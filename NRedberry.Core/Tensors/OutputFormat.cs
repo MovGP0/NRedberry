@@ -20,6 +20,10 @@ namespace NRedberry.Core.Tensors
         /// <summary>
         /// This format specifies expressions to be outputted in the Wolfram Mathematica input notation.
         /// </summary>
-        WolframMathematica
+        WolframMathematica,
+        /// <summary>
+        /// 
+        /// </summary>
+        RedberryConsole
     }
 }
