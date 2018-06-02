@@ -1,8 +1,11 @@
-﻿namespace NRedberry.Core.Utils
+﻿using System;
+
+namespace NRedberry.Core.Utils
 {
     /// <summary>
     /// Mutable array of bits with fixed size.
     /// </summary>
+    [Obsolete("use System.Collections.BitArray instead")]
     public interface IBitArray
     {
         /**

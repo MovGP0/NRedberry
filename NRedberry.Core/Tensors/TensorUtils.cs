@@ -37,5 +37,10 @@ namespace NRedberry.Core.Tensors
             }
             return false;
         }
+
+        public static bool IsSymbol(Tensor tensor)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

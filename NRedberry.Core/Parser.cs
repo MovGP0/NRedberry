@@ -32,7 +32,7 @@ namespace NRedberry.Core
             TokenParsers = tokenParsers;
         }
 
-        public ParseToken parse(string expression)
+        public ParseToken Parse(string expression)
         {
             if(string.IsNullOrEmpty(expression)) throw new ArgumentNullException(nameof(expression));
 
