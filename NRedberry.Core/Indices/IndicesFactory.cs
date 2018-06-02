@@ -1,9 +1,12 @@
 ﻿using System;
+using static NRedberry.Core.Indices.EmptyIndices;
 
 namespace NRedberry.Core.Indices
 {
     public static class IndicesFactory
     {
+        public static IIndices EmptyIndices = EmptyIndicesInstance;
+
         public static ISimpleIndices createSimple(IndicesSymmetries symmetries, params uint[] data)
         {
             throw new NotImplementedException();

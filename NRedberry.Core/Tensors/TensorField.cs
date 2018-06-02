@@ -15,7 +15,7 @@ namespace NRedberry.Core.Tensors
         }
 
         public TensorField(TensorField field, Tensor[] args)
-            : base(field.Name, field.Indices)
+            : base(field.Name, field.SimpleIndices)
         {
             Args = args;
             ArgIndices = field.ArgIndices;

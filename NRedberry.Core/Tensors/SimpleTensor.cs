@@ -8,12 +8,13 @@ namespace NRedberry.Core.Tensors
 {
     public class SimpleTensor : Tensor, IEquatable<SimpleTensor>
     {
-        public ISimpleIndices Indices { get; }
+        public ISimpleIndices SimpleIndices { get; }
+        public override IIndices Indices => SimpleIndices;
 
         public SimpleTensor(int name, ISimpleIndices indices)
         {
             Name = name;
-            Indices = indices ?? throw new ArgumentNullException(nameof(indices));
+            SimpleIndices = indices ?? throw new ArgumentNullException(nameof(indices));
         }
 
         /// <summary>
@@ -36,7 +37,7 @@ namespace NRedberry.Core.Tensors
             return Name;
         }
 
-        public override IIndices GetIndices()
+        public IIndices GetIndices()
         {
             return Indices;
         }
@@ -48,7 +49,7 @@ namespace NRedberry.Core.Tensors
         public override string ToString(OutputFormat outputFormat)
         {
             var sb = new StringBuilder();
-            sb.Append(CC.GetNameDescriptor(Name).GetName(Indices));
+            sb.Append(CC.GetNameDescriptor(Name).GetName(SimpleIndices));
             sb.Append(Indices.ToString(outputFormat));
             return sb.ToString();
         }
@@ -75,7 +76,7 @@ namespace NRedberry.Core.Tensors
 
         public string GetStringName()
         {
-            return CC.Current.GetNameDescriptor(Name).GetName(Indices);
+            return CC.Current.GetNameDescriptor(Name).GetName(SimpleIndices);
         }
 
         public bool Equals(SimpleTensor other)

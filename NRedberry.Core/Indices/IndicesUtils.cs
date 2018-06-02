@@ -33,5 +33,10 @@ namespace NRedberry.Core.Indices
         {
             throw new NotImplementedException();
         }
+
+        internal static int GetNameWithType(uint index)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

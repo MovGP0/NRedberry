@@ -50,7 +50,9 @@ namespace NRedberry.Core.Parsers
 
                 case TokenType.Power:
                     Debug.Assert(Content.Length == 2);
-                    return Tensor.Pow(Content[0].ToTensor(), Content[1].ToTensor());
+                    var tensor0 = Content[0].ToTensor();
+                    var tensor1 = Content[1].ToTensor();
+                    return tensor0.Pow(tensor1);
 
                 case TokenType.Product:
                     return Tensor.MultiplyAndRenameConflictingDummies(ContentToTensors());

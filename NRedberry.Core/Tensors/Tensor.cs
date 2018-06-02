@@ -10,7 +10,7 @@ namespace NRedberry.Core.Tensors
     {
         protected abstract int Hash();
 
-        public abstract IIndices GetIndices();
+        public abstract IIndices Indices { get; }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -85,11 +85,6 @@ namespace NRedberry.Core.Tensors
         public abstract ITensorFactory GetFactory();
 
         public static Tensor Sum(Tensor[] contentToTensors)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static Tensor Pow(Tensor o, Tensor toTensor)
         {
             throw new NotImplementedException();
         }
