@@ -1,7 +1,6 @@
-﻿namespace NRedberry.Core.Contexts.Defaults
+﻿namespace NRedberry.Core.Contexts.Defaults;
+
+public interface IIndexSymbolConverter
 {
-    public interface IIndexSymbolConverter
-    {
-        byte Type { get; }
-    }
+    byte Type { get; }
 }

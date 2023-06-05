@@ -1,7 +1,6 @@
-namespace NRedberry.Core.Tensors
+namespace NRedberry.Core.Tensors;
+
+public interface ITensorFactory
 {
-    public interface ITensorFactory
-    {
-        Tensor Create(params Tensor[] tensors);
-    }
+    Tensor Create(params Tensor[] tensors);
 }

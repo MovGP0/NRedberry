@@ -1,7 +1,6 @@
-﻿namespace NRedberry.Core.Utils
+﻿namespace NRedberry.Core.Utils;
+
+public interface IIndicator<in E>
 {
-    public interface IIndicator<in E>
-    {
-        bool Is(E @object);
-    }
+    bool Is(E @object);
 }

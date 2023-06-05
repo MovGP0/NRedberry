@@ -1,6 +1,5 @@
-namespace NRedberry.Core.Contexts
+namespace NRedberry.Core.Contexts;
+
+public sealed class IndexConverterManager
 {
-    public sealed class IndexConverterManager
-    {
-    }
 }

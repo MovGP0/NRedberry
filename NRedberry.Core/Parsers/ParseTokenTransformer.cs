@@ -1,7 +1,6 @@
-﻿namespace NRedberry.Core.Parsers
+﻿namespace NRedberry.Core.Parsers;
+
+public interface IParseTokenTransformer
 {
-    public interface IParseTokenTransformer
-    {
-        ParseToken Transform(ParseToken node);
-    }
+    ParseToken Transform(ParseToken node);
 }

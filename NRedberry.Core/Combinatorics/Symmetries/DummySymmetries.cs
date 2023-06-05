@@ -1,21 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace NRedberry.Core.Combinatorics.Symmetries
+namespace NRedberry.Core.Combinatorics.Symmetries;
+
+public abstract class DummySymmetries : AbstractSymmetries
 {
-    public class DummySymmetries : AbstractSymmetries
+    protected DummySymmetries(int dimension, List<Symmetry> basis) : base(dimension, basis) { }
+
+    public override bool Add(Symmetry symmetry)
     {
-        public DummySymmetries(int dimension, IList<Symmetry> basis) : base(dimension, basis)
-        {
-        }
+        if (symmetry.Dimension() != base.Dimension || symmetry.IsAntiSymmetry())
+            throw new ArgumentException();
+        return false;
+    }
 
-        public override ISymmetries Clone()
-        {
-            throw new System.NotImplementedException();
-        }
+    public override bool AddUnsafe(Symmetry symmetry)
+    {
+        return Add(symmetry);
+    }
 
-        public override IEnumerator<Symmetry> GetEnumerator()
-        {
-            throw new System.NotImplementedException();
-        }
+    public override Symmetries Clone()
+    {
+        return this;
     }
 }

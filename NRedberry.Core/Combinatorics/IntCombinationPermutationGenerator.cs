@@ -1,53 +1,86 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace NRedberry.Core.Combinatorics
+namespace NRedberry.Core.Combinatorics;
+
+///<summary>
+/// This class represents an iterator over all possible unique
+/// combinations with permutations (i.e. {0,1} and {1,0} both will appear in the iteration) of k numbers, which
+/// can be chosen from the set of n numbers (0,1,2,...,n). The total number of such combinations will be
+/// n!/(n-k)!.
+///</summary>
+public sealed class IntCombinationPermutationGenerator : IIntCombinatorialGenerator, IIntCombinatorialPort
 {
-    public sealed class IntCombinationPermutationGenerator : IIntCombinatorialPort, IIntCombinatorialGenerator
+    private readonly int[] permutation, combination;
+    private readonly int[] combinationPermutation;
+    private readonly IntPermutationsGenerator permutationsGenerator;
+    private readonly IntCombinationsGenerator combinationsGenerator;
+    private readonly int k;
+
+    public IntCombinationPermutationGenerator(int n, int k)
     {
-        public int[] Take()
+        this.k = k;
+        combinationsGenerator = new IntCombinationsGenerator(n, k);
+        combination = combinationsGenerator.GetReference();
+        permutationsGenerator = new IntPermutationsGenerator(k);
+        permutation = permutationsGenerator.GetReference();
+        combinationPermutation = new int[k];
+        combinationsGenerator.MoveNext();
+        System.Array.Copy(combination, 0, combinationPermutation, 0, k);
+    }
+
+    public int[]? Take()
+    {
+        return MoveNext() ? Current : null;
+    }
+
+    public bool MoveNext()
+    {
+        return combinationsGenerator.MoveNext() || permutationsGenerator.MoveNext();
+    }
+
+    public int[] Current
+    {
+        get
         {
-            throw new NotImplementedException();
+            if (!permutationsGenerator.MoveNext())
+            {
+                permutationsGenerator.Reset();
+                combinationsGenerator.MoveNext();
+            }
+            permutationsGenerator.MoveNext();
+            for (int i = 0; i < k; ++i)
+                combinationPermutation[i] = combination[permutation[i]];
+            return combinationPermutation;
         }
+    }
 
-        public bool MoveNext()
-        {
-            throw new NotImplementedException();
-        }
+    object IEnumerator.Current => Current;
 
-        void IEnumerator.Reset()
-        {
-            throw new NotImplementedException();
-        }
+    public void Dispose()
+    {
+        // Not supported yet.
+    }
 
-        public int[] Current { get; }
+    public void Reset()
+    {
+        permutationsGenerator.Reset();
+        combinationsGenerator.Reset();
+        combinationsGenerator.MoveNext();
+    }
 
-        object IEnumerator.Current => Current;
+    public IEnumerator<int[]> GetEnumerator()
+    {
+        return this;
+    }
 
-        void IIntCombinatorialPort.Reset()
-        {
-            throw new NotImplementedException();
-        }
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 
-        public int[] GetReference()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerator<int[]> GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
+    public int[] GetReference()
+    {
+        return combinationPermutation;
     }
 }

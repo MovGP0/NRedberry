@@ -1,53 +1,95 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace NRedberry.Core.Combinatorics
+namespace NRedberry.Core.Combinatorics;
+
+///<summary>
+/// This class represents an iterator over all unordered combinations (i.e. [0,1] and [1,0] are
+/// considered as same, so only [0,1] will appear in the sequence) of k numbers, which can be chosen from the set of
+/// n numbers (0,1,2,...,n). The total number of such combinations is a
+/// binomial coefficient n!/(k!(n-k)!). Each returned array is sorted.
+///</summary>
+public sealed class IntCombinationsGenerator : IIntCombinatorialGenerator, IIntCombinatorialPort
 {
-    public sealed class IntCombinationsGenerator : IIntCombinatorialGenerator, IIntCombinatorialPort
+    private readonly int[] combination;
+    private readonly int n;
+    private readonly int k;
+    private bool onFirst = true;
+
+    public IntCombinationsGenerator(int n, int k)
     {
-        public IEnumerator<int[]> GetEnumerator()
+        if (n < k)
+            throw new System.ArgumentException(" n < k ");
+        this.n = n;
+        this.k = k;
+        combination = new int[k];
+        Reset();
+    }
+
+    public int[]? Take()
+    {
+        return MoveNext() ? Current : null;
+    }
+
+    public bool MoveNext()
+    {
+        return onFirst || !isLast();
+    }
+
+    public void Reset()
+    {
+        onFirst = true;
+        for (int i = 0; i < k; ++i)
+            combination[i] = i;
+    }
+
+    private bool isLast()
+    {
+        for (int i = 0; i < k; ++i)
+            if (combination[i] != i + n - k)
+                return false;
+        return true;
+    }
+
+    public int[] Current
+    {
+        get
         {
-            throw new NotImplementedException();
+            if (onFirst)
+                onFirst = false;
+            else
+            {
+                int i;
+                for (i = k - 1; i >= 0; --i)
+                    if (combination[i] != i + n - k)
+                        break;
+                int m = ++combination[i++];
+                for (; i < k; ++i)
+                    combination[i] = ++m;
+            }
+            return combination;
         }
+    }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+    object IEnumerator.Current => Current;
 
-        public bool MoveNext()
-        {
-            throw new NotImplementedException();
-        }
+    public void Dispose()
+    {
+        // Not supported yet.
+    }
 
-        void IEnumerator.Reset()
-        {
-            throw new NotImplementedException();
-        }
+    public IEnumerator<int[]> GetEnumerator()
+    {
+        return this;
+    }
 
-        public int[] GetReference()
-        {
-            throw new NotImplementedException();
-        }
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 
-        public int[] Current { get; }
-
-        object IEnumerator.Current => Current;
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int[] Take()
-        {
-            throw new NotImplementedException();
-        }
-
-        void IIntCombinatorialPort.Reset()
-        {
-            throw new NotImplementedException();
-        }
+    public int[] GetReference()
+    {
+        return combination;
     }
 }

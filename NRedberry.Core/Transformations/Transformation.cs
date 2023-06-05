@@ -1,9 +1,8 @@
 ﻿using NRedberry.Core.Tensors;
 
-namespace NRedberry.Core.Transformations
+namespace NRedberry.Core.Transformations;
+
+public interface ITransformation
 {
-    public interface ITransformation
-    {
-        Tensor Transform(Tensor t);
-    }
+    Tensor Transform(Tensor t);
 }

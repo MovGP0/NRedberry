@@ -1,7 +1,6 @@
-﻿namespace NRedberry.Core.Combinatorics
+﻿namespace NRedberry.Core.Combinatorics;
+
+public interface IOutputPortUnsafe<out T>
 {
-    public interface IOutputPortUnsafe<out T>
-    {
-        T Take();
-    }
+    T? Take();
 }

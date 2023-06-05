@@ -1,10 +1,9 @@
-﻿namespace NRedberry.Core.Utils
+﻿namespace NRedberry.Core.Utils;
+
+public sealed class DefaultToStringConverter : IToStringConverter<int>
 {
-    public sealed class DefaultToStringConverter : IToStringConverter<int>
+    public string ToString(int t)
     {
-        public string ToString(int t)
-        {
-            return t.ToString();
-        }
+        return t.ToString();
     }
 }

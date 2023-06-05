@@ -2,48 +2,47 @@
 using System.Collections.Generic;
 using NRedberry.Core.Parsers;
 
-namespace NRedberry.Core
+namespace NRedberry.Core;
+
+/// <summary>
+/// Parser of mathematical expressions.
+/// </summary>
+public sealed class Parser
 {
+    //public static Parser Default = new Parser(
+    //    ParserBrackets.Instance,
+    //    ParserSum.Instance,
+    //    ParserProduct.Instance,
+    //    ParserSimpleTensor.Instance,
+    //    ParserTensorField.Instance,
+    //    ParserPower.Instance,
+    //    ParserNumber.Instance,
+    //    ParserFunctions.Instance,
+    //    ParserExpression.Instance,
+    //    ParserPowerAst.Instance);
+
+    private IEnumerable<ITokenParser> TokenParsers { get; }
+
     /// <summary>
-    /// Parser of mathematical expressions.
+    /// Constructs Parser from a given parsers of AST nodes.
     /// </summary>
-    public sealed class Parser
+    /// <param name="tokenParsers"></param>
+    public Parser(params ITokenParser[] tokenParsers)
     {
-        //public static Parser Default = new Parser(
-        //    ParserBrackets.Instance,
-        //    ParserSum.Instance,
-        //    ParserProduct.Instance,
-        //    ParserSimpleTensor.Instance,
-        //    ParserTensorField.Instance,
-        //    ParserPower.Instance,
-        //    ParserNumber.Instance,
-        //    ParserFunctions.Instance,
-        //    ParserExpression.Instance,
-        //    ParserPowerAst.Instance);
+        TokenParsers = tokenParsers;
+    }
 
-        private IEnumerable<ITokenParser> TokenParsers { get; }
+    public ParseToken Parse(string expression)
+    {
+        if(string.IsNullOrEmpty(expression)) throw new ArgumentNullException(nameof(expression));
 
-        /// <summary>
-        /// Constructs Parser from a given parsers of AST nodes.
-        /// </summary>
-        /// <param name="tokenParsers"></param>
-        public Parser(params ITokenParser[] tokenParsers)
+        foreach(var tokenParser in TokenParsers)
         {
-            TokenParsers = tokenParsers;
+            var node = tokenParser.ParseToken(expression.Trim(), this);
+            if (node != null)
+                return node;
         }
 
-        public ParseToken Parse(string expression)
-        {
-            if(string.IsNullOrEmpty(expression)) throw new ArgumentNullException(nameof(expression));
-
-            foreach(var tokenParser in TokenParsers)
-            {
-                var node = tokenParser.ParseToken(expression.Trim(), this);
-                if (node != null)
-                    return node;
-            }
-
-            throw new ParserException($"No appropriate parser for expression: \"{expression}\"");
-        }
+        throw new ParserException($"No appropriate parser for expression: \"{expression}\"");
     }
 }

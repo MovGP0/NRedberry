@@ -1,93 +1,92 @@
 ﻿using System;
 using NRedberry.Core.Tensors;
 
-namespace NRedberry.Core.Indices
+namespace NRedberry.Core.Indices;
+
+public sealed class EmptyIndices : IIndices
 {
-    public sealed class EmptyIndices : IIndices
+    [Obsolete("Use DI instead.")]
+    public static EmptyIndices EmptyIndicesInstance = new EmptyIndices();
+
+    public uint this[uint position] => throw new ArgumentOutOfRangeException(nameof(position), position, "Size is zero.");
+    public uint this[IndexType type, uint position] => throw new ArgumentOutOfRangeException(nameof(position), position, "Size is zero.");
+
+    public IIndices GetInverted()
     {
-        [Obsolete("Use DI instead.")]
-        public static EmptyIndices EmptyIndicesInstance = new EmptyIndices();
+        return this;
+    }
 
-        public uint this[uint position] => throw new ArgumentOutOfRangeException(nameof(position), position, "Size is zero.");
-        public uint this[IndexType type, uint position] => throw new ArgumentOutOfRangeException(nameof(position), position, "Size is zero.");
+    public IIndices GetFree()
+    {
+        return this;
+    }
 
-        public IIndices GetInverted()
-        {
-            return this;
-        }
+    public IIndices GetOfType(IndexType type)
+    {
+        return this;
+    }
 
-        public IIndices GetFree()
-        {
-            return this;
-        }
+    public bool EqualsRegardlessOrder(IIndices indices)
+    {
+        return indices.Size() == 0;
+    }
 
-        public IIndices GetOfType(IndexType type)
-        {
-            return this;
-        }
+    public IntArray GetUpper()
+    {
+        return IntArray.EmptyArray;
+    }
 
-        public bool EqualsRegardlessOrder(IIndices indices)
-        {
-            return indices.Size() == 0;
-        }
+    public IntArray GetLower()
+    {
+        return IntArray.EmptyArray;
+    }
 
-        public IntArray GetUpper()
-        {
-            return IntArray.EmptyArray;
-        }
+    public IntArray GetAllIndices()
+    {
+        return IntArray.EmptyArray;
+    }
 
-        public IntArray GetLower()
-        {
-            return IntArray.EmptyArray;
-        }
+    public int Size(IndexType type)
+    {
+        return 0;
+    }
 
-        public IntArray GetAllIndices()
-        {
-            return IntArray.EmptyArray;
-        }
+    public int Size()
+    {
+        return 0;
+    }
 
-        public int Size(IndexType type)
-        {
-            return 0;
-        }
+    public IIndices ApplyIndexMapping(IIndexMapping mapping)
+    {
+        return this;
+    }
 
-        public int Size()
-        {
-            return 0;
-        }
+    public string ToString(OutputFormat outputFormat)
+    {
+        return string.Empty;
+    }
 
-        public IIndices ApplyIndexMapping(IIndexMapping mapping)
-        {
-            return this;
-        }
+    public void TestConsistentWithException()
+    {
+    }
 
-        public string ToString(OutputFormat outputFormat)
-        {
-            return string.Empty;
-        }
+    public override string ToString()
+    {
+        return string.Empty;
+    }
 
-        public void TestConsistentWithException()
-        {
-        }
+    public override bool Equals(object obj)
+    {
+        return obj is EmptyIndices;
+    }
 
-        public override string ToString()
-        {
-            return string.Empty;
-        }
+    public override int GetHashCode()
+    {
+        return 8758765;
+    }
 
-        public override bool Equals(object obj)
-        {
-            return obj is EmptyIndices;
-        }
-
-        public override int GetHashCode()
-        {
-            return 8758765;
-        }
-
-        public short[] GetDiffIds()
-        {
-            return new short[0];
-        }
+    public short[] GetDiffIds()
+    {
+        return new short[0];
     }
 }

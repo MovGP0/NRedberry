@@ -4,109 +4,108 @@ using System.Collections.Generic;
 using NRedberry.Core.Contexts;
 using NRedberry.Core.Indices;
 
-namespace NRedberry.Core.Tensors
+namespace NRedberry.Core.Tensors;
+
+public abstract class Tensor : IComparable<Tensor>, IEnumerable<Tensor>
 {
-    public abstract class Tensor : IComparable<Tensor>, IEnumerable<Tensor>
+    protected abstract int Hash();
+
+    public abstract IIndices Indices { get; }
+
+    IEnumerator IEnumerable.GetEnumerator()
     {
-        protected abstract int Hash();
+        return GetEnumerator();
+    }
 
-        public abstract IIndices Indices { get; }
+    public virtual IEnumerator<Tensor> GetEnumerator()
+    {
+        return new BasicTensorIterator(this);
+    }
 
-        IEnumerator IEnumerable.GetEnumerator()
+    public abstract Tensor this[int i]
+    {
+        get;
+    }
+
+    public abstract int Size
+    {
+        get;
+    }
+
+    public Tensor Set(int i, Tensor tensor)
+    {
+        var size = Size;
+        if (i >= size || i < 0) throw new IndexOutOfRangeException(nameof(i));
+        if (tensor == null) throw new ArgumentNullException(nameof(tensor));
+
+        var builder = GetBuilder();
+        for (var j = 0; j < size; ++j)
         {
-            return GetEnumerator();
+            builder.Put(j == i ? tensor : this[j]);
         }
 
-        public virtual IEnumerator<Tensor> GetEnumerator()
-        {
-            return new BasicTensorIterator(this);
-        }
+        return builder.Build();
+    }
 
-        public abstract Tensor this[int i]
-        {
-            get;
-        }
+    public Tensor[] GetRange(int from, int to)
+    {
+        var size = Size;
+        if (from < 0 || from > to || to >= size)
+            throw new IndexOutOfRangeException();
+        var range = new Tensor[from - to];
+        for (size = 0; from < to; ++size, ++from)
+            range[size] = this[from];
+        return range;
+    }
 
-        public abstract int Size
-        {
-            get;
-        }
+    public Tensor[] ToArray()
+    {
+        return GetRange(0, Size);
+    }
 
-        public Tensor Set(int i, Tensor tensor)
-        {
-            var size = Size;
-            if (i >= size || i < 0) throw new IndexOutOfRangeException(nameof(i));
-            if (tensor == null) throw new ArgumentNullException(nameof(tensor));
+    public abstract string ToString(OutputFormat outputFormat);
 
-            var builder = GetBuilder();
-            for (var j = 0; j < size; ++j)
-            {
-                builder.Put(j == i ? tensor : this[j]);
-            }
+    public override string ToString()
+    {
+        return ToString(Context.get().getDefaultOutputFormat());
+    }
 
-            return builder.Build();
-        }
+    public int CompareTo(Tensor other)
+    {
+        return Hash().CompareTo(other.Hash());
+    }
 
-        public Tensor[] GetRange(int from, int to)
-        {
-            var size = Size;
-            if (from < 0 || from > to || to >= size)
-                throw new IndexOutOfRangeException();
-            var range = new Tensor[from - to];
-            for (size = 0; from < to; ++size, ++from)
-                range[size] = this[from];
-            return range;
-        }
+    public override int GetHashCode()
+    {
+        return Hash();
+    }
 
-        public Tensor[] ToArray()
-        {
-            return GetRange(0, Size);
-        }
+    public abstract ITensorBuilder GetBuilder();
 
-        public abstract string ToString(OutputFormat outputFormat);
+    public abstract ITensorFactory GetFactory();
 
-        public override string ToString()
-        {
-            return ToString(Context.get().getDefaultOutputFormat());
-        }
+    public static Tensor Sum(Tensor[] contentToTensors)
+    {
+        throw new NotImplementedException();
+    }
 
-        public int CompareTo(Tensor other)
-        {
-            return Hash().CompareTo(other.Hash());
-        }
+    public static Tensor MultiplyAndRenameConflictingDummies(Tensor[] contentToTensors)
+    {
+        throw new NotImplementedException();
+    }
 
-        public override int GetHashCode()
-        {
-            return Hash();
-        }
+    public static Tensor Expression(Tensor toTensor, Tensor tensor)
+    {
+        throw new NotImplementedException();
+    }
 
-        public abstract ITensorBuilder GetBuilder();
+    public static SimpleTensor SimpleTensor(string name, ISimpleIndices indices)
+    {
+        throw new NotImplementedException();
+    }
 
-        public abstract ITensorFactory GetFactory();
-
-        public static Tensor Sum(Tensor[] contentToTensors)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static Tensor MultiplyAndRenameConflictingDummies(Tensor[] contentToTensors)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static Tensor Expression(Tensor toTensor, Tensor tensor)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static SimpleTensor SimpleTensor(string name, ISimpleIndices indices)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static SimpleTensor SimpleTensor(int name, ISimpleIndices indices)
-        {
-            throw new NotImplementedException();
-        }
+    public static SimpleTensor SimpleTensor(int name, ISimpleIndices indices)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace NRedberry.Core.Utils
+namespace NRedberry.Core.Utils;
+
+public sealed class BinaryToStringConverter : IToStringConverter<int>
 {
-    public sealed class BinaryToStringConverter : IToStringConverter<int>
+    public string ToString(int t)
     {
-        public string ToString(int t)
-        {
-            return Convert.ToString(t, 2);
-        }
+        return Convert.ToString(t, 2);
     }
 }
