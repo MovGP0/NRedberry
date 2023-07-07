@@ -5,9 +5,9 @@ namespace NRedberry.Core.Numbers;
 
 public sealed class Numeric : Real
 {
-    public static Numeric Zero = new Numeric(0);
-    public static Numeric One = new Numeric(1);
-    public static Numeric MinusOne = new Numeric(-1);
+    public static Numeric Zero = new(0);
+    public static Numeric One = new(1);
+    public static Numeric MinusOne = new(-1);
 
     private double Value { get; }
 

@@ -8,9 +8,9 @@ namespace NRedberry.Core.Concurrent;
 public sealed class PortEnumerator<T> : IEnumerator<T>
     where T : class
 {
-    private IOutputPortUnsave<T> Opu { get; }
+    private IOutputPortUnsafe<T> Opu { get; }
 
-    public PortEnumerator(IOutputPortUnsave<T> opu)
+    public PortEnumerator(IOutputPortUnsafe<T> opu)
     {
         Opu = opu;
     }

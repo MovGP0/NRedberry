@@ -1,5 +1,6 @@
 using System;
 using NRedberry.Core.Contexts.Defaults;
+using NRedberry.Core.Tensors;
 
 namespace NRedberry.Core.Contexts;
 
@@ -14,30 +15,30 @@ namespace NRedberry.Core.Contexts;
 public static class ContextManager
 {
     /**
-         * Thread-local container for the current context
-         */
+     * Thread-local container for the current context
+     */
     [ThreadStatic]
-    private static Context ThreadLocalContext = new Context(new ContextSettings());
+    private static Context ThreadLocalContext = new(new ContextSettings(OutputFormat.Redberry, "d"));
 
     public static Context CurrentContext { get; set; }
 
     /**
-         * Returns the current context of Redberry session.
-         *
-         * @return the current context of Redberry session.
-         */
+     * Returns the current context of Redberry session.
+     *
+     * @return the current context of Redberry session.
+     */
     public static Context GetCurrentContext()
     {
         return ThreadLocalContext;
     }
 
     /**
-         * This method initializes and sets current session context by the default
-         * value defined in {@link DefaultContextFactory}. After this step, all
-         * tensors that exist in the thread will be invalidated.
-         *
-         * @return created context
-         */
+     * This method initializes and sets current session context by the default
+     * value defined in {@link DefaultContextFactory}. After this step, all
+     * tensors that exist in the thread will be invalidated.
+     *
+     * @return created context
+     */
     public static Context InitializeNew()
     {
         ThreadLocalContext = DefaultContextFactory.Instance.CreateContext();
@@ -45,13 +46,13 @@ public static class ContextManager
     }
 
     /**
-         * This method initializes and sets current session context from
-         * the specified {@code context settings} ({@link ContextSettings}).
-         * After invocation of this method, all the tensors that exist in
-         * the current thread will be invalidated.
-         *
-         * @return created context
-         */
+     * This method initializes and sets current session context from
+     * the specified {@code context settings} ({@link ContextSettings}).
+     * After invocation of this method, all the tensors that exist in
+     * the current thread will be invalidated.
+     *
+     * @return created context
+     */
     public static Context InitializeNew(ContextSettings contextSettings)
     {
         var context = new Context(contextSettings);
@@ -60,11 +61,11 @@ public static class ContextManager
     }
 
     /**
-         * Sets current thread-local context to the specified one. After this step, all the
-         * tensors that exist in the thread will be invalidated.
-         *
-         * @param context context
-         */
+     * Sets current thread-local context to the specified one. After this step, all the
+     * tensors that exist in the thread will be invalidated.
+     *
+     * @param context context
+     */
     public static void SetCurrentContext(Context context)
     {
         ThreadLocalContext = context;

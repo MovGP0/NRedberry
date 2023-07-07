@@ -58,7 +58,7 @@ public static class SymmetriesFactory
             symmetries.AddUnsafe(lowerTranspositionSymmetry);
         }
 
-        //cycle        
+        //cycle
         if (upperCount > 2)
         {
             int[] upperCycle = new int[upperCount + lowerCount];

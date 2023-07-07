@@ -5,7 +5,7 @@ namespace NRedberry.Core.Maths;
 
 public static class MathUtils
 {
-    public static uint[] GetSortedDistinct(this uint[] values)
+    public static long[] GetSortedDistinct(this long[] values)
     {
         return values.OrderBy(v => v).Distinct().ToArray();
     }
@@ -17,13 +17,13 @@ public static class MathUtils
     /// <param name="b"></param>
     /// <returns>The set of elements in B but not in A</returns>
     [Obsolete("use b.Except(a) instead")]
-    public static int[] IntSetDifference(this int[] a, int[] b)
+    public static long[] IntSetDifference(this long[] a, long[] b)
     {
         return b.Except(a).ToArray();
     }
 
     [Obsolete("use a.Union(b) instead.")]
-    public static int[] IntSetUnion(this int[] a, int[] b)
+    public static long[] IntSetUnion(long[] a, long[] b)
     {
         return a.Union(b).ToArray();
     }

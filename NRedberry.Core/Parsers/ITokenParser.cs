@@ -9,7 +9,7 @@ public interface ITokenParser
     /// <param name="expression">string expression</param>
     /// <param name="parser">recursion</param>
     /// <returns>AST node</returns>
-    ParseToken ParseToken(string expression, Parser parser);
+    ParseToken? ParseToken(string expression, Parser parser);
 
     /// <summary>
     /// The higher the priority, the earlier runs.

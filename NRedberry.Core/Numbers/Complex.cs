@@ -7,8 +7,8 @@ namespace NRedberry.Core.Numbers;
 
 public sealed class Complex : Tensor, INumber<Complex>
 {
-    public static Complex Zero = new Complex(Rational.Zero, Rational.Zero);
-    public static Complex One = new Complex(Rational.One, Rational.One);
+    public static Complex Zero = new(Rational.Zero, Rational.Zero);
+    public static Complex One = new(Rational.One, Rational.One);
 
     private Real Real { get; }
     private Real Imaginary { get; }

@@ -65,19 +65,19 @@ public static class ArraysUtils
             : (x[b] > x[c] ? b : x[a] > x[c] ? c : a));
     }
 
-    public static void quickSort(int[] target, long[] coSort)
+    public static void quickSort(long[] target, long[] coSort)
     {
         quickSort1(target, 0, target.Length, coSort);
     }
 
-    public static void quickSort(int[] target, int fromIndex, int toIndex, long[] coSort)
+    public static void quickSort(long[] target, int fromIndex, int toIndex, long[] coSort)
     {
         rangeCheck(target.Length, fromIndex, toIndex);
         rangeCheck(coSort.Length, fromIndex, toIndex);
         quickSort1(target, fromIndex, toIndex - fromIndex, coSort);
     }
 
-    public static void quickSort1(int[] target, int fromIndex, int length, long[] coSort)
+    public static void quickSort1(long[] target, int fromIndex, int length, long[] coSort)
     {
         throw new NotImplementedException();
     }
@@ -93,9 +93,7 @@ public static class ArraysUtils
          */
     private static void swap(long[] x, int a, int b)
     {
-        long t = x[a];
-        x[a] = x[b];
-        x[b] = t;
+        (x[a], x[b]) = (x[b], x[a]);
     }
 
     private static void vecswap(int[] x, int a, int b, int n, long[] coSort)

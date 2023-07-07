@@ -67,7 +67,7 @@ public abstract class Tensor : IComparable<Tensor>, IEnumerable<Tensor>
 
     public override string ToString()
     {
-        return ToString(Context.get().getDefaultOutputFormat());
+        return ToString(Context.Get().GetDefaultOutputFormat());
     }
 
     public int CompareTo(Tensor other)

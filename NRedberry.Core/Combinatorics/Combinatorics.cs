@@ -17,7 +17,7 @@ public static class Combinatorics
             : new IntCombinationPermutationGenerator(n, k);
     }
 
-    public static bool IsIdentity(int[] permutation)
+    public static bool IsIdentity(long[] permutation)
     {
         return permutation.Select((t, i) => t == i).All(isTrue => isTrue);
     }
@@ -89,9 +89,9 @@ public static class Combinatorics
         return cycle;
     }
 
-    public static int[] Inverse(int[] permutation)
+    public static long[] Inverse(long[] permutation)
     {
-        var inverse = new int[permutation.Length];
+        var inverse = new long[permutation.Length];
         for (var i = 0; i < permutation.Length; i++)
         {
             inverse[permutation[i]] = i;
@@ -100,7 +100,7 @@ public static class Combinatorics
         return inverse;
     }
 
-    public static T[] Shuffle<T>(T[] array, int[] permutation)
+    public static T[] Shuffle<T>(T[] array, long[] permutation)
     {
         if (array.Length != permutation.Length)
         {
@@ -121,7 +121,7 @@ public static class Combinatorics
         return newArray;
     }
 
-    public static int[] Reorder(int[] array, int[] permutation)
+    public static long[] Reorder(long[] array, long[] permutation)
     {
         if (array.Length != permutation.Length)
         {
@@ -133,7 +133,7 @@ public static class Combinatorics
             throw new ArgumentException();
         }
 
-        var newArray = new int[array.Length];
+        var newArray = new long[array.Length];
         for (var i = 0; i < permutation.Length; i++)
         {
             newArray[i] = array[permutation[i]];
@@ -141,9 +141,9 @@ public static class Combinatorics
         return newArray;
     }
 
-    public static bool TestPermutationCorrectness(int[] permutation)
+    public static bool TestPermutationCorrectness(long[] permutation)
     {
-        var clone = (int[])permutation.Clone();
+        var clone = (long[])permutation.Clone();
         Array.Sort(clone);
 
         for (var i = 0; i < clone.Length; i++)

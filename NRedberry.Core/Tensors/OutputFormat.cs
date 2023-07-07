@@ -22,7 +22,7 @@ public enum OutputFormat
     /// </summary>
     WolframMathematica,
     /// <summary>
-    /// 
+    /// This format specifies expressions to be outputted in the Redberry console notation.
     /// </summary>
     RedberryConsole
 }

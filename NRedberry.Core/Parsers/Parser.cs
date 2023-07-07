@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using NRedberry.Core.Parsers;
 
-namespace NRedberry.Core;
+namespace NRedberry.Core.Parsers;
 
 /// <summary>
 /// Parser of mathematical expressions.
 /// </summary>
 public sealed class Parser
 {
-    //public static Parser Default = new Parser(
+    /// <summary>
+    /// Default parser.
+    /// </summary>
+    public static readonly Parser Default = new Parser(
     //    ParserBrackets.Instance,
     //    ParserSum.Instance,
     //    ParserProduct.Instance,
@@ -19,7 +21,8 @@ public sealed class Parser
     //    ParserNumber.Instance,
     //    ParserFunctions.Instance,
     //    ParserExpression.Instance,
-    //    ParserPowerAst.Instance);
+    //    ParserPowerAst.Instance
+    );
 
     private IEnumerable<ITokenParser> TokenParsers { get; }
 
@@ -32,6 +35,13 @@ public sealed class Parser
         TokenParsers = tokenParsers;
     }
 
+    /// <summary>
+    /// Parse string expression into AST.
+    /// </summary>
+    /// <param name="expression">string expression</param>
+    /// <returns>AST</returns>
+    /// <exception cref="ArgumentNullException"></exception>
+    /// <exception cref="ParserException"></exception>
     public ParseToken Parse(string expression)
     {
         if(string.IsNullOrEmpty(expression)) throw new ArgumentNullException(nameof(expression));
@@ -39,7 +49,7 @@ public sealed class Parser
         foreach(var tokenParser in TokenParsers)
         {
             var node = tokenParser.ParseToken(expression.Trim(), this);
-            if (node != null)
+            if (node is not null)
                 return node;
         }
 

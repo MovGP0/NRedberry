@@ -6,7 +6,7 @@ namespace NRedberry.Core.Tensors;
 
 public sealed class PowerFactory : ITensorFactory
 {
-    public static PowerFactory Factory = new PowerFactory();
+    public static PowerFactory Factory = new();
 
     private PowerFactory()
     {

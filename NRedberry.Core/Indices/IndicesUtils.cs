@@ -1,41 +1,353 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using NRedberry.Core.Contexts;
+using NRedberry.Core.Maths;
+using NRedberry.Core.Tensors;
+using NRedberry.Core.Utils;
+using CC = NRedberry.Core.Tensors.CC;
 
 namespace NRedberry.Core.Indices;
 
+/// <summary>
+/// This class provides static methods to work with individual index and indices objects.
+/// </summary>
+/// <remarks>
+/// <h5>Index representation</h5>
+/// All information about single index is enclosed in 32-bit word (int). The following bit structure is used:
+/// <code>
+/// Index: stttttttXXXXXXXXcccccccccccccccc - per-bit representation
+/// | | | | |
+/// 31 23 15 7 0 - bit index
+/// </code>
+/// s - one bit representing index state (0 - lower; 1 - upper)
+/// t - 7-bits representing index type (lower latin, upper latin, etc...) [for concrete codes see below]
+/// c - code of concrete index (a - 0, b - 1, c - 2, etc...) [index name]
+/// X - reserved (always 0)
+/// <h5>Index types</h5>
+/// By default there are four different index types:
+/// <table cellspacing="0" cellpadding="5">
+/// <caption></caption>
+/// <thead>
+/// <tr>
+/// <th>HexCode</th>
+/// <th>BitCode</th>
+/// <th>Description</th>
+/// </tr>
+/// </thead>
+/// <tbody>
+/// <tr>
+/// <td>0x00</td>
+/// <td>00000000</td>
+/// <td>Latin lower case symbols</td>
+/// </tr>
+/// <tr>
+/// <td>0x01</td>
+/// <td>00000001</td>
+/// <td>Latin upper case symbols</td>
+/// </tr>
+/// <tr>
+/// <td>0x02</td>
+/// <td>00000010</td>
+/// <td>Greek lower case symbols</td>
+/// </tr>
+/// <tr>
+/// <td>0x03</td>
+/// <td>00000011</td>
+/// <td>Greek upper case symbols</td>
+/// </tr>
+/// </tbody>
+/// </table>
+/// <h5>Examples</h5>
+/// Here are some examples of how concrete indices are presented in Redberry.
+/// <table cellspacing="0" cellpadding="5">
+/// <caption></caption>
+/// <thead>
+/// <tr>
+/// <th>Index</th>
+/// <th>Hex</th>
+/// </tr>
+/// </thead>
+/// <tbody>
+/// <tr>
+/// <td>_a</td>
+/// <td>0x00000000</td>
+/// </tr>
+/// <tr>
+/// <td>_C</td>
+/// <td>0x01000002</td>
+/// </tr>
+/// <tr>
+/// <td>^{\beta}</td>
+/// <td>0x82000001</td>
+/// </tr>
+/// <tr>
+/// <td>^{\Chi}</td>
+/// <td>0x83000015</td>
+/// </tr>
+/// </tbody>
+/// </table>
+/// </remarks>
+/// <remarks>https://github.com/redberry-cas/core/blob/master/src/main/java/cc/redberry/core/indices/IndicesUtils.java</remarks>
 public sealed class IndicesUtils
 {
-    public static byte getType(uint index)
+    public static long CreateIndex(long name, IndexType type, bool state)
     {
-        throw new NotImplementedException();
+        return CreateIndex(name, type.GetType_(), state);
     }
 
-    public static uint getRawStateInt(uint index)
+    public static long CreateIndex(long name, byte type, bool state)
+    {
+        return (name & 0xFFFF) | ((0x7F & type) << 24) | (state ? 0x80000000 : 0);
+    }
+
+    public static long GetRawStateInt(long index)
     {
         return index & 0x80000000;
     }
 
-    public static uint getStateInt(uint index)
+    public static long GetStateInt(long index)
     {
         return (index & 0x80000000) >> 31;
     }
 
-    public static bool getState(uint index)
+    public static bool GetState(long index)
     {
         return (index & 0x80000000) == 0x80000000;
     }
 
-    public static uint inverseIndexState(uint index)
+    public static long InverseIndexState(long index)
     {
         return 0x80000000 ^ index;
     }
 
-    public static bool haveEqualStates(uint tIndex, uint index)
+    public static long GetNameWithType(long index)
     {
-        throw new NotImplementedException();
+        return index & 0x7FFFFFFF;
     }
 
-    internal static int GetNameWithType(uint index)
+    public static long SetType(byte type, long index)
     {
-        throw new NotImplementedException();
+        return (0x80FFFFFF & index) | ((0x7F & type) << 24);
+    }
+
+    public static long SetType(IndexType type, long index)
+    {
+        return SetType(type.GetType_(), index);
+    }
+
+    public static long SetRawState(long rawState, long index)
+    {
+        return rawState | index;
+    }
+
+    public static long GetNameWithoutType(long index)
+    {
+        return index & 0xFFFF;
+    }
+
+    public static byte GetType(long index)
+    {
+        return (byte)((index & 0x7FFFFFFF) >> 24);
+    }
+
+    public static IndexType GetTypeEnum(long index)
+    {
+        foreach (IndexType type in Enum.GetValues(typeof(IndexType)))
+            if (type.GetType_() == GetType_(index))
+                return type;
+        throw new Exception("Unknown type");
+    }
+
+    public static long GetTypeInt(long index)
+    {
+        return (index & 0x7FFFFFFF) >> 24;
+    }
+
+    public static long GetRawTypeInt(long index)
+    {
+        return index & 0x7F000000;
+    }
+
+    public static byte GetTypeWithState(long index)
+    {
+        return (byte)(index >> 24);
+    }
+
+    public static bool HasEqualTypeAndName(long index0, long index1)
+    {
+        return (index0 & 0x7FFFFFFF) == (index1 & 0x7FFFFFFF);
+    }
+
+    public static bool HasEqualTypes(long index0, long index1)
+    {
+        return (index0 & 0x7F000000) == (index1 & 0x7F000000);
+    }
+
+    public static bool HasEqualTypesAndStates(long index0, long index1)
+    {
+        return (index0 & 0xFF000000) == (index1 & 0xFF000000);
+    }
+
+    public static bool AreContracted(long index0, long index1)
+    {
+        return (index0 ^ index1) == 0x80000000;
+    }
+
+    public static long[] GetSortedDistinctIndicesNames(IIndices indices)
+    {
+        long[] indsArray = indices.GetAllIndices().ToArray(); // Assuming copy() is equivalent to ToArray()
+        for (int i = 0; i < indsArray.Length; ++i)
+            indsArray[i] = IndicesUtils.GetNameWithType(indsArray[i]);
+        return indsArray.GetSortedDistinct();
+    }
+
+    public static string ToString(long index, OutputFormat mode)
+    {
+        return (GetState(index) ? "^{" : "_{") + Context.Get().GetIndexConverterManager().GetSymbol(index, mode) + "}";
+    }
+
+    public static string ToString(long index)
+    {
+        return ToString(index, Context.Get().GetDefaultOutputFormat());
+    }
+
+    public static string ToString(long[] indices, OutputFormat mode)
+    {
+        return IndicesFactory.CreateSimple(null, indices).ToString(mode);
+    }
+
+    public static string ToString(long[] indices)
+    {
+        return ToString(indices, CC.GetDefaultOutputFormat());
+    }
+
+    public static long ParseIndex(string @string)
+    {
+        bool state = @string[0] == '^';
+        long nameWithType;
+        if (@string[1] == '{')
+            nameWithType = Context.Get().GetIndexConverterManager().GetCode(@string.Substring(2, @string.Length - 1));
+        else
+            nameWithType = Context.Get().GetIndexConverterManager().GetCode(@string.Substring(1));
+        return state ? (0x80000000 ^ nameWithType) : nameWithType;
+    }
+
+    public static long[] GetIndicesNames(IIndices indices)
+    {
+        long[] a = new long[indices.Size()];
+        for (long i = indices.Size() - 1; i >= 0; --i)
+            a[i] = GetNameWithType(indices[i]);
+        return a;
+    }
+
+    public static long[] GetIndicesNames(long[] indices)
+    {
+        long[] a = new long[indices.Length];
+        for (long i = a.Length - 1; i >= 0; --i)
+            a[i] = GetNameWithType(indices[i]);
+        return a;
+    }
+
+    public static long[] GetFree(long[] indices)
+    {
+        return IndicesFactory.CreateSimple(null, indices).GetFree().GetAllIndices().ToArray();
+    }
+
+    public static bool HaveEqualStates(long index1, long index2)
+    {
+        return GetRawStateInt(index1) == GetRawStateInt(index2);
+    }
+
+    public static bool IsPermutationConsistentWithIndices(long[] indices, long[] permutation)
+    {
+        if (indices.Length != permutation.Length)
+            return false;
+        for (long i = 0; i < permutation.Length; ++i)
+            if (GetRawTypeInt(indices[i]) != GetRawTypeInt(indices[permutation[i]]))
+                return false;
+        return true;
+    }
+
+    public static bool IsPermutationConsistentWithIndices(long[] indices, Permutation permutation)
+    {
+        if (indices.Length != permutation.Dimension())
+            return false;
+        for (long i = 0; i < permutation.Dimension(); ++i)
+            if (GetRawTypeInt(indices[i]) != GetRawTypeInt(indices[permutation.NewIndexOf(i)]))
+                return false;
+        return true;
+    }
+
+    public static bool EqualsRegardlessOrder(IIndices indices1, long[] indices2)
+    {
+        if (indices1 is EmptyIndices)
+            return indices2.Length == 0;
+        if (indices1.Size() != indices2.Length)
+            return false;
+        long[] temp = (long[])indices2.Clone();
+        Array.Sort(temp);
+        return Enumerable.SequenceEqual(((AbstractIndices)indices1).GetSortedData(), temp);
+    }
+
+    public static bool EqualsRegardlessOrder(long[] indices1, long[] indices2)
+    {
+        if (indices1.Length != indices2.Length)
+            return false;
+        long[] temp1 = (long[])indices1.Clone(), temp2 = (long[])indices2.Clone();
+        Array.Sort(temp1);
+        Array.Sort(temp2);
+        return Enumerable.SequenceEqual(temp1, temp2);
+    }
+
+    public static bool HaveIntersections(IIndices u, IIndices v)
+    {
+        IIndices uFree = u.GetFree(),
+            vFree = v.GetFree();
+        if (uFree.Size() > vFree.Size())
+        {
+            (uFree, vFree) = (vFree, uFree);
+        }
+
+        for (long i = 0; i < uFree.Size(); ++i)
+        for (long j = 0; j < vFree.Size(); ++j)
+        {
+            if (vFree[j] == InverseIndexState(uFree[i]))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static byte GetType_(long index) {
+        return ((byte) ((index & 0x7FFFFFFF) >>> 24));
+    }
+
+    public static long[] GetIntersections(long[] freeIndices1, long[] freeIndices2)
+    {
+        //micro optimization
+        if (freeIndices1.Length > freeIndices2.Length)
+        {
+            (freeIndices1, freeIndices2) = (freeIndices2, freeIndices1);
+        }
+
+        List<long> contracted = new List<long>();
+        for (int i = 0; i < freeIndices1.Length; ++i)
+        for (int j = 0; j < freeIndices2.Length; ++j)
+            if (freeIndices2[j] == InverseIndexState(freeIndices1[i]))
+                contracted.Add(GetNameWithType(freeIndices2[j]));
+        return contracted.ToArray();
+    }
+
+    public static long[] GetIntersections(IIndices u, IIndices v)
+    {
+        if (u.Size() == 0 || v.Size() == 0)
+            return new long[0];
+        IIndices freeU = u.GetFree(), freeV = v.GetFree();
+        if (freeU.Size() == 0 || freeV.Size() == 0)
+            return new long[0];
+        return GetIntersections(((AbstractIndices)freeU).Data, ((AbstractIndices)freeV).Data);
     }
 }

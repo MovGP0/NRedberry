@@ -1,23 +1,28 @@
-﻿using NRedberry.Core.Indices;
-using NRedberry.Core.Tensors;
+﻿using System;
+using NRedberry.Core.Indices;
 
 namespace NRedberry.Core.Contexts.Defaults;
 
+/// <summary>
+/// The default Redberry context settings.
+/// </summary>
+/// <remarks>https://github.com/redberry-cas/core/blob/master/src/main/java/cc/redberry/core/context/defaults/DefaultContextSettings.java</remarks>
 public static class DefaultContextSettings
 {
-    public static ContextSettings create()
+    public static ContextSettings Create()
     {
-        ContextSettings defaultSettings = new ContextSettings(OutputFormat.Redberry, "d");
-        defaultSettings.setMetricName("g");
+        var defaultSettings = new ContextSettings();
+        defaultSettings.AddMetricIndexType(IndexType.LatinLower);
+        defaultSettings.AddMetricIndexType(IndexType.GreekLower);
+        defaultSettings.AddMetricIndexType(IndexType.LatinUpper);
+        defaultSettings.AddMetricIndexType(IndexType.GreekUpper);
 
-        defaultSettings.addMetricIndexType(IndexType.LatinLower);
-        defaultSettings.addMetricIndexType(IndexType.GreekLower);
-        defaultSettings.addMetricIndexType(IndexType.LatinUpper);
-        defaultSettings.addMetricIndexType(IndexType.GreekUpper);
-
-        //Reading seed from property if exists
-        //if (System.getProperty("redberry.nmseed") != null)
-        //    defaultSettings.setNameManagerSeed(Long.parseLong(System.getProperty("redberry.nmseed"), 10));
+        //Reading seed from environment variable if exists
+        var seed = Environment.GetEnvironmentVariable("redberry.nmseed");
+        if (seed != null)
+        {
+            defaultSettings.NameManagerSeed = int.TryParse(seed, out var seedValue) ? seedValue : 10;
+        }
 
         return defaultSettings;
     }

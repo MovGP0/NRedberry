@@ -6,9 +6,9 @@ public class FullSymmetries : DummySymmetries
 {
     public FullSymmetries(int dimension)
         : base(dimension, new List<Symmetry> {
-            new Symmetry(dimension),
-            new Symmetry(Combinatorics.CreateTransposition(dimension), false),
-            new Symmetry(Combinatorics.CreateCycle(dimension), false)
+            new(dimension),
+            new(Combinatorics.CreateTransposition(dimension), false),
+            new(Combinatorics.CreateCycle(dimension), false)
         })
     {
     }

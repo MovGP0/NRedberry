@@ -20,7 +20,7 @@ public sealed class ComplexField : IField<Complex>
         return (TC)(IFieldElement<Complex>)null;
     }
 
-    private static Lazy<ComplexField> RealFieldFactory => new Lazy<ComplexField>(() => new ComplexField());
+    private static Lazy<ComplexField> RealFieldFactory => new(() => new ComplexField());
 
     [Obsolete("Inject IField<Complex> instead.")]
     public static ComplexField GetInstance()

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NRedberry.Core.Indices;
 using NRedberry.Core.Tensors;
 
@@ -6,58 +7,54 @@ namespace NRedberry.Core.Contexts;
 
 public sealed class ContextSettings
 {
-    private OutputFormat redberry;
-    private string v;
+    private string kronecker = "d";
+    private string metricName = "g";
 
-    public ContextSettings(OutputFormat redberry, string v)
+    public ContextSettings(OutputFormat defaultOutputFormat = OutputFormat.Redberry, string kronecker = "g", string metricName = "g")
     {
-        this.redberry = redberry;
-        this.v = v;
+        DefaultOutputFormat = defaultOutputFormat;
+        Kronecker = kronecker;
+        MetricName = metricName;
     }
 
-    public ContextSettings()
+    public HashSet<IndexType> MetricTypes { get; } = new();
+
+    public void RemoveMetricIndexType(IndexType type)
     {
+        MetricTypes.Remove(type);
     }
 
-    public Parser getParser()
+    public void AddMetricIndexType(IndexType type)
     {
-        throw new NotImplementedException();
+        MetricTypes.Add(type);
     }
 
-    public IndexConverterManager getConverterManager()
+    public OutputFormat DefaultOutputFormat { get; set; }
+
+    public string Kronecker
     {
-        throw new NotImplementedException();
+        get => kronecker;
+        set
+        {
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (value.Length == 0) throw new ArgumentException("Kronecker tensor name cannot be empty.");
+            kronecker = value;
+        }
     }
 
-    public int getNameManagerSeed()
+    public string MetricName
     {
-        throw new NotImplementedException();
+        get => metricName;
+        set
+        {
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (value.Length == 0) throw new ArgumentException("Metric tensor name cannot be empty.");
+            metricName = value;
+        }
     }
 
-    public string getKronecker()
-    {
-        throw new NotImplementedException();
-    }
+    public int NameManagerSeed { get; set; }
 
-    public string getMetricName()
-    {
-        throw new NotImplementedException();
-    }
-
-    public OutputFormat getDefaultOutputFormat()
-    {
-        throw new NotImplementedException();
-    }
-
-    public IndexType[] MetricTypes { get; set; }
-
-    public void setMetricName(string s)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void addMetricIndexType(IndexType indexType)
-    {
-        throw new NotImplementedException();
-    }
+    public IndexConverterManager ConverterManager { get; set; } = IndexConverterManager.Default;
+    public NRedberry.Core.Parsers.Parser Parser { get; set; } = NRedberry.Core.Parsers.Parser.Default;
 }

@@ -5,7 +5,7 @@ namespace NRedberry.Core.Utils;
 [Obsolete("use System.Collections.BitArray instead")]
 public sealed class ByteBackedBitArray : IBitArray, IEquatable<ByteBackedBitArray>
 {
-    public static ByteBackedBitArray Empty = new ByteBackedBitArray(0);
+    public static ByteBackedBitArray Empty = new(0);
 
     public ByteBackedBitArray(params bool[] bits)
     {

@@ -17,13 +17,13 @@ public sealed class NameManager
 {
     private long seed;
     private Random random;
-    private object readLock = new object();
-    private object writeLock = new object();
+    private object readLock = new();
+    private object writeLock = new();
 
     private IDictionary<int, NameDescriptor> fromId = new Dictionary<int, NameDescriptor>();
     private IDictionary<NameAndStructureOfIndices, NameDescriptor> fromStructure = new Dictionary<NameAndStructureOfIndices, NameDescriptor>();
     private readonly string[] kroneckerAndMetricNames = {"d", "g"};
-    private IntArrayList kroneckerAndMetricIds = new IntArrayList();
+    private IntArrayList kroneckerAndMetricIds = new();
 
     public NameManager(int seed, string kronecker, string metric)
     {

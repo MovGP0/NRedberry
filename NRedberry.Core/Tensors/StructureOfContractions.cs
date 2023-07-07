@@ -10,7 +10,7 @@ namespace NRedberry.Core.Tensors;
 public sealed class StructureOfContractions
 {
     public static StructureOfContractions EmptyFullContractionsStructure =
-        new StructureOfContractions(new long[0], new long[0][], new int[0], 0);
+        new(new long[0], new long[0][], new int[0], 0);
 
     public long[] freeContractions;
     public long[][] contractions;
@@ -29,7 +29,9 @@ public sealed class StructureOfContractions
     {
         //Names (names with type, see IndicesUtils.getNameWithType() ) of all indices in this multiplication
         //It will be used as index name -> index index [0,1,2,3...] mapping
-        int[] upperIndices = new int[differentIndicesCount], lowerIndices = new int[differentIndicesCount];
+        long[] upperIndices = new long[differentIndicesCount];
+        long[]  lowerIndices = new long[differentIndicesCount];
+
         //This is sorage for intermediate information about indices, used in the algorithm (see below)
         //Structure:
         //
@@ -38,7 +40,7 @@ public sealed class StructureOfContractions
         //This is for generalization of algorithm
         //indices[0] == lowerIndices
         //indices[1] == lowerIndices
-        int[][] indices = { lowerIndices, upperIndices };
+        long[][] indices = { lowerIndices, upperIndices };
 
         //This is for generalization of algorithm too
         //info[0] == lowerInfo
@@ -58,9 +60,9 @@ public sealed class StructureOfContractions
         //product. (sorry for English)
         freeContractions = new long[freeIndices.Size()];
 
-        uint state;
-        uint index;
-        uint i;
+        long state;
+        long index;
+        long i;
 
         //Processing free indices = creating contractions for dummy tensor
         for (i = 0; i < freeIndices.Size(); ++i)
@@ -68,7 +70,7 @@ public sealed class StructureOfContractions
             index = freeIndices[i];
             //Inverse state (because it is state of index at (??) dummy tensor,
             //contracted with this free index)
-            state = 1 - IndicesUtils.getStateInt(index);
+            state = 1 - IndicesUtils.GetStateInt(index);
 
             //Important:
             info[state][pointer[state]] = dummyTensorInfo;
@@ -89,7 +91,7 @@ public sealed class StructureOfContractions
             for (uint j = 0; j < tInds.Size(); ++j)
             {
                 index = tInds[j];
-                state = IndicesUtils.getStateInt(index);
+                state = IndicesUtils.GetStateInt(index);
                 info[state][pointer[state]] = packToLong(tensorIndex, diffIds[j], j);
                 indices[state][pointer[state]++] = IndicesUtils.GetNameWithType(index);
             }
@@ -99,15 +101,15 @@ public sealed class StructureOfContractions
         }
 
         //Here we can use unstable sorting algorithm (all indices are different)
-        ArraysUtils.quickSort(indices[0], info[0].Select(u => (int)u).ToArray());
-        ArraysUtils.quickSort(indices[1], info[1].Select(u => (int)u).ToArray());
+        ArraysUtils.quickSort(indices[0], info[0].Select(u => (long)u).ToArray());
+        ArraysUtils.quickSort(indices[1], info[1].Select(u => (long)u).ToArray());
 
         //Calculating connected components
         var infoTensorIndicesFrom = infoToTensorIndices(lowerInfo);
         var infoTensorIndicesTo = infoToTensorIndices(upperInfo);
 
         uint shift = 0;
-        uint last = 0;
+        long last = 0;
         for (i = 0; i < infoTensorIndicesFrom.Length; ++i)
             if (infoTensorIndicesFrom[i] == -1 || infoTensorIndicesTo[i] == -1)
             {

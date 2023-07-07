@@ -37,11 +37,6 @@ public class SimpleTensor : Tensor, IEquatable<SimpleTensor>
         return Name;
     }
 
-    public IIndices GetIndices()
-    {
-        return Indices;
-    }
-
     public override Tensor this[int i] => throw new IndexOutOfRangeException();
 
     public override int Size => 0;
@@ -97,10 +92,5 @@ public class SimpleTensor : Tensor, IEquatable<SimpleTensor>
     public override int GetHashCode()
     {
         return Name;
-    }
-
-    public int GetName()
-    {
-        throw new NotImplementedException();
     }
 }

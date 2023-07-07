@@ -21,7 +21,7 @@ public static class NumberUtils
         return new Rational(value);
     }
 
-    public static BigInteger Two = new BigInteger(2);
+    public static BigInteger Two = new(2);
 
     public static BigInteger Sqrt(BigInteger value)
     {

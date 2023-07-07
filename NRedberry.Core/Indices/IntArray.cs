@@ -1,36 +1,38 @@
 using System;
+using System.Linq;
 
 namespace NRedberry.Core.Indices;
 
 public sealed class IntArray
 {
-    public static IntArray EmptyArray = new IntArray(new int[0]);
-    private int[] InnerArray { get; }
+    public static IntArray EmptyArray = new(new long[0]);
+    private long[] InnerArray { get; }
 
-    public IntArray(int[] innerArray)
+    public IntArray(long[] innerArray)
     {
         InnerArray = innerArray ?? throw new ArgumentNullException(nameof(innerArray));
     }
 
-    public int this[int i] => InnerArray[i];
-    public int Length => InnerArray.Length;
+    public long this[long i] => InnerArray[i];
+    public long Length => InnerArray.Length;
 
-    public int[] Copy()
+    public long[] Copy()
     {
-        var target = new int[InnerArray.Length];
+        var target = new long[InnerArray.Length];
         Array.Copy(InnerArray, target, InnerArray.Length);
         return target;
     }
 
-    public int[] Copy(int from, int to)
+    public long[] Copy(int from, int to)
     {
-        var target = new int[to-from];
+        var target = new long[to-from];
         Array.Copy(InnerArray, from, target, 0, target.Length);
         return target;
     }
 
-    public override bool Equals(object obj) {
-        if (obj == null) return false;
+    public override bool Equals(object obj)
+    {
+        if (obj is null) return false;
         if (ReferenceEquals(this, obj)) return true;
 
         if (obj is IntArray other)
@@ -40,11 +42,15 @@ public sealed class IntArray
         return false;
     }
 
-    public override int GetHashCode() {
+    public override int GetHashCode()
+    {
         return 497 + InnerArray.GetHashCode();
     }
 
-    public override string ToString() {
+    public override string ToString()
+    {
         return InnerArray.ToString();
     }
+
+    public long[] ToArray() => Copy();
 }

@@ -20,7 +20,7 @@ public sealed class RealField : IField<Real>
         return (TC)(IFieldElement<Real>)null;
     }
 
-    private static Lazy<RealField> RealFieldFactory => new Lazy<RealField>(() => new RealField());
+    private static Lazy<RealField> RealFieldFactory => new(() => new RealField());
 
     [Obsolete("Inject IField<Real> instead.")]
     public static RealField GetInstance()

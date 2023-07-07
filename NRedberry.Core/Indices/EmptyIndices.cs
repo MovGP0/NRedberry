@@ -5,11 +5,10 @@ namespace NRedberry.Core.Indices;
 
 public sealed class EmptyIndices : IIndices
 {
-    [Obsolete("Use DI instead.")]
-    public static EmptyIndices EmptyIndicesInstance = new EmptyIndices();
+    public static readonly EmptyIndices EmptyIndicesInstance = new();
 
-    public uint this[uint position] => throw new ArgumentOutOfRangeException(nameof(position), position, "Size is zero.");
-    public uint this[IndexType type, uint position] => throw new ArgumentOutOfRangeException(nameof(position), position, "Size is zero.");
+    public long this[long position] => throw new ArgumentOutOfRangeException(nameof(position), position, "Size is zero.");
+    public long this[IndexType type, long position] => throw new ArgumentOutOfRangeException(nameof(position), position, "Size is zero.");
 
     public IIndices GetInverted()
     {

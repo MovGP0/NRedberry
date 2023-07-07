@@ -4,6 +4,10 @@ using NRedberry.Core.Tensors;
 
 namespace NRedberry.Core.Contexts.Defaults;
 
+/// <summary>
+/// Base class for other <see cref="IIndexSymbolConverter"/>.
+/// </summary>
+/// <remarks>https://github.com/redberry-cas/core/blob/master/src/main/java/cc/redberry/core/context/defaults/SymbolArrayConverter.java</remarks>
 public abstract class SymbolArrayConverter : IIndexSymbolConverter
 {
     private string[] Symbols { get; }
@@ -55,6 +59,6 @@ public abstract class SymbolArrayConverter : IIndexSymbolConverter
         }
     }
 
-    public int MaxNumberOfSymbols => Symbols.Length - 1;
-    public abstract byte Type { get; }
+    public int MaxNumberOfSymbols() => Symbols.Length - 1;
+    public abstract byte GetType_();
 }

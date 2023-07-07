@@ -6,7 +6,7 @@ namespace NRedberry.Core.Combinatorics.Symmetries;
 
 public class EmptySymmetries : DummySymmetries
 {
-    public EmptySymmetries(int dimension) : base(dimension, new List<Symmetry> { new Symmetry(dimension) })
+    public EmptySymmetries(int dimension) : base(dimension, new List<Symmetry> { new(dimension) })
     {
         if (dimension != 0 && dimension != 1)
             throw new ArgumentException("Dimension must be either 0 or 1.");

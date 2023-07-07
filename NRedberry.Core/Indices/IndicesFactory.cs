@@ -1,34 +1,40 @@
-﻿using System;
-using static NRedberry.Core.Indices.EmptyIndices;
-
-namespace NRedberry.Core.Indices;
+﻿namespace NRedberry.Core.Indices;
 
 public static class IndicesFactory
 {
-    public static IIndices EmptyIndices = EmptyIndicesInstance;
+    public static readonly IIndices EmptyIndices = NRedberry.Core.Indices.EmptyIndices.EmptyIndicesInstance;
 
-    public static ISimpleIndices createSimple(IndicesSymmetries symmetries, params uint[] data)
+    public static readonly ISimpleIndices EmptySimpleIndices = EmptySimpleIndices.EmptySimpleIndicesInstance;
+
+    public static ISimpleIndices CreateSimple(IndicesSymmetries? symmetries, params long[] data)
     {
-        throw new NotImplementedException();
+        if (data.Length == 0)
+            return EmptySimpleIndices.EmptySimpleIndicesInstance;
+        return new SimpleIndicesIsolated((long[])data.Clone(), symmetries);
     }
 
-    public static ISimpleIndices createSimple(IndicesSymmetries symmetries, IIndices indices)
+    public static ISimpleIndices CreateSimple(IndicesSymmetries? symmetries, IIndices indices)
     {
-        throw new NotImplementedException();
+        if (indices.Size() == 0)
+            return EmptySimpleIndices.EmptySimpleIndicesInstance;
+        if (indices is SimpleIndicesAbstract simpleIndicesAbstract)
+            return new SimpleIndicesIsolated(simpleIndicesAbstract.data, symmetries);
+        return new SimpleIndicesIsolated(indices.GetAllIndices().Copy(), symmetries);
     }
 
-    public static IIndices create(IIndices indices)
+    public static IIndices Create(IIndices indices)
     {
-        throw new NotImplementedException();
+        if (indices.Size() == 0)
+            return EmptyIndices;
+        if (indices is SortedIndices)
+            return indices;
+        return new SortedIndices(indices.GetAllIndices().Copy());
     }
 
-    /// <summary>
-    /// Creates unordered indices from specified integer array of indices.
-    /// </summary>
-    /// <param name="data"></param>
-    /// <returns>unordered indices from specified integer array of indices</returns>
-    public static IIndices create(params uint[] data)
+    public static IIndices Create(params long[] data)
     {
-        throw new NotImplementedException();
+        if (data.Length == 0)
+            return EmptyIndices;
+        return new SortedIndices((long[])data.Clone());
     }
 }

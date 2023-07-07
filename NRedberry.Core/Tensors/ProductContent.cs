@@ -5,7 +5,7 @@ namespace NRedberry.Core.Tensors;
 
 public sealed class ProductContent
 {
-    public static ProductContent EmptyInstance = new ProductContent(
+    public static ProductContent EmptyInstance = new(
         StructureOfContractionsHashed.EmptyInstance,
         StructureOfContractions.EmptyFullContractionsStructure,
         new Tensor[0], null, new short[0], new Tensor[0], new int[0]);

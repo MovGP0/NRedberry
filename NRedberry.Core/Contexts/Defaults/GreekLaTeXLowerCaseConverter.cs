@@ -1,5 +1,9 @@
 ﻿namespace NRedberry.Core.Contexts.Defaults;
 
+/// <summary>
+/// <see cref="IIndexSymbolConverter "/> for Greek lower case letters.
+/// </summary>
+/// <remarks>https://github.com/redberry-cas/core/blob/master/src/main/java/cc/redberry/core/context/defaults/GreekLaTeXLowerCaseConverter.java</remarks>
 public sealed class GreekLaTeXLowerCaseConverter : SymbolArrayConverter
 {
     private static string[] Symbols { get; } = new string[23];
@@ -50,7 +54,10 @@ public sealed class GreekLaTeXLowerCaseConverter : SymbolArrayConverter
     {
     }
 
-    public static GreekLaTeXLowerCaseConverter Instance = new GreekLaTeXLowerCaseConverter();
+    /// <summary>
+    /// Singleton instance.
+    /// </summary>
+    public static GreekLaTeXLowerCaseConverter Instance = new();
 
-    public override byte Type => 2;
+    public override byte GetType_() => 2;
 }

@@ -34,7 +34,7 @@ public sealed class Context
     /// Holds information about metric types.
     /// This is a "map" from (byte) type to (bit) isMetric
     /// </summary>
-    private LongBackedBitArray metricTypes = new LongBackedBitArray(128);
+    private LongBackedBitArray metricTypes = new(128);
 
     /**
      * Creates context from the settings
@@ -43,11 +43,11 @@ public sealed class Context
      * @see ContextSettings
      */
     public Context(ContextSettings contextSettings) {
-        parseManager = new ParseManager(contextSettings.getParser());
-        converterManager = contextSettings.getConverterManager();
-        nameManager = new NameManager(contextSettings.getNameManagerSeed(), contextSettings.getKronecker(), contextSettings.getMetricName());
+        parseManager = new ParseManager(contextSettings.Parser);
+        converterManager = contextSettings.ConverterManager;
+        nameManager = new NameManager(contextSettings.NameManagerSeed, contextSettings.Kronecker, contextSettings.MetricName);
 
-        defaultOutputFormat = contextSettings.getDefaultOutputFormat();
+        defaultOutputFormat = contextSettings.DefaultOutputFormat;
 
         foreach (IndexType type in contextSettings.MetricTypes)
         {
@@ -55,7 +55,7 @@ public sealed class Context
         }
     }
 
-    private readonly object _resetTensorNamesLock = new object();
+    private readonly object _resetTensorNamesLock = new();
     /**
      * This method resets all tensor names in the namespace.
      *
@@ -71,7 +71,7 @@ public sealed class Context
         }
     }
 
-    private readonly object _resetTensorNames = new object();
+    private readonly object _resetTensorNames = new();
     /**
      * This method resets all tensor names in the namespace and sets a
      * specified seed to the {@link NameManager}. If this method is invoked
@@ -100,15 +100,6 @@ public sealed class Context
      */
     public void SetDefaultOutputFormat(OutputFormat defaultOutputFormat) {
         this.defaultOutputFormat = defaultOutputFormat;
-    }
-
-    /**
-     * Returns current default output format.
-     *
-     * @return current default output format
-     */
-    public OutputFormat GetDefaultOutputFormat() {
-        return defaultOutputFormat;
     }
 
     /**
@@ -185,7 +176,7 @@ public sealed class Context
      */
     public bool IsKronecker(SimpleTensor t) {
         return nameManager.IsKroneckerOrMetric(t.Name)
-               && !IndicesUtils.haveEqualStates(t.Indices[0], t.Indices[1]);
+               && !IndicesUtils.HaveEqualStates(t.Indices[0], t.Indices[1]);
     }
 
     /**
@@ -196,7 +187,7 @@ public sealed class Context
      */
     public bool IsMetric(SimpleTensor t) {
         return nameManager.IsKroneckerOrMetric(t.Name)
-               && IndicesUtils.haveEqualStates(t.Indices[0], t.Indices[1]);
+               && IndicesUtils.HaveEqualStates(t.Indices[0], t.Indices[1]);
     }
 
     /**
@@ -239,31 +230,20 @@ public sealed class Context
      */
     public SimpleTensor CreateKronecker(uint index1, uint index2) {
         byte type;
-        if ((type = IndicesUtils.getType(index1)) != IndicesUtils.getType(index2) || IndicesUtils.getRawStateInt((uint)index1) == IndicesUtils.getRawStateInt((uint)index2))
+        if ((type = IndicesUtils.GetType_(index1)) != IndicesUtils.GetType_(index2) || IndicesUtils.GetRawStateInt((uint)index1) == IndicesUtils.GetRawStateInt((uint)index2))
             throw new ArgumentException("This is not kronecker indices!");
 
-        if (!isMetric(type) && IndicesUtils.getState(index2))
+        if (!IsMetric(type) && IndicesUtils.GetState(index2))
         {
             var t = index1;
             index1 = index2;
             index2 = t;
         }
 
-        ISimpleIndices indices = IndicesFactory.createSimple(null, index1, index2);
+        ISimpleIndices indices = IndicesFactory.CreateSimple(null, index1, index2);
         var nd = nameManager.mapNameDescriptor(nameManager.getKroneckerName(), new StructureOfIndices(indices));
         var name = nd.Id;
         return Tensor.SimpleTensor(name, indices);
-    }
-
-    public bool isMetric(SimpleTensor t)
-    {
-        return nameManager.isKroneckerOrMetric(t.GetName())
-               && IndicesUtils.haveEqualStates(t.GetIndices()[0], t.GetIndices()[1]);
-    }
-
-    public bool isMetric(byte type)
-    {
-        return metricTypes[type];
     }
 
     /**
@@ -278,11 +258,11 @@ public sealed class Context
      */
     public SimpleTensor CreateMetric(uint index1, uint index2) {
         byte type;
-        if ((type = IndicesUtils.getType(index1)) != IndicesUtils.getType(index2)
-            || !IndicesUtils.haveEqualStates(index1, index2)
+        if ((type = IndicesUtils.GetType_(index1)) != IndicesUtils.GetType_(index2)
+            || !IndicesUtils.HaveEqualStates(index1, index2)
             || !metricTypes.Get(type))
             throw new ArgumentException("Not metric indices.");
-        var indices = IndicesFactory.createSimple(null, index1, index2);
+        var indices = IndicesFactory.CreateSimple(null, index1, index2);
         var nd = nameManager.mapNameDescriptor(nameManager.GetMetricName(), new StructureOfIndices(indices));
         var name = nd.Id;
         return Tensor.SimpleTensor(name, indices);
@@ -300,7 +280,7 @@ public sealed class Context
      * @throws IllegalArgumentException if indices have same states and non metric types
      */
     public SimpleTensor CreateMetricOrKronecker(uint index1, uint index2) {
-        if (IndicesUtils.getRawStateInt(index1) == IndicesUtils.getRawStateInt(index2))
+        if (IndicesUtils.GetRawStateInt(index1) == IndicesUtils.GetRawStateInt(index2))
             return createMetric(index1, index2);
         return createKronecker(index1, index2);
     }
@@ -325,13 +305,5 @@ public sealed class Context
         throw new NotImplementedException();
     }
 
-    public static Context get()
-    {
-        return ContextManager.GetCurrentContext();
-    }
-
-    public OutputFormat getDefaultOutputFormat()
-    {
-        return defaultOutputFormat;
-    }
+    public OutputFormat GetDefaultOutputFormat() => defaultOutputFormat;
 }
