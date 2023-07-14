@@ -9,7 +9,7 @@ public sealed class Product : MultiTensor
     private Complex Factor { get; }
     private Tensor[] IndexlessData { get; }
     private Tensor[] Data { get; }
-    private WeakReference<ProductContent> ContentReference { get; }
+    private WeakReference<ProductContent> contentReference;
 
     public Product(IIndices indices) : base(indices)
     {
@@ -38,7 +38,12 @@ public sealed class Product : MultiTensor
         throw new NotImplementedException();
     }
 
-    public override Tensor Remove(uint position)
+    protected override Tensor Remove1(int[] positions)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Tensor Remove(int position)
     {
         throw new NotImplementedException();
     }
@@ -48,7 +53,7 @@ public sealed class Product : MultiTensor
         throw new NotImplementedException();
     }
 
-    protected override Tensor Select1(uint[] positions)
+    protected override Tensor Select1(int[] positions)
     {
         throw new NotImplementedException();
     }
@@ -56,5 +61,19 @@ public sealed class Product : MultiTensor
     internal Tensor[] GetAllScalars()
     {
         throw new NotImplementedException();
+    }
+
+    public ProductContent Content
+    {
+        get
+        {
+            var success = contentReference.TryGetTarget(out var content);
+            if (!success)
+            {
+                content = CalculateContent();
+                contentReference.SetTarget(content);
+            }
+            return content;
+        }
     }
 }

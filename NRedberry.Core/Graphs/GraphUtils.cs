@@ -36,7 +36,7 @@ public static class GraphUtils
         Array.Copy(_from, 0, to, _from.Length, _from.Length);
         Array.Copy(_to, 0, from, _from.Length, _from.Length);
 
-        //Sorting to easy indexing by from 
+        //Sorting to easy indexing by from
         ArraysUtils.quickSort(from, to);
 
         //Test for parameters consistence

@@ -1,4 +1,5 @@
-﻿using NRedberry.Core.Indices;
+﻿using System;
+using NRedberry.Core.Indices;
 using NRedberry.Core.Maths;
 using NRedberry.Core.Numbers;
 
@@ -13,27 +14,63 @@ public abstract class MultiTensor : Tensor
         Indices = indices;
     }
 
-    public abstract Tensor Remove(uint position);
-
-    public Tensor Remove(uint[] positions)
+    public Tensor Remove(Tensor tensor)
     {
-        var p = positions.GetSortedDistinct();
-        Tensor temp = this;
-        for(var i = p.Length -1; i >= 0; --i)
+        for (int l = 0, size = this.Size; l < size; ++l)
         {
-            if (temp is MultiTensor mt)
+            if (this[l] == tensor)
             {
-                temp = mt.Remove(p[i]);
+                return Remove(l);
             }
-            else
+        }
+        return tensor;
+    }
+
+    public Tensor Remove(int[] positions)
+    {
+        if (positions.Length == 0)
+        {
+            return this;
+        }
+        int size = Size;
+        foreach (int i in positions)
+        {
+            if (i >= size || i < 0)
             {
-                temp = GetNeutral();
+                throw new IndexOutOfRangeException();
             }
         }
 
-        return temp;
+        int[] p = MathUtils.GetSortedDistinct(positions.Clone() as int[]);
+        if (p.Length == size)
+        {
+            return GetNeutral();
+        }
+        return Remove1(p);
+    }
+
+    protected abstract Tensor Remove1(int[] positions);
+    public abstract Tensor Remove(int position);
+
+    public Tensor Select(int[] positions)
+    {
+        if (positions.Length == 0)
+        {
+            return GetNeutral();
+        }
+        if (positions.Length == 1)
+        {
+            return this[positions[0]];
+        }
+
+        int[] p = MathUtils.GetSortedDistinct(positions.Clone() as int[]);
+        if (p.Length == Size)
+        {
+            return this;
+        }
+        return Select1(p);
     }
 
     protected abstract Complex GetNeutral();
-    protected abstract Tensor Select1(uint[] positions);
+    protected abstract Tensor Select1(int[] positions);
 }

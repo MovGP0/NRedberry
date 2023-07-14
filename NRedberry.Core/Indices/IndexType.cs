@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NRedberry.Core.Contexts;
 using NRedberry.Core.Contexts.Defaults;
 
@@ -50,6 +51,25 @@ public static class IndexTypeMethods
         { IndexType.Matrix3, new IndexWithStrokeConverter(IndexConverterExtender.GreekLowerEx, 1) },
         { IndexType.Matrix4, new IndexWithStrokeConverter(IndexConverterExtender.GreekUpperEx, 1) },
     };
+
+    public static IndexType[] Values { get; } = new IndexType[]
+    {
+        IndexType.LatinLower,
+        IndexType.LatinUpper,
+        IndexType.GreekLower,
+        IndexType.GreekUpper,
+        IndexType.Matrix1,
+        IndexType.Matrix2,
+        IndexType.Matrix3,
+        IndexType.Matrix4
+    };
+
+    public static string GetShortString(this IndexType indexType)
+    {
+        return commonNames.Any(e => e.Value == indexType)
+            ? commonNames.First(e => e.Value == indexType).Key
+            : indexType.ToString();
+    }
 
     public static IndexType FromShortString(string stringVal)
     {

@@ -46,7 +46,7 @@ public static class CC
     /// Returns the current default output format.
     /// </summary>
     /// <returns>The current default output format.</returns>
-    public static OutputFormat GetDefaultOutputFormat() => Current().getDefaultOutputFormat();
+    public static OutputFormat GetDefaultOutputFormat() => Current().GetDefaultOutputFormat();
 
     /// <summary>
     /// Sets the default output format.

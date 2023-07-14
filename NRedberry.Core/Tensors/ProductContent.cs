@@ -24,10 +24,10 @@ public sealed class ProductContent
 
     private short[] StretchIndices { get; }
     public short[] StretchIds => (short[])StretchIndices.Clone();
-    public short GetStretchId(int id) => StretchIndices[id];
+    public short GetStretchId(long id) => StretchIndices[id];
 
     private Tensor[] Data { get; }
-    public Tensor this[int i] => Data[i];
+    public Tensor this[long i] => Data[i];
     public int Size => Data.Length;
 
     public ProductContent(

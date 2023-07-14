@@ -10,6 +10,11 @@ public static class MathUtils
         return values.OrderBy(v => v).Distinct().ToArray();
     }
 
+    public static int[] GetSortedDistinct(this int[] values)
+    {
+        return values.OrderBy(v => v).Distinct().ToArray();
+    }
+
     /// <summary>
     /// Return the set difference B - A for int sets A and B.
     /// </summary>

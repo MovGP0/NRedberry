@@ -26,16 +26,16 @@ public sealed class LatinUpperCaseConverter : IIndexSymbolConverter
         return false;
     }
 
-    public int GetCode(string symbol) => symbol[0] - 0x41;
+    public long GetCode(string symbol) => symbol[0] - 0x41;
 
-    public string GetSymbol(int code, OutputFormat mode) // assuming OutputFormat is a defined type
+    public string GetSymbol(long code, OutputFormat mode) // assuming OutputFormat is a defined type
     {
-        int number = code + 0x41;
+        long number = code + 0x41;
         if (number > 0x5A)
             throw new IndexConverterException(); // assuming IndexConverterException is a defined type
         return ((char) number).ToString();
     }
 
     public byte GetType_() => Type;
-    public int MaxNumberOfSymbols() => 25;
+    public long MaxNumberOfSymbols() => 25;
 }

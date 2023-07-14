@@ -3,7 +3,7 @@ using NRedberry.Core.Tensors;
 
 namespace NRedberry.Core.Indices;
 
-public sealed class EmptyIndices : IIndices
+public class EmptyIndices : IIndices
 {
     public static readonly EmptyIndices EmptyIndicesInstance = new();
 

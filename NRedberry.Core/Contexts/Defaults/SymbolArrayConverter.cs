@@ -26,7 +26,7 @@ public abstract class SymbolArrayConverter : IIndexSymbolConverter
         return Symbols.Any(s => s.Equals(symbol));
     }
 
-    public int GetCode(string symbol)
+    public long GetCode(string symbol)
     {
         for (var i = 0; i < Symbols.Length; ++i)
         {
@@ -39,7 +39,7 @@ public abstract class SymbolArrayConverter : IIndexSymbolConverter
         throw new IndexConverterException();
     }
 
-    public string GetSymbol(int code, OutputFormat mode)
+    public string GetSymbol(long code, OutputFormat mode)
     {
         try
         {
@@ -59,6 +59,6 @@ public abstract class SymbolArrayConverter : IIndexSymbolConverter
         }
     }
 
-    public int MaxNumberOfSymbols() => Symbols.Length - 1;
+    public long MaxNumberOfSymbols() => Symbols.Length - 1;
     public abstract byte GetType_();
 }

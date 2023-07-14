@@ -1,0 +1,221 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using NRedberry.Core.Indices;
+using NRedberry.Core.Tensors;
+using static NRedberry.Core.Indices.IndicesUtils;
+
+namespace NRedberry.Core.Graphs;
+
+public sealed class PrimitiveSubgraphPartition
+{
+    private readonly ProductContent pc;
+    private readonly StructureOfContractions fcs;
+    private readonly int size;
+    private readonly IndexType type;
+    private readonly PrimitiveSubgraph[] partition;
+    private readonly BitArray used;
+
+    public PrimitiveSubgraphPartition(ProductContent productContent, IndexType type)
+    {
+        this.pc = productContent;
+        this.fcs = pc.StructureOfContractions;
+        this.size = pc.Size;
+        this.type = type;
+        this.used = new BitArray(size);
+        this.partition = CalculatePartition();
+    }
+
+    public PrimitiveSubgraph[] Partition
+    {
+        get
+        {
+            return (PrimitiveSubgraph[])partition.Clone();
+        }
+    }
+
+    public static PrimitiveSubgraph[] CalculatePartition(Product p, IndexType type)
+    {
+        return new PrimitiveSubgraphPartition(p.Content, type).Partition;
+    }
+
+    public static PrimitiveSubgraph[] CalculatePartition(ProductContent p, IndexType type)
+    {
+        return new PrimitiveSubgraphPartition(p, type).Partition;
+    }
+
+    private PrimitiveSubgraph[] CalculatePartition()
+    {
+        List<PrimitiveSubgraph> subgraphs = new List<PrimitiveSubgraph>();
+        for (int pivot = 0; pivot < size; ++pivot)
+            if (pc[pivot].Indices.Size(type) != 0 && !used.Get(pivot))
+                subgraphs.Add(CalculateComponent(pivot));
+        return subgraphs.ToArray();
+    }
+
+    private PrimitiveSubgraph CalculateComponent(int pivot)
+    {
+        LinkedList<int> positions = new LinkedList<int>();
+        positions.AddLast(pivot);
+
+        long[] left, right;
+        left = right = GetLinks(pivot);
+
+        Debug.Assert(left[0] != NO_LINKS || left[1] != NO_LINKS);
+
+        if (left[0] == BRANCHING || left[1] == BRANCHING)
+            return ProcessGraph(pivot);
+
+        if (left[0] == left[1] && left[0] == pivot) {
+            used.Set(pivot, true);
+            return new PrimitiveSubgraph(GraphType.Cycle, new int[]{pivot});
+        }
+
+        long leftPivot, rightPivot, lastLeftPivot = NOT_INITIALIZED, lastRightPivot = NOT_INITIALIZED;
+
+        while (left != DUMMY || right != DUMMY)
+        {
+            if (left[0] == BRANCHING || left[1] == BRANCHING || right[0] == BRANCHING || right[1] == BRANCHING)
+                return ProcessGraph(pivot);
+
+            leftPivot = left[0];
+            rightPivot = right[1];
+
+            Debug.Assert(leftPivot < 0 || !used.Get((int)leftPivot));
+            Debug.Assert(rightPivot < 0 || !used.Get((int)rightPivot));
+
+            //Left end detection
+            if (leftPivot == NO_LINKS || leftPivot == -1)
+                leftPivot = DUMMY_PIVOT;
+
+            //Right end detection
+            if (rightPivot == NO_LINKS || rightPivot == -1)
+                rightPivot = DUMMY_PIVOT;
+
+            //Odd cycle detection
+            if (leftPivot >= 0 && leftPivot == lastRightPivot) {
+                //Closing odd nodes number cycle
+                Debug.Assert(rightPivot == lastLeftPivot);
+                return new PrimitiveSubgraph(GraphType.Cycle, DequeToArray(positions));
+            }
+
+            //Adding left pivot before cycle detection (if cycle, not to add closing node twice)
+            if (leftPivot >= 0)
+                positions.AddFirst((int)leftPivot);
+
+            //Even cycle detection
+            if (leftPivot >= 0 && leftPivot == rightPivot) {
+                left = GetLinks((int)leftPivot);
+
+                // Checking next (cycle closing) node
+                if (left[0] == BRANCHING || left[1] == BRANCHING)
+                    return ProcessGraph(pivot);
+
+                return new PrimitiveSubgraph(GraphType.Cycle, DequeToArray(positions));
+            }
+
+            //Adding right pivot
+            if (rightPivot >= 0)
+                positions.AddLast((int)rightPivot);
+
+            //Needed in odd cycle detection
+            lastLeftPivot = leftPivot;
+            //Redundant (needed for assertion)
+            lastRightPivot = rightPivot;
+
+            //Next layer (breadth-first traversal)
+            left = GetLinks((int)leftPivot);
+            right = GetLinks((int)rightPivot);
+        }
+
+        return new PrimitiveSubgraph(GraphType.Line, DequeToArray(positions));
+    }
+
+    private int[] DequeToArray(LinkedList<int> deque)
+    {
+        int[] arr = new int[deque.Count];
+        int i = -1;
+        foreach (int ii in deque)
+        {
+            arr[++i] = ii;
+            used.Set(ii, true);
+        }
+        return arr;
+    }
+
+    private const long BRANCHING = -3, NO_LINKS = -2, NOT_INITIALIZED = -4, DUMMY_PIVOT = -5;
+    private static readonly long[] DUMMY = new long[] { DUMMY_PIVOT, DUMMY_PIVOT };
+
+    private long[] GetLinks(int pivot)
+    {
+        if (pivot == DUMMY_PIVOT)
+            return DUMMY;
+
+        Debug.Assert(pivot >= 0);
+
+        long[] links = new long[] { NOT_INITIALIZED, NOT_INITIALIZED };
+        long[] contractions = fcs.contractions[pivot];
+        IIndices indices = pc[pivot].Indices;
+        long index, toTensorIndex;
+        for (long i = contractions.Length - 1; i >= 0; --i)
+        {
+            index = indices[i];
+
+            if (GetType_(index) != type.GetType_())
+                continue;
+
+            toTensorIndex = StructureOfContractions.ToPosition(contractions[i]);
+            long state = 1 - GetStateInt(index);
+
+            if (links[state] >= -1 && links[state] != toTensorIndex)
+                links[state] = BRANCHING;
+            if (links[state] == NOT_INITIALIZED)
+                links[state] = toTensorIndex;
+        }
+
+        if (links[0] == NOT_INITIALIZED)
+            links[0] = NO_LINKS;
+
+        if (links[1] == NOT_INITIALIZED)
+            links[1] = NO_LINKS;
+
+        return links;
+    }
+
+    private PrimitiveSubgraph ProcessGraph(int pivot)
+    {
+        List<int> positions = new List<int>();
+        positions.Add(pivot);
+
+        Stack<int> stack = new Stack<int>();
+        stack.Push(pivot);
+        used.Set(pivot, true);
+
+        long[] contractions;
+        IIndices indices;
+
+        long currentPivot, index, toTensorIndex;
+        while (stack.Count > 0)
+        {
+            currentPivot = stack.Pop();
+
+            indices = pc[currentPivot].Indices;
+            contractions = fcs.contractions[currentPivot];
+            for (int i = contractions.Length - 1; i >= 0; --i)
+            {
+                index = indices[i];
+                if (GetType_(index) != type.GetType_())
+                    continue;
+
+                toTensorIndex = StructureOfContractions.ToPosition(contractions[i]);
+                if (toTensorIndex == -1 || used.Get((int)toTensorIndex))
+                    continue;
+                used.Set((int)toTensorIndex, true);
+                positions.Add((int)toTensorIndex);
+                stack.Push((int)toTensorIndex);
+            }
+        }
+        return new PrimitiveSubgraph(GraphType.Graph, positions.ToArray());
+    }
+
+}
