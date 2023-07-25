@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace NRedberry.Core.Combinatorics.Symmetries;
 
+/// <summary>
+/// src\main\java\cc\redberry\core\combinatorics\symmetries\Symmetries.java
+/// </summary>
 public interface Symmetries : IEnumerable<Symmetry>
 {
     int Dimension();

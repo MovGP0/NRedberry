@@ -4,6 +4,9 @@ using NRedberry.Core.Utils;
 
 namespace NRedberry.Core.Combinatorics.Symmetries;
 
+/// <summary>
+/// src\main\java\cc\redberry\core\combinatorics\symmetries\EmptySymmetries.java
+/// </summary>
 public class EmptySymmetries : DummySymmetries
 {
     public EmptySymmetries(int dimension) : base(dimension, new List<Symmetry> { new(dimension) })

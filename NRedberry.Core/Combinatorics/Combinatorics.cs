@@ -17,7 +17,7 @@ public static class Combinatorics
             : new IntCombinationPermutationGenerator(n, k);
     }
 
-    public static bool IsIdentity(long[] permutation)
+    public static bool IsIdentity(int[] permutation)
     {
         return permutation.Select((t, i) => t == i).All(isTrue => isTrue);
     }
@@ -142,6 +142,22 @@ public static class Combinatorics
     }
 
     public static bool TestPermutationCorrectness(long[] permutation)
+    {
+        var clone = (long[])permutation.Clone();
+        Array.Sort(clone);
+
+        for (var i = 0; i < clone.Length; i++)
+        {
+            if (clone[i] != i)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static bool TestPermutationCorrectness(int[] permutation)
     {
         var clone = (long[])permutation.Clone();
         Array.Sort(clone);

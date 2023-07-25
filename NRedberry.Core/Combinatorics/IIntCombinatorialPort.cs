@@ -3,6 +3,9 @@
 /// <summary>
 /// This interface is common for all combinatorial iterators.
 /// </summary>
+/// <remarks>
+/// src\main\java\cc\redberry\core\combinatorics\IntCombinatorialPort.java
+/// </remarks>
 public interface IIntCombinatorialPort : IOutputPortUnsafe<int[]>
 {
     /// <summary>
@@ -10,17 +13,11 @@ public interface IIntCombinatorialPort : IOutputPortUnsafe<int[]>
     /// </summary>
     void Reset();
 
-    /**
-         * Returns the reference to the current iteration element.
-         *
-         * @return the reference to the current iteration element
-         */
+    /// <summary>Returns the reference to the current iteration element.</summary>
+    /// <returns>Reference to the current iteration element</returns>
     int[] GetReference();
 
-    /**
-     * Calculates and returns the next combination or null, if no more combinations exist.
-     *
-     * @return the next combination or null, if no more combinations exist
-     */
+    /// <summary>Calculates and returns the next combination or <value>null</value>, if no more combinations exist.</summary>
+    /// <returns>The next combination or <value>null</value>, if no more combinations exist</returns>
     int[]? Take();
 }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace NRedberry.Core.Combinatorics;
 
-public abstract class IntCombinatorialGenerator : IEnumerable<int>, IEnumerator<int>
+public abstract class IntCombinatorialGenerator : IIntCombinatorialGenerator
 {
-    public IEnumerator<int> GetEnumerator()
+    public IEnumerator<int[]> GetEnumerator()
     {
         return this;
     }
@@ -19,7 +19,7 @@ public abstract class IntCombinatorialGenerator : IEnumerable<int>, IEnumerator<
 
     public abstract void Reset();
 
-    public abstract int Current { get; }
+    public abstract int[] Current { get; }
 
     object IEnumerator.Current => Current;
 

@@ -4,23 +4,23 @@ using NRedberry.Core.Combinatorics;
 
 public class Permutation : IComparable<Permutation>
 {
-    protected long[] permutation;
+    protected int[] permutation;
 
     public Permutation(int dimension)
     {
-        permutation = new long[dimension];
+        permutation = new int[dimension];
         for (int i = 0; i < dimension; ++i)
             permutation[i] = i;
     }
 
-    public Permutation(long[] permutation)
+    public Permutation(int[] permutation)
     {
         if (!Combinatorics.TestPermutationCorrectness(permutation))
             throw new ArgumentException("Wrong permutation input: input array is not consistent with one-line notation");
-        this.permutation = (long[])permutation.Clone();
+        this.permutation = (int[])permutation.Clone();
     }
 
-    protected Permutation(long[] permutation, bool notClone)
+    protected Permutation(int[] permutation, bool notClone)
     {
         this.permutation = permutation;
     }
@@ -30,11 +30,11 @@ public class Permutation : IComparable<Permutation>
         return new Permutation(permutation.Length);
     }
 
-    protected long[] CompositionArray(Permutation element)
+    protected int[] CompositionArray(Permutation element)
     {
         if (permutation.Length != element.permutation.Length)
             throw new ArgumentException("different dimensions of compositing combinatorics");
-        long[] perm = new long[permutation.Length];
+        int[] perm = new int[permutation.Length];
         for (int i = 0; i < permutation.Length; ++i)
             perm[i] = element.permutation[permutation[i]];
         return perm;
@@ -55,15 +55,15 @@ public class Permutation : IComparable<Permutation>
         return copy;
     }
 
-    protected long[] CalculateInverse()
+    protected int[] CalculateInverse()
     {
-        long[] inverse = new long[permutation.Length];
-        for (long i = 0; i < permutation.Length; ++i)
+        int[] inverse = new int[permutation.Length];
+        for (int i = 0; i < permutation.Length; ++i)
             inverse[permutation[i]] = i;
         return inverse;
     }
 
-    public long NewIndexOf(long index)
+    public int NewIndexOf(int index)
     {
         return permutation[index];
     }
@@ -73,7 +73,7 @@ public class Permutation : IComparable<Permutation>
         return permutation.Length;
     }
 
-    public long[] GetPermutation()
+    public int[] GetPermutation()
     {
         return permutation;
     }
@@ -114,7 +114,7 @@ public class Permutation : IComparable<Permutation>
         return 0;
     }
 
-    public bool Compare(long[] permutation)
+    public bool Compare(int[] permutation)
     {
         return this.permutation.SequenceEqual(permutation);
     }
