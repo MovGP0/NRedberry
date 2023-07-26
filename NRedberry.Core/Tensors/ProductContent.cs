@@ -20,7 +20,7 @@ public sealed class ProductContent
         private set => _scalars = value;
     }
 
-    public Tensor NonScalar { get; }
+    public Tensor? NonScalar { get; }
 
     private short[] StretchIndices { get; }
     public short[] StretchIds => (short[])StretchIndices.Clone();
@@ -48,7 +48,8 @@ public sealed class ProductContent
     private ProductContent(
         StructureOfContractionsHashed structureOfContractionsHashed,
         StructureOfContractions structureOfContractions,
-        Tensor[] scalars, Tensor nonScalar,
+        Tensor[] scalars,
+        Tensor? nonScalar,
         short[] stretchIndices,
         Tensor[] data,
         int[] stretchHashReflection)

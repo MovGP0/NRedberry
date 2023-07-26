@@ -7,8 +7,85 @@ public sealed class Rational : Real
 {
     private Rationals.Rational Fraction { get; set; }
 
-    public static Real One = new Rational(1);
-    public static Real Zero = new Rational(0);
+    /// <summary>
+    /// A fraction representing "2 / 1".
+    /// </summary>
+    public static Rational Two { get; } = new(2);
+
+    /// <summary>
+    /// A fraction representing "4 / 1".
+    /// </summary>
+    public static Rational Four { get; } = new(4);
+
+    /// <summary>
+    /// A fraction representing "-2 / 1".
+    /// </summary>
+    public static Rational MinusTwo { get; } = new(-2);
+
+    /// <summary>
+    /// A fraction representing "1".
+    /// </summary>
+    public static Rational One { get; } = new(1);
+
+    /// <summary>
+    /// A fraction representing "0".
+    /// </summary>
+    public static Rational Zero { get; } = new(0);
+
+    /// <summary>
+    /// A fraction representing "-1 / 1".
+    /// </summary>
+    public static Rational MinusOne { get; } = new(-1);
+
+    /// <summary>
+    /// A fraction representing "4/5".
+    /// </summary>
+    public static Rational FourFifths { get; } = new(4, 5);
+
+    /// <summary>
+    /// A fraction representing "1/5".
+    /// </summary>
+    public static Rational OneFifth { get; } = new(1, 5);
+
+    /// <summary>
+    /// A fraction representing "1/2".
+    /// </summary>
+    public static Rational OneHalf { get; } = new(1, 2);
+
+    /// <summary>
+    /// A fraction representing "-1/2".
+    /// </summary>
+    public static Rational MinusOneHalf { get; } = new(-1, 2);
+
+    /// <summary>
+    /// A fraction representing "1/4".
+    /// </summary>
+    public static Rational OneQuarter { get; } = new(1, 4);
+
+    /// <summary>
+    /// A fraction representing "1/3".
+    /// </summary>
+    public static Rational OneThird { get; } = new(1, 3);
+
+    /// <summary>
+    /// A fraction representing "3/5".
+    /// </summary>
+    public static Rational ThreeFifths { get; } = new(3, 5);
+
+    /// <summary>
+    /// A fraction representing "3/4".
+    /// </summary>
+    public static Rational ThreeQuarters { get; } = new(3, 4);
+
+    /// <summary>
+    /// A fraction representing "2/5".
+    /// </summary>
+    public static Rational TwoFifths { get; } = new(2, 5);
+
+    /// <summary>
+    /// A fraction representing "2/3".
+    /// </summary>
+    public static Rational TwoThirds { get; } = new(2, 3);
 
     public Rational(BigInteger number)
     {

@@ -8,8 +8,8 @@ public interface IIndices : IEquatable<object>
     IntArray GetUpper();
     IntArray GetLower();
     IntArray GetAllIndices();
-    int Size();
-    int Size(IndexType type);
+    long Size();
+    long Size(IndexType type);
     long this[long position] { get; }
     long this[IndexType type, long position] { get; }
     IIndices GetFree();

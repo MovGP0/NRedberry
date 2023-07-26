@@ -82,7 +82,7 @@ public abstract class Tensor : IComparable<Tensor>, IEnumerable<Tensor>
 
     public abstract ITensorBuilder GetBuilder();
 
-    public abstract ITensorFactory GetFactory();
+    public abstract ITensorFactory? GetFactory();
 
     public static Tensor Sum(Tensor[] contentToTensors)
     {

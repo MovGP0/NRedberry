@@ -235,7 +235,7 @@ public sealed class IndicesUtils
 
     public static long[] GetIndicesNames(IIndices indices)
     {
-        long[] a = new long[indices.Size()];
+        var a = new long[indices.Size()];
         for (long i = indices.Size() - 1; i >= 0; --i)
             a[i] = GetNameWithType(indices[i]);
         return a;

@@ -1,24 +1,124 @@
 ﻿using System;
 using NRedberry.Core.Indices;
+using NRedberry.Core.Utils;
 using Complex = NRedberry.Core.Numbers.Complex;
 
 namespace NRedberry.Core.Tensors;
 
 public sealed class Product : MultiTensor
 {
-    private Complex Factor { get; }
-    private Tensor[] IndexlessData { get; }
-    private Tensor[] Data { get; }
-    private WeakReference<ProductContent> contentReference;
+    ///<summary>
+    /// Numerical factor.
+    ///</summary>
+    public Complex Factor { get; }
 
-    public Product(IIndices indices) : base(indices)
+    ///<summary>
+    /// Elements with zero size of indices (without indices).
+    ///</summary>
+    public Tensor[] IndexlessData { get; }
+
+    ///<summary>
+    /// Elements with indices.
+    ///</summary>
+    public Tensor[] Data { get; }
+
+    ///<summary>
+    /// Reference to cached ProductContent object.
+    ///</summary>
+    private WeakReference<ProductContent> ContentReference { get; }
+
+    ///<summary>
+    /// Hash code of this product.
+    ///</summary>
+    private int hash;
+
+    public Product(IIndices indices, Complex factor, Tensor[] indexless, Tensor[] data) : base(indices)
     {
+        Factor = GetDefaultReference(factor);
+        IndexlessData = indexless;
+        Data = data;
+
+        Array.Sort(data);
+        Array.Sort(indexless);
+
+        ContentReference = new WeakReference<ProductContent>(ProductContent.EmptyInstance);
+        CalculateContent();
+        hash = CalculateHash();
     }
 
-    protected override int Hash()
+    public Product(Complex factor, Tensor[] indexlessData, Tensor[] data, ProductContent? content, IIndices indices) : base(indices)
     {
-        throw new NotImplementedException();
+        Factor = GetDefaultReference(factor);
+        IndexlessData = indexlessData;
+        Data = data;
+        ContentReference = new WeakReference<ProductContent>(ProductContent.EmptyInstance);
+        if (content == null)
+        {
+            CalculateContent();
+        }
+        else
+        {
+            ContentReference.TryGetTarget(out content);
+        }
+        hash = CalculateHash();
     }
+
+    //very unsafe
+    public Product(IIndices indices, Complex factor, Tensor[] indexlessData, Tensor[] data, WeakReference<ProductContent> contentReference, int hash) : base(indices)
+    {
+        Factor = factor;
+        IndexlessData = indexlessData;
+        Data = data;
+        ContentReference = contentReference;
+        this.hash = hash;
+    }
+
+    //very unsafe
+    public Product(IIndices indices, Complex factor, Tensor[] indexlessData, Tensor[] data, WeakReference<ProductContent> contentReference) : base(indices)
+    {
+        Factor = factor;
+        IndexlessData = indexlessData;
+        Data = data;
+        ContentReference = contentReference;
+        hash = CalculateHash();
+    }
+
+    private static Complex GetDefaultReference(Complex factor)
+    {
+        return factor.IsOne() ? Complex.One : factor.IsMinusOne() ? Complex.MinusOne : factor;
+    }
+
+    private int CalculateHash()
+    {
+        int result;
+        if (Factor == Complex.One || Factor == Complex.MinusOne)
+        {
+            result = 0;
+        }
+        else
+        {
+            result = Factor.GetHashCode();
+        }
+
+        foreach (Tensor t in IndexlessData)
+        {
+            result = result * 31 + t.GetHashCode();
+        }
+
+        foreach (Tensor t in Data)
+        {
+            result = result * 17 + t.GetHashCode();
+        }
+
+        if (Factor == Complex.MinusOne && Size == 2)
+        {
+            return result;
+        }
+
+        return result - 79 * Content.StructureOfContractionsHashed.GetHashCode();
+    }
+
+    protected override int Hash() => hash;
 
     public override Tensor this[int i] => throw new NotImplementedException();
 
@@ -33,10 +133,7 @@ public sealed class Product : MultiTensor
         throw new NotImplementedException();
     }
 
-    public override ITensorFactory GetFactory()
-    {
-        throw new NotImplementedException();
-    }
+    public override ITensorFactory? GetFactory() => null;
 
     protected override Tensor Remove1(int[] positions)
     {
@@ -67,13 +164,56 @@ public sealed class Product : MultiTensor
     {
         get
         {
-            var success = contentReference.TryGetTarget(out var content);
+            var success = ContentReference.TryGetTarget(out var content);
             if (!success)
             {
                 content = CalculateContent();
-                contentReference.SetTarget(content);
+                ContentReference.SetTarget(content);
             }
             return content;
+        }
+    }
+
+    private ProductContent CalculateContent()
+    {
+        throw new NotImplementedException();
+    }
+
+    private static long Hc(Tensor t, long[] inds)
+    {
+        IIndices ind = t.Indices.GetFree();
+        long h = 31;
+        long ii;
+        for (long i = ind.Size() - 1; i >= 0; --i)
+        {
+            ii = IndicesUtils.GetNameWithType(ind[i]);
+            if ((ii = Array.BinarySearch(inds, ii)) >= 0)
+                h ^= HashFunctions.JenkinWang32shift(ii);
+        }
+        return h;
+    }
+
+    private class ScaffoldWrapper : IComparable<ScaffoldWrapper>
+    {
+        public readonly long[] Inds;
+        public readonly Tensor T;
+        public readonly TensorContraction Tc;
+        public readonly long HashWithIndices;
+
+        public ScaffoldWrapper(long[] inds, Tensor t, TensorContraction tc)
+        {
+            Inds = inds;
+            T = t;
+            Tc = tc;
+            HashWithIndices = Hc(t, inds);
+        }
+
+        public int CompareTo(ScaffoldWrapper o)
+        {
+            int r = Tc.CompareTo(o.Tc);
+            if (r != 0)
+                return r;
+            return HashWithIndices.CompareTo(o.HashWithIndices);
         }
     }
 }

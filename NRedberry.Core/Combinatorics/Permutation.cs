@@ -4,23 +4,23 @@ using NRedberry.Core.Combinatorics;
 
 public class Permutation : IComparable<Permutation>
 {
-    protected int[] permutation;
+    protected long[] permutation;
 
-    public Permutation(int dimension)
+    public Permutation(long dimension)
     {
-        permutation = new int[dimension];
-        for (int i = 0; i < dimension; ++i)
+        permutation = new long[dimension];
+        for (long i = 0; i < dimension; ++i)
             permutation[i] = i;
     }
 
-    public Permutation(int[] permutation)
+    public Permutation(long[] permutation)
     {
         if (!Combinatorics.TestPermutationCorrectness(permutation))
             throw new ArgumentException("Wrong permutation input: input array is not consistent with one-line notation");
-        this.permutation = (int[])permutation.Clone();
+        this.permutation = (long[])permutation.Clone();
     }
 
-    protected Permutation(int[] permutation, bool notClone)
+    protected Permutation(long[] permutation, bool notClone)
     {
         this.permutation = permutation;
     }
@@ -30,12 +30,12 @@ public class Permutation : IComparable<Permutation>
         return new Permutation(permutation.Length);
     }
 
-    protected int[] CompositionArray(Permutation element)
+    protected long[] CompositionArray(Permutation element)
     {
         if (permutation.Length != element.permutation.Length)
             throw new ArgumentException("different dimensions of compositing combinatorics");
-        int[] perm = new int[permutation.Length];
-        for (int i = 0; i < permutation.Length; ++i)
+        long[] perm = new long[permutation.Length];
+        for (long i = 0; i < permutation.Length; ++i)
             perm[i] = element.permutation[permutation[i]];
         return perm;
     }
@@ -45,35 +45,35 @@ public class Permutation : IComparable<Permutation>
         return new Permutation(CompositionArray(element), true);
     }
 
-    public int[] Permute(int[] array)
+    public long[] Permute(long[] array)
     {
         if (array.Length != permutation.Length)
             throw new ArgumentException("Wrong length");
-        int[] copy = new int[permutation.Length];
-        for (int i = 0; i < permutation.Length; ++i)
+        long[] copy = new long[permutation.Length];
+        for (long i = 0; i < permutation.Length; ++i)
             copy[permutation[i]] = array[i];
         return copy;
     }
 
-    protected int[] CalculateInverse()
+    protected long[] CalculateInverse()
     {
-        int[] inverse = new int[permutation.Length];
-        for (int i = 0; i < permutation.Length; ++i)
+        long[] inverse = new long[permutation.Length];
+        for (long i = 0; i < permutation.Length; ++i)
             inverse[permutation[i]] = i;
         return inverse;
     }
 
-    public int NewIndexOf(int index)
+    public long NewIndexOf(long index)
     {
         return permutation[index];
     }
 
-    public int Dimension()
+    public long Dimension()
     {
         return permutation.Length;
     }
 
-    public int[] GetPermutation()
+    public long[] GetPermutation()
     {
         return permutation;
     }
@@ -106,7 +106,7 @@ public class Permutation : IComparable<Permutation>
     {
         if (t.permutation.Length != permutation.Length)
             throw new ArgumentException("different dimensions of comparing combinatorics");
-        for (int i = 0; i < permutation.Length; ++i)
+        for (long i = 0; i < permutation.Length; ++i)
             if (permutation[i] < t.permutation[i])
                 return -1;
             else if (permutation[i] > t.permutation[i])
@@ -114,7 +114,7 @@ public class Permutation : IComparable<Permutation>
         return 0;
     }
 
-    public bool Compare(int[] permutation)
+    public bool Compare(long[] permutation)
     {
         return this.permutation.SequenceEqual(permutation);
     }

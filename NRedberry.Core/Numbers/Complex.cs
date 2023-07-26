@@ -7,8 +7,23 @@ namespace NRedberry.Core.Numbers;
 
 public sealed class Complex : Tensor, INumber<Complex>
 {
-    public static Complex Zero = new(Rational.Zero, Rational.Zero);
-    public static Complex One = new(Rational.One, Rational.One);
+    public static readonly Complex ComplexNan = new(Numeric.NaN, Numeric.NaN);
+    public static readonly Complex RealPositiveInfinity = new(Numeric.PositiveInfinity, Numeric.Zero);
+    public static readonly Complex RealNegativeInfinity = new(Numeric.NegativeInfinity, Numeric.Zero);
+    public static readonly Complex ImaginaryPositiveInfinity = new(Numeric.Zero, Numeric.PositiveInfinity);
+    public static readonly Complex ImaginaryNegativeInfinity = new(Numeric.Zero, Numeric.NegativeInfinity);
+    public static readonly Complex ComplexNegativeInfinity = new(Numeric.NegativeInfinity, Numeric.NegativeInfinity);
+    public static readonly Complex ComplexPositiveInfinity = new(Numeric.PositiveInfinity, Numeric.PositiveInfinity);
+    public static readonly Complex ComplexInfinity = ComplexPositiveInfinity;
+    public static readonly Complex Zero = new(Rational.Zero, Rational.Zero);
+    public static readonly Complex One = new(Rational.One, Rational.Zero);
+    public static readonly Complex OneHalf = new(Rational.OneHalf, Rational.Zero);
+    public static readonly Complex Two = new(Rational.Two, Rational.Zero);
+    public static readonly Complex Four = new(Rational.Four, Rational.Zero);
+    public static readonly Complex MinusOne = new(Rational.MinusOne, Rational.Zero);
+    public static readonly Complex MinusOneHalf = new(Rational.MinusOneHalf, Rational.Zero);
+    public static readonly Complex MinusTwo = new(Rational.MinusTwo, Rational.Zero);
+    public static readonly Complex ImaginaryOne = new(Rational.Zero, Rational.One);
 
     private Real Real { get; }
     private Real Imaginary { get; }

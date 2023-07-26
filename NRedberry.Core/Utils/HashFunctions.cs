@@ -103,7 +103,7 @@ public static class HashFunctions
     /// </summary>
     /// <param name="key">key to be hashed</param>
     /// <returns>hashed value</returns>
-    public static int JenkinWang32shift(int key)
+    public static long JenkinWang32shift(long key)
     {
         unchecked
         {
@@ -128,7 +128,7 @@ public static class HashFunctions
     /// </summary>
     /// <param name="key">key to be hashed</param>
     /// <returns>hashed value</returns>
-    public static int Wang32shiftmult(int key)
+    public static long Wang32shiftmult(long key)
     {
         unchecked
         {
@@ -514,7 +514,7 @@ public static class HashFunctions
         return MurmurHash2(data, 0x2f1a32b3);
     }
 
-    /// <summary> 
+    /// <summary>
     /// MurmurHash hash function integer with default seed value equals to 0x2f1a32b3.
     /// <p/>
     /// <h3>Links</h3>
