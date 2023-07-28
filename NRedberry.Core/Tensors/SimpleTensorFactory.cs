@@ -2,7 +2,7 @@
 
 namespace NRedberry.Core.Tensors;
 
-public sealed class SimpleTensorFactory : ITensorFactory
+public sealed class SimpleTensorFactory : TensorFactory
 {
     private SimpleTensor SimpleTensor { get; }
 

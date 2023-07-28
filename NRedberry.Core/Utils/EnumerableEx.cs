@@ -4,7 +4,7 @@ namespace NRedberry.Core.Utils;
 
 public static class EnumerableEx
 {
-    public static int GetHashCode(long[] data)
+    public static int GetHashCode(int[] data)
     {
         unchecked
         {

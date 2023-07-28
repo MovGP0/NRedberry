@@ -21,4 +21,6 @@ public static class BitArrayExtensions
         }
         return -1;  // Return -1 if no 'true' bits found
     }
+
+    public static readonly BitArray Empty = new(0);
 }

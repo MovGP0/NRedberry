@@ -3,9 +3,51 @@ using System.Numerics;
 
 namespace NRedberry.Core.Numbers;
 
+public static class RationalExtensions
+{
+    /// <summary>
+    /// Gets the absolute value of the rational number.
+    /// </summary>
+    public static Rationals.Rational Abs(this Rationals.Rational p)
+    {
+        if (p.IsNaN)
+            return Rationals.Rational.NaN;
+
+        if (p.IsZero)
+            return Rationals.Rational.Zero;
+
+        var numerator = BigInteger.Abs(p.Numerator);
+        var denominator = BigInteger.Abs(p.Denominator);
+        var result = new Rationals.Rational(numerator, denominator);
+        return result;
+    }
+
+    /// <summary>
+    /// Gets the absolute value of the rational number.
+    /// </summary>
+    public static Rational Abs(Rational p)
+    {
+        if (p.IsNaN())
+            return Rational.NaN;
+
+        if (p.IsZero())
+            return Rational.Zero;
+
+        var numerator = BigInteger.Abs(p.Numerator);
+        var denominator = BigInteger.Abs(p.Denominator);
+        var result = new Rational(numerator, denominator);
+        return result;
+    }
+}
+
 public sealed class Rational : Real
 {
-    private Rationals.Rational Fraction { get; set; }
+    private Rationals.Rational Fraction { get; }
+
+    /// <summary>
+    /// Not a Number (after a division by 0).
+    /// </summary>
+    public static Rational NaN { get; } = new(Rationals.Rational.NaN);
 
     /// <summary>
     /// A fraction representing "2 / 1".
@@ -102,7 +144,17 @@ public sealed class Rational : Real
         Fraction = rational;
     }
 
+    public BigInteger GetNumerator() => Fraction.Numerator;
+    public BigInteger GetDenominator() => Fraction.Denominator;
+    public BigInteger Numerator => Fraction.Numerator;
+    public BigInteger Denominator => Fraction.Denominator;
+
     public override Real Add(Real a)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Real Add(Rationals.Rational fraction)
     {
         throw new NotImplementedException();
     }
@@ -133,31 +185,6 @@ public sealed class Rational : Real
     }
 
     public override Real Reciprocal()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override int SigNum()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override int IntValue()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override long LongValue()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override double DoubleValue()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override float FloatValue()
     {
         throw new NotImplementedException();
     }
@@ -287,48 +314,76 @@ public sealed class Rational : Real
         throw new NotImplementedException();
     }
 
-    public override bool IsInfinite()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override bool IsNaN()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override bool IsZero()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override bool IsOne()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override bool IsMinusOne()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override bool IsNumeric()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override bool IsInteger()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override bool IsNatural()
-    {
-        throw new NotImplementedException();
-    }
+    public override bool IsNumeric() => false;
+    public override bool IsZero() =>Fraction.Numerator.Equals(BigInteger.Zero);
+    public override bool IsOne() => Fraction.Numerator.Equals(BigInteger.One) && Fraction.Denominator.Equals(BigInteger.One);
+    public override bool IsMinusOne() => Fraction.Numerator.Equals(BigInteger.MinusOne) && Fraction.Denominator.Equals(BigInteger.One);
+    public override int SigNum() => Fraction.Numerator.Sign;
+    public int Sign => Fraction.Numerator.Sign;
+    public override bool IsInteger() => Fraction.Denominator.CompareTo(BigInteger.One) == 0;
+    public override bool IsNatural() => Fraction.Numerator.Sign >= 0 && IsInteger();
 
     public override int CompareTo(Real other)
     {
-        throw new NotImplementedException();
+        if (other == null)
+        {
+            throw new ArgumentNullException(nameof(other));
+        }
+
+        if (other is Numeric numeric)
+        {
+            return DoubleValue().CompareTo(numeric.DoubleValue());
+        }
+
+        return Fraction.CompareTo(((Rational)other).Fraction);
     }
+
+    public override long LongValue()
+    {
+        return (long) Fraction;
+    }
+
+    public override int IntValue()
+    {
+        return (int) Fraction;
+    }
+
+    public override float FloatValue()
+    {
+        return (float) Fraction;
+    }
+
+    public override double DoubleValue()
+    {
+        return (double) Fraction;
+    }
+
+    public override int GetHashCode()
+    {
+        return Fraction.Abs().GetHashCode();
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+
+        if (obj is Rational rational)
+        {
+            return Fraction.Equals(rational.Fraction);
+        }
+
+        if (obj is Number num)
+        {
+            return num.DoubleValue() == DoubleValue();
+        }
+
+        return false;
+    }
+
+    public override string ToString() => Fraction.Numerator + (Fraction.Denominator.Equals(BigInteger.One) ? "" : "/" + Fraction.Denominator);
+    public override bool IsInfinite() => false;
+    public override bool IsNaN() => false;
 }

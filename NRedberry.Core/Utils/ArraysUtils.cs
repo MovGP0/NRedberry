@@ -169,4 +169,52 @@ public static class ArraysUtils
             b.Append(", ");
         }
     }
+
+    public static void TimSort(int[] target, int[] coSort)
+    {
+        IntTimSort.Sort(target, coSort);
+    }
+
+    public static void InsertionSort(int[] target, int[] coSort)
+    {
+        InsertionSort(target, 0, target.Length, coSort);
+    }
+
+    public static void InsertionSort(int[] target, int fromIndex, int toIndex, int[] coSort)
+    {
+        RangeCheck(target.Length, fromIndex, toIndex);
+        RangeCheck(coSort.Length, fromIndex, toIndex);
+
+        int i, key, j, keyC;
+        for (i = fromIndex + 1; i < toIndex; i++)
+        {
+            key = target[i];
+            keyC = coSort[i];
+            for (j = i; j > fromIndex && target[j - 1] > key; j--)
+            {
+                target[j] = target[j - 1];
+                coSort[j] = coSort[j - 1];
+            }
+            target[j] = key;
+            coSort[j] = keyC;
+        }
+    }
+
+    private static void RangeCheck(int arrayLen, int fromIndex, int toIndex)
+    {
+        if (fromIndex > toIndex)
+            throw new ArgumentException($"fromIndex({fromIndex}) > toIndex({toIndex})");
+        if (fromIndex < 0)
+            throw new ArgumentOutOfRangeException(nameof(fromIndex), $"fromIndex({fromIndex}) must not be less than zero.");
+        if (toIndex > arrayLen)
+            throw new ArgumentOutOfRangeException(nameof(toIndex), $"toIndex({toIndex}) is greater than array length ({arrayLen}).");
+    }
+
+    public static void StableSort(int[] target, int[] coSort)
+    {
+        if (target.Length > 100)
+            TimSort(target, coSort);
+        else
+            InsertionSort(target, coSort);
+    }
 }

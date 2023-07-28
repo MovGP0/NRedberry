@@ -26,30 +26,20 @@ public sealed class PrimitiveSubgraphPartition
         this.partition = CalculatePartition();
     }
 
-    public PrimitiveSubgraph[] Partition
-    {
-        get
-        {
-            return (PrimitiveSubgraph[])partition.Clone();
-        }
-    }
-
-    public static PrimitiveSubgraph[] CalculatePartition(Product p, IndexType type)
-    {
-        return new PrimitiveSubgraphPartition(p.Content, type).Partition;
-    }
-
-    public static PrimitiveSubgraph[] CalculatePartition(ProductContent p, IndexType type)
-    {
-        return new PrimitiveSubgraphPartition(p, type).Partition;
-    }
+    public PrimitiveSubgraph[] Partition => (PrimitiveSubgraph[])partition.Clone();
+    public static PrimitiveSubgraph[] CalculatePartition(Product p, IndexType type) => new PrimitiveSubgraphPartition(p.Content, type).Partition;
+    public static PrimitiveSubgraph[] CalculatePartition(ProductContent p, IndexType type) => new PrimitiveSubgraphPartition(p, type).Partition;
 
     private PrimitiveSubgraph[] CalculatePartition()
     {
         List<PrimitiveSubgraph> subgraphs = new List<PrimitiveSubgraph>();
         for (int pivot = 0; pivot < size; ++pivot)
+        {
             if (pc[pivot].Indices.Size(type) != 0 && !used.Get(pivot))
+            {
                 subgraphs.Add(CalculateComponent(pivot));
+            }
+        }
         return subgraphs.ToArray();
     }
 
@@ -58,7 +48,7 @@ public sealed class PrimitiveSubgraphPartition
         LinkedList<int> positions = new LinkedList<int>();
         positions.AddLast(pivot);
 
-        long[] left, right;
+        int[] left, right;
         left = right = GetLinks(pivot);
 
         Debug.Assert(left[0] != NO_LINKS || left[1] != NO_LINKS);
@@ -143,21 +133,21 @@ public sealed class PrimitiveSubgraphPartition
         return arr;
     }
 
-    private const long BRANCHING = -3, NO_LINKS = -2, NOT_INITIALIZED = -4, DUMMY_PIVOT = -5;
-    private static readonly long[] DUMMY = new long[] { DUMMY_PIVOT, DUMMY_PIVOT };
+    private const int BRANCHING = -3, NO_LINKS = -2, NOT_INITIALIZED = -4, DUMMY_PIVOT = -5;
+    private static readonly int[] DUMMY = new int[] { DUMMY_PIVOT, DUMMY_PIVOT };
 
-    private long[] GetLinks(int pivot)
+    private int[] GetLinks(int pivot)
     {
         if (pivot == DUMMY_PIVOT)
             return DUMMY;
 
         Debug.Assert(pivot >= 0);
 
-        long[] links = new long[] { NOT_INITIALIZED, NOT_INITIALIZED };
-        long[] contractions = fcs.contractions[pivot];
-        IIndices indices = pc[pivot].Indices;
-        long index, toTensorIndex;
-        for (long i = contractions.Length - 1; i >= 0; --i)
+        int[] links = new int[] { NOT_INITIALIZED, NOT_INITIALIZED };
+        int[] contractions = fcs.contractions[pivot];
+        Indices.Indices indices = pc[pivot].Indices;
+        int index, toTensorIndex;
+        for (int i = contractions.Length - 1; i >= 0; --i)
         {
             index = indices[i];
 
@@ -191,10 +181,10 @@ public sealed class PrimitiveSubgraphPartition
         stack.Push(pivot);
         used.Set(pivot, true);
 
-        long[] contractions;
-        IIndices indices;
+        int[] contractions;
+        Indices.Indices indices;
 
-        long currentPivot, index, toTensorIndex;
+        int currentPivot, index, toTensorIndex;
         while (stack.Count > 0)
         {
             currentPivot = stack.Pop();
@@ -208,14 +198,13 @@ public sealed class PrimitiveSubgraphPartition
                     continue;
 
                 toTensorIndex = StructureOfContractions.ToPosition(contractions[i]);
-                if (toTensorIndex == -1 || used.Get((int)toTensorIndex))
+                if (toTensorIndex == -1 || used.Get(toTensorIndex))
                     continue;
-                used.Set((int)toTensorIndex, true);
-                positions.Add((int)toTensorIndex);
-                stack.Push((int)toTensorIndex);
+                used.Set(toTensorIndex, true);
+                positions.Add(toTensorIndex);
+                stack.Push(toTensorIndex);
             }
         }
         return new PrimitiveSubgraph(GraphType.Graph, positions.ToArray());
     }
-
 }

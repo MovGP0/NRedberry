@@ -5,12 +5,12 @@ namespace NRedberry.Core.Tensors;
 
 public sealed class StructureOfContractions
 {
-    public static readonly StructureOfContractions EmptyFullContractionsStructure = new StructureOfContractions(new long[0][]);
-    public readonly long[][] contractions;
+    public static readonly StructureOfContractions EmptyFullContractionsStructure = new(new int[0][]);
+    public readonly int[][] contractions;
     public readonly int[] components;
     public readonly int componentCount;
 
-    public StructureOfContractions(long[][] contractions)
+    public StructureOfContractions(int[][] contractions)
     {
         this.contractions = contractions;
         components = new int[contractions.Length];

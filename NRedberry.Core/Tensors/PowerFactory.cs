@@ -4,7 +4,7 @@ using NRedberry.Core.Numbers;
 
 namespace NRedberry.Core.Tensors;
 
-public sealed class PowerFactory : ITensorFactory
+public sealed class PowerFactory : TensorFactory
 {
     public static PowerFactory Factory = new();
 
@@ -40,7 +40,7 @@ public sealed class PowerFactory : ITensorFactory
                 Tensor[] scalars = ((Product)argument).GetAllScalars();
                 if (scalars.Length > 1)
                 {
-                    ITensorBuilder pb = argument.GetBuilder();//creating product builder
+                    TensorBuilder pb = argument.GetBuilder();//creating product builder
                     foreach (Tensor t in scalars)
                         pb.Put(t.Pow(power));//TODO refactor for performance
                     return pb.Build();

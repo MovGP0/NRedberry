@@ -2,74 +2,29 @@
 
 namespace NRedberry.Core.Indices;
 
-sealed class EmptySimpleIndices : EmptyIndices, ISimpleIndices
+sealed class EmptySimpleIndices : EmptyIndices, SimpleIndices
 {
-    // Instance of EmptySimpleIndices
-    static readonly EmptySimpleIndices EMPTY_SIMPLE_INDICES_INSTANCE = new EmptySimpleIndices();
-
+    public static readonly EmptySimpleIndices emptySimpleIndicesInstance = new();
     private EmptySimpleIndices() { }
-
-    // Returns EmptySimpleIndices instance
-    public ISimpleIndices GetInverted() {
-        return this;
+    public SimpleIndices Inverted => this;
+    public SimpleIndices Free => this;
+    public SimpleIndices OfType(IndexType type) => this;
+    public SimpleIndices Upper => this;
+    public SimpleIndices Lower => this;
+    public IndicesSymmetries Symmetries
+    {
+        get => IndicesSymmetries.EmptySymmetries;
+        set
+        {
+            if (value.StructureOfIndices.Size != 0)
+            {
+                throw new InvalidOperationException("Symmetries dimensions are not equal to indices size.");
+            }
+        }
     }
-
-    // Returns EmptySimpleIndices instance
-    public ISimpleIndices GetFree() {
-        return this;
-    }
-
-    // Returns EmptySimpleIndices instance
-    public ISimpleIndices GetOfType(IndexType type) {
-        return this;
-    }
-
-    // Returns EmptySimpleIndices instance
-    public ISimpleIndices GetUpper() {
-        return this;
-    }
-
-    // Returns EmptySimpleIndices instance
-    public ISimpleIndices GetLower() {
-        return this;
-    }
-
-    // Doing nothing
-    public void SetSymmetries(IndicesSymmetries symmetries) {
-        if (symmetries.StructureOfIndices.Count != 0)
-            throw new ArgumentException("Symmetries dimensions are not equal to indices size.");
-    }
-
-    // Returns empty symmetries.
-    public IndicesSymmetries GetSymmetries() {
-        return IndicesSymmetries.Empty;
-    }
-
-    // Do nothing.
-    public ISimpleIndices ApplyIndexMapping(IIndexMapping mapping) {
-        return this;
-    }
-
-    // Equals method
-    public override bool Equals(object obj) {
-        return obj is EmptyIndices;
-    }
-
-    // Returns equals(indices)
-    public bool EqualsWithSymmetries(ISimpleIndices indices) {
-        return indices == EMPTY_SIMPLE_INDICES_INSTANCE; //There is only one instance of empty SimpleIndices
-    }
-
-    // Returns hash code
-    public override int GetHashCode() {
-        return 453679;
-    }
-
-    public int ContractionsHash() {
-        return 0;
-    }
-
-    public StructureOfIndices GetStructureOfIndices() {
-        return StructureOfIndices.Empty;
-    }
+    public SimpleIndices ApplyIndexMapping(IIndexMapping mapping) => this;
+    public override bool Equals(object obj) => obj is EmptyIndices;
+    public bool EqualsWithSymmetries(SimpleIndices indices) => indices == emptySimpleIndicesInstance;
+    public override int GetHashCode() => 453679;
+    public StructureOfIndices StructureOfIndices => StructureOfIndices.Empty;
 }

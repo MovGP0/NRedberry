@@ -26,7 +26,7 @@ public sealed class ParseToken
         Parent = parent;
     }
 
-    public IIndices GetIndices()
+    public Indices.Indices GetIndices()
     {
         throw new NotImplementedException();
     }

@@ -67,13 +67,18 @@ public sealed class Numeric : Real
         Value = value;
     }
 
-    public static Numeric FromNumber<T>(INumber<T> value)
+    public static Numeric FromNumber<T>(Number<T> value)
     {
         if(value is null) throw new ArgumentNullException(nameof(value));
         return new Numeric(value.DoubleValue());
     }
 
     public override Real Add(Real a)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Real Add(Rationals.Rational fraction)
     {
         throw new NotImplementedException();
     }

@@ -2,7 +2,7 @@
 
 namespace NRedberry.Core.Tensors;
 
-public sealed class PowerBuilder : ITensorBuilder
+public sealed class PowerBuilder : TensorBuilder
 {
     private Tensor Argument { get; set; }
     private Tensor Power { get; set; }
@@ -43,7 +43,7 @@ public sealed class PowerBuilder : ITensorBuilder
         throw new InvalidOperationException("Power buider can not take more than two put() invocations.");
     }
 
-    public ITensorBuilder Clone()
+    public TensorBuilder Clone()
     {
         return new PowerBuilder(Argument, Power);
     }

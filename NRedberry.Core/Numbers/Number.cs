@@ -1,14 +1,25 @@
 using System.Numerics;
-using Rationals;
 
 namespace NRedberry.Core.Numbers;
 
-public interface INumber<T> : IFieldElement<T>
+public interface Number
 {
     int IntValue();
     long LongValue();
     double DoubleValue();
     float FloatValue();
+    bool IsInfinite();
+    bool IsNaN();
+    bool IsZero();
+    bool IsOne();
+    bool IsMinusOne();
+    bool IsNumeric();
+    bool IsInteger();
+    bool IsNatural();
+}
+
+public interface Number<T> : FieldElement<T>, Number
+{
     T GetNumericValue();
     T Abs();
     T Add(double bg);
@@ -34,12 +45,4 @@ public interface INumber<T> : IFieldElement<T>
     T Pow(BigInteger exponent);
     T Pow(long exponent);
     T Pow(int exponent);
-    bool IsInfinite();
-    bool IsNaN();
-    bool IsZero();
-    bool IsOne();
-    bool IsMinusOne();
-    bool IsNumeric();
-    bool IsInteger();
-    bool IsNatural();
 }

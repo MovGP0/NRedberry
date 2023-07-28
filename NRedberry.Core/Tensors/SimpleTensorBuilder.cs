@@ -2,7 +2,7 @@
 
 namespace NRedberry.Core.Tensors;
 
-public sealed class SimpleTensorBuilder : ITensorBuilder
+public sealed class SimpleTensorBuilder : TensorBuilder
 {
     private SimpleTensor Tensor { get; }
 
@@ -21,7 +21,7 @@ public sealed class SimpleTensorBuilder : ITensorBuilder
         throw new NotSupportedException("Can not put to SimpleTensor builder!");
     }
 
-    public ITensorBuilder Clone()
+    public TensorBuilder Clone()
     {
         return this;
     }

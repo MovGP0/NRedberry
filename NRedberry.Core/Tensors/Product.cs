@@ -32,7 +32,7 @@ public sealed class Product : MultiTensor
     ///</summary>
     private int hash;
 
-    public Product(IIndices indices, Complex factor, Tensor[] indexless, Tensor[] data) : base(indices)
+    public Product(Indices.Indices indices, Complex factor, Tensor[] indexless, Tensor[] data) : base(indices)
     {
         Factor = GetDefaultReference(factor);
         IndexlessData = indexless;
@@ -46,7 +46,7 @@ public sealed class Product : MultiTensor
         hash = CalculateHash();
     }
 
-    public Product(Complex factor, Tensor[] indexlessData, Tensor[] data, ProductContent? content, IIndices indices) : base(indices)
+    public Product(Complex factor, Tensor[] indexlessData, Tensor[] data, ProductContent? content, Indices.Indices indices) : base(indices)
     {
         Factor = GetDefaultReference(factor);
         IndexlessData = indexlessData;
@@ -64,7 +64,7 @@ public sealed class Product : MultiTensor
     }
 
     //very unsafe
-    public Product(IIndices indices, Complex factor, Tensor[] indexlessData, Tensor[] data, WeakReference<ProductContent> contentReference, int hash) : base(indices)
+    public Product(Indices.Indices indices, Complex factor, Tensor[] indexlessData, Tensor[] data, WeakReference<ProductContent> contentReference, int hash) : base(indices)
     {
         Factor = factor;
         IndexlessData = indexlessData;
@@ -74,7 +74,7 @@ public sealed class Product : MultiTensor
     }
 
     //very unsafe
-    public Product(IIndices indices, Complex factor, Tensor[] indexlessData, Tensor[] data, WeakReference<ProductContent> contentReference) : base(indices)
+    public Product(Indices.Indices indices, Complex factor, Tensor[] indexlessData, Tensor[] data, WeakReference<ProductContent> contentReference) : base(indices)
     {
         Factor = factor;
         IndexlessData = indexlessData;
@@ -128,12 +128,12 @@ public sealed class Product : MultiTensor
         throw new NotImplementedException();
     }
 
-    public override ITensorBuilder GetBuilder()
+    public override TensorBuilder GetBuilder()
     {
         throw new NotImplementedException();
     }
 
-    public override ITensorFactory? GetFactory() => null;
+    public override TensorFactory? GetFactory() => null;
 
     protected override Tensor Remove1(int[] positions)
     {
@@ -181,7 +181,7 @@ public sealed class Product : MultiTensor
 
     private static long Hc(Tensor t, long[] inds)
     {
-        IIndices ind = t.Indices.GetFree();
+        Indices.Indices ind = t.Indices.GetFree();
         long h = 31;
         long ii;
         for (long i = ind.Size() - 1; i >= 0; --i)

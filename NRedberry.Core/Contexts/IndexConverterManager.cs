@@ -7,7 +7,7 @@ namespace NRedberry.Core.Contexts;
 
 public sealed class IndexConverterManager
 {
-    public static readonly IndexConverterManager Default = new IndexConverterManager(IndexTypeMethods.GetAllConverters());
+    public static readonly IndexConverterManager Default = new(IndexTypeMethods.GetAllConverters());
     private readonly IIndexSymbolConverter[] converters;
 
     public IndexConverterManager(IIndexSymbolConverter[] converters)
@@ -41,7 +41,7 @@ public sealed class IndexConverterManager
         }
     }
 
-    public long GetCode(string index)
+    public int GetCode(string index)
     {
         try
         {

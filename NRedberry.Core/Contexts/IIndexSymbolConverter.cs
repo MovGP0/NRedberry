@@ -8,9 +8,9 @@ public interface IIndexSymbolConverter
 
     string GetSymbol(long code, OutputFormat outputFormat);
 
-    long GetCode(string symbol);
+    int GetCode(string symbol);
 
-    long MaxNumberOfSymbols();
+    int MaxNumberOfSymbols();
 
     byte GetType_();
 }

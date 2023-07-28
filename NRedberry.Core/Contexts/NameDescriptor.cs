@@ -90,7 +90,7 @@ public abstract class NameDescriptor
          * @param indices indices (in case of metric or Kronecker) and null in other cases
          * @return string name of tensor
          */
-    public abstract string GetName(ISimpleIndices indices);
+    public abstract string GetName(SimpleIndices indices);
 
     public override string ToString()
     {

@@ -16,6 +16,7 @@ namespace NRedberry.Core.Contexts;
 public sealed class NameManager
 {
     private long seed;
+    public long Seed => seed;
     private Random random;
     private object readLock = new();
     private object writeLock = new();

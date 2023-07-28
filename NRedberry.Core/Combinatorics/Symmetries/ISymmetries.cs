@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace NRedberry.Core.Combinatorics.Symmetries;
 
@@ -8,11 +7,10 @@ namespace NRedberry.Core.Combinatorics.Symmetries;
 /// </summary>
 public interface Symmetries : IEnumerable<Symmetry>
 {
-    int Dimension();
-    bool IsEmpty();
+    int Dimension { get; }
+    bool IsEmpty { get; }
     bool Add(Symmetry symmetry); // Note that in C# exceptions are not declared in the method signature
     bool AddUnsafe(Symmetry symmetry);
-    List<Symmetry> GetBasisSymmetries();
+    List<Symmetry> BasisSymmetries { get; }
     Symmetries Clone();
-    new IEnumerator<Symmetry> GetEnumerator();
 }

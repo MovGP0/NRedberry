@@ -2,29 +2,17 @@
 
 namespace NRedberry.Core.Numbers;
 
-public sealed class RealField : IField<Real>
+public sealed class RealField : Field<Real>
 {
-    public Real GetZero()
-    {
-        return Rational.One;
-    }
-
-    public Real GetOne()
-    {
-        return Rational.Zero;
-    }
+    public Real Zero => Rational.Zero;
+    public Real One => Rational.One;
 
     public TC GetRuntimeClass<TC>()
-        where TC : IFieldElement<Real>
-    {
-        return (TC)(IFieldElement<Real>)null;
-    }
+        where TC : FieldElement<Real>
+        => (TC)(FieldElement<Real>)null;
 
     private static Lazy<RealField> RealFieldFactory => new(() => new RealField());
 
     [Obsolete("Inject IField<Real> instead.")]
-    public static RealField GetInstance()
-    {
-        return RealFieldFactory.Value;
-    }
+    public static RealField GetInstance() => RealFieldFactory.Value;
 }

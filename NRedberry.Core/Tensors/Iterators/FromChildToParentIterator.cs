@@ -13,10 +13,6 @@ public sealed class FromChildToParentIterator : TreeIteratorAbstract
     }
 }
 
-public sealed class TraverseGuide
-{
-}
-
 /// <summary>
 /// An iterator for tensors that allows the programmer to traverse the tensor
 /// tree structure, modify the tensor during iteration, and obtain information

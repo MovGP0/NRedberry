@@ -1,8 +1,8 @@
 namespace NRedberry.Core.Tensors;
 
-public interface ITensorBuilder
+public interface TensorBuilder
 {
     void Put(Tensor tensor);
     Tensor Build();
-    ITensorBuilder Clone();
+    TensorBuilder Clone();
 }

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using NRedberry.Core.Indices;
 using NRedberry.Core.Numbers;
 
 namespace NRedberry.Core.Tensors;
@@ -13,11 +15,6 @@ public static class TensorUtils
     private static bool IsScalar(Tensor tensor)
     {
         return tensor.Indices.GetFree().Size() == 0;
-    }
-
-    public static bool IsOne(Tensor tensor)
-    {
-        return tensor is Complex c && c.IsOne();
     }
 
     public static bool IsZero(Tensor tensor)
@@ -38,8 +35,103 @@ public static class TensorUtils
         return false;
     }
 
-    public static bool IsSymbol(Tensor tensor)
+    public static bool HaveIndicesIntersections(Tensor u, Tensor v)
     {
-        throw new System.NotImplementedException();
+        return IndicesUtils.HaveIntersections(u.Indices, v.Indices);
+    }
+
+    public static bool IsZeroOrIndeterminate(Tensor tensor)
+    {
+        return tensor is Complex complex && NumberUtils.IsZeroOrIndeterminate(complex);
+    }
+
+    public static bool IsIndeterminate(Tensor tensor)
+    {
+        return tensor is Complex complex && NumberUtils.IsIndeterminate(complex);
+    }
+
+    public static bool IsNaturalNumber(Tensor tensor)
+    {
+        return tensor is Complex complex && complex.IsNatural();
+    }
+
+    public static bool IsNumeric(Tensor tensor)
+    {
+        return tensor is Complex complex && complex.IsNumeric();
+    }
+
+    public static bool IsNegativeIntegerNumber(Tensor tensor)
+    {
+        return tensor is Complex complex && complex.IsNegativeInteger();
+    }
+
+    public static bool IsRealNegativeNumber(Tensor tensor)
+    {
+        if (tensor is Complex complex)
+        {
+            return complex.IsReal() && complex.GetReal().SigNum() < 0;
+        }
+        return false;
+    }
+
+    public static bool IsIndexless(params Tensor[] tensors)
+    {
+        return tensors.All(t => t.Indices.Size() == 0);
+    }
+
+    public static bool IsSymbol(Tensor t)
+    {
+        return t.GetType() == typeof(SimpleTensor) && t.Indices.Size() == 0;
+    }
+
+    public static bool IsSymbolOrNumber(Tensor t)
+    {
+        return t is Complex || IsSymbol(t);
+    }
+
+    public static bool IsSymbolic(Tensor t)
+    {
+        // ... other checks and loops here...
+        throw new NotImplementedException("not implemented");
+    }
+
+    public static bool IsSymbolic(params Tensor[] tensors)
+    {
+        return tensors.All(t => IsSymbolic(t));
+    }
+
+    public static bool IsOne(Tensor tensor)
+    {
+        return tensor is Complex c && c.IsOne();
+    }
+
+    public static bool IsImageOne(Tensor tensor)
+    {
+        return tensor is Complex && tensor.Equals(Complex.ImaginaryOne);
+    }
+
+    public static bool IsMinusOne(Tensor tensor)
+    {
+        return tensor is Complex && tensor.Equals(Complex.MinusOne);
+    }
+
+    public static bool IsIntegerOdd(Tensor tensor)
+    {
+        return tensor is Complex complex && NumberUtils.IsIntegerOdd(complex);
+    }
+
+    public static bool IsIntegerEven(Tensor tensor)
+    {
+        return tensor is Complex complex && NumberUtils.IsIntegerEven(complex);
+    }
+
+    public static bool IsPositiveIntegerPower(Tensor t)
+    {
+        return t is Power && IsNaturalNumber(t[1]);
+    }
+
+    public static bool IsNegativeIntegerPower(Tensor t)
+    {
+        return t is Power && IsNegativeIntegerNumber(t[1]);
     }
 }

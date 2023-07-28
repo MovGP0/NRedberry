@@ -3,9 +3,10 @@ using System.Numerics;
 
 namespace NRedberry.Core.Numbers;
 
-public abstract class Real : INumber<Real>, IComparable<Real>
+public abstract class Real : Number<Real>, IComparable<Real>
 {
     public abstract Real Add(Real a);
+    public abstract Real Add(Rationals.Rational fraction);
     public abstract Real Subtract(Real a);
     public abstract Real Negate();
     public abstract Real Multiply(int n);
@@ -14,7 +15,7 @@ public abstract class Real : INumber<Real>, IComparable<Real>
     public abstract Real Reciprocal();
 
     [Obsolete("Inject IField<Real> instead.")]
-    public IField<Real> GetField()
+    public Field<Real> GetField()
     {
         return RealField.GetInstance();
     }
@@ -23,6 +24,7 @@ public abstract class Real : INumber<Real>, IComparable<Real>
     public abstract int IntValue();
     public abstract long LongValue();
     public abstract double DoubleValue();
+    public double ToDouble() => DoubleValue();
     public abstract float FloatValue();
     public abstract Real GetNumericValue();
     public abstract Real Abs();

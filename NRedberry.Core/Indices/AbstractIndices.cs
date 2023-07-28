@@ -7,23 +7,23 @@ using NRedberry.Core.Utils;
 namespace NRedberry.Core.Indices;
 
 /// <summary>
-/// Basic abstract <see cref="IIndices"/> implementation.
+/// Basic abstract <see cref="Indices"/> implementation.
 /// Indices are stored as final integer array.
 /// </summary>
 /// <remarks>https://github.com/redberry-cas/core/blob/master/src/main/java/cc/redberry/core/indices/AbstractIndices.java</remarks>
-public abstract class AbstractIndices : IIndices
+public abstract class AbstractIndices : Indices
 {
-    public long[] Data { get; }
+    public int[] Data { get; }
     private UpperLowerIndices? upperLower;
 
-    protected AbstractIndices(long[] data)
+    protected AbstractIndices(int[] data)
     {
         Data = data;
     }
 
     protected abstract UpperLowerIndices CalculateUpperLower();
 
-    public abstract long[] GetSortedData();
+    public abstract int[] GetSortedData();
 
     protected UpperLowerIndices GetUpperLowerIndices()
     {
@@ -63,9 +63,9 @@ public abstract class AbstractIndices : IIndices
         return new IntArray(Data);
     }
 
-    public abstract IIndices GetOfType(IndexType type);
+    public abstract Indices GetOfType(IndexType type);
 
-    public bool EqualsRegardlessOrder(IIndices indices)
+    public bool EqualsRegardlessOrder(Indices indices)
     {
         if (ReferenceEquals(this, indices)) return true;
         if (indices is EmptyIndices) return Data.Length == 0;
@@ -74,18 +74,18 @@ public abstract class AbstractIndices : IIndices
     }
 
     public abstract void TestConsistentWithException();
-    public abstract IIndices ApplyIndexMapping(IIndexMapping mapping);
+    public abstract Indices ApplyIndexMapping(IIndexMapping mapping);
 
     public int Size() => Data.Length;
 
     public abstract int Size(IndexType type);
 
-    public long this[long position] => Get(position);
-    public abstract long this[IndexType type, long position] { get; }
-    public abstract IIndices GetFree();
-    public abstract IIndices GetInverted();
+    public int this[int position] => Get(position);
+    public abstract int this[IndexType type, int position] { get; }
+    public abstract Indices GetFree();
+    public abstract Indices GetInverted();
 
-    public long Get(long position) => Data[position];
+    public int Get(int position) => Data[position];
 
     public override int GetHashCode() => EnumerableEx.GetHashCode(Data);
 
@@ -102,8 +102,8 @@ public abstract class AbstractIndices : IIndices
             return "";
         bool latex = mode == OutputFormat.LaTeX;
         StringBuilder sb = new StringBuilder();
-        long stateMode = (Data[0] >> 31);
-        long currentState = stateMode;
+        int stateMode = (Data[0] >> 31);
+        int currentState = stateMode;
         if (stateMode == 0)
             sb.Append(latex ? "_{" : "_{");
         else
@@ -134,10 +134,10 @@ public abstract class AbstractIndices : IIndices
 
     protected class UpperLowerIndices
     {
-        public readonly long[] upper;
-        public readonly long[] lower;
+        public readonly int[] upper;
+        public readonly int[] lower;
 
-        public UpperLowerIndices(long[] upper, long[] lower)
+        public UpperLowerIndices(int[] upper, int[] lower)
         {
             this.upper = upper;
             this.lower = lower;

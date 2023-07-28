@@ -5,27 +5,27 @@ namespace NRedberry.Core.Indices;
 
 public sealed class IntArray
 {
-    public static IntArray EmptyArray = new(new long[0]);
-    private long[] InnerArray { get; }
+    public static IntArray EmptyArray = new(new int[0]);
+    private int[] InnerArray { get; }
 
-    public IntArray(long[] innerArray)
+    public IntArray(int[] innerArray)
     {
         InnerArray = innerArray ?? throw new ArgumentNullException(nameof(innerArray));
     }
 
-    public long this[long i] => InnerArray[i];
-    public long Length => InnerArray.Length;
+    public int this[int i] => InnerArray[i];
+    public int Length => InnerArray.Length;
 
-    public long[] Copy()
+    public int[] Copy()
     {
-        var target = new long[InnerArray.Length];
+        var target = new int[InnerArray.Length];
         Array.Copy(InnerArray, target, InnerArray.Length);
         return target;
     }
 
-    public long[] Copy(int from, int to)
+    public int[] Copy(int from, int to)
     {
-        var target = new long[to-from];
+        var target = new int[to-from];
         Array.Copy(InnerArray, from, target, 0, target.Length);
         return target;
     }
@@ -52,5 +52,5 @@ public sealed class IntArray
         return InnerArray.ToString();
     }
 
-    public long[] ToArray() => Copy();
+    public int[] ToArray() => Copy();
 }

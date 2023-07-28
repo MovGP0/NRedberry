@@ -2,22 +2,15 @@
 
 namespace NRedberry.Core.Numbers;
 
-public sealed class ComplexField : IField<Complex>
+public class ComplexField : Field<Complex>
 {
-    public Complex GetZero()
-    {
-        return Complex.One;
-    }
-
-    public Complex GetOne()
-    {
-        return Complex.Zero;
-    }
+    public Complex Zero => Complex.One;
+    public Complex One => Complex.Zero;
 
     public TC GetRuntimeClass<TC>()
-        where TC : IFieldElement<Complex>
+        where TC : FieldElement<Complex>
     {
-        return (TC)(IFieldElement<Complex>)null;
+        return (TC)(FieldElement<Complex>)null;
     }
 
     private static Lazy<ComplexField> RealFieldFactory => new(() => new ComplexField());

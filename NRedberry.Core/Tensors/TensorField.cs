@@ -5,9 +5,9 @@ namespace NRedberry.Core.Tensors;
 public sealed class TensorField : SimpleTensor
 {
     private Tensor[] Args { get; }
-    private ISimpleIndices[] ArgIndices { get; }
+    private SimpleIndices[] ArgIndices { get; }
 
-    public TensorField(int name, ISimpleIndices indices, Tensor[] args, ISimpleIndices[] argIndices)
+    public TensorField(int name, SimpleIndices indices, Tensor[] args, SimpleIndices[] argIndices)
         : base(name, indices)
     {
         Args = args;

@@ -10,7 +10,7 @@ public abstract class Tensor : IComparable<Tensor>, IEnumerable<Tensor>
 {
     protected abstract int Hash();
 
-    public abstract IIndices Indices { get; }
+    public abstract Indices.Indices Indices { get; }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
@@ -64,25 +64,20 @@ public abstract class Tensor : IComparable<Tensor>, IEnumerable<Tensor>
     }
 
     public abstract string ToString(OutputFormat outputFormat);
+    public override string ToString() => ToString(Context.Get().DefaultOutputFormat);
 
-    public override string ToString()
-    {
-        return ToString(Context.Get().GetDefaultOutputFormat());
-    }
+    /// <summary>
+    /// For internal use.
+    /// </summary>
+    protected virtual string ToString<T>(OutputFormat mode) where T : Tensor => ToString(mode);
 
-    public int CompareTo(Tensor other)
-    {
-        return Hash().CompareTo(other.Hash());
-    }
+    public int CompareTo(Tensor other) => Hash().CompareTo(other.Hash());
 
-    public override int GetHashCode()
-    {
-        return Hash();
-    }
+    public override int GetHashCode() => Hash();
 
-    public abstract ITensorBuilder GetBuilder();
+    public abstract TensorBuilder GetBuilder();
 
-    public abstract ITensorFactory? GetFactory();
+    public abstract TensorFactory? GetFactory();
 
     public static Tensor Sum(Tensor[] contentToTensors)
     {
@@ -99,12 +94,12 @@ public abstract class Tensor : IComparable<Tensor>, IEnumerable<Tensor>
         throw new NotImplementedException();
     }
 
-    public static SimpleTensor SimpleTensor(string name, ISimpleIndices indices)
+    public static SimpleTensor SimpleTensor(string name, SimpleIndices indices)
     {
         throw new NotImplementedException();
     }
 
-    public static SimpleTensor SimpleTensor(int name, ISimpleIndices indices)
+    public static SimpleTensor SimpleTensor(int name, SimpleIndices indices)
     {
         throw new NotImplementedException();
     }

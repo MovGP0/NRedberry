@@ -22,7 +22,7 @@ public sealed class Power : Tensor
         throw new NotImplementedException();
     }
 
-    public override IIndices Indices => IndicesFactory.EmptyIndices;
+    public override Indices.Indices Indices => IndicesFactory.EmptyIndices;
 
     public override Tensor this[int i]
     {
@@ -43,12 +43,12 @@ public sealed class Power : Tensor
         throw new NotImplementedException();
     }
 
-    public override ITensorBuilder GetBuilder()
+    public override TensorBuilder GetBuilder()
     {
         throw new NotImplementedException();
     }
 
-    public override ITensorFactory GetFactory()
+    public override TensorFactory GetFactory()
     {
         throw new NotImplementedException();
     }

@@ -1,6 +1,6 @@
 ﻿namespace NRedberry.Core.Tensors;
 
-public sealed class ProductFactory : ITensorFactory
+public sealed class ProductFactory : TensorFactory
 {
     public static ProductFactory Factory = new();
 

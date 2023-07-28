@@ -25,33 +25,12 @@ namespace NRedberry.Core.Combinatorics.Symmetries
         }
 
         public abstract Symmetries Clone();
-
-        int Symmetries.Dimension()
-        {
-            return Dimension;
-        }
-
-        public bool IsEmpty()
-        {
-            return Basis.Count == 0;
-        }
-
+        int Symmetries.Dimension => Dimension;
+        public bool IsEmpty => Basis.Count == 0;
         public abstract bool Add(Symmetry symmetry);
-
         public abstract bool AddUnsafe(Symmetry symmetry);
-
-        public List<Symmetry> GetBasisSymmetries()
-        {
-            return new List<Symmetry>(Basis);  // Return a new list to preserve encapsulation
-        }
-
+        public List<Symmetry> BasisSymmetries =>  new(Basis);
         public abstract IEnumerator<Symmetry> GetEnumerator();
-
-        // Note: .NET requires that we also implement the non-generic version of GetEnumerator
-        // when we implement IEnumerable<T>. This method can simply call the generic version.
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

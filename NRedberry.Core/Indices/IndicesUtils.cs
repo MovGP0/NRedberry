@@ -4,7 +4,6 @@ using System.Linq;
 using NRedberry.Core.Contexts;
 using NRedberry.Core.Maths;
 using NRedberry.Core.Tensors;
-using NRedberry.Core.Utils;
 using CC = NRedberry.Core.Tensors.CC;
 
 namespace NRedberry.Core.Indices;
@@ -91,24 +90,24 @@ namespace NRedberry.Core.Indices;
 /// <remarks>https://github.com/redberry-cas/core/blob/master/src/main/java/cc/redberry/core/indices/IndicesUtils.java</remarks>
 public sealed class IndicesUtils
 {
-    public static long CreateIndex(long name, IndexType type, bool state)
+    public static int CreateIndex(int name, IndexType type, bool state)
     {
         return CreateIndex(name, type.GetType_(), state);
     }
 
-    public static long CreateIndex(long name, byte type, bool state)
+    public static int CreateIndex(int name, byte type, bool state)
     {
-        return (name & 0xFFFF) | ((0x7F & type) << 24) | (state ? 0x80000000 : 0);
+        return (int)((name & 0xFFFF) | ((0x7F & type) << 24) | (state ? 0x80000000 : 0));
     }
 
-    public static long GetRawStateInt(long index)
+    public static int GetRawStateInt(int index)
     {
-        return index & 0x80000000;
+        return (int)(index & 0x80000000);
     }
 
     public static long GetStateInt(long index)
     {
-        return (index & 0x80000000) >> 31;
+        return (int)((index & 0x80000000) >> 31);
     }
 
     public static bool GetState(long index)
@@ -116,42 +115,42 @@ public sealed class IndicesUtils
         return (index & 0x80000000) == 0x80000000;
     }
 
-    public static long InverseIndexState(long index)
+    public static int InverseIndexState(int index)
     {
-        return 0x80000000 ^ index;
+        return (int)(0x80000000 ^ index);
     }
 
-    public static long GetNameWithType(long index)
+    public static int GetNameWithType(int index)
     {
         return index & 0x7FFFFFFF;
     }
 
-    public static long SetType(byte type, long index)
+    public static int SetType(byte type, int index)
     {
-        return (0x80FFFFFF & index) | ((0x7F & type) << 24);
+        return (int)(0x80FFFFFF & index) | ((0x7F & type) << 24);
     }
 
-    public static long SetType(IndexType type, long index)
+    public static int SetType(IndexType type, int index)
     {
         return SetType(type.GetType_(), index);
     }
 
-    public static long SetRawState(long rawState, long index)
+    public static int SetRawState(int rawState, int index)
     {
         return rawState | index;
     }
 
-    public static long GetNameWithoutType(long index)
+    public static int GetNameWithoutType(int index)
     {
         return index & 0xFFFF;
     }
 
-    public static byte GetType(long index)
+    public static byte GetType(int index)
     {
         return (byte)((index & 0x7FFFFFFF) >> 24);
     }
 
-    public static IndexType GetTypeEnum(long index)
+    public static IndexType GetTypeEnum(int index)
     {
         foreach (IndexType type in Enum.GetValues(typeof(IndexType)))
             if (type.GetType_() == GetType_(index))
@@ -194,9 +193,9 @@ public sealed class IndicesUtils
         return (index0 ^ index1) == 0x80000000;
     }
 
-    public static long[] GetSortedDistinctIndicesNames(IIndices indices)
+    public static int[] GetSortedDistinctIndicesNames(Indices indices)
     {
-        long[] indsArray = indices.GetAllIndices().ToArray(); // Assuming copy() is equivalent to ToArray()
+        int[] indsArray = indices.GetAllIndices().ToArray(); // Assuming copy() is equivalent to ToArray()
         for (int i = 0; i < indsArray.Length; ++i)
             indsArray[i] = IndicesUtils.GetNameWithType(indsArray[i]);
         return indsArray.GetSortedDistinct();
@@ -212,105 +211,105 @@ public sealed class IndicesUtils
         return ToString(index, Context.Get().GetDefaultOutputFormat());
     }
 
-    public static string ToString(long[] indices, OutputFormat mode)
+    public static string ToString(int[] indices, OutputFormat mode)
     {
         return IndicesFactory.CreateSimple(null, indices).ToString(mode);
     }
 
-    public static string ToString(long[] indices)
+    public static string ToString(int[] indices)
     {
         return ToString(indices, CC.GetDefaultOutputFormat());
     }
 
-    public static long ParseIndex(string @string)
+    public static int ParseIndex(string @string)
     {
         bool state = @string[0] == '^';
-        long nameWithType;
+        int nameWithType;
         if (@string[1] == '{')
             nameWithType = Context.Get().GetIndexConverterManager().GetCode(@string.Substring(2, @string.Length - 1));
         else
             nameWithType = Context.Get().GetIndexConverterManager().GetCode(@string.Substring(1));
-        return state ? (0x80000000 ^ nameWithType) : nameWithType;
+        return state ? (int)(0x80000000 ^ nameWithType) : nameWithType;
     }
 
-    public static long[] GetIndicesNames(IIndices indices)
+    public static int[] GetIndicesNames(Indices indices)
     {
-        var a = new long[indices.Size()];
-        for (long i = indices.Size() - 1; i >= 0; --i)
+        var a = new int[indices.Size()];
+        for (int i = indices.Size() - 1; i >= 0; --i)
             a[i] = GetNameWithType(indices[i]);
         return a;
     }
 
-    public static long[] GetIndicesNames(long[] indices)
+    public static int[] GetIndicesNames(int[] indices)
     {
-        long[] a = new long[indices.Length];
-        for (long i = a.Length - 1; i >= 0; --i)
+        int[] a = new int[indices.Length];
+        for (int i = a.Length - 1; i >= 0; --i)
             a[i] = GetNameWithType(indices[i]);
         return a;
     }
 
-    public static long[] GetFree(long[] indices)
+    public static int[] GetFree(int[] indices)
     {
         return IndicesFactory.CreateSimple(null, indices).GetFree().GetAllIndices().ToArray();
     }
 
-    public static bool HaveEqualStates(long index1, long index2)
+    public static bool HaveEqualStates(int index1, int index2)
     {
         return GetRawStateInt(index1) == GetRawStateInt(index2);
     }
 
-    public static bool IsPermutationConsistentWithIndices(long[] indices, long[] permutation)
+    public static bool IsPermutationConsistentWithIndices(int[] indices, int[] permutation)
     {
         if (indices.Length != permutation.Length)
             return false;
-        for (long i = 0; i < permutation.Length; ++i)
+        for (int i = 0; i < permutation.Length; ++i)
             if (GetRawTypeInt(indices[i]) != GetRawTypeInt(indices[permutation[i]]))
                 return false;
         return true;
     }
 
-    public static bool IsPermutationConsistentWithIndices(long[] indices, Permutation permutation)
+    public static bool IsPermutationConsistentWithIndices(int[] indices, Permutation permutation)
     {
         if (indices.Length != permutation.Dimension())
             return false;
-        for (long i = 0; i < permutation.Dimension(); ++i)
+        for (int i = 0; i < permutation.Dimension(); ++i)
             if (GetRawTypeInt(indices[i]) != GetRawTypeInt(indices[permutation.NewIndexOf(i)]))
                 return false;
         return true;
     }
 
-    public static bool EqualsRegardlessOrder(IIndices indices1, long[] indices2)
+    public static bool EqualsRegardlessOrder(Indices indices1, int[] indices2)
     {
         if (indices1 is EmptyIndices)
             return indices2.Length == 0;
         if (indices1.Size() != indices2.Length)
             return false;
-        long[] temp = (long[])indices2.Clone();
+        int[] temp = (int[])indices2.Clone();
         Array.Sort(temp);
         return Enumerable.SequenceEqual(((AbstractIndices)indices1).GetSortedData(), temp);
     }
 
-    public static bool EqualsRegardlessOrder(long[] indices1, long[] indices2)
+    public static bool EqualsRegardlessOrder(int[] indices1, int[] indices2)
     {
         if (indices1.Length != indices2.Length)
             return false;
-        long[] temp1 = (long[])indices1.Clone(), temp2 = (long[])indices2.Clone();
+        int[] temp1 = (int[])indices1.Clone(), temp2 = (int[])indices2.Clone();
         Array.Sort(temp1);
         Array.Sort(temp2);
         return Enumerable.SequenceEqual(temp1, temp2);
     }
 
-    public static bool HaveIntersections(IIndices u, IIndices v)
+    public static bool HaveIntersections(Indices u, Indices v)
     {
-        IIndices uFree = u.GetFree(),
+        Indices uFree = u.GetFree(),
             vFree = v.GetFree();
         if (uFree.Size() > vFree.Size())
         {
             (uFree, vFree) = (vFree, uFree);
         }
 
-        for (long i = 0; i < uFree.Size(); ++i)
-        for (long j = 0; j < vFree.Size(); ++j)
+        for (int i = 0; i < uFree.Size(); ++i)
+        for (int j = 0; j < vFree.Size(); ++j)
         {
             if (vFree[j] == InverseIndexState(uFree[i]))
             {
@@ -321,11 +320,11 @@ public sealed class IndicesUtils
         return false;
     }
 
-    public static byte GetType_(long index) {
+    public static byte GetType_(int index) {
         return ((byte) ((index & 0x7FFFFFFF) >>> 24));
     }
 
-    public static long[] GetIntersections(long[] freeIndices1, long[] freeIndices2)
+    public static int[] GetIntersections(int[] freeIndices1, int[] freeIndices2)
     {
         //micro optimization
         if (freeIndices1.Length > freeIndices2.Length)
@@ -333,7 +332,7 @@ public sealed class IndicesUtils
             (freeIndices1, freeIndices2) = (freeIndices2, freeIndices1);
         }
 
-        List<long> contracted = new List<long>();
+        List<int> contracted = new List<int>();
         for (int i = 0; i < freeIndices1.Length; ++i)
         for (int j = 0; j < freeIndices2.Length; ++j)
             if (freeIndices2[j] == InverseIndexState(freeIndices1[i]))
@@ -341,13 +340,13 @@ public sealed class IndicesUtils
         return contracted.ToArray();
     }
 
-    public static long[] GetIntersections(IIndices u, IIndices v)
+    public static int[] GetIntersections(Indices u, Indices v)
     {
         if (u.Size() == 0 || v.Size() == 0)
-            return new long[0];
-        IIndices freeU = u.GetFree(), freeV = v.GetFree();
+            return new int[0];
+        Indices freeU = u.GetFree(), freeV = v.GetFree();
         if (freeU.Size() == 0 || freeV.Size() == 0)
-            return new long[0];
+            return new int[0];
         return GetIntersections(((AbstractIndices)freeU).Data, ((AbstractIndices)freeV).Data);
     }
 }

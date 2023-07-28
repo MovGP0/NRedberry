@@ -8,10 +8,10 @@ namespace NRedberry.Core.Tensors;
 
 public class SimpleTensor : Tensor, IEquatable<SimpleTensor>
 {
-    public ISimpleIndices SimpleIndices { get; }
-    public override IIndices Indices => SimpleIndices;
+    public SimpleIndices SimpleIndices { get; }
+    public override Indices.Indices Indices => SimpleIndices;
 
-    public SimpleTensor(int name, ISimpleIndices indices)
+    public SimpleTensor(int name, SimpleIndices indices)
     {
         Name = name;
         SimpleIndices = indices ?? throw new ArgumentNullException(nameof(indices));
@@ -54,12 +54,12 @@ public class SimpleTensor : Tensor, IEquatable<SimpleTensor>
         yield break;
     }
 
-    public override ITensorBuilder GetBuilder()
+    public override TensorBuilder GetBuilder()
     {
         return new SimpleTensorBuilder(this);
     }
 
-    public override ITensorFactory GetFactory()
+    public override TensorFactory GetFactory()
     {
         return new SimpleTensorFactory(this);
     }

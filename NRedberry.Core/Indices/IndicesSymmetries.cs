@@ -1,267 +1,310 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using NRedberry.Core.Groups;
+using NRedberry.Core.Combinatorics;
+using NRedberry.Core.Combinatorics.Symmetries;
 
 namespace NRedberry.Core.Indices;
 
 /// <summary>
 /// Representation of permutational symmetries of indices of simple tensors.
 /// </summary>
-public class IndicesSymmetries //: IEnumerable<Symmetry>
+public class IndicesSymmetries : IEnumerable<Symmetry>
 {
-    private readonly StructureOfIndices structureOfIndices;
-    private readonly List<Permutation> generators;
-    private PermutationGroup permutationGroup;
-    private short[] positionsInOrbits;
+    public StructureOfIndices StructureOfIndices { get; }
+    private Symmetries Symmetries { get; }
 
-    private IndicesSymmetries(StructureOfIndices structureOfIndices)
+    [Obsolete("Use Symmetries property instead", true)]
+    public Symmetries GetInnerSymmetries() => Symmetries;
+
+    private short[]? _diffIds;
+
+    public IndicesSymmetries(StructureOfIndices structureOfIndices)
     {
-        this.structureOfIndices = structureOfIndices;
-        this.generators = new List<Permutation>();
+        StructureOfIndices = structureOfIndices;
+        Symmetries = SymmetriesFactory.CreateSymmetries(structureOfIndices.Size);
     }
 
-    private IndicesSymmetries(StructureOfIndices structureOfIndices, List<Permutation> generators, PermutationGroup permutationGroup)
+    private IndicesSymmetries(StructureOfIndices structureOfIndices, Symmetries symmetries, short[] diffIds)
     {
-        this.structureOfIndices = structureOfIndices;
-        this.generators = generators;
-        this.permutationGroup = permutationGroup;
+        StructureOfIndices = structureOfIndices;
+        Symmetries = symmetries;
+        _diffIds = diffIds;
     }
 
-    public static IndicesSymmetries Create(StructureOfIndices structureOfIndices)
+    public IndicesSymmetries(StructureOfIndices structureOfIndices, Symmetries symmetries)
     {
-        return structureOfIndices.Size() == 0 ? Empty : new IndicesSymmetries(structureOfIndices);
+        StructureOfIndices = structureOfIndices;
+        Symmetries = symmetries;
     }
 
-    public static IndicesSymmetries Create(StructureOfIndices structureOfIndices, PermutationGroup group)
+    /// <summary>
+    /// Gets the diffIds for indices as specified in Indices.getDiffIds().
+    /// </summary>
+    /// <returns>diffIds for indices.</returns>
+    public short[] DiffIds
     {
-        if (group.Degree() != structureOfIndices.Size())
-            throw new ArgumentException("Degree of permutation group not equal to indices size.");
-        return structureOfIndices.Size() == 0 ? Empty : new IndicesSymmetries(structureOfIndices, group.Generators().ToList(), group);
-    }
-
-    public static IndicesSymmetries Create(StructureOfIndices structureOfIndices, List<Permutation> generators)
-    {
-        foreach (var p in generators)
+        get
         {
-            if (p.Degree() > structureOfIndices.Size())
-                throw new ArgumentException("Permutation degree not equal to indices size.");
-        }
-        return structureOfIndices.Size() == 0 ? Empty : new IndicesSymmetries(structureOfIndices, new List<Permutation>(generators), null);
-    }
-
-    public StructureOfIndices StructureOfIndices
-    {
-        get => structureOfIndices;
-    }
-
-    public List<Permutation> Generators => new(generators);
-
-    public PermutationGroup GetPermutationGroup()
-    {
-        if (permutationGroup == null)
-        {
-            permutationGroup = !generators.Any() ? PermutationGroup.TrivialGroup() : PermutationGroup.CreatePermutationGroup(generators);
-        }
-        return permutationGroup;
-    }
-
-    public short[] GetPositionsInOrbits()
-    {
-        if (positionsInOrbits == null)
-        {
-            var positionsInOrbitsInt = GetPermutationGroup().GetPositionsInOrbits();
-            positionsInOrbits = new short[structureOfIndices.Size];
-            var i = 0;
-            for (; i < positionsInOrbitsInt.Length; ++i)
+            //TODO synchronize
+            if (_diffIds == null)
             {
-                positionsInOrbits[i] = (short)positionsInOrbitsInt[i];
+                List<Symmetry> list = Symmetries.BasisSymmetries;
+                _diffIds = new short[Symmetries.Dimension];
+                Array.Fill(_diffIds, (short)-1);
+                short number = 0;
+                List<int> removed = new List<int>(2);
+                int i0, i1;
+                foreach (var symmetry in list)
+                {
+                    for (i0 = _diffIds.Length - 1; i0 >= 0; --i0)
+                    {
+                        if ((i1 = symmetry.NewIndexOf(i0)) != i0)
+                        {
+                            if (_diffIds[i0] == -1 && _diffIds[i1] == -1)
+                            {
+                                _diffIds[i0] = _diffIds[i1] = number++;
+                            }
+                            else if (_diffIds[i0] == -1)
+                            {
+                                _diffIds[i0] = _diffIds[i1];
+                            }
+                            else if (_diffIds[i1] == -1)
+                            {
+                                _diffIds[i1] = _diffIds[i0];
+                            }
+                            else if (_diffIds[i1] != _diffIds[i0])
+                            {
+                                int n = _diffIds[i1];
+                                for (int k = 0; k < _diffIds.Length; ++k)
+                                {
+                                    if (_diffIds[k] == n)
+                                    {
+                                        _diffIds[k] = _diffIds[i0];
+                                    }
+                                }
+
+                                removed.Add(n);
+                            }
+                        }
+                    }
+                }
+
+                for (i1 = 0; i1 < _diffIds.Length; ++i1)
+                {
+                    if (_diffIds[i1] == -1)
+                    {
+                        _diffIds[i1] = number++;
+                    }
+                }
+
+                removed.Sort();
+                for (i0 = _diffIds.Length - 1; i0 >= 0; --i0)
+                {
+                    _diffIds[i0] += (short)(Array.BinarySearch(removed.ToArray(), _diffIds[i0]) + 1);
+                }
             }
-            for (; i < structureOfIndices.Size; ++i)
-            {
-                positionsInOrbits[i] = (short)i;
-            }
+
+            return _diffIds;
         }
-        return positionsInOrbits;
     }
 
-    public bool IsTrivial()
-    {
-        return generators.All(p => p.IsIdentity());
-    }
+    /// <summary>
+    /// Adds permutational symmetry.
+    /// </summary>
+    /// <param name="permutation">Permutation</param>
+    /// <returns>true if it is a new symmetry of indices and false if it follows from already defined symmetries.</returns>
+    /// <exception cref="ArgumentException">If there are more than one type of indices in corresponding indices.</exception>
+    /// <exception cref="ArgumentException">If permutation.length() != indices.size().</exception>
+    /// <exception cref="InconsistentGeneratorsException">If the specified symmetry is inconsistent with already defined.</exception>
+    public bool AddSymmetry(params int[] permutation) => Add(false, permutation);
 
-    public bool AvailableForModification()
-    {
-        return permutationGroup == null;
-    }
+    /// <summary>
+    /// Adds permutational antisymmetry.
+    /// </summary>
+    /// <param name="permutation">Permutation</param>
+    /// <returns>true if it is a new symmetry of indices and false if it follows from already defined symmetries.</returns>
+    /// <exception cref="ArgumentException">If there are more than one type of indices in corresponding indices.</exception>
+    /// <exception cref="ArgumentException">If permutation.length() != indices.size().</exception>
+    /// <exception cref="InconsistentGeneratorsException">If the specified symmetry is inconsistent with already defined.</exception>
+    public bool AddAntiSymmetry(params int[] permutation) => Add(true, permutation);
 
-    public void AddSymmetry(params int[] permutation)
-    {
-        Add(false, permutation);
-    }
+    /// <summary>
+    /// Adds permutational symmetry for a particular type of indices.
+    /// </summary>
+    /// <param name="type">Type of indices</param>
+    /// <param name="permutation">Permutation</param>
+    /// <returns>true if it is a new symmetry of indices and false if it follows from already defined symmetries.</returns>
+    /// <exception cref="ArgumentException">If permutation.length() != indices.size(type).</exception>
+    /// <exception cref="InconsistentGeneratorsException">If the specified symmetry is inconsistent with already defined.</exception>
+    public bool AddSymmetry(IndexType type, params int[] permutation) => Add(type, false, permutation);
 
-    public void AddAntiSymmetry(params int[] permutation)
-    {
-        Add(true, permutation);
-    }
+    /// <summary>
+    /// Adds permutational antisymmetry for a particular type of indices.
+    /// </summary>
+    /// <param name="type">Type of indices</param>
+    /// <param name="permutation">Permutation</param>
+    /// <returns>true if it is a new symmetry of indices and false if it follows from already defined symmetries.</returns>
+    /// <exception cref="ArgumentException">If permutation.length() != indices.size(type).</exception>
+    /// <exception cref="InconsistentGeneratorsException">If the specified symmetry is inconsistent with already defined.</exception>
+    public bool AddAntiSymmetry(IndexType type, params int[] permutation) => Add(type, true, permutation);
 
-    public void Add(bool sign, int[] permutation)
+    /// <summary>
+    /// Adds permutational (anti)symmetry for a particular type of indices.
+    /// </summary>
+    /// <param name="type">Type of indices</param>
+    /// <param name="sign">Sign of symmetry (true means '-', false means '+')</param>
+    /// <param name="permutation">Permutation</param>
+    /// <returns>true if it is a new symmetry of indices and false if it follows from already defined symmetries.</returns>
+    /// <exception cref="ArgumentException">If permutation.length() != indices.size(type).</exception>
+    /// <exception cref="InconsistentGeneratorsException">If the specified symmetry is inconsistent with already defined.</exception>
+    public bool Add(IndexType type, bool sign, params int[] permutation) => Add((byte)type, new Symmetry(permutation, sign));
+
+    /// <summary>
+    /// Adds permutational (anti)symmetry for a particular type of indices.
+    /// </summary>
+    /// <param name="type">Type of indices</param>
+    /// <param name="sign">Sign of symmetry (true means '-', false means '+')</param>
+    /// <param name="permutation">Permutation</param>
+    /// <returns>true if it is a new symmetry of indices and false if it follows from already defined symmetries.</returns>
+    /// <exception cref="ArgumentException">If permutation.length() != indices.size(type).</exception>
+    /// <exception cref="InconsistentGeneratorsException">If the specified symmetry is inconsistent with already defined.</exception>
+    public bool Add(byte type, bool sign, params int[] permutation) => Add(type, new Symmetry(permutation, sign));
+
+    /// <summary>
+    /// Adds permutational (anti)symmetry.
+    /// </summary>
+    /// <param name="sign">sign of symmetry (true means '-', false means '+')</param>
+    /// <param name="permutation">permutation</param>
+    /// <returns>true if it is a new symmetry of indices and false if it follows from
+    /// already defined symmetries.</returns>
+    /// <exception cref="ArgumentException">If there are more than one type of indices in corresponding indices.</exception>
+    /// <exception cref="ArgumentException">If permutation.length() != indices.size(type).</exception>
+    /// <exception cref="InconsistentGeneratorsException">If the specified symmetry is inconsistent with already defined.</exception>
+    public bool Add(bool sign, params int[] permutation)
     {
-        byte type = -1;
-        StructureOfIndices.TypeData typeData;
-        for (int i = 0; i < IndexType.TypesCount; ++i)
+        byte type = 255;
+        TypeData typeData;
+        for (int i = 0; i < IndexTypeMethods.TypesCount; ++i)
         {
-            typeData = structureOfIndices.GetTypeData((byte)i);
+            typeData = StructureOfIndices.GetTypeData((byte) i);
             if (typeData.Length != 0)
             {
-                if (type != -1)
+                if (type != 255)
                     throw new ArgumentException();
                 if (typeData.Length != permutation.Length)
                     throw new ArgumentException();
-                type = (byte)i;
+                type = (byte) i;
             }
         }
-        AddSymmetry(type, Permutations.CreatePermutation(sign, permutation));
+        return Add(type, new Symmetry(permutation, sign));
     }
 
-    public void AddSymmetry(IndexType type, params int[] permutation)
+    /// <summary>
+    /// Adds permutational (anti)symmetry.
+    /// </summary>
+    /// <param name="type">Type of the symmetry.</param>
+    /// <param name="symmetry">Symmetry object.</param>
+    /// <returns>true if it is a new symmetry of indices and false if it follows from already defined symmetries.</returns>
+    /// <exception cref="ArgumentException">If symmetry.dimension() != indices.size(type).</exception>
+    /// <exception cref="InconsistentGeneratorsException">If the specified symmetry is inconsistent with already defined.</exception>
+    public bool Add(byte type, Symmetry symmetry)
     {
-        Add(type, false, permutation);
-    }
-
-    public void AddAntiSymmetry(IndexType type, params int[] permutation)
-    {
-        Add(type, true, permutation);
-    }
-
-    public void Add(IndexType type, bool sign, params int[] permutation)
-    {
-        AddSymmetry(type.GetType(), Permutations.CreatePermutation(sign, permutation));
-    }
-
-    public void Add(byte type, bool sign, params int[] permutation)
-    {
-        AddSymmetry(type, Permutations.CreatePermutation(sign, permutation));
-    }
-
-    public void AddSymmetry(byte type, Permutation symmetry)
-    {
-        if (symmetry.IsIdentity())
-            return;
-        if (permutationGroup != null)
-            throw new InvalidOperationException("Permutation group is already in use.");
-
-        StructureOfIndices.TypeData data = structureOfIndices.GetTypeData(type);
+        var data = StructureOfIndices.GetTypeData(type);
         if (data == null)
-            throw new ArgumentException($"No such type: {IndexTypeMethods.GetType_(type)}");
-        if (data.Length < symmetry.Degree())
+        {
+            throw new ArgumentException("No such type: " + IndexTypeMethods.GetType(type));
+        }
+
+        if (data.Length != symmetry.Dimension())
+        {
             throw new ArgumentException("Wrong symmetry length.");
+        }
 
-        long[] s = new long[structureOfIndices.Size];
-        long i = 0;
+        int[] s = new int[StructureOfIndices.Size];
+        int i = 0;
         for (; i < data.From; ++i)
-        {
             s[i] = i;
-        }
         for (int j = 0; j < data.Length; ++j, ++i)
-        {
             s[i] = symmetry.NewIndexOf(j) + data.From;
-        }
-        for (; i < structureOfIndices.Size; ++i)
-        {
+        for (; i < StructureOfIndices.Size; ++i)
             s[i] = i;
-        }
-        generators.Add(Permutations.CreatePermutation(symmetry.Antisymmetry(), s));
-    }
-
-    public void AddSymmetry(Permutation symmetry)
-    {
-        if (permutationGroup != null)
-            throw new InvalidOperationException("Permutation group is already in use.");
-        generators.Add(symmetry);
-    }
-
-    public void AddSymmetries(params Permutation[] symmetries)
-    {
-        if (permutationGroup != null) throw new InvalidOperationException("Permutation group is already in use.");
-
-        foreach (var symmetry in symmetries)
+        try
         {
-            generators.Add(symmetry);
-        }
-    }
-
-    public void AddSymmetries(IEnumerable<Permutation> symmetries)
-    {
-        if (permutationGroup != null)
-            throw new InvalidOperationException("Permutation group is already in use.");
-        foreach (var symmetry in symmetries)
-            generators.Add(symmetry);
-    }
-
-    public void AddAll(IEnumerable<Permutation> symmetry)
-    {
-        if (permutationGroup != null)
-            throw new ArgumentException();
-        generators.AddRange(symmetry);
-    }
-
-    public void SetSymmetric()
-    {
-        if (permutationGroup != null)
-            throw new InvalidOperationException("Permutation group is already in use.");
-        PermutationGroup sym = null;
-        int[] counts = structureOfIndices.GetTypesCounts();
-        foreach (int c in counts)
-        {
-            if (c != 0)
+            if (Symmetries.Add(new Symmetry(s, symmetry.IsAntiSymmetry())))
             {
-                if (sym == null)
-                    sym = PermutationGroup.SymmetricGroup(c);
-                else
-                    sym = sym.DirectProduct(PermutationGroup.SymmetricGroup(c));
+                _diffIds = null;
+                return true;
+            }
+            return false;
+        }
+        catch (InconsistentGeneratorsException exception)
+        {
+            throw new InconsistentGeneratorsException("Adding inconsistent symmetry to tensor indices symmetries.");
+        }
+    }
+
+    public bool AddUnsafe(byte type, Symmetry symmetry)
+    {
+        var data = StructureOfIndices.GetTypeData(type);
+        if (data == null)
+            throw new ArgumentException("No such type: " + IndexTypeMethods.GetType(type));
+        if (data.Length != symmetry.Dimension())
+            throw new ArgumentException("Wrong symmetry length.");
+        int[] s = new int[StructureOfIndices.Size];
+        int i = 0;
+        for (; i < data.From; ++i)
+            s[i] = i;
+        for (int j = 0; j < data.Length; ++j, ++i)
+            s[i] = symmetry.NewIndexOf(j) + data.From;
+        for (; i < StructureOfIndices.Size; ++i)
+            s[i] = i;
+        Symmetries.AddUnsafe(new Symmetry(s, symmetry.IsAntiSymmetry()));
+        return true;
+    }
+
+    /// <summary>
+    /// Adds permutational (anti)symmetry of indices without any checks.
+    /// </summary>
+    /// <param name="symmetry"></param>
+    /// <returns></returns>
+    public bool AddUnsafe(Symmetry symmetry) => Symmetries.AddUnsafe(symmetry);
+
+    /// <summary>
+    /// Returns true if and only if this set contains only identity symmetry and false otherwise.
+    /// </summary>
+    /// <returns></returns>
+    public bool IsEmpty => Symmetries.IsEmpty;
+
+    public IndicesSymmetries Clone() => new(StructureOfIndices, Symmetries.Clone(), _diffIds);
+
+    public static IndicesSymmetries Create(StructureOfIndices structureOfIndices) =>
+        structureOfIndices.Size == 0
+            ? EmptySymmetries
+            : new IndicesSymmetries(structureOfIndices);
+
+    public static readonly IndicesSymmetries EmptySymmetries = new(
+        new StructureOfIndices(EmptySimpleIndices.emptySimpleIndicesInstance),
+        SymmetriesFactory.CreateSymmetries(0),
+        new short[0]);
+
+    public override int GetHashCode()
+    {
+        const int Prime1 = 113;
+        const int Prime2 = 193;
+        var hash = Prime1;
+        unchecked
+        {
+            foreach (var symmetry in Symmetries)
+            {
+                hash = hash * Prime2 + symmetry.GetHashCode();
             }
         }
-
-        permutationGroup = sym;
-        generators.Clear();
-        generators.AddRange(sym.Generators());
+        return hash;
     }
 
-    public void SetAntiSymmetric()
-    {
-        if (permutationGroup != null)
-            throw new InvalidOperationException("Permutation group is already in use.");
-        PermutationGroup sym = null;
-        int[] counts = structureOfIndices.GetTypesCounts();
-        foreach (int c in counts)
-        {
-            if (c != 0)
-            {
-                if (sym == null)
-                    sym = PermutationGroup.AntisymmetricGroup(c);
-                else
-                    sym = sym.DirectProduct(PermutationGroup.AntisymmetricGroup(c));
-            }
-        }
-
-        permutationGroup = sym;
-        generators.Clear();
-        generators.AddRange(sym.Generators());
-    }
-
-    public IndicesSymmetries Clone()
-    {
-        if (structureOfIndices.Size == 0)
-            return Empty;
-        return new IndicesSymmetries(structureOfIndices, new List<Permutation>(generators), permutationGroup);
-    }
-
-    private static IndicesSymmetries emptyIndicesSymmetries = new(StructureOfIndices.Empty, new List<Permutation>(), null);
-    public static IndicesSymmetries Empty => emptyIndicesSymmetries;
-
-    public override string ToString()
-    {
-        return generators.ToString();
-    }
+    public List<Symmetry> Basis => Symmetries.BasisSymmetries;
+    public IEnumerator<Symmetry> GetEnumerator() => Symmetries.GetEnumerator();
+    public override string ToString() => Symmetries.ToString();
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

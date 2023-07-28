@@ -2,39 +2,39 @@
 
 public static class IndicesFactory
 {
-    public static readonly IIndices EmptyIndices = NRedberry.Core.Indices.EmptyIndices.EmptyIndicesInstance;
+    public static readonly Indices EmptyIndices = NRedberry.Core.Indices.EmptyIndices.EmptyIndicesInstance;
 
-    public static readonly ISimpleIndices EmptySimpleIndices = EmptySimpleIndices.EmptySimpleIndicesInstance;
+    public static readonly SimpleIndices emptySimpleIndices = NRedberry.Core.Indices.EmptySimpleIndices.emptySimpleIndicesInstance;
 
-    public static ISimpleIndices CreateSimple(IndicesSymmetries? symmetries, params long[] data)
+    public static SimpleIndices CreateSimple(IndicesSymmetries? symmetries, params int[] data)
     {
         if (data.Length == 0)
-            return EmptySimpleIndices.EmptySimpleIndicesInstance;
-        return new SimpleIndicesIsolated((long[])data.Clone(), symmetries);
+            return NRedberry.Core.Indices.EmptySimpleIndices.emptySimpleIndicesInstance;
+        return new SimpleIndicesIsolated((int[])data.Clone(), symmetries);
     }
 
-    public static ISimpleIndices CreateSimple(IndicesSymmetries? symmetries, IIndices indices)
+    public static SimpleIndices CreateSimple(IndicesSymmetries? symmetries, Indices indices)
     {
         if (indices.Size() == 0)
-            return EmptySimpleIndices.EmptySimpleIndicesInstance;
+            return NRedberry.Core.Indices.EmptySimpleIndices.emptySimpleIndicesInstance;
         if (indices is SimpleIndicesAbstract simpleIndicesAbstract)
-            return new SimpleIndicesIsolated(simpleIndicesAbstract.data, symmetries);
+            return new SimpleIndicesIsolated(simpleIndicesAbstract.Data, symmetries);
         return new SimpleIndicesIsolated(indices.GetAllIndices().Copy(), symmetries);
     }
 
-    public static IIndices Create(IIndices indices)
+    public static Indices Create(Indices indices)
     {
         if (indices.Size() == 0)
             return EmptyIndices;
         if (indices is SortedIndices)
             return indices;
-        return new SortedIndices(indices.GetAllIndices().Copy());
+        return new SortedIndices(indices.AllIndices.Copy());
     }
 
-    public static IIndices Create(params long[] data)
+    public static Indices Create(params int[] data)
     {
         if (data.Length == 0)
             return EmptyIndices;
-        return new SortedIndices((long[])data.Clone());
+        return new SortedIndices((int[])data.Clone());
     }
 }

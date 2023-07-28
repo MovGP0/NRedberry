@@ -1,6 +1,6 @@
 namespace NRedberry.Core.Numbers;
 
-public interface IFieldElement<T>
+public interface FieldElement<T>
 {
     T Add(T a);
     T Subtract(T a);
@@ -9,5 +9,5 @@ public interface IFieldElement<T>
     T Multiply(T a);
     T Divide(T a);
     T Reciprocal();
-    IField<T> GetField();
+    Field<T> GetField();
 }

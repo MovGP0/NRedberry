@@ -7,9 +7,9 @@ namespace NRedberry.Core.Tensors;
 
 public abstract class MultiTensor : Tensor
 {
-    public override IIndices Indices { get; }
+    public override Indices.Indices Indices { get; }
 
-    protected MultiTensor(IIndices indices)
+    protected MultiTensor(Indices.Indices indices)
     {
         Indices = indices;
     }

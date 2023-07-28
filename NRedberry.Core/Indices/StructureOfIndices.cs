@@ -18,7 +18,7 @@ public sealed class StructureOfIndices
 {
     private readonly int[] typesCounts = new int[IndexTypeMethods.TypesCount];
     private readonly BitArray[] states = new BitArray[IndexTypeMethods.TypesCount];
-    private readonly int size;
+    private readonly long size;
 
     #region Constructors
     //for empty instance
@@ -88,7 +88,7 @@ public sealed class StructureOfIndices
         this.size = size;
     }
 
-    internal StructureOfIndices(ISimpleIndices indices)
+    internal StructureOfIndices(SimpleIndices indices)
     {
         size = indices.Size();
         int i;
@@ -158,7 +158,7 @@ public sealed class StructureOfIndices
         return new StructureOfIndices(allCount, allStates);
     }
 
-    public static StructureOfIndices Create(ISimpleIndices indices)
+    public static StructureOfIndices Create(SimpleIndices indices)
     {
         if (indices.Size() == 0)
             return Empty;
@@ -221,8 +221,8 @@ public sealed class StructureOfIndices
         return new BitArray(size);
     }
 
-    public int Size => size;
-    public int Count => size;
+    public int Size => (int)size;
+    public int Count => (int)size;
 
     public override bool Equals(object obj)
     {
@@ -269,7 +269,7 @@ public sealed class StructureOfIndices
         return typesCounts[type];
     }
 
-    public bool IsStructureOf(ISimpleIndices indices)
+    public bool IsStructureOf(SimpleIndices indices)
     {
         if (size != indices.Size())
             return false;
@@ -280,7 +280,7 @@ public sealed class StructureOfIndices
     {
         if (size == 0)
             return this;
-        StructureOfIndices r = new StructureOfIndices(size);
+        StructureOfIndices r = new StructureOfIndices((int)size);
         Array.Copy(typesCounts, r.typesCounts, typesCounts.Length);
         for (int i = r.states.Length - 1; i >= 0; --i)
         {
@@ -299,7 +299,7 @@ public sealed class StructureOfIndices
             return oth;
         if (oth.Size == 0)
             return this;
-        int newSize = this.size + oth.Size;
+        int newSize = (int)this.size + oth.Size;
         StructureOfIndices r = new StructureOfIndices(newSize);
         for (int i = 0; i < IndexTypeMethods.TypesCount; ++i)
         {
@@ -316,7 +316,7 @@ public sealed class StructureOfIndices
         if (size == 0 || N == 0) return Empty;
         if (N == 1) return this;
 
-        int newSize = N * this.size;
+        int newSize = N * (int)this.size;
         StructureOfIndices r = new StructureOfIndices(newSize);
         for (int i = 0; i < IndexTypeMethods.TypesCount; ++i)
         {
@@ -330,7 +330,7 @@ public sealed class StructureOfIndices
 
     public StructureOfIndices Subtract(StructureOfIndices other)
     {
-        int newSize = this.size - other.Size;
+        int newSize = (int)(this.size - other.Size);
         if (newSize < 0)
             throw new ArgumentException();
         if (other.Size == 0)

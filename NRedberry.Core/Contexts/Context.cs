@@ -235,12 +235,10 @@ public sealed class Context
 
         if (!IsMetric(type) && IndicesUtils.GetState(index2))
         {
-            var t = index1;
-            index1 = index2;
-            index2 = t;
+            (index1, index2) = (index2, index1);
         }
 
-        ISimpleIndices indices = IndicesFactory.CreateSimple(null, index1, index2);
+        SimpleIndices indices = IndicesFactory.CreateSimple(null, (int)index1, (int)index2);
         var nd = nameManager.mapNameDescriptor(nameManager.getKroneckerName(), new StructureOfIndices(indices));
         var name = nd.Id;
         return Tensor.SimpleTensor(name, indices);
@@ -262,7 +260,7 @@ public sealed class Context
             || !IndicesUtils.HaveEqualStates(index1, index2)
             || !metricTypes.Get(type))
             throw new ArgumentException("Not metric indices.");
-        var indices = IndicesFactory.CreateSimple(null, index1, index2);
+        var indices = IndicesFactory.CreateSimple(null, (int)index1, (int)index2);
         var nd = nameManager.mapNameDescriptor(nameManager.GetMetricName(), new StructureOfIndices(indices));
         var name = nd.Id;
         return Tensor.SimpleTensor(name, indices);
@@ -306,4 +304,5 @@ public sealed class Context
     }
 
     public OutputFormat GetDefaultOutputFormat() => defaultOutputFormat;
+    public OutputFormat DefaultOutputFormat => defaultOutputFormat;
 }
