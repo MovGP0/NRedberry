@@ -5,12 +5,22 @@ namespace NRedberry.Core.Tensors;
 public class TensorException : Exception
 {
     public TensorException(string message, params Tensor[] tensors)
-        : base($"\"{message}\" in tensors {ArrayToString(tensors)}\n nmseed: {CC.GetNameManager().Seed}")
+        : base($"\"{message}\" in tensors {ArrayToString(tensors)}")
+    {
+    }
+
+    public TensorException(string message, long nmseed, params Tensor[] tensors)
+        : base($"\"{message}\" in tensors {ArrayToString(tensors)}\n nmseed: {nmseed}")
     {
     }
 
     public TensorException(string message)
-        : base($"{message}\n nmseed: {CC.GetNameManager().Seed}")
+        : base(message)
+    {
+    }
+
+    public TensorException(string message, long nmseed)
+        : base($"{message}\n nmseed: {nmseed}")
     {
     }
 

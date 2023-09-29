@@ -1,4 +1,4 @@
-﻿using NRedberry.Core.Contexts;
+﻿using NRedberry.Contexts;
 
 namespace NRedberry.Core.Tensors;
 

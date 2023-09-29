@@ -4,7 +4,7 @@ using NRedberry.Core.Parsers;
 using NRedberry.Core.Tensors;
 using NRedberry.Core.Transformations;
 
-namespace NRedberry.Core.Contexts;
+namespace NRedberry.Contexts;
 
 public sealed class ParseManager
 {

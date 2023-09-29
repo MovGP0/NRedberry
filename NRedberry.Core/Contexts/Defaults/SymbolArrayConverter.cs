@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Linq;
-using NRedberry.Core.Tensors;
 
-namespace NRedberry.Core.Contexts.Defaults;
+namespace NRedberry.Contexts.Defaults;
 
 /// <summary>
 /// Base class for other <see cref="IIndexSymbolConverter"/>.
@@ -26,7 +25,7 @@ public abstract class SymbolArrayConverter : IIndexSymbolConverter
         return Symbols.Any(s => s.Equals(symbol));
     }
 
-    public long GetCode(string symbol)
+    public int GetCode(string symbol)
     {
         for (var i = 0; i < Symbols.Length; ++i)
         {
@@ -59,6 +58,6 @@ public abstract class SymbolArrayConverter : IIndexSymbolConverter
         }
     }
 
-    public long MaxNumberOfSymbols() => Symbols.Length - 1;
+    public int MaxNumberOfSymbols() => Symbols.Length - 1;
     public abstract byte GetType_();
 }

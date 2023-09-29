@@ -1,7 +1,6 @@
 ﻿using System;
-using NRedberry.Core.Indices;
 
-namespace NRedberry.Core.Contexts.Defaults;
+namespace NRedberry.Contexts.Defaults;
 
 /// <summary>
 /// The default Redberry context settings.

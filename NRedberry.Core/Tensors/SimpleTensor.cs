@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using NRedberry.Core.Contexts;
+using NRedberry.Contexts;
 using NRedberry.Core.Indices;
 
 namespace NRedberry.Core.Tensors;

@@ -1,6 +1,4 @@
-﻿using NRedberry.Core.Tensors;
-
-namespace NRedberry.Core.Contexts.Defaults;
+﻿namespace NRedberry.Contexts.Defaults;
 
 /// <summary>
 /// <see cref="IIndexSymbolConverter"/> for latin lower case letters.
@@ -26,7 +24,7 @@ public sealed class LatinLowerCaseConverter : IIndexSymbolConverter
         return false;
     }
 
-    public long GetCode(string symbol)
+    public int GetCode(string symbol)
     {
         return symbol[0] - 0x61;
     }
@@ -44,7 +42,7 @@ public sealed class LatinLowerCaseConverter : IIndexSymbolConverter
         return Type;
     }
 
-    public long MaxNumberOfSymbols()
+    public int MaxNumberOfSymbols()
     {
         return 25;
     }

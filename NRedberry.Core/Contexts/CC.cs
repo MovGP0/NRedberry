@@ -1,6 +1,4 @@
-﻿using NRedberry.Core.Tensors;
-
-namespace NRedberry.Core.Contexts;
+﻿namespace NRedberry.Contexts;
 
 /// <summary>
 /// Redberry current context.

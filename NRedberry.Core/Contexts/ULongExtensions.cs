@@ -1,4 +1,4 @@
-namespace NRedberry.Core.Contexts;
+namespace NRedberry.Contexts;
 
 public static class ULongExtensions
 {

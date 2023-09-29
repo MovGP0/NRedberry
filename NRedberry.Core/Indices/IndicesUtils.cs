@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NRedberry.Core.Contexts;
+using NRedberry.Contexts;
+using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Maths;
 using NRedberry.Core.Tensors;
 using CC = NRedberry.Core.Tensors.CC;

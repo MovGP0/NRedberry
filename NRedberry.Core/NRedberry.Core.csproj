@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
@@ -17,6 +17,12 @@
 
   <ItemGroup>
     <Folder Include="Transformations\Expand\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NRedberry.Core.Combinatorics\NRedberry.Core.Combinatorics.csproj" />
+    <ProjectReference Include="..\NRedberry.Core.Entities\NRedberry.Core.Entities.csproj" />
+    <ProjectReference Include="..\NRedberry.Core.Utils\NRedberry.Core.Utils.csproj" />
   </ItemGroup>
 
 </Project>

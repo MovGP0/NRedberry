@@ -179,28 +179,28 @@ public sealed class Product : MultiTensor
         throw new NotImplementedException();
     }
 
-    private static long Hc(Tensor t, long[] inds)
+    private static int Hc(Tensor t, int[] inds)
     {
         Indices.Indices ind = t.Indices.GetFree();
         long h = 31;
-        long ii;
-        for (long i = ind.Size() - 1; i >= 0; --i)
+        int ii;
+        for (int i = ind.Size() - 1; i >= 0; --i)
         {
             ii = IndicesUtils.GetNameWithType(ind[i]);
             if ((ii = Array.BinarySearch(inds, ii)) >= 0)
                 h ^= HashFunctions.JenkinWang32shift(ii);
         }
-        return h;
+        return (int)h;
     }
 
     private class ScaffoldWrapper : IComparable<ScaffoldWrapper>
     {
-        public readonly long[] Inds;
+        public readonly int[] Inds;
         public readonly Tensor T;
         public readonly TensorContraction Tc;
         public readonly long HashWithIndices;
 
-        public ScaffoldWrapper(long[] inds, Tensor t, TensorContraction tc)
+        public ScaffoldWrapper(int[] inds, Tensor t, TensorContraction tc)
         {
             Inds = inds;
             T = t;

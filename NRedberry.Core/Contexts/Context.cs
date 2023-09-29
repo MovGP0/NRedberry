@@ -1,8 +1,6 @@
-using System;
-using NRedberry.Core.Indices;
-using NRedberry.Core.Tensors;
+using NRedberry.Core.Parsers;
 
-namespace NRedberry.Core.Contexts;
+namespace NRedberry.Contexts;
 
 /// <summary>
 /// This class represents Redberry context. It stores all Redberry session data (in some sense it stores static data).
@@ -20,7 +18,7 @@ public sealed class Context
     ///<summary>
     /// NameManager has a sense of namespace
     /// </summary>
-    private NameManager nameManager;
+    public NameManager nameManager;
 
     /// <summary>
     ///  Defaults output format can be changed during the session
@@ -34,7 +32,7 @@ public sealed class Context
     /// Holds information about metric types.
     /// This is a "map" from (byte) type to (bit) isMetric
     /// </summary>
-    private LongBackedBitArray metricTypes = new(128);
+    public LongBackedBitArray metricTypes = new(128);
 
     /**
      * Creates context from the settings
@@ -42,8 +40,9 @@ public sealed class Context
      * @param contextSettings settings
      * @see ContextSettings
      */
-    public Context(ContextSettings contextSettings) {
-        parseManager = new ParseManager(contextSettings.Parser);
+    public Context(ContextSettings contextSettings)
+    {
+        parseManager = new ParseManager(contextSettings.Parser());
         converterManager = contextSettings.ConverterManager;
         nameManager = new NameManager(contextSettings.NameManagerSeed, contextSettings.Kronecker, contextSettings.MetricName);
 
@@ -154,7 +153,7 @@ public sealed class Context
      *
      * @param name string representation of metric tensor name
      */
-    public void SetMetricName(String name) {
+    public void SetMetricName(string name) {
         nameManager.SetMetricName(name);
     }
 
@@ -164,40 +163,8 @@ public sealed class Context
      *
      * @param name string representation of Kronecker tensor name
      */
-    public void SetKroneckerName(String name) {
+    public void SetKroneckerName(string name) {
         nameManager.SetKroneckerName(name);
-    }
-
-    /**
-     * Returns {@code true} if specified tensor is a Kronecker tensor
-     *
-     * @param t tensor
-     * @return {@code true} if specified tensor is a Kronecker tensor
-     */
-    public bool IsKronecker(SimpleTensor t) {
-        return nameManager.IsKroneckerOrMetric(t.Name)
-               && !IndicesUtils.HaveEqualStates(t.Indices[0], t.Indices[1]);
-    }
-
-    /**
-     * Returns {@code true} if specified tensor is a metric tensor
-     *
-     * @param t tensor
-     * @return {@code true} if specified tensor is a metric tensor
-     */
-    public bool IsMetric(SimpleTensor t) {
-        return nameManager.IsKroneckerOrMetric(t.Name)
-               && IndicesUtils.HaveEqualStates(t.Indices[0], t.Indices[1]);
-    }
-
-    /**
-     * Returns {@code true} if specified tensor is a metric or a Kronecker tensor
-     *
-     * @param t tensor
-     * @return {@code true} if specified tensor is a metric or a Kronecker tensor
-     */
-    public bool IsKroneckerOrMetric(SimpleTensor t) {
-        return nameManager.IsKroneckerOrMetric(t.Name);
     }
 
     /**
@@ -220,70 +187,6 @@ public sealed class Context
     }
 
     /**
-     * Returns Kronecker tensor with specified upper and lower indices.
-     *
-     * @param index1 first index
-     * @param index2 second index
-     * @return Kronecker tensor with specified upper and lower indices
-     * @throws IllegalArgumentException if indices have same states
-     * @throws IllegalArgumentException if indices have different types
-     */
-    public SimpleTensor CreateKronecker(uint index1, uint index2) {
-        byte type;
-        if ((type = IndicesUtils.GetType_(index1)) != IndicesUtils.GetType_(index2) || IndicesUtils.GetRawStateInt((uint)index1) == IndicesUtils.GetRawStateInt((uint)index2))
-            throw new ArgumentException("This is not kronecker indices!");
-
-        if (!IsMetric(type) && IndicesUtils.GetState(index2))
-        {
-            (index1, index2) = (index2, index1);
-        }
-
-        SimpleIndices indices = IndicesFactory.CreateSimple(null, (int)index1, (int)index2);
-        var nd = nameManager.mapNameDescriptor(nameManager.getKroneckerName(), new StructureOfIndices(indices));
-        var name = nd.Id;
-        return Tensor.SimpleTensor(name, indices);
-    }
-
-    /**
-     * Returns metric tensor with specified indices.
-     *
-     * @param index1 first index
-     * @param index2 second index
-     * @return metric tensor with specified indices
-     * @throws IllegalArgumentException if indices have different states
-     * @throws IllegalArgumentException if indices have different types
-     * @throws IllegalArgumentException if indices have non metric types
-     */
-    public SimpleTensor CreateMetric(uint index1, uint index2) {
-        byte type;
-        if ((type = IndicesUtils.GetType_(index1)) != IndicesUtils.GetType_(index2)
-            || !IndicesUtils.HaveEqualStates(index1, index2)
-            || !metricTypes.Get(type))
-            throw new ArgumentException("Not metric indices.");
-        var indices = IndicesFactory.CreateSimple(null, (int)index1, (int)index2);
-        var nd = nameManager.mapNameDescriptor(nameManager.GetMetricName(), new StructureOfIndices(indices));
-        var name = nd.Id;
-        return Tensor.SimpleTensor(name, indices);
-    }
-
-    /**
-     * Returns metric tensor if specified indices have same states and
-     * Kronecker tensor if specified indices have different states.
-     *
-     * @param index1 first index
-     * @param index2 second index
-     * @return metric tensor if specified indices have same states and
-     *         Kronecker tensor if specified indices have different states
-     * @throws IllegalArgumentException if indices have different types
-     * @throws IllegalArgumentException if indices have same states and non metric types
-     */
-    public SimpleTensor CreateMetricOrKronecker(uint index1, uint index2) {
-        if (IndicesUtils.GetRawStateInt(index1) == IndicesUtils.GetRawStateInt(index2))
-            return createMetric(index1, index2);
-        return createKronecker(index1, index2);
-    }
-
-    /**
      * Returns the current context of Redberry session.
      *
      * @return the current context of Redberry session.
@@ -291,16 +194,6 @@ public sealed class Context
     public static Context Get()
     {
         return ContextManager.GetCurrentContext();
-    }
-
-    public SimpleTensor createMetric(uint index1, uint index2)
-    {
-        throw new NotImplementedException();
-    }
-
-    public SimpleTensor createKronecker(uint index1, uint index2)
-    {
-        throw new NotImplementedException();
     }
 
     public OutputFormat GetDefaultOutputFormat() => defaultOutputFormat;

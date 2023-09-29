@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace NRedberry.Core.Contexts;
+namespace NRedberry.Contexts;
 
 public sealed class IndexConverterException : Exception
 {

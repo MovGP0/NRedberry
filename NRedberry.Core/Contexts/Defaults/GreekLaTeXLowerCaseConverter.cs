@@ -1,4 +1,4 @@
-﻿namespace NRedberry.Core.Contexts.Defaults;
+﻿namespace NRedberry.Contexts.Defaults;
 
 /// <summary>
 /// <see cref="IIndexSymbolConverter "/> for Greek lower case letters.

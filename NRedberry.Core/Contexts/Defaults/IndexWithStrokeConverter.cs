@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Text;
 using NRedberry.Core.Indices;
-using NRedberry.Core.Tensors;
 
-namespace NRedberry.Core.Contexts.Defaults;
+namespace NRedberry.Contexts.Defaults;
 
 /// <summary>
 /// <see cref="IIndexSymbolConverter"/> for letters with strokes (e.g. \\alpha' or A'').
@@ -51,12 +50,12 @@ public sealed class IndexWithStrokeConverter : IIndexSymbolConverter
         return _converter.GetSymbol(code, mode) + _strokesString;
     }
 
-    public long GetCode(string symbol)
+    public int GetCode(string symbol)
     {
         return _converter.GetCode(GetBase(symbol));
     }
 
-    public long MaxNumberOfSymbols()
+    public int MaxNumberOfSymbols()
     {
         return _converter.MaxNumberOfSymbols();
     }

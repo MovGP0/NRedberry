@@ -1,4 +1,4 @@
-﻿namespace NRedberry.Core.Contexts.Defaults;
+﻿namespace NRedberry.Contexts.Defaults;
 
 /// <summary>
 /// A factory interface for <see cref="Context"/> creation.

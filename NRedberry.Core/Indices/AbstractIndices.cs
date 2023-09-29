@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Text;
-using NRedberry.Core.Contexts;
-using NRedberry.Core.Tensors;
+using NRedberry.Contexts;
 using NRedberry.Core.Utils;
 
 namespace NRedberry.Core.Indices;
@@ -44,7 +43,7 @@ public abstract class AbstractIndices : Indices
             ul = CalculateUpperLower();
             upperLower = ul;
         }
-        return new IntArray(ul.upper);
+        return new IntArray(ul.Upper);
     }
 
     public IntArray GetLower()
@@ -55,7 +54,7 @@ public abstract class AbstractIndices : Indices
             ul = CalculateUpperLower();
             upperLower = ul;
         }
-        return new IntArray(ul.lower);
+        return new IntArray(ul.Lower);
     }
 
     public IntArray GetAllIndices()
@@ -121,6 +120,7 @@ public abstract class AbstractIndices : Indices
             }
             sb.Append(Context.Get().GetIndexConverterManager().GetSymbol(Data[i], mode));
         }
+
         sb.Append("}");
         return sb.ToString();
     }
@@ -130,17 +130,5 @@ public abstract class AbstractIndices : Indices
     public override string ToString()
     {
         return ToString(Context.Get().GetDefaultOutputFormat());
-    }
-
-    protected class UpperLowerIndices
-    {
-        public readonly int[] upper;
-        public readonly int[] lower;
-
-        public UpperLowerIndices(int[] upper, int[] lower)
-        {
-            this.upper = upper;
-            this.lower = lower;
-        }
     }
 }

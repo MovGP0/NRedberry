@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using NRedberry.Core.Indices;
+using NRedberry.Core.Tensors;
 using NRedberry.Core.Utils;
 
-namespace NRedberry.Core.Contexts;
+namespace NRedberry.Contexts;
 
 /// <summary>
 /// Object of this class represents a namespace of simple tensor and tensor fields in Redberry.

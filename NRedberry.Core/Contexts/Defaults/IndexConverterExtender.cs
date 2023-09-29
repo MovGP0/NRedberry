@@ -1,7 +1,6 @@
 ﻿using System;
-using NRedberry.Core.Tensors;
 
-namespace NRedberry.Core.Contexts.Defaults;
+namespace NRedberry.Contexts.Defaults;
 
 /// <summary>
 /// <see cref="IIndexSymbolConverter"/> for subscripted letters (e.g. \\alpha_{2} or A_{4}).
@@ -45,7 +44,7 @@ public sealed class IndexConverterExtender : IIndexSymbolConverter
         }
     }
 
-    public long GetCode(string symbol)
+    public int GetCode(string symbol)
     {
         if (!symbol.Contains("_"))
             return innerConverter.GetCode(symbol);
@@ -58,10 +57,10 @@ public sealed class IndexConverterExtender : IIndexSymbolConverter
                 throw new IndexConverterException();
             split[1] = split[1].Substring(1, split[1].Length - 1);
         }
-        long num;
+        int num;
         try
         {
-            num = long.Parse(split[1]);
+            num = int.Parse(split[1]);
         }
         catch (FormatException)
         {
@@ -84,7 +83,7 @@ public sealed class IndexConverterExtender : IIndexSymbolConverter
         return innerConverter.GetType_();
     }
 
-    public long MaxNumberOfSymbols()
+    public int MaxNumberOfSymbols()
     {
         return 10 * (innerConverter.MaxNumberOfSymbols() + 1) - 1;
     }

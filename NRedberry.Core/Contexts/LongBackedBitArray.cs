@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using NRedberry.Core.Utils;
 
-namespace NRedberry.Core.Contexts;
+namespace NRedberry.Contexts;
 
 public sealed class LongBackedBitArray : IBitArray
 {

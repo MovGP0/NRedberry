@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using NRedberry.Core.Contexts;
+using NRedberry.Contexts;
 using NRedberry.Core.Utils;
 
 namespace NRedberry.Core.Indices;

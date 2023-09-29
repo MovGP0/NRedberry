@@ -1,4 +1,4 @@
-﻿namespace NRedberry.Core.Contexts.Defaults;
+﻿namespace NRedberry.Contexts.Defaults;
 
 public class GreekLaTeXUpperCaseConverter : SymbolArrayConverter
 {

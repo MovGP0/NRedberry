@@ -1,6 +1,4 @@
-﻿using NRedberry.Core.Tensors;
-
-namespace NRedberry.Core.Contexts.Defaults;
+﻿namespace NRedberry.Contexts.Defaults;
 
 /// <summary>
 /// <see cref="IIndexSymbolConverter"/> for latin upper case letters.
@@ -26,7 +24,7 @@ public sealed class LatinUpperCaseConverter : IIndexSymbolConverter
         return false;
     }
 
-    public long GetCode(string symbol) => symbol[0] - 0x41;
+    public int GetCode(string symbol) => symbol[0] - 0x41;
 
     public string GetSymbol(long code, OutputFormat mode) // assuming OutputFormat is a defined type
     {
@@ -37,5 +35,5 @@ public sealed class LatinUpperCaseConverter : IIndexSymbolConverter
     }
 
     public byte GetType_() => Type;
-    public long MaxNumberOfSymbols() => 25;
+    public int MaxNumberOfSymbols() => 25;
 }

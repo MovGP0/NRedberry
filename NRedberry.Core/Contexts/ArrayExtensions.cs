@@ -1,6 +1,6 @@
 using System;
 
-namespace NRedberry.Core.Contexts;
+namespace NRedberry.Contexts;
 
 public static class ArrayExtensions
 {

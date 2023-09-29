@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using NRedberry.Core.Indices;
-using NRedberry.Core.Tensors;
 
-namespace NRedberry.Core.Contexts;
+namespace NRedberry.Contexts;
 
 public sealed class ContextSettings
 {
@@ -56,5 +54,4 @@ public sealed class ContextSettings
     public int NameManagerSeed { get; set; }
 
     public IndexConverterManager ConverterManager { get; set; } = IndexConverterManager.Default;
-    public NRedberry.Core.Parsers.Parser Parser { get; set; } = NRedberry.Core.Parsers.Parser.Default;
 }

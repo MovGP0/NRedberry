@@ -1,7 +1,7 @@
 ﻿using System;
 using NRedberry.Core.Indices;
 
-namespace NRedberry.Core.Contexts;
+namespace NRedberry.Contexts;
 
 ///<summary>
 /// Object of this class represents unique type of simple tensor or tensor fields (unique name).

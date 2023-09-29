@@ -1,4 +1,4 @@
-﻿namespace NRedberry.Core.Contexts.Defaults;
+﻿namespace NRedberry.Contexts.Defaults;
 
 /// <summary>
 /// Context factory, which creates context with default settings <see cref="DefaultContextSettings"/>.

@@ -271,10 +271,10 @@ public sealed class Complex : Tensor, Number<Complex>
     public double AbsNumeric()
     {
         if (IsNaN())
-            return Double.NaN;
+            return double.NaN;
 
         if (IsInfinite())
-            return Double.PositiveInfinity;
+            return double.PositiveInfinity;
 
         double real = this.Real.ToDouble();
         double imaginary = this.Imaginary.ToDouble();

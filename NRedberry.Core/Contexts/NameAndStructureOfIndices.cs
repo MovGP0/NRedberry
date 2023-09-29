@@ -1,7 +1,7 @@
 ﻿using System;
 using NRedberry.Core.Indices;
 
-namespace NRedberry.Core.Contexts;
+namespace NRedberry.Contexts;
 
 /// <inheritdoc />
 /// <summary>
