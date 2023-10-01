@@ -11,4 +11,8 @@
       <PackageReference Include="Rationals" Version="2.1.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\NRedberry.Apache.Commons.Math\NRedberry.Apache.Commons.Math.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace NRedberry.Core;
+namespace NRedberry;
 
 public static class BitArrayExtensions
 {
@@ -19,7 +19,7 @@ public static class BitArrayExtensions
                 return i;
             }
         }
-        return -1;  // Return -1 if no 'true' bits found
+        return -1; // Return -1 if no 'true' bits found
     }
 
     public static readonly BitArray Empty = new(0);

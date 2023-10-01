@@ -1,13 +1,15 @@
-﻿namespace NRedberry;
+﻿using NRedberry.Apache.Commons.Math;
 
-public sealed class RealField : Field<Real>
+namespace NRedberry;
+
+public sealed class RealField : IField<Real>
 {
     public Real Zero => Rational.Zero;
     public Real One => Rational.One;
 
     public TC GetRuntimeClass<TC>()
-        where TC : FieldElement<Real>
-        => (TC)(FieldElement<Real>)null;
+        where TC : IFieldElement<Real>
+        => (TC)(IFieldElement<Real>)null;
 
     private static Lazy<RealField> RealFieldFactory => new(() => new RealField());
 

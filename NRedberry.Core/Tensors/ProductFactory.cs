@@ -8,4 +8,9 @@ public sealed class ProductFactory : TensorFactory
     {
         throw new System.NotImplementedException();
     }
+
+    public Tensor Create(Tensor tensor)
+    {
+        throw new System.NotImplementedException();
+    }
 }

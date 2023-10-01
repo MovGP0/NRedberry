@@ -66,4 +66,9 @@ public sealed class PowerFactory : TensorFactory
             throw new NullReferenceException();
         }
     }
+
+    public Tensor Create(Tensor tensor)
+    {
+        throw new NotImplementedException();
+    }
 }

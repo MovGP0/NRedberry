@@ -322,7 +322,7 @@ public sealed class IndicesUtils
     }
 
     public static byte GetType_(int index) {
-        return ((byte) ((index & 0x7FFFFFFF) >>> 24));
+        return (byte) ((index & 0x7FFFFFFF) >>> 24);
     }
 
     public static int[] GetIntersections(int[] freeIndices1, int[] freeIndices2)

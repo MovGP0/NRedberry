@@ -1,8 +1,9 @@
 ﻿using System.Numerics;
+using NRedberry.Apache.Commons.Math;
 
 namespace NRedberry;
 
-public abstract class Real : Number<Real>, IComparable<Real>
+public abstract class Real : INumber<Real>, IComparable<Real>
 {
     public abstract Real Add(Real a);
     public abstract Real Add(Rationals.Rational fraction);
@@ -14,7 +15,7 @@ public abstract class Real : Number<Real>, IComparable<Real>
     public abstract Real Reciprocal();
 
     [Obsolete("Inject IField<Real> instead.")]
-    public Field<Real> GetField()
+    public IField<Real> GetField()
     {
         return RealField.GetInstance();
     }
@@ -59,4 +60,6 @@ public abstract class Real : Number<Real>, IComparable<Real>
     public abstract bool IsInteger();
     public abstract bool IsNatural();
     public abstract int CompareTo(Real other);
+
+    public IField<Real> Field => throw new NotImplementedException();
 }

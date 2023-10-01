@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Numerics;
+using NRedberry.Apache.Commons.Math;
 using NRedberry.Core.Indices;
 using NRedberry.Core.Tensors;
 using Complex32 = System.Numerics.Complex;
 
 namespace NRedberry.Core.Numbers;
 
-public sealed class Complex : Tensor, Number<Complex>
+public sealed class Complex : Tensor, INumber<Complex>
 {
     public Complex32 ToComplex32() => new((float)Real.ToDouble(), (float)Imaginary.ToDouble());
     public static implicit operator Complex32(Complex c) => new((float)c.Real.ToDouble(), (float)c.Imaginary.ToDouble());
@@ -193,7 +194,7 @@ public sealed class Complex : Tensor, Number<Complex>
         }
     }
 
-    public /*override*/ Field<Complex> GetField()
+    public /*override*/ IField<Complex> GetField()
     {
         return ComplexField.GetInstance();
     }
@@ -234,6 +235,8 @@ public sealed class Complex : Tensor, Number<Complex>
             return new Complex(scale, scale.Multiply(q).Negate());
         }
     }
+
+    public IField<Complex> Field => throw new NotImplementedException();
 
     public /*override*/ Complex Subtract(Complex a)
     {

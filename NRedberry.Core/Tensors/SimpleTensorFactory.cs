@@ -16,4 +16,9 @@ public sealed class SimpleTensorFactory : TensorFactory
         if (tensors.Length != 0) throw new NotSupportedException("Don't provide tensors here.");
         return SimpleTensor;
     }
+
+    public Tensor Create(Tensor tensor)
+    {
+        throw new NotImplementedException();
+    }
 }

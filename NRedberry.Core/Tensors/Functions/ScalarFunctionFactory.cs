@@ -1,5 +1,6 @@
 ﻿namespace NRedberry.Core.Tensors.Functions;
 
-public class ScalarFunctionFactory : TensorFactory
+public abstract class ScalarFunctionFactory : TensorFactory
 {
+    public abstract Tensor Create(Tensor tensor);
 }

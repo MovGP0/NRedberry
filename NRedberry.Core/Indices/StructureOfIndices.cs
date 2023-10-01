@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -273,7 +272,7 @@ public sealed class StructureOfIndices
     {
         if (size != indices.Size())
             return false;
-        return Equals(indices.GetStructureOfIndices());
+        return Equals(indices.StructureOfIndices);
     }
 
     public StructureOfIndices GetInverted()
@@ -437,36 +436,4 @@ public sealed class StructureOfIndices
 
     private static StructureOfIndices _empty = new();
     public static StructureOfIndices Empty => _empty;
-}
-
-public class BitArrayEqualityComparer : IEqualityComparer<BitArray>
-{
-    public bool Equals(BitArray x, BitArray y)
-    {
-        if (x == null && y == null)
-            return true;
-        if (x == null || y == null)
-            return false;
-        return x.Cast<bool>().SequenceEqual(y.Cast<bool>());
-    }
-
-    public int GetHashCode(BitArray obj)
-    {
-        if (obj is null) return 0;
-        return obj.Cast<bool>().Aggregate(0, (current, bit) => unchecked((current * 23) + bit.GetHashCode()));
-    }
-}
-
-public class TypeData
-{
-    public int From { get; }
-    public int Length { get; }
-    public BitArray States { get; }
-
-    public TypeData(int from, int length, BitArray states)
-    {
-        From = from;
-        Length = length;
-        States = states != null ? (BitArray)states.Clone() : null;
-    }
 }

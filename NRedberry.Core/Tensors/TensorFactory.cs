@@ -2,5 +2,5 @@ namespace NRedberry.Core.Tensors;
 
 public interface TensorFactory
 {
-    Tensor Create(params Tensor[] tensors);
+    Tensor Create(Tensor tensor);
 }
