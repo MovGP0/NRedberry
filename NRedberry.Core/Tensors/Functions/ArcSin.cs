@@ -41,7 +41,7 @@ public class ArcSin : ScalarFunction
 
     public sealed class ArcSinFactory : ScalarFunctionFactory
     {
-        public static readonly ArcSinFactory Factory = new ArcSinFactory();
+        public static readonly ArcSinFactory Factory = new();
 
         private ArcSinFactory()
         {
@@ -50,11 +50,20 @@ public class ArcSin : ScalarFunction
         public override Tensor Create(Tensor arg)
         {
             if (arg is Sin)
+            {
                 return arg[0];
+            }
+
             if (TensorUtils.IsZero(arg))
+            {
                 return Complex.Zero;
+            }
+
             if (TensorUtils.IsNumeric(arg))
+            {
                 return ComplexUtils.ArcSin((Complex)arg);
+            }
+
             return new ArcSin(arg);
         }
     }

@@ -1,9 +1,8 @@
 using System;
-using NRedberry.Core.Tensors;
-
+using System.Collections.Generic;
 namespace NRedberry.Core.Indices;
 
-public interface Indices : IEquatable<object>
+public interface Indices : IEquatable<object>, IEnumerable<int>
 {
     IntArray GetUpper();
     IntArray GetLower();

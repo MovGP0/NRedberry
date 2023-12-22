@@ -52,7 +52,7 @@ public static class SimpleTensorExtensions
         if ((type = IndicesUtils.GetType_(index1)) != IndicesUtils.GetType_(index2) || IndicesUtils.GetRawStateInt((int)index1) == IndicesUtils.GetRawStateInt((int)index2))
             throw new ArgumentException("This is not kronecker indices!");
 
-        if (!IsMetric(context, type) && IndicesUtils.GetState(index2))
+        if (!IsMetric(type) && IndicesUtils.GetState(index2))
         {
             (index1, index2) = (index2, index1);
         }
@@ -61,6 +61,13 @@ public static class SimpleTensorExtensions
         var nd = context.nameManager.mapNameDescriptor(context.nameManager.getKroneckerName(), new StructureOfIndices(indices));
         var name = nd.Id;
         return Tensor.SimpleTensor(name, indices);
+    }
+
+    private static readonly LongBackedBitArray metricTypes = new(128);
+
+    public static bool IsMetric(byte type)
+    {
+        return metricTypes[type];
     }
 
     /**

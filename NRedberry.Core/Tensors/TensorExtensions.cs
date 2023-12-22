@@ -19,4 +19,9 @@ public static class TensorExtensions
     {
         return Multiply(new []{ left, right });
     }
+
+    public static Tensor Sum(params Tensor[] summands)
+    {
+        return SumFactory.Factory.Create(summands);
+    }
 }

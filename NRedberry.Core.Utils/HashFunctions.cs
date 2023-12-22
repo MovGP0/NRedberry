@@ -103,7 +103,7 @@ public static class HashFunctions
     /// </summary>
     /// <param name="key">key to be hashed</param>
     /// <returns>hashed value</returns>
-    public static long JenkinWang32shift(long key)
+    public static int JenkinWang32shift(int key)
     {
         unchecked
         {

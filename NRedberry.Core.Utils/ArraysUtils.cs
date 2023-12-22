@@ -5,12 +5,12 @@ namespace NRedberry.Core.Utils;
 
 public static class ArraysUtils
 {
-    public static void quickSort(int[] target, int[] coSort)
+    public static void QuickSort(int[] target, int[] coSort)
     {
-        quickSort(target, 0, target.Length, coSort);
+        QuickSort(target, 0, target.Length, coSort);
     }
 
-    public static void quickSort(int[] target, int fromIndex, int toIndex, int[] coSort)
+    public static void QuickSort(int[] target, int fromIndex, int toIndex, int[] coSort)
     {
         throw new NotImplementedException();
     }
@@ -65,12 +65,12 @@ public static class ArraysUtils
             : (x[b] > x[c] ? b : x[a] > x[c] ? c : a));
     }
 
-    public static void quickSort(long[] target, long[] coSort)
+    public static void QuickSort(long[] target, long[] coSort)
     {
         quickSort1(target, 0, target.Length, coSort);
     }
 
-    public static void quickSort(long[] target, int fromIndex, int toIndex, long[] coSort)
+    public static void QuickSort(long[] target, int fromIndex, int toIndex, long[] coSort)
     {
         rangeCheck(target.Length, fromIndex, toIndex);
         rangeCheck(coSort.Length, fromIndex, toIndex);
@@ -102,13 +102,13 @@ public static class ArraysUtils
             swap(x, a, b, coSort);
     }
 
-    public static void quickSort<T>(T[] target, object[] coSort)
+    public static void QuickSort<T>(T[] target, object[] coSort)
         where T : IComparable<T>
     {
-        quickSort(target, 0, target.Length, coSort);
+        QuickSort(target, 0, target.Length, coSort);
     }
 
-    public static void quickSort<T>(T[] target, int fromIndex, int toIndex, object[] coSort)
+    public static void QuickSort<T>(T[] target, int fromIndex, int toIndex, object[] coSort)
         where T : IComparable<T>
     {
         throw new NotImplementedException();

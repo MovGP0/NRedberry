@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using NRedberry.Contexts;
 using NRedberry.Core.Utils;
@@ -88,6 +90,11 @@ public abstract class AbstractIndices : Indices
 
     public override int GetHashCode() => EnumerableEx.GetHashCode(Data);
 
+    public IEnumerator<int> GetEnumerator()
+    {
+        throw new System.NotImplementedException();
+    }
+
     public override bool Equals(object obj)
     {
         if (ReferenceEquals(obj, null)) return false;
@@ -130,5 +137,10 @@ public abstract class AbstractIndices : Indices
     public override string ToString()
     {
         return ToString(Context.Get().GetDefaultOutputFormat());
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

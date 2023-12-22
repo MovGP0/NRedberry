@@ -1,4 +1,8 @@
+using System;
+using System.Linq;
+using NRedberry.Core.Indices;
 using NRedberry.Core.Numbers;
+using NotImplementedException = sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 namespace NRedberry.Core.Tensors;
 
@@ -22,44 +26,99 @@ public class Split
 
     public static Split SplitScalars(Tensor tensor)
     {
-        if (tensor.Indices.GetFree().Count == 0) //case 2*a*b*c
+        if (tensor.Indices.GetFree().Count() == 0)
         {
+            // case 2*a*b*c
             return new SplitNumbers(tensor, Complex.One);
         }
-        else //case 2*a*g_mn*g_cd
+
+        //case 2*a*g_mn*g_cd
+        Tensor summand = null!;
+        Tensor? factor;
+
+        if (tensor is Product product)
         {
-            Tensor summand;
-            Tensor factor;
+            ProductContent content = product.Content;
+            factor = content.NonScalar;
+            Tensor[] scalars = content.Scalars;
 
-            if (tensor is Product product)
+            int dataLength = factor is Product prod
+                ? product.Data.Length - prod.Data.Length
+                : product.Data.Length == 0
+                    ? 0
+                    : product.Data.Length - 1;
+
+            if (factor == null)
             {
-                ProductContent content = product.GetContent();
-                factor = content.GetNonScalar();
-                Tensor[] scalars = content.GetScalars();
-                int dataLength = factor is Product prod
-                    ? product.Data.Length - prod.Data.Length
-                    : product.Data.Length == 0 ? 0 : product.Data.Length - 1;
-
-                if (factor == null)
-                    factor = Complex.One;
-
-                // ... other logic for summand
-                // You will need to implement logic similar to your Java code to fill in 'summand'
-
+                factor = Complex.One;
+            }
+            if (dataLength == 0)
+            {
+                if (product.IndexlessData.Length == 0)
+                {
+                    summand = product.Factor;
+                }
+                else if (product.IndexlessData.Length == 1 && product.Factor == Complex.One)
+                {
+                    summand = product.IndexlessData[0];
+                }
+                else if (product.Factor.IsMinusOne() && product.IndexlessData.Length == 1 && product.IndexlessData[0] is Sum s)
+                {
+                    Tensor[] sumData = (Tensor[])s.data.Clone();
+                    for (int i = sumData.Length - 1; i >= 0; --i)
+                    {
+                        sumData[i] = Tensors.Negate(sumData[i]);
+                    }
+                    summand = new Sum(s.Indices, sumData, s.GetHashCode());
+                }
+                else
+                {
+                    summand = new Product(product.Factor, product.IndexlessData, new Tensor[0], ProductContent.EmptyInstance, IndicesFactory.EmptyIndices);
+                }
+            }
+            else if (dataLength == 1 && product.IndexlessData.Length == 0 && product.Factor == Complex.One)
+            {
+                summand = scalars[0];
             }
             else
             {
-                summand = Complex.One;
-                factor = tensor;
-            }
+                Tensor[] data = new Tensor[dataLength];
+                var ib = new IndicesBuilder();
+                dataLength = -1;
+                foreach (Tensor t in scalars)
+                {
+                    if (t is Product)
+                    {
+                        foreach (Tensor d in t)
+                        {
+                            data[++dataLength] = d;
+                            ib.Append(d);
+                        }
+                    }
+                    else
+                    {
+                        data[++dataLength] = t;
+                        ib.Append(t);
+                    }
+                }
 
-            return new Split(factor, summand);
+                System.Diagnostics.Debug.Assert(dataLength == data.Length - 1);
+                Array.Sort(data);
+                summand = new Product(product.Factor, product.IndexlessData, data, null, ib.Indices);
+            }
         }
+        else
+        {
+            summand = Complex.One;
+            factor = tensor;
+        }
+
+        return new Split(factor, summand);
     }
 
     public static Split SplitIndexless(Tensor tensor)
     {
-        if (tensor.Indices.Count == 0) //case 2*a*b*c
+        if (tensor.Indices.Count() == 0) //case 2*a*b*c
         {
             Complex complex;
             Tensor factor;
@@ -68,8 +127,7 @@ public class Split
             {
                 complex = product.Factor;
 
-                // ... other logic for 'factor'
-                // You will need to implement logic similar to your Java code to fill in 'factor'
+                throw new NotImplementedException();
             }
             else
             {
@@ -86,8 +144,7 @@ public class Split
 
             if (tensor is Product product)
             {
-                // ... logic for 'summand' and 'factor'
-                // You will need to implement logic similar to your Java code to fill in 'summand' and 'factor'
+                throw new NotImplementedException();
             }
             else
             {
@@ -99,8 +156,5 @@ public class Split
         }
     }
 
-    public override string ToString()
-    {
-        return $"{Summand} * {Factor}";
-    }
+    public override string ToString() => $"{Summand} * {Factor}";
 }

@@ -1,5 +1,6 @@
 ﻿using System;
-using NRedberry.Core.Tensors;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace NRedberry.Core.Indices;
 
@@ -72,6 +73,16 @@ public class EmptyIndices : Indices
     public override string ToString()
     {
         return string.Empty;
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    public IEnumerator<int> GetEnumerator()
+    {
+        throw new NotImplementedException();
     }
 
     public override bool Equals(object obj)

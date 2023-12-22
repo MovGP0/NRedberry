@@ -310,53 +310,6 @@ public sealed class StructureOfIndices
         return r;
     }
 
-    public StructureOfIndices Pow(int N)
-    {
-        if (size == 0 || N == 0) return Empty;
-        if (N == 1) return this;
-
-        int newSize = N * (int)this.size;
-        StructureOfIndices r = new StructureOfIndices(newSize);
-        for (int i = 0; i < IndexTypeMethods.TypesCount; ++i)
-        {
-            r.typesCounts[i] = N * typesCounts[i];
-            if (states[i] == null)
-                continue;
-            r.states[i] = states[i].Times(N); // Assuming BitArray.Times exists
-        }
-        return r;
-    }
-
-    public StructureOfIndices Subtract(StructureOfIndices other)
-    {
-        int newSize = (int)(this.size - other.Size);
-        if (newSize < 0)
-            throw new ArgumentException();
-        if (other.Size == 0)
-            return this;
-
-        StructureOfIndices r = new StructureOfIndices(newSize);
-        for (int i = 0; i < IndexTypeMethods.TypesCount; ++i)
-        {
-            if ((r.typesCounts[i] = typesCounts[i] - other.typesCounts[i]) < 0)
-                throw new ArgumentException("Other is larger then this.");
-
-            if (states[i] == null)
-                continue;
-            if (other.states[i] == null)
-                throw new ArgumentException("Inconsistent structures: " + this + " and " + other);
-
-            if (!states[i].CopyOfRange(states[i].Length - other.states[i].Length).SequenceEqual(other.states[i]))
-                throw new ArgumentException("Nonmetric states are different");
-
-            r.states[i] = states[i].CopyOfRange(0, states[i].Length - other.states[i].Length);
-        }
-
-        if (newSize == 0)
-            return Empty;
-        return r;
-    }
-
     public int[][] GetPartitionMappings(params StructureOfIndices[] partition)
     {
         int c;

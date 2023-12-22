@@ -14,7 +14,7 @@ public interface IField<T>
     /// </summary>
     /// <returns>The additive identity of the field.</returns>
     T Zero { get; }
-    
+
     /// <summary>
     /// Gets the multiplicative identity of the field.
     /// The multiplicative identity is the element e1 of the field such that

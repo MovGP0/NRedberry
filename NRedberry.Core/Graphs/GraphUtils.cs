@@ -37,7 +37,7 @@ public static class GraphUtils
         Array.Copy(_to, 0, from, _from.Length, _from.Length);
 
         //Sorting to easy indexing by from
-        ArraysUtils.quickSort(from, to);
+        ArraysUtils.QuickSort(from, to);
 
         //Test for parameters consistence
         if (from[0] < 0 || from[from.Length - 1] > vertices)

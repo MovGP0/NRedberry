@@ -43,4 +43,9 @@ public static class Tensors
     {
         return Sum(tensors.ToArray());
     }
+
+    public static Tensor Negate(Tensor tensor)
+    {
+        throw new NotImplementedException();
+    }
 }
