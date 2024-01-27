@@ -16,7 +16,7 @@ public class SortedIndices : AbstractIndices
     public SortedIndices(int[] data) : base(data)
     {
         Array.Sort(Data);
-        firstLower = Array.BinarySearch(this.Data, 0);
+        firstLower = Array.BinarySearch(Data, 0);
         TestConsistentWithException();
     }
 

@@ -198,7 +198,7 @@ public sealed class IndicesUtils
     {
         int[] indsArray = indices.GetAllIndices().ToArray(); // Assuming copy() is equivalent to ToArray()
         for (int i = 0; i < indsArray.Length; ++i)
-            indsArray[i] = IndicesUtils.GetNameWithType(indsArray[i]);
+            indsArray[i] = GetNameWithType(indsArray[i]);
         return indsArray.GetSortedDistinct();
     }
 

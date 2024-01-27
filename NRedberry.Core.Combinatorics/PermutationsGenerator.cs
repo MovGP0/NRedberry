@@ -25,7 +25,7 @@ public class PermutationsGenerator<T> : IEnumerator<T> where T : Permutation
         get
         {
             generator.MoveNext();
-            return (T)Activator.CreateInstance(typeof(T), generator.permutation.Clone(), false);
+            return (T)Activator.CreateInstance(typeof(T), generator.Permutation.Clone(), false);
         }
     }
 

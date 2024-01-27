@@ -21,90 +21,112 @@ namespace NRedberry.Contexts;
 /// </summary>
 public abstract class NameDescriptor
 {
-    //first element is simple tensor indexTypeStructure, other appears for tensor fields
-    StructureOfIndices[] indexTypeStructures { get; }
+    /// <summary>
+    /// First element is simple tensor indexTypeStructure, other appears for tensor fields
+    /// </summary>
+    public StructureOfIndices[] IndexTypeStructures { get; }
+
+    public StructureOfIndices[] StructuresOfIndices => IndexTypeStructures;
 
     /// <summary>
     /// Unique simple tensor identifier.
     /// </summary>
     public int Id { get; }
 
-    private IndicesSymmetries symmetries { get; }
+    public IndicesSymmetries Symmetries { get; }
+    public NameManager? NameManager { get; private set; }
 
     protected NameDescriptor(StructureOfIndices[] indexTypeStructures, int id)
     {
-        if (indexTypeStructures.Length == 0) throw new ArgumentException();
+        if (indexTypeStructures.Length == 0)
+        {
+            throw new ArgumentException();
+        }
 
         Id = id;
-        this.indexTypeStructures = indexTypeStructures;
-        symmetries = IndicesSymmetries.Create(indexTypeStructures[0]);
+        IndexTypeStructures = indexTypeStructures;
+        Symmetries = IndicesSymmetries.Create(indexTypeStructures[0]);
     }
 
-    /**
-         * Returns symmetries of indices of tensors with this name descriptor
-         *
-         * @return symmetries of indices of tensors with this name descriptor
-         */
+    public void RegisterInNameManager(NameManager nameManager)
+    {
+        if (NameManager != null && !ReferenceEquals(NameManager, nameManager))
+        {
+            throw new InvalidOperationException("Already registered in another name manager.");
+        }
+
+        NameManager = nameManager;
+    }
+
+    /// <summary>
+    /// Return symmetries of indices of tensors with this name descriptor.
+    /// </summary>
     public IndicesSymmetries GetSymmetries()
     {
-        return symmetries;
+        return Symmetries;
     }
 
-    /**
-         * Returns {@code true} if this is a descriptor of tensor field
-         *
-         * @return {@code true} if this is a descriptor of tensor field
-         */
+    /// <summary>
+    /// Return <c>true</c> if this is a descriptor of tensor field.
+    /// </summary>
     public bool IsField()
     {
-        return indexTypeStructures.Length != 1;
+        return IndexTypeStructures.Length != 1;
     }
 
-    /**
-         * Returns structure of indices of tensors with this name descriptor
-         *
-         * @return structure of indices of tensors with this name descriptor
-         */
+    /// <summary>
+    /// Returns structure of indices of tensors with this name descriptor
+    /// </summary>
+    [Pure]
     public StructureOfIndices GetStructureOfIndices()
     {
-        return indexTypeStructures[0];
+        return IndexTypeStructures[0];
     }
 
-    /**
-         * Returns structure of indices of tensors with this name descriptor (first element in array) and
-         * structures of indices of their arguments (in case of tensor field)
-         *
-         * @return structure of indices of tensors and their arguments
-         */
+    /// <summary>
+    /// Returns structure of indices of tensors with this name descriptor (first element in array) and
+    /// structures of indices of their arguments (in case of tensor field)
+    /// </summary>
+    /// <returns>structure of indices of tensors and their arguments</returns>
     public StructureOfIndices[] GetStructuresOfIndices()
     {
         //todo clone() ?
-        return indexTypeStructures;
+        return IndexTypeStructures;
     }
 
     public abstract NameAndStructureOfIndices[] GetKeys();
 
-    /**
-         * Returns string name of tensor. The argument can be {@code null}.
-         *
-         * @param indices indices (in case of metric or Kronecker) and null in other cases
-         * @return string name of tensor
-         */
-    public abstract string GetName(SimpleIndices indices);
+    /// <summary>
+    /// Returns string name of tensor. The argument can be <c>null</c> in case of metric or Kronecker.
+    /// </summary>
+    /// <param name="indices">indices (in case of metric or Kronecker) and null in other cases</param>
+    /// <param name="format">output format</param>
+    /// <returns>string name of tensor</returns>
+    public abstract string GetName(SimpleIndices? indices, OutputFormat format);
 
     public override string ToString()
     {
-        return GetName(null) + ":" + indexTypeStructures;
+        return GetName(null, OutputFormat.Redberry) + ":" + IndexTypeStructures;
     }
 
-    /**
-         * Returns structure of indices of tensors with specified name descriptor
-         *
-         * @param nd name descriptor
-         * @return structure of indices of tensors with specified name descriptor
-         */
+    /// <summary>
+    /// Returns structure of indices of tensors with specified name descriptor
+    /// </summary>
+    /// <param name="nd">name descriptor</param>
+    /// <returns>structure of indices of tensors with specified name descriptor</returns>
+    [Pure]
     public static NameAndStructureOfIndices ExtractKey(NameDescriptor nd)
     {
         return nd.GetKeys()[0];
+    }
+
+    /// <summary>
+    /// Returns structure of i-th arg indices of tensors with this name descriptor.
+    /// </summary>
+    /// <param name="arg"></param>
+    /// <returns>structure of i-th arg indices indices of tensors with this name descriptor</returns>
+    public StructureOfIndices GetArgStructuresOfIndices(int arg)
+    {
+        return IndexTypeStructures[arg + 1];
     }
 }

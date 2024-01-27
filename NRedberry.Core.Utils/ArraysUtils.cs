@@ -217,4 +217,20 @@ public static class ArraysUtils
         else
             InsertionSort(target, coSort);
     }
+
+    public static byte[] Int2byte(int[] a) {
+        byte[] r = new byte[a.Length];
+        for (int i = 0; i < a.Length; ++i) {
+            r[i] = (byte)a[i];
+        }
+        return r;
+    }
+
+    public static short[] Int2short(int[] a) {
+        short[] r = new short[a.Length];
+        for (int i = 0; i < a.Length; ++i) {
+            r[i] = (short)a[i];
+        }
+        return r;
+    }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NRedberry.Core.Parsers;
 
 namespace NRedberry.Contexts;
 
@@ -8,7 +9,10 @@ public sealed class ContextSettings
     private string kronecker = "d";
     private string metricName = "g";
 
-    public ContextSettings(OutputFormat defaultOutputFormat = OutputFormat.Redberry, string kronecker = "g", string metricName = "g")
+    public ContextSettings(
+        OutputFormat defaultOutputFormat = OutputFormat.Redberry,
+        string kronecker = "g",
+        string metricName = "g")
     {
         DefaultOutputFormat = defaultOutputFormat;
         Kronecker = kronecker;
@@ -51,7 +55,9 @@ public sealed class ContextSettings
         }
     }
 
-    public int NameManagerSeed { get; set; }
+    public long NameManagerSeed { get; set; }
 
     public IndexConverterManager ConverterManager { get; set; } = IndexConverterManager.Default;
+
+    public Parser Parser { get; set; } = Parser.Default;
 }

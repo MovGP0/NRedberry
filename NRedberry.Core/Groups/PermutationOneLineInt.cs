@@ -1,5 +1,5 @@
 ﻿namespace NRedberry.Core.Groups;
 
-public class PermutationOneLineInt
+public class PermutationOneLineInt : Permutation
 {
 }

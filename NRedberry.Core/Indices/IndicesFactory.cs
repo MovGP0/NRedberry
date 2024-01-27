@@ -4,19 +4,19 @@ public static class IndicesFactory
 {
     public static readonly Indices EmptyIndices = NRedberry.Core.Indices.EmptyIndices.EmptyIndicesInstance;
 
-    public static readonly SimpleIndices emptySimpleIndices = NRedberry.Core.Indices.EmptySimpleIndices.emptySimpleIndicesInstance;
+    public static readonly SimpleIndices emptySimpleIndices = EmptySimpleIndices.emptySimpleIndicesInstance;
 
     public static SimpleIndices CreateSimple(IndicesSymmetries? symmetries, params int[] data)
     {
         if (data.Length == 0)
-            return NRedberry.Core.Indices.EmptySimpleIndices.emptySimpleIndicesInstance;
+            return EmptySimpleIndices.emptySimpleIndicesInstance;
         return new SimpleIndicesIsolated((int[])data.Clone(), symmetries);
     }
 
     public static SimpleIndices CreateSimple(IndicesSymmetries? symmetries, Indices indices)
     {
         if (indices.Size() == 0)
-            return NRedberry.Core.Indices.EmptySimpleIndices.emptySimpleIndicesInstance;
+            return EmptySimpleIndices.emptySimpleIndicesInstance;
         if (indices is SimpleIndicesAbstract simpleIndicesAbstract)
             return new SimpleIndicesIsolated(simpleIndicesAbstract.Data, symmetries);
         return new SimpleIndicesIsolated(indices.GetAllIndices().Copy(), symmetries);

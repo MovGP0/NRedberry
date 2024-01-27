@@ -1,4 +1,6 @@
-﻿namespace NRedberry.Contexts.Defaults;
+﻿using System.Diagnostics.Contracts;
+
+namespace NRedberry.Contexts.Defaults;
 
 public class GreekLaTeXUpperCaseConverter : SymbolArrayConverter
 {
@@ -32,11 +34,13 @@ public class GreekLaTeXUpperCaseConverter : SymbolArrayConverter
         utf[10] = ((char)0x03A9).ToString();
     }
 
-    public static readonly GreekLaTeXUpperCaseConverter Instance = new();
+    [Pure]
+    public static GreekLaTeXUpperCaseConverter Instance { get; } = new();
 
     private GreekLaTeXUpperCaseConverter() : base(symbols, utf)
     {
     }
 
+    [Pure]
     public override byte GetType_() => 3;
 }

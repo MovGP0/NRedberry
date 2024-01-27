@@ -3,7 +3,7 @@ namespace NRedberry.Core.Combinatorics;
 public sealed class IntTuplesPort : IIntCombinatorialPort
 {
     private readonly int[] upperBounds;
-    private int[] current;
+    private readonly int[] current;
 
     public IntTuplesPort(params int[] upperBounds)
     {
@@ -13,18 +13,15 @@ public sealed class IntTuplesPort : IIntCombinatorialPort
         current[upperBounds.Length - 1] = -1;
     }
 
-    private static void CheckWithException(int[] upperBounds)
+    private static void CheckWithException(IEnumerable<int> upperBounds)
     {
-        foreach (var i in upperBounds)
+        if (upperBounds.Any(i => i < 0))
         {
-            if (i < 0)
-            {
-                throw new ArgumentException("Upper bound cannot be negative.");
-            }
+            throw new ArgumentException("Upper bound cannot be negative.");
         }
     }
 
-    public int[] Take()
+    public int[]? Take()
     {
         var pointer = upperBounds.Length - 1;
         var next = false;
@@ -44,10 +41,12 @@ public sealed class IntTuplesPort : IIntCombinatorialPort
                 next = true;
             }
         }
+
         if (next)
         {
             return null;
         }
+
         return current;
     }
 

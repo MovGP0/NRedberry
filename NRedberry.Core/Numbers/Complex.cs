@@ -164,16 +164,16 @@ public sealed class Complex : Tensor, INumber<Complex>
     public /*override*/ Complex Add(Complex a)
     {
         NumberUtils.CheckNotNull(a);
-        return a.IsZero() ? (a.IsNumeric() ? this.GetNumericValue() : this) : new Complex(Real.Add(a.Real), Imaginary.Add(a.Imaginary));
+        return a.IsZero() ? (a.IsNumeric() ? GetNumericValue() : this) : new Complex(Real.Add(a.Real), Imaginary.Add(a.Imaginary));
     }
 
     public /*override*/ Complex Divide(Complex divisor)
     {
         NumberUtils.CheckNotNull(divisor);
         if (divisor.IsOne())
-            return divisor.IsNumeric() ? this.GetNumericValue() : this;
+            return divisor.IsNumeric() ? GetNumericValue() : this;
         if (divisor.IsNaN() || IsNaN())
-            return Complex.ComplexNaN;
+            return ComplexNaN;
 
         Real c = divisor.Real;
         Real d = divisor.Imaginary;
@@ -208,7 +208,7 @@ public sealed class Complex : Tensor, INumber<Complex>
     {
         NumberUtils.CheckNotNull(factor);
         if (factor.IsNaN())
-            return Complex.ComplexNaN;
+            return ComplexNaN;
         return new Complex(Real.Multiply(factor.Real).Subtract(Imaginary.Multiply(factor.Imaginary)),
                 Real.Multiply(factor.Imaginary).Add(Imaginary.Multiply(factor.Real)));
     }
@@ -221,7 +221,7 @@ public sealed class Complex : Tensor, INumber<Complex>
     public /*override*/ Complex Reciprocal()
     {
         if (IsNaN())
-            return Complex.ComplexNaN;
+            return ComplexNaN;
         if (Real.Abs().CompareTo(Imaginary.Abs()) < 0)
         {
             Real q = Real.Divide(Imaginary);
@@ -241,7 +241,7 @@ public sealed class Complex : Tensor, INumber<Complex>
     public /*override*/ Complex Subtract(Complex a)
     {
         NumberUtils.CheckNotNull(a);
-        return a.IsZero() ? (a.IsNumeric() ? this.GetNumericValue() : this) : new Complex(Real.Subtract(a.Real), Imaginary.Subtract(a.Imaginary));
+        return a.IsZero() ? (a.IsNumeric() ? GetNumericValue() : this) : new Complex(Real.Subtract(a.Real), Imaginary.Subtract(a.Imaginary));
     }
 
     public /*override*/ Complex GetNumericValue()
@@ -279,8 +279,8 @@ public sealed class Complex : Tensor, INumber<Complex>
         if (IsInfinite())
             return double.PositiveInfinity;
 
-        double real = this.Real.ToDouble();
-        double imaginary = this.Imaginary.ToDouble();
+        double real = Real.ToDouble();
+        double imaginary = Imaginary.ToDouble();
 
         return AbsNumeric(real, imaginary);
     }

@@ -6,7 +6,7 @@ public sealed class IntPriorityPermutationsGenerator : IIntCombinatorialPort
     private readonly List<PermutationPriorityTuple> tuples = new();
     private readonly HashSet<PermutationPriorityTuple> set = new();
     private int[] last = Array.Empty<int>();
-    private int lastTuplePointer = 0;
+    private int lastTuplePointer;
 
     public IntPriorityPermutationsGenerator(int dimension)
     {

@@ -23,10 +23,10 @@ public sealed class StructureOfIndices
     //for empty instance
     private StructureOfIndices()
     {
-        this.size = 0;
+        size = 0;
         for (int i = 0; i < IndexTypeMethods.TypesCount; ++i)
             if (!CC.IsMetric((byte)i))
-                this.states[i] = BitArrayExtensions.Empty;
+                states[i] = BitArrayExtensions.Empty;
     }
 
     private StructureOfIndices(int size)
@@ -80,10 +80,10 @@ public sealed class StructureOfIndices
             if ((allStates[i] != null && CC.IsMetric((byte)i)) ||
                     (allStates[i] == null && !CC.IsMetric((byte)i)))
                 throw new ArgumentException();
-            this.states[i] = allStates[i] == null ? null : (BitArray)allStates[i].Clone();
+            states[i] = allStates[i] == null ? null : (BitArray)allStates[i].Clone();
             size += allCount[i];
         }
-        Array.Copy(allCount, 0, this.typesCounts, 0, allCount.Length);
+        Array.Copy(allCount, 0, typesCounts, 0, allCount.Length);
         this.size = size;
     }
 
@@ -298,7 +298,7 @@ public sealed class StructureOfIndices
             return oth;
         if (oth.Size == 0)
             return this;
-        int newSize = (int)this.size + oth.Size;
+        int newSize = (int)size + oth.Size;
         StructureOfIndices r = new StructureOfIndices(newSize);
         for (int i = 0; i < IndexTypeMethods.TypesCount; ++i)
         {

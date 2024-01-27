@@ -2,16 +2,16 @@
 
 public sealed class IntPermutationsGenerator : IIntCombinatorialGenerator
 {
-    internal readonly int[] permutation;
+    internal readonly int[] Permutation;
     private bool onFirst = true;
     private readonly int size;
 
     public IntPermutationsGenerator(int dimension)
     {
-        permutation = new int[dimension];
+        Permutation = new int[dimension];
         for (var i = 0; i < dimension; ++i)
         {
-            permutation[i] = i;
+            Permutation[i] = i;
         }
 
         size = dimension;
@@ -19,7 +19,7 @@ public sealed class IntPermutationsGenerator : IIntCombinatorialGenerator
 
     public IntPermutationsGenerator(int[] permutation)
     {
-        this.permutation = permutation;
+        this.Permutation = permutation;
         size = permutation.Length;
         for (var i = 0; i < size - 1; ++i)
         {
@@ -45,7 +45,7 @@ public sealed class IntPermutationsGenerator : IIntCombinatorialGenerator
         onFirst = true;
         for (var i = 0; i < size; ++i)
         {
-            permutation[i] = i;
+            Permutation[i] = i;
         }
     }
 
@@ -63,7 +63,7 @@ public sealed class IntPermutationsGenerator : IIntCombinatorialGenerator
     {
         for (var i = 0; i < size; i++)
         {
-            if (permutation[i] != size - 1 - i)
+            if (Permutation[i] != size - 1 - i)
             {
                 return false;
             }
@@ -77,20 +77,22 @@ public sealed class IntPermutationsGenerator : IIntCombinatorialGenerator
         if (onFirst)
         {
             onFirst = false;
-            return permutation;
+            return Permutation;
         }
 
         var end = size - 1;
-        int p = end, low, high, med, s;
-        while ((p > 0) && (permutation[p] < permutation[p - 1]))
+        int p = end;
+        int high, med;
+        while ((p > 0) && (Permutation[p] < Permutation[p - 1]))
         {
             p--;
         }
 
         if (p > 0) //if p==0 then it's the last one
         {
-            s = permutation[p - 1];
-            if (permutation[end] > s)
+            var s = Permutation[p - 1];
+            int low;
+            if (Permutation[end] > s)
             {
                 low = end;
             }
@@ -101,7 +103,7 @@ public sealed class IntPermutationsGenerator : IIntCombinatorialGenerator
                 while (high > low + 1)
                 {
                     med = (high + low) >> 1;
-                    if (permutation[med] < s)
+                    if (Permutation[med] < s)
                     {
                         high = med;
                     }
@@ -112,22 +114,22 @@ public sealed class IntPermutationsGenerator : IIntCombinatorialGenerator
                 }
             }
 
-            permutation[p - 1] = permutation[low];
-            permutation[low] = s;
+            Permutation[p - 1] = Permutation[low];
+            Permutation[low] = s;
         }
 
         high = end;
         while (high > p)
         {
-            med = permutation[high];
-            permutation[high] = permutation[p];
-            permutation[p] = med;
+            med = Permutation[high];
+            Permutation[high] = Permutation[p];
+            Permutation[p] = med;
             p++;
             high--;
         }
 
-        return permutation;
+        return Permutation;
     }
 
-    public int[] GetReference() => permutation;
+    public int[] GetReference() => Permutation;
 }

@@ -36,44 +36,44 @@ public sealed class Sum : MultiTensor
 
     protected override int Hash()
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
-    public override Tensor this[int i] => throw new System.NotImplementedException();
+    public override Tensor this[int i] => throw new NotImplementedException();
 
     public override int Size { get; }
     public override string ToString(OutputFormat outputFormat)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public override TensorBuilder GetBuilder()
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public override TensorFactory? GetFactory()
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     protected override Tensor Remove1(int[] positions)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public override Tensor Remove(int position)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     protected override Complex GetNeutral()
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     protected override Tensor Select1(int[] positions)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 }

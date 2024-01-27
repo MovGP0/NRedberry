@@ -57,7 +57,7 @@ public sealed class GreekLaTeXLowerCaseConverter : SymbolArrayConverter
     /// <summary>
     /// Singleton instance.
     /// </summary>
-    public static GreekLaTeXLowerCaseConverter Instance = new();
+    public static GreekLaTeXLowerCaseConverter Instance { get; } = new();
 
     public override byte GetType_() => 2;
 }

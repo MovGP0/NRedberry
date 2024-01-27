@@ -88,4 +88,31 @@ public sealed class NameManager
     {
         throw new NotImplementedException();
     }
+
+    /// <summary>
+    /// Generates a new name descriptor for a simple tensor with given structure of indices.
+    /// </summary>
+    /// <remarks>
+    /// <b>Important:</b> run only in write lock!
+    /// </remarks>
+    private int GenerateNewName()
+    {
+        int name;
+        do
+            name = random.Next();
+        while (fromId.ContainsKey(name));
+        return name;
+    }
+
+    internal NameDescriptorForTensorFieldDerivative CreateDescriptorForFieldDerivative(
+        NameDescriptorForTensorFieldImpl field,
+        int[] orders)
+    {
+        lock (writeLock)
+        {
+            var result = new NameDescriptorForTensorFieldDerivative(GenerateNewName(), orders, field);
+            RegisterDescriptor(result);
+            return result;
+        }
+    }
 }

@@ -22,7 +22,7 @@ public sealed class NameAndStructureOfIndices : IEquatable<NameAndStructureOfInd
     public StructureOfIndices[] Structure { get; }
 
     ///<summary>
-    /// 
+    /// Creates new instance of <see cref="NameAndStructureOfIndices"/>
     /// </summary>
     /// <param name="name">name of tensor</param>
     /// <param name="structure">structure of tensor indices</param>
@@ -32,24 +32,21 @@ public sealed class NameAndStructureOfIndices : IEquatable<NameAndStructureOfInd
         Structure = structure;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        if (obj is null) return false;
-        if (ReferenceEquals(this, obj)) return true;
-        if (!(obj is NameAndStructureOfIndices nameAndStructureOfIndices)) return false;
-        return Equals(nameAndStructureOfIndices);
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
+        return obj is NameAndStructureOfIndices nameAndStructureOfIndices
+               && Equals(nameAndStructureOfIndices);
     }
 
     public override int GetHashCode()
-    {
-        unchecked
-        {
-            return ((Name != null ? Name.GetHashCode() : 0) * 397)
-                   ^ (Structure != null ? Structure.GetHashCode() : 0);
-        }
-    }
+        => HashCode.Combine(Name, Structure);
 
-    public bool Equals(NameAndStructureOfIndices other)
+    public bool Equals(NameAndStructureOfIndices? other)
     {
         if (other is null) return false;
         if (ReferenceEquals(this, other)) return true;

@@ -49,7 +49,7 @@ public abstract class SimpleIndicesAbstract : AbstractIndices, SimpleIndices
     /// and null in other case.</returns>
     public bool? EqualsWithSymmetriesDetailed(SimpleIndices indices)
     {
-        if (indices.GetType() != this.GetType())
+        if (indices.GetType() != GetType())
             return null;
 
         if (Data.Length != indices.Size())

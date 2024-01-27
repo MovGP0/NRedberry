@@ -16,7 +16,7 @@ public abstract class MultiTensor : Tensor
 
     public Tensor Remove(Tensor tensor)
     {
-        for (int l = 0, size = this.Size; l < size; ++l)
+        for (int l = 0, size = Size; l < size; ++l)
         {
             if (this[l] == tensor)
             {

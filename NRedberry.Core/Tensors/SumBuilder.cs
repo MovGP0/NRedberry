@@ -39,7 +39,7 @@ public sealed class SumBuilder : AbstractSumBuilder
 
     public override TensorBuilder Clone()
     {
-        var summands = new Dictionary<int, List<FactorNode>>(this.Summands);
+        var summands = new Dictionary<int, List<FactorNode>>(Summands);
         foreach (var pair in summands)
         {
             var vals = pair.Value;

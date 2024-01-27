@@ -18,12 +18,12 @@ public sealed class PrimitiveSubgraphPartition
 
     public PrimitiveSubgraphPartition(ProductContent productContent, IndexType type)
     {
-        this.pc = productContent;
-        this.fcs = pc.StructureOfContractions;
-        this.size = pc.Size;
+        pc = productContent;
+        fcs = pc.StructureOfContractions;
+        size = pc.Size;
         this.type = type;
-        this.used = new BitArray(size);
-        this.partition = CalculatePartition();
+        used = new BitArray(size);
+        partition = CalculatePartition();
     }
 
     public PrimitiveSubgraph[] Partition => (PrimitiveSubgraph[])partition.Clone();
