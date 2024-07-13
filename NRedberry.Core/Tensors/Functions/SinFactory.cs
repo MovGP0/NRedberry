@@ -8,7 +8,7 @@ public sealed class SinFactory : ScalarFunctionFactory
 
     private SinFactory() { }
 
-    public override Tensor Create(Tensor arg)
+    protected override Tensor Create1(Tensor arg)
     {
         if (arg is ArcSin arcSin)
             return arcSin[0];

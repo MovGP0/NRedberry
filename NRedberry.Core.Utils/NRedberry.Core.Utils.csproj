@@ -6,4 +6,16 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Compile Update="ArraysUtils.QuickSort.cs">
+        <DependentUpon>ArraysUtils.cs</DependentUpon>
+      </Compile>
+      <Compile Update="ArraysUtils.Swap.cs">
+        <DependentUpon>ArraysUtils.cs</DependentUpon>
+      </Compile>
+      <Compile Update="ArrayUtils.InsertionSort.cs">
+        <DependentUpon>ArraysUtils.cs</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

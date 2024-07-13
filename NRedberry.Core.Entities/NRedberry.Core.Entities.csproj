@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <PackageReference Include="Rationals" Version="2.1.0" />
+      <PackageReference Include="NetEscapades.EnumGenerators" Version="1.0.0-beta09" PrivateAssets="all" ExcludeAssets="runtime" />
     </ItemGroup>
 
     <ItemGroup>

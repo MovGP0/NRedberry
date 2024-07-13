@@ -17,7 +17,7 @@ public sealed class Power : Tensor
         this.power = power;
     }
 
-    protected override int Hash()
+    public override int GetHashCode()
     {
         throw new NotImplementedException();
     }

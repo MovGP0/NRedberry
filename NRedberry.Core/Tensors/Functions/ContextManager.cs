@@ -17,7 +17,7 @@ public static class ContextManager
      * Thread-local container for the current context
      */
     [ThreadStatic]
-    private static Context ThreadLocalContext = new(new ContextSettings(OutputFormat.Redberry, "d"));
+    private static Context ThreadLocalContext = new(new ContextSettings(OutputFormat.Redberry, "d", "g"));
 
     public static Context CurrentContext { get; set; }
 

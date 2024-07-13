@@ -8,8 +8,6 @@ namespace NRedberry.Core.Tensors;
 
 public abstract class Tensor : IComparable<Tensor>, IEnumerable<Tensor>
 {
-    protected abstract int Hash();
-
     public abstract Indices.Indices Indices { get; }
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -71,9 +69,7 @@ public abstract class Tensor : IComparable<Tensor>, IEnumerable<Tensor>
     /// </summary>
     protected virtual string ToString<T>(OutputFormat mode) where T : Tensor => ToString(mode);
 
-    public int CompareTo(Tensor other) => Hash().CompareTo(other.Hash());
-
-    public override int GetHashCode() => Hash();
+    public int CompareTo(Tensor other) => GetHashCode().CompareTo(other.GetHashCode());
 
     public abstract TensorBuilder GetBuilder();
 

@@ -64,7 +64,7 @@ public class Split
                 }
                 else if (product.Factor.IsMinusOne() && product.IndexlessData.Length == 1 && product.IndexlessData[0] is Sum s)
                 {
-                    Tensor[] sumData = (Tensor[])s.data.Clone();
+                    Tensor[] sumData = (Tensor[])s.Data.Clone();
                     for (int i = sumData.Length - 1; i >= 0; --i)
                     {
                         sumData[i] = Tensors.Negate(sumData[i]);

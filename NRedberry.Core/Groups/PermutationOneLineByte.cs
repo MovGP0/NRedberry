@@ -1,53 +1,438 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 using NRedberry.Core.Combinatorics;
+using NRedberry.Core.Utils;
 
 namespace NRedberry.Core.Groups;
 
 public class PermutationOneLineByte : Permutation
 {
-    private readonly byte[] permutation;
-    private readonly byte internalDegree; // MAX_VALUE = 127 => max permutation length = 126
-    private readonly bool isIdentity;
-    private readonly bool antisymmetry;
+    private readonly sbyte[] _permutation;
+    private readonly sbyte _internalDegree;
+    private readonly bool _isIdentity;
+    private readonly bool _antisymmetry;
 
-    /// <summary>
-    /// Creates a permutation with antisymmetry property from a given array in one-line notation and a boolean value of antisymmetry.
-    /// </summary>
-    /// <param name="antisymmetry">Antisymmetry (true for antisymmetry, false for symmetry).</param>
-    /// <param name="permutation">Permutation in one-line notation.</param>
-    /// <exception cref="ArgumentException">Thrown if the permutation is inconsistent with one-line notation.</exception>
-    /// <exception cref="ArgumentException">Thrown if antisymmetry is true and permutation order is odd.</exception>
-    public PermutationOneLineByte(bool antisymmetry, params byte[] permutation)
+    public PermutationOneLineByte(bool antisymmetry, params sbyte[] permutation)
     {
         if (!Permutations.TestPermutationCorrectness(permutation, antisymmetry))
             throw new ArgumentException("Inconsistent permutation: " + string.Join(", ", permutation));
-        this.permutation = (byte[])permutation.Clone();
-        this.antisymmetry = antisymmetry;
-        this.isIdentity = Permutations.IsIdentity(permutation);
-        this.internalDegree = Permutations.InternalDegree(permutation);
+        _permutation = (sbyte[])permutation.Clone();
+        _antisymmetry = antisymmetry;
+        _isIdentity = Permutations.IsIdentity(permutation);
+        _internalDegree = Permutations.InternalDegree(permutation);
     }
 
-    //!no check for one-line notation => unsafe constructor
-    internal PermutationOneLineByte(bool isIdentity, bool antisymmetry, byte internalDegree, byte[] permutation)
+    private PermutationOneLineByte(bool isIdentity, bool antisymmetry, sbyte internalDegree, sbyte[] permutation)
     {
-        this.isIdentity = isIdentity;
-        this.permutation = permutation;
-        this.antisymmetry = antisymmetry;
-        this.internalDegree = internalDegree;
+        _isIdentity = isIdentity;
+        _permutation = permutation;
+        _antisymmetry = antisymmetry;
+        _internalDegree = internalDegree;
         if (antisymmetry && Permutations.OrderOfPermutationIsOdd(permutation))
             throw new InconsistentGeneratorsException();
     }
 
-    //!!no any checks, used only to create inverse or identity permutation
-    internal PermutationOneLineByte(bool isIdentity, bool antisymmetry, byte internalDegree, byte[] permutation, bool identity)
+    private PermutationOneLineByte(bool isIdentity, bool antisymmetry, sbyte internalDegree, sbyte[] permutation, bool identity)
     {
-        if (!identity)
-            throw new ArgumentException("This constructor is only for creating an identity permutation.");
-        this.permutation = permutation;
-        this.antisymmetry = antisymmetry;
-        this.isIdentity = isIdentity;
-        this.internalDegree = internalDegree;
+        _isIdentity = isIdentity;
+        _permutation = permutation;
+        _antisymmetry = antisymmetry;
+        _internalDegree = internalDegree;
     }
 
-    // TODO: implement the rest of the methods
+    public PermutationOneLineInt ToIntRepresentation()
+    {
+        return new PermutationOneLineInt(
+            _isIdentity,
+            _antisymmetry,
+            _internalDegree,
+            ArraysUtils.ByteToInt(_permutation),
+            true);
+    }
+
+    public PermutationOneLineShort ToShortRepresentation()
+    {
+        return new PermutationOneLineShort(
+            _isIdentity,
+            _antisymmetry,
+            _internalDegree,
+            ArraysUtils.ByteToShort(_permutation),
+            true);
+    }
+
+    public Permutation ToLargerRepresentation(int newLength)
+    {
+        if (newLength <= short.MaxValue)
+            return ToShortRepresentation();
+        else
+            return ToIntRepresentation();
+    }
+
+    public int Length()
+    {
+        return _permutation.Length;
+    }
+
+    public bool Antisymmetry()
+    {
+        return _antisymmetry;
+    }
+
+    public Permutation ToSymmetry()
+    {
+        return _antisymmetry ? new PermutationOneLineByte(_isIdentity, false, _internalDegree, _permutation, true) : this;
+    }
+
+    public Permutation Negate()
+    {
+        return new PermutationOneLineByte(false, _antisymmetry ^ true, _internalDegree, _permutation);
+    }
+
+    public int[] OneLine()
+    {
+        return ArraysUtils.ByteToInt(_permutation);
+    }
+
+    public IntArray OneLineImmutable()
+    {
+        return new IntArray(ArraysUtils.ByteToInt(_permutation));
+    }
+
+    public int[][] Cycles()
+    {
+        return Permutations.ConvertOneLineToCycles(_permutation);
+    }
+
+    public int NewIndexOf(int i)
+    {
+        return i < _internalDegree ? _permutation[i] : i;
+    }
+
+    public int ImageOf(int i)
+    {
+        return i < _internalDegree ? _permutation[i] : i;
+    }
+
+    public int[] ImageOf(int[] set)
+    {
+        if (_isIdentity)
+            return (int[])set.Clone();
+        int[] result = new int[set.Length];
+        for (int i = 0; i < set.Length; ++i)
+            result[i] = NewIndexOf(set[i]);
+        return result;
+    }
+
+    public int[] Permute(int[] array)
+    {
+        if (_isIdentity)
+            return (int[])array.Clone();
+        int[] result = new int[array.Length];
+        for (int i = 0; i < array.Length; ++i)
+            result[i] = array[NewIndexOf(i)];
+        return result;
+    }
+
+    public char[] Permute(char[] array)
+    {
+        if (_isIdentity)
+            return (char[])array.Clone();
+        char[] result = new char[array.Length];
+        for (int i = 0; i < array.Length; ++i)
+            result[i] = array[NewIndexOf(i)];
+        return result;
+    }
+
+    public T[] Permute<T>(T[] array)
+    {
+        if (_isIdentity)
+            return (T[])array.Clone();
+        T[] result = new T[array.Length];
+        for (int i = 0; i < array.Length; ++i)
+            result[i] = array[NewIndexOf(i)];
+        return result;
+    }
+
+    public List<T> Permute<T>(List<T> set)
+    {
+        if (_isIdentity)
+            return new List<T>(set);
+        List<T> list = new List<T>(set.Count);
+        for (int i = 0; i < set.Count; ++i)
+            list.Add(set[NewIndexOf(i)]);
+        return list;
+    }
+
+    public int NewIndexOfUnderInverse(int i)
+    {
+        if (i >= _permutation.Length)
+            return i;
+        for (int j = _permutation.Length - 1; j >= 0; --j)
+            if (_permutation[j] == i)
+                return j;
+        throw new IndexOutOfRangeException();
+    }
+
+    public Permutation Conjugate(Permutation p)
+    {
+        return Inverse().Composition(p).Composition(this);
+    }
+
+    public Permutation Commutator(Permutation p)
+    {
+        return Inverse().Composition(p.Inverse()).Composition(this).Composition(p);
+    }
+
+    public Permutation Composition(Permutation other)
+    {
+        if (_isIdentity)
+            return other;
+        if (other.IsIdentity())
+            return this;
+
+        int newLength = Math.Max(Degree(), other.Degree());
+        if (newLength > byte.MaxValue)
+            return ToLargerRepresentation(newLength).Composition(other);
+
+        sbyte newInternalDegree = -1;
+        sbyte[] result = new sbyte[newLength];
+        bool resultIsIdentity = true;
+        for (sbyte i = 0; i < newLength; ++i)
+        {
+            result[i] = (sbyte)other.NewIndexOf(NewIndexOf(i));
+            resultIsIdentity &= result[i] == i;
+            newInternalDegree = result[i] == i ? newInternalDegree : i;
+        }
+
+        try
+        {
+            return new PermutationOneLineByte(resultIsIdentity, _antisymmetry ^ other.Antisymmetry(),
+                (sbyte)(newInternalDegree + 1), result);
+        }
+        catch (InconsistentGeneratorsException ex)
+        {
+            throw new InconsistentGeneratorsException(this + " and " + other);
+        }
+    }
+
+    public Permutation Composition(Permutation a, Permutation b)
+    {
+        if (_isIdentity)
+            return a.Composition(b);
+        if (a.IsIdentity())
+            return Composition(b);
+        if (b.IsIdentity())
+            return Composition(a);
+
+        int newLength = Math.Max(Math.Max(Degree(), a.Degree()), b.Degree());
+        if (newLength > byte.MaxValue)
+            return ToLargerRepresentation(newLength).Composition(a, b);
+
+        sbyte newInternalDegree = -1;
+        sbyte[] result = new sbyte[newLength];
+        bool resultIsIdentity = true;
+        for (sbyte i = 0; i < newLength; ++i)
+        {
+            result[i] = (sbyte)b.NewIndexOf(a.NewIndexOf(NewIndexOf(i)));
+            resultIsIdentity &= result[i] == i;
+            newInternalDegree = result[i] == i ? newInternalDegree : i;
+        }
+
+        try
+        {
+            return new PermutationOneLineByte(resultIsIdentity,
+                _antisymmetry ^ a.Antisymmetry() ^ b.Antisymmetry(), (sbyte)(newInternalDegree + 1), result);
+        }
+        catch (InconsistentGeneratorsException ex)
+        {
+            throw new InconsistentGeneratorsException(this + " and " + a + " and " + b);
+        }
+    }
+
+    public Permutation Composition(Permutation a, Permutation b, Permutation c)
+    {
+        if (_isIdentity)
+            return a.Composition(b, c);
+        if (a.IsIdentity())
+            return Composition(b, c);
+        if (b.IsIdentity())
+            return Composition(a, c);
+        if (c.IsIdentity())
+            return Composition(a, b);
+
+        int newLength = Math.Max(c.Degree(), Math.Max(Math.Max(Degree(), a.Degree()), b.Degree()));
+        if (newLength > sbyte.MaxValue)
+            return ToLargerRepresentation(newLength).Composition(a, b, c);
+
+        sbyte[] result = new sbyte[newLength];
+        sbyte newInternalDegree = -1;
+        bool resultIsIdentity = true;
+        for (sbyte i = 0; i < newLength; ++i)
+        {
+            result[i] = (sbyte)c.NewIndexOf(b.NewIndexOf(a.NewIndexOf(NewIndexOf(i))));
+            resultIsIdentity &= result[i] == i;
+            newInternalDegree = result[i] == i ? newInternalDegree : i;
+        }
+
+        try
+        {
+            return new PermutationOneLineByte(resultIsIdentity,
+                _antisymmetry ^ a.Antisymmetry() ^ b.Antisymmetry() ^ c.Antisymmetry(), (sbyte)(newInternalDegree + 1), result);
+        }
+        catch (InconsistentGeneratorsException ex)
+        {
+            throw new InconsistentGeneratorsException(this + " and " + a + " and " + b + " and " + c);
+        }
+    }
+
+    public Permutation CompositionWithInverse(Permutation other)
+    {
+        if (_isIdentity)
+            return other.Inverse();
+        if (other.IsIdentity())
+            return this;
+
+        return Composition(other.Inverse());
+    }
+
+    public Permutation Inverse()
+    {
+        if (_isIdentity)
+            return this;
+
+        sbyte[] inv = new sbyte[_permutation.Length];
+        for (sbyte i = (sbyte)(_permutation.Length - 1); i >= 0; --i)
+        {
+            inv[_permutation[i]] = i;
+        }
+
+        return new PermutationOneLineByte(false, _antisymmetry, _internalDegree, inv, true);
+    }
+
+    public bool IsIdentity()
+    {
+        return _isIdentity;
+    }
+
+    public Permutation GetIdentity()
+    {
+        if (_isIdentity)
+            return this;
+        return Permutations.CreateIdentityPermutation(_permutation.Length);
+    }
+
+    public BigInteger Order()
+    {
+        return Permutations.OrderOfPermutation(_permutation);
+    }
+
+    public bool OrderIsOdd()
+    {
+        return !_isIdentity && Permutations.OrderOfPermutationIsOdd(_permutation);
+    }
+
+    public int Degree()
+    {
+        return _internalDegree;
+    }
+
+    public Permutation Pow(int exponent)
+    {
+        if (_isIdentity)
+            return this;
+        if (exponent < 0)
+            return Inverse().Pow(-exponent);
+        Permutation basePerm = this, result = GetIdentity();
+        while (exponent != 0)
+        {
+            if ((exponent % 2) == 1)
+                result = result.Composition(basePerm);
+            basePerm = basePerm.Composition(basePerm);
+            exponent >>= 1;
+        }
+        return result;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (this == obj) return true;
+        if (obj == null || !(obj is Permutation)) return false;
+
+        Permutation that = (Permutation)obj;
+        if (_antisymmetry != that.Antisymmetry())
+            return false;
+        if (_internalDegree != that.Degree())
+            return false;
+        for (int i = 0; i < _internalDegree; ++i)
+            if (NewIndexOf(i) != that.NewIndexOf(i))
+                return false;
+        return true;
+    }
+
+    public override int GetHashCode()
+    {
+        int result = 1;
+        for (int i = 0; i < _internalDegree; ++i)
+            result = 31 * result + _permutation[i];
+        result = 31 * result + (_antisymmetry ? 1 : 0);
+        return result;
+    }
+
+    public int Parity()
+    {
+        return Permutations.Parity(_permutation);
+    }
+
+    public Permutation MoveRight(int size)
+    {
+        if (size == 0)
+            return this;
+        if (size + _permutation.Length > sbyte.MaxValue)
+            return ToIntRepresentation().MoveRight(size);
+
+        sbyte[] p = new sbyte[size + _permutation.Length];
+        sbyte i = 1;
+        for (; i < size; ++i)
+            p[i] = i;
+        int k = i;
+        for (; i < p.Length; ++i)
+            p[i] = (sbyte)(_permutation[i - k] + size);
+        return new PermutationOneLineByte(_isIdentity, _antisymmetry, (sbyte)(size + _internalDegree), p, true);
+    }
+
+    public int[] LengthsOfCycles()
+    {
+        return Permutations.LengthsOfCycles(_permutation);
+    }
+
+    public override string ToString()
+    {
+        return ToStringCycles();
+    }
+
+    public string ToStringOneLine()
+    {
+        return (_antisymmetry ? "-" : "+") + string.Join(", ", _permutation);
+    }
+
+    public string ToStringCycles()
+    {
+        string cycles = string.Join(", ", Cycles().Select(c => "{" + string.Join(", ", c) + "}"));
+        return (_antisymmetry ? "-" : "+") + cycles;
+    }
+
+    public int CompareTo(Permutation t)
+    {
+        int max = Math.Max(Degree(), t.Degree());
+        if (_antisymmetry != t.Antisymmetry())
+            return _antisymmetry ? -1 : 1;
+        for (int i = 0; i < max; ++i)
+            if (NewIndexOf(i) < t.NewIndexOf(i))
+                return -1;
+            else if (NewIndexOf(i) > t.NewIndexOf(i))
+                return 1;
+        return 0;
+    }
 }

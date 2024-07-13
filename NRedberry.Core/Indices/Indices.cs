@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using NRedberry.Core.Utils;
+
 namespace NRedberry.Core.Indices;
 
 public interface Indices : IEquatable<object>, IEnumerable<int>

@@ -10,7 +10,7 @@ public sealed class CosFactory : ScalarFunctionFactory
     {
     }
 
-    public override Tensor Create(Tensor arg)
+    protected override Tensor Create1(Tensor arg)
     {
         if (arg is ArcCos)
             return arg[0];

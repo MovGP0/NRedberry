@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
 
 namespace NRedberry.Core.Groups;
 
-public static class Permutations
+public static partial class Permutations
 {
     /// <summary>
     /// Converts cycles to one-line notation.
@@ -43,6 +47,110 @@ public static class Permutations
     }
 
     /// <summary>
+    /// Converts permutation written in one-line notation to disjoint cycles notation.
+    /// </summary>
+    /// <param name="permutation">Permutation written in one-line notation.</param>
+    /// <returns>Permutation written in disjoint cycles notation.</returns>
+    public static int[][] ConvertOneLineToCycles(int[] permutation)
+    {
+        var cycles = new List<int[]>();
+        var seen = new bool[permutation.Length];
+        int counter = 0;
+
+        while (counter < permutation.Length)
+        {
+            int start = Array.IndexOf(seen, false);
+            if (permutation[start] == start)
+            {
+                counter++;
+                seen[start] = true;
+                continue;
+            }
+
+            var cycle = new List<int>();
+            while (!seen[start])
+            {
+                seen[start] = true;
+                counter++;
+                cycle.Add(start);
+                start = permutation[start];
+            }
+            cycles.Add(cycle.ToArray());
+        }
+
+        return cycles.ToArray();
+    }
+/// <summary>
+    /// Converts permutation written in one-line notation to disjoint cycles notation.
+    /// </summary>
+    /// <param name="permutation">Permutation written in one-line notation.</param>
+    /// <returns>Permutation written in disjoint cycles notation.</returns>
+    public static int[][] ConvertOneLineToCycles(short[] permutation)
+    {
+        var cycles = new List<int[]>();
+        var seen = new bool[permutation.Length];
+        int counter = 0;
+
+        while (counter < permutation.Length)
+        {
+            int start = Array.IndexOf(seen, false);
+            if (permutation[start] == start)
+            {
+                counter++;
+                seen[start] = true;
+                continue;
+            }
+
+            var cycle = new List<int>();
+            while (!seen[start])
+            {
+                seen[start] = true;
+                counter++;
+                cycle.Add(start);
+                start = permutation[start];
+            }
+            cycles.Add(cycle.ToArray());
+        }
+
+        return cycles.ToArray();
+    }
+
+    /// <summary>
+    /// Converts permutation written in one-line notation to disjoint cycles notation.
+    /// </summary>
+    /// <param name="permutation">Permutation written in one-line notation.</param>
+    /// <returns>Permutation written in disjoint cycles notation.</returns>
+    public static int[][] ConvertOneLineToCycles(sbyte[] permutation)
+    {
+        var cycles = new List<int[]>();
+        var seen = new bool[permutation.Length];
+        int counter = 0;
+
+        while (counter < permutation.Length)
+        {
+            int start = Array.IndexOf(seen, false);
+            if (permutation[start] == start)
+            {
+                counter++;
+                seen[start] = true;
+                continue;
+            }
+
+            var cycle = new List<int>();
+            while (!seen[start])
+            {
+                seen[start] = true;
+                counter++;
+                cycle.Add(start);
+                start = permutation[start];
+            }
+            cycles.Add(cycle.ToArray());
+        }
+
+        return cycles.ToArray();
+    }
+
+    /// <summary>
     /// Creates permutation instance from a given array that represents permutation in disjoint cycle notation.
     /// This method will automatically choose an appropriate underlying implementation of Permutation depending on
     /// the permutation length.
@@ -51,7 +159,7 @@ public static class Permutations
     /// </summary>
     /// <param name="antisymmetry">If true, then antisymmetry will be created.</param>
     /// <param name="cycles">Array of disjoint cycles.</param>
-    /// <returns>An instance of <see cref="Permutation"/>.</returns>
+    /// <returns>An instance of <see cref="IPermutation"/>.</returns>
     /// <exception cref="ArgumentException">If specified array is inconsistent with disjoint cycle notation or if antisymmetry is true and permutation order is odd.</exception>
     public static Permutation CreatePermutation(bool antisymmetry, int[][] cycles) {
         return CreatePermutation(antisymmetry, ConvertCyclesToOneLine(cycles));
@@ -63,7 +171,7 @@ public static class Permutations
     /// the permutation length.
     /// </summary>
     /// <param name="cycles">Array of disjoint cycles.</param>
-    /// <returns>An instance of <see cref="Permutation"/>.</returns>
+    /// <returns>An instance of <see cref="IPermutation"/>.</returns>
     /// <exception cref="ArgumentException">If specified array is inconsistent with disjoint cycle notation.</exception>
     public static Permutation CreatePermutation(int[][] cycles) {
         return CreatePermutation(false, ConvertCyclesToOneLine(cycles));
@@ -75,7 +183,7 @@ public static class Permutations
     /// the permutation length.
     /// </summary>
     /// <param name="oneLine">Array that represents permutation in one line notation.</param>
-    /// <returns>An instance of <see cref="Permutation"/>.</returns>
+    /// <returns>An instance of <see cref="IPermutation"/>.</returns>
     /// <exception cref="ArgumentException">If specified array is inconsistent with one-line notation.</exception>
     public static Permutation CreatePermutation(params int[] oneLine) {
         return CreatePermutation(false, oneLine);
@@ -90,7 +198,7 @@ public static class Permutations
     /// </summary>
     /// <param name="antisymmetry">If true, then antisymmetry will be created.</param>
     /// <param name="oneLine">Array that represents permutation in one line notation.</param>
-    /// <returns>An instance of <see cref="Permutation"/>.</returns>
+    /// <returns>An instance of <see cref="IPermutation"/>.</returns>
     /// <exception cref="ArgumentException">If specified array is inconsistent with one-line notation or if antisymmetry is true and permutation order is odd.</exception>
     public static Permutation CreatePermutation(bool antisymmetry, params int[] oneLine) {
         bool _byte = true, _short = true;
@@ -249,5 +357,329 @@ public static class Permutations
             inverse[permutation[i]] = i;
         }
         return inverse;
+    }
+    
+    public static int InternalDegree(int[] permutation)
+    {
+        int i;
+        for (i = permutation.Length - 1; i >= 0; --i)
+            if (permutation[i] != i)
+                break;
+        return i + 1;
+    }
+
+    public static short InternalDegree(short[] permutation)
+    {
+        int i;
+        for (i = permutation.Length - 1; i >= 0; --i)
+            if (permutation[i] != i)
+                break;
+        return (short)(i + 1);
+    }
+
+    public static sbyte InternalDegree(sbyte[] permutation)
+    {
+        int i;
+        for (i = permutation.Length - 1; i >= 0; --i)
+            if (permutation[i] != i)
+                break;
+        return (sbyte)(i + 1);
+    }
+
+    public static int Parity(int[] permutation)
+    {
+        BitArray used = new BitArray(permutation.Length);
+        int start, pointer, currentSize, counter = 0;
+        int numOfTranspositions = 0;
+        while (counter < permutation.Length)
+        {
+            start = pointer = NextZeroBit(used);
+            currentSize = 0;
+            do
+            {
+                used.Set(pointer, true);
+                pointer = permutation[pointer];
+                ++currentSize;
+            } while (pointer != start);
+            counter += currentSize;
+            numOfTranspositions += currentSize - 1;
+        }
+        return numOfTranspositions % 2;
+    }
+
+    public static int Parity(short[] permutation)
+    {
+        BitArray used = new BitArray(permutation.Length);
+        int start, pointer, currentSize, counter = 0;
+        int numOfTranspositions = 0;
+        while (counter < permutation.Length)
+        {
+            start = pointer = NextZeroBit(used);
+            currentSize = 0;
+            do
+            {
+                used.Set(pointer, true);
+                pointer = permutation[pointer];
+                ++currentSize;
+            } while (pointer != start);
+            counter += currentSize;
+            numOfTranspositions += currentSize - 1;
+        }
+        return numOfTranspositions % 2;
+    }
+
+    public static int Parity(sbyte[] permutation)
+    {
+        BitArray used = new BitArray(permutation.Length);
+        int start, pointer, currentSize, counter = 0;
+        int numOfTranspositions = 0;
+        while (counter < permutation.Length)
+        {
+            start = pointer = NextZeroBit(used);
+            currentSize = 0;
+            do
+            {
+                used.Set(pointer, true);
+                pointer = permutation[pointer];
+                ++currentSize;
+            } while (pointer != start);
+            counter += currentSize;
+            numOfTranspositions += currentSize - 1;
+        }
+        return numOfTranspositions % 2;
+    }
+
+    public static bool IsIdentity(int[] permutation)
+    {
+        for (int i = 0; i < permutation.Length; ++i)
+            if (i != permutation[i])
+                return false;
+        return true;
+    }
+
+    public static bool IsIdentity(short[] permutation)
+    {
+        for (int i = 0; i < permutation.Length; ++i)
+            if (i != permutation[i])
+                return false;
+        return true;
+    }
+
+    public static bool IsIdentity(sbyte[] permutation)
+    {
+        for (int i = 0; i < permutation.Length; ++i)
+            if (i != permutation[i])
+                return false;
+        return true;
+    }
+
+    public static bool TestPermutationCorrectness(int[] permutation, bool sign)
+    {
+        return TestPermutationCorrectness(permutation) && (!sign || !OrderOfPermutationIsOdd(permutation));
+    }
+
+    public static bool TestPermutationCorrectness(short[] permutation, bool sign)
+    {
+        return TestPermutationCorrectness(permutation) && (!sign || !OrderOfPermutationIsOdd(permutation));
+    }
+
+    public static bool TestPermutationCorrectness(sbyte[] permutation, bool sign)
+    {
+        return TestPermutationCorrectness(permutation) && (!sign || !OrderOfPermutationIsOdd(permutation));
+    }
+
+    public static bool TestPermutationCorrectness(int[] permutation)
+    {
+        int length = permutation.Length;
+        BitArray checkedBits = new BitArray(length);
+        for (int i = 0; i < length; ++i)
+        {
+            if (permutation[i] >= length || permutation[i] < 0 || checkedBits.Get(permutation[i]))
+                return false;
+            checkedBits.Set(permutation[i], true);
+        }
+        return checkedBits.Cast<bool>().All(b => b);
+    }
+
+    public static bool TestPermutationCorrectness(short[] permutation)
+    {
+        int length = permutation.Length;
+        BitArray checkedBits = new BitArray(length);
+        for (int i = 0; i < length; ++i)
+        {
+            if (permutation[i] >= length || permutation[i] < 0 || checkedBits.Get(permutation[i]))
+                return false;
+            checkedBits.Set(permutation[i], true);
+        }
+        return checkedBits.Cast<bool>().All(b => b);
+    }
+
+    public static bool TestPermutationCorrectness(sbyte[] permutation)
+    {
+        int length = permutation.Length;
+        BitArray checkedBits = new BitArray(length);
+        for (int i = 0; i < length; ++i)
+        {
+            if (permutation[i] >= length || permutation[i] < 0 || checkedBits.Get(permutation[i]))
+                return false;
+            checkedBits.Set(permutation[i], true);
+        }
+        return checkedBits.Cast<bool>().All(b => b);
+    }
+
+    public static BigInteger OrderOfPermutation(int[] permutation)
+    {
+        BitArray used = new BitArray(permutation.Length);
+        BigInteger lcm = BigInteger.One, temp;
+
+        int start, pointer, currentSize, counter = 0;
+        while (counter < permutation.Length)
+        {
+            start = pointer = NextZeroBit(used);
+            currentSize = 0;
+            do
+            {
+                used.Set(pointer, true);
+                pointer = permutation[pointer];
+                ++currentSize;
+            } while (pointer != start);
+            counter += currentSize;
+            temp = new BigInteger(currentSize);
+            lcm = (lcm / BigInteger.GreatestCommonDivisor(lcm, temp)) * temp;
+        }
+        return lcm;
+    }
+
+    public static BigInteger OrderOfPermutation(short[] permutation)
+    {
+        BitArray used = new BitArray(permutation.Length);
+        BigInteger lcm = BigInteger.One, temp;
+
+        int start, pointer, currentSize, counter = 0;
+        while (counter < permutation.Length)
+        {
+            start = pointer = NextZeroBit(used);
+            currentSize = 0;
+            do
+            {
+                used.Set(pointer, true);
+                pointer = permutation[pointer];
+                ++currentSize;
+            } while (pointer != start);
+            counter += currentSize;
+            temp = new BigInteger(currentSize);
+            lcm = (lcm / BigInteger.GreatestCommonDivisor(lcm, temp)) * temp;
+        }
+        return lcm;
+    }
+
+    public static BigInteger OrderOfPermutation(sbyte[] permutation)
+    {
+        BitArray used = new BitArray(permutation.Length);
+        BigInteger lcm = BigInteger.One, temp;
+
+        int start, pointer, currentSize, counter = 0;
+        while (counter < permutation.Length)
+        {
+            start = pointer = NextZeroBit(used);
+            currentSize = 0;
+            do
+            {
+                used.Set(pointer, true);
+                pointer = permutation[pointer];
+                ++currentSize;
+            } while (pointer != start);
+            counter += currentSize;
+            temp = new BigInteger(currentSize);
+            lcm = (lcm / BigInteger.GreatestCommonDivisor(lcm, temp)) * temp;
+        }
+        return lcm;
+    }
+
+    public static bool OrderOfPermutationIsOdd(int[] permutation)
+    {
+        BitArray used = new BitArray(permutation.Length);
+        int start, pointer, currentSize, counter = 0;
+        while (counter < permutation.Length)
+        {
+            start = pointer = NextZeroBit(used);
+            currentSize = 0;
+            do
+            {
+                used.Set(pointer, true);
+                pointer = permutation[pointer];
+                ++currentSize;
+            } while (pointer != start);
+            if (currentSize % 2 == 0)
+                return false;
+            counter += currentSize;
+        }
+        return true;
+    }
+
+    public static bool OrderOfPermutationIsOdd(short[] permutation)
+    {
+        BitArray used = new BitArray(permutation.Length);
+        int start, pointer, currentSize, counter = 0;
+        while (counter < permutation.Length)
+        {
+            start = pointer = NextZeroBit(used);
+            currentSize = 0;
+            do
+            {
+                used.Set(pointer, true);
+                pointer = permutation[pointer];
+                ++currentSize;
+            } while (pointer != start);
+            if (currentSize % 2 == 0)
+                return false;
+            counter += currentSize;
+        }
+        return true;
+    }
+
+    public static bool OrderOfPermutationIsOdd(sbyte[] permutation)
+    {
+        BitArray used = new BitArray(permutation.Length);
+        int start, pointer, currentSize, counter = 0;
+        while (counter < permutation.Length)
+        {
+            start = pointer = NextZeroBit(used);
+            currentSize = 0;
+            do
+            {
+                used.Set(pointer, true);
+                pointer = permutation[pointer];
+                ++currentSize;
+            } while (pointer != start);
+            if (currentSize % 2 == 0)
+                return false;
+            counter += currentSize;
+        }
+        return true;
+    }
+
+    private static int NextZeroBit(BitArray bitArray)
+    {
+        for (int i = 0; i < bitArray.Length; ++i)
+        {
+            if (!bitArray.Get(i))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private static int NextZeroBit(BitArray bitArray, int startIndex)
+    {
+        for (int i = startIndex; i < bitArray.Length; i++)
+        {
+            if (!bitArray.Get(i))
+            {
+                return i;
+            }
+        }
+        return -1; // This should never happen if the function is called correctly
     }
 }

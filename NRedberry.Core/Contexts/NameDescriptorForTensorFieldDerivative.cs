@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Groups;
 using NRedberry.Core.Indices;
+using NotImplementedException = sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 namespace NRedberry.Contexts;
 
@@ -120,6 +122,11 @@ internal sealed class NameDescriptorForTensorFieldDerivative : NameDescriptorFor
             }
             j += Orders[i];
         }
+    }
+
+    static int[] ConvertPermutation(Permutation permutation, int[] mapping, int newDimension)
+    {
+        throw new NotImplementedException();
     }
 
     static int[] ConvertPermutation(int[] permutation, int[] mapping, int newDimension)

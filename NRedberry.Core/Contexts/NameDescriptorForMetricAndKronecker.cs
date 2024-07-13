@@ -41,7 +41,7 @@ internal sealed class NameDescriptorForMetricAndKronecker : NameDescriptor
         ];
     }
 
-    public override string GetName(SimpleIndices? indices)
+    public override string GetName(SimpleIndices? indices, OutputFormat outputFormat)
     {
         if (indices == null)
         {

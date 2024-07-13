@@ -42,15 +42,11 @@ public abstract class SymbolArrayConverter : IIndexSymbolConverter
     {
         try
         {
-            switch (mode)
-            {
-                case OutputFormat.UTF8:
-                    return UTF[code];
-                case OutputFormat.RedberryConsole:
-                    return "\\" + Symbols[code];
-                default:
-                    return Symbols[code];
-            }
+            if (mode == OutputFormat.UTF8)
+                return UTF[code];
+            if (mode == OutputFormat.Redberry)
+                return "\\" + Symbols[code];
+            return Symbols[code];
         }
         catch (ArgumentOutOfRangeException e)
         {

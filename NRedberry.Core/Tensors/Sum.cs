@@ -7,14 +7,14 @@ namespace NRedberry.Core.Tensors;
 
 public sealed class Sum : MultiTensor
 {
-    internal Tensor[] data;
+    internal readonly Tensor[] Data;
     private int hash;
 
     public Sum(Tensor[] data, Indices.Indices indices) : base(indices)
     {
         Debug.Assert(data.Length > 1);
 
-        this.data = data;
+        this.Data = data;
         TensorWrapper[] wrappers = new TensorWrapper[data.Length];
         int i;
         for (i = 0; i < data.Length; ++i)
@@ -30,11 +30,11 @@ public sealed class Sum : MultiTensor
     public Sum(Indices.Indices indices, Tensor[] data, int hash) : base(indices)
     {
         Debug.Assert(data.Length > 1);
-        this.data = data;
+        this.Data = data;
         this.hash = hash;
     }
 
-    protected override int Hash()
+    public override int GetHashCode()
     {
         throw new NotImplementedException();
     }

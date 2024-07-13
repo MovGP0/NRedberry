@@ -1,55 +1,9 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace NRedberry.Core.Utils;
 
-public static class ArraysUtils
+public static partial class ArraysUtils
 {
-    public static void QuickSort(int[] target, int[] coSort)
-    {
-        QuickSort(target, 0, target.Length, coSort);
-    }
-
-    public static void QuickSort(int[] target, int fromIndex, int toIndex, int[] coSort)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static void quickSort1(int[] target, int fromIndex, int length, int[] coSort)
-    {
-        throw new NotImplementedException();
-    }
-
-    private static void quickSort2(int[] target, int fromIndex, int length, int[] coSort)
-    {
-        throw new NotImplementedException();
-    }
-
-    private static void swap(int[] x, int a, int b, int[] coSort)
-    {
-        swap(x, a, b);
-        swap(coSort, a, b);
-    }
-
-    /// <summary>
-    /// Swaps x[a] with x[b].
-    /// </summary>
-    /// <param name="x"></param>
-    /// <param name="a"></param>
-    /// <param name="b"></param>
-    private static void swap(int[] x, int a, int b)
-    {
-        int t = x[a];
-        x[a] = x[b];
-        x[b] = t;
-    }
-
-    private static void vecswap(int[] x, int a, int b, int n, int[] coSort)
-    {
-        for (int i = 0; i < n; i++, a++, b++)
-            swap(x, a, b, coSort);
-    }
-
     /// <summary>
     /// Returns the index of the median of the three indexed integers.
     /// </summary>
@@ -63,60 +17,6 @@ public static class ArraysUtils
         return (x[a] < x[b]
             ? (x[b] < x[c] ? b : x[a] < x[c] ? c : a)
             : (x[b] > x[c] ? b : x[a] > x[c] ? c : a));
-    }
-
-    public static void QuickSort(long[] target, long[] coSort)
-    {
-        quickSort1(target, 0, target.Length, coSort);
-    }
-
-    public static void QuickSort(long[] target, int fromIndex, int toIndex, long[] coSort)
-    {
-        rangeCheck(target.Length, fromIndex, toIndex);
-        rangeCheck(coSort.Length, fromIndex, toIndex);
-        quickSort1(target, fromIndex, toIndex - fromIndex, coSort);
-    }
-
-    public static void quickSort1(long[] target, int fromIndex, int length, long[] coSort)
-    {
-        throw new NotImplementedException();
-    }
-
-    private static void swap(int[] x, int a, int b, long[] coSort)
-    {
-        swap(x, a, b);
-        swap(coSort, a, b);
-    }
-
-    /**
-         * Swaps x[a] with x[b].
-         */
-    private static void swap(long[] x, int a, int b)
-    {
-        (x[a], x[b]) = (x[b], x[a]);
-    }
-
-    private static void vecswap(int[] x, int a, int b, int n, long[] coSort)
-    {
-        for (int i = 0; i < n; i++, a++, b++)
-            swap(x, a, b, coSort);
-    }
-
-    public static void QuickSort<T>(T[] target, object[] coSort)
-        where T : IComparable<T>
-    {
-        QuickSort(target, 0, target.Length, coSort);
-    }
-
-    public static void QuickSort<T>(T[] target, int fromIndex, int toIndex, object[] coSort)
-        where T : IComparable<T>
-    {
-        throw new NotImplementedException();
-        //if (ReferenceEquals(target, coSort)) throw new ArgumentException();
-
-        //rangeCheck(target.Length, fromIndex, toIndex);
-        //rangeCheck(coSort.Length, fromIndex, toIndex);
-        //quickSort1(target, fromIndex, toIndex - fromIndex, coSort);
     }
 
     /// <summary>
@@ -175,31 +75,6 @@ public static class ArraysUtils
         IntTimSort.Sort(target, coSort);
     }
 
-    public static void InsertionSort(int[] target, int[] coSort)
-    {
-        InsertionSort(target, 0, target.Length, coSort);
-    }
-
-    public static void InsertionSort(int[] target, int fromIndex, int toIndex, int[] coSort)
-    {
-        RangeCheck(target.Length, fromIndex, toIndex);
-        RangeCheck(coSort.Length, fromIndex, toIndex);
-
-        int i, key, j, keyC;
-        for (i = fromIndex + 1; i < toIndex; i++)
-        {
-            key = target[i];
-            keyC = coSort[i];
-            for (j = i; j > fromIndex && target[j - 1] > key; j--)
-            {
-                target[j] = target[j - 1];
-                coSort[j] = coSort[j - 1];
-            }
-            target[j] = key;
-            coSort[j] = keyC;
-        }
-    }
-
     private static void RangeCheck(int arrayLen, int fromIndex, int toIndex)
     {
         if (fromIndex > toIndex)
@@ -218,10 +93,10 @@ public static class ArraysUtils
             InsertionSort(target, coSort);
     }
 
-    public static byte[] Int2byte(int[] a) {
-        byte[] r = new byte[a.Length];
+    public static sbyte[] Int2byte(int[] a) {
+        sbyte[] r = new sbyte[a.Length];
         for (int i = 0; i < a.Length; ++i) {
-            r[i] = (byte)a[i];
+            r[i] = (sbyte)a[i];
         }
         return r;
     }
@@ -232,5 +107,338 @@ public static class ArraysUtils
             r[i] = (short)a[i];
         }
         return r;
+    }
+    
+    public static int[] ShortToInt(short[] a)
+    {
+        int[] r = new int[a.Length];
+        for (int i = 0; i < a.Length; ++i)
+            r[i] = a[i];
+        return r;
+    }
+
+    public static short[] IntToShort(int[] a)
+    {
+        short[] r = new short[a.Length];
+        for (int i = 0; i < a.Length; ++i)
+            r[i] = (short)a[i];
+        return r;
+    }
+
+    public static int[] ByteToInt(sbyte[] a)
+    {
+        int[] r = new int[a.Length];
+        for (int i = 0; i < a.Length; ++i)
+            r[i] = a[i];
+        return r;
+    }
+
+    public static short[] ByteToShort(sbyte[] a)
+    {
+        short[] r = new short[a.Length];
+        for (int i = 0; i < a.Length; ++i)
+            r[i] = a[i];
+        return r;
+    }
+
+    public static byte[] IntToByte(int[] a)
+    {
+        byte[] r = new byte[a.Length];
+        for (int i = 0; i < a.Length; ++i)
+            r[i] = (byte)a[i];
+        return r;
+    }
+
+    public static int Max(int[] array)
+    {
+        int a = -1;
+        foreach (int i in array)
+            a = Math.Max(a, i);
+        return a;
+    }
+
+    public static int[] GetSeriesFrom0(int size)
+    {
+        int[] ret = new int[size];
+        for (int i = size - 1; i >= 0; --i)
+            ret[i] = i;
+        return ret;
+    }
+
+    public static int[][] DeepClone(int[][] input)
+    {
+        int[][] res = new int[input.Length][];
+        for (int i = res.Length - 1; i >= 0; --i)
+            res[i] = (int[])input[i].Clone();
+        return res;
+    }
+
+    public static int Sum(int[] array)
+    {
+        int s = 0;
+        foreach (int i in array)
+            s += i;
+        return s;
+    }
+
+    public static int[] Bijection<T>(T[] from, T[] to, IComparer<T> comparator)
+    {
+        if (from.Length != to.Length)
+            return null;
+
+        int length = from.Length;
+        int[] bijection = new int[length];
+        Array.Fill(bijection, -1);
+        for (int i = 0; i < length; ++i)
+        {
+            for (int j = 0; j < length; ++j)
+            {
+                if (bijection[j] == -1 && comparator.Compare(from[i], to[j]) == 0)
+                {
+                    bijection[j] = i;
+                    break;
+                }
+            }
+            if (Array.IndexOf(bijection, -1) == -1)
+                return bijection;
+        }
+        return null;
+    }
+
+    public static int[] Bijection<T>(T[] from, T[] to) where T : IComparable<T>
+    {
+        if (from.Length != to.Length)
+            return null;
+
+        int length = from.Length;
+        int[] bijection = new int[length];
+        Array.Fill(bijection, -1);
+        for (int i = 0; i < length; ++i)
+        {
+            for (int j = 0; j < length; ++j)
+            {
+                if (bijection[j] == -1 && from[i].CompareTo(to[j]) == 0)
+                {
+                    bijection[j] = i;
+                    break;
+                }
+            }
+            if (Array.IndexOf(bijection, -1) == -1)
+                return bijection;
+        }
+        return null;
+    }
+
+    public static int[] AddAll(int[] array1, params int[] array2)
+    {
+        int[] r = new int[array1.Length + array2.Length];
+        Array.Copy(array1, 0, r, 0, array1.Length);
+        Array.Copy(array2, 0, r, array1.Length, array2.Length);
+        return r;
+    }
+
+    public static int[] AddAll(params int[][] arrays)
+    {
+        if (arrays.Length == 0)
+            return new int[0];
+        int length = 0;
+        foreach (int[] array in arrays)
+            length += array.Length;
+
+        if (length == 0)
+            return new int[0];
+
+        int[] r = new int[length];
+        int pointer = 0;
+        foreach (int[] array in arrays)
+        {
+            Array.Copy(array, 0, r, pointer, array.Length);
+            pointer += array.Length;
+        }
+        return r;
+    }
+
+    public static T[] Remove<T>(T[] array, int i)
+    {
+        T[] r = new T[array.Length - 1];
+        Array.Copy(array, 0, r, 0, i);
+        if (i < array.Length - 1)
+            Array.Copy(array, i + 1, r, i, array.Length - i - 1);
+        return r;
+    }
+
+    public static T[] Remove<T>(T[] array, int[] positions)
+    {
+        if (array == null)
+            throw new ArgumentNullException();
+        int[] p = MathUtils.GetSortedDistinct(positions);
+        if (p.Length == 0)
+            return array;
+
+        int size = p.Length, pointer = 0, s = array.Length;
+        for (; pointer < size; ++pointer)
+            if (p[pointer] >= s)
+                throw new IndexOutOfRangeException();
+
+        T[] r = new T[array.Length - p.Length];
+        pointer = 0;
+        int i = -1;
+        for (int j = 0; j < s; ++j)
+        {
+            if (pointer < size - 1 && j > p[pointer])
+                ++pointer;
+            if (j == p[pointer]) continue;
+            else r[++i] = array[j];
+        }
+        return r;
+    }
+
+    public static int[] Remove(int[] array, int[] positions)
+    {
+        if (array == null)
+            throw new ArgumentNullException();
+        int[] p = MathUtils.GetSortedDistinct(positions);
+        if (p.Length == 0)
+            return array;
+
+        int size = p.Length, pointer = 0, s = array.Length;
+        for (; pointer < size; ++pointer)
+            if (p[pointer] >= s)
+                throw new IndexOutOfRangeException();
+
+        int[] r = new int[array.Length - p.Length];
+        pointer = 0;
+        int i = -1;
+        for (int j = 0; j < s; ++j)
+        {
+            if (pointer < size - 1 && j > p[pointer])
+                ++pointer;
+            if (j == p[pointer]) continue;
+            else r[++i] = array[j];
+        }
+        return r;
+    }
+
+    public static T[] Select<T>(T[] array, int[] positions)
+    {
+        if (array == null)
+            throw new ArgumentNullException();
+        int[] p = MathUtils.GetSortedDistinct(positions);
+        T[] r = new T[p.Length];
+        for (int i = 0; i < p.Length; ++i)
+            r[i] = array[p[i]];
+        return r;
+    }
+
+    public static int[] ToArray(HashSet<int> set)
+    {
+        int[] a = new int[set.Count];
+        set.CopyTo(a);
+        return a;
+    }
+
+    public static void Fill(IntArrayList list, int fromIndex, int toIndex, int value)
+    {
+        if (toIndex >= list.Size)
+            throw new IndexOutOfRangeException();
+        Array.Fill(list.Data, value, fromIndex, toIndex - fromIndex);
+    }
+
+    public static void Fill(IntArrayList list, int value)
+    {
+        Fill(list, 0, list.Size, value);
+    }
+
+    public static int BinarySearch(IntArrayList list, int key)
+    {
+        return Array.BinarySearch(list.Data, 0, list.Size, key);
+    }
+
+    public static int BinarySearch(IntArray array, int key)
+    {
+        return Array.BinarySearch(array.InnerArray, key);
+    }
+
+    public static int BinarySearch1(int[] a, int key)
+    {
+        return BinarySearch1(a, 0, a.Length, key);
+    }
+
+    public static int BinarySearch1(int[] a, int fromIndex, int toIndex, int key)
+    {
+        int low = fromIndex;
+        int high = toIndex - 1;
+
+        while (low <= high)
+        {
+            int mid = (low + high) >> 1;
+            int midVal = a[mid];
+
+            if (midVal < key)
+                low = mid + 1;
+            else if (midVal > key)
+                high = mid - 1;
+            else
+            {
+                while (mid > 0 && a[mid - 1] == midVal) --mid;
+                return mid;
+            }
+        }
+        if (low >= a.Length) return low;
+        while (low > 0 && a[low - 1] == a[low]) --low;
+        return low;
+    }
+
+    public static int CommutativeHashCode(params object[] objects)
+    {
+        if (objects == null)
+            return 0;
+        int hash = 0;
+        foreach (object o in objects)
+            hash ^= (o == null ? 0 : o.GetHashCode());
+        return HashFunctions.JenkinWang32shift(hash);
+    }
+
+    public static int CommutativeHashCode(object[] objects, int from, int to)
+    {
+        if (objects == null)
+            return 0;
+        int hash = 0;
+        for (int i = from; i < to; ++i)
+            hash ^= (objects[i] == null ? 0 : objects[i].GetHashCode());
+        return HashFunctions.JenkinWang32shift(hash);
+    }
+
+    private static int Med3(int[] x, int a, int b, int c)
+    {
+        return (x[a] < x[b] ? (x[b] < x[c] ? b : x[a] < x[c] ? c : a) : (x[b] > x[c] ? b : x[a] > x[c] ? c : a));
+    }
+
+    private static int Med3(long[] x, int a, int b, int c)
+    {
+        return (x[a] < x[b] ? (x[b] < x[c] ? b : x[a] < x[c] ? c : a) : (x[b] > x[c] ? b : x[a] > x[c] ? c : a));
+    }
+
+    private static int Med3<T>(T[] x, int a, int b, int c) where T : IComparable<T>
+    {
+        return (x[a].CompareTo(x[b]) < 0 ? (x[b].CompareTo(x[c]) < 0 ? b : x[a].CompareTo(x[c]) < 0 ? c : a) : (x[b].CompareTo(x[c]) > 0 ? b : x[a].CompareTo(x[c]) > 0 ? c : a));
+    }
+
+    public static bool Equals(int[] a, int[] b)
+    {
+        if (a == b)
+            return true;
+        if (a == null || b == null)
+            return false;
+
+        int length = a.Length;
+        if (b.Length != length)
+            return false;
+
+        for (int i = 0; i < length; i++)
+            if (a[i] != b[i])
+                return false;
+
+        return true;
     }
 }

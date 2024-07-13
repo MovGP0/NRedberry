@@ -4,6 +4,9 @@ public class Permutation : IComparable<Permutation>
 {
     protected readonly int[] _permutation;
 
+    public Permutation()
+    {}
+
     public Permutation(int dimension)
     {
         _permutation = new int[dimension];
@@ -49,6 +52,16 @@ public class Permutation : IComparable<Permutation>
         return new Permutation(CompositionArray(element), true);
     }
 
+    public Permutation Composition(Permutation a, Permutation b)
+    {
+        throw new NotImplementedException();
+    }
+    
+    public Permutation Composition(Permutation a, Permutation b, Permutation c)
+    {
+        throw new NotImplementedException();
+    }
+
     public long[] Permute(long[] array)
     {
         if (array.Length != _permutation.Length)
@@ -85,7 +98,7 @@ public class Permutation : IComparable<Permutation>
 
     public int[] GetPermutation() => _permutation;
 
-    public Permutation Inverse() => new(CalculateInverse(), true);
+    public virtual Permutation Inverse() => new(CalculateInverse(), true);
 
     public override bool Equals(object? obj)
     {
@@ -126,4 +139,9 @@ public class Permutation : IComparable<Permutation>
     }
 
     public bool Compare(int[] permutation) => _permutation.SequenceEqual(permutation);
+
+    public virtual int Degree() => throw new NotImplementedException();
+    public virtual  bool Antisymmetry() => throw new NotImplementedException();
+    public virtual Permutation Pow(int exponent) => throw new NotImplementedException();
+    public virtual bool IsIdentity() => throw new NotImplementedException();
 }

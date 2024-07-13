@@ -44,7 +44,10 @@ public sealed class Context
     {
         parseManager = new ParseManager(contextSettings.Parser());
         converterManager = contextSettings.ConverterManager;
-        nameManager = new NameManager(contextSettings.NameManagerSeed, contextSettings.Kronecker, contextSettings.MetricName);
+        nameManager = new NameManager(
+            contextSettings.NameManagerSeed,
+            contextSettings.Kronecker,
+            contextSettings.MetricName);
 
         defaultOutputFormat = contextSettings.DefaultOutputFormat;
 

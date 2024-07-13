@@ -115,7 +115,7 @@ public sealed class Complex : Tensor, INumber<Complex>
         return Imaginary.IsZero();
     }
 
-    protected override int Hash()
+    public override int GetHashCode()
     {
         return 47 * (329 + Real.GetHashCode()) + Imaginary.GetHashCode();
     }

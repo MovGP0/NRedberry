@@ -9,7 +9,7 @@ public sealed class Sin : ScalarFunction
         return new Cos(Argument);
     }
 
-    protected override int Hash()
+    public override int GetHashCode()
     {
         return 7 * Argument.GetHashCode();
     }

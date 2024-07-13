@@ -23,7 +23,7 @@ internal sealed class NameDescriptorForSimpleTensor(
     private SimpleTensor? cachedSymbol;
 
     [Pure]
-    public override string GetName(SimpleIndices? indices)
+    public override string GetName(SimpleIndices? indices, OutputFormat outputFormat)
     {
         return Name;
     }

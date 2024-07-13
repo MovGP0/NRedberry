@@ -118,7 +118,7 @@ public sealed class Product : MultiTensor
         return result - 79 * Content.StructureOfContractionsHashed.GetHashCode();
     }
 
-    protected override int Hash() => hash;
+    public override int GetHashCode() => hash;
 
     public override Tensor this[int i] => throw new NotImplementedException();
 

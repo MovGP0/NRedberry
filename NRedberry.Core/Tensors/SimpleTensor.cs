@@ -32,7 +32,7 @@ public class SimpleTensor : Tensor, IEquatable<SimpleTensor>
          * @return name of this tensor
          * @see cc.redberry.core.context.NameDescriptor
          */
-    protected override int Hash()
+    public override int GetHashCode()
     {
         return Name;
     }
@@ -44,7 +44,7 @@ public class SimpleTensor : Tensor, IEquatable<SimpleTensor>
     public override string ToString(OutputFormat outputFormat)
     {
         var sb = new StringBuilder();
-        sb.Append(CC.GetNameDescriptor(Name).GetName(SimpleIndices));
+        sb.Append(CC.GetNameDescriptor(Name).GetName(SimpleIndices, outputFormat));
         sb.Append(Indices.ToString(outputFormat));
         return sb.ToString();
     }
@@ -69,28 +69,25 @@ public class SimpleTensor : Tensor, IEquatable<SimpleTensor>
         return ContextManager.CurrentContext.GetNameDescriptor(Name);
     }
 
-    public string GetStringName()
+    public string GetStringName(OutputFormat outputFormat)
     {
-        return CC.Current.GetNameDescriptor(Name).GetName(SimpleIndices);
+        return CC.Current
+            .GetNameDescriptor(Name)
+            .GetName(SimpleIndices, outputFormat);
     }
 
-    public bool Equals(SimpleTensor other)
+    public bool Equals(SimpleTensor? other)
     {
         if (other is null) return false;
         if (ReferenceEquals(this, other)) return true;
         return Name == other.Name;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is null) return false;
         if (ReferenceEquals(this, obj)) return true;
         if (obj.GetType() != GetType()) return false;
         return Equals((SimpleTensor) obj);
-    }
-
-    public override int GetHashCode()
-    {
-        return Name;
     }
 }

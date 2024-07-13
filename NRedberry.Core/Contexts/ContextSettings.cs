@@ -6,13 +6,17 @@ namespace NRedberry.Contexts;
 
 public sealed class ContextSettings
 {
-    private string kronecker = "d";
-    private string metricName = "g";
+    public ContextSettings()
+    {
+        DefaultOutputFormat = OutputFormat.Redberry;
+        Kronecker = "g";
+        MetricName = "g";
+    }
 
     public ContextSettings(
-        OutputFormat defaultOutputFormat = OutputFormat.Redberry,
-        string kronecker = "g",
-        string metricName = "g")
+        OutputFormat defaultOutputFormat,
+        string kronecker,
+        string metricName)
     {
         DefaultOutputFormat = defaultOutputFormat;
         Kronecker = kronecker;
@@ -33,6 +37,7 @@ public sealed class ContextSettings
 
     public OutputFormat DefaultOutputFormat { get; set; }
 
+    private string kronecker = "d";
     public string Kronecker
     {
         get => kronecker;
@@ -44,6 +49,7 @@ public sealed class ContextSettings
         }
     }
 
+    private string metricName = "g";
     public string MetricName
     {
         get => metricName;
@@ -55,7 +61,7 @@ public sealed class ContextSettings
         }
     }
 
-    public long NameManagerSeed { get; set; }
+    public int NameManagerSeed { get; set; }
 
     public IndexConverterManager ConverterManager { get; set; } = IndexConverterManager.Default;
 

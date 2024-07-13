@@ -35,16 +35,21 @@ public abstract class ScalarFunction : Tensor
     public override string ToString(OutputFormat mode)
     {
         string stringSymbol = FunctionName();
-        switch (mode)
+        if (mode == OutputFormat.UTF8)
         {
-            case OutputFormat.UTF8:
-                return $"{stringSymbol}({Argument.ToString(OutputFormat.UTF8)})";
-            case OutputFormat.LaTeX:
-                return $"\\{stringSymbol.ToLower()}({Argument.ToString(OutputFormat.UTF8)})";
-            case OutputFormat.Redberry:
-                return $"{char.ToUpper(stringSymbol[0])}{stringSymbol.Substring(1, stringSymbol.Length - 1)}[{Argument.ToString(OutputFormat.Redberry)}]";
-            default:
-                return $"{stringSymbol}({Argument.ToString(OutputFormat.UTF8)})";
+            return $"{stringSymbol}({Argument.ToString(OutputFormat.UTF8)})";
         }
+
+        if (mode == OutputFormat.LaTeX)
+        {
+            return $"\\{stringSymbol.ToLower()}({Argument.ToString(OutputFormat.UTF8)})";
+        }
+
+        if (mode == OutputFormat.Redberry)
+        {
+            return $"{char.ToUpper(stringSymbol[0])}{stringSymbol.Substring(1, stringSymbol.Length - 1)}[{Argument.ToString(OutputFormat.Redberry)}]";
+        }
+
+        return $"{stringSymbol}({Argument.ToString(OutputFormat.UTF8)})";
     }
 }

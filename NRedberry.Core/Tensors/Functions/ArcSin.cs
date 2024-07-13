@@ -10,13 +10,7 @@ public class ArcSin : ScalarFunction
 
     public override Tensor Derivative()
     {
-        return TensorExtensions.Pow(
-            TensorExtensions.Sum(
-                Complex.One,
-                TensorExtensions.Pow(Argument, Complex.Two)
-            ),
-            Complex.MinusOneHalf
-        );
+        return TensorExtensions.Sum(Complex.One, Argument.Pow(Complex.Two)).Pow(Complex.MinusOneHalf);
     }
 
     protected override string FunctionName()
@@ -24,7 +18,7 @@ public class ArcSin : ScalarFunction
         return "ArcSin";
     }
 
-    protected override int Hash()
+    public override int GetHashCode()
     {
         return 92837 * Argument.GetHashCode();
     }
@@ -37,34 +31,5 @@ public class ArcSin : ScalarFunction
     public override TensorFactory GetFactory()
     {
         return ArcSinFactory.Factory;
-    }
-
-    public sealed class ArcSinFactory : ScalarFunctionFactory
-    {
-        public static readonly ArcSinFactory Factory = new();
-
-        private ArcSinFactory()
-        {
-        }
-
-        public override Tensor Create(Tensor arg)
-        {
-            if (arg is Sin)
-            {
-                return arg[0];
-            }
-
-            if (TensorUtils.IsZero(arg))
-            {
-                return Complex.Zero;
-            }
-
-            if (TensorUtils.IsNumeric(arg))
-            {
-                return ComplexUtils.ArcSin((Complex)arg);
-            }
-
-            return new ArcSin(arg);
-        }
     }
 }

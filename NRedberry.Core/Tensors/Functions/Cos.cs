@@ -10,7 +10,7 @@ public sealed class Cos : ScalarFunction
 
     public override Tensor Derivative() => Complex.MinusOne.Multiply(new Sin(Argument));
 
-    protected override int Hash() => 11 * Argument.GetHashCode();
+    public override int GetHashCode() => 11 * Argument.GetHashCode();
 
     protected override string FunctionName() => "Cos";
 

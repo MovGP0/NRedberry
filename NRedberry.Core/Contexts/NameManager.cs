@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
 using NRedberry.Core.Indices;
+using NRedberry.Core.Parsers;
 using NRedberry.Core.Tensors;
 using NRedberry.Core.Utils;
 
@@ -19,100 +22,317 @@ public sealed class NameManager
     private long seed;
     public long Seed => seed;
     private Random random;
-    private object readLock = new();
-    private object writeLock = new();
+    private readonly ReaderWriterLockSlim readWriteLock = new ReaderWriterLockSlim();
+    private readonly ConcurrentDictionary<int, NameDescriptor> fromId = new ConcurrentDictionary<int, NameDescriptor>();
+    private readonly HashSet<string> stringNames = new HashSet<string>();
+    private readonly StringGenerator stringGenerator = new StringGenerator();
+    private readonly Dictionary<NameAndStructureOfIndices, NameDescriptor> fromStructure = new Dictionary<NameAndStructureOfIndices, NameDescriptor>();
+    private readonly string[] kroneckerAndMetricNames = { "d", "g" };
+    private volatile string diracDeltaName = "DiracDelta";
+    private readonly List<int> kroneckerAndMetricIds = new List<int>();
 
-    private IDictionary<int, NameDescriptor> fromId = new Dictionary<int, NameDescriptor>();
-    private IDictionary<NameAndStructureOfIndices, NameDescriptor> fromStructure = new Dictionary<NameAndStructureOfIndices, NameDescriptor>();
-    private readonly string[] kroneckerAndMetricNames = {"d", "g"};
-    private IntArrayList kroneckerAndMetricIds = new();
-
-    public NameManager(int seed, string kronecker, string metric)
+    public NameManager(long? seed, string kronecker, string metric)
     {
-        random = new Random(seed);
+        if (seed == null)
+        {
+            random = new Random();
+            this.seed = random.NextInt64();
+            random = new Random((int)this.seed);
+        }
+        else
+        {
+            this.seed = seed.Value;
+            random = new Random((int)this.seed);
+        }
         kroneckerAndMetricNames[0] = kronecker;
         kroneckerAndMetricNames[1] = metric;
     }
 
-    public void Reset()
+    public bool IsKroneckerOrMetric(int name)
     {
-        throw new NotImplementedException();
-    }
-
-    public void Reset(int seed)
-    {
-        throw new NotImplementedException();
-    }
-
-    public NameDescriptor GetNameDescriptor(int nameId)
-    {
-        throw new NotImplementedException();
+        return kroneckerAndMetricIds.BinarySearch(name) >= 0;
     }
 
     public string GetKroneckerName()
     {
-        throw new NotImplementedException();
+        return kroneckerAndMetricNames[0];
     }
 
     public string GetMetricName()
     {
-        throw new NotImplementedException();
-    }
-
-    public void SetMetricName(string name)
-    {
-        throw new NotImplementedException();
+        return kroneckerAndMetricNames[1];
     }
 
     public void SetKroneckerName(string name)
     {
-        throw new NotImplementedException();
+        kroneckerAndMetricNames[0] = name;
+        Rebuild();
     }
 
-    public bool IsKroneckerOrMetric(int tName)
+    public void SetMetricName(string name)
     {
-        throw new NotImplementedException();
+        kroneckerAndMetricNames[1] = name;
+        Rebuild();
     }
 
-    public object getKroneckerName()
+    public string GetDiracDeltaName()
     {
-        throw new NotImplementedException();
+        return diracDeltaName;
     }
 
-    public NameDescriptor mapNameDescriptor(object o, StructureOfIndices structureOfIndices)
+    public void SetDiracDeltaName(string name)
     {
-        throw new NotImplementedException();
+        diracDeltaName = name;
     }
 
-    public bool isKroneckerOrMetric(int name)
+    private void Rebuild()
     {
-        throw new NotImplementedException();
+        readWriteLock.EnterWriteLock();
+        try
+        {
+            fromStructure.Clear();
+            foreach (var descriptor in fromId.Values)
+            {
+                foreach (var key in descriptor.GetKeys())
+                {
+                    fromStructure[key] = descriptor;
+                }
+            }
+        }
+        finally
+        {
+            readWriteLock.ExitWriteLock();
+        }
     }
 
-    /// <summary>
-    /// Generates a new name descriptor for a simple tensor with given structure of indices.
-    /// </summary>
-    /// <remarks>
-    /// <b>Important:</b> run only in write lock!
-    /// </remarks>
-    private int GenerateNewName()
+    private NameDescriptor CreateDescriptor(string sname, StructureOfIndices[] structuresOfIndices, int id)
     {
-        int name;
-        do
-            name = random.Next();
-        while (fromId.ContainsKey(name));
-        return name;
+        if (structuresOfIndices.Length != 1)
+            return new NameDescriptorForTensorFieldImpl(sname, structuresOfIndices, id, sname.Equals(diracDeltaName) && structuresOfIndices.Length == 3);
+
+        var its = structuresOfIndices[0];
+        if (its.Size != 2)
+            return new NameDescriptorForSimpleTensor(sname, structuresOfIndices, id);
+
+        for (byte b = 0; b < IndexTypeExtensions.Length; ++b)
+        {
+            if (its.TypeCount(b) == 2)
+            {
+                if (CC.IsMetric(b))
+                {
+                    if (sname.Equals(kroneckerAndMetricNames[0]) || sname.Equals(kroneckerAndMetricNames[1]))
+                    {
+                        var descriptor = new NameDescriptorForMetricAndKronecker(kroneckerAndMetricNames, b, id);
+                        descriptor.GetSymmetries().Add(b, false, 1, 0);
+                        return descriptor;
+                    }
+                }
+                else
+                {
+                    if (sname.Equals(kroneckerAndMetricNames[1]))
+                        throw new ParserException("Metric is not specified for non metric index type.");
+
+                    if (sname.Equals(kroneckerAndMetricNames[0]))
+                    {
+                        if (!its.GetTypeData(b).States[0] || its.GetTypeData(b).States[1])
+                            throw new ParserException("Illegal Kronecker indices states.");
+
+                        return new NameDescriptorForMetricAndKronecker(kroneckerAndMetricNames, b, id);
+                    }
+                }
+            }
+        }
+        return new NameDescriptorForSimpleTensor(sname, structuresOfIndices, id);
     }
 
-    internal NameDescriptorForTensorFieldDerivative CreateDescriptorForFieldDerivative(
-        NameDescriptorForTensorFieldImpl field,
-        int[] orders)
+    //USE IT ONLY INSIDE LOCK!!!
+    private void RegisterDescriptor(NameDescriptor descriptor)
     {
-        lock (writeLock)
+        fromId[descriptor.Id] = descriptor;
+        foreach (var key in descriptor.GetKeys())
+        {
+            fromStructure[key] = descriptor;
+        }
+        descriptor.RegisterInNameManager(this);
+    }
+
+    public NameDescriptor MapNameDescriptor(string sname, params StructureOfIndices[] structureOfIndices)
+    {
+        var key = new NameAndStructureOfIndices(sname, structureOfIndices);
+        bool rLocked = true;
+        readWriteLock.EnterReadLock();
+        try
+        {
+            if (!fromStructure.TryGetValue(key, out var knownND))
+            {
+                readWriteLock.ExitReadLock();
+                rLocked = false;
+                readWriteLock.EnterWriteLock();
+                try
+                {
+                    if (!fromStructure.TryGetValue(key, out knownND))
+                    {
+                        int name = GenerateNewName();
+                        var descriptor = CreateDescriptor(sname, structureOfIndices, name);
+                        if (descriptor is NameDescriptorForMetricAndKronecker)
+                        {
+                            kroneckerAndMetricIds.Add(name);
+                            kroneckerAndMetricIds.Sort();
+                        }
+                        RegisterDescriptor(descriptor);
+                        stringNames.Add(sname);
+                        return descriptor;
+                    }
+                    readWriteLock.EnterReadLock();
+                    rLocked = true;
+                }
+                finally
+                {
+                    readWriteLock.ExitWriteLock();
+                }
+            }
+            return knownND;
+        }
+        finally
+        {
+            if (rLocked)
+                readWriteLock.ExitReadLock();
+        }
+    }
+
+    internal NameDescriptorForTensorFieldDerivative CreateDescriptorForFieldDerivative(NameDescriptorForTensorFieldImpl field, int[] orders)
+    {
+        readWriteLock.EnterWriteLock();
+        try
         {
             var result = new NameDescriptorForTensorFieldDerivative(GenerateNewName(), orders, field);
             RegisterDescriptor(result);
             return result;
         }
+        finally
+        {
+            readWriteLock.ExitWriteLock();
+        }
     }
+
+    public void Reset()
+    {
+        readWriteLock.EnterWriteLock();
+        try
+        {
+            kroneckerAndMetricIds.Clear();
+            stringNames.Clear();
+            fromId.Clear();
+            fromStructure.Clear();
+            seed = random.NextInt64();
+            random = new Random((int)seed);
+        }
+        finally
+        {
+            readWriteLock.ExitWriteLock();
+        }
+    }
+
+    public void Reset(long seed)
+    {
+        readWriteLock.EnterWriteLock();
+        try
+        {
+            kroneckerAndMetricIds.Clear();
+            stringNames.Clear();
+            fromId.Clear();
+            fromStructure.Clear();
+            this.seed = seed;
+            random = new Random((int)seed);
+        }
+        finally
+        {
+            readWriteLock.ExitWriteLock();
+        }
+    }
+
+    private int GenerateNewName()
+    {
+        int name;
+        do
+        {
+            name = random.Next();
+        } while (fromId.ContainsKey(name));
+        return name;
+    }
+
+    public NameDescriptor GetNameDescriptor(int nameId)
+    {
+        readWriteLock.EnterReadLock();
+        try
+        {
+            fromId.TryGetValue(nameId, out var descriptor);
+            return descriptor;
+        }
+        finally
+        {
+            readWriteLock.ExitReadLock();
+        }
+    }
+
+    public NameDescriptor GenerateNewSymbolDescriptor()
+    {
+        bool rLocked = true;
+        readWriteLock.EnterReadLock();
+        try
+        {
+            int newNameId = GenerateNewName();
+            string name;
+            do
+            {
+                name = stringGenerator.NextString();
+            } while (stringNames.Contains(name));
+            stringNames.Add(name);
+            var nd = new NameDescriptorForSimpleTensor(name, new StructureOfIndices[] { StructureOfIndices.Empty }, newNameId);
+            readWriteLock.ExitReadLock();
+            rLocked = false;
+            readWriteLock.EnterWriteLock();
+            try
+            {
+                RegisterDescriptor(nd);
+                readWriteLock.EnterReadLock();
+                rLocked = true;
+            }
+            finally
+            {
+                readWriteLock.ExitWriteLock();
+            }
+            return nd;
+        }
+        finally
+        {
+            if (rLocked)
+                readWriteLock.ExitReadLock();
+        }
+    }
+
+    public int Size()
+    {
+        readWriteLock.EnterWriteLock();
+        try
+        {
+            return fromId.Count;
+        }
+        finally
+        {
+            readWriteLock.ExitWriteLock();
+        }
+    }
+
+    public long GetSeed() => seed;
+
+    public Random GetRandomGenerator() => random;
+
+    private sealed class StringGenerator
+    {
+        private long count = 0;
+        public string NextString() => $"{DEFAULT_VAR_SYMBOL_PREFIX}{count++}";
+    }
+
+    public const string DEFAULT_VAR_SYMBOL_PREFIX = "rc";
 }

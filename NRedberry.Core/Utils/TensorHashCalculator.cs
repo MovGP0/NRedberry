@@ -63,6 +63,9 @@ public static class TensorHashCalculator
         return _hashWithIndices(tensor, indices);
     }
 
-    public static int HashWithIndices(Tensor tensor, Indices.Indices indices) => HashWithIndices(tensor, indices.AllIndices.Copy());
-    public static int HashWithIndices(Tensor tensor) => HashWithIndices(tensor, tensor.Indices.GetFree());
+    public static int HashWithIndices(Tensor tensor, Indices.Indices indices)
+        => HashWithIndices(tensor, (int[])indices.AllIndices.Copy());
+
+    public static int HashWithIndices(Tensor tensor)
+        => HashWithIndices(tensor, tensor.Indices.GetFree());
 }

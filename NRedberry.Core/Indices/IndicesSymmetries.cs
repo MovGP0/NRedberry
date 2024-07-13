@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Combinatorics.Symmetries;
+using NotImplementedException = sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 namespace NRedberry.Core.Indices;
 
@@ -13,6 +15,10 @@ public class IndicesSymmetries : IEnumerable<Symmetry>
 {
     public StructureOfIndices StructureOfIndices { get; }
     private Symmetries Symmetries { get; }
+
+    private IList<Permutation> _generators;
+    public IList<Permutation> Generators => _generators.ToImmutableList();
+    public IList<Permutation> GetGenerators() => _generators.ToImmutableList();
 
     [Obsolete("Use Symmetries property instead", true)]
     public Symmetries GetInnerSymmetries() => Symmetries;
@@ -118,6 +124,8 @@ public class IndicesSymmetries : IEnumerable<Symmetry>
     /// <exception cref="ArgumentException">If permutation.length() != indices.size().</exception>
     /// <exception cref="InconsistentGeneratorsException">If the specified symmetry is inconsistent with already defined.</exception>
     public bool AddSymmetry(params int[] permutation) => Add(false, permutation);
+
+    public bool AddSymmetry(Permutation permutation) => throw new NotImplementedException();
 
     /// <summary>
     /// Adds permutational antisymmetry.
