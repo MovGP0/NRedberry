@@ -5,7 +5,8 @@ public class Permutation : IComparable<Permutation>
     protected readonly int[] _permutation;
 
     public Permutation()
-    {}
+    {
+    }
 
     public Permutation(int dimension)
     {
@@ -58,6 +59,11 @@ public class Permutation : IComparable<Permutation>
     }
     
     public Permutation Composition(Permutation a, Permutation b, Permutation c)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Permutation CompositionWithInverse(Permutation other)
     {
         throw new NotImplementedException();
     }

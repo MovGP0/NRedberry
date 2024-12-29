@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
@@ -24,6 +24,7 @@
     <ProjectReference Include="..\NRedberry.Apache.Commons.Math\NRedberry.Apache.Commons.Math.csproj" />
     <ProjectReference Include="..\NRedberry.Core.Combinatorics\NRedberry.Core.Combinatorics.csproj" />
     <ProjectReference Include="..\NRedberry.Core.Entities\NRedberry.Core.Entities.csproj" />
+    <ProjectReference Include="..\NRedberry.Core.Exceptions\NRedberry.Core.Exceptions.csproj" />
     <ProjectReference Include="..\NRedberry.Core.Utils\NRedberry.Core.Utils.csproj" />
   </ItemGroup>
 

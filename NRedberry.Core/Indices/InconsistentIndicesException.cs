@@ -2,7 +2,7 @@
 
 namespace NRedberry.Core.Indices;
 
-public class InconsistentIndicesException: TensorException
+public sealed class InconsistentIndicesException: TensorException
 {
     public InconsistentIndicesException(int index)
         : base($"Inconsistent index {IndicesUtils.ToString(index)}.")

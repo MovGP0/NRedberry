@@ -5,11 +5,9 @@ using NRedberry.Contexts.Defaults;
 
 namespace NRedberry.Core.Indices;
 
-
-
 public static class IndexTypeMethods
 {
-    private static Dictionary<string, IndexType> commonNames = new Dictionary<string, IndexType>
+    private static readonly Dictionary<string, IndexType> CommonNames = new()
     {
         { "l", IndexType.LatinLower },
         { "L", IndexType.LatinUpper },
@@ -24,7 +22,7 @@ public static class IndexTypeMethods
     public const byte TypesCount = 8;
     public const byte AlphabetsCount = 4;
 
-    private static Dictionary<IndexType, IIndexSymbolConverter> converterMap = new()
+    private static readonly Dictionary<IndexType, IIndexSymbolConverter> ConverterMap = new()
     {
         { IndexType.LatinLower, new IndexWithStrokeConverter(IndexConverterExtender.LatinLowerEx, 1) },
         { IndexType.LatinUpper, new IndexWithStrokeConverter(IndexConverterExtender.LatinUpperEx, 1) },
@@ -36,8 +34,8 @@ public static class IndexTypeMethods
         { IndexType.Matrix4, new IndexWithStrokeConverter(IndexConverterExtender.GreekUpperEx, 1) },
     };
 
-    public static IndexType[] Values { get; } = new IndexType[]
-    {
+    public static IndexType[] Values { get; } =
+    [
         IndexType.LatinLower,
         IndexType.LatinUpper,
         IndexType.GreekLower,
@@ -46,28 +44,28 @@ public static class IndexTypeMethods
         IndexType.Matrix2,
         IndexType.Matrix3,
         IndexType.Matrix4
-    };
+    ];
 
     public static string GetShortString(this IndexType indexType)
     {
-        return commonNames.Any(e => e.Value == indexType)
-            ? commonNames.First(e => e.Value == indexType).Key
+        return CommonNames.Any(e => e.Value == indexType)
+            ? CommonNames.First(e => e.Value == indexType).Key
             : indexType.ToString();
     }
 
     public static IndexType FromShortString(string stringVal)
     {
-        return commonNames[stringVal];
+        return CommonNames[stringVal];
     }
 
     public static IIndexSymbolConverter GetSymbolConverter(this IndexType indexType)
     {
-        return converterMap[indexType];
+        return ConverterMap[indexType];
     }
 
     public static byte GetType_(this IndexType indexType)
     {
-        return converterMap[indexType].GetType_();
+        return ConverterMap[indexType].Type;
     }
 
     public static byte[] GetBytes()
@@ -89,7 +87,7 @@ public static class IndexTypeMethods
 
     public static IIndexSymbolConverter[] GetAllConverters()
     {
-        List<IIndexSymbolConverter> converters = new List<IIndexSymbolConverter>();
+        List<IIndexSymbolConverter> converters = [];
         foreach (IndexType type in Enum.GetValues(typeof(IndexType)))
             converters.Add(type.GetSymbolConverter());
         return converters.ToArray();

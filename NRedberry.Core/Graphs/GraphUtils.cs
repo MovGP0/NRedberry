@@ -131,16 +131,10 @@ public static class GraphUtils
         return -1;
     }
 
-    private sealed class BreadthFirstPointer
+    private sealed class BreadthFirstPointer(int node, int edgePointer)
     {
-        public int Vertex { get; }
-        public int EdgePointer { get; set; }
-
-        public BreadthFirstPointer(int node, int edgePointer)
-        {
-            Vertex = node;
-            EdgePointer = edgePointer;
-        }
+        public int Vertex { get; } = node;
+        public int EdgePointer { get; set; } = edgePointer;
     }
 
     public static int ComponentSize(int vertex, int[] components)

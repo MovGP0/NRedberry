@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NRedberry.Core.Exceptions;
 using NRedberry.Core.Indices;
 
 namespace NRedberry.Contexts;
@@ -14,9 +15,9 @@ public sealed class IndexConverterManager
         HashSet<byte> types = new HashSet<byte>(converters.Length);
         foreach (IIndexSymbolConverter converter in converters)
         {
-            if (types.Contains(converter.GetType_()))
+            if (types.Contains(converter.Type))
                 throw new ArgumentException("Several converters for same type.");
-            types.Add(converter.GetType_());
+            types.Add(converter.Type);
         }
         this.converters = converters;
     }
@@ -28,7 +29,7 @@ public sealed class IndexConverterManager
         try
         {
             foreach (IIndexSymbolConverter converter in converters)
-                if (converter.GetType_() == typeId)
+                if (converter.Type == typeId)
                 {
                     return converter.GetSymbol(number, outputFormat);
                 }
@@ -46,7 +47,7 @@ public sealed class IndexConverterManager
         {
             foreach (IIndexSymbolConverter converter in converters)
                 if (converter.ApplicableToSymbol(index))
-                    return (converter.GetCode(index) & 0xFFFF) | ((converter.GetType_() & 0x7F) << 24);
+                    return (converter.GetCode(index) & 0xFFFF) | ((converter.Type & 0x7F) << 24);
             throw new ArgumentException("No available converters for such symbol : " + index);
         }
         catch (IndexConverterException e)

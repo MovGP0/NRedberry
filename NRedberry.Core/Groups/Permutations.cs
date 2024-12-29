@@ -358,7 +358,7 @@ public static partial class Permutations
         }
         return inverse;
     }
-    
+
     public static int InternalDegree(int[] permutation)
     {
         int i;
@@ -384,6 +384,30 @@ public static partial class Permutations
             if (permutation[i] != i)
                 break;
         return (sbyte)(i + 1);
+    }
+
+    /// <summary>
+    /// Calculates common <i>degree</i> of specified permutations,
+    /// i.e. larges point moved by specified permutations plus one.
+    /// </summary>
+    /// <param name="permutations">permutations</param>
+    /// <returns>larges point moved by specified permutations plus one</returns>
+    public static int InternalDegree<T>(List<T> permutations)
+        where T: Permutation
+    {
+        return permutations.Select(p => p.Degree()).Prepend(0).Max();
+    }
+
+    /// <summary>
+    /// Calculates common <i>degree</i> of specified permutations,
+    /// i.e. larges point moved by specified permutations plus one.
+    /// </summary>
+    /// <param name="permutations">permutations</param>
+    /// <returns>larges point moved by specified permutations plus one</returns>
+    public static int InternalDegree<T>(IReadOnlyCollection<T> permutations)
+        where T: Permutation
+    {
+        return permutations.Select(p => p.Degree()).Prepend(0).Max();
     }
 
     public static int Parity(int[] permutation)

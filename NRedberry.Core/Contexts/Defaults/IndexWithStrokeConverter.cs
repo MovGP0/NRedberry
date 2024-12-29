@@ -16,7 +16,7 @@ public sealed class IndexWithStrokeConverter : IIndexSymbolConverter
 
     public IndexWithStrokeConverter(IIndexSymbolConverter converter, byte numberOfStrokes)
     {
-        if (numberOfStrokes + converter.GetType_() > byte.MaxValue)
+        if (numberOfStrokes + converter.Type > byte.MaxValue)
         {
             throw new ArgumentException("Too many strokes.");
         }
@@ -58,13 +58,7 @@ public sealed class IndexWithStrokeConverter : IIndexSymbolConverter
         return converter.GetCode(GetBase(symbol));
     }
 
-    public int MaxNumberOfSymbols()
-    {
-        return converter.MaxNumberOfSymbols();
-    }
+    public int MaxNumberOfSymbols => converter.MaxNumberOfSymbols;
 
-    public byte GetType_()
-    {
-        return (byte) (IndexTypeMethods.AlphabetsCount + (numberOfStrokes * converter.GetType_()));
-    }
+    public byte Type => (byte) (IndexTypeMethods.AlphabetsCount + (numberOfStrokes * converter.Type));
 }

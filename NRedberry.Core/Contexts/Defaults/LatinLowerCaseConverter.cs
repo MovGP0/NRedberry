@@ -1,4 +1,6 @@
-﻿namespace NRedberry.Contexts.Defaults;
+﻿using NRedberry.Core.Exceptions;
+
+namespace NRedberry.Contexts.Defaults;
 
 /// <summary>
 /// <see cref="IIndexSymbolConverter"/> for latin lower case letters.
@@ -6,7 +8,6 @@
 /// <remarks>https://github.com/redberry-cas/core/blob/master/src/main/java/cc/redberry/core/context/defaults/LatinLowerCaseConverter.java</remarks>
 public sealed class LatinLowerCaseConverter : IIndexSymbolConverter
 {
-    public static readonly byte Type = 0;
     public static readonly LatinLowerCaseConverter Instance = new();
 
     private LatinLowerCaseConverter()
@@ -37,13 +38,10 @@ public sealed class LatinLowerCaseConverter : IIndexSymbolConverter
         return ((char) number).ToString();
     }
 
-    public byte GetType_()
-    {
-        return Type;
-    }
+    /// <summary>
+    /// Always returns 0.
+    /// </summary>
+    public byte Type => 0;
 
-    public int MaxNumberOfSymbols()
-    {
-        return 25;
-    }
+    public int MaxNumberOfSymbols => 25;
 }

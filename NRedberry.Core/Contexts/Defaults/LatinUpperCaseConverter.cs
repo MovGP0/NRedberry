@@ -1,4 +1,6 @@
-﻿namespace NRedberry.Contexts.Defaults;
+﻿using NRedberry.Core.Exceptions;
+
+namespace NRedberry.Contexts.Defaults;
 
 /// <summary>
 /// <see cref="IIndexSymbolConverter"/> for latin upper case letters.
@@ -6,7 +8,6 @@
 /// <remarks>https://github.com/redberry-cas/core/blob/master/src/main/java/cc/redberry/core/context/defaults/LatinUpperCaseConverter.java</remarks>
 public sealed class LatinUpperCaseConverter : IIndexSymbolConverter
 {
-    public static readonly byte Type = 1;
     public static readonly LatinUpperCaseConverter Instance = new();
 
     private LatinUpperCaseConverter()
@@ -34,6 +35,10 @@ public sealed class LatinUpperCaseConverter : IIndexSymbolConverter
         return ((char) number).ToString();
     }
 
-    public byte GetType_() => Type;
-    public int MaxNumberOfSymbols() => 25;
+    /// <summary>
+    /// Always returns 1.
+    /// </summary>
+    public byte Type => 1;
+
+    public int MaxNumberOfSymbols => 25;
 }

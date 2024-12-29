@@ -1,69 +1,72 @@
-﻿namespace NRedberry;
+﻿using System.Runtime.CompilerServices;
 
+namespace NRedberry;
+
+/// <summary>
+/// Defines formats of string representation of expressions in Redberry.
+/// </summary>
 public struct OutputFormat : IEquatable<OutputFormat>
 {
     /// <summary>
-    /// This format specifies expressions to be outputted in the LaTeX notation. The produces strings
-    /// can be simply putted in some LaTeX math environments and compiled via LaTeX compiler.
+    /// This format specifies expressions to be outputted in the LaTeX notation. 
+    /// The produced strings can be simply put in some LaTeX math environments and compiled via LaTeX compiler.
     /// </summary>
-    public static OutputFormat LaTeX { get; } = new(0, "^", "_");
+    public static readonly OutputFormat LaTeX = new(0, "^", "_");
 
     /// <summary>
-    /// This format specifies greek letters to be printed as is (if stdout supports utf-8 characters).
-    /// In other aspects it is similar to {@link OutputFormat#Redberry}
+    /// This format specifies Greek letters to be printed as is (if stdout supports UTF-8 characters).
+    /// In other aspects, it is similar to <see cref="Redberry"/>.
     /// </summary>
-    public static OutputFormat UTF8 { get; } = new(1, "^", "_");
+    public static readonly OutputFormat UTF8 = new(1, "^", "_");
 
     /// <summary>
-    /// This format specifies expressions to be outputted in the Redberry input notation. Produced strings
-    /// can be parsed in Redberry.
+    /// This format specifies expressions to be outputted in the Redberry input notation.
+    /// Produced strings can be parsed in Redberry.
     /// </summary>
-    public static OutputFormat Redberry { get; } = new(2, "^", "_");
+    public static readonly OutputFormat Redberry = new(2, "^", "_");
 
     /// <summary>
-    /// This format specifies expressions to be outputted in the Redberry input notation. Produced strings
-    /// can be parsed in Redberry.
+    /// This format specifies expressions to be outputted in the Cadabra input notation.
     /// </summary>
-    public static OutputFormat Cadabra { get; } = new(3, "^", "_");
+    public static readonly OutputFormat Cadabra = new(3, "^", "_");
 
     /// <summary>
     /// This format specifies expressions to be outputted in the Wolfram Mathematica input notation.
     /// </summary>
-    public static OutputFormat WolframMathematica { get; } = new(4, "", "-");
+    public static readonly OutputFormat WolframMathematica = new(4, "", "-");
 
     /// <summary>
     /// This format specifies expressions to be outputted in the Maplesoft Maple input notation.
     /// </summary>
-    public static OutputFormat Maple { get; } = new(5, "~", "");
+    public static readonly OutputFormat Maple = new(5, "~", "");
 
     /// <summary>
-    /// This format will not print explicit indices of matrices. E.g. if A and B are matrices, that it will
-    /// produce A*B instead of A^i'_j'*B^j'_k'.
+    /// This format will not print explicit indices of matrices.
+    /// E.g., it produces A*B instead of A^i'_j'*B^j'_k'.
     /// </summary>
-    public static OutputFormat SimpleRedberry { get; } = new(6, "^", "_", false);
+    public static readonly OutputFormat SimpleRedberry = new(6, "^", "_", false);
 
     /// <summary>
-    /// Format used to export expressions for C/C++
+    /// Format used to export expressions for C/C++.
     /// </summary>
-    public static OutputFormat C { get; } = new(7, "^", "_");
+    public static readonly OutputFormat C = new(7, "^", "_");
 
     /// <summary>
     /// Unique identifier.
     /// </summary>
     public int Id { get; }
-
     /// <summary>
-    /// Prefix, which specifies upper index (e.g. '^' in LaTeX)
+    /// Prefix, which specifies the upper index (e.g., '^' in LaTeX).
     /// </summary>
     public string UpperIndexPrefix { get; }
 
     /// <summary>
-    /// Prefix, which specifies lower index (e.g. '_' in LaTeX)
+    /// Prefix, which specifies the lower index (e.g., '_' in LaTeX).
     /// </summary>
     public string LowerIndexPrefix { get; }
 
     /// <summary>
-    /// Specifies whether print matrix indices or not.
+    /// Specifies whether to print matrix indices or not.
     /// </summary>
     public bool PrintMatrixIndices { get; }
 
@@ -81,13 +84,37 @@ public struct OutputFormat : IEquatable<OutputFormat>
     }
 
     /// <summary>
+    /// Returns an output format that will not print matrix indices.
+    /// </summary>
+    /// <returns>Output format that will not print matrix indices.</returns>
+    public OutputFormat DoNotPrintMatrixIndices()
+    {
+        return PrintMatrixIndices ? new OutputFormat(this, false) : this;
+    }
+
+    /// <summary>
+    /// Returns an output format that will always print matrix indices.
+    /// </summary>
+    /// <returns>Output format that will always print matrix indices.</returns>
+    public OutputFormat PrintMatrixIndicesAlways()
+    {
+        return PrintMatrixIndices ? this : new OutputFormat(this, true);
+    }
+
+    /// <summary>
     /// Returns whether this and oth defines same format.
     /// </summary>
     /// <param name="other">other format</param>
     /// <returns>whether this and oth defines same format</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Is(OutputFormat other)
         => Id == other.Id;
 
+    /// <summary>
+    /// Returns the appropriate prefix based on the integer state.
+    /// </summary>
+    /// <param name="intState">Integer state (0 - lower, 1 - upper).</param>
+    /// <returns>Prefix.</returns>
     public string GetPrefixFromIntState(int intState)
     {
         return intState switch
@@ -98,12 +125,17 @@ public struct OutputFormat : IEquatable<OutputFormat>
         };
     }
 
+    /// <summary>
+    /// Returns the appropriate prefix based on the raw integer state.
+    /// </summary>
+    /// <param name="rawIntState">Raw integer state (0 - lower, <see cref="int.MaxValue"/> - upper).</param>
+    /// <returns>Prefix.</returns>
     public string GetPrefixFromRawIntState(int rawIntState)
     {
         return rawIntState switch
         {
             0 => LowerIndexPrefix,
-            unchecked((int)0x80000000) => UpperIndexPrefix,
+            int.MaxValue => UpperIndexPrefix,
             _ => throw new ArgumentException("Not a state int")
         };
     }

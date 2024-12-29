@@ -339,19 +339,19 @@ public static partial class ArraysUtils
 
     public static void Fill(IntArrayList list, int fromIndex, int toIndex, int value)
     {
-        if (toIndex >= list.Size)
+        if (toIndex >= list.Count)
             throw new IndexOutOfRangeException();
         Array.Fill(list.Data, value, fromIndex, toIndex - fromIndex);
     }
 
     public static void Fill(IntArrayList list, int value)
     {
-        Fill(list, 0, list.Size, value);
+        Fill(list, 0, list.Count, value);
     }
 
     public static int BinarySearch(IntArrayList list, int key)
     {
-        return Array.BinarySearch(list.Data, 0, list.Size, key);
+        return Array.BinarySearch(list.Data, 0, list.Count, key);
     }
 
     public static int BinarySearch(IntArray array, int key)

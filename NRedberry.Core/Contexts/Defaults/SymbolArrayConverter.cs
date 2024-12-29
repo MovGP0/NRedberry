@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using NRedberry.Core.Exceptions;
 
 namespace NRedberry.Contexts.Defaults;
 
@@ -54,6 +55,6 @@ public abstract class SymbolArrayConverter : IIndexSymbolConverter
         }
     }
 
-    public int MaxNumberOfSymbols() => Symbols.Length - 1;
-    public abstract byte GetType_();
+    public int MaxNumberOfSymbols => Symbols.Length - 1;
+    public abstract byte Type { get; }
 }
