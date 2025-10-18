@@ -10,10 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Rationals" Version="2.1.0" />
-    <PackageReference Include="Roslynator.Analyzers" Version="4.3.0" />
-    <PackageReference Include="Roslynator.CSharp" Version="4.3.0" />
-    <PackageReference Include="IKVM" Version="8.7.3" />
+    <PackageReference Include="Rationals" />
+    <PackageReference Include="Roslynator.Analyzers" />
+    <PackageReference Include="Roslynator.CSharp" />
+    <PackageReference Include="IKVM" />
   </ItemGroup>
 
   <ItemGroup>
