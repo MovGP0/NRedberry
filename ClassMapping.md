@@ -159,7 +159,8 @@ This document lists each NRedberry class (.cs) alongside the Redberry source (.j
 | ./NRedberry.Core/Numbers/NumberUtils.cs | ./core/src/main/java/cc/redberry/core/number/NumberUtils.java |  |
 | ./NRedberry.Core/Numbers/Numeric.cs | ./core/src/main/java/cc/redberry/core/number/Numeric.java |  |
 | ./NRedberry.Core/Parsers/ContextSettingsExtensions.cs | (no matching Java source) | C# extension returning default parser; Java accessed static field directly. |
-| ./NRedberry.Core/Parsers/ITokenParser.cs | ./core/src/main/java/cc/redberry/core/number/parser/TokenParser.java, ./core/src/main/java/cc/redberry/core/parser/TokenParser.java |  |
+| ./NRedberry.Core/Parsers/ITokenParser.cs | ./core/src/main/java/cc/redberry/core/parser/TokenParser.java |  |
+| ./NRedberry.Core/Numbers/Parser/INumberTokenParser.cs | ./core/src/main/java/cc/redberry/core/number/parser/TokenParser.java | Skeleton pending full port. |
 | ./NRedberry.Core/Parsers/Parser.cs | ./core/src/main/java/cc/redberry/core/parser/Parser.java |  |
 | ./NRedberry.Core/Parsers/ParserException.cs | ./core/src/main/java/cc/redberry/core/parser/ParserException.java |  |
 | ./NRedberry.Core/Parsers/ParseToken.cs | ./core/src/main/java/cc/redberry/core/parser/ParseToken.java |  |
@@ -276,76 +277,82 @@ This document lists each NRedberry class (.cs) alongside the Redberry source (.j
 | ./NRedberry.Core/Transformations/Symmetrization/Transformer.cs | ./core/src/main/java/cc/redberry/core/transformations/Transformer.java |  |
 | ./NRedberry.Core/Transformations/Transformation.cs | ./core/src/main/java/cc/redberry/core/transformations/Transformation.java |  |
 | ./NRedberry.Core/Utils/TensorHashCalculator.cs | ./core/src/main/java/cc/redberry/core/tensor/playground/GraphStructure.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/context/ToString.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/indexmapping/DummyIndexMappingProvider.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/indexmapping/IndexMappingBuffer.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/indexmapping/IndexMappingBufferRecord.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/indexmapping/IndexMappingProvider.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/indexmapping/IndexMappingProviderAbstract.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/indexmapping/IndexMappingProviderAbstractFT.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/indexmapping/IndexMappingProviderFactory.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/indexmapping/MappingsPort.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/indexmapping/MappingsPortRemovingContracted.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/indexmapping/MinusIndexMappingProvider.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/indexmapping/MinusIndexMappingProviderWrapper.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/indexmapping/PlusMinusIndexMappingProvider.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/indexmapping/ProviderComplex.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/indexmapping/ProviderFunctions.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/indexmapping/ProviderPower.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/indexmapping/SimpleProductMappingsPort.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/indices/ShortArrayFactory.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/number/parser/BracketToken.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/number/parser/BracketsError.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/number/parser/ComplexToken.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/number/parser/NumberParser.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/number/parser/OperatorToken.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/number/parser/RealToken.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/BracketsError.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/NodeParserComparator.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParseTokenDerivative.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParseTokenExpression.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParseTokenNumber.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParseTokenScalarFunction.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParseTokenSimpleTensor.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParseTokenTensorField.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParseUtils.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParserBrackets.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParserDerivative.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParserExpression.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParserFunctions.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParserIndices.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParserNumber.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParserOperator.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParserPower.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParserProduct.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParserSimpleTensor.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParserSum.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/ParserTensorField.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/parser/preprocessor/ChangeIndicesTypesAndTensorNames.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/solver/ReducedSystem.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/solver/frobenius/DummySolutionProvider.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/solver/frobenius/FbUtils.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/solver/frobenius/FinalSolutionProvider.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/solver/frobenius/SingleSolutionProvider.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/solver/frobenius/SolutionProvider.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/solver/frobenius/SolutionProviderAbstract.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/solver/frobenius/TotalSolutionProvider.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/tensor/Expression.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/tensor/ExpressionBuilder.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/tensor/ExpressionFactory.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/tensor/FastTensors.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/tensor/PowersContainer.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/tensor/ScalarsBackedProductBuilder.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/tensor/SumBuilderSplitingScalars.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/tensor/iterator/DummyPayload.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/tensor/iterator/FromParentToChildIterator.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/tensor/iterator/Payload.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/tensor/iterator/PayloadFactory.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/tensor/iterator/StackPosition.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/tensor/iterator/TreeTraverseIterator.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/tensor/playground/ContentData.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/tensor/playground/GraphStructureHashed.java |  |
-| (no match) | ./core/src/main/java/cc/redberry/core/tensor/playground/IAlgorithm.java |  |
+| ./NRedberry.Core/Contexts/IOutputFormattable.cs | ./core/src/main/java/cc/redberry/core/context/ToString.java |  |
+| ./NRedberry.Core/IndexMapping/DummyIndexMappingProvider.cs | ./core/src/main/java/cc/redberry/core/indexmapping/DummyIndexMappingProvider.java | Skeleton pending full port. |
+| ./NRedberry.Core/IndexMapping/IIndexMappingBuffer.cs | ./core/src/main/java/cc/redberry/core/indexmapping/IndexMappingBuffer.java | Skeleton pending full port. |
+| ./NRedberry.Core/IndexMapping/IndexMappingBufferRecord.cs | ./core/src/main/java/cc/redberry/core/indexmapping/IndexMappingBufferRecord.java | Skeleton pending full port. |
+| ./NRedberry.Core/IndexMapping/IIndexMappingProvider.cs | ./core/src/main/java/cc/redberry/core/indexmapping/IndexMappingProvider.java | Skeleton pending full port. |
+| ./NRedberry.Core/IndexMapping/IndexMappingProviderAbstract.cs | ./core/src/main/java/cc/redberry/core/indexmapping/IndexMappingProviderAbstract.java | Skeleton pending full port. |
+| ./NRedberry.Core/IndexMapping/IndexMappingProviderAbstractFT.cs | ./core/src/main/java/cc/redberry/core/indexmapping/IndexMappingProviderAbstractFT.java | Skeleton pending full port. |
+| ./NRedberry.Core/IndexMapping/IIndexMappingProviderFactory.cs | ./core/src/main/java/cc/redberry/core/indexmapping/IndexMappingProviderFactory.java | Skeleton pending full port. |
+| ./NRedberry.Core/IndexMapping/MappingsPort.cs | ./core/src/main/java/cc/redberry/core/indexmapping/MappingsPort.java | Skeleton pending full port. |
+| ./NRedberry.Core/IndexMapping/MappingsPortRemovingContracted.cs | ./core/src/main/java/cc/redberry/core/indexmapping/MappingsPortRemovingContracted.java | Skeleton pending full port. |
+| ./NRedberry.Core/IndexMapping/MinusIndexMappingProvider.cs | ./core/src/main/java/cc/redberry/core/indexmapping/MinusIndexMappingProvider.java | Skeleton pending full port. |
+| ./NRedberry.Core/IndexMapping/MinusIndexMappingProviderWrapper.cs | ./core/src/main/java/cc/redberry/core/indexmapping/MinusIndexMappingProviderWrapper.java | Skeleton pending full port. |
+| ./NRedberry.Core/IndexMapping/PlusMinusIndexMappingProvider.cs | ./core/src/main/java/cc/redberry/core/indexmapping/PlusMinusIndexMappingProvider.java | Skeleton pending full port. |
+| ./NRedberry.Core/IndexMapping/ProviderComplex.cs | ./core/src/main/java/cc/redberry/core/indexmapping/ProviderComplex.java | Skeleton pending full port. |
+| ./NRedberry.Core/IndexMapping/ProviderFunctions.cs | ./core/src/main/java/cc/redberry/core/indexmapping/ProviderFunctions.java | Skeleton pending full port. |
+| ./NRedberry.Core/IndexMapping/ProviderPower.cs | ./core/src/main/java/cc/redberry/core/indexmapping/ProviderPower.java | Skeleton pending full port. |
+| ./NRedberry.Core/IndexMapping/SimpleProductMappingsPort.cs | ./core/src/main/java/cc/redberry/core/indexmapping/SimpleProductMappingsPort.java | Skeleton pending full port. |
+| ./NRedberry.Core/Indices/ShortArrayFactory.cs | ./core/src/main/java/cc/redberry/core/indices/ShortArrayFactory.java | Skeleton pending full port. |
+| ./NRedberry.Core/Numbers/Parser/BracketToken.cs | ./core/src/main/java/cc/redberry/core/number/parser/BracketToken.java | Skeleton pending full port. |
+| ./NRedberry.Core/Numbers/Parser/BracketsError.cs | ./core/src/main/java/cc/redberry/core/number/parser/BracketsError.java | Skeleton pending full port. |
+| ./NRedberry.Core/Numbers/Parser/ComplexToken.cs | ./core/src/main/java/cc/redberry/core/number/parser/ComplexToken.java | Skeleton pending full port. |
+| ./NRedberry.Core/Numbers/Parser/NumberParser.cs | ./core/src/main/java/cc/redberry/core/number/parser/NumberParser.java | Skeleton pending full port. |
+| ./NRedberry.Core/Numbers/Parser/OperatorToken.cs | ./core/src/main/java/cc/redberry/core/number/parser/OperatorToken.java | Skeleton pending full port. |
+| ./NRedberry.Core/Numbers/Parser/RealToken.cs | ./core/src/main/java/cc/redberry/core/number/parser/RealToken.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/BracketsError.cs | ./core/src/main/java/cc/redberry/core/parser/BracketsError.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/NodeParserComparator.cs | ./core/src/main/java/cc/redberry/core/parser/NodeParserComparator.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParseTokenDerivative.cs | ./core/src/main/java/cc/redberry/core/parser/ParseTokenDerivative.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParseTokenExpression.cs | ./core/src/main/java/cc/redberry/core/parser/ParseTokenExpression.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParseTokenNumber.cs | ./core/src/main/java/cc/redberry/core/parser/ParseTokenNumber.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParseTokenScalarFunction.cs | ./core/src/main/java/cc/redberry/core/parser/ParseTokenScalarFunction.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParseTokenSimpleTensor.cs | ./core/src/main/java/cc/redberry/core/parser/ParseTokenSimpleTensor.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParseTokenTensorField.cs | ./core/src/main/java/cc/redberry/core/parser/ParseTokenTensorField.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParseUtils.cs | ./core/src/main/java/cc/redberry/core/parser/ParseUtils.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParserBrackets.cs | ./core/src/main/java/cc/redberry/core/parser/ParserBrackets.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParserDerivative.cs | ./core/src/main/java/cc/redberry/core/parser/ParserDerivative.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParserExpression.cs | ./core/src/main/java/cc/redberry/core/parser/ParserExpression.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParserFunctions.cs | ./core/src/main/java/cc/redberry/core/parser/ParserFunctions.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParserIndices.cs | ./core/src/main/java/cc/redberry/core/parser/ParserIndices.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParserNumber.cs | ./core/src/main/java/cc/redberry/core/parser/ParserNumber.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParserOperator.cs | ./core/src/main/java/cc/redberry/core/parser/ParserOperator.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParserPower.cs | ./core/src/main/java/cc/redberry/core/parser/ParserPower.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParserProduct.cs | ./core/src/main/java/cc/redberry/core/parser/ParserProduct.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParserSimpleTensor.cs | ./core/src/main/java/cc/redberry/core/parser/ParserSimpleTensor.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParserSum.cs | ./core/src/main/java/cc/redberry/core/parser/ParserSum.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/ParserTensorField.cs | ./core/src/main/java/cc/redberry/core/parser/ParserTensorField.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/Preprocessor/ChangeIndicesTypesAndTensorNames.cs | ./core/src/main/java/cc/redberry/core/parser/preprocessor/ChangeIndicesTypesAndTensorNames.java | Skeleton pending full port. |
+| ./NRedberry.Core/Parsers/Preprocessor/TypesAndNamesTransformer.cs | ./core/src/main/java/cc/redberry/core/parser/preprocessor/TypesAndNamesTransformer.java | Skeleton pending full port. |
+| ./NRedberry.Core/Solver/ExternalSolver.cs | ./core/src/main/java/cc/redberry/core/solver/ExternalSolver.java | Skeleton pending full port. |
+| ./NRedberry.Core/Solver/InverseTensor.cs | ./core/src/main/java/cc/redberry/core/solver/InverseTensor.java | Skeleton pending full port. |
+| ./NRedberry.Core/Solver/ReducedSystem.cs | ./core/src/main/java/cc/redberry/core/solver/ReducedSystem.java | Skeleton pending full port. |
+| ./NRedberry.Core/Solver/ReduceEngine.cs | ./core/src/main/java/cc/redberry/core/solver/ReduceEngine.java | Skeleton pending full port. |
+| ./NRedberry.Core/Solver/Frobenius/DummySolutionProvider.cs | ./core/src/main/java/cc/redberry/core/solver/frobenius/DummySolutionProvider.java | Skeleton pending full port. |
+| ./NRedberry.Core/Solver/Frobenius/FbUtils.cs | ./core/src/main/java/cc/redberry/core/solver/frobenius/FbUtils.java | Skeleton pending full port. |
+| ./NRedberry.Core/Solver/Frobenius/FinalSolutionProvider.cs | ./core/src/main/java/cc/redberry/core/solver/frobenius/FinalSolutionProvider.java | Skeleton pending full port. |
+| ./NRedberry.Core/Solver/Frobenius/FrobeniusNumber.cs | ./core/src/main/java/cc/redberry/core/solver/frobenius/FrobeniusNumber.java | Skeleton pending full port. |
+| ./NRedberry.Core/Solver/Frobenius/FrobeniusSolver.cs | ./core/src/main/java/cc/redberry/core/solver/frobenius/FrobeniusSolver.java | Skeleton pending full port. |
+| ./NRedberry.Core/Solver/Frobenius/SingleSolutionProvider.cs | ./core/src/main/java/cc/redberry/core/solver/frobenius/SingleSolutionProvider.java | Skeleton pending full port. |
+| ./NRedberry.Core/Solver/Frobenius/SolutionProvider.cs | ./core/src/main/java/cc/redberry/core/solver/frobenius/SolutionProvider.java | Skeleton pending full port. |
+| ./NRedberry.Core/Solver/Frobenius/SolutionProviderAbstract.cs | ./core/src/main/java/cc/redberry/core/solver/frobenius/SolutionProviderAbstract.java | Skeleton pending full port. |
+| ./NRedberry.Core/Solver/Frobenius/TotalSolutionProvider.cs | ./core/src/main/java/cc/redberry/core/solver/frobenius/TotalSolutionProvider.java | Skeleton pending full port. |
+| ./NRedberry.Core/Tensors/Expression.cs | ./core/src/main/java/cc/redberry/core/tensor/Expression.java | Skeleton pending full port. |
+| ./NRedberry.Core/Tensors/ExpressionBuilder.cs | ./core/src/main/java/cc/redberry/core/tensor/ExpressionBuilder.java | Skeleton pending full port. |
+| ./NRedberry.Core/Tensors/ExpressionFactory.cs | ./core/src/main/java/cc/redberry/core/tensor/ExpressionFactory.java | Skeleton pending full port. |
+| ./NRedberry.Core/Tensors/FastTensors.cs | ./core/src/main/java/cc/redberry/core/tensor/FastTensors.java | Skeleton pending full port. |
+| ./NRedberry.Core/Tensors/PowersContainer.cs | ./core/src/main/java/cc/redberry/core/tensor/PowersContainer.java | Skeleton pending full port. |
+| ./NRedberry.Core/Tensors/ScalarsBackedProductBuilder.cs | ./core/src/main/java/cc/redberry/core/tensor/ScalarsBackedProductBuilder.java | Skeleton pending full port. |
+| ./NRedberry.Core/Tensors/SumBuilderSplitingScalars.cs | ./core/src/main/java/cc/redberry/core/tensor/SumBuilderSplitingScalars.java | Skeleton pending full port. |
+| ./NRedberry.Core/Tensors/Iterators/DummyPayload.cs | ./core/src/main/java/cc/redberry/core/tensor/iterator/DummyPayload.java | Skeleton pending full port. |
+| ./NRedberry.Core/Tensors/Iterators/FromParentToChildIterator.cs | ./core/src/main/java/cc/redberry/core/tensor/iterator/FromParentToChildIterator.java | Skeleton pending full port. |
+| ./NRedberry.Core/Tensors/Iterators/Payload.cs | ./core/src/main/java/cc/redberry/core/tensor/iterator/Payload.java | Skeleton pending full port. |
+| ./NRedberry.Core/Tensors/Iterators/PayloadFactory.cs | ./core/src/main/java/cc/redberry/core/tensor/iterator/PayloadFactory.java | Skeleton pending full port. |
+| ./NRedberry.Core/Tensors/Iterators/StackPosition.cs | ./core/src/main/java/cc/redberry/core/tensor/iterator/StackPosition.java | Skeleton pending full port. |
+| ./NRedberry.Core/Tensors/Iterators/TreeTraverseIterator.cs | ./core/src/main/java/cc/redberry/core/tensor/iterator/TreeTraverseIterator.java | Skeleton pending full port. |
+| ./NRedberry.Core/Tensors/Playground/ContentData.cs | ./core/src/main/java/cc/redberry/core/tensor/playground/ContentData.java | Skeleton pending full port. |
+| ./NRedberry.Core/Tensors/Playground/GraphStructureHashed.cs | ./core/src/main/java/cc/redberry/core/tensor/playground/GraphStructureHashed.java | Skeleton pending full port. |
+| ./NRedberry.Core/Tensors/Playground/IAlgorithm.cs | ./core/src/main/java/cc/redberry/core/tensor/playground/IAlgorithm.java | Skeleton pending full port. |
 | (no match) | ./core/src/main/java/cc/redberry/core/transformations/ApplyDiracDeltasTransformation.java |  |
 | (no match) | ./core/src/main/java/cc/redberry/core/transformations/TransformationToStringAble.java |  |
 | (no match) | ./core/src/main/java/cc/redberry/core/transformations/abbreviations/AbbreviationsBuilder.java |  |

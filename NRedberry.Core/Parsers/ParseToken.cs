@@ -5,7 +5,7 @@ using NRedberry.Core.Tensors;
 
 namespace NRedberry.Core.Parsers;
 
-public sealed class ParseToken
+public class ParseToken
 {
     public TokenType TokenType { get; }
     public ParseToken[] Content { get; }
@@ -26,7 +26,7 @@ public sealed class ParseToken
         Parent = parent;
     }
 
-    public Indices.Indices GetIndices()
+    public virtual Indices.Indices GetIndices()
     {
         throw new NotImplementedException();
     }
@@ -41,7 +41,7 @@ public sealed class ParseToken
         throw new NotImplementedException();
     }
 
-    public Tensor ToTensor()
+    public virtual Tensor ToTensor()
     {
         switch (TokenType)
         {
