@@ -26,3 +26,72 @@
 - Follow the existing history’s concise, present-tense summaries (e.g., `migrating to slnx format`, `porting functions and utils`, `updating NuGet packages`). Limit to 120 characters, adding detail in the body if required.
 - Each PR should describe the ported feature or fix, list any deviations from upstream behaviour, and link related issues. Include screenshots or sample expressions when the change affects symbolic output.
 - Document validation steps (`dotnet test`, benchmarks, manual algebra checks) in the PR checklist so reviewers can reproduce results quickly.
+
+# Java to C# Transformation Guide
+
+This note captures the patterns we follow when porting Redberry Java sources in `./redberry` into their C# counterparts under `./NRedberry`. Examples come from already mapped files such as `core/src/main/java/cc/redberry/core/tensor/Tensor.java`, `core/src/main/java/cc/redberry/core/indices/IndexType.java`, and their ports `NRedberry.Core/Tensors/Tensor.cs`, `NRedberry.Core.Entities/IndexType.cs`, `NRedberry.Core/Indices/IndexType.cs`.
+
+## Structure, Namespaces, and Casing
+- Java packages (`package cc.redberry.core.tensor;`) become file-scoped namespaces (`namespace NRedberry.Core.Tensors;`), with PascalCase segments that mirror the target project layout.
+- `import` and `import static` statements translate into `using` (and `using static`) directives grouped at the top of the file before the namespace, e.g. `using NRedberry.Contexts;` in `NRedberry.Core/Tensors/Tensor.cs`.
+- Types, methods, and properties adopt C# casing rules (PascalCase for public members, camelCase locals) and Allman braces. Compare method declarations in `core/src/main/java/cc/redberry/core/tensor/Tensor.java` and `NRedberry.Core/Tensors/Tensor.cs`.
+- Nested classes and helper types that live in separate `.java` files are often reorganized into partial classes or static helper classes when that yields clearer .NET idioms (see `NRedberry.Core/Indices/IndexType.cs` versus the larger Java enum that bundled behaviour).
+
+## Enumerations
+- Java enums can store fields, constructors, and methods. C# enums are value-only, so behavioural logic is moved to companion types.
+  - Example: `core/src/main/java/cc/redberry/core/indices/IndexType.java` embedded converter logic directly inside the enum. The C# port splits responsibilities between the plain enum (`NRedberry.Core.Entities/IndexType.cs`) and a static helper (`NRedberry.Core/Indices/IndexTypeMethods.cs`) containing extension methods, lookup tables, and cached converters.
+- When the Java enum exposed instance members (`getSymbolConverter()`, `getShortString()`), we surface equivalent functionality as extension methods or static helpers (`GetSymbolConverter`, `GetShortString`) so call sites remain fluent.
+- Stored state such as the Java `shortString` field is represented as dictionary maps (`CommonNames` in `IndexTypeMethods`) to preserve lookups without extending the enum definition.
+
+## Properties vs. Getter/Setter Methods
+- Java `getX()`/`setX(T value)` methods are mapped to C# properties with `get;`/`set;` accessors. The property name drops the `get`/`set` prefix and uses PascalCase:
+  - `Tensor.getIndices()` → `public override Indices.Indices Indices { get; }` (`NRedberry.Core/Tensors/Tensor.cs`).
+  - `SimpleTensor.getName()` → `public int Name { get; }` (`NRedberry.Core/Tensors/SimpleTensor.cs`).
+- When the Java class supplied only a setter or getter, we create a read-only (`{ get; }`) or write-only (rare) property as appropriate. Backing validation logic from `setX(...)` becomes guard clauses inside the property setter or constructor.
+- Fluent `setProperty(T value)` patterns often change to immutable constructors or builder methods because C# favours immutable types for thread safety—note how `SimpleTensor` checks for `null` in its constructor instead of deferring to `setIndices`.
+
+## Documentation Comments
+- JavaDoc `/** ... */` blocks convert into XML documentation comments with triple slashes. Tags map as:
+  - `@return` → `<returns>`
+  - `@see` → `<seealso>`
+  - `{@link Type}` or `{@code}` → `<see cref="Type"/>` or `<c>literal</c>`, respectively.
+- Example: the XML `<summary>` and `<seealso>` in `NRedberry.Core/Tensors/SimpleTensor.cs` replace the JavaDoc above `SimpleTensor.getName()`. (Some legacy block comments remain and should be converted during future clean up.)
+- Multi-line license headers are omitted when the top-level solution already tracks licensing, unless a direct copy is legally required. Internal comments remain `//` and are tightened to explain non-obvious logic only.
+
+## Iteration and Enumerables
+- Java’s `implements Iterable<T>` and `Iterator<T> iterator()` map to `IEnumerable<T>` plus `GetEnumerator()` in C#. Non-generic iteration uses the explicit interface implementation required by .NET (see `NRedberry.Core/Tensors/Tensor.cs`).
+- `for` loops remain familiar, but enhanced-for loops are often rewritten with LINQ helpers or standard `foreach`. When Java relied on `Iterator.remove()`, we refactor to collection copies or builder patterns because .NET enumerators are read-only.
+
+## Exception and Null Handling
+- Java’s `NullPointerException` and `IndexOutOfBoundsException` become `ArgumentNullException`/`ArgumentOutOfRangeException`/`IndexOutOfRangeException` as appropriate (`Tensor.set` → `Tensor.Set` in `NRedberry.Core/Tensors/Tensor.cs`).
+- Assertions enforced with `Objects.requireNonNull` or `Preconditions.checkArgument` convert into guard clauses using standard .NET exceptions.
+- Checked exceptions are removed; callers rely on documentation and tests because C# lacks checked exception signatures.
+
+## Collections and Generics
+- Java collections (`List`, `EnumSet`, `Iterator`) translate to `List<T>`, `HashSet<T>`, or specific structures from `System.Collections.Generic`. When Java used specialized Redberry iterators, C# ports may introduce helper classes or yield iterators (`yield return`) to match idiomatic enumeration (see `SimpleTensor.GetEnumerator()`).
+- Java array cloning (`array.clone()`) becomes `Array.Copy`, `Span`, or new array allocations with loops, depending on performance needs.
+
+## Formatting and Bracing Conventions
+- Every type and method uses Allman-style braces even inside record-like constructs. File-scoped namespaces reduce indentation relative to Java’s outer braces.
+- Expression-bodied members (`=>`) appear for simple getters to keep code succinct while honoring the 4-space indentation guideline.
+- `var` is reserved for obvious anonymous types; otherwise we keep explicit types to mirror Java’s clarity (see `Tensor.Set` for explicit `var size` only when the inferred type is evident).
+
+## Additional Observed Conventions
+- Static utility access moves through dedicated context types: Java’s `Context.get()` is mirrored by `Context.Get()` in C# with PascalCase static methods (`NRedberry.Core/Tensors/Tensor.cs`).
+- Where Java code relied on method overloading with raw types, we surface clearer signatures or nullable annotations (`TensorFactory? GetFactory()`).
+- Java inner classes that act as builders or factories become separate public or internal C# types in the same namespace (`SimpleTensorBuilder`, `SimpleTensorFactory`) and frequently live in distinct files to satisfy .NET file-per-type expectations.
+- Analyzers expect explicit nullable annotations: return types that may be absent are marked with `?`, and we introduce `ArgumentNullException` checks early to keep flow analyzers satisfied.
+
+## Checklist for Future Ports
+1. Update namespaces, using directives, and casing immediately after copying Java logic.
+2. Replace getters/setters with properties and align constructor validation to guard inputs.
+3. Convert JavaDoc to XML doc comments; remove lingering `/** */` blocks.
+4. Refactor enums with behaviour into enums plus companion static classes or extension methods.
+5. Revisit iteration and collections to leverage `IEnumerable<T>` and C# iterators.
+6. Audit exception types to match .NET expectations and nullability annotations.
+
+## Class mappings
+
+- Note all type mappings from the original java file to the cs file in the `ClassMapping.md` file, such that code ports are traceable to their original source file.
+- When porting java types to C#, first create the empty *.cs file with a skeleton implementation, throwing `NotImplementedException` and using inline comment block to reflect the original source code that is to be ported.
+- The port of the business logic should only be started, when the solution is building with the skeleton code.
