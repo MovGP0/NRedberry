@@ -16,7 +16,6 @@
     <PackageReference Include="Roslynator.CSharp" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
-    <DotNetCliToolReference Include="dotnet-xunit" />
   </ItemGroup>
 
   <ItemGroup>
