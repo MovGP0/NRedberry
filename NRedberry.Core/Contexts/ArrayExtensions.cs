@@ -1,5 +1,3 @@
-using System;
-
 namespace NRedberry.Contexts;
 
 public static class ArrayExtensions

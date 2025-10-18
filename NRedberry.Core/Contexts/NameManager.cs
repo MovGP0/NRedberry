@@ -1,11 +1,7 @@
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Threading;
 using NRedberry.Core.Indices;
 using NRedberry.Core.Parsers;
 using NRedberry.Core.Tensors;
-using NRedberry.Core.Utils;
 
 namespace NRedberry.Contexts;
 
@@ -24,12 +20,12 @@ public sealed class NameManager
     private Random random;
     private readonly ReaderWriterLockSlim readWriteLock = new ReaderWriterLockSlim();
     private readonly ConcurrentDictionary<int, NameDescriptor> fromId = new ConcurrentDictionary<int, NameDescriptor>();
-    private readonly HashSet<string> stringNames = new HashSet<string>();
+    private readonly HashSet<string> stringNames = [];
     private readonly StringGenerator stringGenerator = new StringGenerator();
     private readonly Dictionary<NameAndStructureOfIndices, NameDescriptor> fromStructure = new Dictionary<NameAndStructureOfIndices, NameDescriptor>();
-    private readonly string[] kroneckerAndMetricNames = { "d", "g" };
+    private readonly string[] kroneckerAndMetricNames = ["d", "g"];
     private volatile string diracDeltaName = "DiracDelta";
-    private readonly List<int> kroneckerAndMetricIds = new List<int>();
+    private readonly List<int> kroneckerAndMetricIds = [];
 
     public NameManager(long? seed, string kronecker, string metric)
     {
@@ -288,7 +284,7 @@ public sealed class NameManager
                 name = stringGenerator.NextString();
             } while (stringNames.Contains(name));
             stringNames.Add(name);
-            var nd = new NameDescriptorForSimpleTensor(name, new StructureOfIndices[] { StructureOfIndices.Empty }, newNameId);
+            var nd = new NameDescriptorForSimpleTensor(name, [StructureOfIndices.Empty], newNameId);
             readWriteLock.ExitReadLock();
             rLocked = false;
             readWriteLock.EnterWriteLock();

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
 using NRedberry.Core.Tensors;
 using NRedberry.Core.Tensors.Iterators;
 
@@ -55,7 +52,7 @@ public sealed class SymbolsGenerator : IEnumerator<SimpleTensor>
     {
         CheckName(name);
         Name = name;
-        UsedNames = new string[0];
+        UsedNames = [];
     }
 
     private static void CheckName(string name)

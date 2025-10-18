@@ -1,4 +1,3 @@
-using System;
 using NRedberry.Core.Concurrent;
 
 namespace NRedberry.Core.Solver.Frobenius;

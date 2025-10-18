@@ -1,7 +1,3 @@
-using System;
-using NRedberry.Core.Indices;
-using NRedberry.Core.Tensors;
-
 namespace NRedberry.Core.Tensors.Playground;
 
 /*
@@ -11,7 +7,7 @@ namespace NRedberry.Core.Tensors.Playground;
 public sealed class GraphStructure
 {
     public static GraphStructure EmptyFullContractionsStructure { get; } =
-        new GraphStructure(Array.Empty<long>(), Array.Empty<long[]>(), Array.Empty<int>(), 0);
+        new GraphStructure([], [], [], 0);
 
     public GraphStructure(long[] freeContractions, long[][] contractions, int[] components, int componentCount)
     {

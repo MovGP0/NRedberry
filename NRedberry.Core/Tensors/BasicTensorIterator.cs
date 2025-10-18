@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace NRedberry.Core.Tensors;
 
 public sealed class BasicTensorIterator : IEnumerator<Tensor>

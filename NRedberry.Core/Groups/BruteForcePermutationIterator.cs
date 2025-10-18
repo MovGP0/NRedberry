@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
 using NRedberry.Core.Combinatorics;
 
 namespace NRedberry.Core.Groups;
@@ -106,7 +103,7 @@ public sealed class BruteForcePermutationIterator : IEnumerator<Permutation>
         lowerIndex = 0;
         upperLayer = set.ToList();
         lowerLayer = nextLayer;
-        nextLayer = new List<Permutation>();
+        nextLayer = [];
     }
 
     private Permutation? TryPair(Permutation p0, Permutation p1)

@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-using System.Linq;
 using NRedberry.Core.Parsers;
 using NRedberry.Core.Tensors;
-using NRedberry.Core.Transformations;
+using NRedberry.Core.Transformations.Symmetrization;
 
 namespace NRedberry.Contexts;
 

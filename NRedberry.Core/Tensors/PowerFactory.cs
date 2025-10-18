@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using NRedberry.Core.Numbers;
+﻿using NRedberry.Core.Numbers;
 
 namespace NRedberry.Core.Tensors;
 

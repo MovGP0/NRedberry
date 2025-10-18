@@ -82,7 +82,7 @@ public sealed class IntDistinctTuplesPort : IIntCombinatorialPort
     {
         if (state == 1)
         {
-            return Array.Empty<int>();
+            return [];
         }
 
         if (state == unchecked((byte)-1))
@@ -111,7 +111,7 @@ public sealed class IntDistinctTuplesPort : IIntCombinatorialPort
                 if (i == 0)
                 {
                     state = 1;
-                    return Array.Empty<int>();
+                    return [];
                 }
 
                 combination[i] = 0;

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NRedberry.Core.Tensors;
+﻿namespace NRedberry.Core.Tensors;
 
 public sealed class SimpleTensorBuilder : TensorBuilder
 {

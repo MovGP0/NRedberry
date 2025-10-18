@@ -1,5 +1,3 @@
-using NRedberry.Core.Tensors;
-
 namespace NRedberry.Core.Tensors.Iterators;
 
 /*

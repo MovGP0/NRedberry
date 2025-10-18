@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace NRedberry.Core.Utils;
+﻿namespace NRedberry.Core.Utils;
 
 public static class Arrays
 {

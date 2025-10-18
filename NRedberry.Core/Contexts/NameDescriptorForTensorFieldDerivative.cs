@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Text;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Groups;
@@ -28,7 +25,7 @@ internal sealed class NameDescriptorForTensorFieldDerivative : NameDescriptorFor
 
     public override NameAndStructureOfIndices[] GetKeys()
     {
-        return new NameAndStructureOfIndices[0];
+        return [];
     }
 
     public override string GetName(SimpleIndices? indices, OutputFormat format)

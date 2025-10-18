@@ -17,7 +17,7 @@ public static class TensorExtensions
 
     public static Tensor Multiply(this Tensor left, Tensor right)
     {
-        return Multiply(new []{ left, right });
+        return Multiply([left, right]);
     }
 
     public static Tensor Sum(params Tensor[] summands)

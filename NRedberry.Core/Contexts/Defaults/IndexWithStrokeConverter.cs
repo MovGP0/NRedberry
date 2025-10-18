@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using NRedberry.Core.Indices;
 
 namespace NRedberry.Contexts.Defaults;

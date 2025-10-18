@@ -1,5 +1,3 @@
-using System;
-
 namespace NRedberry.Core.Numbers.Parser;
 
 /*

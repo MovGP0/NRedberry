@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using NRedberry.Core.Combinatorics;
+﻿using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
 
 namespace NRedberry.Core.Groups;

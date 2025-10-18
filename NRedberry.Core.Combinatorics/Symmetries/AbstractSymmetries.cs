@@ -28,7 +28,7 @@ namespace NRedberry.Core.Combinatorics.Symmetries
         public bool IsEmpty => Basis.Count == 0;
         public abstract bool Add(Symmetry symmetry);
         public abstract bool AddUnsafe(Symmetry symmetry);
-        public List<Symmetry> BasisSymmetries =>  new(Basis);
+        public List<Symmetry> BasisSymmetries => [..Basis];
         public abstract IEnumerator<Symmetry> GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }

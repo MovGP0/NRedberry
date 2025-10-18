@@ -1,5 +1,4 @@
-﻿using System;
-using NRedberry.Core.Indices;
+﻿using NRedberry.Core.Indices;
 using NRedberry.Core.Utils;
 
 namespace NRedberry.Core.Tensors;

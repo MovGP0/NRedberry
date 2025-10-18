@@ -1,6 +1,3 @@
-using System;
-using NRedberry.Core.Tensors;
-
 namespace NRedberry.Core.Tensors.Playground;
 
 /*
@@ -10,7 +7,7 @@ namespace NRedberry.Core.Tensors.Playground;
 public sealed class ContentData
 {
     public static ContentData EmptyInstance { get; } =
-        new ContentData(GraphStructureHashed.EmptyInstance, null, Array.Empty<Tensor>(), Array.Empty<short>(), Array.Empty<int>());
+        new ContentData(GraphStructureHashed.EmptyInstance, null, [], [], []);
 
     public ContentData(GraphStructureHashed structureOfContractionsHashed,
                        GraphStructure? structureOfContractions,

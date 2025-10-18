@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Collections.Immutable;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Combinatorics.Symmetries;
@@ -294,7 +292,7 @@ public class IndicesSymmetries : IEnumerable<Symmetry>
     public static readonly IndicesSymmetries EmptySymmetries = new(
         new StructureOfIndices(EmptySimpleIndices.emptySimpleIndicesInstance),
         SymmetriesFactory.CreateSymmetries(0),
-        new short[0]);
+        []);
 
     public override int GetHashCode()
     {

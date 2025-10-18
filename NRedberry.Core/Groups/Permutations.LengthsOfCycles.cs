@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace NRedberry.Core.Groups;
 
 public static partial class Permutations

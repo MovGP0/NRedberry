@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NRedberry.Contexts;
+﻿namespace NRedberry.Contexts;
 
 public interface IContextListener : IObserver<ContextEvent>
 {

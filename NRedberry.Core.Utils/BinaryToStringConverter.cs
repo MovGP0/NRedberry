@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NRedberry.Core.Utils;
+﻿namespace NRedberry.Core.Utils;
 
 public sealed class BinaryToStringConverter : IToStringConverter<int>
 {

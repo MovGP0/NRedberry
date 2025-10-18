@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace NRedberry.Core.Maths;
+﻿namespace NRedberry.Core.Maths;
 
 public static class MathUtils
 {

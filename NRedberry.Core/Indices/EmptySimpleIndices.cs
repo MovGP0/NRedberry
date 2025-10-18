@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NRedberry.Core.Indices;
+﻿namespace NRedberry.Core.Indices;
 
 sealed class EmptySimpleIndices : EmptyIndices, SimpleIndices
 {

@@ -3,7 +3,7 @@ using NRedberry.Core.Tensors.Iterators;
 
 namespace NRedberry.Core.Transformations.Symmetrization;
 
-public class Transformer : Transformation
+public class Transformer : ITransformation
 {
     private readonly TraverseState state;
     private readonly ITransformation[] transformations;
@@ -24,16 +24,18 @@ public class Transformer : Transformation
     public Tensor Transform(Tensor t)
     {
         var iterator = new TreeTraverseIterator(t, guide);
-        TraverseState currentState;
-        Tensor currentTensor, newTensor;
+        TraverseState? currentState;
         while ((currentState = iterator.Next()) != null)
         {
             if (currentState != state)
                 continue;
-            currentTensor = newTensor = iterator.Current();
+
+            Tensor newTensor;
+            var currentTensor = newTensor = iterator.Current();
 
             foreach (ITransformation transformation in transformations)
                 newTensor = transformation.Transform(newTensor);
+
             if (currentTensor != newTensor)
                 iterator.Set(newTensor);
         }

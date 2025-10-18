@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using NRedberry.Core.Utils;
 
 namespace NRedberry.Core.Indices;
@@ -98,6 +96,6 @@ public class EmptyIndices : Indices
 
     public short[] GetDiffIds()
     {
-        return new short[0];
+        return [];
     }
 }

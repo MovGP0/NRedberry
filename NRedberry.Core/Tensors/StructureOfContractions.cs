@@ -1,11 +1,10 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace NRedberry.Core.Tensors;
 
 public sealed class StructureOfContractions
 {
-    public static readonly StructureOfContractions EmptyFullContractionsStructure = new(new int[0][]);
+    public static readonly StructureOfContractions EmptyFullContractionsStructure = new([]);
     public readonly int[][] contractions;
     public readonly int[] components;
     public readonly int componentCount;

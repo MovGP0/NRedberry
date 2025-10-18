@@ -1,29 +1,49 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
 using NRedberry.Core.Tensors;
 
 namespace NRedberry.Core.Transformations.Symmetrization;
 
-public sealed class TransformationCollection : Transformation
+/// <summary>
+/// Skeleton port of cc.redberry.core.transformations.TransformationCollection.
+/// </summary>
+public sealed class TransformationCollection : TransformationToStringAble, IEnumerable<ITransformation>
 {
-    private readonly Transformation[] _transformations;
+    private readonly ITransformation[] transformations = null!;
 
-    public TransformationCollection(IEnumerable<Transformation> transformations)
-        => _transformations = transformations.ToArray();
-
-    public TransformationCollection(params Transformation[] transformations)
-        => _transformations = (Transformation[])transformations.Clone();
-
-    public Tensor Transform(Tensor t)
+    public TransformationCollection(IEnumerable<ITransformation> transformations)
     {
-        foreach (Transformation tr in _transformations)
-        {
-            t = tr.Transform(t);
-        }
-        return t;
+        throw new NotImplementedException();
     }
 
-    public List<Transformation> GetTransformations() => new(_transformations);
+    public TransformationCollection(params ITransformation[] transformations)
+    {
+        throw new NotImplementedException();
+    }
 
-    public override string ToString() => string.Join<Transformation>("\n", _transformations);
+    public Tensor Transform(Tensor tensor)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IReadOnlyList<ITransformation> GetTransformations()
+    {
+        throw new NotImplementedException();
+    }
+
+    public string ToString(OutputFormat outputFormat)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override string ToString()
+    {
+        throw new NotImplementedException();
+    }
+
+    public IEnumerator<ITransformation> GetEnumerator()
+    {
+        throw new NotImplementedException();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

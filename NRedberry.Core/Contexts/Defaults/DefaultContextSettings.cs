@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NRedberry.Contexts.Defaults;
+﻿namespace NRedberry.Contexts.Defaults;
 
 /// <summary>
 /// The default Redberry context settings.

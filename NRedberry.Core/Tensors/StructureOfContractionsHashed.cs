@@ -2,7 +2,7 @@
 
 public sealed class StructureOfContractionsHashed
 {
-    public static StructureOfContractionsHashed EmptyInstance = new(new TensorContraction(-1, new long[0]));
+    public static StructureOfContractionsHashed EmptyInstance = new(new TensorContraction(-1, []));
 
     public TensorContraction FreeContraction { get; }
     private TensorContraction[] Contractions { get; }

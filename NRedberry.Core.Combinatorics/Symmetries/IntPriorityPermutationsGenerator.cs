@@ -3,9 +3,9 @@ namespace NRedberry.Core.Combinatorics.Symmetries;
 public sealed class IntPriorityPermutationsGenerator : IIntCombinatorialPort
 {
     private readonly IntPermutationsGenerator generator;
-    private readonly List<PermutationPriorityTuple> tuples = new();
-    private readonly HashSet<PermutationPriorityTuple> set = new();
-    private int[] last = Array.Empty<int>();
+    private readonly List<PermutationPriorityTuple> tuples = [];
+    private readonly HashSet<PermutationPriorityTuple> set = [];
+    private int[] last = [];
     private int lastTuplePointer;
 
     public IntPriorityPermutationsGenerator(int dimension)
@@ -27,7 +27,7 @@ public sealed class IntPriorityPermutationsGenerator : IIntCombinatorialPort
             {
                 if (!generator.MoveNext())
                 {
-                    return Array.Empty<int>();
+                    return [];
                 }
 
                 next = generator.Current;
@@ -64,7 +64,7 @@ public sealed class IntPriorityPermutationsGenerator : IIntCombinatorialPort
     {
         generator.Reset();
         lastTuplePointer = 0;
-        last = Array.Empty<int>();
+        last = [];
     }
 
     public int[] GetReference() => tuples[lastTuplePointer - 1].Permutation;

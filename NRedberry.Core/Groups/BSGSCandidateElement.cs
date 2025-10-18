@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
 
@@ -20,7 +18,7 @@ public sealed class BSGSCandidateElement : BSGSElement
         int basePoint,
         List<Permutation> stabilizerGenerators,
         int schreierVectorCapacity)
-        : base(basePoint, stabilizerGenerators, new SchreierVector(schreierVectorCapacity), new IntArrayList())
+        : base(basePoint, stabilizerGenerators, new SchreierVector(schreierVectorCapacity), [])
     {
         OrbitList.Add(basePoint);
         RecalculateOrbitAndSchreierVector();
@@ -86,7 +84,7 @@ public sealed class BSGSCandidateElement : BSGSElement
 
     public override BSGSElement AsBSGSElement()
     {
-        return new BSGSElement(BasePoint, StabilizerGenerators.ToImmutableArray(), SchreierVector, OrbitList.Clone());
+        return new BSGSElement(BasePoint, [..StabilizerGenerators], SchreierVector, OrbitList.Clone());
     }
 
     public override BSGSCandidateElement AsBSGSCandidateElement()

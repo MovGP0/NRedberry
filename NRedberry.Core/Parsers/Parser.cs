@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace NRedberry.Core.Parsers;
+﻿namespace NRedberry.Core.Parsers;
 
 /// <summary>
 /// Parser of mathematical expressions.

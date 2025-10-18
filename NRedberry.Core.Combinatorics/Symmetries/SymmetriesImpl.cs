@@ -7,7 +7,7 @@ namespace NRedberry.Core.Combinatorics.Symmetries;
 /// </summary>
 public class SymmetriesImpl : AbstractSymmetries
 {
-    public SymmetriesImpl(int dimension) : base(dimension, new List<Symmetry>())
+    public SymmetriesImpl(int dimension) : base(dimension, [])
     {
         Basis.Add(new Symmetry(dimension));
     }
@@ -59,12 +59,12 @@ public class SymmetriesImpl : AbstractSymmetries
 
     public List<Symmetry> GetBasisSymmetries()
     {
-        return new List<Symmetry>(Basis); // Return a new list to preserve encapsulation
+        return [..Basis]; // Return a new list to preserve encapsulation
     }
 
     public override Symmetries Clone()
     {
-        return new SymmetriesImpl(Dimension(), new List<Symmetry>(Basis));
+        return new SymmetriesImpl(Dimension(), [..Basis]);
     }
 
     public override string ToString()

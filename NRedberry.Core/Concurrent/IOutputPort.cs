@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NRedberry.Core.Concurrent;
+﻿namespace NRedberry.Core.Concurrent;
 
 /// <summary>
 /// Interface for passive objects provider.

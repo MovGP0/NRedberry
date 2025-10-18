@@ -4,7 +4,7 @@ namespace NRedberry.Core.Utils;
 
 public sealed class IntArray : IEnumerable<int>
 {
-    public static readonly IntArray EmptyArray = new(new int[0]);
+    public static readonly IntArray EmptyArray = new([]);
     public readonly int[] InnerArray;
 
     /// <summary>

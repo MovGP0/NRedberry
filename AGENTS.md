@@ -95,3 +95,16 @@ This note captures the patterns we follow when porting Redberry Java sources in 
 - Note all type mappings from the original java file to the cs file in the `ClassMapping.md` file, such that code ports are traceable to their original source file.
 - When porting java types to C#, first create the empty *.cs file with a skeleton implementation, throwing `NotImplementedException` and using inline comment block to reflect the original source code that is to be ported.
 - The port of the business logic should only be started, when the solution is building with the skeleton code.
+
+## Class mapping process
+- Check the ClassMapping.md file.
+- find a file that marked with 'Skeleton pending full port'
+- check the original *.java file; paths are relative to the D:/GitHub/redberry/ folder
+- check the ported *.cs file; paths are relative to the D:/GitHub/NRedberry/ folder
+- implement the skeleton of all the methods and properties of the type; the methods should throw NotImplementedException();
+- Update the ClassMapping.md file with 'Skeleton pending method port' in the Notes column.
+- Continue with the next class until finished
+
+## Important Notes
+- Do not try to port multiple files at once; implement one file at a time
+- Always try to execute a build after every file; fix the build errors

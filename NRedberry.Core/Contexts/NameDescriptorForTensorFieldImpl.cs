@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using NRedberry.Core.Indices;
+﻿using NRedberry.Core.Indices;
 
 namespace NRedberry.Contexts;
 

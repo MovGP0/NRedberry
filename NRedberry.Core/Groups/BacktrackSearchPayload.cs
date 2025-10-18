@@ -1,5 +1,4 @@
-﻿using System;
-using NRedberry.Core.Combinatorics;
+﻿using NRedberry.Core.Combinatorics;
 
 namespace NRedberry.Core.Groups;
 

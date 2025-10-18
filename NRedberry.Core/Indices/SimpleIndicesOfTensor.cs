@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NRedberry.Core.Indices;
+﻿namespace NRedberry.Core.Indices;
 
 public sealed class SimpleIndicesOfTensor : SimpleIndicesAbstract
 {
@@ -9,12 +7,12 @@ public sealed class SimpleIndicesOfTensor : SimpleIndicesAbstract
     {
     }
 
-    public SimpleIndicesOfTensor(bool notResort, int[] data, IndicesSymmetries symmetries)
+    public SimpleIndicesOfTensor(bool notResort, int[] data, IndicesSymmetries? symmetries)
         : base(notResort, data, symmetries)
     {
     }
 
-    public SimpleIndices Create(int[] data, IndicesSymmetries symmetries)
+    protected override SimpleIndices Create(int[] data, IndicesSymmetries? symmetries)
     {
         return new SimpleIndicesOfTensor(true, data, symmetries);
     }

@@ -240,13 +240,13 @@ public static partial class ArraysUtils
     public static int[] AddAll(params int[][] arrays)
     {
         if (arrays.Length == 0)
-            return new int[0];
+            return [];
         int length = 0;
         foreach (int[] array in arrays)
             length += array.Length;
 
         if (length == 0)
-            return new int[0];
+            return [];
 
         int[] r = new int[length];
         int pointer = 0;

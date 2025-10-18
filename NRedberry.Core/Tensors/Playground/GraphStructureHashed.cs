@@ -1,5 +1,3 @@
-using System;
-
 namespace NRedberry.Core.Tensors.Playground;
 
 /*
@@ -9,7 +7,7 @@ namespace NRedberry.Core.Tensors.Playground;
 public sealed class GraphStructureHashed
 {
     public static GraphStructureHashed EmptyInstance { get; } =
-        new GraphStructureHashed(Array.Empty<short>(), Array.Empty<long>(), Array.Empty<long[]>());
+        new GraphStructureHashed([], [], []);
 
     public GraphStructureHashed(short[] stretchIndices, long[] freeContraction, long[][] contractions)
     {

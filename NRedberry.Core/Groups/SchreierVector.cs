@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NRedberry.Core.Groups;
+﻿namespace NRedberry.Core.Groups;
 
 public sealed class SchreierVector : ICloneable
 {

@@ -1,4 +1,3 @@
-using System;
 using NRedberry.Core.Tensors;
 
 namespace NRedberry.Core.Solver;

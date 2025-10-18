@@ -1,7 +1,4 @@
-using System;
-using NRedberry.Contexts;
-using NRedberry.Core.Indices;
-using NRedberry.Core.Transformations;
+using NRedberry.Core.Transformations.Symmetrization;
 
 namespace NRedberry.Core.Tensors;
 

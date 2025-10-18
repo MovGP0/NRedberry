@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using NRedberry.Core.Indices;
+﻿using System.Diagnostics;
 using NRedberry.Core.Tensors;
 
 namespace NRedberry.Core.Parsers;

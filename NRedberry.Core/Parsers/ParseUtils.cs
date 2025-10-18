@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using NRedberry.Core.Indices;
 using NRedberry.Core.Tensors;
 
 namespace NRedberry.Core.Parsers;

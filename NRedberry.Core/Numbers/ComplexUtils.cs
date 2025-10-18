@@ -1,5 +1,4 @@
-﻿using System;
-using Complex32 = System.Numerics.Complex;
+﻿using Complex32 = System.Numerics.Complex;
 
 namespace NRedberry.Core.Numbers;
 

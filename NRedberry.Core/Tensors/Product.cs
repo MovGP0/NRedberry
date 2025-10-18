@@ -1,5 +1,4 @@
-﻿using System;
-using NRedberry.Core.Indices;
+﻿using NRedberry.Core.Indices;
 using NRedberry.Core.Utils;
 using Complex = NRedberry.Core.Numbers.Complex;
 

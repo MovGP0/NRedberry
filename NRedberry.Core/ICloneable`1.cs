@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NRedberry.Core;
+﻿namespace NRedberry.Core;
 
 public interface ICloneable<out T> : ICloneable
 {

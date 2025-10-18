@@ -6,15 +6,17 @@
         public IEnumerator<Permutation> iterator;
         private List<Permutation> upperLayer;
         private List<Permutation?> lowerLayer;
-        private List<Permutation> nextLayer = new();
+        private List<Permutation> nextLayer = [];
         private bool forward;
         private int upperIndex, lowerIndex;
 
         public PermutationsSpanIterator(List<T> permutations)
         {
-            set = new SortedSet<Permutation>();
-            upperLayer = new List<Permutation>();
-            upperLayer.Add(permutations[0].GetOne());
+            set = [];
+            upperLayer =
+            [
+                permutations[0].GetOne()
+            ];
             lowerLayer = permutations.Cast<Permutation?>().ToList();
         }
 
@@ -60,7 +62,7 @@
             lowerIndex = 0;
             upperLayer = new List<Permutation>(set);
             lowerLayer = nextLayer;
-            nextLayer = new List<Permutation>();
+            nextLayer = [];
         }
 
         private Permutation? TryPair(Permutation? p0, Permutation? p1)

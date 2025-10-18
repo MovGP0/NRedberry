@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using NRedberry.Contexts;
+﻿using NRedberry.Contexts;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Maths;
-using NRedberry.Core.Tensors;
 using CC = NRedberry.Core.Tensors.CC;
 
 namespace NRedberry.Core.Indices;
@@ -333,7 +329,7 @@ public sealed class IndicesUtils
             (freeIndices1, freeIndices2) = (freeIndices2, freeIndices1);
         }
 
-        List<int> contracted = new List<int>();
+        List<int> contracted = [];
         for (int i = 0; i < freeIndices1.Length; ++i)
         for (int j = 0; j < freeIndices2.Length; ++j)
             if (freeIndices2[j] == InverseIndexState(freeIndices1[i]))
@@ -344,10 +340,10 @@ public sealed class IndicesUtils
     public static int[] GetIntersections(Indices u, Indices v)
     {
         if (u.Size() == 0 || v.Size() == 0)
-            return new int[0];
+            return [];
         Indices freeU = u.GetFree(), freeV = v.GetFree();
         if (freeU.Size() == 0 || freeV.Size() == 0)
-            return new int[0];
+            return [];
         return GetIntersections(((AbstractIndices)freeU).Data, ((AbstractIndices)freeV).Data);
     }
 }

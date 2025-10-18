@@ -6,11 +6,11 @@
 public class FullSymmetries : DummySymmetries
 {
     public FullSymmetries(int dimension)
-        : base(dimension, new List<Symmetry> {
+        : base(dimension, [
             new(dimension),
             new(Combinatorics.CreateTransposition(dimension), false),
             new(Combinatorics.CreateCycle(dimension), false)
-        })
+        ])
     {
     }
 

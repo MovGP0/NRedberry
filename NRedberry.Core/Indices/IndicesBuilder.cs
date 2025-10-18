@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
 using NRedberry.Core.Tensors;
 
 namespace NRedberry.Core.Indices;
@@ -10,9 +7,9 @@ public sealed class IndicesBuilder : IEnumerable<int>, ICloneable<IndicesBuilder
 {
     private readonly List<int> data;
 
-    public IndicesBuilder() => data = new List<int>();
+    public IndicesBuilder() => data = [];
     private IndicesBuilder(List<int> data) => this.data = data;
-    private IndicesBuilder(params int[] data) => this.data = new List<int>(data);
+    private IndicesBuilder(params int[] data) => this.data = [..data];
     public IndicesBuilder(int capacity) => data = new List<int>(capacity);
 
     public IndicesBuilder Append(int index)

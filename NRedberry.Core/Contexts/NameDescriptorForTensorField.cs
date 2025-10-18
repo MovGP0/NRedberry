@@ -1,6 +1,4 @@
-﻿using System;
-using NRedberry.Core.Indices;
-using System.Linq;
+﻿using NRedberry.Core.Indices;
 
 namespace NRedberry.Contexts;
 
@@ -42,7 +40,7 @@ public abstract class NameDescriptorForTensorField : NameDescriptor
         if (!IsDerivative())
         {
             int[][] ret = new int[IndexTypeStructures.Length][];
-            Array.Fill(ret, new int[0], 1, ret.Length - 1);
+            Array.Fill(ret, [], 1, ret.Length - 1);
             ret[0] = Enumerable.Range(0, IndexTypeStructures[0].Size).ToArray();
             _indicesPartitionMapping = ret;
         }

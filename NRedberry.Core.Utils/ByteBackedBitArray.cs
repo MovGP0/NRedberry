@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NRedberry.Core.Utils;
+﻿namespace NRedberry.Core.Utils;
 
 [Obsolete("use System.Collections.BitArray instead")]
 public sealed class ByteBackedBitArray : IBitArray, IEquatable<ByteBackedBitArray>

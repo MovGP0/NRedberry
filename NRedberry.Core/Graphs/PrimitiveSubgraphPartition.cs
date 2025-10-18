@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using NRedberry.Core.Indices;
 using NRedberry.Core.Tensors;
@@ -32,7 +31,7 @@ public sealed class PrimitiveSubgraphPartition
 
     private PrimitiveSubgraph[] CalculatePartition()
     {
-        List<PrimitiveSubgraph> subgraphs = new List<PrimitiveSubgraph>();
+        List<PrimitiveSubgraph> subgraphs = [];
         for (int pivot = 0; pivot < size; ++pivot)
         {
             if (pc[pivot].Indices.Size(type) != 0 && !used.Get(pivot))
@@ -58,7 +57,7 @@ public sealed class PrimitiveSubgraphPartition
 
         if (left[0] == left[1] && left[0] == pivot) {
             used.Set(pivot, true);
-            return new PrimitiveSubgraph(GraphType.Cycle, new int[]{pivot});
+            return new PrimitiveSubgraph(GraphType.Cycle, [pivot]);
         }
 
         long leftPivot, rightPivot, lastLeftPivot = NOT_INITIALIZED, lastRightPivot = NOT_INITIALIZED;
@@ -134,7 +133,7 @@ public sealed class PrimitiveSubgraphPartition
     }
 
     private const int BRANCHING = -3, NO_LINKS = -2, NOT_INITIALIZED = -4, DUMMY_PIVOT = -5;
-    private static readonly int[] DUMMY = new int[] { DUMMY_PIVOT, DUMMY_PIVOT };
+    private static readonly int[] DUMMY = [DUMMY_PIVOT, DUMMY_PIVOT];
 
     private int[] GetLinks(int pivot)
     {
@@ -143,7 +142,7 @@ public sealed class PrimitiveSubgraphPartition
 
         Debug.Assert(pivot >= 0);
 
-        int[] links = new int[] { NOT_INITIALIZED, NOT_INITIALIZED };
+        int[] links = [NOT_INITIALIZED, NOT_INITIALIZED];
         int[] contractions = fcs.contractions[pivot];
         Indices.Indices indices = pc[pivot].Indices;
         int index, toTensorIndex;
@@ -174,8 +173,10 @@ public sealed class PrimitiveSubgraphPartition
 
     private PrimitiveSubgraph ProcessGraph(int pivot)
     {
-        List<int> positions = new List<int>();
-        positions.Add(pivot);
+        List<int> positions =
+        [
+            pivot
+        ];
 
         Stack<int> stack = new Stack<int>();
         stack.Push(pivot);

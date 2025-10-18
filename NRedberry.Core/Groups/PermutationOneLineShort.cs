@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
+﻿using System.Numerics;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
 
@@ -150,7 +147,7 @@ public class PermutationOneLineShort : Permutation
     public List<T> Permute<T>(List<T> set)
     {
         if (_isIdentity)
-            return new List<T>(set);
+            return [..set];
         List<T> list = new List<T>(set.Count);
         for (int i = 0; i < set.Count; ++i)
             list.Add(set[NewIndexOf(i)]);

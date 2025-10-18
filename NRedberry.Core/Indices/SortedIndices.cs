@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace NRedberry.Core.Indices;
+﻿namespace NRedberry.Core.Indices;
 
 public class SortedIndices : AbstractIndices
 {
@@ -50,7 +46,7 @@ public class SortedIndices : AbstractIndices
 
     public override Indices GetFree()
     {
-        List<int> list = new List<int>();
+        List<int> list = [];
         int u, l;
         int iLower = firstLower, iUpper = 0;
         for (; iUpper < firstLower && iLower < Data.Length; ++iLower, ++iUpper)

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NRedberry.Core.Tensors.Functions;
+﻿namespace NRedberry.Core.Tensors.Functions;
 
 public abstract class ScalarFunctionFactory : TensorFactory
 {

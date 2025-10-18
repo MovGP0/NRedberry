@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Linq;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
 

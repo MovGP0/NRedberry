@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NRedberry.Core.Tensors.Iterators;
+﻿namespace NRedberry.Core.Tensors.Iterators;
 
 public sealed class FromChildToParentIterator : TreeIteratorAbstract
 {
@@ -65,7 +63,7 @@ public sealed class TreeTraverseIterator
 
     public int Depth { get; set; }
 
-    public TraverseState Next()
+    public TraverseState? Next()
     {
         throw new NotImplementedException();
     }

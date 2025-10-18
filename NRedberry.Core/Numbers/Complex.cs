@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using NRedberry.Apache.Commons.Math;
 using NRedberry.Core.Indices;
 using NRedberry.Core.Tensors;

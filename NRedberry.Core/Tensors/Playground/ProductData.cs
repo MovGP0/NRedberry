@@ -1,6 +1,3 @@
-using NRedberry.Core.Indices;
-using NRedberry.Core.Tensors;
-
 namespace NRedberry.Core.Tensors.Playground;
 
 /*

@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using NRedberry.Core.Parsers;
 
 namespace NRedberry.Contexts;
@@ -23,7 +21,7 @@ public sealed class ContextSettings
         MetricName = metricName;
     }
 
-    public HashSet<IndexType> MetricTypes { get; } = new();
+    public HashSet<IndexType> MetricTypes { get; } = [];
 
     public void RemoveMetricIndexType(IndexType type)
     {

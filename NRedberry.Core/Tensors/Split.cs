@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using NRedberry.Core.Indices;
 using NRedberry.Core.Numbers;
 using NotImplementedException = sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -73,7 +71,7 @@ public class Split
                 }
                 else
                 {
-                    summand = new Product(product.Factor, product.IndexlessData, new Tensor[0], ProductContent.EmptyInstance, IndicesFactory.EmptyIndices);
+                    summand = new Product(product.Factor, product.IndexlessData, [], ProductContent.EmptyInstance, IndicesFactory.EmptyIndices);
                 }
             }
             else if (dataLength == 1 && product.IndexlessData.Length == 0 && product.Factor == Complex.One)

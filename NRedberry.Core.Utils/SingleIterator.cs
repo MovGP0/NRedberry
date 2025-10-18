@@ -1,47 +1,48 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 
-namespace NRedberry.Core.Utils
+namespace NRedberry.Core.Utils;
+
+[Obsolete("Consider using Enumerable.Return(element) instead.")]
+public sealed class SingleIterator<T> : IEnumerator<T>
 {
-    public class SingleIterator<T> : IEnumerator<T>
+    private readonly T _element;
+    private bool _ended;
+
+    public SingleIterator(T element)
     {
-        private T element;
-        private bool ended = false;
+        _element = element;
+    }
 
-        public SingleIterator(T element)
+    public T Current
+    {
+        get
         {
-            this.element = element;
-        }
-
-        public T Current
-        {
-            get
+            if (_ended)
             {
-                if (ended)
-                    throw new InvalidOperationException();
-                return element;
+                throw new InvalidOperationException("Enumeration already finished.");
             }
-        }
 
-        object? IEnumerator.Current => Current;
-
-        public bool MoveNext()
-        {
-            if (ended)
-                return false;
-            ended = true;
-            return true;
+            return _element;
         }
+    }
 
-        public void Reset()
-        {
-            ended = false;
-        }
+    object? IEnumerator.Current => Current;
 
-        public void Dispose()
-        {
-            // No resources to release
-        }
+    public bool MoveNext()
+    {
+        if (_ended)
+            return false;
+        _ended = true;
+        return true;
+    }
+
+    public void Reset()
+    {
+        _ended = false;
+    }
+
+    public void Dispose()
+    {
+        // No resources to release
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NRedberry.Core.Utils;
+﻿namespace NRedberry.Core.Utils;
 
 /// <summary>
 /// Mutable array of bits with fixed size.

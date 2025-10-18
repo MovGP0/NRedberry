@@ -8,7 +8,7 @@ namespace NRedberry.Core.Combinatorics.Symmetries;
 public sealed class EmptySymmetries : DummySymmetries
 {
     public EmptySymmetries(int dimension)
-        : base(dimension, new List<Symmetry> { new(dimension) })
+        : base(dimension, [new(dimension)])
     {
         if (dimension != 0 && dimension != 1)
         {

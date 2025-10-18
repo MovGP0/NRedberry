@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NRedberry.Core.Numbers;
+﻿namespace NRedberry.Core.Numbers;
 
 public static class Exponentiation
 {

@@ -20,22 +20,63 @@ public abstract class SimpleIndicesAbstract : AbstractIndices, SimpleIndices
         TestConsistentWithException();
     }
 
-    protected SimpleIndicesAbstract(bool notResort, int[] data, IndicesSymmetries symmetries) : base(data)
+    protected SimpleIndicesAbstract(bool notResort, int[] data, IndicesSymmetries? symmetries) : base(data)
     {
         Debug.Assert(data.Length != 0);
         this.symmetries = symmetries;
     }
 
-    // TODO: protected UpperLowerIndices CalculateUpperLower()
-    // TODO: int Size(IndexType type)
-    // TODO: int this[IndexType type, int position]
-    // TODO: SimpleIndices GetInverted()
-    // TODO: SimpleIndices Free { get; }
-    // TODO: SimpleIndices OfType(IndexType type)
-    // TODO: SimpleIndices applyIndexMapping(IndexMapping mapping)
-    // TODO: protected abstract SimpleIndices Create(int[] data, IndicesSymmetries symmetries);
-    // TODO: int[] SortedData { get; }
-    // TODO: void TestConsistentWithException()
+    protected override UpperLowerIndices CalculateUpperLower()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override int[] GetSortedData()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Indices GetOfType(IndexType type)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void TestConsistentWithException()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Indices ApplyIndexMapping(IIndexMapping mapping)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override int Size(IndexType type)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override int this[IndexType type, int position]
+    {
+        get { throw new NotImplementedException(); }
+    }
+
+    public override Indices GetFree()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Indices GetInverted()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override short[] GetDiffIds()
+    {
+        throw new NotImplementedException();
+    }
+
+    protected abstract SimpleIndices Create(int[] data, IndicesSymmetries? symmetries);
 
     public bool EqualsWithSymmetries(SimpleIndices indices) => EqualsWithSymmetriesDetailed(indices) == false;
 

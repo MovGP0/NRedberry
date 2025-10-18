@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NRedberry.Core.Parsers;
+﻿namespace NRedberry.Core.Parsers;
 
 public class ParserException : Exception
 {

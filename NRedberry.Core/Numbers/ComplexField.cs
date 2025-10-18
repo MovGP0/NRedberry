@@ -1,5 +1,4 @@
-﻿using System;
-using NRedberry.Apache.Commons.Math;
+﻿using NRedberry.Apache.Commons.Math;
 
 namespace NRedberry.Core.Numbers;
 
