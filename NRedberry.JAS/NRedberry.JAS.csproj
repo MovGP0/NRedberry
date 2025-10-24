@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas</RootNamespace>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Update="*.java" CopyToOutputDirectory="Never" />
+    </ItemGroup>
+</Project>
