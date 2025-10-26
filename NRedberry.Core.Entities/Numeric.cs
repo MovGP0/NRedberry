@@ -7,47 +7,47 @@ public sealed class Numeric : Real
     /// <summary>
     /// A constant holding 0 value.
     /// </summary>
-    public static readonly Numeric Zero = new Numeric(0);
+    public static readonly Numeric Zero = new(0);
 
     /// <summary>
     /// A constant holding 1 value.
     /// </summary>
-    public static readonly Numeric One = new Numeric(1);
+    public static readonly Numeric One = new(1);
 
     /// <summary>
     /// A constant holding -1 value.
     /// </summary>
-    public static readonly Numeric MinusOne = new Numeric(-1);
+    public static readonly Numeric MinusOne = new(-1);
 
     /// <summary>
     /// A constant holding the positive infinity of type double.
     /// </summary>
-    public static readonly Numeric PositiveInfinity = new Numeric(double.PositiveInfinity);
+    public static readonly Numeric PositiveInfinity = new(double.PositiveInfinity);
 
     /// <summary>
     /// A constant holding the negative infinity of type double.
     /// </summary>
-    public static readonly Numeric NegativeInfinity = new Numeric(double.NegativeInfinity);
+    public static readonly Numeric NegativeInfinity = new(double.NegativeInfinity);
 
     /// <summary>
     /// A constant holding a Not-a-Number (NaN) value of type double.
     /// </summary>
-    public static readonly Numeric NaN = new Numeric(double.NaN);
+    public static readonly Numeric NaN = new(double.NaN);
 
     /// <summary>
     /// A constant holding the largest positive finite value of type double, (2-2^-52)*2^1023.
     /// </summary>
-    public static readonly Numeric MaxValue = new Numeric(double.MaxValue);
+    public static readonly Numeric MaxValue = new(double.MaxValue);
 
     /// <summary>
     /// A constant holding the smallest positive normal value of type double, 2^-1022.
     /// </summary>
-    public static readonly Numeric MinNormal = new Numeric(double.MinValue);
+    public static readonly Numeric MinNormal = new(double.MinValue);
 
     /// <summary>
     /// A constant holding the smallest positive nonzero value of type double, 2^-1074.
     /// </summary>
-    public static readonly Numeric MinValue = new Numeric(double.Epsilon);
+    public static readonly Numeric MinValue = new(double.Epsilon);
 
     private double Value { get; }
 

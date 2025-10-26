@@ -25,8 +25,10 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
     /// </summary>
     public ModInteger(ModIntegerRing m, BigInteger a)
     {
+        ArgumentNullException.ThrowIfNull(m);
+        ArgumentNullException.ThrowIfNull(a);
         Ring = m;
-        Val = a % Ring.Modul;
+        Val = Normalize(a, Ring.Modul);
     }
 
     /// <summary>
@@ -79,24 +81,24 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
     /// <summary>
     /// Clone this.
     /// </summary>
-    public ModInteger Copy() => new ModInteger(Ring, Val);
+    public ModInteger Clone() => new(Ring, Val);
 
     /// <summary>
     /// Is ModInteger number zero.
     /// </summary>
-    public bool IsZERO() => Val.Equals(BigInteger.Zero);
+    public bool IsZero() => Val.Equals(BigInteger.Zero);
 
     /// <summary>
     /// Is ModInteger number one.
     /// </summary>
-    public bool IsONE() => Val.Equals(BigInteger.One);
+    public bool IsOne() => Val.Equals(BigInteger.One);
 
     /// <summary>
     /// Is ModInteger number a unit.
     /// </summary>
     public bool IsUnit()
     {
-        if (IsZERO())
+        if (IsZero())
         {
             return false;
         }
@@ -124,7 +126,7 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
         BigInteger v = b.Val;
         if (Ring != b.Ring)
         {
-            v %= Ring.Modul;
+            v = Normalize(v, Ring.Modul);
         }
         return Val.CompareTo(v);
     }
@@ -149,12 +151,12 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
     /// <summary>
     /// ModInteger absolute value.
     /// </summary>
-    public ModInteger Abs() => new ModInteger(Ring, BigInteger.Abs(Val));
+    public ModInteger Abs() => new(Ring, BigInteger.Abs(Val));
 
     /// <summary>
     /// ModInteger negative.
     /// </summary>
-    public ModInteger Negate() => new ModInteger(Ring, BigInteger.Negate(Val));
+    public ModInteger Negate() => new(Ring, BigInteger.Negate(Val));
 
     /// <summary>
     /// ModInteger signum.
@@ -164,31 +166,37 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
     /// <summary>
     /// ModInteger subtraction.
     /// </summary>
-    public ModInteger Subtract(ModInteger S) => new ModInteger(Ring, Val - S.Val);
+    public ModInteger Subtract(ModInteger S)
+    {
+        ArgumentNullException.ThrowIfNull(S);
+        return new ModInteger(Ring, Val - S.Val);
+    }
 
     /// <summary>
     /// ModInteger divide.
     /// </summary>
     public ModInteger Divide(ModInteger S)
     {
+        ArgumentNullException.ThrowIfNull(S);
         try
         {
             return Multiply(S.Inverse());
         }
         catch (NotInvertibleException e)
         {
-            if (Val.IsZero())
-                return this;
-
-            if (Ring.IsField())
-                throw new NotInvertibleException(e.Message, e.InnerException);
-
-            ModInteger r = new(Ring, Val);
-            ModInteger q = new(Ring, S.Val);
-            if (r.IsZERO())
-                return q;
-
-            return q;
+            try
+            {
+                BigInteger remainder = Val.Remainder(S.Val);
+                if (remainder.IsZero())
+                {
+                    return new ModInteger(Ring, Val / S.Val);
+                }
+                throw new NotInvertibleException(e.Message, e);
+            }
+            catch (ArithmeticException a)
+            {
+                throw new NotInvertibleException(a.Message, a);
+            }
         }
     }
 
@@ -205,7 +213,8 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
         catch (ArithmeticException e)
         {
             BigInteger g = BigInteger.GreatestCommonDivisor(Val, Ring.Modul);
-            throw new ModularNotInvertibleException(e, new BigInteger(Ring.Modul), new BigInteger(g));
+            BigInteger f = Ring.Modul / g;
+            throw new ModularNotInvertibleException(e, new BigInteger(Ring.Modul), g, f);
         }
     }
 
@@ -214,47 +223,57 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
     /// </summary>
     public ModInteger Remainder(ModInteger S)
     {
-        if (S == null || S.IsZERO())
+        ArgumentNullException.ThrowIfNull(S);
+        if (S.IsZero())
         {
             throw new ArithmeticException("division by zero");
         }
-        if (S.IsONE())
+        if (S.IsOne())
         {
-            return Ring.GetZERO();
+            return Ring.Zero;
         }
         if (S.IsUnit())
         {
-            return Ring.GetZERO();
+            return Ring.Zero;
         }
-        return new ModInteger(Ring, BigInteger.Remainder(Val, S.Val));
+        BigInteger remainder = BigInteger.Remainder(Val, S.Val);
+        return new ModInteger(Ring, remainder);
     }
 
     /// <summary>
     /// ModInteger multiply.
     /// </summary>
-    public ModInteger Multiply(ModInteger S) => new ModInteger(Ring, Val * S.Val);
+    public ModInteger Multiply(ModInteger S)
+    {
+        ArgumentNullException.ThrowIfNull(S);
+        return new ModInteger(Ring, Val * S.Val);
+    }
 
     /// <summary>
     /// ModInteger summation.
     /// </summary>
-    public ModInteger Sum(ModInteger S) => new ModInteger(Ring, Val + S.Val);
+    public ModInteger Sum(ModInteger S)
+    {
+        ArgumentNullException.ThrowIfNull(S);
+        return new ModInteger(Ring, Val + S.Val);
+    }
 
     /// <summary>
     /// ModInteger greatest common divisor.
     /// </summary>
     public ModInteger Gcd(ModInteger S)
     {
-        if (S.IsZERO())
+        if (S.IsZero())
         {
             return this;
         }
-        if (IsZERO())
+        if (IsZero())
         {
             return S;
         }
         if (IsUnit() || S.IsUnit())
         {
-            return Ring.GetONE();
+            return Ring.One;
         }
         return new ModInteger(Ring, BigInteger.GreatestCommonDivisor(Val, S.Val));
     }
@@ -268,22 +287,22 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
         ret[0] = null!;
         ret[1] = null!;
         ret[2] = null!;
-        if (S == null || S.IsZERO())
+        if (S == null || S.IsZero())
         {
             ret[0] = this;
             return ret;
         }
-        if (IsZERO())
+        if (IsZero())
         {
             ret[0] = S;
             return ret;
         }
         if (IsUnit() || S.IsUnit())
         {
-            ret[0] = Ring.GetONE();
+            ret[0] = Ring.One;
             if (IsUnit() && S.IsUnit())
             {
-                ret[1] = Ring.GetONE();
+                ret[1] = Ring.One;
                 ModInteger x = ret[0].Subtract(ret[1].Multiply(this));
                 ret[2] = x.Divide(S);
                 return ret;
@@ -291,10 +310,10 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
             if (IsUnit())
             {
                 ret[1] = Inverse();
-                ret[2] = Ring.GetZERO();
+                ret[2] = Ring.Zero;
                 return ret;
             }
-            ret[1] = Ring.GetZERO();
+            ret[1] = Ring.Zero;
             ret[2] = S.Inverse();
             return ret;
         }
@@ -332,22 +351,37 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
     /// <summary>
     /// BigInteger modular inverse.
     /// </summary>
-        private static BigInteger ModInverse(BigInteger a, BigInteger m)
+    private static BigInteger ModInverse(BigInteger a, BigInteger m)
+    {
+        if (m.IsZero())
         {
-            if (a.IsZero())
-                throw new NotInvertibleException("zero is not invertible");
-    
-            if (a.Sign() < 0)
-                a += m;
-    
-            BigInteger x, y;
-            BigInteger g = Gcd(a, m, out x, out y);
-    
-            if (g != BigInteger.One)
-                throw new NotInvertibleException("numbers are not relatively prime");
-    
-            return (x % m + m) % m;
+            throw new NotInvertibleException("modulus zero is not invertible");
         }
+
+        BigInteger value = Normalize(a, m);
+        if (value.IsZero())
+        {
+            throw new NotInvertibleException("zero is not invertible");
+        }
+
+        BigInteger x;
+        BigInteger y;
+        BigInteger g = Gcd(value, m, out x, out y);
+
+        if (!g.Equals(BigInteger.One))
+        {
+            throw new NotInvertibleException("numbers are not relatively prime");
+        }
+
+        BigInteger result = x % m;
+        if (result.Sign() < 0)
+        {
+            result += m;
+        }
+
+        return result;
+    }
+
     private static BigInteger Gcd(BigInteger a, BigInteger b, out BigInteger x, out BigInteger y)
     {
         if (a.IsZero())
@@ -364,6 +398,22 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
         y = x1;
 
         return g;
+    }
+
+    private static BigInteger Normalize(BigInteger value, BigInteger modulus)
+    {
+        if (modulus.IsZero())
+        {
+            throw new ArgumentException("modulus must be non-zero", nameof(modulus));
+        }
+
+        BigInteger positiveModulus = modulus.Sign() < 0 ? BigInteger.Abs(modulus) : modulus;
+        BigInteger remainder = value % positiveModulus;
+        if (remainder.Sign() < 0)
+        {
+            remainder += positiveModulus;
+        }
+        return remainder;
     }
 
     ElemFactory<ModInteger> Element<ModInteger>.Factory() => Factory();

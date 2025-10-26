@@ -86,15 +86,60 @@ This note captures the patterns we follow when porting Redberry Java sources in 
 1. Update namespaces, using directives, and casing immediately after copying Java logic.
 2. Replace getters/setters with properties and align constructor validation to guard inputs.
 3. Convert JavaDoc to XML doc comments; remove lingering `/** */` blocks.
-4. Refactor enums with behaviour into enums plus companion static classes or extension methods.
+4. Refactor enums with behavior into enums plus companion static classes or extension methods.
 5. Revisit iteration and collections to leverage `IEnumerable<T>` and C# iterators.
 6. Audit exception types to match .NET expectations and nullability annotations.
+
+## Translate different idioms between Java and C#
+- Java uses an `bool MoveNext()` method, a `T? Current` property, and a `void Reset()` method for enumerations
+  - When converting Java to C#, re-implement those methods and properties for compatibility reasons, but also implement `IEnumerable<T>` or an `IEnumerator<T>`
+- Java uses `Copy()` while C# uses `Clone()`
+  - When converting Java to C#, implement the `ICloneable` interface in those cases.
+  - You may provide the `public T Copy() => Clone();` method as fallback.
+```csharp
+    // instead of T Copy()
+    public T Clone() => new(...);
+    object ICloneable.Clone() => Clone();
+
+    // instead of T Copy(T value) when required
+    public static T Clone(T c) => new(...);
+```
+
+- When a class implements the `Equals` method, also implement the `IEquatable<T>` interface 
+  - Also override the `==` and `!=` operators for equatable classes.
+  - Also override the `ToHashCode()` method.
+  - When the class is a reference type, make sure that the equality methods also work with nullable arguments: `public bool Equals(T? left, T? right)`.
 
 ## Class mappings
 
 - Note all type mappings from the original java file to the cs file in the `ClassMapping.md` file, such that code ports are traceable to their original source file.
 - When porting java types to C#, first create the empty *.cs file with a skeleton implementation, throwing `NotImplementedException` and using inline comment block to reflect the original source code that is to be ported.
 - The port of the business logic should only be started, when the solution is building with the skeleton code.
+- Avoid public fields. Prefer public Properties instead.
+- Use `is null` instead of `== null` and `is not null` instead of `!= null`
+- Do not note the variable type twice. Instead of `SomeType varible = new SomeType(5);` use either `var varible = new SomeType(5);` or `SomeType varible = new(5);`
+- Use C# naming conventions. 
+  - Instead of method names like `isZero()` or `IsZERO()` use `IsZero()` instead.
+  - Instead of a property named `ZERO` use `Zero` instead.
+- When there are method names abbreviated like `GCD`, implement the method with a proper name like `GreatestCommonDivisor` and provide the `GCD` method as a redirection:
+  ```csharp
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public int GCD(int a, int b) => GreatestCommonDivisor(a, b);
+  ```  
+- Avoid empty constructors when the empty constructor is the only constructor.
+- Feel fee to use Unicode symbols in comments and summaries. I.e. write "Gröbner" instead of "Groebner" and "Poincaré" instead of "Poincare".
+- Note that some elements like `Zero`, `One`, and `Imag` (complex i) elements are static properties in the C# interface (see `MonoidFactory.cs` and `AbelianGroupFactory.cs`).
+  - They are implemented as non-static `GetONE()`, `GetZERO()` and `GetIMAG()` methods in Java. Do not replicate that pattern.
+- When implementing `GetHashCode`, consider using the ` HashCode  class:
+```csharp
+public override int GetHashCode()
+{
+    HashCode hashCode = new();
+    hashCode.Add(Foo);
+    hashCode.Add(Bar);
+    return hashCode.ToHashCode();
+} 
+```
 
 ## Class mapping process
 - Check the ClassMapping.md file.
@@ -108,3 +153,4 @@ This note captures the patterns we follow when porting Redberry Java sources in 
 ## Important Notes
 - Do not try to port multiple files at once; implement one file at a time
 - Always try to execute a build after every file; fix the build errors
+- Do not use PowerShell to execute Python and do not use Python to execute PowerShell. Use either.

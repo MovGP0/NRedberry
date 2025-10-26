@@ -13,7 +13,7 @@ public interface MonoidFactory<C> : ElemFactory<C> where C : MonoidElem<C>
     /// Get the constant one for the MonoidElem.
     /// </summary>
     /// <returns>1.</returns>
-    C GetONE();
+    static C One { get; }
 
     /// <summary>
     /// Query if this monoid is commutative.

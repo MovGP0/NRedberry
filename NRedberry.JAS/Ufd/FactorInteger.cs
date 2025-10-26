@@ -12,22 +12,22 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ufd.FactorInteger
 /// </remarks>
-public class FactorInteger<MOD> : FactorAbstract<Arith.BigInteger> where MOD : GcdRingElem<MOD>, Modular
+public class FactorInteger<MOD> : FactorAbstract<BigInteger> where MOD : GcdRingElem<MOD>, Modular
 {
     private readonly bool debug = false;
     protected readonly FactorAbstract<MOD> mfactor;
     protected readonly GreatestCommonDivisorAbstract<MOD> mengine;
 
-    public FactorInteger() : this(Arith.BigInteger.ONE)
+    public FactorInteger() : this(BigInteger.One)
     {
     }
 
-    public FactorInteger(RingFactory<Arith.BigInteger> cfac) : base(cfac)
+    public FactorInteger(RingFactory<BigInteger> cfac) : base(cfac)
     {
         throw new NotImplementedException();
     }
 
-    public override List<GenPolynomial<Arith.BigInteger>> BaseFactorsSquarefree(GenPolynomial<Arith.BigInteger> P)
+    public override List<GenPolynomial<BigInteger>> BaseFactorsSquarefree(GenPolynomial<BigInteger> P)
     {
         throw new NotImplementedException();
     }
@@ -42,12 +42,12 @@ public class FactorInteger<MOD> : FactorAbstract<Arith.BigInteger> where MOD : G
         throw new NotImplementedException();
     }
 
-    public override List<GenPolynomial<Arith.BigInteger>> FactorsSquarefree(GenPolynomial<Arith.BigInteger> P)
+    public override List<GenPolynomial<BigInteger>> FactorsSquarefree(GenPolynomial<BigInteger> P)
     {
         throw new NotImplementedException();
     }
 
-    public List<GenPolynomial<Arith.BigInteger>> FactorsSquarefreeHensel(GenPolynomial<Arith.BigInteger> P)
+    public List<GenPolynomial<BigInteger>> FactorsSquarefreeHensel(GenPolynomial<BigInteger> P)
     {
         throw new NotImplementedException();
     }

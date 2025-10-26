@@ -6,7 +6,7 @@ namespace NRedberry.Core.Tensors;
 
 public sealed class ExpressionFactory : TensorFactory
 {
-    public static ExpressionFactory Instance { get; } = new ExpressionFactory();
+    public static ExpressionFactory Instance { get; } = new();
 
     private ExpressionFactory()
     {

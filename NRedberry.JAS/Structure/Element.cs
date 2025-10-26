@@ -15,7 +15,7 @@ public interface Element<C> : IComparable<C> where C : Element<C>
     /// Clone this Element.
     /// </summary>
     /// <returns>Creates and returns a copy of this Element.</returns>
-    C Copy();
+    C Clone();
 
     /// <summary>
     /// Test if this is equal to b.

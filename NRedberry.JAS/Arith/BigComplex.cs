@@ -9,7 +9,7 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.arith.BigComplex
 /// </remarks>
-public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex>
+public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex>, ICloneable
 {
     /// <summary>
     /// Real part of the data structure.
@@ -21,22 +21,22 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// </summary>
     public readonly BigRational Im;
 
-    private static readonly Random random = new Random();
+    private static readonly Random random = new();
 
     /// <summary>
     /// The constant 0.
     /// </summary>
-    public static readonly BigComplex ZERO = new BigComplex();
+    public static readonly BigComplex ZERO = new();
 
     /// <summary>
     /// The constant 1.
     /// </summary>
-    public static readonly BigComplex ONE = new BigComplex(BigRational.ONE);
+    public static readonly BigComplex ONE = new(BigRational.One);
 
     /// <summary>
     /// The constant i.
     /// </summary>
-    public static readonly BigComplex I = new BigComplex(BigRational.ZERO, BigRational.ONE);
+    public static readonly BigComplex I = new(BigRational.Zero, BigRational.One);
 
     /// <summary>
     /// The constructor creates a BigComplex object from two BigRational objects
@@ -55,7 +55,7 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// real part, the imaginary part is set to 0.
     /// </summary>
     /// <param name="r">real part.</param>
-    public BigComplex(BigRational r) : this(r, BigRational.ZERO)
+    public BigComplex(BigRational r) : this(r, BigRational.Zero)
     {
     }
 
@@ -63,7 +63,7 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// The constructor creates a BigComplex object with real part 0 and
     /// imaginary part 0.
     /// </summary>
-    public BigComplex() : this(BigRational.ZERO)
+    public BigComplex() : this(BigRational.Zero)
     {
     }
 
@@ -82,9 +82,11 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// <returns>list of generators for the algebraic structure.</returns>
     public List<BigComplex> Generators()
     {
-        List<BigComplex> g = new List<BigComplex>(2);
-        g.Add(GetONE());
-        g.Add(GetIMAG());
+        List<BigComplex> g =
+        [
+            One,
+            Imag
+        ];
         return g;
     }
 
@@ -100,47 +102,34 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// <summary>
     /// Clone this.
     /// </summary>
-    public BigComplex Copy()
-    {
-        return new BigComplex(Re, Im);
-    }
+    public BigComplex Clone() => new(Re, Im);
+
+    object ICloneable.Clone() => Clone(); 
 
     /// <summary>
     /// Copy BigComplex element c.
     /// </summary>
     /// <param name="c">BigComplex.</param>
     /// <returns>a copy of c.</returns>
-    public BigComplex Copy(BigComplex c)
-    {
-        return new BigComplex(c.Re, c.Im);
-    }
+    public static BigComplex Clone(BigComplex c) => new(c.Re, c.Im);
 
     /// <summary>
     /// Get the zero element.
     /// </summary>
     /// <returns>0 as BigComplex.</returns>
-    public BigComplex GetZERO()
-    {
-        return ZERO;
-    }
+    public BigComplex Zero => ZERO;
 
     /// <summary>
     /// Get the one element.
     /// </summary>
     /// <returns>1 as BigComplex.</returns>
-    public BigComplex GetONE()
-    {
-        return ONE;
-    }
+    public BigComplex One => ONE;
 
     /// <summary>
     /// Get the i element.
     /// </summary>
     /// <returns>i as BigComplex.</returns>
-    public BigComplex GetIMAG()
-    {
-        return I;
-    }
+    public BigComplex Imag => I;
 
     /// <summary>
     /// Query if this ring is commutative.
@@ -155,66 +144,33 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// Query if this ring is associative.
     /// </summary>
     /// <returns>true.</returns>
-    public bool IsAssociative()
-    {
-        return true;
-    }
+    public bool IsAssociative() => true;
 
     /// <summary>
     /// Query if this ring is a field.
     /// </summary>
     /// <returns>true.</returns>
-    public bool IsField()
-    {
-        return true;
-    }
+    public bool IsField() => true;
 
     /// <summary>
     /// Characteristic of this ring.
     /// </summary>
     /// <returns>characteristic of this ring.</returns>
-    public System.Numerics.BigInteger Characteristic()
-    {
-        return System.Numerics.BigInteger.Zero;
-    }
+    public System.Numerics.BigInteger Characteristic() => System.Numerics.BigInteger.Zero;
 
     /// <summary>
     /// Get a BigComplex element from a BigInteger.
     /// </summary>
     /// <param name="a">BigInteger.</param>
     /// <returns>a BigComplex.</returns>
-    public BigComplex FromInteger(BigInteger a)
-    {
-        return new BigComplex(new BigRational(a));
-    }
+    public BigComplex FromInteger(BigInteger a) => new(new BigRational(a));
 
     /// <summary>
     /// Get a BigComplex element from a long.
     /// </summary>
     /// <param name="a">long.</param>
     /// <returns>a BigComplex.</returns>
-    public BigComplex FromInteger(long a)
-    {
-        return new BigComplex(new BigRational(a));
-    }
-
-    /// <summary>
-    /// Get the real part.
-    /// </summary>
-    /// <returns>re.</returns>
-    public BigRational GetRe()
-    {
-        return Re;
-    }
-
-    /// <summary>
-    /// Get the imaginary part.
-    /// </summary>
-    /// <returns>im.</returns>
-    public BigRational GetIm()
-    {
-        return Im;
-    }
+    public BigComplex FromInteger(long a) => new(new BigRational(a));
 
     /// <summary>
     /// Get the String representation.
@@ -222,7 +178,7 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     public override string ToString()
     {
         string s = "" + Re;
-        int i = Im.CompareTo(BigRational.ZERO);
+        int i = Im.CompareTo(BigRational.Zero);
         if (i == 0)
             return s;
         s += "i" + Im;
@@ -233,28 +189,19 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// Is Complex number zero.
     /// </summary>
     /// <returns>If this is 0 then true is returned, else false.</returns>
-    public bool IsZERO()
-    {
-        return Re.Equals(BigRational.ZERO) && Im.Equals(BigRational.ZERO);
-    }
+    public bool IsZero() => Re.Equals(BigRational.Zero) && Im.Equals(BigRational.Zero);
 
     /// <summary>
     /// Is Complex number one.
     /// </summary>
     /// <returns>If this is 1 then true is returned, else false.</returns>
-    public bool IsONE()
-    {
-        return Re.Equals(BigRational.ONE) && Im.Equals(BigRational.ZERO);
-    }
+    public bool IsOne() => Re.Equals(BigRational.One) && Im.Equals(BigRational.Zero);
 
     /// <summary>
     /// Is Complex unit element.
     /// </summary>
     /// <returns>If this is a unit then true is returned, else false.</returns>
-    public bool IsUnit()
-    {
-        return !IsZERO();
-    }
+    public bool IsUnit() => !IsZero();
 
     /// <summary>
     /// Comparison with any other object.
@@ -273,7 +220,10 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// </summary>
     public override int GetHashCode()
     {
-        return 37 * Re.GetHashCode() + Im.GetHashCode();
+        var hashCode = new HashCode();
+        hashCode.Add(Re);
+        hashCode.Add(Im);
+        return hashCode.ToHashCode();
     }
 
     /// <summary>
@@ -284,7 +234,7 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// b.im; -1 if re &lt; b.re, or re == b.re and im &lt; b.im</returns>
     public int CompareTo(BigComplex? b)
     {
-        if (b == null)
+        if (b is null)
             return 1;
         int s = Re.CompareTo(b.Re);
         if (s != 0)
@@ -397,7 +347,7 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// <returns>0.</returns>
     public BigComplex Remainder(BigComplex S)
     {
-        if (S.IsZERO())
+        if (S.IsZero())
         {
             throw new ArithmeticException("division by zero");
         }
@@ -436,8 +386,8 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// <returns>R.</returns>
     public BigComplex Random(int n, Random rnd)
     {
-        BigRational r = BigRational.ONE.Random(n, rnd);
-        BigRational i = BigRational.ONE.Random(n, rnd);
+        BigRational r = BigRational.One.Random(n, rnd);
+        BigRational i = BigRational.One.Random(n, rnd);
         return new BigComplex(r, i);
     }
 
@@ -448,11 +398,11 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// <returns>gcd(this, S).</returns>
     public BigComplex Gcd(BigComplex S)
     {
-        if (S == null || S.IsZERO())
+        if (S is null || S.IsZero())
         {
             return this;
         }
-        if (IsZERO())
+        if (IsZero())
         {
             return S;
         }
@@ -464,18 +414,18 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// </summary>
     /// <param name="S">BigComplex.</param>
     /// <returns>[ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).</returns>
-    public BigComplex[] Egcd(BigComplex S)
+    public BigComplex[] Egcd(BigComplex? S)
     {
         BigComplex[] ret = new BigComplex[3];
         ret[0] = null!;
         ret[1] = null!;
         ret[2] = null!;
-        if (S == null || S.IsZERO())
+        if (S is null || S.IsZero())
         {
             ret[0] = this;
             return ret;
         }
-        if (IsZERO())
+        if (IsZero())
         {
             ret[0] = S;
             return ret;

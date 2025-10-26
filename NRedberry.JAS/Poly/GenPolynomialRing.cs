@@ -19,7 +19,7 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
     public readonly TermOrder Tord;
     protected bool partial;
     protected string[] vars;
-    private static readonly HashSet<string> knownVars = new();
+    private static readonly HashSet<string> knownVars = [];
     public readonly GenPolynomial<C> ZERO;
     public readonly GenPolynomial<C> ONE;
     public readonly ExpVector Evzero;
@@ -51,8 +51,8 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
         throw new NotImplementedException();
     }
 
-    public GenPolynomial<C> GetZERO() { throw new NotImplementedException(); }
-    public GenPolynomial<C> GetONE() { throw new NotImplementedException(); }
+    public static GenPolynomial<C> Zero => throw new NotImplementedException();
+    public static GenPolynomial<C> One => throw new NotImplementedException();
     public List<GenPolynomial<C>> Generators() { throw new NotImplementedException(); }
     public bool IsFinite() { throw new NotImplementedException(); }
     public bool IsCommutative() { throw new NotImplementedException(); }
@@ -65,7 +65,7 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
     public GenPolynomial<C> Random() { throw new NotImplementedException(); }
     public GenPolynomial<C> Random(int k) { throw new NotImplementedException(); }
     public GenPolynomial<C> Random(int k, Random rnd) { throw new NotImplementedException(); }
-    public GenPolynomial<C> Copy(GenPolynomial<C> c) { throw new NotImplementedException(); }
+    public static GenPolynomial<C> Clone(GenPolynomial<C> c) { throw new NotImplementedException(); }
     public IEnumerator<GenPolynomial<C>> GetEnumerator() { throw new NotImplementedException(); }
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     public override string ToString() { throw new NotImplementedException(); }

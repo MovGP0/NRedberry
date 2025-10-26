@@ -8,18 +8,25 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 /// </remarks>
 public class NotInvertibleException : Exception
 {
-    public NotInvertibleException() 
-        : base("NotInvertibleException")
+    private const string DefaultMessage = "NotInvertibleException";
+
+    public NotInvertibleException()
+        : base(DefaultMessage)
     {
     }
 
-    public NotInvertibleException(string message) 
+    public NotInvertibleException(string message)
         : base(message)
     {
     }
 
-    public NotInvertibleException(string message, Exception innerException) 
+    public NotInvertibleException(string message, Exception innerException)
         : base(message, innerException)
+    {
+    }
+
+    public NotInvertibleException(Exception innerException)
+        : base(DefaultMessage, innerException)
     {
     }
 }

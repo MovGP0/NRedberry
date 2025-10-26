@@ -38,7 +38,7 @@ public class PolyIterator<C> : IEnumerator<Monomial<C>> where C : RingElem<C>
     /// <summary>
     /// Get current monomial element.
     /// </summary>
-    public Monomial<C> Current => new Monomial<C>(ms.Current);
+    public Monomial<C> Current => new(ms.Current);
 
     object IEnumerator.Current => Current;
 

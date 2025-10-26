@@ -71,19 +71,19 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     /// <summary>
     /// Clone this.
     /// </summary>
-    public ModLong Copy() => new ModLong(Ring, Val);
+    public ModLong Clone() => new(Ring, Val);
 
     /// <summary>
     /// Is ModLong number zero.
     /// </summary>
     /// <returns>If this is 0 then true is returned, else false.</returns>
-    public bool IsZERO() => Val == 0L;
+    public bool IsZero() => Val == 0L;
 
     /// <summary>
     /// Is ModLong number one.
     /// </summary>
     /// <returns>If this is 1 then true is returned, else false.</returns>
-    public bool IsONE() => Val == 1L;
+    public bool IsOne() => Val == 1L;
 
     /// <summary>
     /// Is ModLong number a unit.
@@ -91,7 +91,7 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     /// <returns>If this is a unit then true is returned, else false.</returns>
     public bool IsUnit()
     {
-        if (IsZERO())
+        if (IsZero())
         {
             return false;
         }
@@ -150,13 +150,13 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     /// ModLong absolute value.
     /// </summary>
     /// <returns>the absolute value of this.</returns>
-    public ModLong Abs() => new ModLong(Ring, Val < 0 ? -Val : Val);
+    public ModLong Abs() => new(Ring, Val < 0 ? -Val : Val);
 
     /// <summary>
     /// ModLong negative.
     /// </summary>
     /// <returns>-this.</returns>
-    public ModLong Negate() => new ModLong(Ring, -Val);
+    public ModLong Negate() => new(Ring, -Val);
 
     /// <summary>
     /// ModLong signum.
@@ -176,7 +176,7 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     /// </summary>
     /// <param name="S">ModLong.</param>
     /// <returns>this-S.</returns>
-    public ModLong Subtract(ModLong S) => new ModLong(Ring, Val - S.Val);
+    public ModLong Subtract(ModLong S) => new(Ring, Val - S.Val);
 
     /// <summary>
     /// ModLong divide.
@@ -232,17 +232,17 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     /// <returns>remainder(this, S).</returns>
     public ModLong Remainder(ModLong S)
     {
-        if (S == null || S.IsZERO())
+        if (S == null || S.IsZero())
         {
             throw new ArithmeticException("division by zero");
         }
-        if (S.IsONE())
+        if (S.IsOne())
         {
-            return Ring.GetZERO();
+            return Ring.Zero;
         }
         if (S.IsUnit())
         {
-            return Ring.GetZERO();
+            return Ring.Zero;
         }
         return new ModLong(Ring, Val % S.Val);
     }
@@ -252,14 +252,14 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     /// </summary>
     /// <param name="S">ModLong.</param>
     /// <returns>this*S.</returns>
-    public ModLong Multiply(ModLong S) => new ModLong(Ring, Val * S.Val);
+    public ModLong Multiply(ModLong S) => new(Ring, Val * S.Val);
 
     /// <summary>
     /// ModLong summation.
     /// </summary>
     /// <param name="S">ModLong.</param>
     /// <returns>this+S.</returns>
-    public ModLong Sum(ModLong S) => new ModLong(Ring, Val + S.Val);
+    public ModLong Sum(ModLong S) => new(Ring, Val + S.Val);
 
     /// <summary>
     /// ModLong greatest common divisor.
@@ -268,17 +268,17 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     /// <returns>gcd(this, S).</returns>
     public ModLong Gcd(ModLong S)
     {
-        if (S.IsZERO())
+        if (S.IsZero())
         {
             return this;
         }
-        if (IsZERO())
+        if (IsZero())
         {
             return S;
         }
         if (IsUnit() || S.IsUnit())
         {
-            return Ring.GetONE();
+            return Ring.One;
         }
         return new ModLong(Ring, Gcd(Val, S.Val));
     }
@@ -294,22 +294,22 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
         ret[0] = null!;
         ret[1] = null!;
         ret[2] = null!;
-        if (S == null || S.IsZERO())
+        if (S == null || S.IsZero())
         {
             ret[0] = this;
             return ret;
         }
-        if (IsZERO())
+        if (IsZero())
         {
             ret[0] = S;
             return ret;
         }
         if (IsUnit() || S.IsUnit())
         {
-            ret[0] = Ring.GetONE();
+            ret[0] = Ring.One;
             if (IsUnit() && S.IsUnit())
             {
-                ret[1] = Ring.GetONE();
+                ret[1] = Ring.One;
                 ModLong x = ret[0].Subtract(ret[1].Multiply(this));
                 ret[2] = x.Divide(S);
                 return ret;
@@ -317,10 +317,10 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
             if (IsUnit())
             {
                 ret[1] = Inverse();
-                ret[2] = Ring.GetZERO();
+                ret[2] = Ring.Zero;
                 return ret;
             }
-            ret[1] = Ring.GetZERO();
+            ret[1] = Ring.Zero;
             ret[2] = S.Inverse();
             return ret;
         }

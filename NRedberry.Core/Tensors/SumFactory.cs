@@ -4,7 +4,7 @@ namespace NRedberry.Core.Tensors;
 
 public sealed class SumFactory : TensorFactory
 {
-    public static readonly SumFactory Factory = new SumFactory();
+    public static readonly SumFactory Factory = new();
 
     private SumFactory()
     {

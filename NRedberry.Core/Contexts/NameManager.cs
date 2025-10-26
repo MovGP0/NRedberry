@@ -18,11 +18,11 @@ public sealed class NameManager
     private long seed;
     public long Seed => seed;
     private Random random;
-    private readonly ReaderWriterLockSlim readWriteLock = new ReaderWriterLockSlim();
-    private readonly ConcurrentDictionary<int, NameDescriptor> fromId = new ConcurrentDictionary<int, NameDescriptor>();
+    private readonly ReaderWriterLockSlim readWriteLock = new();
+    private readonly ConcurrentDictionary<int, NameDescriptor> fromId = new();
     private readonly HashSet<string> stringNames = [];
-    private readonly StringGenerator stringGenerator = new StringGenerator();
-    private readonly Dictionary<NameAndStructureOfIndices, NameDescriptor> fromStructure = new Dictionary<NameAndStructureOfIndices, NameDescriptor>();
+    private readonly StringGenerator stringGenerator = new();
+    private readonly Dictionary<NameAndStructureOfIndices, NameDescriptor> fromStructure = new();
     private readonly string[] kroneckerAndMetricNames = ["d", "g"];
     private volatile string diracDeltaName = "DiracDelta";
     private readonly List<int> kroneckerAndMetricIds = [];

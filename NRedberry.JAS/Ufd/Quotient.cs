@@ -20,7 +20,7 @@ public class Quotient<C> : GcdRingElem<Quotient<C>> where C : GcdRingElem<C>
     {
         Ring = r;
         Num = n;
-        Den = r.Ring.GetONE();
+        Den = GenPolynomialRing<C>.One;
     }
 
     public Quotient(QuotientRing<C> r, GenPolynomial<C> n, GenPolynomial<C> d)
@@ -35,17 +35,17 @@ public class Quotient<C> : GcdRingElem<Quotient<C>> where C : GcdRingElem<C>
         return Ring;
     }
 
-    public Quotient<C> Copy()
+    public Quotient<C> Clone()
     {
         throw new NotImplementedException();
     }
 
-    public bool IsZERO()
+    public bool IsZero()
     {
         throw new NotImplementedException();
     }
 
-    public bool IsONE()
+    public bool IsOne()
     {
         throw new NotImplementedException();
     }

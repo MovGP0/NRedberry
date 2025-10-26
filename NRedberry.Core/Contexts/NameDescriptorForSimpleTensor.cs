@@ -16,7 +16,7 @@ internal sealed class NameDescriptorForSimpleTensor(
 
     private readonly NameAndStructureOfIndices[] key =
     [
-        new NameAndStructureOfIndices(name, indexTypeStructures)
+        new(name, indexTypeStructures)
     ];
 
     private SimpleTensor? cachedSymbol;

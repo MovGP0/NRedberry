@@ -9,7 +9,7 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.arith.BigRational
 /// </remarks>
-public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRational>
+public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRational>, ICloneable
 {
     /// <summary>
     /// Numerator part of the data structure.
@@ -21,17 +21,17 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
     /// </summary>
     public readonly System.Numerics.BigInteger Den;
 
-    private static readonly Random random = new Random();
+    private static readonly Random random = new();
 
     /// <summary>
     /// The Constant 0.
     /// </summary>
-    public static readonly BigRational ZERO = new BigRational(System.Numerics.BigInteger.Zero);
+    public static readonly BigRational Zero = new(System.Numerics.BigInteger.Zero);
 
     /// <summary>
     /// The Constant 1.
     /// </summary>
-    public static readonly BigRational ONE = new BigRational(System.Numerics.BigInteger.One);
+    public static readonly BigRational One = new(System.Numerics.BigInteger.One);
 
     /// <summary>
     /// Constructor for a BigRational from math.BigIntegers.
@@ -173,8 +173,10 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
     /// </summary>
     public List<BigRational> Generators()
     {
-        List<BigRational> g = new List<BigRational>(1);
-        g.Add(GetONE());
+        List<BigRational> g =
+        [
+            One
+        ];
         return g;
     }
 
@@ -186,12 +188,14 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
     /// <summary>
     /// Clone this.
     /// </summary>
-    public BigRational Copy() => new BigRational(Num, Den);
+    public BigRational Clone() => new(Num, Den);
+
+    object ICloneable.Clone() => Clone();
 
     /// <summary>
     /// Copy BigRational element c.
     /// </summary>
-    public BigRational Copy(BigRational c) => new BigRational(c.Num, c.Den);
+    public static BigRational Clone(BigRational c) => new(c.Num, c.Den);
 
     /// <summary>
     /// Get the numerator.
@@ -216,16 +220,6 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
     }
 
     /// <summary>
-    /// Get the zero element.
-    /// </summary>
-    public BigRational GetZERO() => ZERO;
-
-    /// <summary>
-    /// Get the one element.
-    /// </summary>
-    public BigRational GetONE() => ONE;
-
-    /// <summary>
     /// Query if this ring is commutative.
     /// </summary>
     public bool IsCommutative() => true;
@@ -248,42 +242,42 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
     /// <summary>
     /// Get a BigRational element from a math.BigInteger.
     /// </summary>
-    public BigRational FromInteger(System.Numerics.BigInteger a) => new BigRational(a);
+    public BigRational FromInteger(System.Numerics.BigInteger a) => new(a);
 
     /// <summary>
     /// Get a BigRational element from a arith.BigInteger.
     /// </summary>
-    public BigRational FromInteger(BigInteger a) => new BigRational(a);
+    public BigRational FromInteger(BigInteger a) => new(a);
 
     /// <summary>
     /// Get a BigRational element from a math.BigInteger.
     /// </summary>
-    public static BigRational ValueOf(System.Numerics.BigInteger a) => new BigRational(a);
+    public static BigRational ValueOf(System.Numerics.BigInteger a) => new(a);
 
     /// <summary>
     /// Get a BigRational element from a long.
     /// </summary>
-    public BigRational FromInteger(long a) => new BigRational(a);
+    public BigRational FromInteger(long a) => new(a);
 
     /// <summary>
     /// Get a BigRational element from a long.
     /// </summary>
-    public static BigRational ValueOf(long a) => new BigRational(a);
+    public static BigRational ValueOf(long a) => new(a);
 
     /// <summary>
     /// Is BigRational zero.
     /// </summary>
-    public bool IsZERO() => Num.Equals(System.Numerics.BigInteger.Zero);
+    public bool IsZero() => Num.Equals(System.Numerics.BigInteger.Zero);
 
     /// <summary>
     /// Is BigRational one.
     /// </summary>
-    public bool IsONE() => Num.Equals(Den);
+    public bool IsOne() => Num.Equals(Den);
 
     /// <summary>
     /// Is BigRational unit.
     /// </summary>
-    public bool IsUnit() => !IsZERO();
+    public bool IsUnit() => !IsZero();
 
     /// <summary>
     /// Comparison with any other object.
@@ -343,11 +337,11 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
         if (S == null)
             return 1;
 
-        if (Equals(ZERO))
+        if (Equals(Zero))
         {
             return -S.Signum();
         }
-        if (S.Equals(ZERO))
+        if (S.Equals(One))
         {
             return Signum();
         }
@@ -393,16 +387,16 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
     /// <summary>
     /// Rational number negative.
     /// </summary>
-    public BigRational Negate() => new BigRational(System.Numerics.BigInteger.Negate(Num), Den);
+    public BigRational Negate() => new(System.Numerics.BigInteger.Negate(Num), Den);
 
     /// <summary>
     /// Rational number product.
     /// </summary>
     public BigRational Multiply(BigRational S)
     {
-        if (Equals(ZERO) || S.Equals(ZERO))
+        if (Equals(Zero) || S.Equals(Zero))
         {
-            return ZERO;
+            return Zero;
         }
 
         System.Numerics.BigInteger R1 = Num;
@@ -450,11 +444,11 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
     /// </summary>
     public BigRational Remainder(BigRational S)
     {
-        if (S.IsZERO())
+        if (S.IsZero())
         {
             throw new ArithmeticException("division by zero");
         }
-        return ZERO;
+        return Zero;
     }
 
     /// <summary>
@@ -492,11 +486,11 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
     /// </summary>
     public BigRational Sum(BigRational S)
     {
-        if (Equals(ZERO))
+        if (Equals(Zero))
         {
             return S;
         }
-        if (S.Equals(ZERO))
+        if (S.Equals(Zero))
         {
             return this;
         }
@@ -530,7 +524,7 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
 
         if (T1.Equals(System.Numerics.BigInteger.Zero))
         {
-            return ZERO;
+            return Zero;
         }
 
         if (!D.Equals(System.Numerics.BigInteger.One))
@@ -552,15 +546,15 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
     /// </summary>
     public BigRational Gcd(BigRational S)
     {
-        if (S == null || S.IsZERO())
+        if (S == null || S.IsZero())
         {
             return this;
         }
-        if (IsZERO())
+        if (IsZero())
         {
             return S;
         }
-        return ONE;
+        return One;
     }
 
     /// <summary>
@@ -572,18 +566,18 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
         ret[0] = null!;
         ret[1] = null!;
         ret[2] = null!;
-        if (S == null || S.IsZERO())
+        if (S == null || S.IsZero())
         {
             ret[0] = this;
             return ret;
         }
-        if (IsZERO())
+        if (IsZero())
         {
             ret[0] = S;
             return ret;
         }
         BigRational half = new BigRational(1, 2);
-        ret[0] = ONE;
+        ret[0] = One;
         ret[1] = Inverse().Multiply(half);
         ret[2] = S.Inverse().Multiply(half);
         return ret;

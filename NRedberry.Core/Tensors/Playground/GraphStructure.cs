@@ -6,8 +6,7 @@ namespace NRedberry.Core.Tensors.Playground;
 
 public sealed class GraphStructure
 {
-    public static GraphStructure EmptyFullContractionsStructure { get; } =
-        new GraphStructure([], [], [], 0);
+    public static GraphStructure EmptyFullContractionsStructure { get; } = new([], [], [], 0);
 
     public GraphStructure(long[] freeContractions, long[][] contractions, int[] components, int componentCount)
     {

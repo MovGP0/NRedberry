@@ -23,10 +23,10 @@ public class ComplexRing<C> : RingFactory<Complex<C>> where C : RingElem<C>
     public List<Complex<C>> Generators() { throw new NotImplementedException(); }
     public AlgebraicNumberRing<C> AlgebraicRing() { throw new NotImplementedException(); }
     public bool IsFinite() { throw new NotImplementedException(); }
-    public Complex<C> Copy(Complex<C> c) { throw new NotImplementedException(); }
-    public Complex<C> GetZERO() { throw new NotImplementedException(); }
-    public Complex<C> GetONE() { throw new NotImplementedException(); }
-    public Complex<C> GetIMAG() { throw new NotImplementedException(); }
+    public static Complex<C> Clone(Complex<C> c) { throw new NotImplementedException(); }
+    public static Complex<C> Zero => throw new NotImplementedException();
+    public static Complex<C> One => throw new NotImplementedException();
+    public static Complex<C> Imag => throw new NotImplementedException();
     public bool IsCommutative() { throw new NotImplementedException(); }
     public bool IsAssociative() { throw new NotImplementedException(); }
     public bool IsField() { throw new NotImplementedException(); }

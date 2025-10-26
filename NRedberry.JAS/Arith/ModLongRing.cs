@@ -16,7 +16,7 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
     /// </summary>
     public readonly long Modul;
 
-    private static readonly Random random = new Random();
+    private static readonly Random random = new();
 
     /// <summary>
     /// Indicator if this ring is a field.
@@ -26,8 +26,7 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
     /// <summary>
     /// maximal representable integer.
     /// </summary>
-    public static readonly System.Numerics.BigInteger MAX_LONG = 
-        new System.Numerics.BigInteger(int.MaxValue);
+    public static readonly System.Numerics.BigInteger MAX_LONG = new(int.MaxValue);
 
     /// <summary>
     /// The constructor creates a ModLongRing object from a long integer as module part.
@@ -78,42 +77,46 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
     /// Get the module part as BigInteger.
     /// </summary>
     /// <returns>modul.</returns>
-    public BigInteger GetIntegerModul() => new BigInteger(Modul);
+    public BigInteger GetIntegerModul() => new(Modul);
 
     /// <summary>
     /// Create ModLong element c.
     /// </summary>
-    public ModLong Create(System.Numerics.BigInteger c) => new ModLong(this, c);
+    public ModLong Create(System.Numerics.BigInteger c) => new(this, c);
 
     /// <summary>
     /// Create ModLong element c.
     /// </summary>
-    public ModLong Create(long c) => new ModLong(this, c);
+    public ModLong Create(long c) => new(this, c);
 
     /// <summary>
     /// Copy ModLong element c.
     /// </summary>
-    public ModLong Copy(ModLong c) => new ModLong(this, c.Val);
+    public ModLong Copy(ModLong c) => new(this, c.Val);
+
+    public static ModLong Clone(ModLong c) => c.Clone();
 
     /// <summary>
     /// Get the zero element.
     /// </summary>
     /// <returns>0 as ModLong.</returns>
-    public ModLong GetZERO() => new ModLong(this, 0L);
+    public ModLong Zero => new(this, 0L);
 
     /// <summary>
     /// Get the one element.
     /// </summary>
     /// <returns>1 as ModLong.</returns>
-    public ModLong GetONE() => new ModLong(this, 1L);
+    public ModLong One => new(this, 1L);
 
     /// <summary>
     /// Get a list of the generating elements.
     /// </summary>
     public List<ModLong> Generators()
     {
-        List<ModLong> g = new List<ModLong>(1);
-        g.Add(GetONE());
+        List<ModLong> g =
+        [
+            One
+        ];
         return g;
     }
 
@@ -163,22 +166,21 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
     /// Characteristic of this ring.
     /// </summary>
     /// <returns>characteristic of this ring.</returns>
-    public BigInteger Characteristic() => new BigInteger(Modul);
+    public BigInteger Characteristic() => new(Modul);
 
-    System.Numerics.BigInteger RingFactory<ModLong>.Characteristic() => 
-        new System.Numerics.BigInteger(Modul);
+    System.Numerics.BigInteger RingFactory<ModLong>.Characteristic() => new(Modul);
 
     /// <summary>
     /// Get a ModLong element from a BigInteger value.
     /// </summary>
-    public ModLong FromInteger(System.Numerics.BigInteger a) => new ModLong(this, a);
+    public ModLong FromInteger(System.Numerics.BigInteger a) => new(this, a);
 
     ModLong ElemFactory<ModLong>.FromInteger(System.Numerics.BigInteger a) => FromInteger(a);
 
     /// <summary>
     /// Get a ModLong element from a long value.
     /// </summary>
-    public ModLong FromInteger(long a) => new ModLong(this, a);
+    public ModLong FromInteger(long a) => new(this, a);
 
     /// <summary>
     /// ModLong random.
@@ -203,7 +205,7 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
     {
         ModLong b = a.Ring.FromInteger(c.Val);
         ModLong d = a.Subtract(b);
-        if (d.IsZERO())
+        if (d.IsZero())
         {
             return new ModLong(this, c.Val);
         }
@@ -346,5 +348,24 @@ internal static class BigIntegerExtensions
         }
 
         return true;
+    }
+
+    public static int GetBitLength(this System.Numerics.BigInteger value)
+    {
+        if (value.IsZero)
+        {
+            return 0;
+        }
+
+        byte[] bytes = System.Numerics.BigInteger.Abs(value).ToByteArray();
+        byte msb = bytes[^1];
+        int bitLength = (bytes.Length - 1) * 8;
+        while (msb != 0)
+        {
+            msb >>= 1;
+            bitLength++;
+        }
+
+        return bitLength;
     }
 }

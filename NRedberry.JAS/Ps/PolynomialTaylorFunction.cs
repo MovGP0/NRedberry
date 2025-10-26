@@ -21,21 +21,21 @@ public class PolynomialTaylorFunction<C> : TaylorFunction<C> where C : RingElem<
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        return pol.ToString();
     }
 
     public bool IsZERO()
     {
-        throw new NotImplementedException();
+        return pol.IsZero();
     }
 
     public TaylorFunction<C> Deriviative()
     {
-        throw new NotImplementedException();
+        return new PolynomialTaylorFunction<C>(PolyUtil.BaseDeriviative(pol));
     }
 
     public C Evaluate(C a)
     {
-        throw new NotImplementedException();
+        return PolyUtil.EvaluateMain(null!, pol, a);
     }
 }

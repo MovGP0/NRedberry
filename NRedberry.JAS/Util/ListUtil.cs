@@ -8,7 +8,7 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Util;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.util.ListUtil
 /// </remarks>
-public class ListUtil
+public static class ListUtil
 {
     /// <summary>
     /// Map a unary function to the list.
@@ -18,10 +18,23 @@ public class ListUtil
     /// <param name="list">input list</param>
     /// <param name="f">evaluation functor</param>
     /// <returns>new list elements f(list(i)).</returns>
-    public static List<D> Map<C, D>(List<C> list, UnaryFunctor<C, D> f) 
-        where C : Element<C> 
+    public static List<D>? Map<C, D>(List<C>? list, UnaryFunctor<C, D> f)
+        where C : Element<C>
         where D : Element<D>
     {
-        throw new NotImplementedException();
+        if (list is null)
+        {
+            return null;
+        }
+
+        ArgumentNullException.ThrowIfNull(f);
+
+        List<D> result = new(list.Count);
+        foreach (var item in list)
+        {
+            result.Add(f.Eval(item));
+        }
+
+        return result;
     }
 }

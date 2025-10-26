@@ -12,29 +12,36 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 public class Complex<C> : GcdRingElem<Complex<C>> where C : RingElem<C>
 {
     public readonly ComplexRing<C> Ring;
-    protected readonly C re;
-    protected readonly C im;
 
     public Complex(ComplexRing<C> ring, C r, C i)
     {
         Ring = ring;
-        re = r;
-        im = i;
+        Re = r;
+        Im = i;
     }
 
-    public Complex(ComplexRing<C> ring, C r) : this(ring, r, ring.Ring.GetZERO()) { }
+    public Complex(ComplexRing<C> ring, C r) : this(ring, r, RingFactory<C>.Zero) { }
 
     public Complex(ComplexRing<C> ring, long r) : this(ring, ring.Ring.FromInteger(r)) { }
 
-    public Complex(ComplexRing<C> ring) : this(ring, ring.Ring.GetZERO()) { }
+    public Complex(ComplexRing<C> ring) : this(ring, RingFactory<C>.Zero) { }
 
     public ComplexRing<C> Factory() => Ring;
-    public C GetRe() => re;
-    public C GetIm() => im;
-    public Complex<C> Copy() { throw new NotImplementedException(); }
+    
+    /// <summary>
+    /// The real part of the complex number.
+    /// </summary>
+    public C Re { get; }
+
+    /// <summary>
+    /// The imaginary part of the complex number.
+    /// </summary>
+    public C Im { get; }
+
+    public Complex<C> Clone() { throw new NotImplementedException(); }
     public override string ToString() { throw new NotImplementedException(); }
-    public bool IsZERO() { throw new NotImplementedException(); }
-    public bool IsONE() { throw new NotImplementedException(); }
+    public bool IsZero() { throw new NotImplementedException(); }
+    public bool IsOne() { throw new NotImplementedException(); }
     public bool IsUnit() { throw new NotImplementedException(); }
     public int CompareTo(Complex<C>? other) { throw new NotImplementedException(); }
     public override bool Equals(object? obj) { throw new NotImplementedException(); }

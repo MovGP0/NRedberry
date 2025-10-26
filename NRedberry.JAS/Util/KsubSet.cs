@@ -28,7 +28,7 @@ public class KsubSet<E> : IEnumerable<List<E>>
         Set = set ?? throw new ArgumentNullException(nameof(set));
         if (k < 0 || k > set.Count)
         {
-            throw new ArgumentException("k out of range");
+            throw new ArgumentException("k out of range", nameof(k));
         }
         K = k;
     }
@@ -39,8 +39,42 @@ public class KsubSet<E> : IEnumerable<List<E>>
     /// <returns>an iterator.</returns>
     public IEnumerator<List<E>> GetEnumerator()
     {
-        throw new NotImplementedException();
+        return GenerateSubsets().GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+    private IEnumerable<List<E>> GenerateSubsets()
+    {
+        if (K == 0)
+        {
+            yield return [];
+            yield break;
+        }
+
+        foreach (List<E> subset in GenerateSubsetsRecursive(0, K))
+        {
+            yield return subset;
+        }
+    }
+
+    private IEnumerable<List<E>> GenerateSubsetsRecursive(int start, int remaining)
+    {
+        if (remaining == 0)
+        {
+            yield return [];
+            yield break;
+        }
+
+        for (int i = start; i <= Set.Count - remaining; i++)
+        {
+            E element = Set[i];
+            foreach (List<E> tail in GenerateSubsetsRecursive(i + 1, remaining - 1))
+            {
+                List<E> subset = new List<E>(tail.Count + 1) { element };
+                subset.AddRange(tail);
+                yield return subset;
+            }
+        }
+    }
 }

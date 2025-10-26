@@ -13,5 +13,5 @@ public interface AbelianGroupFactory<C> : ElemFactory<C> where C : AbelianGroupE
     /// Get the constant zero for the AbelianGroupElem.
     /// </summary>
     /// <returns>0.</returns>
-    C GetZERO();
+    static C Zero { get; }
 }

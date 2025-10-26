@@ -33,7 +33,7 @@ public abstract class ExpVector : AbelianGroupElem<ExpVector>
     public static ExpVector Create(ICollection<long> v) { throw new NotImplementedException(); }
     
     public abstract AbelianGroupFactory<ExpVector> Factory();
-    public abstract ExpVector Copy();
+    public abstract ExpVector Clone();
     public abstract long GetVal(int i);
     public abstract long[] GetVal();
     public abstract int Length();
@@ -43,7 +43,7 @@ public abstract class ExpVector : AbelianGroupElem<ExpVector>
     public abstract int Signum();
     public abstract ExpVector Subtract(ExpVector V);
     public abstract ExpVector Sum(ExpVector V);
-    public abstract bool IsZERO();
+    public abstract bool IsZero();
     public abstract int CompareTo(ExpVector? v);
     public abstract override bool Equals(object? B);
     public abstract override int GetHashCode();

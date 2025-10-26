@@ -8,7 +8,7 @@ public sealed class Parser
     /// <summary>
     /// Default parser.
     /// </summary>
-    public static readonly Parser Default = new Parser(
+    public static readonly Parser Default = new(
     //    ParserBrackets.Instance,
     //    ParserSum.Instance,
     //    ParserProduct.Instance,

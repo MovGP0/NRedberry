@@ -12,16 +12,15 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 /// </remarks>
 public class AlgebraicNotInvertibleException : NotInvertibleException
 {
-    public readonly object? F;
-    public readonly object? F1;
-    public readonly object? F2;
+    public object? F { get; }
+    public object? F1 { get; }
+    public object? F2 { get; }
 
-    public AlgebraicNotInvertibleException(string message, Exception? innerException)
-        : this(message, innerException, null, null, null)
-    {
-    }
-
-    public AlgebraicNotInvertibleException(string message, object? f, object? f1, object? f2)
+    public AlgebraicNotInvertibleException(
+        string message,
+        object? f,
+        object? f1,
+        object? f2)
         : base(message)
     {
         F = f;
@@ -29,7 +28,12 @@ public class AlgebraicNotInvertibleException : NotInvertibleException
         F2 = f2;
     }
 
-    public AlgebraicNotInvertibleException(string message, Exception? innerException, object? f, object? f1, object? f2)
+    public AlgebraicNotInvertibleException(
+        string message,
+        Exception? innerException,
+        object? f = null,
+        object? f1 = null,
+        object? f2 = null)
         : base(message, innerException!)
     {
         F = f;

@@ -31,93 +31,39 @@ public class QuotientRing<C> : RingFactory<Quotient<C>> where C : GcdRingElem<C>
         }
     }
 
-    public bool IsFinite()
-    {
-        throw new NotImplementedException();
-    }
+    public bool IsFinite() => throw new NotImplementedException();
 
-    public Quotient<C> Copy(Quotient<C> c)
-    {
-        throw new NotImplementedException();
-    }
+    public static Quotient<C> Clone(Quotient<C> c) => throw new NotImplementedException();
 
-    public Quotient<C> GetZERO()
-    {
-        throw new NotImplementedException();
-    }
+    public static Quotient<C> Zero => throw new NotImplementedException();
 
-    public Quotient<C> GetONE()
-    {
-        throw new NotImplementedException();
-    }
+    public static Quotient<C> One => throw new NotImplementedException();
 
-    public List<Quotient<C>> Generators()
-    {
-        throw new NotImplementedException();
-    }
+    public List<Quotient<C>> Generators() => throw new NotImplementedException();
 
-    public bool IsCommutative()
-    {
-        throw new NotImplementedException();
-    }
+    public bool IsCommutative() => throw new NotImplementedException();
 
-    public bool IsAssociative()
-    {
-        throw new NotImplementedException();
-    }
+    public bool IsAssociative() => throw new NotImplementedException();
 
-    public bool IsField()
-    {
-        throw new NotImplementedException();
-    }
+    public bool IsField() => throw new NotImplementedException();
 
-    public Quotient<C> FromInteger(long a)
-    {
-        throw new NotImplementedException();
-    }
+    public Quotient<C> FromInteger(long a) => throw new NotImplementedException();
 
-    public Quotient<C> FromInteger(System.Numerics.BigInteger a)
-    {
-        throw new NotImplementedException();
-    }
+    public Quotient<C> FromInteger(System.Numerics.BigInteger a) => throw new NotImplementedException();
 
-    public Quotient<C> Random(int n)
-    {
-        throw new NotImplementedException();
-    }
+    public Quotient<C> Random(int n) => throw new NotImplementedException();
 
-    public Quotient<C> Random(int n, Random rnd)
-    {
-        throw new NotImplementedException();
-    }
+    public Quotient<C> Random(int n, Random rnd) => throw new NotImplementedException();
 
-    public System.Numerics.BigInteger Characteristic()
-    {
-        throw new NotImplementedException();
-    }
+    public System.Numerics.BigInteger Characteristic() => throw new NotImplementedException();
 
-    public Quotient<C> Parse(string s)
-    {
-        throw new NotImplementedException();
-    }
+    public Quotient<C> Parse(string s) => throw new NotImplementedException();
 
-    public override string ToString()
-    {
-        throw new NotImplementedException();
-    }
+    public override string ToString() => throw new NotImplementedException();
 
-    public override bool Equals(object? b)
-    {
-        throw new NotImplementedException();
-    }
+    public override bool Equals(object? b) => throw new NotImplementedException();
 
-    public override int GetHashCode()
-    {
-        throw new NotImplementedException();
-    }
+    public override int GetHashCode() => throw new NotImplementedException();
 
-    public string ToScript()
-    {
-        throw new NotImplementedException();
-    }
+    public string ToScript() => throw new NotImplementedException();
 }

@@ -39,7 +39,7 @@ public sealed class ExpVectorShort : ExpVector
         val = v;
     }
 
-    public override ExpVector Copy()
+    public override ExpVector Clone()
     {
         short[] w = new short[val.Length];
         Array.Copy(val, 0, w, 0, val.Length);
@@ -65,7 +65,7 @@ public sealed class ExpVectorShort : ExpVector
     public override int Signum() { throw new NotImplementedException(); }
     public override ExpVector Subtract(ExpVector V) { throw new NotImplementedException(); }
     public override ExpVector Sum(ExpVector V) { throw new NotImplementedException(); }
-    public override bool IsZERO() { throw new NotImplementedException(); }
+    public override bool IsZero() { throw new NotImplementedException(); }
     public override int CompareTo(ExpVector? v) { throw new NotImplementedException(); }
     public override bool Equals(object? B) { throw new NotImplementedException(); }
     public override int GetHashCode() { throw new NotImplementedException(); }

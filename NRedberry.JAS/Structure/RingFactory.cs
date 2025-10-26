@@ -12,7 +12,7 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 public interface RingFactory<C> : AbelianGroupFactory<C>, MonoidFactory<C> where C : RingElem<C>
 {
     /// <summary>
-    /// Query if this ring is a field. May return false if it is to hard to determine if this ring is a field.
+    /// Query if this ring is a field. May return false if it is too hard to determine if this ring is a field.
     /// </summary>
     /// <returns>true if it is known that this ring is a field, else false.</returns>
     bool IsField();

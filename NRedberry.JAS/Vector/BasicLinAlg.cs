@@ -13,21 +13,34 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Vector;
 public class BasicLinAlg<C> where C : RingElem<C>
 {
     /// <summary>
-    /// Constructor.
-    /// </summary>
-    public BasicLinAlg()
-    {
-    }
-
-    /// <summary>
     /// Addition of vectors of ring elements.
     /// </summary>
     /// <param name="a">a ring element list</param>
     /// <param name="b">a ring element list</param>
     /// <returns>a+b, the vector sum of a and b.</returns>
-    public List<C> VectorAdd(List<C> a, List<C> b)
+    public List<C>? VectorAdd(List<C>? a, List<C>? b)
     {
-        throw new NotImplementedException();
+        if (a == null)
+        {
+            return b;
+        }
+
+        if (b == null)
+        {
+            return a;
+        }
+
+        List<C> result = new(a.Count);
+        using IEnumerator<C> ai = a.GetEnumerator();
+        using IEnumerator<C> bi = b.GetEnumerator();
+        while (ai.MoveNext() && bi.MoveNext())
+        {
+            C sum = ai.Current.Sum(bi.Current);
+            result.Add(sum);
+        }
+
+        // Note: original implementation ignores trailing elements if lists differ in length.
+        return result;
     }
 
     /// <summary>
@@ -35,8 +48,13 @@ public class BasicLinAlg<C> where C : RingElem<C>
     /// </summary>
     /// <param name="a">a ring element list</param>
     /// <returns>true, if all polynomial in a are zero, else false.</returns>
-    public bool IsZero(List<C> a)
+    public bool IsZero(List<C?>? a)
     {
-        throw new NotImplementedException();
+        if (a is null)
+        {
+            return true;
+        }
+
+        return a.OfType<C>().All(element => element.IsZero());
     }
 }

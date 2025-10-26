@@ -57,5 +57,5 @@ public interface ElemFactory<C> where C : Element<C>
     /// </summary>
     /// <param name="c">element to copy</param>
     /// <returns>a copy of c.</returns>
-    C Copy(C c);
+    static abstract C Clone(C c);
 }

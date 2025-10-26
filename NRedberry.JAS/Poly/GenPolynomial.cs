@@ -15,9 +15,9 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 public class GenPolynomial<C> : RingElem<GenPolynomial<C>> where C : RingElem<C>
 {
     // Will be fully implemented later
-    public GenPolynomial<C> Copy() { throw new NotImplementedException(); }
-    public bool IsZERO() { throw new NotImplementedException(); }
-    public bool IsONE() { throw new NotImplementedException(); }
+    public GenPolynomial<C> Clone() { throw new NotImplementedException(); }
+    public bool IsZero() { throw new NotImplementedException(); }
+    public bool IsOne() { throw new NotImplementedException(); }
     public bool IsUnit() { throw new NotImplementedException(); }
     public int CompareTo(GenPolynomial<C>? other) { throw new NotImplementedException(); }
     public override bool Equals(object? obj) { throw new NotImplementedException(); }

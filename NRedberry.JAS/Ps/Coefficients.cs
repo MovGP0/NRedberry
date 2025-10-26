@@ -41,7 +41,19 @@ public abstract class Coefficients<C> where C : RingElem<C>
     /// <returns>coefficient at index.</returns>
     public C Get(int index)
     {
-        throw new NotImplementedException();
+        if (CoeffCache == null)
+        {
+            return Generate(index);
+        }
+
+        if (CoeffCache.TryGetValue(index, out C? value))
+        {
+            return value;
+        }
+
+        value = Generate(index);
+        CoeffCache[index] = value;
+        return value;
     }
 
     /// <summary>

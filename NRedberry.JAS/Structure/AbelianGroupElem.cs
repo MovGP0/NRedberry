@@ -13,7 +13,7 @@ public interface AbelianGroupElem<C> : Element<C> where C : AbelianGroupElem<C>
     /// Test if this is zero.
     /// </summary>
     /// <returns>true if this is 0, else false.</returns>
-    bool IsZERO();
+    bool IsZero();
 
     /// <summary>
     /// Signum.

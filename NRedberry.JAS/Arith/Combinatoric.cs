@@ -17,9 +17,9 @@ public class Combinatoric
     {
         if (n <= 1)
         {
-            return BigInteger.ONE;
+            return BigInteger.One;
         }
-        BigInteger f = BigInteger.ONE;
+        BigInteger f = BigInteger.One;
         if (n >= int.MaxValue)
         {
             throw new NotSupportedException(n + " >= int.MaxValue = " + int.MaxValue);

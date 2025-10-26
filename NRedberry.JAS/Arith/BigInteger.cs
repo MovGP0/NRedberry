@@ -10,7 +10,7 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.arith.BigInteger
 /// </remarks>
-public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger>, IEnumerable<BigInteger>
+public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger>, IEnumerable<BigInteger>, ICloneable
 {
     /// <summary>
     /// The data structure.
@@ -23,14 +23,12 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
     /// <summary>
     /// The constant 0.
     /// </summary>
-    public static readonly BigInteger ZERO = new (System.Numerics.BigInteger.Zero);
-    public static BigInteger Zero => ZERO;
+    public static readonly BigInteger Zero = new (System.Numerics.BigInteger.Zero);
 
     /// <summary>
     /// The constant 1.
     /// </summary>
-    public static readonly BigInteger ONE = new (System.Numerics.BigInteger.One);
-    public static BigInteger One => ONE;
+    public static readonly BigInteger One = new (System.Numerics.BigInteger.One);
 
     public static BigInteger Parse(string s) => new(System.Numerics.BigInteger.Parse(s));
 
@@ -38,15 +36,9 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
     /// Constructor for BigInteger from math.BigInteger.
     /// </summary>
     /// <param name="a">System.Numerics.BigInteger.</param>
-    public BigInteger(System.Numerics.BigInteger a)
-    {
-        Val = a;
-    }
+    public BigInteger(System.Numerics.BigInteger a) => Val = a;
 
-    public BigInteger(BigInteger a)
-    {
-        Val = a.Val;
-    }
+    public BigInteger(BigInteger a) => Val = a.Val;
 
     /// <summary>
     /// Constructor for BigInteger from long.
@@ -98,8 +90,10 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
     /// <returns>list of generators for the algebraic structure.</returns>
     public List<BigInteger> Generators()
     {
-        List<BigInteger> g = new List<BigInteger>(1);
-        g.Add(GetONE());
+        List<BigInteger> g =
+        [
+            One
+        ];
         return g;
     }
 
@@ -112,35 +106,16 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
         return false;
     }
 
-    /// <summary>
-    /// Clone this.
-    /// </summary>
-    public BigInteger Copy()
-    {
-        return new BigInteger(Val);
-    }
+    public BigInteger Clone() => new(Val);
+
+    object ICloneable.Clone() => Clone();
 
     /// <summary>
     /// Copy BigInteger element c.
     /// </summary>
     /// <param name="c">BigInteger.</param>
     /// <returns>a copy of c.</returns>
-    public BigInteger Copy(BigInteger c)
-    {
-        return new BigInteger(c.Val);
-    }
-
-    /// <summary>
-    /// Get the zero element.
-    /// </summary>
-    /// <returns>0.</returns>
-    public BigInteger GetZERO() => ZERO;
-
-    /// <summary>
-    /// Get the one element.
-    /// </summary>
-    /// <returns>1.</returns>
-    public BigInteger GetONE() => ONE;
+    public static BigInteger Clone(BigInteger c) => new(c.Val);
 
     /// <summary>
     /// Query if this ring is commutative.
@@ -222,29 +197,25 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
     /// Is BigInteger number zero.
     /// </summary>
     /// <returns>If this is 0 then true is returned, else false.</returns>
-    public bool IsZERO()
+    public bool IsZero()
     {
         return Val.Equals(System.Numerics.BigInteger.Zero);
     }
 
-    public bool IsZero() => IsZERO();
-    
     /// <summary>
     /// Is BigInteger number one.
     /// </summary>
-    public bool IsONE()
+    public bool IsOne()
     {
         return Val.Equals(System.Numerics.BigInteger.One);
     }
 
-    public bool IsOne() => IsONE();
-    
     /// <summary>
     /// Is BigInteger number unit.
     /// </summary>
     public bool IsUnit()
     {
-        return IsONE() || Negate().IsONE();
+        return IsOne() || Negate().IsOne();
     }
 
     /// <summary>
@@ -348,11 +319,11 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
     /// </summary>
     public BigInteger Inverse()
     {
-        if (IsONE() || Negate().IsONE())
+        if (IsOne() || Negate().IsOne())
         {
             return this;
         }
-        return ZERO;
+        return Zero;
     }
 
     /// <summary>
@@ -408,12 +379,12 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
         ret[0] = null!;
         ret[1] = null!;
         ret[2] = null!;
-        if (S == null || S.IsZERO())
+        if (S == null || S.IsZero())
         {
             ret[0] = this;
             return ret;
         }
-        if (IsZERO())
+        if (IsZero())
         {
             ret[0] = S;
             return ret;
@@ -421,13 +392,13 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
         BigInteger[] qr;
         BigInteger q = this;
         BigInteger r = S;
-        BigInteger c1 = ONE;
-        BigInteger d1 = ZERO;
-        BigInteger c2 = ZERO;
-        BigInteger d2 = ONE;
+        BigInteger c1 = One;
+        BigInteger d1 = Zero;
+        BigInteger c2 = Zero;
+        BigInteger d2 = One;
         BigInteger x1;
         BigInteger x2;
-        while (!r.IsZERO())
+        while (!r.IsZero())
         {
             qr = q.QuotientRemainder(r);
             q = qr[0];

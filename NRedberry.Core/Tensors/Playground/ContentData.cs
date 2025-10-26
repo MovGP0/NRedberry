@@ -6,8 +6,7 @@ namespace NRedberry.Core.Tensors.Playground;
 
 public sealed class ContentData
 {
-    public static ContentData EmptyInstance { get; } =
-        new ContentData(GraphStructureHashed.EmptyInstance, null, [], [], []);
+    public static ContentData EmptyInstance { get; } = new(GraphStructureHashed.EmptyInstance, null, [], [], []);
 
     public ContentData(GraphStructureHashed structureOfContractionsHashed,
                        GraphStructure? structureOfContractions,

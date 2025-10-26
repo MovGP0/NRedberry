@@ -13,7 +13,7 @@ public interface MonoidElem<C> : Element<C> where C : MonoidElem<C>
     /// Test if this is one.
     /// </summary>
     /// <returns>true if this is 1, else false.</returns>
-    bool IsONE();
+    bool IsOne();
 
     /// <summary>
     /// Test if this is a unit. I.e. there exists x with this.Multiply(x).IsONE() == true.

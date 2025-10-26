@@ -1,4 +1,4 @@
-# Java to C# Scaffolding Tracking
+﻿# Java to C# Scaffolding Tracking
 
 This document tracks the scaffolding status of all Java files in the NRedberry.JAS project.
 
@@ -15,22 +15,22 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 | BigInteger.java | BigInteger.cs | ✔️ Complete | |
 | BigRational.java | BigRational.cs | ✔️ Complete | |
 | Combinatoric.java | Combinatoric.cs | ✔️ Complete | |
-| ModInteger.java | ModInteger.cs | ✅ Scaffolded | |
-| ModIntegerRing.java | ModIntegerRing.cs | ✅ Scaffolded | |
+| ModInteger.java | ModInteger.cs | ✔️ Complete | |
+| ModIntegerRing.java | ModIntegerRing.cs | ✔️ Complete | |
 | ModLong.java | ModLong.cs | ✔️ Complete | |
 | ModLongRing.java | ModLongRing.cs | ✔️ Complete | |
 | Modular.java | Modular.cs | ✔️ Complete | |
 | ModularNotInvertibleException.java | ModularNotInvertibleException.cs | ✔️ Complete | |
-| ModularRingFactory.java | ModularRingFactory.cs | ✅ Scaffolded | |
-| PrimeList.java | PrimeList.cs | ✅ Scaffolded | |
+| ModularRingFactory.java | ModularRingFactory.cs | ✔️ Complete | |
+| PrimeList.java | PrimeList.cs | ✔️ Complete | |
 
 ### Gb (4 files)
 | Java File | C# File | Status | Notes |
 |-----------|---------|--------|-------|
-| GroebnerBase.java | GroebnerBase.cs | ✅ Scaffolded | |
-| Reduction.java | Reduction.cs | ✅ Scaffolded | |
-| ReductionAbstract.java | ReductionAbstract.cs | ✅ Scaffolded | |
-| ReductionSeq.java | ReductionSeq.cs | ✅ Scaffolded | |
+| GroebnerBase.java | GroebnerBase.cs | ✔️ Complete | |
+| Reduction.java | Reduction.cs | ✔️ Complete | |
+| ReductionAbstract.java | ReductionAbstract.cs | ✔️ Complete | |
+| ReductionSeq.java | ReductionSeq.cs | ✔️ Complete | |
 
 ### Poly (24 files)
 | Java File | C# File | Status    | Notes |
@@ -64,28 +64,28 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 ### Ps (5 files)
 | Java File | C# File | Status | Notes |
 |-----------|---------|--------|-------|
-| Coefficients.java | Coefficients.cs | ✅ Scaffolded | |
-| PolynomialTaylorFunction.java | PolynomialTaylorFunction.cs | ✅ Scaffolded | |
-| TaylorFunction.java | TaylorFunction.cs | ✅ Scaffolded | |
-| UnivPowerSeries.java | UnivPowerSeries.cs | ✅ Scaffolded | |
-| UnivPowerSeriesRing.java | UnivPowerSeriesRing.cs | ✅ Scaffolded | |
+| Coefficients.java | Coefficients.cs | ✔️ Complete | |
+| PolynomialTaylorFunction.java | PolynomialTaylorFunction.cs | ✔️ Complete | |
+| TaylorFunction.java | TaylorFunction.cs | ✔️ Complete | |
+| UnivPowerSeries.java | UnivPowerSeries.cs | ✔️ Complete | |
+| UnivPowerSeriesRing.java | UnivPowerSeriesRing.cs | ✔️ Complete | |
 
 ### Structure (13 files)
 | Java File | C# File | Status | Notes |
 |-----------|---------|--------|-------|
-| AbelianGroupElem.java | AbelianGroupElem.cs | ✅ Scaffolded | |
-| AbelianGroupFactory.java | AbelianGroupFactory.cs | ✅ Scaffolded | |
-| BinaryFunctor.java | BinaryFunctor.cs | ✅ Scaffolded | |
-| Element.java | Element.cs | ✅ Scaffolded | |
-| ElemFactory.java | ElemFactory.cs | ✅ Scaffolded | |
-| GcdRingElem.java | GcdRingElem.cs | ✅ Scaffolded | |
-| MonoidElem.java | MonoidElem.cs | ✅ Scaffolded | |
-| MonoidFactory.java | MonoidFactory.cs | ✅ Scaffolded | |
-| NotInvertibleException.java | NotInvertibleException.cs | ✅ Scaffolded | |
-| Power.java | Power.cs | ✅ Scaffolded | |
-| RingElem.java | RingElem.cs | ✅ Scaffolded | |
-| RingFactory.java | RingFactory.cs | ✅ Scaffolded | |
-| UnaryFunctor.java | UnaryFunctor.cs | ✅ Scaffolded | |
+| AbelianGroupElem.java | AbelianGroupElem.cs | ✔️ Complete | |
+| AbelianGroupFactory.java | AbelianGroupFactory.cs | ✔️ Complete | |
+| BinaryFunctor.java | BinaryFunctor.cs | ✔️ Complete | |
+| Element.java | Element.cs | ✔️ Complete | |
+| ElemFactory.java | ElemFactory.cs | ✔️ Complete | |
+| GcdRingElem.java | GcdRingElem.cs | ✔️ Complete | |
+| MonoidElem.java | MonoidElem.cs | ✔️ Complete | |
+| MonoidFactory.java | MonoidFactory.cs | ✔️ Complete | |
+| NotInvertibleException.java | NotInvertibleException.cs | ✔️ Complete | |
+| Power.java | Power.cs | ✔️ Complete | |
+| RingElem.java | RingElem.cs | ✔️ Complete | |
+| RingFactory.java | RingFactory.cs | ✔️ Complete | |
+| UnaryFunctor.java | UnaryFunctor.cs | ✔️ Complete | |
 
 ### Ufd (37 files)
 | Java File | C# File | Status       | Notes |
@@ -129,13 +129,13 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 ### Util (5 files)
 | Java File | C# File | Status | Notes |
 |-----------|---------|--------|-------|
-| CartesianProduct.java | CartesianProduct.cs | ✅ Scaffolded | |
-| CartesianProductInfinite.java | CartesianProductInfinite.cs | ✅ Scaffolded | |
-| KsubSet.java | KsubSet.cs | ✅ Scaffolded | |
-| ListUtil.java | ListUtil.cs | ✅ Scaffolded | |
-| LongIterable.java | LongIterable.cs | ✅ Scaffolded | |
+| CartesianProduct.java | CartesianProduct.cs | ✔️ Complete | |
+| CartesianProductInfinite.java | CartesianProductInfinite.cs | ✔️ Complete | |
+| KsubSet.java | KsubSet.cs | ✔️ Complete | |
+| ListUtil.java | ListUtil.cs | ✔️ Complete | |
+| LongIterable.java | LongIterable.cs | ✔️ Complete | |
 
 ### Vector (1 file)
 | Java File | C# File | Status | Notes |
 |-----------|---------|--------|-------|
-| BasicLinAlg.java | BasicLinAlg.cs | ✅ Scaffolded | Completed: VectorAdd(), IsZero() methods |
+| BasicLinAlg.java | BasicLinAlg.cs | ✔️ Complete | |

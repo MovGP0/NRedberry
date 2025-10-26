@@ -26,9 +26,9 @@ public class AlgebraicNumberRing<C> : RingFactory<AlgebraicNumber<C>> where C : 
     }
 
     public GenPolynomial<C> GetModul() => Modul;
-    public AlgebraicNumber<C> Copy(AlgebraicNumber<C> c) { throw new NotImplementedException(); }
-    public AlgebraicNumber<C> GetZERO() { throw new NotImplementedException(); }
-    public AlgebraicNumber<C> GetONE() { throw new NotImplementedException(); }
+    public static AlgebraicNumber<C> Clone(AlgebraicNumber<C> c) { throw new NotImplementedException(); }
+    public static AlgebraicNumber<C> Zero => throw new NotImplementedException();
+    public static AlgebraicNumber<C> One => throw new NotImplementedException();
     public AlgebraicNumber<C> GetGenerator() { throw new NotImplementedException(); }
     public List<AlgebraicNumber<C>> Generators() { throw new NotImplementedException(); }
     public bool IsFinite() { throw new NotImplementedException(); }

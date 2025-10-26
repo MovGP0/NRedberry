@@ -20,13 +20,13 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
         Val = a;
     }
 
-    public AlgebraicNumber(AlgebraicNumberRing<C> r) : this(r, r.Ring.GetZERO()) { }
+    public AlgebraicNumber(AlgebraicNumberRing<C> r) : this(r, GenPolynomialRing<C>.Zero) { }
 
     public GenPolynomial<C> GetVal() => Val;
     public AlgebraicNumberRing<C> Factory() => Ring;
-    public AlgebraicNumber<C> Copy() { throw new NotImplementedException(); }
-    public bool IsZERO() { throw new NotImplementedException(); }
-    public bool IsONE() { throw new NotImplementedException(); }
+    public AlgebraicNumber<C> Clone() { throw new NotImplementedException(); }
+    public bool IsZero() { throw new NotImplementedException(); }
+    public bool IsOne() { throw new NotImplementedException(); }
     public bool IsUnit() { throw new NotImplementedException(); }
     public int CompareTo(AlgebraicNumber<C>? other) { throw new NotImplementedException(); }
     public override bool Equals(object? obj) { throw new NotImplementedException(); }
