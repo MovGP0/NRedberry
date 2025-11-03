@@ -1,4 +1,4 @@
-namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
+﻿namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 /// <summary>
 /// ExpVectorPair implements pairs of exponent vectors for S-polynomials. Objects of this class are immutable.
@@ -8,8 +8,8 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 /// </remarks>
 public class ExpVectorPair
 {
-    private readonly ExpVector e1;
-    private readonly ExpVector e2;
+    private readonly ExpVector _first;
+    private readonly ExpVector _second;
 
     /// <summary>
     /// Constructors for ExpVectorPair.
@@ -18,28 +18,28 @@ public class ExpVectorPair
     /// <param name="f">second part</param>
     public ExpVectorPair(ExpVector e, ExpVector f)
     {
-        e1 = e;
-        e2 = f;
+        _first = e;
+        _second = f;
     }
 
     /// <summary>
     /// Get first part.
     /// </summary>
     /// <returns>first part.</returns>
-    public ExpVector GetFirst() => e1;
+    public ExpVector GetFirst() => _first;
 
     /// <summary>
     /// Get second part.
     /// </summary>
     /// <returns>second part.</returns>
-    public ExpVector GetSecond() => e2;
+    public ExpVector GetSecond() => _second;
 
     /// <summary>
     /// String representation.
     /// </summary>
     public override string ToString()
     {
-        return $"ExpVectorPair[{e1},{e2}]";
+        return $"ExpVectorPair[{_first},{_second}]";
     }
 
     /// <summary>
@@ -60,9 +60,13 @@ public class ExpVectorPair
     /// <returns>true, if this == b, else false.</returns>
     public bool Equals(ExpVectorPair b)
     {
-        bool t = e1.Equals(b.GetFirst());
-        t = t && e2.Equals(b.GetSecond());
-        return t;
+        bool equalFirst = _first.Equals(b.GetFirst());
+        if (!equalFirst)
+        {
+            return false;
+        }
+
+        return _second.Equals(b.GetSecond());
     }
 
     /// <summary>
@@ -70,7 +74,7 @@ public class ExpVectorPair
     /// </summary>
     public override int GetHashCode()
     {
-        return (e1.GetHashCode() << 16) + e2.GetHashCode();
+        return (_first.GetHashCode() << 16) + _second.GetHashCode();
     }
 
     /// <summary>
@@ -80,6 +84,16 @@ public class ExpVectorPair
     /// <returns>true, if this is a multiple of p, else false.</returns>
     public bool IsMultiple(ExpVectorPair p)
     {
-        throw new NotImplementedException();
+        if (!_first.MultipleOf(p.GetFirst()))
+        {
+            return false;
+        }
+
+        if (!_second.MultipleOf(p.GetSecond()))
+        {
+            return false;
+        }
+
+        return true;
     }
 }
