@@ -1,3 +1,8 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 /// <summary>
@@ -31,42 +36,350 @@ public sealed class TermOrder
 
     public TermOrder()
     {
-        throw new NotImplementedException();
+        InitializeSingle(DEFAULT_EVORD);
     }
 
     public TermOrder(int evord)
     {
-        throw new NotImplementedException();
+        InitializeSingle(evord);
     }
 
-    public TermOrder(int evord, int n)
+    /// <summary>
+    /// Creates a split term order with the default order applied to both blocks.
+    /// </summary>
+    /// <param name="length">Maximum number of exponents to compare.</param>
+    /// <param name="split">Index where the second block starts.</param>
+    public TermOrder(int length, int split)
     {
-        throw new NotImplementedException();
+        InitializeSplit(DEFAULT_EVORD, DEFAULT_EVORD, length, split);
     }
 
     public TermOrder(long[][] w)
     {
-        throw new NotImplementedException();
+        if (w == null || w.Length == 0)
+        {
+            throw new ArgumentException("Invalid term order weight", nameof(w));
+        }
+
+        weight = CloneWeight(w);
+        evord = 0;
+        evord2 = 0;
+        evbeg1 = 0;
+        evend1 = weight[0].Length;
+        evbeg2 = evend1;
+        evend2 = evend1;
+
+        horder = new ExpVectorComparer((left, right) => -ExpVector.EvIwlc(weight, left, right));
+        lorder = new ExpVectorComparer((left, right) => ExpVector.EvIwlc(weight, left, right));
+    }
+
+    /// <summary>
+    /// Creates a split term order with explicit block orders.
+    /// </summary>
+    /// <param name="firstOrder">Order for the first block.</param>
+    /// <param name="secondOrder">Order for the second block.</param>
+    /// <param name="length">Maximum number of exponents considered.</param>
+    /// <param name="split">Index where the second block starts.</param>
+    public TermOrder(int firstOrder, int secondOrder, int length, int split)
+    {
+        InitializeSplit(firstOrder, secondOrder, length, split);
     }
 
     public int GetEvord() => evord;
     public int GetEvord2() => evord2;
-    public long[][] GetWeight() => weight;
+    public long[][]? GetWeight() => weight is null ? null : CloneWeight(weight);
     public IComparer<ExpVector> GetDescendComparator() => horder;
     public IComparer<ExpVector> GetAscendComparator() => lorder;
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        StringBuilder builder = new ();
+        if (weight != null)
+        {
+            builder.Append("W(");
+            for (int j = 0; j < weight.Length; j++)
+            {
+                long[] row = weight[j];
+                builder.Append('(');
+                for (int i = 0; i < row.Length; i++)
+                {
+                    builder.Append(row[row.Length - 1 - i]);
+                    if (i < row.Length - 1)
+                    {
+                        builder.Append(',');
+                    }
+                }
+
+                builder.Append(')');
+                if (j < weight.Length - 1)
+                {
+                    builder.Append(',');
+                }
+            }
+
+            builder.Append(')');
+            if (evend1 == evend2)
+            {
+                return builder.ToString();
+            }
+
+            builder.Append('[')
+                .Append(evbeg1)
+                .Append(',')
+                .Append(evend1)
+                .Append(']')
+                .Append('[')
+                .Append(evbeg2)
+                .Append(',')
+                .Append(evend2)
+                .Append(']');
+            return builder.ToString();
+        }
+
+        builder.Append(OrderName(evord));
+        if (evord2 == 0)
+        {
+            return builder.ToString();
+        }
+
+        builder.Append('[')
+            .Append(evbeg1)
+            .Append(',')
+            .Append(evend1)
+            .Append(']')
+            .Append(OrderName(evord2))
+            .Append('[')
+            .Append(evbeg2)
+            .Append(',')
+            .Append(evend2)
+            .Append(']');
+        return builder.ToString();
     }
 
     public override bool Equals(object? obj)
     {
-        throw new NotImplementedException();
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
+        if (obj is not TermOrder other)
+        {
+            return false;
+        }
+
+        if (evord != other.evord
+            || evord2 != other.evord2
+            || evbeg1 != other.evbeg1
+            || evend1 != other.evend1
+            || evbeg2 != other.evbeg2
+            || evend2 != other.evend2)
+        {
+            return false;
+        }
+
+        if (weight is null && other.weight is null)
+        {
+            return true;
+        }
+
+        if (weight is null || other.weight is null)
+        {
+            return false;
+        }
+
+        if (weight.Length != other.weight.Length)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < weight.Length; i++)
+        {
+            if (!weight[i].SequenceEqual(other.weight[i]))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public override int GetHashCode()
     {
-        throw new NotImplementedException();
+        HashCode hash = new ();
+        hash.Add(evord);
+        hash.Add(evord2);
+        hash.Add(evbeg1);
+        hash.Add(evend1);
+        hash.Add(evbeg2);
+        hash.Add(evend2);
+        if (weight != null)
+        {
+            foreach (long[] row in weight)
+            {
+                foreach (long value in row)
+                {
+                    hash.Add(value);
+                }
+            }
+        }
+
+        return hash.ToHashCode();
+    }
+
+    private void InitializeSingle(int order)
+    {
+        ValidateOrder(order, nameof(order));
+        evord = order;
+        evord2 = 0;
+        weight = null;
+        evbeg1 = 0;
+        evend1 = int.MaxValue;
+        evbeg2 = int.MaxValue;
+        evend2 = int.MaxValue;
+        horder = CreateSingleOrderComparer(order);
+        lorder = new ExpVectorComparer((left, right) => -horder.Compare(left, right));
+    }
+
+    private void InitializeSplit(int firstOrder, int secondOrder, int length, int split)
+    {
+        ValidateOrder(firstOrder, nameof(firstOrder));
+        ValidateOrder(secondOrder, nameof(secondOrder));
+        if (split < 0 || split > length)
+        {
+            throw new ArgumentOutOfRangeException(nameof(split), "Invalid term order split.");
+        }
+
+        evord = firstOrder;
+        evord2 = secondOrder;
+        weight = null;
+        evbeg1 = 0;
+        evend1 = split;
+        evbeg2 = split;
+        evend2 = length;
+
+        horder = CreateSplitOrderComparer(firstOrder, secondOrder, evbeg1, evend1, evbeg2, evend2);
+        lorder = new ExpVectorComparer((left, right) => -horder.Compare(left, right));
+    }
+
+    private static void ValidateOrder(int order, string paramName)
+    {
+        if (order < LEX || order > REVITDG)
+        {
+            throw new ArgumentOutOfRangeException(paramName, $"Invalid term order: {order}");
+        }
+    }
+
+    private static IComparer<ExpVector> CreateSingleOrderComparer(int order)
+    {
+        return new ExpVectorComparer((left, right) => CompareBlock(left, right, order, 0, int.MaxValue));
+    }
+
+    private static IComparer<ExpVector> CreateSplitOrderComparer(int firstOrder, int secondOrder, int begin1, int end1, int begin2, int end2)
+    {
+        return new ExpVectorComparer((left, right) =>
+        {
+            int primary = CompareBlock(left, right, firstOrder, begin1, end1);
+            if (primary != 0 || secondOrder == 0 || end2 <= begin2)
+            {
+                return primary;
+            }
+
+            return CompareBlock(left, right, secondOrder, begin2, end2);
+        });
+    }
+
+    private static int CompareBlock(ExpVector left, ExpVector right, int order, int begin, int end)
+    {
+        if (left is null)
+        {
+            throw new ArgumentNullException(nameof(left));
+        }
+
+        if (right is null)
+        {
+            throw new ArgumentNullException(nameof(right));
+        }
+
+        int leftLength = left.Length();
+        int rightLength = right.Length();
+        int maxLength = Math.Min(leftLength, rightLength);
+        int effectiveEnd = end == int.MaxValue ? maxLength : Math.Min(end, maxLength);
+        int effectiveBegin = Math.Clamp(begin, 0, effectiveEnd);
+        if (effectiveEnd <= effectiveBegin)
+        {
+            effectiveBegin = 0;
+            effectiveEnd = maxLength;
+        }
+
+        return order switch
+        {
+            LEX => ExpVector.EvIlcp(left, right, effectiveBegin, effectiveEnd),
+            INVLEX => -ExpVector.EvIlcp(left, right, effectiveBegin, effectiveEnd),
+            GRLEX => ExpVector.EvIglc(left, right, effectiveBegin, effectiveEnd),
+            IGRLEX => -ExpVector.EvIglc(left, right, effectiveBegin, effectiveEnd),
+            REVLEX => ExpVector.EvRilcp(left, right, effectiveBegin, effectiveEnd),
+            REVILEX => -ExpVector.EvRilcp(left, right, effectiveBegin, effectiveEnd),
+            REVTDEG => ExpVector.EvRiglc(left, right, effectiveBegin, effectiveEnd),
+            REVITDG => -ExpVector.EvRiglc(left, right, effectiveBegin, effectiveEnd),
+            _ => throw new ArgumentOutOfRangeException(nameof(order), $"Unsupported term order: {order}")
+        };
+    }
+
+    private static string OrderName(int order)
+    {
+        return order switch
+        {
+            LEX => "LEX",
+            INVLEX => "INVLEX",
+            GRLEX => "GRLEX",
+            IGRLEX => "IGRLEX",
+            REVLEX => "REVLEX",
+            REVILEX => "REVILEX",
+            REVTDEG => "REVTDEG",
+            REVITDG => "REVITDG",
+            _ => $"ORDER({order})"
+        };
+    }
+
+    private static long[][] CloneWeight(long[][] source)
+    {
+        long[][] copy = new long[source.Length][];
+        for (int i = 0; i < source.Length; i++)
+        {
+            copy[i] = source[i].ToArray();
+        }
+
+        return copy;
+    }
+
+    private sealed class ExpVectorComparer : IComparer<ExpVector>
+    {
+        private readonly Func<ExpVector, ExpVector, int> comparer;
+
+        public ExpVectorComparer(Func<ExpVector, ExpVector, int> comparer)
+        {
+            this.comparer = comparer ?? throw new ArgumentNullException(nameof(comparer));
+        }
+
+        public int Compare(ExpVector? x, ExpVector? y)
+        {
+            if (ReferenceEquals(x, y))
+            {
+                return 0;
+            }
+
+            if (x is null)
+            {
+                return -1;
+            }
+
+            if (y is null)
+            {
+                return 1;
+            }
+
+            return comparer(x, y);
+        }
     }
 }
