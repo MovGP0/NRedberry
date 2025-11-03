@@ -38,16 +38,16 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 | AlgebraicNotInvertibleException.java | AlgebraicNotInvertibleException.cs | ✅ Scaffolded | |
 | AlgebraicNumber.java | AlgebraicNumber.cs | ✅ Scaffolded | Algebraic number with GenPolynomial value |
 | AlgebraicNumberRing.java | AlgebraicNumberRing.cs | ✅ Scaffolded | Factory for AlgebraicNumber |
-| Complex.java | Complex.cs | ✅ Scaffolded | Complex numbers with real/imaginary parts |
-| ComplexRing.java | ComplexRing.cs | ✅ Scaffolded | Factory for Complex numbers |
-| ExpVector.java | ExpVector.cs | ✅ Scaffolded | Abstract class with key methods |
-| ExpVectorByte.java | ExpVectorByte.cs | ✅ Scaffolded | Implements ExpVector with sbyte[] storage |
-| ExpVectorInteger.java | ExpVectorInteger.cs | ✅ Scaffolded | Implements ExpVector with int[] storage |
-| ExpVectorLong.java | ExpVectorLong.cs | ✅ Scaffolded | Implements ExpVector with long[] storage |
-| ExpVectorPair.java | ExpVectorPair.cs | ✅ Scaffolded | Pair of ExpVectors for S-polynomials |
-| ExpVectorShort.java | ExpVectorShort.cs | ✅ Scaffolded | Implements ExpVector with short[] storage |
-| GenPolynomial.java | GenPolynomial.cs | ✅ Scaffolded | Generic with RingElem methods |
-| GenPolynomialRing.java | GenPolynomialRing.cs | ✅ Scaffolded | Factory for GenPolynomial, n-variate |
+| Complex.java | Complex.cs | ✔️ Complete | |
+| ComplexRing.java | ComplexRing.cs | ✔️ Complete | |
+| ExpVector.java | ExpVector.cs | ✔️ Complete | Core compare/order helpers and random generation ported |
+| ExpVectorByte.java | ExpVectorByte.cs | ✔️ Complete | |
+| ExpVectorInteger.java | ExpVectorInteger.cs | ✔️ Complete | |
+| ExpVectorLong.java | ExpVectorLong.cs | ✔️ Complete | |
+| ExpVectorPair.java | ExpVectorPair.cs | ✔️ Complete | |
+| ExpVectorShort.java | ExpVectorShort.cs | ✔️ Complete | |
+| GenPolynomial.java | GenPolynomial.cs | ✅ Scaffolded | Map-backed core with add/multiply; division/GCD pending |
+| GenPolynomialRing.java | GenPolynomialRing.cs | ✅ Scaffolded | Constructors/randoms done; enumerators pending |
 | GenSolvablePolynomial.java | GenSolvablePolynomial.cs | ✅ Scaffolded | Solvable polynomial extending GenPolynomial |
 | GenSolvablePolynomialRing.java | GenSolvablePolynomialRing.cs | ✅ Scaffolded | Factory for GenSolvablePolynomial |
 | Monomial.java | Monomial.cs | ✅ Scaffolded | |
@@ -58,7 +58,7 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 | PolynomialList.java | PolynomialList.cs | ✅ Scaffolded | List with ring factory |
 | PolyUtil.java | PolyUtil.cs | ✅ Scaffolded | Polynomial utilities and conversions |
 | RelationTable.java | RelationTable.cs | ✅ Scaffolded | Relation table for solvable polynomials |
-| TermOrder.java | TermOrder.cs | ✅ Scaffolded | Term ordering (LEX, GRLEX, IGRLEX, etc.) |
+| TermOrder.java | TermOrder.cs | ✔️ Complete | Single/split/weight orders with extend/contract/reverse |
 | TermOrderOptimization.java | TermOrderOptimization.cs | ✅ Scaffolded | Variable permutation optimization |
 
 ### Ps (5 files)
