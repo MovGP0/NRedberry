@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -54,6 +54,11 @@ public sealed class TermOrder
         InitializeSplit(DEFAULT_EVORD, DEFAULT_EVORD, length, split);
     }
 
+    public TermOrder(long[] weightVector)
+        : this(weightVector == null ? throw new ArgumentNullException(nameof(weightVector)) : new[] { weightVector.ToArray() })
+    {
+    }
+
     public TermOrder(long[][] w)
     {
         if (w == null || w.Length == 0)
@@ -88,8 +93,127 @@ public sealed class TermOrder
     public int GetEvord() => evord;
     public int GetEvord2() => evord2;
     public long[][]? GetWeight() => weight is null ? null : CloneWeight(weight);
+    public int GetSplit() => evend1;
     public IComparer<ExpVector> GetDescendComparator() => horder;
     public IComparer<ExpVector> GetAscendComparator() => lorder;
+
+    public TermOrder Extend(int length, int extendBy)
+    {
+        if (weight != null)
+        {
+            long[][] cloned = CloneWeight(weight);
+            for (int rowIndex = 0; rowIndex < cloned.Length; rowIndex++)
+            {
+                long[] row = cloned[rowIndex];
+                long max = row.Length == 0 ? 0 : row.Max();
+                long[] extended = new long[row.Length + extendBy];
+                long maxValue = max + 1;
+                for (int j = 0; j < rowIndex && j < extended.Length; j++)
+                {
+                    extended[j] = maxValue;
+                }
+
+                Array.Copy(row, 0, extended, rowIndex, row.Length);
+                cloned[rowIndex] = extended;
+            }
+
+            return new TermOrder(cloned);
+        }
+
+        if (evord2 != 0)
+        {
+            return new TermOrder(evord, evord2, length + extendBy, evend1 + extendBy);
+        }
+
+        return new TermOrder(DEFAULT_EVORD, evord, length + extendBy, extendBy);
+    }
+
+    public TermOrder Contract(int start, int newLength)
+    {
+        if (weight != null)
+        {
+            long[][] contracted = CloneWeight(weight);
+            for (int rowIndex = 0; rowIndex < contracted.Length; rowIndex++)
+            {
+                long[] row = contracted[rowIndex];
+                long[] slice = new long[newLength];
+                Array.Copy(row, start, slice, 0, newLength);
+                contracted[rowIndex] = slice;
+            }
+
+            return new TermOrder(contracted);
+        }
+
+        if (evord2 == 0)
+        {
+            return new TermOrder(evord);
+        }
+
+        if (evend1 > start)
+        {
+            int length = evend1 - start;
+            while (length > newLength)
+            {
+                length -= newLength;
+            }
+
+            if (length <= 0 || length == newLength)
+            {
+                return new TermOrder(evord);
+            }
+
+            return new TermOrder(evord, evord2, newLength, length);
+        }
+
+        return new TermOrder(evord2);
+    }
+
+    public TermOrder Reverse()
+    {
+        return Reverse(false);
+    }
+
+    public TermOrder Reverse(bool partial)
+    {
+        if (weight != null)
+        {
+            long[][] reversedWeight = CloneWeight(weight);
+            for (int i = 0; i < reversedWeight.Length; i++)
+            {
+                Array.Reverse(reversedWeight[i]);
+            }
+
+            return new TermOrder(reversedWeight);
+        }
+
+        if (evord2 == 0)
+        {
+            return new TermOrder(Revert(evord));
+        }
+
+        if (partial)
+        {
+            return new TermOrder(Revert(evord), Revert(evord2), evend2, evend1);
+        }
+
+        return new TermOrder(Revert(evord2), Revert(evord), evend2, evend2 - evbeg2);
+    }
+
+    public static int Revert(int order)
+    {
+        return order switch
+        {
+            LEX => REVLEX,
+            INVLEX => REVILEX,
+            GRLEX => REVTDEG,
+            IGRLEX => REVITDG,
+            REVLEX => LEX,
+            REVILEX => INVLEX,
+            REVTDEG => GRLEX,
+            REVITDG => IGRLEX,
+            _ => order
+        };
+    }
 
     public override string ToString()
     {
