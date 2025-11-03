@@ -1,8 +1,4 @@
-﻿﻿using System;
-using System.Collections.Generic;
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
-
-namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
+﻿namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 /// <summary>
 /// ExpVectorLong implements exponent vectors for polynomials using arrays of long as storage unit.
