@@ -21,15 +21,15 @@ public sealed class TermOrder
     public const int REVITDG = 8;
     public const int DEFAULT_EVORD = IGRLEX;
 
-    private readonly int evord;
-    private readonly int evord2;
-    private readonly int evbeg1;
-    private readonly int evend1;
-    private readonly int evbeg2;
-    private readonly int evend2;
-    private readonly long[][] weight;
-    private readonly IComparer<ExpVector> horder;
-    private readonly IComparer<ExpVector> lorder;
+    private int evord;
+    private int evord2;
+    private int evbeg1;
+    private int evend1;
+    private int evbeg2;
+    private int evend2;
+    private long[][] weight;
+    private IComparer<ExpVector> horder;
+    private IComparer<ExpVector> lorder;
 
     public TermOrder()
     {

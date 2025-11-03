@@ -99,7 +99,10 @@ public class PolynomialList<C> : IComparable<PolynomialList<C>> where C : RingEl
         bool first = true;
         foreach (GenPolynomial<C> polynomial in Polynomials)
         {
-            string text = variables is null ? polynomial.ToString() : polynomial.ToString(variables);
+            string text = variables is null
+                ? polynomial.ToString()
+                : polynomial.ToString(variables);
+
             if (!first)
             {
                 builder.Append(',');

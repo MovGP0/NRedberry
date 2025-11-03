@@ -268,7 +268,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         ArgumentNullException.ThrowIfNull(other);
         if (IsZero() || other.IsZero())
         {
-            return Ring.ZERO;
+            return GenPolynomialRing<C>.Zero;
         }
 
         SortedDictionary<ExpVector, C> result = CreateDictionary();
@@ -290,7 +290,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         ArgumentNullException.ThrowIfNull(coefficient);
         if (coefficient.IsZero() || IsZero())
         {
-            return Ring.ZERO;
+            return GenPolynomialRing<C>.Zero;
         }
 
         SortedDictionary<ExpVector, C> result = CreateDictionary();
@@ -308,7 +308,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         ArgumentNullException.ThrowIfNull(exponent);
         if (coefficient.IsZero() || IsZero())
         {
-            return Ring.ZERO;
+            return GenPolynomialRing<C>.Zero;
         }
 
         SortedDictionary<ExpVector, C> result = CreateDictionary();
@@ -423,5 +423,10 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         {
             terms.Add(exponent, coefficient);
         }
+    }
+
+    public string ToString(string[] variables)
+    {
+        throw new NotImplementedException();
     }
 }

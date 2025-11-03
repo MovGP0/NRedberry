@@ -21,9 +21,11 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
     public readonly int Nvar;
     public readonly TermOrder Tord;
     protected bool partial;
+    public bool IsPartial => partial;
+
     protected string[]? vars;
-    public readonly GenPolynomial<C> ZERO;
-    public readonly GenPolynomial<C> ONE;
+    private static GenPolynomial<C> ZERO;
+    private static GenPolynomial<C> ONE;
     public readonly ExpVector Evzero;
     protected static readonly Random random = new();
     protected int isField = -1;
@@ -153,7 +155,7 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
     {
         HashCode hash = new ();
         hash.Add(Nvar);
-        hash.Add(CoFac);
+        hash.Add(CoFac.GetHashCode());
         hash.Add(Tord);
         if (vars != null)
         {
@@ -333,11 +335,12 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
         return ZERO;
     }
 
-    public virtual GenPolynomial<C> GetONE()
-    {
-        return ONE;
-    }
+    public static GenPolynomial<C> Zero => ZERO;
 
+    public GenPolynomial<C> GetONE() => ONE;
+
+    public static GenPolynomial<C> One => ONE;
+    
     public static GenPolynomial<C> Clone(GenPolynomial<C> polynomial)
     {
         ArgumentNullException.ThrowIfNull(polynomial);
