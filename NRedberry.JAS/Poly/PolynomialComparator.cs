@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
@@ -33,16 +35,23 @@ public class PolynomialComparator<C> : IComparer<GenPolynomial<C>> where C : Rin
     /// <returns>0 if ( p1 == p2 ), -1 if ( p1 &lt; p2 ) and +1 if ( p1 &gt; p2 ).</returns>
     public int Compare(GenPolynomial<C>? p1, GenPolynomial<C>? p2)
     {
-        if (p1 == null || p2 == null)
+        if (ReferenceEquals(p1, p2))
         {
-            throw new ArgumentNullException();
+            return 0;
         }
-        int s = p1.CompareTo(p2);
-        if (Reverse)
+
+        if (p1 is null)
         {
-            return -s;
+            return Reverse ? 1 : -1;
         }
-        return s;
+
+        if (p2 is null)
+        {
+            return Reverse ? -1 : 1;
+        }
+
+        int result = p1.CompareTo(p2);
+        return Reverse ? -result : result;
     }
 
     public override bool Equals(object? o)
@@ -51,16 +60,17 @@ public class PolynomialComparator<C> : IComparer<GenPolynomial<C>> where C : Rin
         {
             return false;
         }
-        return Tord.Equals(pc.Tord);
+
+        return Reverse == pc.Reverse && Tord.Equals(pc.Tord);
     }
 
     public override int GetHashCode()
     {
-        return Tord.GetHashCode();
+        return HashCode.Combine(Tord, Reverse);
     }
 
     public override string ToString()
     {
-        return $"PolynomialComparator({Tord})";
+        return $"PolynomialComparator({Tord}, reverse: {Reverse})";
     }
 }

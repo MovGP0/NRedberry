@@ -48,16 +48,16 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 | ExpVectorShort.java | ExpVectorShort.cs | ✔️ Complete | |
 | GenPolynomial.java | GenPolynomial.cs | ✅ Scaffolded | Map-backed core with add/multiply; division/GCD pending |
 | GenPolynomialRing.java | GenPolynomialRing.cs | ✅ Scaffolded | Constructors/randoms done; enumerators pending |
-| GenSolvablePolynomial.java | GenSolvablePolynomial.cs | ✅ Scaffolded | Solvable polynomial extending GenPolynomial |
-| GenSolvablePolynomialRing.java | GenSolvablePolynomialRing.cs | ✅ Scaffolded | Factory for GenSolvablePolynomial |
-| Monomial.java | Monomial.cs | ✅ Scaffolded | |
-| OptimizedPolynomialList.java | OptimizedPolynomialList.cs | ✅ Scaffolded | Extends PolynomialList with optimized order |
-| OrderedPolynomialList.java | OrderedPolynomialList.cs | ✅ Scaffolded | Sorted polynomial list with comparator |
-| PolyIterator.java | PolyIterator.cs | ✅ Scaffolded | |
-| PolynomialComparator.java | PolynomialComparator.cs | ✅ Scaffolded | IComparer for GenPolynomial |
-| PolynomialList.java | PolynomialList.cs | ✅ Scaffolded | List with ring factory |
+| GenSolvablePolynomial.java | GenSolvablePolynomial.cs | ✅ Scaffolded | Non-commutative multiply pending |
+| GenSolvablePolynomialRing.java | GenSolvablePolynomialRing.cs | ✅ Scaffolded | Uses RelationTable; assoc/multiply TBD |
+| Monomial.java | Monomial.cs | ✔️ Complete | |
+| OptimizedPolynomialList.java | OptimizedPolynomialList.cs | ✔️ Complete | Permutation metadata & string output |
+| OrderedPolynomialList.java | OrderedPolynomialList.cs | ✔️ Complete | Implements sorting & comparer wrappers |
+| PolyIterator.java | PolyIterator.cs | ✔️ Complete | Implements IEnumerator<Monomial<C>> adaptor
+| PolynomialComparator.java | PolynomialComparator.cs | ✔️ Complete | Standard IComparer implementation
+| PolynomialList.java | PolynomialList.cs | ✔️ Complete | Equality/compare/toString implemented |
 | PolyUtil.java | PolyUtil.cs | ✅ Scaffolded | Polynomial utilities and conversions |
-| RelationTable.java | RelationTable.cs | ✅ Scaffolded | Relation table for solvable polynomials |
+| RelationTable.java | RelationTable.cs | ✅ Scaffolded | Minimal storage; relation ops pending |
 | TermOrder.java | TermOrder.cs | ✔️ Complete | Single/split/weight orders with extend/contract/reverse |
 | TermOrderOptimization.java | TermOrderOptimization.cs | ✅ Scaffolded | Variable permutation optimization |
 

@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
@@ -10,45 +12,32 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.poly.PolyIterator
 /// </remarks>
-public class PolyIterator<C> : IEnumerator<Monomial<C>> where C : RingElem<C>
+public sealed class PolyIterator<C> : IEnumerator<Monomial<C>> where C : RingElem<C>
 {
-    /// <summary>
-    /// Internal iterator over polynomial map.
-    /// </summary>
-    protected readonly IEnumerator<KeyValuePair<ExpVector, C>> ms;
+    private readonly IEnumerator<KeyValuePair<ExpVector, C>> innerEnumerator;
 
-    /// <summary>
-    /// Constructor of polynomial iterator.
-    /// </summary>
-    /// <param name="m">SortedMap of a polynomial</param>
-    public PolyIterator(SortedDictionary<ExpVector, C> m)
+    public PolyIterator(IDictionary<ExpVector, C> map)
     {
-        ms = m.GetEnumerator();
+        ArgumentNullException.ThrowIfNull(map);
+        innerEnumerator = map.GetEnumerator();
     }
 
-    /// <summary>
-    /// Test for availability of a next monomial.
-    /// </summary>
-    /// <returns>true if the iteration has more monomials, else false.</returns>
-    public bool MoveNext()
-    {
-        return ms.MoveNext();
-    }
-
-    /// <summary>
-    /// Get current monomial element.
-    /// </summary>
-    public Monomial<C> Current => new(ms.Current);
+    public Monomial<C> Current => new Monomial<C>(innerEnumerator.Current);
 
     object IEnumerator.Current => Current;
 
+    public bool MoveNext()
+    {
+        return innerEnumerator.MoveNext();
+    }
+
     public void Reset()
     {
-        ms.Reset();
+        innerEnumerator.Reset();
     }
 
     public void Dispose()
     {
-        ms.Dispose();
+        innerEnumerator.Dispose();
     }
 }
