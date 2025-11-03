@@ -1,3 +1,5 @@
+﻿using System;
+using System.Collections.Generic;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
@@ -12,23 +14,67 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 /// </remarks>
 public class GenSolvablePolynomial<C> : GenPolynomial<C> where C : RingElem<C>
 {
-    public readonly GenSolvablePolynomialRing<C> Ring;
+    public new GenSolvablePolynomialRing<C> Ring { get; }
 
-    public GenSolvablePolynomial(GenSolvablePolynomialRing<C> r)
+    public GenSolvablePolynomial(GenSolvablePolynomialRing<C> ring)
+        : base(ring)
     {
-        throw new NotImplementedException();
+        Ring = ring ?? throw new ArgumentNullException(nameof(ring));
     }
 
-    public GenSolvablePolynomial(GenSolvablePolynomialRing<C> r, object c)
+    public GenSolvablePolynomial(GenSolvablePolynomialRing<C> ring, C coefficient, ExpVector exponent)
+        : base(ring, coefficient, exponent)
     {
-        throw new NotImplementedException();
+        Ring = ring ?? throw new ArgumentNullException(nameof(ring));
     }
 
-    public new GenSolvablePolynomialRing<C> Factory() { throw new NotImplementedException(); }
-    public new GenSolvablePolynomial<C> Copy() { throw new NotImplementedException(); }
-    public override bool Equals(object? B) { throw new NotImplementedException(); }
-    public GenSolvablePolynomial<C> Multiply(GenSolvablePolynomial<C> Bp) { throw new NotImplementedException(); }
-    public GenSolvablePolynomial<C> Multiply(GenSolvablePolynomial<C> S, GenSolvablePolynomial<C> T) { throw new NotImplementedException(); }
-    public new GenSolvablePolynomial<C> Multiply(C b) { throw new NotImplementedException(); }
-    public GenSolvablePolynomial<C> Multiply(C b, C c) { throw new NotImplementedException(); }
+    internal GenSolvablePolynomial(GenSolvablePolynomialRing<C> ring, IDictionary<ExpVector, C> terms, bool copy = true)
+        : base(ring, terms, copy)
+    {
+        Ring = ring ?? throw new ArgumentNullException(nameof(ring));
+    }
+
+    public new GenSolvablePolynomialRing<C> Factory()
+    {
+        return Ring;
+    }
+
+    public new GenSolvablePolynomial<C> Copy()
+    {
+        return new GenSolvablePolynomial<C>(Ring, CloneTerms(), copy: false);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is not GenSolvablePolynomial<C>)
+        {
+            return false;
+        }
+
+        return base.Equals(obj);
+    }
+
+    public GenSolvablePolynomial<C> Multiply(GenSolvablePolynomial<C> other)
+    {
+        throw new NotImplementedException("Solvable polynomial multiplication pending port.");
+    }
+
+    public GenSolvablePolynomial<C> Multiply(GenSolvablePolynomial<C> left, GenSolvablePolynomial<C> right)
+    {
+        throw new NotImplementedException("Solvable polynomial multiplication pending port.");
+    }
+
+    public new GenSolvablePolynomial<C> Multiply(C coefficient)
+    {
+        ArgumentNullException.ThrowIfNull(coefficient);
+        GenPolynomial<C> product = base.Multiply(coefficient);
+        return new GenSolvablePolynomial<C>(Ring, product.Terms, copy: false);
+    }
+
+    public GenSolvablePolynomial<C> Multiply(C left, C right)
+    {
+        ArgumentNullException.ThrowIfNull(left);
+        ArgumentNullException.ThrowIfNull(right);
+        return Multiply(left).Multiply(right);
+    }
 }

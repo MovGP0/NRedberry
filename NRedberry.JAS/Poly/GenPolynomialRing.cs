@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿﻿﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -329,6 +329,16 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
     public bool IsAssociative()
     {
         return CoFac.IsAssociative();
+    }
+
+    public virtual GenPolynomial<C> GetZERO()
+    {
+        return ZERO;
+    }
+
+    public virtual GenPolynomial<C> GetONE()
+    {
+        return ONE;
     }
 
     public bool IsField()
