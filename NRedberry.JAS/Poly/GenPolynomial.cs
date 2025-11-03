@@ -367,7 +367,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return GetEnumerator();
     }
 
-    public ExpVector? LeadingExpVector()
+    public ExpVector? leadingExpVector()
     {
         if (Terms.Count == 0)
         {

@@ -1,4 +1,4 @@
-﻿﻿﻿using System;
+﻿﻿﻿﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -339,6 +339,12 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
     public virtual GenPolynomial<C> GetONE()
     {
         return ONE;
+    }
+
+    public static GenPolynomial<C> Clone(GenPolynomial<C> polynomial)
+    {
+        ArgumentNullException.ThrowIfNull(polynomial);
+        return polynomial.Clone();
     }
 
     public bool IsField()

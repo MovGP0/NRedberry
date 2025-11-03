@@ -1,3 +1,6 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
@@ -21,11 +24,21 @@ public class OptimizedPolynomialList<C> : PolynomialList<C> where C : RingElem<C
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        return "permutation = " + string.Join(", ", Perm) + Environment.NewLine + base.ToString();
     }
 
     public override bool Equals(object? B)
     {
-        throw new NotImplementedException();
+        if (B is not OptimizedPolynomialList<C> other)
+        {
+            return false;
+        }
+
+        if (!base.Equals(other))
+        {
+            return false;
+        }
+
+        return Perm.SequenceEqual(other.Perm);
     }
 }
