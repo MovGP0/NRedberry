@@ -56,7 +56,7 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 | PolyIterator.java | PolyIterator.cs | ✔️ Complete | Implements IEnumerator<Monomial<C>> adaptor
 | PolynomialComparator.java | PolynomialComparator.cs | ✔️ Complete | Standard IComparer implementation
 | PolynomialList.java | PolynomialList.cs | ✔️ Complete | Equality/compare/toString implemented |
-| PolyUtil.java | PolyUtil.cs | ✅ Scaffolded | Polynomial utilities and conversions |
+| PolyUtil.java | PolyUtil.cs | ✅ Scaffolded | Initial conversion utilities implemented; further methods pending
 | RelationTable.java | RelationTable.cs | ✅ Scaffolded | Minimal storage; relation ops pending |
 | TermOrder.java | TermOrder.cs | ✔️ Complete | Single/split/weight orders with extend/contract/reverse |
 | TermOrderOptimization.java | TermOrderOptimization.cs | ✅ Scaffolded | Variable permutation optimization |
