@@ -204,7 +204,7 @@ public class RelationTable<C> where C : RingElem<C>
             }
 
             ExpVector expected = left.Sum(right);
-            ExpVector? leading = product.leadingExpVector();
+            ExpVector? leading = product.LeadingExpVector();
             if (leading is null || !expected.Equals(leading))
             {
                 throw new ArgumentException("RelationTable update e * f does not match lt(p)");
@@ -253,8 +253,8 @@ public class RelationTable<C> where C : RingElem<C>
             throw new ArgumentException("Leading base coefficients must be one.");
         }
 
-        ExpVector? firstLeading = first.leadingExpVector();
-        ExpVector? secondLeading = second.leadingExpVector();
+        ExpVector? firstLeading = first.LeadingExpVector();
+        ExpVector? secondLeading = second.LeadingExpVector();
         if (firstLeading is null || secondLeading is null)
         {
             throw new InvalidOperationException("Polynomials must have leading monomials.");
@@ -459,7 +459,7 @@ public class RelationTable<C> where C : RingElem<C>
     private static GenSolvablePolynomial<C> AdjustProductForSwap(GenSolvablePolynomial<C> product)
     {
         GenPolynomial<C> polynomial = product;
-        ExpVector? exponent = polynomial.leadingExpVector();
+        ExpVector? exponent = polynomial.LeadingExpVector();
         if (exponent is null)
         {
             throw new InvalidOperationException("Product must have a leading exponent.");
@@ -643,7 +643,7 @@ public sealed class TableRelation<C> where C : RingElem<C>
     public ExpVector? Right { get; }
     public GenSolvablePolynomial<C> Product { get; }
 
-    internal ExpVectorPair Pair => new (Left ?? Product.leadingExpVector() ?? Product.Ring.Evzero, Right ?? Product.Ring.Evzero);
+    internal ExpVectorPair Pair => new (Left ?? Product.LeadingExpVector() ?? Product.Ring.Evzero, Right ?? Product.Ring.Evzero);
 
     public override string ToString()
     {

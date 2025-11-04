@@ -1,4 +1,5 @@
-﻿using System.Collections;
+using System.Collections;
+using System.Text;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
@@ -68,7 +69,54 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return new GenPolynomial<C>(Ring, Terms);
     }
 
-    public bool IsZero()
+    public override string ToString()
+    {
+        string[]? variables = Ring.GetVars();
+        if (variables != null)
+        {
+            return ToString(variables);
+        }
+
+        StringBuilder builder = new();
+        builder.Append(GetType().Name);
+        builder.Append(":");
+        builder.Append(Ring.CoFac.GetType().Name);
+
+        try
+        {
+            System.Numerics.BigInteger characteristic = Ring.Characteristic();
+            if (characteristic.Sign != 0)
+            {
+                builder.Append('(');
+                builder.Append(characteristic);
+                builder.Append(')');
+            }
+        }
+        catch (NotSupportedException)
+        {
+            // Some coefficient factories may not support characteristic queries.
+        }
+
+        builder.Append("[ ");
+        bool first = true;
+        foreach (KeyValuePair<ExpVector, C> term in Terms)
+        {
+            if (!first)
+            {
+                builder.Append(", ");
+            }
+
+            first = false;
+            builder.Append(term.Value);
+            builder.Append(' ');
+            builder.Append(term.Key);
+        }
+
+        builder.Append(" ]");
+        return builder.ToString();
+    }
+
+public bool IsZero()
     {
         return Terms.Count == 0;
     }
@@ -181,25 +229,24 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
 
     public override int GetHashCode()
     {
-        HashCode hash = new ();
-        hash.Add(Ring);
-        foreach (KeyValuePair<ExpVector, C> pair in Terms)
+        HashCode hashCode = new();
+        hashCode.Add(Ring);
+        foreach (KeyValuePair<ExpVector, C> term in Terms)
         {
-            hash.Add(pair.Key);
-            hash.Add(pair.Value);
+            hashCode.Add(term.Key);
+            hashCode.Add(term.Value);
         }
-
-        return hash.ToHashCode();
+        return hashCode.ToHashCode();
     }
 
     public GenPolynomial<C> Abs()
     {
-        C leading = LeadingBaseCoefficient();
-        if (leading == null)
+        if (IsZero())
         {
             return this;
         }
 
+        C leading = LeadingBaseCoefficient();
         if (leading.Signum() < 0)
         {
             return Negate();
@@ -369,7 +416,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return GetEnumerator();
     }
 
-    public ExpVector? leadingExpVector()
+    public ExpVector? LeadingExpVector()
     {
         if (Terms.Count == 0)
         {
@@ -432,6 +479,67 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
 
     public string ToString(string[] variables)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(variables);
+        if (Terms.Count == 0)
+        {
+            return "0";
+        }
+        StringBuilder builder = new();
+        bool first = true;
+        foreach (KeyValuePair<ExpVector, C> term in Terms)
+        {
+            C coefficient = term.Value;
+            int sign = coefficient.Signum();
+            if (first)
+            {
+                first = false;
+                if (sign < 0)
+                {
+                    builder.Append("- ");
+                    coefficient = coefficient.Negate();
+                }
+            }
+            else
+            {
+                if (sign < 0)
+                {
+                    builder.Append(" - ");
+                    coefficient = coefficient.Negate();
+                }
+                else
+                {
+                    builder.Append(" + ");
+                }
+            }
+            bool printCoefficient = !coefficient.IsOne() || term.Key.IsZero();
+            if (printCoefficient)
+            {
+                string coefficientString = coefficient.ToString();
+                bool wrap = coefficientString.IndexOfAny(new[] { ' ', '+', '-' }) >= 0 && !coefficientString.StartsWith("(");
+                if (wrap)
+                {
+                    builder.Append("( ");
+                    builder.Append(coefficientString);
+                    builder.Append(" )");
+                }
+                else
+                {
+                    builder.Append(coefficientString);
+                }
+                if (!term.Key.IsZero())
+                {
+                    builder.Append(' ');
+                }
+            }
+            if (!term.Key.IsZero())
+            {
+                builder.Append(term.Key.ToString(variables));
+            }
+            else if (!printCoefficient)
+            {
+                builder.Append('1');
+            }
+        }
+        return builder.ToString();
     }
 }

@@ -43,8 +43,8 @@ public class OrderedPolynomialList<C> : PolynomialList<C>, IComparer<GenPolynomi
             return 1;
         }
 
-        ExpVector? left = x.leadingExpVector();
-        ExpVector? right = y.leadingExpVector();
+        ExpVector? left = x.LeadingExpVector();
+        ExpVector? right = y.LeadingExpVector();
         if (left is null)
         {
             return right is null ? 0 : -1;
@@ -73,7 +73,7 @@ public class OrderedPolynomialList<C> : PolynomialList<C>, IComparer<GenPolynomi
 
         IComparer<ExpVector> comparer = ring.Tord.GetAscendComparator();
         return polynomials
-            .OrderBy(p => p.leadingExpVector(), Comparer<ExpVector>.Create((a, b) =>
+            .OrderBy(p => p.LeadingExpVector(), Comparer<ExpVector>.Create((a, b) =>
             {
                 if (a is null)
                 {
