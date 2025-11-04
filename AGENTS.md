@@ -140,6 +140,8 @@ public override int GetHashCode()
     return hashCode.ToHashCode();
 } 
 ```
+- Do not implement the `[Serializable]` attribute. The mechanism is obsolete in modern C#.
+- Implement the standard Exception constructors when implementing custom exceptions.
 
 ## Class mapping process
 - Check the ClassMapping.md file.
@@ -154,3 +156,16 @@ public override int GetHashCode()
 - Do not try to port multiple files at once; implement one file at a time
 - Always try to execute a build after every file; fix the build errors
 - Do not use PowerShell to execute Python and do not use Python to execute PowerShell. Use either.
+- Python scripts can mess up line endings in C# files (issues with the difference between \n and \r). Prefer a PowerShell script with a regex for file encoding and line ending fixes.
+
+## Global usings
+- Global usings are enables. Do not import the following namespaces:
+```csharp
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+```
