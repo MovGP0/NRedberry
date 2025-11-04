@@ -240,13 +240,13 @@ public static class PolyUtil
         return result;
     }
 
-    public static GenPolynomial<C> FromIntegerCoefficients<C>(GenPolynomialRing<C> ring, GenPolynomial<BigInteger>? polynomial)
+    public static GenPolynomial<C> FromIntegerCoefficients<C>(GenPolynomialRing<C> ring, GenPolynomial<BigInteger> polynomial)
         where C : RingElem<C>
     {
         ArgumentNullException.ThrowIfNull(ring);
 
         GenPolynomial<C> result = new (ring);
-        if (polynomial?.IsZero() != false)
+        if (polynomial.IsZero())
         {
             return result;
         }
@@ -371,10 +371,10 @@ public static class PolyUtil
         return result;
     }
 
-    public static GenPolynomial<GenPolynomial<C>>? Monic<C>(GenPolynomial<GenPolynomial<C>>? polynomial)
+    public static GenPolynomial<GenPolynomial<C>>? Monic<C>(GenPolynomial<GenPolynomial<C>> polynomial)
         where C : RingElem<C>
     {
-        if (polynomial?.IsZero() != false)
+        if (polynomial.IsZero())
         {
             return polynomial;
         }
@@ -665,7 +665,7 @@ public static class PolyUtil
             throw new ArithmeticException($"{polynomial} division by zero {divisor}");
         }
 
-        if (polynomial?.IsZero() != false)
+        if (polynomial.IsZero())
         {
             return polynomial;
         }
@@ -934,6 +934,209 @@ public static class PolyUtil
         return result;
     }
 
+    public static GenPolynomial<C> EvaluateFirstRec<C>(
+        GenPolynomialRing<C> coefficientRing,
+        GenPolynomialRing<C> destinationRing,
+        GenPolynomial<GenPolynomial<C>> polynomial,
+        C value)
+        where C : RingElem<C>
+    {
+        ArgumentNullException.ThrowIfNull(coefficientRing);
+        ArgumentNullException.ThrowIfNull(destinationRing);
+        ArgumentNullException.ThrowIfNull(polynomial);
+        ArgumentNullException.ThrowIfNull(value);
+
+        if (polynomial.IsZero())
+        {
+            return new GenPolynomial<C>(destinationRing);
+        }
+
+        GenPolynomial<C> result = new (destinationRing);
+        SortedDictionary<ExpVector, C> resultTerms = result.Terms;
+        foreach (KeyValuePair<ExpVector, GenPolynomial<C>> term in polynomial.Terms)
+        {
+            C evaluated = EvaluateMain(coefficientRing.CoFac, term.Value, value);
+            if (!evaluated.IsZero())
+            {
+                resultTerms[term.Key] = evaluated;
+            }
+        }
+
+        return result;
+    }
+
+    public static GenPolynomial<GenPolynomial<C>> Interpolate<C>(
+        GenPolynomialRing<GenPolynomial<C>> ring,
+        GenPolynomial<GenPolynomial<C>> source,
+        GenPolynomial<C> modulus,
+        C modulusInverse,
+        GenPolynomial<C> evaluation,
+        C evaluationPoint)
+        where C : RingElem<C>
+    {
+        ArgumentNullException.ThrowIfNull(ring);
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(modulus);
+        ArgumentNullException.ThrowIfNull(modulusInverse);
+        ArgumentNullException.ThrowIfNull(evaluation);
+        ArgumentNullException.ThrowIfNull(evaluationPoint);
+
+        GenPolynomial<GenPolynomial<C>> result = new (ring);
+        GenPolynomial<GenPolynomial<C>> working = source.Clone();
+
+        SortedDictionary<ExpVector, GenPolynomial<C>> sourceTerms = working.Terms;
+        SortedDictionary<ExpVector, C> evaluationTerms = evaluation.Terms;
+        SortedDictionary<ExpVector, GenPolynomial<C>> resultTerms = result.Terms;
+
+        GenPolynomialRing<C> coefficientRing = (GenPolynomialRing<C>)ring.CoFac;
+        RingFactory<C> coefficientFactory = coefficientRing.CoFac;
+
+        foreach (KeyValuePair<ExpVector, C> entry in evaluationTerms)
+        {
+            ExpVector exponent = entry.Key;
+            C entryValue = entry.Value;
+            if (sourceTerms.TryGetValue(exponent, out GenPolynomial<C>? existing))
+            {
+                sourceTerms.Remove(exponent);
+                GenPolynomial<C> interpolated = Interpolate(coefficientRing, existing, modulus, modulusInverse, entryValue, evaluationPoint);
+                if (!interpolated.IsZero())
+                {
+                    resultTerms[exponent] = interpolated;
+                }
+            }
+            else
+            {
+                GenPolynomial<C> interpolated = Interpolate(
+                    coefficientRing,
+                    new GenPolynomial<C>(coefficientRing),
+                    modulus,
+                    modulusInverse,
+                    entryValue,
+                    evaluationPoint);
+                if (!interpolated.IsZero())
+                {
+                    resultTerms[exponent] = interpolated;
+                }
+            }
+        }
+
+        foreach (KeyValuePair<ExpVector, GenPolynomial<C>> entry in sourceTerms)
+        {
+            GenPolynomial<C> interpolated = Interpolate(
+                coefficientRing,
+                entry.Value,
+                modulus,
+                modulusInverse,
+                coefficientFactory.FromInteger(0),
+                evaluationPoint);
+
+            if (!interpolated.IsZero())
+            {
+                resultTerms[entry.Key] = interpolated;
+            }
+        }
+
+        return result;
+    }
+
+    public static GenPolynomial<C> Interpolate<C>(
+        GenPolynomialRing<C> ring,
+        GenPolynomial<C> polynomial,
+        GenPolynomial<C> modulus,
+        C modulusInverse,
+        C targetValue,
+        C evaluationPoint)
+        where C : RingElem<C>
+    {
+        ArgumentNullException.ThrowIfNull(ring);
+        ArgumentNullException.ThrowIfNull(polynomial);
+        ArgumentNullException.ThrowIfNull(modulus);
+        ArgumentNullException.ThrowIfNull(modulusInverse);
+        ArgumentNullException.ThrowIfNull(targetValue);
+        ArgumentNullException.ThrowIfNull(evaluationPoint);
+
+        C evaluated = EvaluateMain(ring.CoFac, polynomial, evaluationPoint);
+        C difference = targetValue.Subtract(evaluated);
+        if (difference.IsZero())
+        {
+            return polynomial;
+        }
+
+        C scaled = difference.Multiply(modulusInverse);
+        return modulus.Multiply(scaled).Sum(polynomial);
+    }
+
+    public static long CoeffMaxDegree<C>(GenPolynomial<GenPolynomial<C>> polynomial)
+        where C : RingElem<C>
+    {
+        ArgumentNullException.ThrowIfNull(polynomial);
+
+        if (polynomial.IsZero())
+        {
+            return 0;
+        }
+
+        long degree = 0;
+        foreach (GenPolynomial<C> coefficient in polynomial.Terms.Values)
+        {
+            long current = coefficient.Degree();
+            if (current > degree)
+            {
+                degree = current;
+            }
+        }
+
+        return degree;
+    }
+
+    public static BigInteger FactorBound(ExpVector exponent)
+    {
+        ArgumentNullException.ThrowIfNull(exponent);
+        if (exponent.IsZero())
+        {
+            return BigInteger.One;
+        }
+
+        int bits = 0;
+        System.Numerics.BigInteger product = System.Numerics.BigInteger.One;
+
+        for (int i = 0; i < exponent.Length(); i++)
+        {
+            long value = exponent.GetVal(i);
+            if (value <= 0)
+            {
+                continue;
+            }
+
+            bits += (int)(2 * value - 1);
+            System.Numerics.BigInteger factor = new(value - 1);
+            product *= factor;
+        }
+
+        bits += PopCount(product) + 1;
+        bits /= 2;
+
+        System.Numerics.BigInteger result = System.Numerics.BigInteger.One << (bits + 1);
+        return new BigInteger(result);
+    }
+
+    private static int PopCount(System.Numerics.BigInteger value)
+    {
+        value = System.Numerics.BigInteger.Abs(value);
+        int count = 0;
+        while (value > System.Numerics.BigInteger.Zero)
+        {
+            if (!value.IsEven)
+            {
+                count++;
+            }
+
+            value >>= 1;
+        }
+
+        return count;
+    }
+
     public static GenPolynomial<C> BaseDeriviative<C>(GenPolynomial<C> polynomial)
         where C : RingElem<C>
     {
@@ -1055,7 +1258,7 @@ public static class PolyUtil
 
         public Complex<C> Eval(AlgebraicNumber<C> value)
         {
-            if (value?.IsZero() != false)
+            if (value.IsZero())
             {
                 return _ring.Zero;
             }

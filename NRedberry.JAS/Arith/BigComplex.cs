@@ -396,7 +396,7 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// <returns>gcd(this, S).</returns>
     public BigComplex Gcd(BigComplex S)
     {
-        if (S?.IsZero() != false)
+        if (S.IsZero())
         {
             return this;
         }
@@ -420,7 +420,7 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
         ret[0] = null!;
         ret[1] = null!;
         ret[2] = null!;
-        if (S?.IsZero() != false)
+        if (S.IsZero())
         {
             ret[0] = this;
             return ret;

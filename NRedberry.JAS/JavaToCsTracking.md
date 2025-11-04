@@ -103,12 +103,12 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 | Factors.java | Factors.cs | ✅ Scaffolded | Container for absolute factorization results |
 | GCDFactory.java | GCDFactory.cs | ✅ Scaffolded | Factory for GCD algorithm selection |
 | GreatestCommonDivisor.java | GreatestCommonDivisor.cs | ✅ Scaffolded | GCD interface with generic type parameter |
-| GreatestCommonDivisorAbstract.java | GreatestCommonDivisorAbstract.cs | ✅ Scaffolded | Abstract GCD base with interface methods |
-| GreatestCommonDivisorModEval.java | GreatestCommonDivisorModEval.cs | ✅ Scaffolded | GCD with modular evaluation algorithm |
+| GreatestCommonDivisorAbstract.java | GreatestCommonDivisorAbstract.cs | ✔️ Complete | Abstract GCD base with interface methods |
+| GreatestCommonDivisorModEval.java | GreatestCommonDivisorModEval.cs | ✔️ Complete | GCD with modular evaluation algorithm |
 | GreatestCommonDivisorModular.java | GreatestCommonDivisorModular.cs | ✅ Scaffolded | GCD with Chinese remainder algorithm |
-| GreatestCommonDivisorPrimitive.java | GreatestCommonDivisorPrimitive.cs | ✅ Scaffolded | GCD with primitive polynomial remainder |
-| GreatestCommonDivisorSimple.java | GreatestCommonDivisorSimple.cs | ✅ Scaffolded | GCD with monic polynomial remainder |
-| GreatestCommonDivisorSubres.java | GreatestCommonDivisorSubres.cs | ✅ Scaffolded | GCD with subresultant remainder |
+| GreatestCommonDivisorPrimitive.java | GreatestCommonDivisorPrimitive.cs | ✔️ Complete | GCD with primitive polynomial remainder |
+| GreatestCommonDivisorSimple.java | GreatestCommonDivisorSimple.cs | ✔️ Complete | GCD with monic polynomial remainder |
+| GreatestCommonDivisorSubres.java | GreatestCommonDivisorSubres.cs | ✔️ Complete | GCD with subresultant remainder |
 | HenselApprox.java | HenselApprox.cs | ✅ Scaffolded | Container for Hensel algorithm results |
 | HenselMultUtil.java | HenselMultUtil.cs | ✅ Scaffolded | Hensel multivariate lifting utilities |
 | HenselUtil.java | HenselUtil.cs | ✅ Scaffolded | Hensel univariate lifting utilities |

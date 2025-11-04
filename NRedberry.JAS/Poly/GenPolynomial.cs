@@ -620,7 +620,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
     {
         GenPolynomial<C>[] result = new GenPolynomial<C>[3];
 
-        if (other?.IsZero() != false)
+        if (other.IsZero())
         {
             result[0] = this;
             result[1] = GenPolynomialRing<C>.One;
@@ -696,7 +696,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
     {
         GenPolynomial<C>[] result = new GenPolynomial<C>[2];
 
-        if (other?.IsZero() != false)
+        if (other.IsZero())
         {
             result[0] = this;
             result[1] = GenPolynomialRing<C>.One;

@@ -202,7 +202,7 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
 
     public AlgebraicNumber<C> Remainder(AlgebraicNumber<C> other)
     {
-        if (other?.IsZero() != false)
+        if (other.IsZero())
         {
             throw new ArithmeticException("division by zero");
         }
@@ -248,7 +248,7 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
     {
         AlgebraicNumber<C>[] result = new AlgebraicNumber<C>[3];
 
-        if (other?.IsZero() != false)
+        if (other.IsZero())
         {
             result[0] = this;
             return result;

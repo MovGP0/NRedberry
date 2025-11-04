@@ -225,7 +225,7 @@ public class Complex<C> : GcdRingElem<Complex<C>> where C : RingElem<C>
     /// <inheritdoc />
     public Complex<C> Gcd(Complex<C> b)
     {
-        if (b?.IsZero() != false)
+        if (b.IsZero())
         {
             return this;
         }
@@ -271,7 +271,7 @@ public class Complex<C> : GcdRingElem<Complex<C>> where C : RingElem<C>
     public Complex<C>[] Egcd(Complex<C> b)
     {
         Complex<C>[] ret = new Complex<C>[3];
-        if (b?.IsZero() != false)
+        if (b.IsZero())
         {
             ret[0] = this;
             return ret;

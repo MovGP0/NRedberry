@@ -238,9 +238,9 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     /// </summary>
     /// <param name="S">ModLong.</param>
     /// <returns>remainder(this, S).</returns>
-    public ModLong Remainder(ModLong? S)
+    public ModLong Remainder(ModLong S)
     {
-        if (S?.IsZero() != false)
+        if (S.IsZero())
         {
             throw new ArithmeticException("division by zero");
         }
@@ -308,7 +308,7 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
         ret[0] = null!;
         ret[1] = null!;
         ret[2] = null!;
-        if (S?.IsZero() != false)
+        if (S.IsZero())
         {
             ret[0] = this;
             return ret;

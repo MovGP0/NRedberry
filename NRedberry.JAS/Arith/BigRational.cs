@@ -551,7 +551,7 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
     /// </summary>
     public BigRational Gcd(BigRational S)
     {
-        if (S?.IsZero() != false)
+        if (S.IsZero())
         {
             return this;
         }
@@ -573,7 +573,7 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
         ret[0] = null!;
         ret[1] = null!;
         ret[2] = null!;
-        if (S?.IsZero() != false)
+        if (S.IsZero())
         {
             ret[0] = this;
             return ret;

@@ -377,7 +377,7 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
         ret[0] = null!;
         ret[1] = null!;
         ret[2] = null!;
-        if (S?.IsZero() != false)
+        if (S.IsZero())
         {
             ret[0] = this;
             return ret;
