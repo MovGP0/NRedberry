@@ -46,10 +46,10 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 | ExpVectorLong.java | ExpVectorLong.cs | ✔️ Complete | |
 | ExpVectorPair.java | ExpVectorPair.cs | ✔️ Complete | |
 | ExpVectorShort.java | ExpVectorShort.cs | ✔️ Complete | |
-| GenPolynomial.java | GenPolynomial.cs | ✅ Scaffolded | Map-backed core with add/multiply; division/GCD pending |
-| GenPolynomialRing.java | GenPolynomialRing.cs | ✅ Scaffolded | Constructors/randoms done; enumerators pending |
-| GenSolvablePolynomial.java | GenSolvablePolynomial.cs | ✅ Scaffolded | Non-commutative multiply pending |
-| GenSolvablePolynomialRing.java | GenSolvablePolynomialRing.cs | ✅ Scaffolded | Uses RelationTable; assoc/multiply TBD |
+| GenPolynomial.java | GenPolynomial.cs | ✔️ Complete | |
+| GenPolynomialRing.java | GenPolynomialRing.cs | ✔️ Complete | |
+| GenSolvablePolynomial.java | GenSolvablePolynomial.cs | ✔️ Complete | |
+| GenSolvablePolynomialRing.java | GenSolvablePolynomialRing.cs | ✔️ Complete | |
 | Monomial.java | Monomial.cs | ✔️ Complete | |
 | OptimizedPolynomialList.java | OptimizedPolynomialList.cs | ✔️ Complete | Permutation metadata & string output |
 | OrderedPolynomialList.java | OrderedPolynomialList.cs | ✔️ Complete | Implements sorting & comparer wrappers |

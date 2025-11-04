@@ -330,16 +330,19 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
         return CoFac.IsAssociative();
     }
 
-    public virtual GenPolynomial<C> GetZERO()
-    {
-        return ZERO;
-    }
-
     public static GenPolynomial<C> Zero => ZERO;
 
-    public GenPolynomial<C> GetONE() => ONE;
-
     public static GenPolynomial<C> One => ONE;
+
+    public C GetZeroCoefficient()
+    {
+        return CoFac.FromInteger(0);
+    }
+
+    public C GetOneCoefficient()
+    {
+        return CoFac.FromInteger(1);
+    }
     
     public static GenPolynomial<C> Clone(GenPolynomial<C> polynomial)
     {

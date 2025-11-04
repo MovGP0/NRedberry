@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 using BigInteger = NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith.BigInteger;
@@ -21,16 +18,14 @@ public static class PolyUtil
         ArgumentNullException.ThrowIfNull(recursiveRing);
         ArgumentNullException.ThrowIfNull(polynomial);
 
-        GenPolynomial<GenPolynomial<C>> result = recursiveRing.GetZERO().Clone();
+        GenPolynomial<GenPolynomial<C>> result = GenPolynomialRing<GenPolynomial<C>>.Zero.Clone();
         if (polynomial.IsZero())
         {
             return result;
         }
 
         int split = recursiveRing.Nvar;
-        GenPolynomialRing<C> coefficientRing = recursiveRing.CoFac as GenPolynomialRing<C>
-            ?? throw new InvalidOperationException("Coefficient ring must be a polynomial ring.");
-        GenPolynomial<C> zeroCoefficient = coefficientRing.GetZERO();
+        GenPolynomial<C> zeroCoefficient = GenPolynomialRing<C>.Zero;
 
         SortedDictionary<ExpVector, GenPolynomial<C>> resultTerms = result.Terms;
         foreach (KeyValuePair<ExpVector, C> term in polynomial.Terms)
@@ -58,7 +53,7 @@ public static class PolyUtil
         ArgumentNullException.ThrowIfNull(distributedRing);
         ArgumentNullException.ThrowIfNull(recursivePolynomial);
 
-        GenPolynomial<C> result = distributedRing.GetZERO().Clone();
+        GenPolynomial<C> result = GenPolynomialRing<C>.Zero.Clone();
         if (recursivePolynomial.IsZero())
         {
             return result;
@@ -100,7 +95,7 @@ public static class PolyUtil
         ArgumentNullException.ThrowIfNull(resultRing);
         ArgumentNullException.ThrowIfNull(polynomial);
 
-        GenPolynomial<BigInteger> result = resultRing.GetZERO().Clone();
+        GenPolynomial<BigInteger> result = GenPolynomialRing<BigInteger>.Zero.Clone();
         SortedDictionary<ExpVector, BigInteger> terms = result.Terms;
         foreach (KeyValuePair<ExpVector, C> term in polynomial.Terms)
         {
@@ -126,7 +121,7 @@ public static class PolyUtil
 
         if (polynomial.IsZero())
         {
-            return resultRing.GetZERO().Clone();
+            return GenPolynomialRing<BigInteger>.Zero.Clone();
         }
 
         System.Numerics.BigInteger lcm = System.Numerics.BigInteger.Zero;
@@ -151,10 +146,10 @@ public static class PolyUtil
 
         if (lcm.IsZero)
         {
-            return resultRing.GetZERO().Clone();
+            return GenPolynomialRing<BigInteger>.Zero.Clone();
         }
 
-        GenPolynomial<BigInteger> result = resultRing.GetZERO().Clone();
+        GenPolynomial<BigInteger> result = GenPolynomialRing<BigInteger>.Zero.Clone();
         SortedDictionary<ExpVector, BigInteger> terms = result.Terms;
         foreach (KeyValuePair<ExpVector, BigRational> term in polynomial.Terms)
         {
@@ -178,7 +173,7 @@ public static class PolyUtil
         {
             result[0] = System.Numerics.BigInteger.One;
             result[1] = System.Numerics.BigInteger.Zero;
-            result[2] = resultRing.GetZERO().Clone();
+            result[2] = GenPolynomialRing<BigInteger>.Zero.Clone();
             return result;
         }
 
@@ -228,7 +223,7 @@ public static class PolyUtil
             gcdValue = System.Numerics.BigInteger.Negate(gcdValue);
         }
 
-        GenPolynomial<BigInteger> converted = resultRing.GetZERO().Clone();
+        GenPolynomial<BigInteger> converted = GenPolynomialRing<BigInteger>.Zero.Clone();
         SortedDictionary<ExpVector, BigInteger> terms = converted.Terms;
         foreach (KeyValuePair<ExpVector, BigRational> term in polynomial.Terms)
         {
@@ -320,7 +315,7 @@ public static class PolyUtil
         }
 
         RingFactory<C> coefficientFactory = ring.CoFac;
-        GenPolynomial<C> derivative = ring.GetZERO().Clone();
+        GenPolynomial<C> derivative = GenPolynomialRing<C>.Zero.Clone();
         SortedDictionary<ExpVector, C> derivativeTerms = derivative.Terms;
 
         foreach (KeyValuePair<ExpVector, C> term in polynomial.Terms)

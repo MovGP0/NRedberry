@@ -39,7 +39,7 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
     }
 
     public AlgebraicNumber(AlgebraicNumberRing<C> ring)
-        : this(ring, ring.Ring.GetZERO())
+        : this(ring, GenPolynomialRing<C>.Zero)
     {
     }
 
@@ -285,10 +285,10 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
 
         GenPolynomial<C> q = Val;
         GenPolynomial<C> r = other.Val;
-        GenPolynomial<C> c1 = Ring.Ring.GetONE();
-        GenPolynomial<C> d1 = Ring.Ring.GetZERO();
-        GenPolynomial<C> c2 = Ring.Ring.GetZERO();
-        GenPolynomial<C> d2 = Ring.Ring.GetONE();
+        GenPolynomial<C> c1 = GenPolynomialRing<C>.One;
+        GenPolynomial<C> d1 = GenPolynomialRing<C>.Zero;
+        GenPolynomial<C> c2 = GenPolynomialRing<C>.Zero;
+        GenPolynomial<C> d2 = GenPolynomialRing<C>.One;
 
         while (!r.IsZero())
         {

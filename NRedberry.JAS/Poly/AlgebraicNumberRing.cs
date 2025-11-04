@@ -149,9 +149,9 @@ public class AlgebraicNumberRing<C> : RingFactory<AlgebraicNumber<C>> where C : 
         }
 
         BigInteger remaining = value;
-        GenPolynomial<C> aggregate = Ring.GetZERO();
+        GenPolynomial<C> aggregate = GenPolynomialRing<C>.Zero;
         GenPolynomial<C> x = Ring.Univariate(0, 1L);
-        GenPolynomial<C> power = Ring.GetONE();
+        GenPolynomial<C> power = GenPolynomialRing<C>.One;
 
         while (remaining != BigInteger.Zero)
         {
@@ -205,12 +205,12 @@ public class AlgebraicNumberRing<C> : RingFactory<AlgebraicNumber<C>> where C : 
 
     public AlgebraicNumber<C> GetZeroElement()
     {
-        return new AlgebraicNumber<C>(this, Ring.GetZERO());
+        return new AlgebraicNumber<C>(this, GenPolynomialRing<C>.Zero);
     }
 
     public AlgebraicNumber<C> GetOneElement()
     {
-        return new AlgebraicNumber<C>(this, Ring.GetONE());
+        return new AlgebraicNumber<C>(this, GenPolynomialRing<C>.One);
     }
 
     public override string ToString()

@@ -116,7 +116,37 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return builder.ToString();
     }
 
-public bool IsZero()
+    public int Length()
+    {
+        return Terms.Count;
+    }
+
+    public SortedDictionary<ExpVector, C> GetMap()
+    {
+        SortedDictionary<ExpVector, C> copy = CreateDictionary();
+        foreach (KeyValuePair<ExpVector, C> term in Terms)
+        {
+            copy.Add(term.Key, term.Value);
+        }
+
+        return copy;
+    }
+
+    public void DoPutToMap(ExpVector exponent, C coefficient)
+    {
+        ArgumentNullException.ThrowIfNull(exponent);
+        ArgumentNullException.ThrowIfNull(coefficient);
+
+        if (coefficient.IsZero())
+        {
+            Terms.Remove(exponent);
+            return;
+        }
+
+        Terms[exponent] = coefficient;
+    }
+
+    public bool IsZero()
     {
         return Terms.Count == 0;
     }
@@ -145,6 +175,16 @@ public bool IsZero()
         }
 
         return coefficient.IsUnit();
+    }
+
+    public bool IsConstant()
+    {
+        if (Terms.Count != 1)
+        {
+            return false;
+        }
+
+        return Terms.ContainsKey(Ring.Evzero);
     }
 
     public int CompareTo(GenPolynomial<C>? other)
@@ -277,6 +317,11 @@ public bool IsZero()
         return leading.Signum();
     }
 
+    public int NumberOfVariables()
+    {
+        return Ring.Nvar;
+    }
+
     public GenPolynomial<C> Sum(GenPolynomial<C> other)
     {
         ArgumentNullException.ThrowIfNull(other);
@@ -298,6 +343,12 @@ public bool IsZero()
         return new GenPolynomial<C>(Ring, result, false);
     }
 
+    public GenPolynomial<C> Sum(C coefficient)
+    {
+        ArgumentNullException.ThrowIfNull(coefficient);
+        return Sum(coefficient, Ring.Evzero);
+    }
+
     public GenPolynomial<C> Subtract(GenPolynomial<C> other)
     {
         ArgumentNullException.ThrowIfNull(other);
@@ -308,6 +359,19 @@ public bool IsZero()
         }
 
         return new GenPolynomial<C>(Ring, result, false);
+    }
+
+    public GenPolynomial<C> Subtract(C coefficient, ExpVector exponent)
+    {
+        ArgumentNullException.ThrowIfNull(coefficient);
+        ArgumentNullException.ThrowIfNull(exponent);
+        return Sum(coefficient.Negate(), exponent);
+    }
+
+    public GenPolynomial<C> Subtract(C coefficient)
+    {
+        ArgumentNullException.ThrowIfNull(coefficient);
+        return Sum(coefficient.Negate());
     }
 
     public GenPolynomial<C> Multiply(GenPolynomial<C> other)
@@ -330,6 +394,22 @@ public bool IsZero()
         }
 
         return new GenPolynomial<C>(Ring, result, false);
+    }
+
+    public GenPolynomial<C> Monic()
+    {
+        if (IsZero())
+        {
+            return this;
+        }
+
+        C leading = LeadingBaseCoefficient();
+        if (leading.IsOne())
+        {
+            return this;
+        }
+
+        return Multiply(leading.Inverse());
     }
 
     public GenPolynomial<C> Multiply(C coefficient)
@@ -368,34 +448,301 @@ public bool IsZero()
         return new GenPolynomial<C>(Ring, result, false);
     }
 
+    public GenPolynomial<C> Multiply(ExpVector exponent)
+    {
+        ArgumentNullException.ThrowIfNull(exponent);
+        if (IsZero() || exponent.IsZero())
+        {
+            return this;
+        }
+
+        SortedDictionary<ExpVector, C> result = CreateDictionary();
+        foreach (KeyValuePair<ExpVector, C> term in Terms)
+        {
+            ExpVector newExponent = term.Key.Sum(exponent);
+            result.Add(newExponent, term.Value);
+        }
+
+        return new GenPolynomial<C>(Ring, result, false);
+    }
+
+    public GenPolynomial<C> Divide(C divisor)
+    {
+        ArgumentNullException.ThrowIfNull(divisor);
+        if (divisor.IsZero())
+        {
+            throw new ArithmeticException("division by zero");
+        }
+
+        if (IsZero())
+        {
+            return this;
+        }
+
+        SortedDictionary<ExpVector, C> result = CreateDictionary();
+        foreach (KeyValuePair<ExpVector, C> term in Terms)
+        {
+            C quotient = term.Value.Divide(divisor);
+            if (quotient.IsZero())
+            {
+                throw new ArithmeticException($"no exact division: {term.Value}/{divisor}, in {this}");
+            }
+
+            result.Add(term.Key, quotient);
+        }
+
+        return new GenPolynomial<C>(Ring, result, false);
+    }
+
+    public GenPolynomial<C>[] QuotientRemainder(GenPolynomial<C> divisor)
+    {
+        ArgumentNullException.ThrowIfNull(divisor);
+        if (divisor.IsZero())
+        {
+            throw new ArithmeticException("division by zero");
+        }
+
+        C leadingCoefficient = divisor.LeadingBaseCoefficient();
+        if (!leadingCoefficient.IsUnit())
+        {
+            throw new ArithmeticException($"leading coefficient not invertible {leadingCoefficient}");
+        }
+
+        C leadingInverse = leadingCoefficient.Inverse();
+        var quotient = new GenPolynomial<C>(Ring);
+        GenPolynomial<C> remainder = Clone();
+        ExpVector? divisorLeadingExponent = divisor.LeadingExpVector();
+
+        while (!remainder.IsZero())
+        {
+            ExpVector? remainderLeadingExponent = remainder.LeadingExpVector();
+            if (divisorLeadingExponent is null || remainderLeadingExponent is null || !remainderLeadingExponent.MultipleOf(divisorLeadingExponent))
+            {
+                break;
+            }
+
+            C remainderLeadingCoefficient = remainder.LeadingBaseCoefficient();
+            ExpVector exponentDifference = remainderLeadingExponent.Subtract(divisorLeadingExponent);
+            C factor = remainderLeadingCoefficient.Multiply(leadingInverse);
+
+            quotient = quotient.Sum(factor, exponentDifference);
+            GenPolynomial<C> product = divisor.Multiply(factor, exponentDifference);
+            remainder = remainder.Subtract(product);
+        }
+
+        return new[]
+        {
+            quotient,
+            remainder
+        };
+    }
+
     public GenPolynomial<C> ModInverse(GenPolynomial<C> modulus)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(modulus);
+        if (IsZero())
+        {
+            throw new NotInvertibleException("zero is not invertible");
+        }
+
+        GenPolynomial<C>[] result = Hegcd(modulus);
+        GenPolynomial<C> gcd = result[0];
+        if (!gcd.IsUnit())
+        {
+            GenPolynomial<C> factor = modulus.Divide(gcd);
+            throw new AlgebraicNotInvertibleException("element not invertible, gcd != 1", modulus, gcd, factor);
+        }
+
+        GenPolynomial<C> inverse = result[1];
+        if (inverse.IsZero())
+        {
+            throw new NotInvertibleException("element not invertible, divisible by modul");
+        }
+
+        return inverse;
     }
 
     public GenPolynomial<C> Divide(GenPolynomial<C> other)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(other);
+        return QuotientRemainder(other)[0];
     }
 
     public GenPolynomial<C> Inverse()
     {
-        throw new NotImplementedException();
+        if (IsUnit())
+        {
+            C inverse = LeadingBaseCoefficient().Inverse();
+            return GenPolynomialRing<C>.One.Multiply(inverse);
+        }
+
+        throw new NotInvertibleException($"element not invertible {this} :: {Ring}");
     }
 
     public GenPolynomial<C> Remainder(GenPolynomial<C> other)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(other);
+        return QuotientRemainder(other)[1];
     }
 
     public GenPolynomial<C> Gcd(GenPolynomial<C> other)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(other);
+        if (other.IsZero())
+        {
+            return this;
+        }
+
+        if (IsZero())
+        {
+            return other;
+        }
+
+        if (Ring.Nvar != 1)
+        {
+            throw new ArgumentException("not univariate polynomials", nameof(other));
+        }
+
+        GenPolynomial<C> a = this;
+        GenPolynomial<C> b = other;
+        while (!b.IsZero())
+        {
+            GenPolynomial<C> remainder = a.Remainder(b);
+            a = b;
+            b = remainder;
+        }
+
+        return a.Monic();
     }
 
     public GenPolynomial<C>[] Egcd(GenPolynomial<C> other)
     {
-        throw new NotImplementedException();
+        GenPolynomial<C>[] result = new GenPolynomial<C>[3];
+
+        if (other is null || other.IsZero())
+        {
+            result[0] = this;
+            result[1] = GenPolynomialRing<C>.One;
+            result[2] = GenPolynomialRing<C>.Zero;
+            return result;
+        }
+
+        if (IsZero())
+        {
+            result[0] = other;
+            result[1] = GenPolynomialRing<C>.Zero;
+            result[2] = GenPolynomialRing<C>.One;
+            return result;
+        }
+
+        if (Ring.Nvar != 1)
+        {
+            throw new ArgumentException("not univariate polynomials", nameof(other));
+        }
+
+        if (IsConstant() && other.IsConstant())
+        {
+            C a = LeadingBaseCoefficient();
+            C b = other.LeadingBaseCoefficient();
+            C[] gcd = a.Egcd(b);
+            GenPolynomial<C> zero = GenPolynomialRing<C>.Zero;
+            result[0] = zero.Sum(gcd[0]);
+            result[1] = zero.Sum(gcd[1]);
+            result[2] = zero.Sum(gcd[2]);
+            return result;
+        }
+
+        GenPolynomial<C> q = this;
+        GenPolynomial<C> r = other;
+        GenPolynomial<C> c1 = GenPolynomialRing<C>.One.Clone();
+        GenPolynomial<C> d1 = GenPolynomialRing<C>.Zero.Clone();
+        GenPolynomial<C> c2 = GenPolynomialRing<C>.Zero.Clone();
+        GenPolynomial<C> d2 = GenPolynomialRing<C>.One.Clone();
+
+        while (!r.IsZero())
+        {
+            GenPolynomial<C>[] qr = q.QuotientRemainder(r);
+            GenPolynomial<C> quotient = qr[0];
+            GenPolynomial<C> remainder = qr[1];
+
+            GenPolynomial<C> x1 = c1.Subtract(quotient.Multiply(d1));
+            GenPolynomial<C> x2 = c2.Subtract(quotient.Multiply(d2));
+
+            c1 = d1;
+            c2 = d2;
+            d1 = x1;
+            d2 = x2;
+            q = r;
+            r = remainder;
+        }
+
+        C leading = q.LeadingBaseCoefficient();
+        if (leading.IsUnit())
+        {
+            C inverse = leading.Inverse();
+            q = q.Multiply(inverse);
+            c1 = c1.Multiply(inverse);
+            c2 = c2.Multiply(inverse);
+        }
+
+        result[0] = q;
+        result[1] = c1;
+        result[2] = c2;
+        return result;
+    }
+
+    public GenPolynomial<C>[] Hegcd(GenPolynomial<C> other)
+    {
+        GenPolynomial<C>[] result = new GenPolynomial<C>[2];
+
+        if (other is null || other.IsZero())
+        {
+            result[0] = this;
+            result[1] = GenPolynomialRing<C>.One;
+            return result;
+        }
+
+        if (IsZero())
+        {
+            result[0] = other;
+            result[1] = GenPolynomialRing<C>.Zero;
+            return result;
+        }
+
+        if (Ring.Nvar != 1)
+        {
+            throw new ArgumentException("not univariate polynomials", nameof(other));
+        }
+
+        GenPolynomial<C> q = this;
+        GenPolynomial<C> r = other;
+        GenPolynomial<C> c1 = GenPolynomialRing<C>.One.Clone();
+        GenPolynomial<C> d1 = GenPolynomialRing<C>.Zero.Clone();
+
+        while (!r.IsZero())
+        {
+            GenPolynomial<C>[] qr = q.QuotientRemainder(r);
+            GenPolynomial<C> quotient = qr[0];
+            GenPolynomial<C> remainder = qr[1];
+
+            GenPolynomial<C> x1 = c1.Subtract(quotient.Multiply(d1));
+            c1 = d1;
+            d1 = x1;
+            q = r;
+            r = remainder;
+        }
+
+        C leading = q.LeadingBaseCoefficient();
+        if (leading.IsUnit())
+        {
+            C inverse = leading.Inverse();
+            q = q.Multiply(inverse);
+            c1 = c1.Multiply(inverse);
+        }
+
+        result[0] = q;
+        result[1] = c1;
+        return result;
     }
 
     public ElemFactory<GenPolynomial<C>> Factory()
@@ -416,6 +763,17 @@ public bool IsZero()
         return GetEnumerator();
     }
 
+    public Monomial<C>? LeadingMonomial()
+    {
+        if (Terms.Count == 0)
+        {
+            return null;
+        }
+
+        KeyValuePair<ExpVector, C> term = Terms.First();
+        return new Monomial<C>(term.Key, term.Value);
+    }
+
     public ExpVector? LeadingExpVector()
     {
         if (Terms.Count == 0)
@@ -434,6 +792,229 @@ public bool IsZero()
         }
 
         return Terms.First().Value;
+    }
+
+    public ExpVector? TrailingExpVector()
+    {
+        if (Terms.Count == 0)
+        {
+            return null;
+        }
+
+        return Terms.Last().Key;
+    }
+
+    public C TrailingBaseCoefficient()
+    {
+        if (Terms.Count == 0)
+        {
+            return Ring.CoFac.FromInteger(0);
+        }
+
+        return Terms.Last().Value;
+    }
+
+    public C Coefficient(ExpVector exponent)
+    {
+        ArgumentNullException.ThrowIfNull(exponent);
+        return Terms.TryGetValue(exponent, out C? value) ? value : Ring.CoFac.FromInteger(0);
+    }
+
+    public long Degree(int index)
+    {
+        if (Terms.Count == 0)
+        {
+            return 0;
+        }
+
+        int position = index >= 0 ? Ring.Nvar - 1 - index : Ring.Nvar + index;
+        if (position < 0 || position >= Ring.Nvar)
+        {
+            throw new ArgumentOutOfRangeException(nameof(index), "Invalid variable index.");
+        }
+
+        long degree = 0;
+        foreach (ExpVector exponent in Terms.Keys)
+        {
+            long value = exponent.GetVal(position);
+            if (value > degree)
+            {
+                degree = value;
+            }
+        }
+
+        return degree;
+    }
+
+    public long Degree()
+    {
+        if (Terms.Count == 0)
+        {
+            return 0;
+        }
+
+        long degree = 0;
+        foreach (ExpVector exponent in Terms.Keys)
+        {
+            long value = exponent.MaxDeg();
+            if (value > degree)
+            {
+                degree = value;
+            }
+        }
+
+        return degree;
+    }
+
+    public ExpVector DegreeVector()
+    {
+        if (Terms.Count == 0)
+        {
+            return Ring.Evzero;
+        }
+
+        long[] degrees = new long[Ring.Nvar];
+        foreach (ExpVector exponent in Terms.Keys)
+        {
+            long[] values = exponent.GetVal();
+            for (int i = 0; i < values.Length; i++)
+            {
+                if (values[i] > degrees[i])
+                {
+                    degrees[i] = values[i];
+                }
+            }
+        }
+
+        return ExpVector.Create(degrees);
+    }
+
+    public C MaxNorm()
+    {
+        C norm = Ring.CoFac.FromInteger(0);
+        foreach (C coefficient in Terms.Values)
+        {
+            C absolute = coefficient.Abs();
+            if (norm.CompareTo(absolute) < 0)
+            {
+                norm = absolute;
+            }
+        }
+
+        return norm;
+    }
+
+    public C SumNorm()
+    {
+        C norm = Ring.CoFac.FromInteger(0);
+        foreach (C coefficient in Terms.Values)
+        {
+            norm = norm.Sum(coefficient.Abs());
+        }
+
+        return norm;
+    }
+
+    public GenPolynomial<C> Extend(GenPolynomialRing<C> extendedRing, int index, long exponent)
+    {
+        ArgumentNullException.ThrowIfNull(extendedRing);
+        if (Ring.Equals(extendedRing))
+        {
+            return this;
+        }
+
+        GenPolynomial<C> result = GenPolynomialRing<C>.Zero.Clone();
+        if (IsZero())
+        {
+            return result;
+        }
+
+        int shift = extendedRing.Nvar - Ring.Nvar;
+        foreach (KeyValuePair<ExpVector, C> term in Terms)
+        {
+            ExpVector extendedExponent = term.Key.Extend(shift, index, exponent);
+            result.DoPutToMap(extendedExponent, term.Value);
+        }
+
+        return result;
+    }
+
+    public GenPolynomial<C> ExtendLower(GenPolynomialRing<C> extendedRing, int index, long exponent)
+    {
+        ArgumentNullException.ThrowIfNull(extendedRing);
+        if (Ring.Equals(extendedRing))
+        {
+            return this;
+        }
+
+        GenPolynomial<C> result = GenPolynomialRing<C>.Zero.Clone();
+        if (IsZero())
+        {
+            return result;
+        }
+
+        int shift = extendedRing.Nvar - Ring.Nvar;
+        foreach (KeyValuePair<ExpVector, C> term in Terms)
+        {
+            ExpVector extendedExponent = term.Key.ExtendLower(shift, index, exponent);
+            result.DoPutToMap(extendedExponent, term.Value);
+        }
+
+        return result;
+    }
+
+    public SortedDictionary<ExpVector, GenPolynomial<C>> Contract(GenPolynomialRing<C> contractedRing)
+    {
+        ArgumentNullException.ThrowIfNull(contractedRing);
+        var order = new TermOrder(TermOrder.INVLEX);
+        SortedDictionary<ExpVector, GenPolynomial<C>> contracted = new(order.GetAscendComparator());
+
+        if (IsZero())
+        {
+            return contracted;
+        }
+
+        int shift = Ring.Nvar - contractedRing.Nvar;
+        foreach (KeyValuePair<ExpVector, C> term in Terms)
+        {
+            ExpVector exponent = term.Key;
+            ExpVector leading = exponent.Contract(0, shift);
+            ExpVector remainder = exponent.Contract(shift, exponent.Length() - shift);
+
+            if (!contracted.TryGetValue(leading, out GenPolynomial<C>? polynomial))
+            {
+                polynomial = GenPolynomialRing<C>.Zero.Clone();
+            }
+
+            polynomial = polynomial.Sum(term.Value, remainder);
+            contracted[leading] = polynomial;
+        }
+
+        return contracted;
+    }
+
+    public GenPolynomial<C> Reverse(GenPolynomialRing<C> reversedRing)
+    {
+        ArgumentNullException.ThrowIfNull(reversedRing);
+        GenPolynomial<C> result = GenPolynomialRing<C>.Zero.Clone();
+        if (IsZero())
+        {
+            return result;
+        }
+
+        int split = -1;
+        if (reversedRing.Tord.GetEvord2() != 0 && reversedRing.IsPartial)
+        {
+            split = reversedRing.Tord.GetSplit();
+        }
+
+        foreach (KeyValuePair<ExpVector, C> term in Terms)
+        {
+            ExpVector reversedExponent = split >= 0 ? term.Key.Reverse(split) : term.Key.Reverse();
+            result.DoPutToMap(reversedExponent, term.Value);
+        }
+
+        return result;
     }
 
     internal SortedDictionary<ExpVector, C> CloneTerms()

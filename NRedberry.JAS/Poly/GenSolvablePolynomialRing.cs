@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
@@ -14,8 +14,14 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 public class GenSolvablePolynomialRing<C> : GenPolynomialRing<C> where C : RingElem<C>
 {
     public RelationTable<C> Table { get; }
-    public new GenSolvablePolynomial<C> ZERO { get; }
-    public new GenSolvablePolynomial<C> ONE { get; }
+
+    private static GenSolvablePolynomial<C> ZERO = default!;
+
+    private static GenSolvablePolynomial<C> ONE = default!;
+
+    public new static GenSolvablePolynomial<C> Zero => ZERO;
+
+    public new static GenSolvablePolynomial<C> One => ONE;
 
     public GenSolvablePolynomialRing(RingFactory<C> coefficientFactory, int variables, TermOrder order, string[]? variableNames = null)
         : this(coefficientFactory, variables, order, variableNames, null)
@@ -55,16 +61,6 @@ public class GenSolvablePolynomialRing<C> : GenPolynomialRing<C> where C : RingE
     public override int GetHashCode()
     {
         return HashCode.Combine(base.GetHashCode(), Table);
-    }
-
-    public new GenSolvablePolynomial<C> GetZERO()
-    {
-        return ZERO;
-    }
-
-    public new GenSolvablePolynomial<C> GetONE()
-    {
-        return ONE;
     }
 
     public new GenSolvablePolynomial<C> FromInteger(long value)

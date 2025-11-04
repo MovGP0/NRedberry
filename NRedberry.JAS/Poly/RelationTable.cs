@@ -508,7 +508,7 @@ public class RelationTable<C> where C : RingElem<C>
 
             if (!result.TryGetValue(head, out GenSolvablePolynomial<C>? existing))
             {
-                existing = targetRing.GetZERO();
+                existing = GenSolvablePolynomialRing<C>.Zero;
             }
 
             GenPolynomial<C> basePolynomial = existing;
@@ -653,7 +653,7 @@ public sealed class TableRelation<C> where C : RingElem<C>
         builder.Append(" | ");
         builder.Append(Right?.ToString() ?? "null");
         builder.Append(" = ");
-        builder.Append(Product.ToString());
+        builder.Append(Product);
         builder.Append(']');
         return builder.ToString();
     }
