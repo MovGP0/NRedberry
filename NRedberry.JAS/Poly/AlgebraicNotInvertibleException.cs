@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
@@ -18,9 +18,9 @@ public class AlgebraicNotInvertibleException : NotInvertibleException
 
     public AlgebraicNotInvertibleException(
         string message,
-        object? f,
-        object? f1,
-        object? f2)
+        object? f = null,
+        object? f1 = null,
+        object? f2 = null)
         : base(message)
     {
         F = f;
@@ -30,11 +30,11 @@ public class AlgebraicNotInvertibleException : NotInvertibleException
 
     public AlgebraicNotInvertibleException(
         string message,
-        Exception? innerException,
+        Exception innerException,
         object? f = null,
         object? f1 = null,
         object? f2 = null)
-        : base(message, innerException!)
+        : base(message, innerException)
     {
         F = f;
         F1 = f1;

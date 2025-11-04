@@ -321,6 +321,11 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return new GenPolynomial<C>(Ring, result, false);
     }
 
+    public GenPolynomial<C> ModInverse(GenPolynomial<C> modulus)
+    {
+        throw new NotImplementedException();
+    }
+
     public GenPolynomial<C> Divide(GenPolynomial<C> other)
     {
         throw new NotImplementedException();

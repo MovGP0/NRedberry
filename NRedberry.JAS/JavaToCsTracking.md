@@ -35,9 +35,9 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 ### Poly (24 files)
 | Java File | C# File | Status    | Notes |
 |-----------|---------|-----------|-------|
-| AlgebraicNotInvertibleException.java | AlgebraicNotInvertibleException.cs | ✅ Scaffolded | |
-| AlgebraicNumber.java | AlgebraicNumber.cs | ✅ Scaffolded | Algebraic number with GenPolynomial value |
-| AlgebraicNumberRing.java | AlgebraicNumberRing.cs | ✅ Scaffolded | Factory for AlgebraicNumber |
+| AlgebraicNotInvertibleException.java | AlgebraicNotInvertibleException.cs | ✔️ Complete | |
+| AlgebraicNumber.java | AlgebraicNumber.cs | ✔️ Complete | Algebraic number with GenPolynomial value |
+| AlgebraicNumberRing.java | AlgebraicNumberRing.cs | ✔️ Complete | Factory for AlgebraicNumber |
 | Complex.java | Complex.cs | ✔️ Complete | |
 | ComplexRing.java | ComplexRing.cs | ✔️ Complete | |
 | ExpVector.java | ExpVector.cs | ✔️ Complete | Core compare/order helpers and random generation ported |
