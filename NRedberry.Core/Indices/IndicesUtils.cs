@@ -150,8 +150,11 @@ public sealed class IndicesUtils
     public static IndexType GetTypeEnum(int index)
     {
         foreach (IndexType type in Enum.GetValues(typeof(IndexType)))
+        {
             if (type.GetType_() == GetType_(index))
                 return type;
+        }
+
         throw new Exception("Unknown type");
     }
 
@@ -221,11 +224,10 @@ public sealed class IndicesUtils
     public static int ParseIndex(string @string)
     {
         bool state = @string[0] == '^';
-        int nameWithType;
-        if (@string[1] == '{')
-            nameWithType = Context.Get().GetIndexConverterManager().GetCode(@string.Substring(2, @string.Length - 1));
-        else
-            nameWithType = Context.Get().GetIndexConverterManager().GetCode(@string.Substring(1));
+        var nameWithType = Context.Get()
+            .GetIndexConverterManager()
+            .GetCode(@string[1] == '{' ? @string.Substring(2, @string.Length - 1) : @string[1..]);
+
         return state ? (int)(0x80000000 ^ nameWithType) : nameWithType;
     }
 
@@ -260,8 +262,11 @@ public sealed class IndicesUtils
         if (indices.Length != permutation.Length)
             return false;
         for (int i = 0; i < permutation.Length; ++i)
+        {
             if (GetRawTypeInt(indices[i]) != GetRawTypeInt(indices[permutation[i]]))
                 return false;
+        }
+
         return true;
     }
 
@@ -270,8 +275,11 @@ public sealed class IndicesUtils
         if (indices.Length != permutation.Dimension())
             return false;
         for (int i = 0; i < permutation.Dimension(); ++i)
+        {
             if (GetRawTypeInt(indices[i]) != GetRawTypeInt(indices[permutation.NewIndexOf(i)]))
                 return false;
+        }
+
         return true;
     }
 
@@ -283,34 +291,37 @@ public sealed class IndicesUtils
             return false;
         int[] temp = (int[])indices2.Clone();
         Array.Sort(temp);
-        return Enumerable.SequenceEqual(((AbstractIndices)indices1).GetSortedData(), temp);
+        return ((AbstractIndices)indices1).GetSortedData().SequenceEqual(temp);
     }
 
     public static bool EqualsRegardlessOrder(int[] indices1, int[] indices2)
     {
         if (indices1.Length != indices2.Length)
             return false;
-        int[] temp1 = (int[])indices1.Clone(), temp2 = (int[])indices2.Clone();
+        int[] temp1 = (int[])indices1.Clone();
+        int[] temp2 = (int[])indices2.Clone();
         Array.Sort(temp1);
         Array.Sort(temp2);
-        return Enumerable.SequenceEqual(temp1, temp2);
+        return temp1.SequenceEqual(temp2);
     }
 
     public static bool HaveIntersections(Indices u, Indices v)
     {
-        Indices uFree = u.GetFree(),
-            vFree = v.GetFree();
+        Indices uFree = u.GetFree();
+        Indices vFree = v.GetFree();
         if (uFree.Size() > vFree.Size())
         {
             (uFree, vFree) = (vFree, uFree);
         }
 
         for (int i = 0; i < uFree.Size(); ++i)
-        for (int j = 0; j < vFree.Size(); ++j)
         {
-            if (vFree[j] == InverseIndexState(uFree[i]))
+            for (int j = 0; j < vFree.Size(); ++j)
             {
-                return true;
+                if (vFree[j] == InverseIndexState(uFree[i]))
+                {
+                    return true;
+                }
             }
         }
 
@@ -330,10 +341,17 @@ public sealed class IndicesUtils
         }
 
         List<int> contracted = [];
-        for (int i = 0; i < freeIndices1.Length; ++i)
-        for (int j = 0; j < freeIndices2.Length; ++j)
-            if (freeIndices2[j] == InverseIndexState(freeIndices1[i]))
-                contracted.Add(GetNameWithType(freeIndices2[j]));
+        foreach (var t in freeIndices1)
+        {
+            foreach (var t1 in freeIndices2)
+            {
+                if (t1 == InverseIndexState(t))
+                {
+                    contracted.Add(GetNameWithType(t1));
+                }
+            }
+        }
+
         return contracted.ToArray();
     }
 
@@ -341,9 +359,12 @@ public sealed class IndicesUtils
     {
         if (u.Size() == 0 || v.Size() == 0)
             return [];
-        Indices freeU = u.GetFree(), freeV = v.GetFree();
+
+        Indices freeU = u.GetFree();
+        Indices freeV = v.GetFree();
         if (freeU.Size() == 0 || freeV.Size() == 0)
             return [];
+
         return GetIntersections(((AbstractIndices)freeU).Data, ((AbstractIndices)freeV).Data);
     }
 }

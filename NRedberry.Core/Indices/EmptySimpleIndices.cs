@@ -3,12 +3,19 @@
 sealed class EmptySimpleIndices : EmptyIndices, SimpleIndices
 {
     public static readonly EmptySimpleIndices emptySimpleIndicesInstance = new();
-    private EmptySimpleIndices() { }
+
+    private EmptySimpleIndices()
+    {
+    }
+
     public SimpleIndices Inverted => this;
     public SimpleIndices Free => this;
+
     public SimpleIndices OfType(IndexType type) => this;
+
     public SimpleIndices Upper => this;
     public SimpleIndices Lower => this;
+
     public IndicesSymmetries Symmetries
     {
         get => IndicesSymmetries.EmptySymmetries;
@@ -20,9 +27,11 @@ sealed class EmptySimpleIndices : EmptyIndices, SimpleIndices
             }
         }
     }
+
     public SimpleIndices ApplyIndexMapping(IIndexMapping mapping) => this;
-    public override bool Equals(object obj) => obj is EmptyIndices;
+    public override bool Equals(object? obj) => obj is EmptyIndices;
     public bool EqualsWithSymmetries(SimpleIndices indices) => indices == emptySimpleIndicesInstance;
     public override int GetHashCode() => 453679;
+
     public StructureOfIndices StructureOfIndices => StructureOfIndices.Empty;
 }

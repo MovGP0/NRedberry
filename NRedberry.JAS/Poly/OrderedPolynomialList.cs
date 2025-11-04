@@ -16,11 +16,6 @@ public class OrderedPolynomialList<C> : PolynomialList<C>, IComparer<GenPolynomi
     {
     }
 
-    public override bool Equals(object? obj)
-    {
-        return base.Equals(obj);
-    }
-
     public static List<GenPolynomial<C>> Sort(GenPolynomialRing<C> ring, List<GenPolynomial<C>> polynomials)
     {
         return SortInternal(ring, polynomials);
@@ -73,25 +68,27 @@ public class OrderedPolynomialList<C> : PolynomialList<C>, IComparer<GenPolynomi
 
         IComparer<ExpVector> comparer = ring.Tord.GetAscendComparator();
         return polynomials
-            .OrderBy(p => p.LeadingExpVector(), Comparer<ExpVector>.Create((a, b) =>
-            {
-                if (a is null)
+            .OrderBy(
+                p => p.LeadingExpVector(),
+                Comparer<ExpVector>.Create((a, b) =>
                 {
-                    return b is null ? 0 : -1;
-                }
+                    if (a is null)
+                    {
+                        return b is null ? 0 : -1;
+                    }
 
-                if (b is null)
-                {
-                    return 1;
-                }
+                    if (b is null)
+                    {
+                        return 1;
+                    }
 
-                if (a.Length() != b.Length())
-                {
-                    return a.Length().CompareTo(b.Length());
-                }
+                    if (a.Length() != b.Length())
+                    {
+                        return a.Length().CompareTo(b.Length());
+                    }
 
-                return comparer.Compare(a, b);
-            }))
+                    return comparer.Compare(a, b);
+                }))
             .ToList();
     }
 }

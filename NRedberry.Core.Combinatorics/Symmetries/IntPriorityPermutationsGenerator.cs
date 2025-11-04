@@ -48,7 +48,10 @@ public sealed class IntPriorityPermutationsGenerator : IIntCombinatorialPort
             var index = lastTuplePointer - 1;
             var nPriority = ++tuples[index].Priority;
             var position = index;
-            while (--position >= 0 && tuples[position].Priority < nPriority) ;
+            while (--position >= 0 && tuples[position].Priority < nPriority)
+            {
+            }
+
             ++position;
             Swap(position, index);
             return;

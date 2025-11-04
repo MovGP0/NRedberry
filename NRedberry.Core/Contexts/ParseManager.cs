@@ -8,6 +8,7 @@ public sealed class ParseManager
 {
     public IList<IParseTokenTransformer> DefaultParserPreprocessors = new List<IParseTokenTransformer>();
     public IList<ITransformation> DefaultTensorPreprocessors = new List<ITransformation>();
+
     public Parser Parser { get; }
 
     public ParseManager(Parser parser)

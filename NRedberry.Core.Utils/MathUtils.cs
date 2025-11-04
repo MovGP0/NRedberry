@@ -17,13 +17,16 @@ public static class MathUtils
         while (i + shift + 1 < values.Length)
         {
             if (values[i + shift] == values[i + shift + 1])
+            {
                 ++shift;
+            }
             else
             {
                 values[i] = values[i + shift];
                 ++i;
             }
         }
+
         values[i] = values[i + shift];
         return values[..(i + 1)];
     }
@@ -38,7 +41,8 @@ public static class MathUtils
     /// <returns>The set of elements in B but not in A</returns>
     public static int[] IntSetDifference(int[] a, int[] b)
     {
-        int bPointer = 0, aPointer = 0;
+        int bPointer = 0;
+        int aPointer = 0;
         int counter = 0;
         while (aPointer < a.Length && bPointer < b.Length)
         {
@@ -48,13 +52,16 @@ public static class MathUtils
                 bPointer++;
             }
             else if (a[aPointer] < b[bPointer])
+            {
                 aPointer++;
+            }
             else
             {
                 counter++;
                 bPointer++;
             }
         }
+
         counter += b.Length - bPointer;
         int[] result = new int[counter];
         counter = 0;
@@ -68,10 +75,15 @@ public static class MathUtils
                 bPointer++;
             }
             else if (a[aPointer] < b[bPointer])
+            {
                 aPointer++;
+            }
             else
+            {
                 result[counter++] = b[bPointer++];
+            }
         }
+
         Array.Copy(b, bPointer, result, counter, b.Length - bPointer);
         return result;
     }
@@ -86,7 +98,8 @@ public static class MathUtils
     /// <returns>The set of elements from B and from A</returns>
     public static int[] IntSetUnion(int[] a, int[] b)
     {
-        int bPointer = 0, aPointer = 0;
+        int bPointer = 0;
+        int aPointer = 0;
         int counter = 0;
         while (aPointer < a.Length && bPointer < b.Length)
         {
@@ -107,6 +120,7 @@ public static class MathUtils
                 bPointer++;
             }
         }
+
         counter += (a.Length - aPointer) + (b.Length - bPointer); // Assert aPointer==a.Length || bPointer==b.Length
         int[] result = new int[counter];
         counter = 0;
@@ -121,14 +135,24 @@ public static class MathUtils
                 bPointer++;
             }
             else if (a[aPointer] < b[bPointer])
+            {
                 result[counter++] = a[aPointer++];
+            }
             else
+            {
                 result[counter++] = b[bPointer++];
+            }
         }
+
         if (aPointer == a.Length)
+        {
             Array.Copy(b, bPointer, result, counter, b.Length - bPointer);
+        }
         else
+        {
             Array.Copy(a, aPointer, result, counter, a.Length - aPointer);
+        }
+
         return result;
     }
 }

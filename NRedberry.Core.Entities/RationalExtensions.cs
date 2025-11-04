@@ -17,8 +17,7 @@ public static class RationalExtensions
 
         var numerator = BigInteger.Abs(p.Numerator);
         var denominator = BigInteger.Abs(p.Denominator);
-        var result = new Rationals.Rational(numerator, denominator);
-        return result;
+        return new Rationals.Rational(numerator, denominator);
     }
 
     /// <summary>
@@ -34,7 +33,6 @@ public static class RationalExtensions
 
         var numerator = BigInteger.Abs(p.Numerator);
         var denominator = BigInteger.Abs(p.Denominator);
-        var result = new Rational(numerator, denominator);
-        return result;
+        return new Rational(numerator, denominator);
     }
 }

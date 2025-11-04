@@ -4,12 +4,14 @@ public class SortedIndices : AbstractIndices
 {
     private readonly int firstLower;
 
-    private SortedIndices(int[] data, int firstLower) : base(data)
+    private SortedIndices(int[] data, int firstLower)
+        : base(data)
     {
         this.firstLower = firstLower;
     }
 
-    public SortedIndices(int[] data) : base(data)
+    public SortedIndices(int[] data)
+        : base(data)
     {
         Array.Sort(Data);
         firstLower = Array.BinarySearch(Data, 0);
@@ -29,15 +31,19 @@ public class SortedIndices : AbstractIndices
         int size = 0;
 
         int lowerPosition = Array.BinarySearch(Data, 0, (int)firstLower, (type_ << 24) | 0x80000000);
-        if (lowerPosition < 0) lowerPosition = ~lowerPosition;
+        if (lowerPosition < 0)
+            lowerPosition = ~lowerPosition;
         int upperPosition = Array.BinarySearch(Data, lowerPosition, (int)firstLower, ((type_ + 1) << 24) | 0x80000000);
-        if (upperPosition < 0) upperPosition = ~upperPosition;
+        if (upperPosition < 0)
+            upperPosition = ~upperPosition;
         size += upperPosition - lowerPosition;
 
         lowerPosition = Array.BinarySearch(Data, firstLower, Data.Length, type_ << 24);
-        if (lowerPosition < 0) lowerPosition = ~lowerPosition;
+        if (lowerPosition < 0)
+            lowerPosition = ~lowerPosition;
         upperPosition = Array.BinarySearch(Data, lowerPosition, Data.Length, (type_ + 1) << 24);
-        if (upperPosition < 0) upperPosition = ~upperPosition;
+        if (upperPosition < 0)
+            upperPosition = ~upperPosition;
         size += upperPosition - lowerPosition;
         return size;
     }
@@ -47,8 +53,10 @@ public class SortedIndices : AbstractIndices
     public override Indices GetFree()
     {
         List<int> list = [];
-        int u, l;
-        int iLower = firstLower, iUpper = 0;
+        int u;
+        int l;
+        int iLower = firstLower;
+        int iUpper = 0;
         for (; iUpper < firstLower && iLower < Data.Length; ++iLower, ++iUpper)
         {
             u = Data[iUpper] & 0x7FFFFFFF; //taking name with type
@@ -64,6 +72,7 @@ public class SortedIndices : AbstractIndices
                 --iUpper;
             }
         }
+
         list.AddRange(Data.Skip((int)iUpper).Take((int)(firstLower - iUpper)));
         list.AddRange(Data.Skip((int)iLower).Take((int)(Data.Length - iLower)));
         return IndicesFactory.Create(list.ToArray());

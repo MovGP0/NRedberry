@@ -62,9 +62,11 @@ public class PermutationOneLineByte : Permutation
     public Permutation ToLargerRepresentation(int newLength)
     {
         if (newLength <= short.MaxValue)
+        {
             return ToShortRepresentation();
-        else
-            return ToIntRepresentation();
+        }
+
+        return ToIntRepresentation();
     }
 
     public int Length()
@@ -167,8 +169,11 @@ public class PermutationOneLineByte : Permutation
         if (i >= _permutation.Length)
             return i;
         for (int j = _permutation.Length - 1; j >= 0; --j)
+        {
             if (_permutation[j] == i)
                 return j;
+        }
+
         throw new IndexOutOfRangeException();
     }
 
@@ -205,8 +210,11 @@ public class PermutationOneLineByte : Permutation
 
         try
         {
-            return new PermutationOneLineByte(resultIsIdentity, _antisymmetry ^ other.Antisymmetry(),
-                (sbyte)(newInternalDegree + 1), result);
+            return new PermutationOneLineByte(
+                resultIsIdentity,
+                _antisymmetry ^ other.Antisymmetry(),
+                (sbyte)(newInternalDegree + 1),
+                result);
         }
         catch (InconsistentGeneratorsException ex)
         {
@@ -239,8 +247,11 @@ public class PermutationOneLineByte : Permutation
 
         try
         {
-            return new PermutationOneLineByte(resultIsIdentity,
-                _antisymmetry ^ a.Antisymmetry() ^ b.Antisymmetry(), (sbyte)(newInternalDegree + 1), result);
+            return new PermutationOneLineByte(
+                resultIsIdentity,
+                _antisymmetry ^ a.Antisymmetry() ^ b.Antisymmetry(),
+                (sbyte)(newInternalDegree + 1),
+                result);
         }
         catch (InconsistentGeneratorsException ex)
         {
@@ -275,8 +286,11 @@ public class PermutationOneLineByte : Permutation
 
         try
         {
-            return new PermutationOneLineByte(resultIsIdentity,
-                _antisymmetry ^ a.Antisymmetry() ^ b.Antisymmetry() ^ c.Antisymmetry(), (sbyte)(newInternalDegree + 1), result);
+            return new PermutationOneLineByte(
+                resultIsIdentity,
+                _antisymmetry ^ a.Antisymmetry() ^ b.Antisymmetry() ^ c.Antisymmetry(),
+                (sbyte)(newInternalDegree + 1),
+                result);
         }
         catch (InconsistentGeneratorsException ex)
         {
@@ -341,7 +355,8 @@ public class PermutationOneLineByte : Permutation
             return this;
         if (exponent < 0)
             return Inverse().Pow(-exponent);
-        Permutation basePerm = this, result = GetIdentity();
+        Permutation basePerm = this;
+        Permutation result = GetIdentity();
         while (exponent != 0)
         {
             if ((exponent % 2) == 1)
@@ -349,13 +364,16 @@ public class PermutationOneLineByte : Permutation
             basePerm = basePerm.Composition(basePerm);
             exponent >>= 1;
         }
+
         return result;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        if (this == obj) return true;
-        if (obj == null || !(obj is Permutation)) return false;
+        if (this == obj)
+            return true;
+        if (obj == null || !(obj is Permutation))
+            return false;
 
         Permutation that = (Permutation)obj;
         if (_antisymmetry != that.Antisymmetry())
@@ -363,8 +381,11 @@ public class PermutationOneLineByte : Permutation
         if (_internalDegree != that.Degree())
             return false;
         for (int i = 0; i < _internalDegree; ++i)
+        {
             if (NewIndexOf(i) != that.NewIndexOf(i))
                 return false;
+        }
+
         return true;
     }
 
@@ -426,10 +447,13 @@ public class PermutationOneLineByte : Permutation
         if (_antisymmetry != t.Antisymmetry())
             return _antisymmetry ? -1 : 1;
         for (int i = 0; i < max; ++i)
+        {
             if (NewIndexOf(i) < t.NewIndexOf(i))
                 return -1;
-            else if (NewIndexOf(i) > t.NewIndexOf(i))
+            if (NewIndexOf(i) > t.NewIndexOf(i))
                 return 1;
+        }
+
         return 0;
     }
 }

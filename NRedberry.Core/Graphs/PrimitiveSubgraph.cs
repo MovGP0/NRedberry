@@ -11,6 +11,7 @@ public class PrimitiveSubgraph
     public GraphType GraphType { get; }
 
     private int[] partition;
+
     public int[] Partition
     {
         get => (int[])partition.Clone();

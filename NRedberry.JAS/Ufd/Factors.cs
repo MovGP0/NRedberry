@@ -48,8 +48,12 @@ public class Factors<C> where C : GcdRingElem<C>
     /// <param name="ap">GenPolynomial p represented with coefficients from af</param>
     /// <param name="afact">absolute irreducible factors of p with coefficients from af</param>
     /// <param name="arfact">further absolute irreducible factors of p with coefficients from extensions of af</param>
-    public Factors(GenPolynomial<C> p, AlgebraicNumberRing<C>? af, GenPolynomial<AlgebraicNumber<C>>? ap,
-                   List<GenPolynomial<AlgebraicNumber<C>>>? afact, List<Factors<AlgebraicNumber<C>>>? arfact)
+    public Factors(
+        GenPolynomial<C> p,
+        AlgebraicNumberRing<C>? af,
+        GenPolynomial<AlgebraicNumber<C>>? ap,
+        List<GenPolynomial<AlgebraicNumber<C>>>? afact,
+        List<Factors<AlgebraicNumber<C>>>? arfact)
     {
         Poly = p;
         Afac = af;
@@ -65,18 +69,21 @@ public class Factors<C> where C : GcdRingElem<C>
         {
             return h;
         }
-        h = h << 27;
+
+        h <<= 27;
         h += Afac.GetHashCode();
         if (Afactors != null)
         {
-            h = h << 27;
+            h <<= 27;
             h += Afactors.GetHashCode();
         }
+
         if (Arfactors != null)
         {
-            h = h << 27;
+            h <<= 27;
             h += Arfactors.GetHashCode();
         }
+
         return h;
     }
 }

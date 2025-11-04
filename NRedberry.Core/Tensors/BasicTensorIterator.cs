@@ -17,7 +17,8 @@ public sealed class BasicTensorIterator : IEnumerator<Tensor>
 
     public bool MoveNext()
     {
-        if (!HasNext()) return false;
+        if (!HasNext())
+            return false;
         ++Position;
         return true;
     }
@@ -33,11 +34,13 @@ public sealed class BasicTensorIterator : IEnumerator<Tensor>
     }
 
     #region IDisposable
+
     private bool IsDisposed { get; set; }
 
     public void Dispose()
     {
-        if (!IsDisposed) Dispose(true);
+        if (!IsDisposed)
+            Dispose(true);
     }
 
     public void Dispose(bool disposing)
@@ -47,7 +50,9 @@ public sealed class BasicTensorIterator : IEnumerator<Tensor>
 
     ~BasicTensorIterator()
     {
-        if (!IsDisposed) Dispose(false);
+        if (!IsDisposed)
+            Dispose(false);
     }
+
     #endregion
 }

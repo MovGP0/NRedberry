@@ -39,7 +39,7 @@ public sealed class NameAndStructureOfIndices : IEquatable<NameAndStructureOfInd
         }
 
         return obj is NameAndStructureOfIndices nameAndStructureOfIndices
-               && Equals(nameAndStructureOfIndices);
+            && Equals(nameAndStructureOfIndices);
     }
 
     public override int GetHashCode()
@@ -47,9 +47,11 @@ public sealed class NameAndStructureOfIndices : IEquatable<NameAndStructureOfInd
 
     public bool Equals(NameAndStructureOfIndices? other)
     {
-        if (other is null) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (other is null)
+            return false;
+        if (ReferenceEquals(this, other))
+            return true;
         return string.Equals(Name, other.Name)
-               && Equals(Structure, other.Structure);
+            && Equals(Structure, other.Structure);
     }
 }

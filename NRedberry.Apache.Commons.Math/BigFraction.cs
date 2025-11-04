@@ -119,8 +119,10 @@ public sealed class BigFraction : IFieldElement<BigFraction>, IEquatable<BigFrac
 
     public bool Equals(BigFraction? other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+            return false;
+        if (ReferenceEquals(this, other))
+            return true;
 
         if (Numerator.Equals(other.Numerator)
             && Denominator.Equals(other.Denominator))

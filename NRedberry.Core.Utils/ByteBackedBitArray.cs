@@ -93,7 +93,7 @@ public sealed class ByteBackedBitArray : IBitArray, IEquatable<ByteBackedBitArra
 
     public int Size => throw new NotSupportedException();
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         throw new NotSupportedException();
     }

@@ -26,6 +26,7 @@ public sealed class PrimitiveSubgraphPartition
     }
 
     public PrimitiveSubgraph[] Partition => (PrimitiveSubgraph[])partition.Clone();
+
     public static PrimitiveSubgraph[] CalculatePartition(Product p, IndexType type) => new PrimitiveSubgraphPartition(p.Content, type).Partition;
     public static PrimitiveSubgraph[] CalculatePartition(ProductContent p, IndexType type) => new PrimitiveSubgraphPartition(p, type).Partition;
 
@@ -39,6 +40,7 @@ public sealed class PrimitiveSubgraphPartition
                 subgraphs.Add(CalculateComponent(pivot));
             }
         }
+
         return subgraphs.ToArray();
     }
 
@@ -47,20 +49,24 @@ public sealed class PrimitiveSubgraphPartition
         LinkedList<int> positions = new LinkedList<int>();
         positions.AddLast(pivot);
 
-        int[] left, right;
-        left = right = GetLinks(pivot);
+        var left = GetLinks(pivot);
+        int[] right = left;
 
         Debug.Assert(left[0] != NO_LINKS || left[1] != NO_LINKS);
 
         if (left[0] == BRANCHING || left[1] == BRANCHING)
             return ProcessGraph(pivot);
 
-        if (left[0] == left[1] && left[0] == pivot) {
+        if (left[0] == left[1] && left[0] == pivot)
+        {
             used.Set(pivot, true);
             return new PrimitiveSubgraph(GraphType.Cycle, [pivot]);
         }
 
-        long leftPivot, rightPivot, lastLeftPivot = NOT_INITIALIZED, lastRightPivot = NOT_INITIALIZED;
+        long leftPivot;
+        long rightPivot;
+        long lastLeftPivot = NOT_INITIALIZED;
+        long lastRightPivot = NOT_INITIALIZED;
 
         while (left != DUMMY || right != DUMMY)
         {
@@ -82,7 +88,8 @@ public sealed class PrimitiveSubgraphPartition
                 rightPivot = DUMMY_PIVOT;
 
             //Odd cycle detection
-            if (leftPivot >= 0 && leftPivot == lastRightPivot) {
+            if (leftPivot >= 0 && leftPivot == lastRightPivot)
+            {
                 //Closing odd nodes number cycle
                 Debug.Assert(rightPivot == lastLeftPivot);
                 return new PrimitiveSubgraph(GraphType.Cycle, DequeToArray(positions));
@@ -93,7 +100,8 @@ public sealed class PrimitiveSubgraphPartition
                 positions.AddFirst((int)leftPivot);
 
             //Even cycle detection
-            if (leftPivot >= 0 && leftPivot == rightPivot) {
+            if (leftPivot >= 0 && leftPivot == rightPivot)
+            {
                 left = GetLinks((int)leftPivot);
 
                 // Checking next (cycle closing) node
@@ -129,10 +137,15 @@ public sealed class PrimitiveSubgraphPartition
             arr[++i] = ii;
             used.Set(ii, true);
         }
+
         return arr;
     }
 
-    private const int BRANCHING = -3, NO_LINKS = -2, NOT_INITIALIZED = -4, DUMMY_PIVOT = -5;
+    private const int BRANCHING = -3;
+    private const int NO_LINKS = -2;
+    private const int NOT_INITIALIZED = -4;
+    private const int DUMMY_PIVOT = -5;
+
     private static readonly int[] DUMMY = [DUMMY_PIVOT, DUMMY_PIVOT];
 
     private int[] GetLinks(int pivot)
@@ -145,7 +158,8 @@ public sealed class PrimitiveSubgraphPartition
         int[] links = [NOT_INITIALIZED, NOT_INITIALIZED];
         int[] contractions = fcs.contractions[pivot];
         Indices.Indices indices = pc[pivot].Indices;
-        int index, toTensorIndex;
+        int index;
+        int toTensorIndex;
         for (int i = contractions.Length - 1; i >= 0; --i)
         {
             index = indices[i];
@@ -185,7 +199,9 @@ public sealed class PrimitiveSubgraphPartition
         int[] contractions;
         Indices.Indices indices;
 
-        int currentPivot, index, toTensorIndex;
+        int currentPivot;
+        int index;
+        int toTensorIndex;
         while (stack.Count > 0)
         {
             currentPivot = stack.Pop();
@@ -206,6 +222,7 @@ public sealed class PrimitiveSubgraphPartition
                 stack.Push(toTensorIndex);
             }
         }
+
         return new PrimitiveSubgraph(GraphType.Graph, positions.ToArray());
     }
 }

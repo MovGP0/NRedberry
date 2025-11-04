@@ -14,12 +14,14 @@ public class FactorQuotient<C> : FactorAbstract<Quotient<C>> where C : GcdRingEl
 {
     protected readonly FactorAbstract<C> nengine;
 
-    public FactorQuotient(QuotientRing<C> fac) : base(fac)
+    public FactorQuotient(QuotientRing<C> fac)
+        : base(fac)
     {
         throw new NotImplementedException();
     }
 
-    public FactorQuotient(QuotientRing<C> fac, FactorAbstract<C> nengine) : base(fac)
+    public FactorQuotient(QuotientRing<C> fac, FactorAbstract<C> nengine)
+        : base(fac)
     {
         this.nengine = nengine;
     }

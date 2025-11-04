@@ -10,6 +10,7 @@ public static class Arrays
         {
             dest[i] = src[start + i]; // so 0..n = 0+x..n+x
         }
+
         return dest;
     }
 

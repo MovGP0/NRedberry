@@ -41,7 +41,8 @@ public sealed class Parser
     /// <exception cref="ParserException"></exception>
     public ParseToken Parse(string expression)
     {
-        if(string.IsNullOrEmpty(expression)) throw new ArgumentNullException(nameof(expression));
+        if(string.IsNullOrEmpty(expression))
+            throw new ArgumentNullException(nameof(expression));
 
         foreach(var tokenParser in TokenParsers)
         {

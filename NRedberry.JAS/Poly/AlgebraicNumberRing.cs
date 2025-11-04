@@ -109,7 +109,6 @@ public class AlgebraicNumberRing<C> : RingFactory<AlgebraicNumber<C>> where C : 
         if (!Ring.CoFac.IsField())
         {
             _isField = 0;
-            return false;
         }
 
         return false;
@@ -242,5 +241,3 @@ public class AlgebraicNumberRing<C> : RingFactory<AlgebraicNumber<C>> where C : 
         return hashCode.ToHashCode();
     }
 }
-
-

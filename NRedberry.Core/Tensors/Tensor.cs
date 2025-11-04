@@ -18,21 +18,17 @@ public abstract class Tensor : IComparable<Tensor>, IEnumerable<Tensor>
         return new BasicTensorIterator(this);
     }
 
-    public abstract Tensor this[int i]
-    {
-        get;
-    }
+    public abstract Tensor this[int i] { get; }
 
-    public abstract int Size
-    {
-        get;
-    }
+    public abstract int Size { get; }
 
     public Tensor Set(int i, Tensor tensor)
     {
         var size = Size;
-        if (i >= size || i < 0) throw new IndexOutOfRangeException(nameof(i));
-        if (tensor == null) throw new ArgumentNullException(nameof(tensor));
+        if (i >= size || i < 0)
+            throw new IndexOutOfRangeException(nameof(i));
+        if (tensor == null)
+            throw new ArgumentNullException(nameof(tensor));
 
         var builder = GetBuilder();
         for (var j = 0; j < size; ++j)

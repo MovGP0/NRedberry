@@ -6,10 +6,6 @@ namespace NRedberry.Core.Tensors;
 
 public sealed class ExpressionBuilder : TensorBuilder
 {
-    public ExpressionBuilder()
-    {
-    }
-
     public Tensor Build()
     {
         throw new NotImplementedException();

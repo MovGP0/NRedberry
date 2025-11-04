@@ -6,7 +6,9 @@ public sealed class TanFactory : ScalarFunctionFactory
 {
     public static readonly TanFactory Factory = new();
 
-    private TanFactory() { }
+    private TanFactory()
+    {
+    }
 
     protected override Tensor Create1(Tensor arg)
     {

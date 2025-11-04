@@ -36,25 +36,31 @@ public sealed class ContextSettings
     public OutputFormat DefaultOutputFormat { get; set; }
 
     private string kronecker = "d";
+
     public string Kronecker
     {
         get => kronecker;
         set
         {
-            if (value == null) throw new ArgumentNullException(nameof(value));
-            if (value.Length == 0) throw new ArgumentException("Kronecker tensor name cannot be empty.");
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+            if (value.Length == 0)
+                throw new ArgumentException("Kronecker tensor name cannot be empty.");
             kronecker = value;
         }
     }
 
     private string metricName = "g";
+
     public string MetricName
     {
         get => metricName;
         set
         {
-            if (value == null) throw new ArgumentNullException(nameof(value));
-            if (value.Length == 0) throw new ArgumentException("Metric tensor name cannot be empty.");
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+            if (value.Length == 0)
+                throw new ArgumentException("Metric tensor name cannot be empty.");
             metricName = value;
         }
     }

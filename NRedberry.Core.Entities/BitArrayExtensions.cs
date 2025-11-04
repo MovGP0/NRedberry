@@ -19,6 +19,7 @@ public static class BitArrayExtensions
                 return i;
             }
         }
+
         return -1; // Return -1 if no 'true' bits found
     }
 

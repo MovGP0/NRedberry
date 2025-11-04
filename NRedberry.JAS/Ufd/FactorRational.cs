@@ -11,7 +11,8 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 /// </remarks>
 public class FactorRational : FactorAbsolute<BigRational>
 {
-    public FactorRational() : base(BigRational.One)
+    public FactorRational()
+        : base(BigRational.One)
     {
     }
 

@@ -45,8 +45,11 @@ public sealed class IntCombinationsGenerator : IIntCombinatorialGenerator, IIntC
     private bool isLast()
     {
         for (var i = 0; i < k; ++i)
+        {
             if (combination[i] != i + n - k)
                 return false;
+        }
+
         return true;
     }
 
@@ -55,17 +58,25 @@ public sealed class IntCombinationsGenerator : IIntCombinatorialGenerator, IIntC
         get
         {
             if (onFirst)
+            {
                 onFirst = false;
+            }
             else
             {
                 int i;
                 for (i = k - 1; i >= 0; --i)
+                {
                     if (combination[i] != i + n - k)
+                    {
                         break;
+                    }
+                }
+
                 var m = ++combination[i++];
                 for (; i < k; ++i)
                     combination[i] = ++m;
             }
+
             return combination;
         }
     }

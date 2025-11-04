@@ -2,9 +2,15 @@
 
 public sealed class SimpleIndicesIsolated : SimpleIndicesAbstract
 {
-    public SimpleIndicesIsolated(int[] data, IndicesSymmetries symmetries) : base(data, symmetries) { }
+    public SimpleIndicesIsolated(int[] data, IndicesSymmetries symmetries)
+        : base(data, symmetries)
+    {
+    }
 
-    public SimpleIndicesIsolated(bool notResort, int[] data, IndicesSymmetries symmetries) : base(notResort, data, symmetries) { }
+    public SimpleIndicesIsolated(bool notResort, int[] data, IndicesSymmetries symmetries)
+        : base(notResort, data, symmetries)
+    {
+    }
 
     protected override SimpleIndices Create(int[] data, IndicesSymmetries symmetries)
     {

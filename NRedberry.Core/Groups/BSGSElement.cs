@@ -39,6 +39,7 @@ public class BSGSElement
         {
             throw new InvalidOperationException("Invariant violated: Transversal does not map the base point correctly.");
         }
+
         return transversal;
     }
 
@@ -54,6 +55,7 @@ public class BSGSElement
             var perm = SchreierVector[temp.NewIndexOf(point)];
             temp = temp.CompositionWithInverse(stabilizerGenerators[perm]);
         }
+
         return temp;
     }
 

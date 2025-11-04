@@ -30,6 +30,7 @@ public class Power<C> where C : RingElem<C>
         {
             throw new ArgumentOutOfRangeException(nameof(n), n, "only positive n allowed");
         }
+
         if (a.IsZero() || a.IsOne())
         {
             return a;
@@ -62,6 +63,7 @@ public class Power<C> where C : RingElem<C>
         {
             throw new ArgumentOutOfRangeException(nameof(n), n, "only positive n allowed");
         }
+
         if (a.IsZero() || a.IsOne())
         {
             return a;
@@ -113,6 +115,7 @@ public class Power<C> where C : RingElem<C>
             {
                 throw new ArgumentException("fac may not be null for a^0", nameof(fac));
             }
+
             return MonoidFactory<TMonoid>.One;
         }
 
@@ -173,6 +176,7 @@ public class Power<C> where C : RingElem<C>
             {
                 throw new ArgumentException("fac may not be null for a^0", nameof(fac));
             }
+
             return MonoidFactory<TMonoid>.One;
         }
 
@@ -239,6 +243,7 @@ public class Power<C> where C : RingElem<C>
             current = current.Multiply(p);
             k++;
         }
+
         return k;
     }
 

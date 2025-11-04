@@ -34,8 +34,10 @@ public sealed class SymbolsGenerator : IEnumerator<SimpleTensor>
             iterator = new FromChildToParentIterator(f);
             Tensor c;
             while ((c = iterator.Next()) != null)
+            {
                 if (TensorUtils.IsSymbol(c))
                     set.Add(c.ToString());
+            }
         }
 
         var usedNames = new string[set.Count];
@@ -45,7 +47,7 @@ public sealed class SymbolsGenerator : IEnumerator<SimpleTensor>
             usedNames[++i] = str;
         }
 
-        UsedNames = usedNames.OrderBy(n => n).ToArray();
+        UsedNames = usedNames.Order().ToArray();
     }
 
     public SymbolsGenerator(string name)
@@ -57,7 +59,8 @@ public sealed class SymbolsGenerator : IEnumerator<SimpleTensor>
 
     private static void CheckName(string name)
     {
-        if (string.IsNullOrEmpty(name)) throw new ArgumentException("Empty string is illegal.");
+        if (string.IsNullOrEmpty(name))
+            throw new ArgumentException("Empty string is illegal.");
     }
 
     public bool MoveNext()

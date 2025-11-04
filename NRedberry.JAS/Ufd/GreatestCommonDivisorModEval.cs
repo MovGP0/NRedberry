@@ -11,10 +11,10 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ufd.GreatestCommonDivisorModEval
 /// </remarks>
-public class GreatestCommonDivisorModEval<MOD> : GreatestCommonDivisorAbstract<MOD> 
+public class GreatestCommonDivisorModEval<MOD> : GreatestCommonDivisorAbstract<MOD>
     where MOD : GcdRingElem<MOD>, Modular
 {
-    private readonly bool debug = false;
+    private readonly bool debug;
     protected readonly GreatestCommonDivisorAbstract<MOD> mufd;
 
     public GreatestCommonDivisorModEval()

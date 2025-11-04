@@ -12,12 +12,10 @@ public sealed class BacktrackSearch
     private readonly List<BSGSElement> _bsgs;
     private readonly int[] _tuple;
     private readonly int[][] _sortedOrbits;
-    private readonly Permutation[] _word;
     private readonly int _size;
-    private readonly IComparer<int> _ordering;
     private readonly int[][] _cachedSortedOrbits;
 
-    private int _level = 0;
+    private int _level;
 
     /// <summary>
     /// Creates an iterator over group elements that satisfy the specified property.
@@ -30,24 +28,24 @@ public sealed class BacktrackSearch
         throw new NotImplementedException();
         // if (bsgs.Count == 0)
         //     throw new ArgumentException("Empty BSGS.");
-        // 
+        //
         // _bsgs = bsgs;
         // _size = bsgs.Count;
         // _tuple = new int[_size];
         // Array.Fill(_tuple, -1);
-        // 
+        //
         // _ordering = new InducedOrdering(AlgorithmsBase.GetBaseAsArray(bsgs));
-        // 
+        //
         // _word = new Permutation[_size];
         // _sortedOrbits = new int[_size][];
         // _cachedSortedOrbits = new int[_size][];
-        // 
+        //
         // for (int i = _size - 1; i >= 0; --i)
         // {
         //     _cachedSortedOrbits[i] = bsgs[i].OrbitList.ToArray();
         //     Array.Sort(_cachedSortedOrbits[i], _ordering.Compare);
         // }
-        // 
+        //
         // _sortedOrbits[0] = _cachedSortedOrbits[0];
         // _testFunction = test;
         // _property = property;
@@ -75,7 +73,7 @@ public sealed class BacktrackSearch
     /// <summary>
     /// Gets the ordering on Ω(n) induced by a base.
     /// </summary>
-    public IComparer<int> InducedOrdering => _ordering;
+    public IComparer<int> InducedOrdering { get; }
 
     /// <summary>
     /// Gets the level of the last changed element.
@@ -85,7 +83,7 @@ public sealed class BacktrackSearch
     /// <summary>
     /// Gets a reference to the current permutation word.
     /// </summary>
-    public Permutation[] WordReference => _word;
+    public Permutation[] WordReference { get; }
 
     /// <summary>
     /// Searches and returns the next element in the group.
@@ -96,14 +94,14 @@ public sealed class BacktrackSearch
         throw new NotImplementedException();
         // if (_level == -1)
         //     return null;
-        // 
+        //
         // while (true)
         // {
         //     Backtrack();
-        // 
+        //
         //     if (_level == -1)
         //         return null;
-        // 
+        //
         //     while (_level < _size - 1 && _testFunction.Test(_word[_level], _level))
         //     {
         //         ++_level;
@@ -113,10 +111,10 @@ public sealed class BacktrackSearch
         //             _word[_level - 1].NewIndexOfUnderInverse(_sortedOrbits[_level][_tuple[_level]]))
         //             .Composition(_word[_level - 1]);
         //     }
-        // 
+        //
         //     if (_level != _size - 1 || !_testFunction.Test(_word[_level], _level) || !_property.Is(_word[_level]))
         //         continue;
-        // 
+        //
         //     return _word[_level];
         // }
     }
@@ -126,12 +124,12 @@ public sealed class BacktrackSearch
         throw new NotImplementedException();
         // while (_level >= 0 && _tuple[_level] == _bsgs[_level].OrbitList.Count - 1)
         //     --_level;
-        // 
+        //
         // if (_level == -1)
         //     return;
-        // 
+        //
         // ++_tuple[_level];
-        // 
+        //
         // if (_level == 0)
         // {
         //     _word[0] = _bsgs[0].GetTransversalOf(_sortedOrbits[0][_tuple[0]]);

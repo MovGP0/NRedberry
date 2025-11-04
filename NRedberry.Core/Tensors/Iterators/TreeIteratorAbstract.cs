@@ -22,6 +22,7 @@ public abstract class TreeIteratorAbstract : ITreeIterator
         while (Iterator.Next() != State)
         {
         }
+
         return Iterator.Current();
     }
 

@@ -52,7 +52,8 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
     /// The constructor creates a ModLongRing object from a BigInteger converted to long as module part.
     /// </summary>
     /// <param name="m">System.Numerics.BigInteger.</param>
-    public ModLongRing(System.Numerics.BigInteger m) : this((long)m)
+    public ModLongRing(System.Numerics.BigInteger m)
+        : this((long)m)
     {
         if (MAX_LONG.CompareTo(m) <= 0)
         {
@@ -65,7 +66,8 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
     /// </summary>
     /// <param name="m">System.Numerics.BigInteger.</param>
     /// <param name="isFieldArg">indicator if m is prime.</param>
-    public ModLongRing(System.Numerics.BigInteger m, bool isFieldArg) : this((long)m, isFieldArg)
+    public ModLongRing(System.Numerics.BigInteger m, bool isFieldArg)
+        : this((long)m, isFieldArg)
     {
         if (MAX_LONG.CompareTo(m) <= 0)
         {
@@ -111,14 +113,7 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
     /// <summary>
     /// Get a list of the generating elements.
     /// </summary>
-    public List<ModLong> Generators()
-    {
-        List<ModLong> g =
-        [
-            One
-        ];
-        return g;
-    }
+    public List<ModLong> Generators() => [One];
 
     /// <summary>
     /// Is this structure finite or infinite.
@@ -148,16 +143,19 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
         {
             return true;
         }
+
         if (isField == 0)
         {
             return false;
         }
+
         System.Numerics.BigInteger m = new System.Numerics.BigInteger(Modul);
         if (m.IsProbablePrime((int)m.GetBitLength()))
         {
             isField = 1;
             return true;
         }
+
         isField = 0;
         return false;
     }
@@ -209,9 +207,10 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
         {
             return new ModLong(this, c.Val);
         }
+
         b = d.Multiply(ci);
         long s = c.Ring.Modul * b.Val;
-        s = s + c.Val;
+        s += c.Val;
         return new ModLong(this, s);
     }
 
@@ -229,6 +228,7 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
         {
             return false;
         }
+
         return Modul == m.Modul;
     }
 
@@ -274,6 +274,7 @@ internal class ModLongIterator : IEnumerator<ModLong>
         {
             return false;
         }
+
         current = new ModLong(ring, curr);
         curr++;
         return true;

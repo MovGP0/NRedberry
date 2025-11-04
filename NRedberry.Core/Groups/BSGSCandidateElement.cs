@@ -40,6 +40,7 @@ public sealed class BSGSCandidateElement : BSGSElement
         {
             capacity = Math.Max(capacity, p.Degree());
         }
+
         return capacity;
     }
 
@@ -79,6 +80,7 @@ public sealed class BSGSCandidateElement : BSGSElement
             if (stabilizer.NewIndexOf(BasePoint) == BasePoint)
                 basePointStabilizers.Add(stabilizer);
         }
+
         return basePointStabilizers;
     }
 

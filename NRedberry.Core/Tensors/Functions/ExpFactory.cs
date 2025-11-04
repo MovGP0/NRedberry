@@ -6,7 +6,9 @@ public sealed class ExpFactory : ScalarFunctionFactory
 {
     public static readonly ExpFactory Factory = new();
 
-    private ExpFactory() { }
+    private ExpFactory()
+    {
+    }
 
     protected override Tensor Create1(Tensor arg)
     {

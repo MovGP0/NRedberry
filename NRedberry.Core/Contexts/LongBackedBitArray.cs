@@ -22,7 +22,8 @@ public sealed class LongBackedBitArray : IBitArray
     public void And(IBitArray bitArray)
     {
         var longBackedBitArray = (LongBackedBitArray)bitArray;
-        if (Size != longBackedBitArray.Size) throw new ArgumentException();
+        if (Size != longBackedBitArray.Size)
+            throw new ArgumentException();
 
         for (var i = 0; i < Data.Length; ++i)
             Data[i] &= longBackedBitArray.Data[i];
@@ -87,7 +88,8 @@ public sealed class LongBackedBitArray : IBitArray
     public bool Intersects(IBitArray bitArray)
     {
         var longBackedBitArray = (LongBackedBitArray)bitArray;
-        if (longBackedBitArray.Size != Size) throw new ArgumentException();
+        if (longBackedBitArray.Size != Size)
+            throw new ArgumentException();
         return Data.Where((t, i) => (t & longBackedBitArray.Data[i]) != 0).Any();
     }
 
@@ -98,14 +100,16 @@ public sealed class LongBackedBitArray : IBitArray
             throw new ArgumentException();
         }
 
-        if (Size != longBackedBitArray.Size) throw new ArgumentException();
+        if (Size != longBackedBitArray.Size)
+            throw new ArgumentException();
         Array.Copy(longBackedBitArray.Data, 0, Data, 0, Data.Length);
     }
 
     public void Or(IBitArray bitArray)
     {
         var longBackedBitArray = (LongBackedBitArray)bitArray;
-        if (Size != longBackedBitArray.Size) throw new ArgumentException();
+        if (Size != longBackedBitArray.Size)
+            throw new ArgumentException();
 
         for (var i = 0; i < Data.Length; ++i)
             Data[i] |= longBackedBitArray.Data[i];
@@ -120,7 +124,8 @@ public sealed class LongBackedBitArray : IBitArray
     public void Xor(IBitArray bitArray)
     {
         var longBackedBitArray = (LongBackedBitArray)bitArray;
-        if (Size != longBackedBitArray.Size) throw new ArgumentException();
+        if (Size != longBackedBitArray.Size)
+            throw new ArgumentException();
 
         for (var i = 0; i < Data.Length; ++i)
         {
@@ -130,7 +135,8 @@ public sealed class LongBackedBitArray : IBitArray
 
     public int NextTrailingBit(int position)
     {
-        if (position < 0) throw new ArgumentOutOfRangeException(nameof(position), position, "must not be negative");
+        if (position < 0)
+            throw new ArgumentOutOfRangeException(nameof(position), position, "must not be negative");
 
         var firstShift = position & 0x3F;
         var pointer = position >> 6;
@@ -143,7 +149,8 @@ public sealed class LongBackedBitArray : IBitArray
         {
         }
 
-        if (result == 64) return -1;
+        if (result == 64)
+            return -1;
         return (pointer - 1) * 64 + result;
     }
 

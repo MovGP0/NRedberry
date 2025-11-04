@@ -15,7 +15,8 @@ public class SquarefreeInfiniteFieldCharP<C> : SquarefreeFieldCharP<C> where C :
     protected readonly Quotient<C> qone;
     protected readonly Quotient<C> qzero;
 
-    public SquarefreeInfiniteFieldCharP(GreatestCommonDivisorAbstract<C>? engine = null) : base(engine)
+    public SquarefreeInfiniteFieldCharP(GreatestCommonDivisorAbstract<C>? engine = null)
+        : base(engine)
     {
         qone = null!;
         qzero = null!;

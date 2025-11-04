@@ -125,6 +125,7 @@ public abstract class ExpVector : AbelianGroupElem<ExpVector>
 
     public abstract ExpVector Abs();
     public abstract ExpVector Negate();
+
     public virtual bool IsZero()
     {
         return Signum() == 0;
@@ -408,8 +409,7 @@ public abstract class ExpVector : AbelianGroupElem<ExpVector>
             float sample = (float)random.NextDouble();
             if (sample <= density && maxDegree > 0)
             {
-                long exponent = random.NextInt64(maxDegree);
-                values[i] = exponent;
+                values[i] = random.NextInt64(maxDegree);
             }
             else
             {

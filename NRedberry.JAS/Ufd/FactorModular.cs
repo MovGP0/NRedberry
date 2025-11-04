@@ -13,7 +13,8 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 /// </remarks>
 public class FactorModular<MOD> : FactorAbsolute<MOD> where MOD : GcdRingElem<MOD>, Modular
 {
-    public FactorModular(RingFactory<MOD> cfac) : base(cfac)
+    public FactorModular(RingFactory<MOD> cfac)
+        : base(cfac)
     {
     }
 

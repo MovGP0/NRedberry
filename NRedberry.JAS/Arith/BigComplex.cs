@@ -55,7 +55,8 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// real part, the imaginary part is set to 0.
     /// </summary>
     /// <param name="r">real part.</param>
-    public BigComplex(BigRational r) : this(r, BigRational.Zero)
+    public BigComplex(BigRational r)
+        : this(r, BigRational.Zero)
     {
     }
 
@@ -63,7 +64,8 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// The constructor creates a BigComplex object with real part 0 and
     /// imaginary part 0.
     /// </summary>
-    public BigComplex() : this(BigRational.Zero)
+    public BigComplex()
+        : this(BigRational.Zero)
     {
     }
 
@@ -82,12 +84,7 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// <returns>list of generators for the algebraic structure.</returns>
     public List<BigComplex> Generators()
     {
-        List<BigComplex> g =
-        [
-            One,
-            Imag
-        ];
-        return g;
+        return [One, Imag];
     }
 
     /// <summary>
@@ -104,7 +101,7 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// </summary>
     public BigComplex Clone() => new(Re, Im);
 
-    object ICloneable.Clone() => Clone(); 
+    object ICloneable.Clone() => Clone();
 
     /// <summary>
     /// Copy BigComplex element c.
@@ -177,7 +174,7 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// </summary>
     public override string ToString()
     {
-        string s = "" + Re;
+        string s = string.Empty + Re;
         int i = Im.CompareTo(BigRational.Zero);
         if (i == 0)
             return s;
@@ -212,6 +209,7 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
         {
             return false;
         }
+
         return Re.Equals(bc.Re) && Im.Equals(bc.Im);
     }
 
@@ -241,6 +239,7 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
         {
             return s;
         }
+
         return Im.CompareTo(b.Im);
     }
 
@@ -257,6 +256,7 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
         {
             return s;
         }
+
         return Im.Signum();
     }
 
@@ -313,11 +313,7 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// Complex number absolute value.
     /// </summary>
     /// <returns>|this|^2. Note: The square root is not yet implemented.</returns>
-    public BigComplex Abs()
-    {
-        BigComplex n = Norm();
-        return n;
-    }
+    public BigComplex Abs() => Norm();
 
     /// <summary>
     /// Complex number product.
@@ -326,7 +322,8 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// <returns>this*B.</returns>
     public BigComplex Multiply(BigComplex B)
     {
-        return new BigComplex(Re.Multiply(B.Re).Subtract(Im.Multiply(B.Im)),
+        return new BigComplex(
+            Re.Multiply(B.Re).Subtract(Im.Multiply(B.Im)),
             Re.Multiply(B.Im).Sum(Im.Multiply(B.Re)));
     }
 
@@ -351,6 +348,7 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
         {
             throw new ArithmeticException("division by zero");
         }
+
         return ZERO;
     }
 
@@ -398,14 +396,16 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
     /// <returns>gcd(this, S).</returns>
     public BigComplex Gcd(BigComplex S)
     {
-        if (S is null || S.IsZero())
+        if (S?.IsZero() != false)
         {
             return this;
         }
+
         if (IsZero())
         {
             return S;
         }
+
         return ONE;
     }
 
@@ -420,16 +420,18 @@ public sealed class BigComplex : GcdRingElem<BigComplex>, RingFactory<BigComplex
         ret[0] = null!;
         ret[1] = null!;
         ret[2] = null!;
-        if (S is null || S.IsZero())
+        if (S?.IsZero() != false)
         {
             ret[0] = this;
             return ret;
         }
+
         if (IsZero())
         {
             ret[0] = S;
             return ret;
         }
+
         BigComplex half = new BigComplex(new BigRational(1, 2));
         ret[0] = ONE;
         ret[1] = Inverse().Multiply(half);

@@ -4,7 +4,10 @@ namespace NRedberry.Core.Tensors.Functions;
 
 public class Cot : ScalarFunction
 {
-    public Cot(Tensor argument) : base(argument) { }
+    public Cot(Tensor argument)
+        : base(argument)
+    {
+    }
 
     public override Tensor Derivative()
     {

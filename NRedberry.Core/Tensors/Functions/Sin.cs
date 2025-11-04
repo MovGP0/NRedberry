@@ -2,7 +2,10 @@
 
 public sealed class Sin : ScalarFunction
 {
-    public Sin(Tensor argument) : base(argument) { }
+    public Sin(Tensor argument)
+        : base(argument)
+    {
+    }
 
     public override Tensor Derivative()
     {

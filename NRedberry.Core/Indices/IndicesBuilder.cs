@@ -54,17 +54,22 @@ public sealed class IndicesBuilder : IEnumerable<int>, ICloneable<IndicesBuilder
     }
 
     public Indices Indices => IndicesFactory.Create(data.ToArray());
+
     public override string ToString() => Indices.ToString() ?? string.Empty;
 
     #region IEnumerable
+
     public IEnumerator<int> GetEnumerator() => data.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
     #endregion
 
     #region ICloneable
+
     public IndicesBuilder Clone() => new(data.ToArray());
 
     object ICloneable.Clone() => Clone();
+
     #endregion
 }

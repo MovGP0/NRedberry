@@ -10,7 +10,8 @@ public sealed class IndexMapper : IIndexMapping
         this.to = to;
     }
 
-    private int[] from, to;
+    private int[] from;
+    private int[] to;
 
     public int Map(int index)
     {
@@ -43,6 +44,7 @@ public sealed class IndexMapper : IIndexMapping
                 return true;
             }
         }
+
         return false;
     }
 }

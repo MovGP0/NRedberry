@@ -344,7 +344,7 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
     {
         return CoFac.FromInteger(1);
     }
-    
+
     public static GenPolynomial<C> Clone(GenPolynomial<C> polynomial)
     {
         ArgumentNullException.ThrowIfNull(polynomial);

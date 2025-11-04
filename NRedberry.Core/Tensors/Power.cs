@@ -29,14 +29,20 @@ public sealed class Power : Tensor
         {
             switch (i)
             {
-                case 0: return argument;
-                case 1: return power;
-                default: throw new ArgumentOutOfRangeException(nameof(i), i, "must be 0 or 1");
+                case 0:
+                    return argument;
+
+                case 1:
+                    return power;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(i), i, "must be 0 or 1");
             }
         }
     }
 
     public override int Size { get; }
+
     public override string ToString(OutputFormat outputFormat)
     {
         throw new NotImplementedException();

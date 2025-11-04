@@ -8,11 +8,12 @@ public sealed class ContentData
 {
     public static ContentData EmptyInstance { get; } = new(GraphStructureHashed.EmptyInstance, null, [], [], []);
 
-    public ContentData(GraphStructureHashed structureOfContractionsHashed,
-                       GraphStructure? structureOfContractions,
-                       Tensor[] data,
-                       short[] stretchIndices,
-                       int[] hashCodes)
+    public ContentData(
+        GraphStructureHashed structureOfContractionsHashed,
+        GraphStructure? structureOfContractions,
+        Tensor[] data,
+        short[] stretchIndices,
+        int[] hashCodes)
     {
         throw new NotImplementedException();
     }

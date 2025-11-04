@@ -15,7 +15,9 @@ public class IndicesSymmetries : IEnumerable<Symmetry>
     private Symmetries Symmetries { get; }
 
     private IList<Permutation> _generators;
+
     public IList<Permutation> Generators => _generators.ToImmutableList();
+
     public IList<Permutation> GetGenerators() => _generators.ToImmutableList();
 
     [Obsolete("Use Symmetries property instead", true)]
@@ -58,7 +60,8 @@ public class IndicesSymmetries : IEnumerable<Symmetry>
                 Array.Fill(_diffIds, (short)-1);
                 short number = 0;
                 List<int> removed = new List<int>(2);
-                int i0, i1;
+                int i0;
+                int i1;
                 foreach (var symmetry in list)
                 {
                     for (i0 = _diffIds.Length - 1; i0 >= 0; --i0)
@@ -67,7 +70,9 @@ public class IndicesSymmetries : IEnumerable<Symmetry>
                         {
                             if (_diffIds[i0] == -1 && _diffIds[i1] == -1)
                             {
-                                _diffIds[i0] = _diffIds[i1] = number++;
+                                var newNumber = number++;
+                                _diffIds[i0] = newNumber;
+                                _diffIds[i1] = newNumber;
                             }
                             else if (_diffIds[i0] == -1)
                             {
@@ -203,6 +208,7 @@ public class IndicesSymmetries : IEnumerable<Symmetry>
                 type = (byte) i;
             }
         }
+
         return Add(type, new Symmetry(permutation, sign));
     }
 
@@ -242,6 +248,7 @@ public class IndicesSymmetries : IEnumerable<Symmetry>
                 _diffIds = null;
                 return true;
             }
+
             return false;
         }
         catch (InconsistentGeneratorsException exception)
@@ -284,8 +291,8 @@ public class IndicesSymmetries : IEnumerable<Symmetry>
 
     public IndicesSymmetries Clone() => new(StructureOfIndices, Symmetries.Clone(), _diffIds);
 
-    public static IndicesSymmetries Create(StructureOfIndices structureOfIndices) =>
-        structureOfIndices.Size == 0
+    public static IndicesSymmetries Create(StructureOfIndices structureOfIndices)
+        => structureOfIndices.Size == 0
             ? EmptySymmetries
             : new IndicesSymmetries(structureOfIndices);
 
@@ -306,10 +313,12 @@ public class IndicesSymmetries : IEnumerable<Symmetry>
                 hash = hash * Prime2 + symmetry.GetHashCode();
             }
         }
+
         return hash;
     }
 
     public List<Symmetry> Basis => Symmetries.BasisSymmetries;
+
     public IEnumerator<Symmetry> GetEnumerator() => Symmetries.GetEnumerator();
     public override string ToString() => Symmetries.ToString();
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

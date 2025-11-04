@@ -49,7 +49,9 @@ public class ExpVectorPair
     /// <returns>true, if this == B, else false.</returns>
     public override bool Equals(object? B)
     {
-        if (B is not ExpVectorPair b) return false;
+        if (B is not ExpVectorPair b)
+            return false;
+
         return Equals(b);
     }
 

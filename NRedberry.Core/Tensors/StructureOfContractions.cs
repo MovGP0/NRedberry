@@ -23,6 +23,7 @@ public sealed class StructureOfContractions
                 FillComponents(components, componentCounter, i);
             }
         }
+
         componentCount = componentCounter + 1;
     }
 
@@ -50,6 +51,7 @@ public sealed class StructureOfContractions
                 sb.Append("\n");
             }
         }
+
         return sb.ToString();
     }
 

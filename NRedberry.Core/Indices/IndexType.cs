@@ -74,11 +74,15 @@ public static class IndexTypeMethods
     }
 
     public static IndexType GetType_(byte type) => GetType(type);
+
     public static IndexType GetType(byte type)
     {
         foreach (IndexType indexType in Enum.GetValues(typeof(IndexType)))
+        {
             if (indexType.GetType_() == type)
                 return indexType;
+        }
+
         throw new ArgumentException("No such type: " + type);
     }
 

@@ -2,11 +2,13 @@
 
 public sealed class FromChildToParentIterator : TreeIteratorAbstract
 {
-    public FromChildToParentIterator(Tensor tensor, TraverseGuide guide) : base(tensor, guide, TraverseState.Leaving)
+    public FromChildToParentIterator(Tensor tensor, TraverseGuide guide)
+        : base(tensor, guide, TraverseState.Leaving)
     {
     }
 
-    public FromChildToParentIterator(Tensor tensor) : base(tensor, TraverseState.Leaving)
+    public FromChildToParentIterator(Tensor tensor)
+        : base(tensor, TraverseState.Leaving)
     {
     }
 }

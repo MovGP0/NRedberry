@@ -114,6 +114,7 @@ internal static class PolynomialReflectionHelpers
         {
             throw new InvalidOperationException("Polynomial ring not available.");
         }
+
         return GenPolynomialRing<C>.Zero;
     }
 
@@ -124,6 +125,7 @@ internal static class PolynomialReflectionHelpers
         {
             return false;
         }
+
         try
         {
             return InvokeBool(coFac, new[] { "IsField", "isField" });
@@ -141,6 +143,7 @@ internal static class PolynomialReflectionHelpers
         {
             return key;
         }
+
         return Invoke(entry, "GetKey", "getKey");
     }
 
@@ -151,6 +154,7 @@ internal static class PolynomialReflectionHelpers
         {
             return value;
         }
+
         return Invoke(entry, "GetValue", "getValue");
     }
 
@@ -202,6 +206,7 @@ internal static class PolynomialReflectionHelpers
                 return method.Invoke(target, args);
             }
         }
+
         return null;
     }
 
@@ -215,6 +220,7 @@ internal static class PolynomialReflectionHelpers
         {
             throw new InvalidOperationException($"Unable to invoke method(s): {string.Join(", ", methodNames)} on {target.GetType().FullName}.");
         }
+
         return result;
     }
 
@@ -225,12 +231,13 @@ internal static class PolynomialReflectionHelpers
     {
         foreach (MethodInfo method in type.GetMethods(Flags))
         {
-            if (string.Equals(method.Name, name, StringComparison.OrdinalIgnoreCase) &&
-                method.GetParameters().Length == parameterCount)
+            if (string.Equals(method.Name, name, StringComparison.OrdinalIgnoreCase)
+                && method.GetParameters().Length == parameterCount)
             {
                 return method;
             }
         }
+
         return null;
     }
 }

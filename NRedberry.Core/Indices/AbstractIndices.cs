@@ -13,6 +13,7 @@ namespace NRedberry.Core.Indices;
 public abstract class AbstractIndices : Indices
 {
     public int[] Data { get; }
+
     private UpperLowerIndices? upperLower;
 
     protected AbstractIndices(int[] data)
@@ -32,6 +33,7 @@ public abstract class AbstractIndices : Indices
             ul = CalculateUpperLower();
             upperLower = ul;
         }
+
         return ul;
     }
 
@@ -43,6 +45,7 @@ public abstract class AbstractIndices : Indices
             ul = CalculateUpperLower();
             upperLower = ul;
         }
+
         return new IntArray(ul.Upper);
     }
 
@@ -54,6 +57,7 @@ public abstract class AbstractIndices : Indices
             ul = CalculateUpperLower();
             upperLower = ul;
         }
+
         return new IntArray(ul.Lower);
     }
 
@@ -66,8 +70,10 @@ public abstract class AbstractIndices : Indices
 
     public bool EqualsRegardlessOrder(Indices indices)
     {
-        if (ReferenceEquals(this, indices)) return true;
-        if (indices is EmptyIndices) return Data.Length == 0;
+        if (ReferenceEquals(this, indices))
+            return true;
+        if (indices is EmptyIndices)
+            return Data.Length == 0;
 
         return GetSortedData().SequenceEqual(((AbstractIndices)indices).GetSortedData());
     }
@@ -81,6 +87,7 @@ public abstract class AbstractIndices : Indices
 
     public int this[int position] => Get(position);
     public abstract int this[IndexType type, int position] { get; }
+
     public abstract Indices GetFree();
     public abstract Indices GetInverted();
 
@@ -93,25 +100,34 @@ public abstract class AbstractIndices : Indices
         throw new System.NotImplementedException();
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        if (ReferenceEquals(obj, null)) return false;
-        if (GetType() != obj.GetType()) return false;
-        return Enumerable.SequenceEqual(Data, ((AbstractIndices)obj).Data);
+        if (ReferenceEquals(obj, null))
+            return false;
+
+        if (GetType() != obj.GetType())
+            return false;
+
+        return Data.SequenceEqual(((AbstractIndices)obj).Data);
     }
 
     public string ToString(OutputFormat mode)
     {
         if (Data.Length == 0)
-            return "";
+            return string.Empty;
         bool latex = mode == OutputFormat.LaTeX;
         StringBuilder sb = new StringBuilder();
         int stateMode = (Data[0] >> 31);
         int currentState = stateMode;
         if (stateMode == 0)
+        {
             sb.Append(latex ? "_{" : "_{");
+        }
         else
+        {
             sb.Append(latex ? "^{" : "^{");
+        }
+
         for (int i = 0; i < Data.Length; i++)
         {
             stateMode = Data[i] >> 31;
@@ -123,6 +139,7 @@ public abstract class AbstractIndices : Indices
                     sb.Append(latex ? "}{}_{" : "}_{");
                 currentState = stateMode;
             }
+
             sb.Append(Context.Get().GetIndexConverterManager().GetSymbol(Data[i], mode));
         }
 

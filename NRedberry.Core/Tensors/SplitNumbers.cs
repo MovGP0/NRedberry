@@ -2,7 +2,8 @@ namespace NRedberry.Core.Tensors;
 
 internal class SplitNumbers : Split
 {
-    public SplitNumbers(Tensor factor, Tensor summand) : base(factor, summand)
+    public SplitNumbers(Tensor factor, Tensor summand)
+        : base(factor, summand)
     {
     }
 

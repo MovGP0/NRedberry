@@ -5,18 +5,21 @@ public class Symmetry : Permutation
     private bool sign { get; }
 
     // Constructor with permutation array and sign
-    public Symmetry(int[] permutation, bool sign) : base(permutation)
+    public Symmetry(int[] permutation, bool sign)
+        : base(permutation)
     {
         this.sign = sign;
     }
 
     // Constructor with dimension
-    public Symmetry(int dimension) : base(dimension)
+    public Symmetry(int dimension)
+        : base(dimension)
     {
         sign = false;
     }
 
-    public Symmetry(int[] permutation, bool sign, bool notClone) : base(permutation, notClone)
+    public Symmetry(int[] permutation, bool sign, bool notClone)
+        : base(permutation, notClone)
     {
         this.sign = sign;
     }
@@ -44,10 +47,13 @@ public class Symmetry : Permutation
 
     public override bool Equals(object? obj)
     {
-        if (obj == null) return false;
-        if (GetType() != obj.GetType()) return false;
+        if (obj == null)
+            return false;
+        if (GetType() != obj.GetType())
+            return false;
         var other = (Symmetry) obj;
-        if (sign != other.sign) return false;
+        if (sign != other.sign)
+            return false;
         return _permutation.SequenceEqual(other._permutation);
     }
 

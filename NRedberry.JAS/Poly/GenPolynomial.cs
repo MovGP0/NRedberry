@@ -517,7 +517,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         while (!remainder.IsZero())
         {
             ExpVector? remainderLeadingExponent = remainder.LeadingExpVector();
-            if (divisorLeadingExponent is null || remainderLeadingExponent is null || !remainderLeadingExponent.MultipleOf(divisorLeadingExponent))
+            if (divisorLeadingExponent is null || remainderLeadingExponent?.MultipleOf(divisorLeadingExponent) != true)
             {
                 break;
             }
@@ -620,7 +620,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
     {
         GenPolynomial<C>[] result = new GenPolynomial<C>[3];
 
-        if (other is null || other.IsZero())
+        if (other?.IsZero() != false)
         {
             result[0] = this;
             result[1] = GenPolynomialRing<C>.One;
@@ -696,7 +696,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
     {
         GenPolynomial<C>[] result = new GenPolynomial<C>[2];
 
-        if (other is null || other.IsZero())
+        if (other?.IsZero() != false)
         {
             result[0] = this;
             result[1] = GenPolynomialRing<C>.One;
@@ -1082,17 +1082,14 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
                     coefficient = coefficient.Negate();
                 }
             }
+            else if (sign < 0)
+            {
+                builder.Append(" - ");
+                coefficient = coefficient.Negate();
+            }
             else
             {
-                if (sign < 0)
-                {
-                    builder.Append(" - ");
-                    coefficient = coefficient.Negate();
-                }
-                else
-                {
-                    builder.Append(" + ");
-                }
+                builder.Append(" + ");
             }
 
             bool printCoefficient = !coefficient.IsOne() || term.Key.IsZero();

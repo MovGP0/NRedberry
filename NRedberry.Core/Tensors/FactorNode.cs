@@ -3,7 +3,9 @@ namespace NRedberry.Core.Tensors;
 public sealed class FactorNode
 {
     public Tensor Factor { get; }
+
     private readonly TensorBuilder Builder;
+
     public int[] FactorForbiddenIndices { get; private set; }
 
     public FactorNode(Tensor factor, TensorBuilder builder)

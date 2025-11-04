@@ -24,7 +24,7 @@ public class Split
 
     public static Split SplitScalars(Tensor tensor)
     {
-        if (tensor.Indices.GetFree().Count() == 0)
+        if (!tensor.Indices.GetFree().Any())
         {
             // case 2*a*b*c
             return new SplitNumbers(tensor, Complex.One);
@@ -50,6 +50,7 @@ public class Split
             {
                 factor = Complex.One;
             }
+
             if (dataLength == 0)
             {
                 if (product.IndexlessData.Length == 0)
@@ -67,6 +68,7 @@ public class Split
                     {
                         sumData[i] = Tensors.Negate(sumData[i]);
                     }
+
                     summand = new Sum(s.Indices, sumData, s.GetHashCode());
                 }
                 else
@@ -116,7 +118,7 @@ public class Split
 
     public static Split SplitIndexless(Tensor tensor)
     {
-        if (tensor.Indices.Count() == 0) //case 2*a*b*c
+        if (!tensor.Indices.Any()) //case 2*a*b*c
         {
             Complex complex;
             Tensor factor;
@@ -127,11 +129,9 @@ public class Split
 
                 throw new NotImplementedException();
             }
-            else
-            {
-                complex = Complex.One;
-                factor = tensor;
-            }
+
+            complex = Complex.One;
+            factor = tensor;
 
             return new SplitNumbers(factor, complex);
         }
@@ -144,11 +144,9 @@ public class Split
             {
                 throw new NotImplementedException();
             }
-            else
-            {
-                summand = Complex.One;
-                factor = tensor;
-            }
+
+            summand = Complex.One;
+            factor = tensor;
 
             return new Split(factor, summand);
         }

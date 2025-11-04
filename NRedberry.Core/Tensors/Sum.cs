@@ -9,7 +9,8 @@ public sealed class Sum : MultiTensor
     internal readonly Tensor[] Data;
     private int hash;
 
-    public Sum(Tensor[] data, Indices.Indices indices) : base(indices)
+    public Sum(Tensor[] data, Indices.Indices indices)
+        : base(indices)
     {
         Debug.Assert(data.Length > 1);
 
@@ -26,7 +27,8 @@ public sealed class Sum : MultiTensor
         throw new NotImplementedException();
     }
 
-    public Sum(Indices.Indices indices, Tensor[] data, int hash) : base(indices)
+    public Sum(Indices.Indices indices, Tensor[] data, int hash)
+        : base(indices)
     {
         Debug.Assert(data.Length > 1);
         this.Data = data;
@@ -41,6 +43,7 @@ public sealed class Sum : MultiTensor
     public override Tensor this[int i] => throw new NotImplementedException();
 
     public override int Size { get; }
+
     public override string ToString(OutputFormat outputFormat)
     {
         throw new NotImplementedException();

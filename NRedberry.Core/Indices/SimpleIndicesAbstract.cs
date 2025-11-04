@@ -8,7 +8,8 @@ public abstract class SimpleIndicesAbstract : AbstractIndices, SimpleIndices
 {
     protected IndicesSymmetries? symmetries;
 
-    protected SimpleIndicesAbstract(int[] data, IndicesSymmetries symmetries) : base(data)
+    protected SimpleIndicesAbstract(int[] data, IndicesSymmetries symmetries)
+        : base(data)
     {
         Debug.Assert(data.Length != 0);
 
@@ -20,7 +21,8 @@ public abstract class SimpleIndicesAbstract : AbstractIndices, SimpleIndices
         TestConsistentWithException();
     }
 
-    protected SimpleIndicesAbstract(bool notResort, int[] data, IndicesSymmetries? symmetries) : base(data)
+    protected SimpleIndicesAbstract(bool notResort, int[] data, IndicesSymmetries? symmetries)
+        : base(data)
     {
         Debug.Assert(data.Length != 0);
         this.symmetries = symmetries;

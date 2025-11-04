@@ -22,6 +22,7 @@ public sealed class LatinUpperCaseConverter : IIndexSymbolConverter
             if (sym >= 0x41 && sym <= 0x5A)
                 return true;
         }
+
         return false;
     }
 

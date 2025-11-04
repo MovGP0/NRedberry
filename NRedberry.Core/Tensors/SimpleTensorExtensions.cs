@@ -13,7 +13,7 @@ public static class SimpleTensorExtensions
      */
     public static bool IsKronecker(this Context context, SimpleTensor t) {
         return context.nameManager.IsKroneckerOrMetric(t.Name)
-               && !IndicesUtils.HaveEqualStates(t.Indices[0], t.Indices[1]);
+            && !IndicesUtils.HaveEqualStates(t.Indices[0], t.Indices[1]);
     }
 
     /**
@@ -24,7 +24,7 @@ public static class SimpleTensorExtensions
      */
     public static bool IsMetric(this Context context, SimpleTensor t) {
         return context.nameManager.IsKroneckerOrMetric(t.Name)
-               && IndicesUtils.HaveEqualStates(t.Indices[0], t.Indices[1]);
+            && IndicesUtils.HaveEqualStates(t.Indices[0], t.Indices[1]);
     }
 
     /**
@@ -84,7 +84,10 @@ public static class SimpleTensorExtensions
         if ((type = IndicesUtils.GetType_(index1)) != IndicesUtils.GetType_(index2)
             || !IndicesUtils.HaveEqualStates(index1, index2)
             || !context.metricTypes.Get(type))
+        {
             throw new ArgumentException("Not metric indices.");
+        }
+
         var indices = IndicesFactory.CreateSimple(null, (int)index1, (int)index2);
         var nd = context.nameManager.MapNameDescriptor(context.nameManager.GetMetricName(), new StructureOfIndices(indices));
         var name = nd.Id;

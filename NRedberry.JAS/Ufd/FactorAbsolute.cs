@@ -11,7 +11,8 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 /// </remarks>
 public abstract class FactorAbsolute<C> : FactorAbstract<C> where C : GcdRingElem<C>
 {
-    public FactorAbsolute(RingFactory<C> cfac) : base(cfac)
+    protected FactorAbsolute(RingFactory<C> cfac)
+        : base(cfac)
     {
     }
 

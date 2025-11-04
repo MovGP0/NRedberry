@@ -29,5 +29,6 @@ public abstract class AbstractTransformationWithGammas : TransformationToStringA
     protected int Gamma5Name => throw new NotImplementedException();
     protected IndexType MetricType => throw new NotImplementedException();
     protected IndexType MatrixType => throw new NotImplementedException();
+
     public Tensor Transform(Tensor t) => throw new NotImplementedException();
 }

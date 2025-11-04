@@ -38,12 +38,14 @@ public sealed class Numeric : Real, ISerializable
     public Numeric(JSType.Number value)
     {
         var ci = CultureInfo.InvariantCulture;
-        if (value == null) throw new ArgumentNullException(nameof(value));
+        if (value == null)
+            throw new ArgumentNullException(nameof(value));
         this.value = double.Parse(value.ToString() ?? "0", ci);
     }
 
     public override double DoubleValue() => value;
     public override float FloatValue() => (float)value;
+
     public override int SigNum()
     {
         throw new NotImplementedException();
@@ -53,6 +55,7 @@ public sealed class Numeric : Real, ISerializable
     public BigInteger BigIntValue() => new (value);
     public override long LongValue() => (long)value;
     public override Numeric Add(Real n) => Add(n.DoubleValue());
+
     public override Real Add(Rationals.Rational fraction)
     {
         throw new NotImplementedException();
@@ -65,6 +68,7 @@ public sealed class Numeric : Real, ISerializable
     public override Numeric Negate() => new(-value);
     public override Numeric Reciprocal() => new(1.0 / value);
     public override int GetHashCode() => value.GetHashCode();
+
     public override Real Pow(int exponent)
     {
         throw new NotImplementedException();
@@ -74,6 +78,7 @@ public sealed class Numeric : Real, ISerializable
     public override bool IsNaN() => double.IsNaN(value);
     public override Numeric Abs() => value >= 0 ? this : Negate();
     public override Numeric Add(double d) => new(value + d);
+
     public override Real Add(int i)
     {
         throw new NotImplementedException();
@@ -100,6 +105,7 @@ public sealed class Numeric : Real, ISerializable
     }
 
     public override Numeric Divide(double d) => new(value / d);
+
     public override Real Divide(int i)
     {
         throw new NotImplementedException();
@@ -121,6 +127,7 @@ public sealed class Numeric : Real, ISerializable
     }
 
     public override Numeric Multiply(double d) => new(value * d);
+
     public override Real Multiply(long l)
     {
         throw new NotImplementedException();
@@ -137,6 +144,7 @@ public sealed class Numeric : Real, ISerializable
     }
 
     public override Numeric Subtract(double d) => new(value - d);
+
     public override Real Subtract(int i)
     {
         throw new NotImplementedException();
@@ -153,6 +161,7 @@ public sealed class Numeric : Real, ISerializable
     }
 
     public override Numeric Pow(double exponent) => new(Math.Pow(value, exponent));
+
     public override Real Pow(BigInteger exponent)
     {
         throw new NotImplementedException();
@@ -163,13 +172,15 @@ public sealed class Numeric : Real, ISerializable
         throw new NotImplementedException();
     }
 
-    public override bool Equals(object obj) => obj is JSType.Number n && value.Equals(n);
+    public override bool Equals(object? obj) => obj is JSType.Number n && value.Equals(n);
     public override string ToString() => value.ToString();
     public override Numeric GetNumericValue() => this;
     public override bool IsZero() => value == 0.0;
     public override int CompareTo(Real o) => value.CompareTo(o.DoubleValue());
     public override bool IsOne() => value == 1.0;
+
     public override bool IsMinusOne() => value == -1.0;
+
     public override bool IsNumeric()
     {
         throw new NotImplementedException();

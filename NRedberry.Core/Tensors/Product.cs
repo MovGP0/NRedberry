@@ -31,7 +31,8 @@ public sealed class Product : MultiTensor
     ///</summary>
     private int hash;
 
-    public Product(Indices.Indices indices, Complex factor, Tensor[] indexless, Tensor[] data) : base(indices)
+    public Product(Indices.Indices indices, Complex factor, Tensor[] indexless, Tensor[] data)
+        : base(indices)
     {
         Factor = GetDefaultReference(factor);
         IndexlessData = indexless;
@@ -45,7 +46,8 @@ public sealed class Product : MultiTensor
         hash = CalculateHash();
     }
 
-    public Product(Complex factor, Tensor[] indexlessData, Tensor[] data, ProductContent? content, Indices.Indices indices) : base(indices)
+    public Product(Complex factor, Tensor[] indexlessData, Tensor[] data, ProductContent? content, Indices.Indices indices)
+        : base(indices)
     {
         Factor = GetDefaultReference(factor);
         IndexlessData = indexlessData;
@@ -59,11 +61,13 @@ public sealed class Product : MultiTensor
         {
             ContentReference.TryGetTarget(out content);
         }
+
         hash = CalculateHash();
     }
 
     //very unsafe
-    public Product(Indices.Indices indices, Complex factor, Tensor[] indexlessData, Tensor[] data, WeakReference<ProductContent> contentReference, int hash) : base(indices)
+    public Product(Indices.Indices indices, Complex factor, Tensor[] indexlessData, Tensor[] data, WeakReference<ProductContent> contentReference, int hash)
+        : base(indices)
     {
         Factor = factor;
         IndexlessData = indexlessData;
@@ -73,7 +77,8 @@ public sealed class Product : MultiTensor
     }
 
     //very unsafe
-    public Product(Indices.Indices indices, Complex factor, Tensor[] indexlessData, Tensor[] data, WeakReference<ProductContent> contentReference) : base(indices)
+    public Product(Indices.Indices indices, Complex factor, Tensor[] indexlessData, Tensor[] data, WeakReference<ProductContent> contentReference)
+        : base(indices)
     {
         Factor = factor;
         IndexlessData = indexlessData;
@@ -122,6 +127,7 @@ public sealed class Product : MultiTensor
     public override Tensor this[int i] => throw new NotImplementedException();
 
     public override int Size { get; }
+
     public override string ToString(OutputFormat outputFormat)
     {
         throw new NotImplementedException();
@@ -169,6 +175,7 @@ public sealed class Product : MultiTensor
                 content = CalculateContent();
                 ContentReference.SetTarget(content);
             }
+
             return content;
         }
     }
@@ -189,6 +196,7 @@ public sealed class Product : MultiTensor
             if ((ii = Array.BinarySearch(inds, ii)) >= 0)
                 h ^= HashFunctions.JenkinWang32shift(ii);
         }
+
         return (int)h;
     }
 

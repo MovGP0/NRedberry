@@ -65,6 +65,7 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
         {
             v = Val - Ring.Modul;
         }
+
         return new BigInteger(v);
     }
 
@@ -95,10 +96,12 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
         {
             return false;
         }
+
         if (Ring.IsField())
         {
             return true;
         }
+
         long g = Gcd(Ring.Modul, Val);
         return g == 1L || g == -1L;
     }
@@ -120,12 +123,14 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
         long v = b.Val;
         if (Ring != b.Ring)
         {
-            v = v % Ring.Modul;
+            v %= Ring.Modul;
         }
+
         if (Val > v)
         {
             return 1;
         }
+
         return Val < v ? -1 : 0;
     }
 
@@ -138,6 +143,7 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
         {
             return false;
         }
+
         return CompareTo(ml) == 0;
     }
 
@@ -168,6 +174,7 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
         {
             return 1;
         }
+
         return Val < 0L ? -1 : 0;
     }
 
@@ -197,6 +204,7 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
                 {
                     return new ModLong(Ring, Val / S.Val);
                 }
+
                 throw new NotInvertibleException(e.Message, e.InnerException);
             }
             catch (ArithmeticException a)
@@ -230,20 +238,23 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     /// </summary>
     /// <param name="S">ModLong.</param>
     /// <returns>remainder(this, S).</returns>
-    public ModLong Remainder(ModLong S)
+    public ModLong Remainder(ModLong? S)
     {
-        if (S == null || S.IsZero())
+        if (S?.IsZero() != false)
         {
             throw new ArithmeticException("division by zero");
         }
+
         if (S.IsOne())
         {
             return Ring.Zero;
         }
+
         if (S.IsUnit())
         {
             return Ring.Zero;
         }
+
         return new ModLong(Ring, Val % S.Val);
     }
 
@@ -272,14 +283,17 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
         {
             return this;
         }
+
         if (IsZero())
         {
             return S;
         }
+
         if (IsUnit() || S.IsUnit())
         {
             return Ring.One;
         }
+
         return new ModLong(Ring, Gcd(Val, S.Val));
     }
 
@@ -294,16 +308,18 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
         ret[0] = null!;
         ret[1] = null!;
         ret[2] = null!;
-        if (S == null || S.IsZero())
+        if (S?.IsZero() != false)
         {
             ret[0] = this;
             return ret;
         }
+
         if (IsZero())
         {
             ret[0] = S;
             return ret;
         }
+
         if (IsUnit() || S.IsUnit())
         {
             ret[0] = Ring.One;
@@ -314,16 +330,19 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
                 ret[2] = x.Divide(S);
                 return ret;
             }
+
             if (IsUnit())
             {
                 ret[1] = Inverse();
                 ret[2] = Ring.Zero;
                 return ret;
             }
+
             ret[1] = Ring.Zero;
             ret[2] = S.Inverse();
             return ret;
         }
+
         long q = Val;
         long r = S.Val;
         long c1 = 1L;
@@ -346,6 +365,7 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
             q = r;
             r = b;
         }
+
         ret[0] = new ModLong(Ring, q);
         ret[1] = new ModLong(Ring, c1);
         ret[2] = new ModLong(Ring, c2);
@@ -364,10 +384,12 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
         {
             return T;
         }
+
         if (T == 0L)
         {
             return S;
         }
+
         long a = T;
         long b = S;
         while (b != 0L)
@@ -376,6 +398,7 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
             a = b;
             b = r;
         }
+
         return a;
     }
 
@@ -394,12 +417,14 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
             ret[1] = 1L;
             return ret;
         }
+
         if (T == 0L)
         {
             ret[0] = S;
             ret[1] = 0L;
             return ret;
         }
+
         long a = T;
         long b = S;
         long a1 = 1L;
@@ -414,10 +439,12 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
             a1 = b1;
             b1 = r1;
         }
+
         if (a1 < 0L)
         {
             a1 += S;
         }
+
         ret[0] = a;
         ret[1] = a1;
         return ret;
@@ -435,21 +462,25 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
         {
             throw new NotInvertibleException("zero is not invertible");
         }
+
         long[] hegcd = Hegcd(T, m);
         long a = hegcd[0];
         if (!(a == 1L || a == -1L))
         {
             throw new ModularNotInvertibleException("element not invertible, gcd != 1", m, a, m / a);
         }
+
         long b = hegcd[1];
         if (b == 0L)
         {
             throw new NotInvertibleException("element not invertible, divisible by modul");
         }
+
         if (b < 0L)
         {
             b += m;
         }
+
         return b;
     }
 

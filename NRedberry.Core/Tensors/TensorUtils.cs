@@ -28,9 +28,11 @@ public static class TensorUtils
 
     public static bool IsRealPositiveNumber(Tensor tensor)
     {
-        if (tensor is Complex complex) {
+        if (tensor is Complex complex)
+        {
             return complex.IsReal() && complex.GetReal().SigNum() > 0;
         }
+
         return false;
     }
 
@@ -70,6 +72,7 @@ public static class TensorUtils
         {
             return complex.IsReal() && complex.GetReal().SigNum() < 0;
         }
+
         return false;
     }
 

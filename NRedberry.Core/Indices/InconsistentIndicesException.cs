@@ -9,7 +9,9 @@ public sealed class InconsistentIndicesException: TensorException
         => Index = index;
 
     public InconsistentIndicesException(InconsistentIndicesException cause, Tensor inTensor)
-        : this(cause.Index, inTensor) { }
+        : this(cause.Index, inTensor)
+    {
+    }
 
     public InconsistentIndicesException(int? index, Tensor inTensor)
         : base($"Inconsistent index {IndicesUtils.ToString(index ?? -1)}", inTensor)
@@ -21,15 +23,18 @@ public sealed class InconsistentIndicesException: TensorException
 
     public int? Index { get; }
 
-    public InconsistentIndicesException(string message, params Tensor[] tensors) : base(message, tensors)
+    public InconsistentIndicesException(string message, params Tensor[] tensors)
+        : base(message, tensors)
     {
     }
 
-    public InconsistentIndicesException(string message) : base(message)
+    public InconsistentIndicesException(string message)
+        : base(message)
     {
     }
 
-    public InconsistentIndicesException(params Tensor[] tensor) : base(tensor)
+    public InconsistentIndicesException(params Tensor[] tensor)
+        : base(tensor)
     {
     }
 }

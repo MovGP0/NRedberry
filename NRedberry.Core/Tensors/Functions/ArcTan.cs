@@ -4,7 +4,10 @@ namespace NRedberry.Core.Tensors.Functions;
 
 public class ArcTan : ScalarFunction
 {
-    public ArcTan(Tensor argument) : base(argument) { }
+    public ArcTan(Tensor argument)
+        : base(argument)
+    {
+    }
 
     public override Tensor Derivative()
     {

@@ -31,6 +31,7 @@ public static partial class Permutations
                 size++;
                 start = permutation[start];
             }
+
             sizes.Add(size);
         }
 
@@ -66,6 +67,7 @@ public static partial class Permutations
                 size++;
                 start = permutation[start];
             }
+
             sizes.Add(size);
         }
 
@@ -101,6 +103,7 @@ public static partial class Permutations
                 size++;
                 start = permutation[start];
             }
+
             sizes.Add(size);
         }
 

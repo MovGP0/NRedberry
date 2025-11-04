@@ -14,9 +14,9 @@ public static partial class ArraysUtils
     /// <returns></returns>
     private static int med3(int[] x, int a, int b, int c)
     {
-        return (x[a] < x[b]
-            ? (x[b] < x[c] ? b : x[a] < x[c] ? c : a)
-            : (x[b] > x[c] ? b : x[a] > x[c] ? c : a));
+        return x[a] < x[b]
+            ? x[b] < x[c] ? b : x[a] < x[c] ? c : a
+            : x[b] > x[c] ? b : x[a] > x[c] ? c : a;
     }
 
     /// <summary>
@@ -27,9 +27,12 @@ public static partial class ArraysUtils
     /// <param name="toIndex"></param>
     private static void rangeCheck(int arrayLen, int fromIndex, int toIndex)
     {
-        if (fromIndex > toIndex) throw new ArgumentException($"fromIndex({fromIndex}) > toIndex({toIndex})");
-        if (fromIndex < 0) throw new IndexOutOfRangeException(nameof(fromIndex));
-        if (toIndex > arrayLen) throw new IndexOutOfRangeException(nameof(toIndex));
+        if (fromIndex > toIndex)
+            throw new ArgumentException($"fromIndex({fromIndex}) > toIndex({toIndex})");
+        if (fromIndex < 0)
+            throw new IndexOutOfRangeException(nameof(fromIndex));
+        if (toIndex > arrayLen)
+            throw new IndexOutOfRangeException(nameof(toIndex));
     }
 
     public static string ToString<T>(T[] a, IToStringConverter<T> format)
@@ -88,27 +91,35 @@ public static partial class ArraysUtils
     public static void StableSort(int[] target, int[] coSort)
     {
         if (target.Length > 100)
+        {
             TimSort(target, coSort);
+        }
         else
+        {
             InsertionSort(target, coSort);
+        }
     }
 
     public static sbyte[] Int2byte(int[] a) {
         sbyte[] r = new sbyte[a.Length];
-        for (int i = 0; i < a.Length; ++i) {
+        for (int i = 0; i < a.Length; ++i)
+        {
             r[i] = (sbyte)a[i];
         }
+
         return r;
     }
 
     public static short[] Int2short(int[] a) {
         short[] r = new short[a.Length];
-        for (int i = 0; i < a.Length; ++i) {
+        for (int i = 0; i < a.Length; ++i)
+        {
             r[i] = (short)a[i];
         }
+
         return r;
     }
-    
+
     public static int[] ShortToInt(short[] a)
     {
         int[] r = new int[a.Length];
@@ -181,7 +192,7 @@ public static partial class ArraysUtils
         return s;
     }
 
-    public static int[] Bijection<T>(T[] from, T[] to, IComparer<T> comparator)
+    public static int[]? Bijection<T>(T[] from, T[] to, IComparer<T> comparator)
     {
         if (from.Length != to.Length)
             return null;
@@ -199,13 +210,15 @@ public static partial class ArraysUtils
                     break;
                 }
             }
+
             if (Array.IndexOf(bijection, -1) == -1)
                 return bijection;
         }
+
         return null;
     }
 
-    public static int[] Bijection<T>(T[] from, T[] to) where T : IComparable<T>
+    public static int[]? Bijection<T>(T[] from, T[] to) where T : IComparable<T>
     {
         if (from.Length != to.Length)
             return null;
@@ -223,9 +236,11 @@ public static partial class ArraysUtils
                     break;
                 }
             }
+
             if (Array.IndexOf(bijection, -1) == -1)
                 return bijection;
         }
+
         return null;
     }
 
@@ -255,6 +270,7 @@ public static partial class ArraysUtils
             Array.Copy(array, 0, r, pointer, array.Length);
             pointer += array.Length;
         }
+
         return r;
     }
 
@@ -275,10 +291,14 @@ public static partial class ArraysUtils
         if (p.Length == 0)
             return array;
 
-        int size = p.Length, pointer = 0, s = array.Length;
+        int size = p.Length;
+        int pointer = 0;
+        int s = array.Length;
         for (; pointer < size; ++pointer)
+        {
             if (p[pointer] >= s)
                 throw new IndexOutOfRangeException();
+        }
 
         T[] r = new T[array.Length - p.Length];
         pointer = 0;
@@ -287,9 +307,11 @@ public static partial class ArraysUtils
         {
             if (pointer < size - 1 && j > p[pointer])
                 ++pointer;
-            if (j == p[pointer]) continue;
-            else r[++i] = array[j];
+            if (j == p[pointer])
+                continue;
+            r[++i] = array[j];
         }
+
         return r;
     }
 
@@ -301,10 +323,14 @@ public static partial class ArraysUtils
         if (p.Length == 0)
             return array;
 
-        int size = p.Length, pointer = 0, s = array.Length;
+        int size = p.Length;
+        int pointer = 0;
+        int s = array.Length;
         for (; pointer < size; ++pointer)
+        {
             if (p[pointer] >= s)
                 throw new IndexOutOfRangeException();
+        }
 
         int[] r = new int[array.Length - p.Length];
         pointer = 0;
@@ -313,9 +339,14 @@ public static partial class ArraysUtils
         {
             if (pointer < size - 1 && j > p[pointer])
                 ++pointer;
-            if (j == p[pointer]) continue;
-            else r[++i] = array[j];
+            if (j == p[pointer])
+            {
+                continue;
+            }
+
+            r[++i] = array[j];
         }
+
         return r;
     }
 
@@ -375,17 +406,25 @@ public static partial class ArraysUtils
             int midVal = a[mid];
 
             if (midVal < key)
+            {
                 low = mid + 1;
+            }
             else if (midVal > key)
+            {
                 high = mid - 1;
+            }
             else
             {
-                while (mid > 0 && a[mid - 1] == midVal) --mid;
+                while (mid > 0 && a[mid - 1] == midVal)
+                    --mid;
                 return mid;
             }
         }
-        if (low >= a.Length) return low;
-        while (low > 0 && a[low - 1] == a[low]) --low;
+
+        if (low >= a.Length)
+            return low;
+        while (low > 0 && a[low - 1] == a[low])
+            --low;
         return low;
     }
 
@@ -393,9 +432,10 @@ public static partial class ArraysUtils
     {
         if (objects == null)
             return 0;
+
         int hash = 0;
         foreach (object o in objects)
-            hash ^= (o == null ? 0 : o.GetHashCode());
+            hash ^= o == null ? 0 : o.GetHashCode();
         return HashFunctions.JenkinWang32shift(hash);
     }
 
@@ -405,23 +445,23 @@ public static partial class ArraysUtils
             return 0;
         int hash = 0;
         for (int i = from; i < to; ++i)
-            hash ^= (objects[i] == null ? 0 : objects[i].GetHashCode());
+            hash ^= objects[i] == null ? 0 : objects[i].GetHashCode();
         return HashFunctions.JenkinWang32shift(hash);
     }
 
     private static int Med3(int[] x, int a, int b, int c)
     {
-        return (x[a] < x[b] ? (x[b] < x[c] ? b : x[a] < x[c] ? c : a) : (x[b] > x[c] ? b : x[a] > x[c] ? c : a));
+        return x[a] < x[b] ? x[b] < x[c] ? b : x[a] < x[c] ? c : a : x[b] > x[c] ? b : x[a] > x[c] ? c : a;
     }
 
     private static int Med3(long[] x, int a, int b, int c)
     {
-        return (x[a] < x[b] ? (x[b] < x[c] ? b : x[a] < x[c] ? c : a) : (x[b] > x[c] ? b : x[a] > x[c] ? c : a));
+        return x[a] < x[b] ? x[b] < x[c] ? b : x[a] < x[c] ? c : a : x[b] > x[c] ? b : x[a] > x[c] ? c : a;
     }
 
     private static int Med3<T>(T[] x, int a, int b, int c) where T : IComparable<T>
     {
-        return (x[a].CompareTo(x[b]) < 0 ? (x[b].CompareTo(x[c]) < 0 ? b : x[a].CompareTo(x[c]) < 0 ? c : a) : (x[b].CompareTo(x[c]) > 0 ? b : x[a].CompareTo(x[c]) > 0 ? c : a));
+        return x[a].CompareTo(x[b]) < 0 ? x[b].CompareTo(x[c]) < 0 ? b : x[a].CompareTo(x[c]) < 0 ? c : a : x[b].CompareTo(x[c]) > 0 ? b : x[a].CompareTo(x[c]) > 0 ? c : a;
     }
 
     public static bool Equals(int[] a, int[] b)
@@ -436,8 +476,10 @@ public static partial class ArraysUtils
             return false;
 
         for (int i = 0; i < length; i++)
+        {
             if (a[i] != b[i])
                 return false;
+        }
 
         return true;
     }

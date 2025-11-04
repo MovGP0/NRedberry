@@ -54,7 +54,8 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
     /// <summary>
     /// Constructor for a BigRational from jas.arith.BigIntegers.
     /// </summary>
-    public BigRational(BigInteger n) : this(n.GetVal())
+    public BigRational(BigInteger n)
+        : this(n.GetVal())
     {
     }
 
@@ -151,6 +152,7 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
             {
                 Num = r.Num;
             }
+
             Den = r.Den;
         }
         else
@@ -171,14 +173,7 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
     /// <summary>
     /// Get a list of the generating elements.
     /// </summary>
-    public List<BigRational> Generators()
-    {
-        List<BigRational> g =
-        [
-            One
-        ];
-        return g;
-    }
+    public List<BigRational> Generators() => [One];
 
     /// <summary>
     /// Is this structure finite or infinite.
@@ -216,6 +211,7 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
         {
             return Num + "/" + Den;
         }
+
         return Num.ToString();
     }
 
@@ -288,6 +284,7 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
         {
             return false;
         }
+
         return Num.Equals(br.Num) && Den.Equals(br.Den);
     }
 
@@ -308,6 +305,7 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
         {
             return new BigRational(n, System.Numerics.BigInteger.One);
         }
+
         System.Numerics.BigInteger C = System.Numerics.BigInteger.GreatestCommonDivisor(n, d);
         System.Numerics.BigInteger num = n / C;
         System.Numerics.BigInteger den = d / C;
@@ -316,6 +314,7 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
             num = System.Numerics.BigInteger.Negate(num);
             den = System.Numerics.BigInteger.Negate(den);
         }
+
         return new BigRational(num, den);
     }
 
@@ -341,6 +340,7 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
         {
             return -S.Signum();
         }
+
         if (S.Equals(One))
         {
             return Signum();
@@ -370,7 +370,8 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
     /// </summary>
     public BigRational Inverse()
     {
-        System.Numerics.BigInteger S1, S2;
+        System.Numerics.BigInteger S1;
+        System.Numerics.BigInteger S2;
         if (Num.Sign >= 0)
         {
             S1 = Den;
@@ -381,6 +382,7 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
             S1 = System.Numerics.BigInteger.Negate(Den);
             S2 = System.Numerics.BigInteger.Negate(Num);
         }
+
         return new BigRational(S1, S2);
     }
 
@@ -448,6 +450,7 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
         {
             throw new ArithmeticException("division by zero");
         }
+
         return Zero;
     }
 
@@ -471,6 +474,7 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
         {
             A = System.Numerics.BigInteger.Negate(A);
         }
+
         System.Numerics.BigInteger B = new System.Numerics.BigInteger(bytesB);
         B = System.Numerics.BigInteger.Abs(B) + System.Numerics.BigInteger.One;
         return RNRED(A, B);
@@ -490,6 +494,7 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
         {
             return S;
         }
+
         if (S.Equals(Zero))
         {
             return this;
@@ -532,8 +537,8 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
             System.Numerics.BigInteger E = System.Numerics.BigInteger.GreatestCommonDivisor(T1, D);
             if (!E.Equals(System.Numerics.BigInteger.One))
             {
-                T1 = T1 / E;
-                R2 = R2 / E;
+                T1 /= E;
+                R2 /= E;
             }
         }
 
@@ -546,14 +551,16 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
     /// </summary>
     public BigRational Gcd(BigRational S)
     {
-        if (S == null || S.IsZero())
+        if (S?.IsZero() != false)
         {
             return this;
         }
+
         if (IsZero())
         {
             return S;
         }
+
         return One;
     }
 
@@ -566,16 +573,18 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
         ret[0] = null!;
         ret[1] = null!;
         ret[2] = null!;
-        if (S == null || S.IsZero())
+        if (S?.IsZero() != false)
         {
             ret[0] = this;
             return ret;
         }
+
         if (IsZero())
         {
             ret[0] = S;
             return ret;
         }
+
         BigRational half = new BigRational(1, 2);
         ret[0] = One;
         ret[1] = Inverse().Multiply(half);

@@ -6,16 +6,19 @@ public static class ArrayExtensions
     {
         if (array == null)
         {
-            throw new ArgumentNullException("array");
+            throw new ArgumentNullException(nameof(array));
         }
+
         if (count < 0)
         {
-            throw new ArgumentOutOfRangeException("count");
+            throw new ArgumentOutOfRangeException(nameof(count));
         }
+
         if (start + count >= array.Length)
         {
-            throw new ArgumentOutOfRangeException("count");
+            throw new ArgumentOutOfRangeException(nameof(count));
         }
+
         for (var i = start; i < start + count; i++)
         {
             array[i] = value;

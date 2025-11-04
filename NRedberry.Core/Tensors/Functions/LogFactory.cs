@@ -6,7 +6,9 @@ public sealed class LogFactory : ScalarFunctionFactory
 {
     public static readonly LogFactory Factory = new();
 
-    private LogFactory() { }
+    private LogFactory()
+    {
+    }
 
     protected override Tensor Create1(Tensor arg)
     {

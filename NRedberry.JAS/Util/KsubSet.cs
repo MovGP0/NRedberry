@@ -30,6 +30,7 @@ public class KsubSet<E> : IEnumerable<List<E>>
         {
             throw new ArgumentException("k out of range", nameof(k));
         }
+
         K = k;
     }
 

@@ -40,6 +40,7 @@ public static class TensorHashCalculator
                 {
                     hash += HashFunctions.JenkinWang32shift((int) pc.GetStretchId(i)) * _hashWithIndices(pc[i], indices);
                 }
+
                 return hash;
             }
 
@@ -58,6 +59,7 @@ public static class TensorHashCalculator
         {
             return tensor.GetHashCode();
         }
+
         Array.Sort(indices);
         return _hashWithIndices(tensor, indices);
     }

@@ -5,7 +5,8 @@ namespace NRedberry.Core.Exceptions;
 /// </summary>
 public class InconsistentGeneratorsException : Exception
 {
-    public InconsistentGeneratorsException(string message) : base(message)
+    public InconsistentGeneratorsException(string message)
+        : base(message)
     {
     }
 }

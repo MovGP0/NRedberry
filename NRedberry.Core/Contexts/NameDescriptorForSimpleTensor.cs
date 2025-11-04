@@ -39,6 +39,7 @@ internal sealed class NameDescriptorForSimpleTensor(
         {
             throw new InvalidOperationException("Symbol is already created.");
         }
+
         cachedSymbol = symbol;
     }
 

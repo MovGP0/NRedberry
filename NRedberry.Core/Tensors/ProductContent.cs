@@ -5,12 +5,17 @@ public sealed class ProductContent
     public static ProductContent EmptyInstance = new(
         StructureOfContractionsHashed.EmptyInstance,
         StructureOfContractions.EmptyFullContractionsStructure,
-        [], null, [], [], []);
+        [],
+        null,
+        [],
+        [],
+        []);
 
     public StructureOfContractionsHashed StructureOfContractionsHashed { get; }
     public StructureOfContractions StructureOfContractions { get; }
 
     private Tensor[] _scalars;
+
     public Tensor[] Scalars
     {
         get => (Tensor[])_scalars.Clone();
@@ -21,16 +26,20 @@ public sealed class ProductContent
 
     private short[] StretchIndices { get; }
     public short[] StretchIds => (short[])StretchIndices.Clone();
+
     public short GetStretchId(long id) => StretchIndices[id];
 
     private Tensor[] Data { get; }
+
     public Tensor this[long i] => Data[i];
+
     public int Size => Data.Length;
 
     public ProductContent(
         StructureOfContractionsHashed structureOfContractionsHashed,
         StructureOfContractions structureOfContractions,
-        Tensor[] scalars, Tensor nonScalar,
+        Tensor[] scalars,
+        Tensor nonScalar,
         short[] stretchIndices,
         Tensor[] data)
     {

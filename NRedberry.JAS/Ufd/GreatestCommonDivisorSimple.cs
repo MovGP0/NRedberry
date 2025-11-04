@@ -12,7 +12,7 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ufd.GreatestCommonDivisorSimple
 /// </remarks>
-public class GreatestCommonDivisorSimple<C> : GreatestCommonDivisorAbstract<C> 
+public class GreatestCommonDivisorSimple<C> : GreatestCommonDivisorAbstract<C>
     where C : GcdRingElem<C>
 {
     public override GenPolynomial<C> BaseGcd(GenPolynomial<C> P, GenPolynomial<C> S)

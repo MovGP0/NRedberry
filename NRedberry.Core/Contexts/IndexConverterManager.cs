@@ -17,6 +17,7 @@ public sealed class IndexConverterManager
                 throw new ArgumentException("Several converters for same type.");
             types.Add(converter.Type);
         }
+
         this.converters = converters;
     }
 
@@ -27,10 +28,13 @@ public sealed class IndexConverterManager
         try
         {
             foreach (IIndexSymbolConverter converter in converters)
+            {
                 if (converter.Type == typeId)
                 {
                     return converter.GetSymbol(number, outputFormat);
                 }
+            }
+
             throw new ArgumentException("No appropriate converter for typeId 0x" + typeId.ToString("X"));
         }
         catch (IndexConverterException e)
@@ -44,8 +48,11 @@ public sealed class IndexConverterManager
         try
         {
             foreach (IIndexSymbolConverter converter in converters)
+            {
                 if (converter.ApplicableToSymbol(index))
                     return (converter.GetCode(index) & 0xFFFF) | ((converter.Type & 0x7F) << 24);
+            }
+
             throw new ArgumentException("No available converters for such symbol : " + index);
         }
         catch (IndexConverterException e)

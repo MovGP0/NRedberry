@@ -21,6 +21,7 @@ public abstract class MultiTensor : Tensor
                 return Remove(l);
             }
         }
+
         return tensor;
     }
 
@@ -30,6 +31,7 @@ public abstract class MultiTensor : Tensor
         {
             return this;
         }
+
         int size = Size;
         foreach (int i in positions)
         {
@@ -44,6 +46,7 @@ public abstract class MultiTensor : Tensor
         {
             return GetNeutral();
         }
+
         return Remove1(p);
     }
 
@@ -56,6 +59,7 @@ public abstract class MultiTensor : Tensor
         {
             return GetNeutral();
         }
+
         if (positions.Length == 1)
         {
             return this[positions[0]];
@@ -66,6 +70,7 @@ public abstract class MultiTensor : Tensor
         {
             return this;
         }
+
         return Select1(p);
     }
 

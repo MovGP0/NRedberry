@@ -12,6 +12,7 @@
     <File Path="README.md" />
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
+    <File Path=".editorconfig" />
   </Folder>
   <Project Path="NRedberry.Apache.Commons.Math\NRedberry.Apache.Commons.Math.csproj" Type="Classic C#">
     <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />

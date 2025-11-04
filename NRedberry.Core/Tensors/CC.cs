@@ -10,7 +10,8 @@ namespace NRedberry.Core.Tensors;
 public static class CC
 {
     private static Context _current;
-    public static Context Current => _current ?? (_current = new Context(new ContextSettings()));
+
+    public static Context Current => _current ??= new Context(new ContextSettings());
 
     /**
          * Returns true if metric is defined for specified index type.

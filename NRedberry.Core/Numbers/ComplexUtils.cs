@@ -24,6 +24,7 @@ public static class ComplexUtils
         {
             return new Complex(Math.Sin(complex.Real.ToDouble()), 0);
         }
+
         return new Complex(Complex32.Sin(complex).Real, Complex32.Sin(complex).Imaginary);
     }
 
@@ -43,6 +44,7 @@ public static class ComplexUtils
         {
             return new Complex(Math.Tan(complex.Real.ToDouble()), 0);
         }
+
         return new Complex(Complex32.Tan(complex).Real, Complex32.Tan(complex).Imaginary);
     }
 
@@ -52,8 +54,10 @@ public static class ComplexUtils
         {
             return new Complex(1 / Math.Tan(complex.Real.ToDouble()), 0);
         }
-        return new Complex(Complex32.Reciprocal(Complex32.Tan(complex)).Real,
-                           Complex32.Reciprocal(Complex32.Tan(complex)).Imaginary);
+
+        return new Complex(
+            Complex32.Reciprocal(Complex32.Tan(complex)).Real,
+            Complex32.Reciprocal(Complex32.Tan(complex)).Imaginary);
     }
 
     public static Complex ArcCos(Complex complex)
@@ -62,8 +66,10 @@ public static class ComplexUtils
         {
             return new Complex(Math.Acos(complex.Real.ToDouble()), 0);
         }
-        return new Complex(Complex32.Acos(complex).Real,
-                           Complex32.Acos(complex).Imaginary);
+
+        return new Complex(
+            Complex32.Acos(complex).Real,
+            Complex32.Acos(complex).Imaginary);
     }
 
     public static Complex ArcTan(Complex complex)
@@ -72,8 +78,10 @@ public static class ComplexUtils
         {
             return new Complex(Math.Atan(complex.Real.ToDouble()), 0);
         }
-        return new Complex(Complex32.Atan(complex).Real,
-                           Complex32.Atan(complex).Imaginary);
+
+        return new Complex(
+            Complex32.Atan(complex).Real,
+            Complex32.Atan(complex).Imaginary);
     }
 
     public static Complex ArcCot(Complex complex)
@@ -82,8 +90,10 @@ public static class ComplexUtils
         {
             return new Complex(Math.Atan(1 / complex.Real.ToDouble()), 0);
         }
-        return new Complex(Complex32.Atan(Complex32.Reciprocal(complex)).Real,
-                           Complex32.Atan(Complex32.Reciprocal(complex)).Imaginary);
+
+        return new Complex(
+            Complex32.Atan(Complex32.Reciprocal(complex)).Real,
+            Complex32.Atan(Complex32.Reciprocal(complex)).Imaginary);
     }
 
     public static Complex Log(Complex complex)
@@ -92,8 +102,10 @@ public static class ComplexUtils
         {
             return new Complex(Math.Log(complex.Real.ToDouble()), 0);
         }
-        return new Complex(Complex32.Log(complex).Real,
-                           Complex32.Log(complex).Imaginary);
+
+        return new Complex(
+            Complex32.Log(complex).Real,
+            Complex32.Log(complex).Imaginary);
     }
 
     public static Complex Exp(Complex complex)

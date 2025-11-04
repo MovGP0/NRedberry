@@ -26,6 +26,7 @@ public class CartesianProductInfinite<E> : IEnumerable<List<E>>
         {
             throw new ArgumentException("null or empty components not allowed", nameof(comps));
         }
+
         Comps = comps;
     }
 
@@ -155,6 +156,7 @@ public class CartesianProductInfinite<E> : IEnumerable<List<E>>
                     return false;
                 }
             }
+
             return true;
         }
 
@@ -184,6 +186,7 @@ public class CartesianProductInfinite<E> : IEnumerable<List<E>>
             {
                 result.Add(values[i][indices[i]]);
             }
+
             return result;
         }
 

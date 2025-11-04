@@ -6,15 +6,16 @@ public abstract class AbstractSumBuilder : TensorBuilder
 {
     protected readonly Dictionary<int, List<FactorNode>> Summands;
     protected Complex Complex = Complex.Zero;
-    protected Indices.Indices Indices = null;
+    protected Indices.Indices Indices;
     protected int[] SortedNames;
-    private int size = 0;
+    private int size;
 
-    public AbstractSumBuilder() : this(7)
+    protected AbstractSumBuilder()
+        : this(7)
     {
     }
 
-    public AbstractSumBuilder(int initialCapacity)
+    protected AbstractSumBuilder(int initialCapacity)
     {
         Summands = new Dictionary<int, List<FactorNode>>(initialCapacity);
     }
@@ -43,7 +44,7 @@ public abstract class AbstractSumBuilder : TensorBuilder
         return Summands.Count;
     }
 
-    public static bool DEBUG_PRINT_SAME_FLAG = false;
+    public static bool DEBUG_PRINT_SAME_FLAG;
 
     public abstract TensorBuilder Clone();
 }

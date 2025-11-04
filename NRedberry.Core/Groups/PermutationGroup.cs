@@ -8,8 +8,6 @@ namespace NRedberry.Core.Groups;
 /// </summary>
 public sealed class PermutationGroup : IEnumerable<IPermutation>
 {
-    private readonly IReadOnlyList<IPermutation> generators = [];
-
     private PermutationGroup(IReadOnlyList<IPermutation> generators)
     {
         throw new NotImplementedException();
@@ -29,7 +27,7 @@ public sealed class PermutationGroup : IEnumerable<IPermutation>
 
     public int Degree => throw new NotImplementedException();
 
-    public IReadOnlyList<IPermutation> Generators => generators;
+    public IReadOnlyList<IPermutation> Generators { get; } = [];
 
     public bool Contains(IPermutation permutation)
     {

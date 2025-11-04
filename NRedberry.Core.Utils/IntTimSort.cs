@@ -12,7 +12,7 @@ public class IntTimSort
     private static readonly int INITIAL_TMP_STORAGE_LENGTH = 256;
     private int[] tmp; // Actual runtime type will be int[], regardless of T
     private int[] tmpB; // Actual runtime type will be int[], regardless of T
-    private int stackSize = 0; // Number of pending runs on stack
+    private int stackSize; // Number of pending runs on stack
     private readonly int[] runBase;
     private readonly int[] runLen;
 
@@ -23,13 +23,12 @@ public class IntTimSort
 
         // Allocate temp storage (which may be increased later if necessary)
         int len = a.Length;
-        int[] newArray = new int[len < 2 * INITIAL_TMP_STORAGE_LENGTH
-            ? len >> 1 : INITIAL_TMP_STORAGE_LENGTH];
-        tmp = newArray;
 
-        int[] newArrayB = new int[len < 2 * INITIAL_TMP_STORAGE_LENGTH
+        tmp = new int[len < 2 * INITIAL_TMP_STORAGE_LENGTH
             ? len >> 1 : INITIAL_TMP_STORAGE_LENGTH];
-        tmpB = newArrayB;
+
+        tmpB = new int[len < 2 * INITIAL_TMP_STORAGE_LENGTH
+            ? len >> 1 : INITIAL_TMP_STORAGE_LENGTH];
 
         int stackLen = len < 120 ? 5
             : len < 1542 ? 10
@@ -41,7 +40,10 @@ public class IntTimSort
     public static void Sort(int[] a, int[] b)
     {
         if (a.Length != b.Length)
+        {
             throw new ArgumentException();
+        }
+
         Sort(a, 0, a.Length, b);
     }
 
@@ -50,7 +52,9 @@ public class IntTimSort
         RangeCheck(a.Length, lo, hi);
         int nRemaining = hi - lo;
         if (nRemaining < 2)
+        {
             return; // Arrays of size 0 and 1 are always sorted
+        }
 
         // If array is small, do a "mini-TimSort" with no merges
         if (nRemaining < MIN_MERGE)
@@ -94,7 +98,10 @@ public class IntTimSort
     {
         Debug.Assert(lo <= start && start <= hi);
         if (start == lo)
+        {
             start++;
+        }
+
         for (; start < hi; start++)
         {
             int pivot = a[start];
@@ -109,10 +116,15 @@ public class IntTimSort
             {
                 int mid = (left + right) >> 1;
                 if (pivot < a[mid])
+                {
                     right = mid;
+                }
                 else
+                {
                     left = mid + 1;
+                }
             }
+
             Debug.Assert(left == right);
 
             int n = start - left;  // The number of elements to move
@@ -120,18 +132,27 @@ public class IntTimSort
             switch (n)
             {
                 case 2:
+                {
                     a[left + 2] = a[left + 1];
                     b[left + 2] = b[left + 1];
                     goto case 1;
+                }
+
                 case 1:
+                {
                     a[left + 1] = a[left];
                     b[left + 1] = b[left];
                     break;
+                }
+
                 default:
+                {
                     Array.Copy(a, left, a, left + 1, n);
                     Array.Copy(b, left, b, left + 1, n);
                     break;
+                }
             }
+
             a[left] = pivot;
             b[left] = pivotB;
         }
@@ -142,17 +163,22 @@ public class IntTimSort
         Debug.Assert(lo < hi);
         int runHi = lo + 1;
         if (runHi == hi)
+        {
             return 1;
+        }
 
         // Find end of run, and reverse range if descending
-        if (a[runHi++] < a[lo]) { // Descending
+        if (a[runHi++] < a[lo])
+        { // Descending
             while (runHi < hi && a[runHi] < a[runHi - 1])
                 runHi++;
             ReverseRange(a, lo, runHi, b);
         }
         else // Ascending
+        {
             while (runHi < hi && a[runHi] >= a[runHi - 1])
                 runHi++;
+        }
 
         return runHi - lo;
     }
@@ -180,6 +206,7 @@ public class IntTimSort
             r |= (n & 1);
             n >>= 1;
         }
+
         return n + r;
     }
 
@@ -198,13 +225,20 @@ public class IntTimSort
             if (n > 0 && runLen[n - 1] <= runLen[n] + runLen[n + 1])
             {
                 if (runLen[n - 1] < runLen[n + 1])
+                {
                     n--;
+                }
+
                 MergeAt(n);
             }
             else if (runLen[n] <= runLen[n + 1])
+            {
                 MergeAt(n);
+            }
             else
+            {
                 break; // Invariant is established
+            }
         }
     }
 
@@ -214,7 +248,10 @@ public class IntTimSort
         {
             int n = stackSize - 2;
             if (n > 0 && runLen[n - 1] < runLen[n + 1])
+            {
                 n--;
+            }
+
             MergeAt(n);
         }
     }
@@ -239,6 +276,7 @@ public class IntTimSort
             runBase[i + 1] = runBase[i + 2];
             runLen[i + 1] = runLen[i + 2];
         }
+
         stackSize--;
 
         // Find where the first element of run2 goes in run1
@@ -247,19 +285,27 @@ public class IntTimSort
         base1 += k;
         len1 -= k;
         if (len1 == 0)
+        {
             return;
+        }
 
         // Find where the last element of run1 goes in run2
         len2 = GallopLeft(a[base1 + len1 - 1], a, base2, len2, len2 - 1);
         Debug.Assert(len2 >= 0);
         if (len2 == 0)
+        {
             return;
+        }
 
         // Merge remaining runs, using tmp array with min(len1, len2) elements
         if (len1 <= len2)
+        {
             MergeLo(base1, len1, base2, len2);
+        }
         else
+        {
             MergeHi(base1, len1, base2, len2);
+        }
     }
 
     private static int GallopLeft(int key, int[] a, int @base, int len, int hint)
@@ -275,10 +321,15 @@ public class IntTimSort
             lastOfs = ofs;
             ofs = (ofs << 1) + 1;
             if (ofs <= 0)
+            {
                 ofs = maxOfs; // int overflow
+            }
         }
+
         if (ofs > maxOfs)
+        {
             ofs = maxOfs;
+        }
 
         lastOfs += hint;
         ofs += hint;
@@ -291,10 +342,15 @@ public class IntTimSort
             lastOfs = ofs;
             ofs = (ofs << 1) + 1;
             if (ofs <= 0)
+            {
                 ofs = maxOfs; // int overflow
+            }
         }
+
         if (ofs > maxOfs)
+        {
             ofs = maxOfs;
+        }
 
         int tmp = lastOfs;
         lastOfs = hint - ofs;
@@ -309,10 +365,15 @@ public class IntTimSort
         int m = lastOfs + ((ofs - lastOfs) >> 1);
 
         if (key > a[@base + m])
+        {
             lastOfs = m + 1;
+        }
         else
+        {
             ofs = m;
+        }
     }
+
     Debug.Assert(lastOfs == ofs);
     return ofs;
 }
@@ -331,10 +392,15 @@ private static int GallopRight(int key, int[] a, int @base, int len, int hint)
             lastOfs = ofs;
             ofs = (ofs << 1) + 1;
             if (ofs <= 0)
+            {
                 ofs = maxOfs; // int overflow
+            }
         }
+
         if (ofs > maxOfs)
+        {
             ofs = maxOfs;
+        }
 
         int tmp = lastOfs;
         lastOfs = hint - ofs;
@@ -348,10 +414,15 @@ private static int GallopRight(int key, int[] a, int @base, int len, int hint)
             lastOfs = ofs;
             ofs = (ofs << 1) + 1;
             if (ofs <= 0)
+            {
                 ofs = maxOfs; // int overflow
+            }
         }
+
         if (ofs > maxOfs)
+        {
             ofs = maxOfs;
+        }
 
         lastOfs += hint;
         ofs += hint;
@@ -365,10 +436,15 @@ private static int GallopRight(int key, int[] a, int @base, int len, int hint)
         int m = lastOfs + ((ofs - lastOfs) >> 1);
 
         if (key < a[@base + m])
+        {
             ofs = m;
+        }
         else
+        {
             lastOfs = m + 1;
+        }
     }
+
     Debug.Assert(lastOfs == ofs);
     return ofs;
 }
@@ -424,7 +500,9 @@ private void MergeLo(int base1, int len1, int base2, int len2)
                 count2++;
                 count1 = 0;
                 if (--len2 == 0)
+                {
                     break;
+                }
             }
             else
             {
@@ -433,7 +511,9 @@ private void MergeLo(int base1, int len1, int base2, int len2)
                 count1++;
                 count2 = 0;
                 if (--len1 == 1)
+                {
                     break;
+                }
             }
         } while ((count1 | count2) < minGallop);
 
@@ -449,13 +529,17 @@ private void MergeLo(int base1, int len1, int base2, int len2)
                 cursor1 += count1;
                 len1 -= count1;
                 if (len1 <= 1) // len1 == 1 || len1 == 0
+                {
                     break;
+                }
             }
 
             b[dest] = b[cursor2];
             a[dest++] = a[cursor2++];
             if (--len2 == 0)
+            {
                 break;
+            }
 
             count2 = GallopLeft(tmp[cursor1], a, cursor2, len2, 0);
             if (count2 != 0)
@@ -466,18 +550,26 @@ private void MergeLo(int base1, int len1, int base2, int len2)
                 cursor2 += count2;
                 len2 -= count2;
                 if (len2 == 0)
+                {
                     break;
+                }
             }
 
             b[dest] = tmpB[cursor1];
             a[dest++] = tmp[cursor1++];
             if (--len1 == 1)
+            {
                 break;
+            }
+
             minGallop--;
         } while (count1 >= MIN_GALLOP | count2 >= MIN_GALLOP);
 
         if (minGallop < 0)
+        {
             minGallop = 0;
+        }
+
         minGallop += 2; // Penalize for leaving gallop mode
 
         if (len1 == 1)
@@ -489,8 +581,9 @@ private void MergeLo(int base1, int len1, int base2, int len2)
             b[dest + len2] = tmpB[cursor1]; //  Last elt of run 1 to end of merge
         }
         else if (len1 == 0)
-            throw new ArgumentException(
-                "Comparison method violates its general contract!");
+        {
+            throw new ArgumentException("Comparison method violates its general contract!");
+        }
         else
         {
             // len2 == 0
@@ -528,6 +621,7 @@ private void MergeLo(int base1, int len1, int base2, int len2)
             Array.Copy(tmpB, 0, b, dest - (len2 - 1), len2);
             return;
         }
+
         if (len2 == 1)
         {
             dest -= len1;
@@ -555,7 +649,9 @@ private void MergeLo(int base1, int len1, int base2, int len2)
                     count1++;
                     count2 = 0;
                     if (--len1 == 0)
+                    {
                         break;
+                    }
                 }
                 else
                 {
@@ -564,7 +660,9 @@ private void MergeLo(int base1, int len1, int base2, int len2)
                     count2++;
                     count1 = 0;
                     if (--len2 == 1)
+                    {
                         break;
+                    }
                 }
             } while ((count1 | count2) < minGallop);
 
@@ -580,12 +678,17 @@ private void MergeLo(int base1, int len1, int base2, int len2)
                     Array.Copy(a, cursor1 + 1, a, dest + 1, count1);
                     Array.Copy(b, cursor1 + 1, b, dest + 1, count1);
                     if (len1 == 0)
+                    {
                         break;
+                    }
                 }
+
                 b[dest] = tmpB[cursor2];
                 a[dest--] = tmp[cursor2--];
                 if (--len2 == 1)
+                {
                     break;
+                }
 
                 count2 = len2 - GallopLeft(a[cursor1], tmp, 0, len2, len2 - 1);
                 if (count2 != 0)
@@ -596,16 +699,25 @@ private void MergeLo(int base1, int len1, int base2, int len2)
                     Array.Copy(tmpB, cursor2 + 1, b, dest + 1, count2);
                     Array.Copy(tmp, cursor2 + 1, a, dest + 1, count2);
                     if (len2 <= 1)  // len2 == 1 || len2 == 0
+                    {
                         break;
+                    }
                 }
+
                 b[dest] = b[cursor1];
                 a[dest--] = a[cursor1--];
                 if (--len1 == 0)
+                {
                     break;
+                }
+
                 minGallop--;
             } while (count1 >= MIN_GALLOP | count2 >= MIN_GALLOP);
             if (minGallop < 0)
+            {
                 minGallop = 0;
+            }
+
             minGallop += 2;  // Penalize for leaving gallop mode
         }  // End of "outer" loop
 
@@ -622,7 +734,9 @@ private void MergeLo(int base1, int len1, int base2, int len2)
             b[dest] = tmpB[cursor2];  // Move first elt of run2 to front of merge
         }
         else if (len2 == 0)
+        {
             throw new ArgumentException("Comparison method violates its general contract!");
+        }
         else
         {
             Debug.Assert(len1 == 0);
@@ -645,26 +759,33 @@ private void MergeLo(int base1, int len1, int base2, int len2)
             newSize |= newSize >> 16;
             newSize++;
 
-            if (newSize < 0) // Not bloody likely!
-                newSize = minCapacity;
-            else
-                newSize = Math.Min(newSize, a.Length / 2); // Right shift >>> is equivalent to divide by 2 in C#
+            newSize = newSize < 0
+                ? minCapacity
+                : Math.Min(newSize, a.Length / 2); // Right shift >>> is equivalent to divide by 2 in C#
 
-            int[] newArray = new int[newSize];
-            tmp = newArray;
-            int[] newArrayB = new int[newSize];
-            tmpB = newArrayB;
+            // Not bloody likely!
+            tmp = new int[newSize];
+            tmpB = new int[newSize];
         }
+
         return tmp;
     }
 
     private static void RangeCheck(int arrayLen, int fromIndex, int toIndex)
     {
         if (fromIndex > toIndex)
+        {
             throw new ArgumentException("fromIndex(" + fromIndex + ") > toIndex(" + toIndex + ")");
+        }
+
         if (fromIndex < 0)
+        {
             throw new IndexOutOfRangeException("fromIndex is out of bounds: " + fromIndex);
+        }
+
         if (toIndex > arrayLen)
+        {
             throw new IndexOutOfRangeException("toIndex is out of bounds: " + toIndex);
+        }
     }
 }

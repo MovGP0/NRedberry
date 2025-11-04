@@ -16,7 +16,9 @@ namespace NRedberry.Contexts;
 public sealed class NameManager
 {
     private long seed;
+
     public long Seed => seed;
+
     private Random random;
     private readonly ReaderWriterLockSlim readWriteLock = new();
     private readonly ConcurrentDictionary<int, NameDescriptor> fromId = new();
@@ -40,6 +42,7 @@ public sealed class NameManager
             this.seed = seed.Value;
             random = new Random((int)this.seed);
         }
+
         kroneckerAndMetricNames[0] = kronecker;
         kroneckerAndMetricNames[1] = metric;
     }
@@ -138,6 +141,7 @@ public sealed class NameManager
                 }
             }
         }
+
         return new NameDescriptorForSimpleTensor(sname, structuresOfIndices, id);
     }
 
@@ -149,6 +153,7 @@ public sealed class NameManager
         {
             fromStructure[key] = descriptor;
         }
+
         descriptor.RegisterInNameManager(this);
     }
 
@@ -175,10 +180,12 @@ public sealed class NameManager
                             kroneckerAndMetricIds.Add(name);
                             kroneckerAndMetricIds.Sort();
                         }
+
                         RegisterDescriptor(descriptor);
                         stringNames.Add(sname);
                         return descriptor;
                     }
+
                     readWriteLock.EnterReadLock();
                     rLocked = true;
                 }
@@ -187,6 +194,7 @@ public sealed class NameManager
                     readWriteLock.ExitWriteLock();
                 }
             }
+
             return knownND;
         }
         finally
@@ -298,6 +306,7 @@ public sealed class NameManager
             {
                 readWriteLock.ExitWriteLock();
             }
+
             return nd;
         }
         finally
@@ -326,7 +335,8 @@ public sealed class NameManager
 
     private sealed class StringGenerator
     {
-        private long count = 0;
+        private long count;
+
         public string NextString() => $"{DEFAULT_VAR_SYMBOL_PREFIX}{count++}";
     }
 

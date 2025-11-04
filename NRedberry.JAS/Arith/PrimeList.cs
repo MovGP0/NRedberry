@@ -37,7 +37,8 @@ public sealed class PrimeList : IEnumerable<BigInteger>
     private readonly List<BigInteger> _val;
     private BigInteger _last = BigInteger.Zero;
 
-    public PrimeList() : this(Range.Medium)
+    public PrimeList()
+        : this(Range.Medium)
     {
     }
 
@@ -300,8 +301,10 @@ public sealed class PrimeList : IEnumerable<BigInteger>
             {
                 builder.Append(", ");
             }
+
             builder.Append(_val[i]);
         }
+
         builder.Append(']');
         return builder.ToString();
     }

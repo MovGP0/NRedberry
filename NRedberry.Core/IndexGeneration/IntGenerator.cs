@@ -7,10 +7,12 @@ public sealed class IntGenerator : ICloneable<IntGenerator>, IEnumerator<int>
 {
     private static int[] EMPTY_ARRAY = [-1];
     private int[] EngagedData;
+
     private int Counter { get; set; }
     private int Match { get; set; }
 
-    public IntGenerator() : this(EMPTY_ARRAY)
+    public IntGenerator()
+        : this(EMPTY_ARRAY)
     {
     }
 
@@ -68,10 +70,12 @@ public sealed class IntGenerator : ICloneable<IntGenerator>, IEnumerator<int>
     public int GetNext()
     {
         Counter++;
-        while (Match < EngagedData.Length && EngagedData[Match] == Counter) {
+        while (Match < EngagedData.Length && EngagedData[Match] == Counter)
+        {
             Match++;
             Counter++;
         }
+
         return Counter;
     }
 
@@ -86,12 +90,15 @@ public sealed class IntGenerator : ICloneable<IntGenerator>, IEnumerator<int>
     }
 
     #region ICloneable<IntGenerator>
+
     public IntGenerator Clone() => new(EngagedData, Counter, Match);
 
     object ICloneable.Clone() => Clone();
+
     #endregion
 
     #region IEnumerator<int>
+
     public int Current
     {
         get
@@ -112,5 +119,6 @@ public sealed class IntGenerator : ICloneable<IntGenerator>, IEnumerator<int>
     {
         // nothing to dispose
     }
+
     #endregion
 }

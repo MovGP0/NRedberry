@@ -24,7 +24,7 @@ public static partial class ArraysUtils
         for (int i = 0; i < n; i++, a++, b++)
             swap(x, a, b, coSort);
     }
-    
+
     private static void swap(int[] x, int a, int b, long[] coSort)
     {
         swap(x, a, b);
@@ -44,8 +44,7 @@ public static partial class ArraysUtils
         for (int i = 0; i < n; i++, a++, b++)
             swap(x, a, b, coSort);
     }
-    
-    
+
     private static void Swap(int[] x, int a, int b, int[] coSort)
     {
         Swap(x, a, b);
@@ -63,7 +62,6 @@ public static partial class ArraysUtils
             Swap(x, a, b, coSort);
     }
 
-    
     private static void Swap(long[] x, int a, int b, long[] coSort)
     {
         Swap(x, a, b);
@@ -75,8 +73,7 @@ public static partial class ArraysUtils
         for (int i = 0; i < n; i++, a++, b++)
             Swap(x, a, b, coSort);
     }
-    
-    
+
     private static void Swap(int[] x, int a, int b, long[] coSort)
     {
         Swap(x, a, b);
@@ -110,7 +107,7 @@ public static partial class ArraysUtils
         for (int i = 0; i < n; i++, a++, b++)
             Swap(x, a, b, coSort);
     }
-    
+
     private static void Swap<T>(T[] x, int a, int b, int[] coSort) where T : IComparable<T>
     {
         Swap(x, a, b);
@@ -122,5 +119,4 @@ public static partial class ArraysUtils
         for (int i = 0; i < n; i++, a++, b++)
             Swap(x, a, b, coSort);
     }
-
 }

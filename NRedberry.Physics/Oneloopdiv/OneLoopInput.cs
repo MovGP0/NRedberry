@@ -14,8 +14,10 @@ public sealed class OneLoopInput
     private readonly Expression[][] hatQuantities = null!;
     private readonly Expression[] kn = null!;
     private readonly Expression l = null!;
+
     private const int HatQuantitiesGeneralCount = 5;
     private const int InputValuesGeneralCount = 6;
+
     private readonly int actualInput;
     private readonly int actualHatQuantities;
     private readonly ITransformation[] riemannBackground = null!;

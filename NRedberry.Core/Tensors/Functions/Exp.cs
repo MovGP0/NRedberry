@@ -2,7 +2,10 @@
 
 public class Exp : ScalarFunction
 {
-    public Exp(Tensor argument) : base(argument) { }
+    public Exp(Tensor argument)
+        : base(argument)
+    {
+    }
 
     public override Tensor Derivative() => this;
 

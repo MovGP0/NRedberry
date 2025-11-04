@@ -75,6 +75,7 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
         {
             v = Val - Ring.Modul;
         }
+
         return new BigInteger(v);
     }
 
@@ -102,10 +103,12 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
         {
             return false;
         }
+
         if (Ring.IsField())
         {
             return true;
         }
+
         BigInteger g = BigInteger.Abs(
             BigInteger.GreatestCommonDivisor(Ring.Modul, new(Val)));
         return g.Equals(BigInteger.One);
@@ -128,6 +131,7 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
         {
             v = Normalize(v, Ring.Modul);
         }
+
         return Val.CompareTo(v);
     }
 
@@ -140,6 +144,7 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
         {
             return false;
         }
+
         return CompareTo(mi) == 0;
     }
 
@@ -191,6 +196,7 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
                 {
                     return new ModInteger(Ring, Val / S.Val);
                 }
+
                 throw new NotInvertibleException(e.Message, e);
             }
             catch (ArithmeticException a)
@@ -228,14 +234,17 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
         {
             throw new ArithmeticException("division by zero");
         }
+
         if (S.IsOne())
         {
             return Ring.Zero;
         }
+
         if (S.IsUnit())
         {
             return Ring.Zero;
         }
+
         BigInteger remainder = BigInteger.Remainder(Val, S.Val);
         return new ModInteger(Ring, remainder);
     }
@@ -267,14 +276,17 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
         {
             return this;
         }
+
         if (IsZero())
         {
             return S;
         }
+
         if (IsUnit() || S.IsUnit())
         {
             return Ring.One;
         }
+
         return new ModInteger(Ring, BigInteger.GreatestCommonDivisor(Val, S.Val));
     }
 
@@ -287,16 +299,18 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
         ret[0] = null!;
         ret[1] = null!;
         ret[2] = null!;
-        if (S == null || S.IsZero())
+        if (S?.IsZero() != false)
         {
             ret[0] = this;
             return ret;
         }
+
         if (IsZero())
         {
             ret[0] = S;
             return ret;
         }
+
         if (IsUnit() || S.IsUnit())
         {
             ret[0] = Ring.One;
@@ -307,12 +321,14 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
                 ret[2] = x.Divide(S);
                 return ret;
             }
+
             if (IsUnit())
             {
                 ret[1] = Inverse();
                 ret[2] = Ring.Zero;
                 return ret;
             }
+
             ret[1] = Ring.Zero;
             ret[2] = S.Inverse();
             return ret;
@@ -391,8 +407,7 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
             return b;
         }
 
-        BigInteger x1, y1;
-        BigInteger g = Gcd(b % a, a, out x1, out y1);
+        BigInteger g = Gcd(b % a, a, out var x1, out var y1);
 
         x = y1 - (b / a) * x1;
         y = x1;
@@ -413,6 +428,7 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
         {
             remainder += positiveModulus;
         }
+
         return remainder;
     }
 

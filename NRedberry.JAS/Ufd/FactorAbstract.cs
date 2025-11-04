@@ -21,7 +21,7 @@ public abstract class FactorAbstract<C> : Factorization<C> where C : GcdRingElem
         throw new ArgumentException("don't use this constructor");
     }
 
-    public FactorAbstract(RingFactory<C> cfac)
+    protected FactorAbstract(RingFactory<C> cfac)
     {
         engine = GCDFactory.GetProxy(cfac);
         sengine = SquarefreeFactory.GetImplementation(cfac);

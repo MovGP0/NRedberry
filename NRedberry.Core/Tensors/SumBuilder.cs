@@ -4,7 +4,8 @@ namespace NRedberry.Core.Tensors;
 
 public sealed class SumBuilder : AbstractSumBuilder
 {
-    public SumBuilder(int initialCapacity) : base(initialCapacity)
+    public SumBuilder(int initialCapacity)
+        : base(initialCapacity)
     {
     }
 
@@ -47,6 +48,7 @@ public sealed class SumBuilder : AbstractSumBuilder
                 vals[i] = (FactorNode)vals[i].Clone();
             }
         }
+
         return new SumBuilder(summands, Complex, Indices, (int[])SortedNames.Clone());
     }
 }

@@ -78,11 +78,7 @@ public interface IBitArray
  /// Gets or sets thge i-th bit.
  /// </summary>
  ///<param name="i">position of bit</param>
- bool this[int i]
- {
-  get;
-  set;
- }
+ bool this[int i] { get; set; }
 
  /**
          * Sets all bits in this to 1.

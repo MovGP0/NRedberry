@@ -11,14 +11,15 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ufd.GreatestCommonDivisorModular
 /// </remarks>
-public class GreatestCommonDivisorModular<MOD> : GreatestCommonDivisorAbstract<Arith.BigInteger> 
+public class GreatestCommonDivisorModular<MOD> : GreatestCommonDivisorAbstract<Arith.BigInteger>
     where MOD : GcdRingElem<MOD>, Modular
 {
-    private readonly bool debug = false;
+    private readonly bool debug;
     protected readonly GreatestCommonDivisorAbstract<MOD> mufd;
     protected readonly GreatestCommonDivisorAbstract<Arith.BigInteger> iufd;
 
-    public GreatestCommonDivisorModular() : this(false)
+    public GreatestCommonDivisorModular()
+        : this(false)
     {
     }
 
@@ -32,6 +33,7 @@ public class GreatestCommonDivisorModular<MOD> : GreatestCommonDivisorAbstract<A
         {
             mufd = new GreatestCommonDivisorModEval<MOD>();
         }
+
         iufd = new GreatestCommonDivisorSubres<Arith.BigInteger>();
     }
 

@@ -4,7 +4,10 @@ namespace NRedberry.Core.Tensors.Functions;
 
 public class Tan : ScalarFunction
 {
-    public Tan(Tensor argument) : base(argument) { }
+    public Tan(Tensor argument)
+        : base(argument)
+    {
+    }
 
     public override Tensor Derivative()
     {

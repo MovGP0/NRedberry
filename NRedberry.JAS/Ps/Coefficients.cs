@@ -20,7 +20,7 @@ public abstract class Coefficients<C> where C : RingElem<C>
     /// <summary>
     /// Public no arguments constructor.
     /// </summary>
-    public Coefficients()
+    protected Coefficients()
     {
         CoeffCache = new Dictionary<int, C>();
     }
@@ -29,7 +29,7 @@ public abstract class Coefficients<C> where C : RingElem<C>
     /// Public constructor with pre-filled cache.
     /// </summary>
     /// <param name="cache">pre-filled coefficient cache</param>
-    public Coefficients(Dictionary<int, C> cache)
+    protected Coefficients(Dictionary<int, C> cache)
     {
         CoeffCache = cache;
     }

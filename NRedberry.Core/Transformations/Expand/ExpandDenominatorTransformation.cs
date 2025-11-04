@@ -11,7 +11,6 @@ public sealed class ExpandDenominatorTransformation : AbstractExpandNumeratorDen
     public static ExpandDenominatorTransformation Instance => throw new NotImplementedException();
 
     private ExpandDenominatorTransformation()
-        : base()
     {
         throw new NotImplementedException();
     }

@@ -30,8 +30,8 @@ public class Transformer : ITransformation
             if (currentState != state)
                 continue;
 
-            Tensor newTensor;
-            var currentTensor = newTensor = iterator.Current();
+            Tensor newTensor = iterator.Current();
+            var currentTensor = newTensor;
 
             foreach (ITransformation transformation in transformations)
                 newTensor = transformation.Transform(newTensor);

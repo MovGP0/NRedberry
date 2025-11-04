@@ -8,15 +8,18 @@ public sealed class InconsistentGeneratorsException : ApplicationException
     {
     }
 
-    public InconsistentGeneratorsException(SerializationInfo info, StreamingContext context) : base(info, context)
+    public InconsistentGeneratorsException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
     {
     }
 
-    public InconsistentGeneratorsException(string message) : base(message)
+    public InconsistentGeneratorsException(string message)
+        : base(message)
     {
     }
 
-    public InconsistentGeneratorsException(string message, Exception innerException) : base(message, innerException)
+    public InconsistentGeneratorsException(string message, Exception innerException)
+        : base(message, innerException)
     {
     }
 }

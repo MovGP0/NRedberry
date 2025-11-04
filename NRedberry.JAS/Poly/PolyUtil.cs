@@ -1,6 +1,5 @@
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Util;
 using BigInteger = NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith.BigInteger;
 
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
@@ -87,7 +86,7 @@ public static class PolyUtil
         ArgumentNullException.ThrowIfNull(recursiveRing);
         ArgumentNullException.ThrowIfNull(polynomials);
 
-        return polynomials.Select(p => Recursive(recursiveRing, p)).ToList();
+        return polynomials.ConvertAll(p => Recursive(recursiveRing, p));
     }
 
     public static GenPolynomial<BigInteger> IntegerFromModularCoefficients<C>(GenPolynomialRing<BigInteger> resultRing, GenPolynomial<C> polynomial)
@@ -112,7 +111,7 @@ public static class PolyUtil
         ArgumentNullException.ThrowIfNull(resultRing);
         ArgumentNullException.ThrowIfNull(polynomials);
 
-        return polynomials.Select(p => IntegerFromModularCoefficients(resultRing, p)).ToList();
+        return polynomials.ConvertAll(p => IntegerFromModularCoefficients(resultRing, p));
     }
 
     public static GenPolynomial<BigInteger> IntegerFromRationalCoefficients(GenPolynomialRing<BigInteger> resultRing, GenPolynomial<BigRational> polynomial)
@@ -247,7 +246,7 @@ public static class PolyUtil
         ArgumentNullException.ThrowIfNull(ring);
 
         GenPolynomial<C> result = new (ring);
-        if (polynomial is null || polynomial.IsZero())
+        if (polynomial?.IsZero() != false)
         {
             return result;
         }
@@ -255,8 +254,7 @@ public static class PolyUtil
         SortedDictionary<ExpVector, C> destination = result.Terms;
         foreach (KeyValuePair<ExpVector, BigInteger> term in polynomial.Terms)
         {
-            C coefficient = ring.CoFac.FromInteger(term.Value.Val);
-            destination[term.Key] = coefficient;
+            destination[term.Key] = ring.CoFac.FromInteger(term.Value.Val);
         }
 
         return result;
@@ -376,7 +374,7 @@ public static class PolyUtil
     public static GenPolynomial<GenPolynomial<C>>? Monic<C>(GenPolynomial<GenPolynomial<C>>? polynomial)
         where C : RingElem<C>
     {
-        if (polynomial is null || polynomial.IsZero())
+        if (polynomial?.IsZero() != false)
         {
             return polynomial;
         }
@@ -667,7 +665,7 @@ public static class PolyUtil
             throw new ArithmeticException($"{polynomial} division by zero {divisor}");
         }
 
-        if (polynomial is null || polynomial.IsZero())
+        if (polynomial?.IsZero() != false)
         {
             return polynomial;
         }
@@ -1057,7 +1055,7 @@ public static class PolyUtil
 
         public Complex<C> Eval(AlgebraicNumber<C> value)
         {
-            if (value is null || value.IsZero())
+            if (value?.IsZero() != false)
             {
                 return _ring.Zero;
             }

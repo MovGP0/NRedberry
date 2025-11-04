@@ -67,8 +67,11 @@ public static partial class ArraysUtils
         if (length < 7)
         {
             for (int i = fromIndex; i < length + fromIndex; i++)
+            {
                 for (int j = i; j > fromIndex && target[j - 1] > target[j]; j--)
                     Swap(target, j, j - 1, coSort);
+            }
+
             return;
         }
 
@@ -84,11 +87,16 @@ public static partial class ArraysUtils
                 m = Med3(target, m - s1, m, m + s1);
                 n1 = Med3(target, n1 - 2 * s1, n1 - s1, n1);
             }
+
             m = Med3(target, l, m, n1);
         }
+
         long v = target[m];
 
-        int a = fromIndex, b = a, c = fromIndex + length - 1, d = c;
+        int a = fromIndex;
+        int b = a;
+        int c = fromIndex + length - 1;
+        int d = c;
         while (true)
         {
             while (b <= c && target[b] <= v)
@@ -97,18 +105,21 @@ public static partial class ArraysUtils
                     Swap(target, a++, b, coSort);
                 b++;
             }
+
             while (c >= b && target[c] >= v)
             {
                 if (target[c] == v)
                     Swap(target, c, d--, coSort);
                 c--;
             }
+
             if (b > c)
                 break;
             Swap(target, b++, c--, coSort);
         }
 
-        int s, n = fromIndex + length;
+        int s;
+        int n = fromIndex + length;
         s = Math.Min(a - fromIndex, b - a);
         Vecswap(target, fromIndex, b - s, s, coSort);
         s = Math.Min(d - c, n - d - 1);
@@ -132,8 +143,11 @@ public static partial class ArraysUtils
         if (length < 7)
         {
             for (int i = fromIndex; i < length + fromIndex; i++)
+            {
                 for (int j = i; j > fromIndex && target[j - 1] > target[j]; j--)
                     Swap(target, j, j - 1, coSort);
+            }
+
             return;
         }
 
@@ -149,11 +163,16 @@ public static partial class ArraysUtils
                 m = Med3(target, m - s, m, m + s);
                 n = Med3(target, n - 2 * s, n - s, n);
             }
+
             m = Med3(target, l, m, n);
         }
+
         int v = target[m];
 
-        int a = fromIndex, b = a, c = fromIndex + length - 1, d = c;
+        int a = fromIndex;
+        int b = a;
+        int c = fromIndex + length - 1;
+        int d = c;
         while (true)
         {
             while (b <= c && target[b] <= v)
@@ -162,19 +181,21 @@ public static partial class ArraysUtils
                     Swap(target, a++, b, coSort);
                 b++;
             }
+
             while (c >= b && target[c] >= v)
             {
                 if (target[c] == v)
                     Swap(target, c, d--, coSort);
                 c--;
             }
+
             if (b > c)
                 break;
             Swap(target, b++, c--, coSort);
         }
 
-        int s2, n2 = fromIndex + length;
-        s2 = Math.Min(a - fromIndex, b - a);
+        int n2 = fromIndex + length;
+        var s2 = Math.Min(a - fromIndex, b - a);
         Vecswap(target, fromIndex, b - s2, s2, coSort);
         s2 = Math.Min(d - c, n2 - d - 1);
         Vecswap(target, b, n2 - s2, s2, coSort);
@@ -190,8 +211,11 @@ public static partial class ArraysUtils
         if (length < 7)
         {
             for (int i = fromIndex; i < length + fromIndex; i++)
+            {
                 for (int j = i; j > fromIndex && target[j - 1] > target[j]; j--)
                     Swap(target, j, j - 1, coSort);
+            }
+
             return;
         }
 
@@ -207,11 +231,16 @@ public static partial class ArraysUtils
                 m = Med3(target, m - s, m, m + s);
                 n = Med3(target, n - 2 * s, n - s, n);
             }
+
             m = Med3(target, l, m, n);
         }
+
         int v = target[m];
 
-        int a = fromIndex, b = a, c = fromIndex + length - 1, d = c;
+        int a = fromIndex;
+        int b = a;
+        int c = fromIndex + length - 1;
+        int d = c;
         while (true)
         {
             while (b <= c && target[b] <= v)
@@ -220,19 +249,21 @@ public static partial class ArraysUtils
                     Swap(target, a++, b, coSort);
                 b++;
             }
+
             while (c >= b && target[c] >= v)
             {
                 if (target[c] == v)
                     Swap(target, c, d--, coSort);
                 c--;
             }
+
             if (b > c)
                 break;
             Swap(target, b++, c--, coSort);
         }
 
-        int s1, n1 = fromIndex + length;
-        s1 = Math.Min(a - fromIndex, b - a);
+        int n1 = fromIndex + length;
+        var s1 = Math.Min(a - fromIndex, b - a);
         Vecswap(target, fromIndex, b - s1, s1, coSort);
         s1 = Math.Min(d - c, n1 - d - 1);
         Vecswap(target, b, n1 - s1, s1, coSort);
@@ -248,8 +279,11 @@ public static partial class ArraysUtils
         if (length < 7)
         {
             for (int i = fromIndex; i < length + fromIndex; i++)
+            {
                 for (int j = i; j > fromIndex && target[j - 1].CompareTo(target[j]) > 0; j--)
                     Swap(target, j, j - 1, coSort);
+            }
+
             return;
         }
 
@@ -265,11 +299,16 @@ public static partial class ArraysUtils
                 m = Med3(target, m - s, m, m + s);
                 n = Med3(target, n - 2 * s, n - s, n);
             }
+
             m = Med3(target, l, m, n);
         }
+
         T v = target[m];
 
-        int a = fromIndex, b = a, c = fromIndex + length - 1, d = c;
+        int a = fromIndex;
+        int b = a;
+        int c = fromIndex + length - 1;
+        int d = c;
         while (true)
         {
             while (b <= c && target[b].CompareTo(v) <= 0)
@@ -278,19 +317,21 @@ public static partial class ArraysUtils
                     Swap(target, a++, b, coSort);
                 b++;
             }
+
             while (c >= b && target[c].CompareTo(v) >= 0)
             {
                 if (target[c].CompareTo(v) == 0)
                     Swap(target, c, d--, coSort);
                 c--;
             }
+
             if (b > c)
                 break;
             Swap(target, b++, c--, coSort);
         }
 
-        int s1, n1 = fromIndex + length;
-        s1 = Math.Min(a - fromIndex, b - a);
+        var n1 = fromIndex + length;
+        var s1 = Math.Min(a - fromIndex, b - a);
         Vecswap(target, fromIndex, b - s1, s1, coSort);
         s1 = Math.Min(d - c, n1 - d - 1);
         Vecswap(target, b, n1 - s1, s1, coSort);
@@ -306,8 +347,11 @@ public static partial class ArraysUtils
         if (length < 7)
         {
             for (int i = fromIndex; i < length + fromIndex; i++)
+            {
                 for (int j = i; j > fromIndex && target[j - 1].CompareTo(target[j]) > 0; j--)
                     Swap(target, j, j - 1, coSort);
+            }
+
             return;
         }
 
@@ -323,11 +367,16 @@ public static partial class ArraysUtils
                 m = Med3(target, m - s, m, m + s);
                 n = Med3(target, n - 2 * s, n - s, n);
             }
+
             m = Med3(target, l, m, n);
         }
+
         T v = target[m];
 
-        int a = fromIndex, b = a, c = fromIndex + length - 1, d = c;
+        int a = fromIndex;
+        int b = a;
+        int c = fromIndex + length - 1;
+        int d = c;
         while (true)
         {
             while (b <= c && target[b].CompareTo(v) <= 0)
@@ -336,19 +385,21 @@ public static partial class ArraysUtils
                     Swap(target, a++, b, coSort);
                 b++;
             }
+
             while (c >= b && target[c].CompareTo(v) >= 0)
             {
                 if (target[c].CompareTo(v) == 0)
                     Swap(target, c, d--, coSort);
                 c--;
             }
+
             if (b > c)
                 break;
             Swap(target, b++, c--, coSort);
         }
 
-        int s1, n1 = fromIndex + length;
-        s1 = Math.Min(a - fromIndex, b - a);
+        var n1 = fromIndex + length;
+        var s1 = Math.Min(a - fromIndex, b - a);
         Vecswap(target, fromIndex, b - s1, s1, coSort);
         s1 = Math.Min(d - c, n1 - d - 1);
         Vecswap(target, b, n1 - s1, s1, coSort);

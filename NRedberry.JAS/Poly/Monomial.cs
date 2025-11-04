@@ -59,6 +59,6 @@ public sealed class Monomial<TC> where TC : RingElem<TC>
     /// </summary>
     public override string ToString()
     {
-        return C.ToString() + " " + E.ToString();
+        return C + " " + E;
     }
 }

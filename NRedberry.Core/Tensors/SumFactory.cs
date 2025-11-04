@@ -22,6 +22,7 @@ public sealed class SumFactory : TensorFactory
         {
             builder.Put(t);
         }
+
         return builder.Build();
     }
 

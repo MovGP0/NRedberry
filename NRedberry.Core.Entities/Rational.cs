@@ -108,6 +108,7 @@ public sealed class Rational : Real
 
     public BigInteger GetNumerator() => Fraction.Numerator;
     public BigInteger GetDenominator() => Fraction.Denominator;
+
     public BigInteger Numerator => Fraction.Numerator;
     public BigInteger Denominator => Fraction.Denominator;
 
@@ -281,7 +282,9 @@ public sealed class Rational : Real
     public override bool IsOne() => Fraction.Numerator.Equals(BigInteger.One) && Fraction.Denominator.Equals(BigInteger.One);
     public override bool IsMinusOne() => Fraction.Numerator.Equals(BigInteger.MinusOne) && Fraction.Denominator.Equals(BigInteger.One);
     public override int SigNum() => Fraction.Numerator.Sign;
+
     public int Sign => Fraction.Numerator.Sign;
+
     public override bool IsInteger() => Fraction.Denominator.CompareTo(BigInteger.One) == 0;
     public override bool IsNatural() => Fraction.Numerator.Sign >= 0 && IsInteger();
 
@@ -325,7 +328,7 @@ public sealed class Rational : Real
         return Fraction.Abs().GetHashCode();
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj == null)
         {
@@ -345,7 +348,7 @@ public sealed class Rational : Real
         return false;
     }
 
-    public override string ToString() => Fraction.Numerator + (Fraction.Denominator.Equals(BigInteger.One) ? "" : "/" + Fraction.Denominator);
+    public override string ToString() => Fraction.Numerator + (Fraction.Denominator.Equals(BigInteger.One) ? string.Empty : "/" + Fraction.Denominator);
     public override bool IsInfinite() => false;
     public override bool IsNaN() => false;
 }

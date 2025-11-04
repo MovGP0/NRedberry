@@ -14,7 +14,7 @@ public class PolynomialList<C> : IComparable<PolynomialList<C>> where C : RingEl
 {
     public readonly GenPolynomialRing<C> Ring;
     public readonly List<GenPolynomial<C>> Polynomials;
-    
+
     public PolynomialList(GenPolynomialRing<C> r, List<GenPolynomial<C>> l)
     {
         Ring = r ?? throw new ArgumentNullException(nameof(r));

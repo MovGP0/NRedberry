@@ -27,7 +27,7 @@ public sealed class ApplyIndexMapping
         }
 
         var allIndicesNames = TensorUtils.GetAllDummyIndicesT(tensor);
-        if (!allIndicesNames.Any())
+        if (allIndicesNames.Count == 0)
         {
             return tensor;
         }
@@ -55,7 +55,8 @@ public sealed class ApplyIndexMapping
 
         var generator = new IndexGenerator(allIndicesNames.ToArray());
 
-        int[] from = fromL.ToArray(), to = new int[fromL.Count];
+        int[] from = fromL.ToArray();
+        int[] to = new int[fromL.Count];
         Array.Sort(from);
         int i;
         for (i = from.Length - 1; i >= 0; --i)

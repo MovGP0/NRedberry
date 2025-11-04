@@ -4,7 +4,8 @@ namespace NRedberry.Core.Tensors.Functions;
 
 public sealed class Cos : ScalarFunction
 {
-    public Cos(Tensor argument) : base(argument)
+    public Cos(Tensor argument)
+        : base(argument)
     {
     }
 

@@ -39,18 +39,18 @@ public sealed class GreekLaTeXLowerCaseConverter : SymbolArrayConverter
 
         for (var i = 0; i < 23; ++i)
         {
-            char greekLetter;
-            if (i >= 16)
-                greekLetter = (char)((char)0x03b1 + i + 2);
-            else if (i >= 14)
-                greekLetter = (char)((char)0x03b1 + i + 1);
-            else
-                greekLetter = (char)((char)0x03b1 + i);
+            char greekLetter = i switch
+            {
+                >= 16 => (char)((char)0x03b1 + i + 2),
+                >= 14 => (char)((char)0x03b1 + i + 1),
+                _ => (char)((char)0x03b1 + i)
+            };
             UTF[i] = char.ToString(greekLetter);
         }
     }
 
-    private GreekLaTeXLowerCaseConverter() : base(Symbols, UTF)
+    private GreekLaTeXLowerCaseConverter()
+        : base(Symbols, UTF)
     {
     }
 

@@ -12,7 +12,6 @@ public sealed class ExpandAllTransformation : AbstractExpandTransformation
     public static ExpandAllTransformation Instance => throw new NotImplementedException();
 
     private ExpandAllTransformation()
-        : base()
     {
         throw new NotImplementedException();
     }

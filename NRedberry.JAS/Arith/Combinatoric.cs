@@ -19,15 +19,18 @@ public class Combinatoric
         {
             return BigInteger.One;
         }
+
         BigInteger f = BigInteger.One;
         if (n >= int.MaxValue)
         {
             throw new NotSupportedException(n + " >= int.MaxValue = " + int.MaxValue);
         }
+
         for (int i = 2; i <= n; i++)
         {
             f = f.Multiply(new BigInteger(i));
         }
+
         return f;
     }
 }

@@ -8,7 +8,7 @@ namespace NRedberry;
 public struct OutputFormat : IEquatable<OutputFormat>
 {
     /// <summary>
-    /// This format specifies expressions to be outputted in the LaTeX notation. 
+    /// This format specifies expressions to be outputted in the LaTeX notation.
     /// The produced strings can be simply put in some LaTeX math environments and compiled via LaTeX compiler.
     /// </summary>
     public static readonly OutputFormat LaTeX = new(0, "^", "_");
@@ -33,12 +33,12 @@ public struct OutputFormat : IEquatable<OutputFormat>
     /// <summary>
     /// This format specifies expressions to be outputted in the Wolfram Mathematica input notation.
     /// </summary>
-    public static readonly OutputFormat WolframMathematica = new(4, "", "-");
+    public static readonly OutputFormat WolframMathematica = new(4, string.Empty, "-");
 
     /// <summary>
     /// This format specifies expressions to be outputted in the Maplesoft Maple input notation.
     /// </summary>
-    public static readonly OutputFormat Maple = new(5, "~", "");
+    public static readonly OutputFormat Maple = new(5, "~", string.Empty);
 
     /// <summary>
     /// This format will not print explicit indices of matrices.

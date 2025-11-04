@@ -4,12 +4,12 @@ public static class MathUtils
 {
     public static long[] GetSortedDistinct(this long[] values)
     {
-        return values.OrderBy(v => v).Distinct().ToArray();
+        return values.Order().Distinct().ToArray();
     }
 
     public static int[] GetSortedDistinct(this int[] values)
     {
-        return values.OrderBy(v => v).Distinct().ToArray();
+        return values.Order().Distinct().ToArray();
     }
 
     /// <summary>

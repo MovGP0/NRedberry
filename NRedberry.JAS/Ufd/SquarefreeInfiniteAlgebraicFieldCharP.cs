@@ -10,10 +10,10 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ufd.SquarefreeInfiniteAlgebraicFieldCharP
 /// </remarks>
-public class SquarefreeInfiniteAlgebraicFieldCharP<C> : SquarefreeFieldCharP<AlgebraicNumber<C>> 
+public class SquarefreeInfiniteAlgebraicFieldCharP<C> : SquarefreeFieldCharP<AlgebraicNumber<C>>
     where C : GcdRingElem<C>
 {
-    public SquarefreeInfiniteAlgebraicFieldCharP(GreatestCommonDivisorAbstract<AlgebraicNumber<C>>? engine = null) 
+    public SquarefreeInfiniteAlgebraicFieldCharP(GreatestCommonDivisorAbstract<AlgebraicNumber<C>>? engine = null)
         : base(engine)
     {
     }

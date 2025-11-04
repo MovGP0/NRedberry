@@ -5,7 +5,10 @@
 /// </summary>
 public abstract class DummySymmetries : AbstractSymmetries
 {
-    protected DummySymmetries(int dimension, List<Symmetry> basis) : base(dimension, basis) { }
+    protected DummySymmetries(int dimension, List<Symmetry> basis)
+        : base(dimension, basis)
+    {
+    }
 
     public override bool Add(Symmetry symmetry)
     {

@@ -9,7 +9,7 @@ namespace NRedberry.Core.Groups;
 public interface IBacktrackSearchTestFunction
 {
     /// <summary>
-    /// Tests a permutation at the specified level. If the test returns false, no further permutations 
+    /// Tests a permutation at the specified level. If the test returns false, no further permutations
     /// with the same partial base image will be scanned in the search tree.
     /// </summary>
     /// <param name="permutation">The permutation to test.</param>

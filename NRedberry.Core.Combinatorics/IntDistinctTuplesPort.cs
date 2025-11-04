@@ -69,11 +69,13 @@ public sealed class IntDistinctTuplesPort : IIntCombinatorialPort
                     state = 1;
                     return;
                 }
+
                 combination[i] = 0;
                 previousMask.Set(combination[--i], true);
                 ++combination[i];
                 continue;
             }
+
             ++i;
         }
     }

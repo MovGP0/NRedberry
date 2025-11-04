@@ -11,11 +11,20 @@ public class PermutationOneLineInt : Permutation
     private readonly bool _isIdentity;
     private readonly bool _antisymmetry;
 
-    public PermutationOneLineInt(bool antisymmetry, int[][] cycles) : this(antisymmetry, Permutations.ConvertCyclesToOneLine(cycles)) { }
+    public PermutationOneLineInt(bool antisymmetry, int[][] cycles)
+        : this(antisymmetry, Permutations.ConvertCyclesToOneLine(cycles))
+    {
+    }
 
-    public PermutationOneLineInt(int[][] cycles) : this(Permutations.ConvertCyclesToOneLine(cycles)) { }
+    public PermutationOneLineInt(int[][] cycles)
+        : this(Permutations.ConvertCyclesToOneLine(cycles))
+    {
+    }
 
-    public PermutationOneLineInt(params int[] permutation) : this(false, permutation) { }
+    public PermutationOneLineInt(params int[] permutation)
+        : this(false, permutation)
+    {
+    }
 
     public PermutationOneLineInt(bool antisymmetry, params int[] permutation)
     {
@@ -154,8 +163,11 @@ public class PermutationOneLineInt : Permutation
         if (i >= _permutation.Length)
             return i;
         for (int j = _permutation.Length - 1; j >= 0; --j)
+        {
             if (_permutation[j] == i)
                 return j;
+        }
+
         throw new IndexOutOfRangeException();
     }
 
@@ -189,8 +201,11 @@ public class PermutationOneLineInt : Permutation
 
         try
         {
-            return new PermutationOneLineInt(resultIsIdentity, _antisymmetry ^ other.Antisymmetry(),
-                newInternalDegree + 1, result);
+            return new PermutationOneLineInt(
+                resultIsIdentity,
+                _antisymmetry ^ other.Antisymmetry(),
+                newInternalDegree + 1,
+                result);
         }
         catch (InconsistentGeneratorsException ex)
         {
@@ -220,8 +235,11 @@ public class PermutationOneLineInt : Permutation
 
         try
         {
-            return new PermutationOneLineInt(resultIsIdentity,
-                _antisymmetry ^ a.Antisymmetry() ^ b.Antisymmetry(), newInternalDegree + 1, result);
+            return new PermutationOneLineInt(
+                resultIsIdentity,
+                _antisymmetry ^ a.Antisymmetry() ^ b.Antisymmetry(),
+                newInternalDegree + 1,
+                result);
         }
         catch (InconsistentGeneratorsException ex)
         {
@@ -253,8 +271,11 @@ public class PermutationOneLineInt : Permutation
 
         try
         {
-            return new PermutationOneLineInt(resultIsIdentity,
-                _antisymmetry ^ a.Antisymmetry() ^ b.Antisymmetry() ^ c.Antisymmetry(), newInternalDegree + 1, result);
+            return new PermutationOneLineInt(
+                resultIsIdentity,
+                _antisymmetry ^ a.Antisymmetry() ^ b.Antisymmetry() ^ c.Antisymmetry(),
+                newInternalDegree + 1,
+                result);
         }
         catch (InconsistentGeneratorsException ex)
         {
@@ -316,7 +337,8 @@ public class PermutationOneLineInt : Permutation
             return this;
         if (exponent < 0)
             return Inverse().Pow(-exponent);
-        Permutation basePerm = this, result = GetIdentity();
+        Permutation basePerm = this;
+        Permutation result = GetIdentity();
         while (exponent != 0)
         {
             if ((exponent % 2) == 1)
@@ -324,13 +346,17 @@ public class PermutationOneLineInt : Permutation
             basePerm = basePerm.Composition(basePerm);
             exponent >>= 1;
         }
+
         return result;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        if (this == obj) return true;
-        if (obj == null || !(obj is Permutation)) return false;
+        if (this == obj)
+            return true;
+
+        if (obj == null || !(obj is Permutation))
+            return false;
 
         Permutation that = (Permutation)obj;
         if (_antisymmetry != that.Antisymmetry())
@@ -338,8 +364,11 @@ public class PermutationOneLineInt : Permutation
         if (_internalDegree != that.Degree())
             return false;
         for (int i = 0; i < _internalDegree; ++i)
+        {
             if (NewIndexOf(i) != that.NewIndexOf(i))
                 return false;
+        }
+
         return true;
     }
 
@@ -398,10 +427,13 @@ public class PermutationOneLineInt : Permutation
         if (_antisymmetry != t.Antisymmetry())
             return _antisymmetry ? -1 : 1;
         for (int i = 0; i < max; ++i)
+        {
             if (NewIndexOf(i) < t.NewIndexOf(i))
                 return -1;
-            else if (NewIndexOf(i) > t.NewIndexOf(i))
+            if (NewIndexOf(i) > t.NewIndexOf(i))
                 return 1;
+        }
+
         return 0;
     }
 }

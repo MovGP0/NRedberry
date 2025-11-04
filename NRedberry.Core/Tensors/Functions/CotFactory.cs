@@ -6,7 +6,9 @@ public sealed class CotFactory : ScalarFunctionFactory
 {
     public static readonly CotFactory Factory = new();
 
-    private CotFactory() { }
+    private CotFactory()
+    {
+    }
 
     protected override Tensor Create1(Tensor arg)
     {

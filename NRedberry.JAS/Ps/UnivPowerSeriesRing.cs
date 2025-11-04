@@ -14,13 +14,15 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ps;
 public class UnivPowerSeriesRing<C> : RingFactory<UnivPowerSeries<C>> where C : RingElem<C>
 {
     private static readonly Random random = new();
+
     public const int DEFAULT_TRUNCATE = 11;
 
     private int truncate;
-    private readonly string var;
 
-    public string Var => var;
+    public string Var { get; }
+
     public int Truncate => truncate;
+
     public readonly RingFactory<C> CoFac;
     public readonly UnivPowerSeries<C> ONE;
     public readonly UnivPowerSeries<C> ZERO;
@@ -39,7 +41,7 @@ public class UnivPowerSeriesRing<C> : RingFactory<UnivPowerSeries<C>> where C : 
     {
         CoFac = cofac ?? throw new ArgumentNullException(nameof(cofac));
         this.truncate = truncate;
-        var = string.IsNullOrWhiteSpace(name) ? "t" : name;
+        Var = string.IsNullOrWhiteSpace(name) ? "t" : name;
 
         ONE = new UnivPowerSeries<C>(this, new LambdaCoefficients((i, _) => i == 0 ? RingFactory<C>.One : RingFactory<C>.Zero));
         ZERO = new UnivPowerSeries<C>(this, new LambdaCoefficients((_, _) => RingFactory<C>.Zero));
@@ -48,7 +50,7 @@ public class UnivPowerSeriesRing<C> : RingFactory<UnivPowerSeries<C>> where C : 
     public override string ToString()
     {
         string scf = CoFac.GetType().Name;
-        return $"{scf}(({var}))";
+        return $"{scf}(({Var}))";
     }
 
     public override bool Equals(object? obj)
@@ -63,13 +65,13 @@ public class UnivPowerSeriesRing<C> : RingFactory<UnivPowerSeries<C>> where C : 
             return false;
         }
 
-        return CoFac.Equals(other.CoFac) && string.Equals(var, other.var, StringComparison.Ordinal);
+        return CoFac.Equals(other.CoFac) && string.Equals(Var, other.Var, StringComparison.Ordinal);
     }
 
     public override int GetHashCode()
     {
         int h = CoFac.GetHashCode();
-        h += var.GetHashCode() << 27;
+        h += Var.GetHashCode() << 27;
         h += truncate;
         return h;
     }

@@ -9,6 +9,7 @@ namespace NRedberry.Core.Numbers;
 public sealed class Complex : Tensor, INumber<Complex>
 {
     public Complex32 ToComplex32() => new((float)Real.ToDouble(), (float)Imaginary.ToDouble());
+
     public static implicit operator Complex32(Complex c) => new((float)c.Real.ToDouble(), (float)c.Imaginary.ToDouble());
 
     public static readonly Complex ComplexNaN = new(Numeric.NaN, Numeric.NaN);
@@ -60,43 +61,53 @@ public sealed class Complex : Tensor, INumber<Complex>
         }
     }
 
-    public Complex(int real, int imaginary) : this(new Rational(real), new Rational(imaginary))
+    public Complex(int real, int imaginary)
+        : this(new Rational(real), new Rational(imaginary))
     {
     }
 
-    public Complex(int real) : this(new Rational(real), Rational.Zero)
+    public Complex(int real)
+        : this(new Rational(real), Rational.Zero)
     {
     }
 
-    public Complex(double real, double imaginary) : this(new Numeric(real), new Numeric(imaginary))
+    public Complex(double real, double imaginary)
+        : this(new Numeric(real), new Numeric(imaginary))
     {
     }
 
-    public Complex(int real, double imaginary) : this(new Numeric(real), new Numeric(imaginary))
+    public Complex(int real, double imaginary)
+        : this(new Numeric(real), new Numeric(imaginary))
     {
     }
 
-    public Complex(double real, int imaginary) : this(new Numeric(real), new Numeric(imaginary))
+    public Complex(double real, int imaginary)
+        : this(new Numeric(real), new Numeric(imaginary))
     {
     }
 
-    public Complex(double real) : this(new Numeric(real), Numeric.Zero)
+    public Complex(double real)
+        : this(new Numeric(real), Numeric.Zero)
     {
     }
 
-    public Complex(long real) : this(new Rational(real), Rational.Zero)
+    public Complex(long real)
+        : this(new Rational(real), Rational.Zero)
     {
     }
 
-    public Complex(long real, long imaginary) : this(new Rational(real), new Rational(imaginary))
+    public Complex(long real, long imaginary)
+        : this(new Rational(real), new Rational(imaginary))
     {
     }
 
-    public Complex(BigInteger real, BigInteger imaginary) : this(new Rational(real), new Rational(imaginary))
+    public Complex(BigInteger real, BigInteger imaginary)
+        : this(new Rational(real), new Rational(imaginary))
     {
     }
 
-    public Complex(BigInteger real) : this(new Rational(real), Rational.Zero)
+    public Complex(BigInteger real)
+        : this(new Rational(real), Rational.Zero)
     {
     }
 
@@ -134,16 +145,19 @@ public sealed class Complex : Tensor, INumber<Complex>
 
             return Imaginary + "*I";
         }
+
         int @is = Imaginary.SigNum();
         if (@is == 0)
         {
             return Real.ToString();
         }
+
         Real abs = Imaginary.Abs();
         if (@is < 0)
         {
             return abs.IsOne() ? Real + "-I" : Real + "-I*" + Imaginary.Abs();
         }
+
         return abs.IsOne() ? Real + "+I" : Real + "+I*" + Imaginary.Abs();
     }
 
@@ -154,6 +168,7 @@ public sealed class Complex : Tensor, INumber<Complex>
             if (!Imaginary.IsZero() || Real.SigNum() < 0 || !Real.IsInteger())
                 return "(" + ToString(mode) + ")";
         }
+
         return ToString(mode);
     }
 
@@ -181,15 +196,17 @@ public sealed class Complex : Tensor, INumber<Complex>
         {
             Real q = c.Divide(d);
             Real denominator = c.Multiply(q).Add(d);
-            return new Complex((Real.Multiply(q).Add(Imaginary)).Divide(denominator),
-                    (Imaginary.Multiply(q).Subtract(Real)).Divide(denominator));
+            return new Complex(
+                (Real.Multiply(q).Add(Imaginary)).Divide(denominator),
+                (Imaginary.Multiply(q).Subtract(Real)).Divide(denominator));
         }
         else
         {
             Real q = d.Divide(c);
             Real denominator = d.Multiply(q).Add(c);
-            return new Complex((Imaginary.Multiply(q).Add(Real)).Divide(denominator),
-                    (Imaginary.Subtract(Real.Multiply(q))).Divide(denominator));
+            return new Complex(
+                (Imaginary.Multiply(q).Add(Real)).Divide(denominator),
+                (Imaginary.Subtract(Real.Multiply(q))).Divide(denominator));
         }
     }
 
@@ -208,8 +225,9 @@ public sealed class Complex : Tensor, INumber<Complex>
         NumberUtils.CheckNotNull(factor);
         if (factor.IsNaN())
             return ComplexNaN;
-        return new Complex(Real.Multiply(factor.Real).Subtract(Imaginary.Multiply(factor.Imaginary)),
-                Real.Multiply(factor.Imaginary).Add(Imaginary.Multiply(factor.Real)));
+        return new Complex(
+            Real.Multiply(factor.Real).Subtract(Imaginary.Multiply(factor.Imaginary)),
+            Real.Multiply(factor.Imaginary).Add(Imaginary.Multiply(factor.Real)));
     }
 
     public /*override*/ Complex Negate()
@@ -292,6 +310,7 @@ public sealed class Complex : Tensor, INumber<Complex>
             {
                 return Math.Abs(real);
             }
+
             double q = real / imaginary;
             return Math.Abs(imaginary) * Math.Sqrt(1 + q * q);
         }
@@ -301,6 +320,7 @@ public sealed class Complex : Tensor, INumber<Complex>
             {
                 return Math.Abs(imaginary);
             }
+
             double q = imaginary / real;
             return Math.Abs(real) * Math.Sqrt(1 + q * q);
         }

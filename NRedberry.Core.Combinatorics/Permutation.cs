@@ -57,7 +57,7 @@ public class Permutation : IComparable<Permutation>
     {
         throw new NotImplementedException();
     }
-    
+
     public Permutation Composition(Permutation a, Permutation b, Permutation c)
     {
         throw new NotImplementedException();

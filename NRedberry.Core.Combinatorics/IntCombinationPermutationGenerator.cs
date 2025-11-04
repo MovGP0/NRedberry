@@ -10,7 +10,8 @@ namespace NRedberry.Core.Combinatorics;
 ///</summary>
 public sealed class IntCombinationPermutationGenerator : IIntCombinatorialGenerator, IIntCombinatorialPort
 {
-    private readonly int[] permutation, combination;
+    private readonly int[] permutation;
+    private readonly int[] combination;
     private readonly int[] combinationPermutation;
     private readonly IntPermutationsGenerator permutationsGenerator;
     private readonly IntCombinationsGenerator combinationsGenerator;
@@ -47,6 +48,7 @@ public sealed class IntCombinationPermutationGenerator : IIntCombinatorialGenera
                 permutationsGenerator.Reset();
                 combinationsGenerator.MoveNext();
             }
+
             permutationsGenerator.MoveNext();
             for (var i = 0; i < k; ++i)
                 combinationPermutation[i] = combination[permutation[i]];

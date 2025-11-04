@@ -16,27 +16,36 @@ public static partial class Permutations
     public static int[] ConvertCyclesToOneLine(int[][] cycles)
     {
         int degree = -1;
-        foreach (int[] cycle in cycles) {
+        foreach (int[] cycle in cycles)
+        {
             degree = Math.Max(degree, cycle.Max());
         }
+
         ++degree;
 
         int[] permutation = new int[degree];
-        for (int i = 1; i < degree; ++i) {
+        for (int i = 1; i < degree; ++i)
+        {
             permutation[i] = i;
         }
 
-        foreach (int[] cycle in cycles) {
-            if (cycle.Length == 0) {
+        foreach (int[] cycle in cycles)
+        {
+            if (cycle.Length == 0)
+            {
                 continue;
             }
-            if (cycle.Length == 1) {
+
+            if (cycle.Length == 1)
+            {
                 throw new ArgumentException($"Illegal use of cycle notation: {string.Join(", ", cycle)}");
             }
 
-            for (int k = 0, s = cycle.Length - 1; k < s; ++k) {
+            for (int k = 0, s = cycle.Length - 1; k < s; ++k)
+            {
                 permutation[cycle[k]] = cycle[k + 1];
             }
+
             permutation[cycle[cycle.Length - 1]] = cycle[0];
         }
 
@@ -72,12 +81,14 @@ public static partial class Permutations
                 cycle.Add(start);
                 start = permutation[start];
             }
+
             cycles.Add(cycle.ToArray());
         }
 
         return cycles.ToArray();
     }
-/// <summary>
+
+    /// <summary>
     /// Converts permutation written in one-line notation to disjoint cycles notation.
     /// </summary>
     /// <param name="permutation">Permutation written in one-line notation.</param>
@@ -106,6 +117,7 @@ public static partial class Permutations
                 cycle.Add(start);
                 start = permutation[start];
             }
+
             cycles.Add(cycle.ToArray());
         }
 
@@ -141,6 +153,7 @@ public static partial class Permutations
                 cycle.Add(start);
                 start = permutation[start];
             }
+
             cycles.Add(cycle.ToArray());
         }
 
@@ -198,13 +211,21 @@ public static partial class Permutations
     /// <returns>An instance of <see cref="IPermutation"/>.</returns>
     /// <exception cref="ArgumentException">If specified array is inconsistent with one-line notation or if antisymmetry is true and permutation order is odd.</exception>
     public static Permutation CreatePermutation(bool antisymmetry, params int[] oneLine) {
-        bool _byte = true, _short = true;
-        foreach (int i in oneLine) {
-            if (i > short.MaxValue - 1) {  // -1 is because internalDegree calculated as largest moved point + 1
+        bool _byte = true;
+        bool _short = true;
+        foreach (int i in oneLine)
+        {
+            if (i > short.MaxValue - 1)
+            {  // -1 is because internalDegree calculated as largest moved point + 1
                 _short = false;
                 _byte = false;
-            } else if (i > byte.MaxValue - 1) _byte = false;
+            }
+            else if (i > byte.MaxValue - 1)
+            {
+                _byte = false;
+            }
         }
+
         if (_byte)
             return new PermutationOneLineByte(antisymmetry, ArraysUtils.Int2byte(oneLine));
         if (_short)
@@ -228,19 +249,23 @@ public static partial class Permutations
     /// <param name="degree">Degree of permutation.</param>
     /// <returns>Identity permutation.</returns>
     public static Permutation CreateIdentityPermutation(int degree) {
-        if (degree < CachedIdentities.Length) {
+        if (degree < CachedIdentities.Length)
+        {
             if (CachedIdentities[degree] == null)
                 CachedIdentities[degree] = Permutations.CreatePermutation(CreateIdentityArray(degree));
             return CachedIdentities[degree];
         }
+
         return Permutations.CreatePermutation(CreateIdentityArray(degree));
     }
 
     public static int[] CreateIdentityArray(int length) {
         int[] array = new int[length];
-        for (int i = 0; i < length; ++i) {
+        for (int i = 0; i < length; ++i)
+        {
             array[i] = i;
         }
+
         return array;
     }
 
@@ -317,12 +342,15 @@ public static partial class Permutations
         int[] cycle = new int[blockSize * numberOfBlocks];
 
         int i = blockSize * (numberOfBlocks - 1) - 1;
-        for (; i >= 0; --i) {
+        for (; i >= 0; --i)
+        {
             cycle[i] = i + blockSize;
         }
+
         i = blockSize * (numberOfBlocks - 1);
         int k = 0;
-        for (; i < cycle.Length; ++i) {
+        for (; i < cycle.Length; ++i)
+        {
             cycle[i] = k++;
         }
 
@@ -353,6 +381,7 @@ public static partial class Permutations
         {
             inverse[permutation[i]] = i;
         }
+
         return inverse;
     }
 
@@ -360,8 +389,11 @@ public static partial class Permutations
     {
         int i;
         for (i = permutation.Length - 1; i >= 0; --i)
+        {
             if (permutation[i] != i)
                 break;
+        }
+
         return i + 1;
     }
 
@@ -369,8 +401,11 @@ public static partial class Permutations
     {
         int i;
         for (i = permutation.Length - 1; i >= 0; --i)
+        {
             if (permutation[i] != i)
                 break;
+        }
+
         return (short)(i + 1);
     }
 
@@ -378,8 +413,11 @@ public static partial class Permutations
     {
         int i;
         for (i = permutation.Length - 1; i >= 0; --i)
+        {
             if (permutation[i] != i)
                 break;
+        }
+
         return (sbyte)(i + 1);
     }
 
@@ -410,12 +448,13 @@ public static partial class Permutations
     public static int Parity(int[] permutation)
     {
         BitArray used = new BitArray(permutation.Length);
-        int start, pointer, currentSize, counter = 0;
+        int counter = 0;
         int numOfTranspositions = 0;
         while (counter < permutation.Length)
         {
-            start = pointer = NextZeroBit(used);
-            currentSize = 0;
+            int pointer = NextZeroBit(used);
+            var start = pointer;
+            var currentSize = 0;
             do
             {
                 used.Set(pointer, true);
@@ -425,18 +464,20 @@ public static partial class Permutations
             counter += currentSize;
             numOfTranspositions += currentSize - 1;
         }
+
         return numOfTranspositions % 2;
     }
 
     public static int Parity(short[] permutation)
     {
         BitArray used = new BitArray(permutation.Length);
-        int start, pointer, currentSize, counter = 0;
+        int counter = 0;
         int numOfTranspositions = 0;
         while (counter < permutation.Length)
         {
-            start = pointer = NextZeroBit(used);
-            currentSize = 0;
+            int pointer = NextZeroBit(used);
+            var start = pointer;
+            var currentSize = 0;
             do
             {
                 used.Set(pointer, true);
@@ -446,18 +487,20 @@ public static partial class Permutations
             counter += currentSize;
             numOfTranspositions += currentSize - 1;
         }
+
         return numOfTranspositions % 2;
     }
 
     public static int Parity(sbyte[] permutation)
     {
         BitArray used = new BitArray(permutation.Length);
-        int start, pointer, currentSize, counter = 0;
+        int counter = 0;
         int numOfTranspositions = 0;
         while (counter < permutation.Length)
         {
-            start = pointer = NextZeroBit(used);
-            currentSize = 0;
+            int pointer = NextZeroBit(used);
+            var start = pointer;
+            var currentSize = 0;
             do
             {
                 used.Set(pointer, true);
@@ -467,30 +510,40 @@ public static partial class Permutations
             counter += currentSize;
             numOfTranspositions += currentSize - 1;
         }
+
         return numOfTranspositions % 2;
     }
 
     public static bool IsIdentity(int[] permutation)
     {
         for (int i = 0; i < permutation.Length; ++i)
+        {
             if (i != permutation[i])
                 return false;
+        }
+
         return true;
     }
 
     public static bool IsIdentity(short[] permutation)
     {
         for (int i = 0; i < permutation.Length; ++i)
+        {
             if (i != permutation[i])
                 return false;
+        }
+
         return true;
     }
 
     public static bool IsIdentity(sbyte[] permutation)
     {
         for (int i = 0; i < permutation.Length; ++i)
+        {
             if (i != permutation[i])
                 return false;
+        }
+
         return true;
     }
 
@@ -519,6 +572,7 @@ public static partial class Permutations
                 return false;
             checkedBits.Set(permutation[i], true);
         }
+
         return checkedBits.Cast<bool>().All(b => b);
     }
 
@@ -532,6 +586,7 @@ public static partial class Permutations
                 return false;
             checkedBits.Set(permutation[i], true);
         }
+
         return checkedBits.Cast<bool>().All(b => b);
     }
 
@@ -545,19 +600,21 @@ public static partial class Permutations
                 return false;
             checkedBits.Set(permutation[i], true);
         }
+
         return checkedBits.Cast<bool>().All(b => b);
     }
 
     public static BigInteger OrderOfPermutation(int[] permutation)
     {
         BitArray used = new BitArray(permutation.Length);
-        BigInteger lcm = BigInteger.One, temp;
+        BigInteger lcm = BigInteger.One;
 
-        int start, pointer, currentSize, counter = 0;
+        int counter = 0;
         while (counter < permutation.Length)
         {
-            start = pointer = NextZeroBit(used);
-            currentSize = 0;
+            int pointer = NextZeroBit(used);
+            var start = pointer;
+            var currentSize = 0;
             do
             {
                 used.Set(pointer, true);
@@ -565,22 +622,25 @@ public static partial class Permutations
                 ++currentSize;
             } while (pointer != start);
             counter += currentSize;
-            temp = new BigInteger(currentSize);
+            var temp = new BigInteger(currentSize);
             lcm = (lcm / BigInteger.GreatestCommonDivisor(lcm, temp)) * temp;
         }
+
         return lcm;
     }
 
     public static BigInteger OrderOfPermutation(short[] permutation)
     {
         BitArray used = new BitArray(permutation.Length);
-        BigInteger lcm = BigInteger.One, temp;
+        BigInteger lcm = BigInteger.One;
+        BigInteger temp;
 
-        int start, pointer, currentSize, counter = 0;
+        int counter = 0;
         while (counter < permutation.Length)
         {
-            start = pointer = NextZeroBit(used);
-            currentSize = 0;
+            int pointer = NextZeroBit(used);
+            var start = pointer;
+            var currentSize = 0;
             do
             {
                 used.Set(pointer, true);
@@ -591,19 +651,21 @@ public static partial class Permutations
             temp = new BigInteger(currentSize);
             lcm = (lcm / BigInteger.GreatestCommonDivisor(lcm, temp)) * temp;
         }
+
         return lcm;
     }
 
     public static BigInteger OrderOfPermutation(sbyte[] permutation)
     {
         BitArray used = new BitArray(permutation.Length);
-        BigInteger lcm = BigInteger.One, temp;
+        BigInteger lcm = BigInteger.One;
 
-        int start, pointer, currentSize, counter = 0;
+        int counter = 0;
         while (counter < permutation.Length)
         {
-            start = pointer = NextZeroBit(used);
-            currentSize = 0;
+            int pointer = NextZeroBit(used);
+            var start = pointer;
+            var currentSize = 0;
             do
             {
                 used.Set(pointer, true);
@@ -611,20 +673,22 @@ public static partial class Permutations
                 ++currentSize;
             } while (pointer != start);
             counter += currentSize;
-            temp = new BigInteger(currentSize);
+            var temp = new BigInteger(currentSize);
             lcm = (lcm / BigInteger.GreatestCommonDivisor(lcm, temp)) * temp;
         }
+
         return lcm;
     }
 
     public static bool OrderOfPermutationIsOdd(int[] permutation)
     {
         BitArray used = new BitArray(permutation.Length);
-        int start, pointer, currentSize, counter = 0;
+        int counter = 0;
         while (counter < permutation.Length)
         {
-            start = pointer = NextZeroBit(used);
-            currentSize = 0;
+            int pointer = NextZeroBit(used);
+            var start = pointer;
+            var currentSize = 0;
             do
             {
                 used.Set(pointer, true);
@@ -635,17 +699,19 @@ public static partial class Permutations
                 return false;
             counter += currentSize;
         }
+
         return true;
     }
 
     public static bool OrderOfPermutationIsOdd(short[] permutation)
     {
         BitArray used = new BitArray(permutation.Length);
-        int start, pointer, currentSize, counter = 0;
+        int counter = 0;
         while (counter < permutation.Length)
         {
-            start = pointer = NextZeroBit(used);
-            currentSize = 0;
+            int pointer = NextZeroBit(used);
+            var start = pointer;
+            var currentSize = 0;
             do
             {
                 used.Set(pointer, true);
@@ -656,17 +722,19 @@ public static partial class Permutations
                 return false;
             counter += currentSize;
         }
+
         return true;
     }
 
     public static bool OrderOfPermutationIsOdd(sbyte[] permutation)
     {
         BitArray used = new BitArray(permutation.Length);
-        int start, pointer, currentSize, counter = 0;
+        int counter = 0;
         while (counter < permutation.Length)
         {
-            start = pointer = NextZeroBit(used);
-            currentSize = 0;
+            int pointer = NextZeroBit(used);
+            var start = pointer;
+            var currentSize = 0;
             do
             {
                 used.Set(pointer, true);
@@ -677,6 +745,7 @@ public static partial class Permutations
                 return false;
             counter += currentSize;
         }
+
         return true;
     }
 
@@ -689,6 +758,7 @@ public static partial class Permutations
                 return i;
             }
         }
+
         return -1;
     }
 
@@ -701,6 +771,7 @@ public static partial class Permutations
                 return i;
             }
         }
+
         return -1; // This should never happen if the function is called correctly
     }
 }

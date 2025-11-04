@@ -4,7 +4,8 @@ namespace NRedberry.Core.Tensors.Functions;
 
 public class ArcSin : ScalarFunction
 {
-    public ArcSin(Tensor argument) : base(argument)
+    public ArcSin(Tensor argument)
+        : base(argument)
     {
     }
 

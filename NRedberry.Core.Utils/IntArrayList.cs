@@ -106,6 +106,7 @@ public sealed class IntArrayList : IList<int>
             if (data[i] == item)
                 return i;
         }
+
         return -1;
     }
 
@@ -122,7 +123,8 @@ public sealed class IntArrayList : IList<int>
     public bool Remove(int item)
     {
         int index = IndexOf(item);
-        if (index < 0) return false;
+        if (index < 0)
+            return false;
         RemoveAt(index);
         return true;
     }
@@ -173,6 +175,7 @@ public sealed class IntArrayList : IList<int>
             if (data[i] != other.data[i])
                 return false;
         }
+
         return true;
     }
 
@@ -196,6 +199,7 @@ public sealed class IntArrayList : IList<int>
             if (i < size - 1)
                 builder.Append(", ");
         }
+
         builder.Append(']');
         return builder.ToString();
     }

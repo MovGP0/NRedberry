@@ -13,9 +13,12 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 public class HenselUtil
 {
     public static HenselApprox<MOD> LiftHenselQuadratic<MOD>(
-        GenPolynomial<Arith.BigInteger> C, Arith.BigInteger M,
-        GenPolynomial<MOD> A, GenPolynomial<MOD> B,
-        GenPolynomial<MOD> S, GenPolynomial<MOD> T)
+        GenPolynomial<Arith.BigInteger> C,
+        Arith.BigInteger M,
+        GenPolynomial<MOD> A,
+        GenPolynomial<MOD> B,
+        GenPolynomial<MOD> S,
+        GenPolynomial<MOD> T)
         where MOD : GcdRingElem<MOD>, Modular
     {
         throw new NotImplementedException();
@@ -29,16 +32,23 @@ public class HenselUtil
     }
 
     public static bool IsDiophantLift<MOD>(
-        GenPolynomial<MOD> A, GenPolynomial<MOD> B,
-        GenPolynomial<MOD> S, GenPolynomial<MOD> T, GenPolynomial<MOD> C)
+        GenPolynomial<MOD> A,
+        GenPolynomial<MOD> B,
+        GenPolynomial<MOD> S,
+        GenPolynomial<MOD> T,
+        GenPolynomial<MOD> C)
         where MOD : GcdRingElem<MOD>, Modular
     {
         throw new NotImplementedException();
     }
 
     public static List<GenPolynomial<MOD>> DiophantQuadraticLift<MOD>(
-        GenPolynomial<MOD> A, GenPolynomial<MOD> B, GenPolynomial<MOD> C,
-        GenPolynomial<MOD> S, GenPolynomial<MOD> T, long k)
+        GenPolynomial<MOD> A,
+        GenPolynomial<MOD> B,
+        GenPolynomial<MOD> C,
+        GenPolynomial<MOD> S,
+        GenPolynomial<MOD> T,
+        long k)
         where MOD : GcdRingElem<MOD>, Modular
     {
         throw new NotImplementedException();

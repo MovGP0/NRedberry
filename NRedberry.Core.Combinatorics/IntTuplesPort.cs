@@ -31,6 +31,7 @@ public sealed class IntTuplesPort : IIntCombinatorialPort
             current[pointer] = 0;
             next = true;
         }
+
         while (--pointer >= 0 && next)
         {
             next = false;

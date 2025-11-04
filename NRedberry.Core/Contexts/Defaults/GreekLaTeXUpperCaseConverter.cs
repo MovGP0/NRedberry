@@ -35,7 +35,8 @@ public class GreekLaTeXUpperCaseConverter : SymbolArrayConverter
     [Pure]
     public static GreekLaTeXUpperCaseConverter Instance { get; } = new();
 
-    private GreekLaTeXUpperCaseConverter() : base(Symbols, UTF)
+    private GreekLaTeXUpperCaseConverter()
+        : base(Symbols, UTF)
     {
     }
 

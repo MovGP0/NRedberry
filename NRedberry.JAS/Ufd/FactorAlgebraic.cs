@@ -14,12 +14,14 @@ public class FactorAlgebraic<C> : FactorAbsolute<AlgebraicNumber<C>> where C : G
 {
     protected readonly FactorAbstract<C> factorCoeff;
 
-    public FactorAlgebraic(AlgebraicNumberRing<C> fac) : base(fac)
+    public FactorAlgebraic(AlgebraicNumberRing<C> fac)
+        : base(fac)
     {
         throw new NotImplementedException();
     }
 
-    public FactorAlgebraic(AlgebraicNumberRing<C> fac, FactorAbstract<C> factorCoeff) : base(fac)
+    public FactorAlgebraic(AlgebraicNumberRing<C> fac, FactorAbstract<C> factorCoeff)
+        : base(fac)
     {
         this.factorCoeff = factorCoeff;
     }

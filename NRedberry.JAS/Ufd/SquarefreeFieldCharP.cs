@@ -12,7 +12,8 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 /// </remarks>
 public abstract class SquarefreeFieldCharP<C> : SquarefreeAbstract<C> where C : GcdRingElem<C>
 {
-    protected SquarefreeFieldCharP(GreatestCommonDivisorAbstract<C>? engine = null) : base(engine)
+    protected SquarefreeFieldCharP(GreatestCommonDivisorAbstract<C>? engine = null)
+        : base(engine)
     {
     }
 

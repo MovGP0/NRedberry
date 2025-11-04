@@ -13,7 +13,7 @@ public interface IIndexSymbolConverter
     bool ApplicableToSymbol(string symbol);
 
     /// <summary>
-    /// Gets the string representation from the specified integer representation of a single index 
+    /// Gets the string representation from the specified integer representation of a single index
     /// in the specified <paramref name="outputFormat"/>.
     /// </summary>
     /// <param name="code">The integer representation of the index.</param>

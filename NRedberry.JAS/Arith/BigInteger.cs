@@ -90,11 +90,7 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
     /// <returns>list of generators for the algebraic structure.</returns>
     public List<BigInteger> Generators()
     {
-        List<BigInteger> g =
-        [
-            One
-        ];
-        return g;
+        return [One];
     }
 
     /// <summary>
@@ -247,6 +243,7 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
         {
             return false;
         }
+
         return Val.Equals(bi.Val);
     }
 
@@ -323,6 +320,7 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
         {
             return this;
         }
+
         return Zero;
     }
 
@@ -379,16 +377,18 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
         ret[0] = null!;
         ret[1] = null!;
         ret[2] = null!;
-        if (S == null || S.IsZero())
+        if (S?.IsZero() != false)
         {
             ret[0] = this;
             return ret;
         }
+
         if (IsZero())
         {
             ret[0] = S;
             return ret;
         }
+
         BigInteger[] qr;
         BigInteger q = this;
         BigInteger r = S;
@@ -411,12 +411,14 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
             q = r;
             r = qr[1];
         }
+
         if (q.Signum() < 0)
         {
             q = q.Negate();
             c1 = c1.Negate();
             c2 = c2.Negate();
         }
+
         ret[0] = q;
         ret[1] = c1;
         ret[2] = c2;
@@ -448,6 +450,7 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
         {
             r = System.Numerics.BigInteger.Negate(r);
         }
+
         return new BigInteger(r);
     }
 
@@ -529,7 +532,7 @@ internal class BigIntegerIterator : IEnumerator<BigInteger>
         current = new BigInteger(curr);
         if (nonNegative)
         {
-            curr = curr + System.Numerics.BigInteger.One;
+            curr += System.Numerics.BigInteger.One;
         }
         else if (curr.Sign > 0)
         {
@@ -539,6 +542,7 @@ internal class BigIntegerIterator : IEnumerator<BigInteger>
         {
             curr = System.Numerics.BigInteger.Negate(curr) + System.Numerics.BigInteger.One;
         }
+
         return true;
     }
 

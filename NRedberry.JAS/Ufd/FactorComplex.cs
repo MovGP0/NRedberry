@@ -12,7 +12,8 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 /// </remarks>
 public class FactorComplex<C> : FactorAbsolute<Complex<C>> where C : GcdRingElem<C>
 {
-    public FactorComplex(ComplexRing<C> fac) : base(fac)
+    public FactorComplex(ComplexRing<C> fac)
+        : base(fac)
     {
     }
 

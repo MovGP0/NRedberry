@@ -135,6 +135,7 @@ public static class Combinatorics
         {
             newArray[i] = array[permutation[i]];
         }
+
         return newArray;
     }
 

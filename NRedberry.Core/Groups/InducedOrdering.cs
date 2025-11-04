@@ -28,8 +28,10 @@ public class InducedOrdering : IComparer<int>
 
         int next = baseArray.Length;
         for (int i = 1; i < degree + 1; i++)
+        {
             if (positions[i] == -1)
                 positions[i] = next++;
+        }
 
         positions[0] = int.MinValue;
         positions[degree + 1] = int.MaxValue;

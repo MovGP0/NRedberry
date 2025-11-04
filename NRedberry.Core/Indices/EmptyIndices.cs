@@ -84,7 +84,7 @@ public class EmptyIndices : Indices
         throw new NotImplementedException();
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         return obj is EmptyIndices;
     }

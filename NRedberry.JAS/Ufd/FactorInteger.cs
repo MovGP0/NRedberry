@@ -14,15 +14,17 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 /// </remarks>
 public class FactorInteger<MOD> : FactorAbstract<BigInteger> where MOD : GcdRingElem<MOD>, Modular
 {
-    private readonly bool debug = false;
+    private readonly bool debug;
     protected readonly FactorAbstract<MOD> mfactor;
     protected readonly GreatestCommonDivisorAbstract<MOD> mengine;
 
-    public FactorInteger() : this(BigInteger.One)
+    public FactorInteger()
+        : this(BigInteger.One)
     {
     }
 
-    public FactorInteger(RingFactory<BigInteger> cfac) : base(cfac)
+    public FactorInteger(RingFactory<BigInteger> cfac)
+        : base(cfac)
     {
         throw new NotImplementedException();
     }

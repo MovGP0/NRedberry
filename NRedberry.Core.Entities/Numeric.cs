@@ -68,7 +68,8 @@ public sealed class Numeric : Real
 
     public static Numeric FromNumber<T>(INumber<T> value)
     {
-        if(value is null) throw new ArgumentNullException(nameof(value));
+        if(value is null)
+            throw new ArgumentNullException(nameof(value));
         return new Numeric(value.DoubleValue());
     }
 

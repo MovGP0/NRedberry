@@ -38,6 +38,7 @@ public abstract class ReductionAbstract<C> : Reduction<C> where C : RingElem<C>
                         result.Add(monic);
                         return result;
                     }
+
                     result.Add(monic);
                 }
             }
@@ -64,6 +65,7 @@ public abstract class ReductionAbstract<C> : Reduction<C> where C : RingElem<C>
                 {
                     return result;
                 }
+
                 continue;
             }
 

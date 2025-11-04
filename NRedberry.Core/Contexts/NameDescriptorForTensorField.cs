@@ -6,7 +6,9 @@ public abstract class NameDescriptorForTensorField : NameDescriptor
 {
     public int[] Orders { get; }
     public string Name { get; }
+
     private int[][] _indicesPartitionMapping;
+
     public bool IsDiracDelta { get; }
 
     protected NameDescriptorForTensorField(
@@ -49,7 +51,8 @@ public abstract class NameDescriptorForTensorField : NameDescriptor
 
         var partition = new StructureOfIndices[Orders.Sum() + 1];
         partition[0] = parent.GetStructureOfIndices();
-        int i, j;
+        int i;
+        int j;
         int totalOrder = 1;
         for (i = 0; i < IndexTypeStructures.Length - 1; ++i)
         {

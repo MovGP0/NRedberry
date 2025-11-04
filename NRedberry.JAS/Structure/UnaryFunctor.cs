@@ -8,8 +8,8 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.structure.UnaryFunctor
 /// </remarks>
-public interface UnaryFunctor<C, D> 
-    where C : Element<C> 
+public interface UnaryFunctor<C, D>
+    where C : Element<C>
     where D : Element<D>
 {
     /// <summary>

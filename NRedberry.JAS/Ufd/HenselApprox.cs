@@ -18,8 +18,11 @@ public class HenselApprox<MOD> where MOD : GcdRingElem<MOD>, Modular
     public readonly GenPolynomial<MOD> Am;
     public readonly GenPolynomial<MOD> Bm;
 
-    public HenselApprox(GenPolynomial<Arith.BigInteger> A, GenPolynomial<Arith.BigInteger> B, 
-                       GenPolynomial<MOD> Am, GenPolynomial<MOD> Bm)
+    public HenselApprox(
+        GenPolynomial<Arith.BigInteger> A,
+        GenPolynomial<Arith.BigInteger> B,
+        GenPolynomial<MOD> Am,
+        GenPolynomial<MOD> Bm)
     {
         this.A = A;
         this.B = B;

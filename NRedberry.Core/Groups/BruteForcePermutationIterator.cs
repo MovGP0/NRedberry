@@ -75,7 +75,7 @@ public sealed class BruteForcePermutationIterator : IEnumerator<Permutation>
                 composition = TryPair(upperLayer[upperIndex], lowerLayer[lowerIndex]);
                 AdvanceIndices();
 
-                if (!lowerLayer.Any())
+                if (lowerLayer.Count == 0)
                     break;
 
                 forward = !forward;

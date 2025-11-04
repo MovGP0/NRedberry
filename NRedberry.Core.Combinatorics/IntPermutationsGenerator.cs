@@ -53,7 +53,9 @@ public sealed class IntPermutationsGenerator : IIntCombinatorialGenerator
 
     object System.Collections.IEnumerator.Current => Current;
 
-    public void Dispose() { }
+    public void Dispose()
+    {
+    }
 
     public IEnumerator<int[]> GetEnumerator() => this;
 
@@ -82,7 +84,8 @@ public sealed class IntPermutationsGenerator : IIntCombinatorialGenerator
 
         var end = size - 1;
         int p = end;
-        int high, med;
+        int high;
+        int med;
         while ((p > 0) && (Permutation[p] < Permutation[p - 1]))
         {
             p--;

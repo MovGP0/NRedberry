@@ -7,12 +7,14 @@ namespace NRedberry.Core.Combinatorics.Symmetries;
 /// </summary>
 public class SymmetriesImpl : AbstractSymmetries
 {
-    public SymmetriesImpl(int dimension) : base(dimension, [])
+    public SymmetriesImpl(int dimension)
+        : base(dimension, [])
     {
         Basis.Add(new Symmetry(dimension));
     }
 
-    public SymmetriesImpl(int dimension, List<Symmetry> basis) : base(dimension, basis)
+    public SymmetriesImpl(int dimension, List<Symmetry> basis)
+        : base(dimension, basis)
     {
     }
 
@@ -33,11 +35,15 @@ public class SymmetriesImpl : AbstractSymmetries
             if (s.Equals(symmetry))
                 return false;
         }
+
         Basis.Add(symmetry);
         //BOTTLENECK
         //checking consistense
         it = new PermutationsSpanIterator<Symmetry>(Basis);
-        while (it.MoveNext()) ;
+        while (it.MoveNext())
+        {
+        }
+
         return true;
     }
 

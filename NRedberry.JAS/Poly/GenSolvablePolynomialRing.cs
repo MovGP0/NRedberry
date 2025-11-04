@@ -90,7 +90,7 @@ public class GenSolvablePolynomialRing<C> : GenPolynomialRing<C> where C : RingE
 
     public new List<GenSolvablePolynomial<C>> UnivariateList()
     {
-        return base.UnivariateList().Select(FromBase).ToList();
+        return base.UnivariateList().ConvertAll(FromBase);
     }
 
     public new List<GenSolvablePolynomial<C>> UnivariateList(int moduleVariables, long exponent)

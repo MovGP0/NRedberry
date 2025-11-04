@@ -8,7 +8,8 @@ public static class NumberUtils
     [Obsolete("Check for null and throw ArgumentNullException instead.")]
     public static void CheckNotNull(object o)
     {
-        if(o is null) throw new ArgumentNullException(nameof(o));
+        if(o is null)
+            throw new ArgumentNullException(nameof(o));
     }
 
     public static Numeric CreateNumeric(double value)
@@ -25,7 +26,8 @@ public static class NumberUtils
 
     public static BigInteger Sqrt(BigInteger value)
     {
-        if(value.Sign < 0) throw new ArgumentOutOfRangeException(nameof(value), value, "square root of negative number");
+        if(value.Sign < 0)
+            throw new ArgumentOutOfRangeException(nameof(value), value, "square root of negative number");
         var result = Rationals.Rational.RationalRoot(new Rationals.Rational(value), 2);
         return result.WholePart;
     }
@@ -36,7 +38,7 @@ public static class NumberUtils
         var lowerBound = Rationals.Rational.Pow(new Rationals.Rational(root), 2);
         var upperBound = Rationals.Rational.Pow(Rationals.Rational.Add(new Rationals.Rational(root), 1), 2);
         return lowerBound.CompareTo(number) <= 0
-               && number.CompareTo(upperBound) < 0;
+            && number.CompareTo(upperBound) < 0;
     }
 
     public static bool IsSqrt(BigInteger value, BigInteger root)
@@ -80,8 +82,11 @@ public static class NumberUtils
         if (tensor is Complex complex && complex.IsReal())
             return true;
         foreach (Tensor t in tensor)
+        {
             if (!IsRealNumerical(t))
                 return false;
+        }
+
         return true;
     }
 }

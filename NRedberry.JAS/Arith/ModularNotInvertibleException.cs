@@ -47,6 +47,7 @@ public class ModularNotInvertibleException : NotInvertibleException
         {
             s += $", f = {F}, f1 = {F1}, f2 = {F2}";
         }
+
         return s;
     }
 }

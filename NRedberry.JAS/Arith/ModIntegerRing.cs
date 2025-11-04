@@ -62,14 +62,7 @@ public sealed class ModIntegerRing : ModularRingFactory<ModInteger>, IEnumerable
 
     public ModInteger One => new(this, BigInteger.One);
 
-    public List<ModInteger> Generators()
-    {
-        List<ModInteger> generators =
-        [
-            One
-        ];
-        return generators;
-    }
+    public List<ModInteger> Generators() => [One];
 
     public bool IsFinite() => true;
 
@@ -110,8 +103,8 @@ public sealed class ModIntegerRing : ModularRingFactory<ModInteger>, IEnumerable
         return new ModInteger(this, a);
     }
 
-    ModInteger ElemFactory<ModInteger>.FromInteger(System.Numerics.BigInteger a) =>
-        FromInteger(new BigInteger(a));
+    ModInteger ElemFactory<ModInteger>.FromInteger(System.Numerics.BigInteger a)
+        => FromInteger(new BigInteger(a));
 
     public ModInteger FromInteger(long a) => new(this, a);
 
@@ -133,6 +126,7 @@ public sealed class ModIntegerRing : ModularRingFactory<ModInteger>, IEnumerable
             byte mask = (byte)((1 << (n % 8)) - 1);
             bytes[length - 1] &= mask;
         }
+
         bytes[^1] = 0;
         System.Numerics.BigInteger value = new(bytes);
         if (value.Sign < 0)

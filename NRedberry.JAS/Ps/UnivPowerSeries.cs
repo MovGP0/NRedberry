@@ -67,9 +67,8 @@ public class UnivPowerSeries<C> : RingElem<UnivPowerSeries<C>> where C : RingEle
                 sb.Append(" - ");
             }
 
-            bool wrap =
-                coefficient is GenPolynomial<C> ||
-                coefficient is AlgebraicNumber<C>;
+            bool wrap = coefficient is GenPolynomial<C>
+                || coefficient is AlgebraicNumber<C>;
 
             if (!coefficient.IsOne() || i == 0)
             {
@@ -110,11 +109,12 @@ public class UnivPowerSeries<C> : RingElem<UnivPowerSeries<C>> where C : RingEle
             sb.Append("0");
         }
 
-        sb.Append(" + BigO(")
-          .Append(variable)
-          .Append("^")
-          .Append(limit)
-          .Append(")");
+        sb
+            .Append(" + BigO(")
+            .Append(variable)
+            .Append("^")
+            .Append(limit)
+            .Append(")");
 
         return sb.ToString();
     }
@@ -254,8 +254,9 @@ public class UnivPowerSeries<C> : RingElem<UnivPowerSeries<C>> where C : RingEle
         for (int i = 0; i <= truncate; i++)
         {
             hash += Coefficient(i).GetHashCode();
-            hash = hash << 23;
+            hash <<= 23;
         }
+
         return hash;
     }
 
@@ -315,8 +316,7 @@ public class UnivPowerSeries<C> : RingElem<UnivPowerSeries<C>> where C : RingEle
                     }
                 }
 
-                C result = sum!.Multiply(d.Negate());
-                return result;
+                return sum!.Multiply(d.Negate());
             }));
     }
 
@@ -359,6 +359,7 @@ public class UnivPowerSeries<C> : RingElem<UnivPowerSeries<C>> where C : RingEle
         {
             return Ring.GetZero();
         }
+
         return this;
     }
 
@@ -370,6 +371,7 @@ public class UnivPowerSeries<C> : RingElem<UnivPowerSeries<C>> where C : RingEle
         {
             return this;
         }
+
         if (IsZero())
         {
             return ps;

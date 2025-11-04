@@ -6,7 +6,9 @@ public sealed class SinFactory : ScalarFunctionFactory
 {
     public static readonly SinFactory Factory = new();
 
-    private SinFactory() { }
+    private SinFactory()
+    {
+    }
 
     protected override Tensor Create1(Tensor arg)
     {

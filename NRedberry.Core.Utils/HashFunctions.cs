@@ -241,6 +241,7 @@ public static class HashFunctions
                 hash ^= 0xFF & b;
                 hash *= FNV_PRIME_32;
             }
+
             return (int)hash;
         }
     }
@@ -308,6 +309,7 @@ public static class HashFunctions
                 hash ^= 0xFF & bytes[i];
                 hash *= FNV_PRIME_64;
             }
+
             return hash;
         }
     }
@@ -443,20 +445,28 @@ public static class HashFunctions
             switch (len)
             {
                 case 3:
+                {
                     h ^= (data[i + 2] & 0xFF) << 16;
                     h ^= (data[i + 1] & 0xFF) << 8;
                     h ^= (data[i] & 0xFF);
                     h *= m;
                     break;
+                }
+
                 case 2:
+                {
                     h ^= (data[i + 1] & 0xFF) << 8;
                     h ^= (data[i] & 0xFF);
                     h *= m;
                     break;
+                }
+
                 case 1:
+                {
                     h ^= (data[i] & 0xFF);
                     h *= m;
                     break;
+                }
             }
 
             h ^= h >> 13;

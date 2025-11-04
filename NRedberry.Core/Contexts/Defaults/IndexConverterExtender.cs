@@ -38,8 +38,8 @@ public sealed class IndexConverterExtender(IIndexSymbolConverter innerConverter)
             split[1] = split[1][1..^1];
         }
 
-        return int.TryParse(split[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out _) 
-               && innerConverter.ApplicableToSymbol(split[0]);
+        return int.TryParse(split[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out _)
+            && innerConverter.ApplicableToSymbol(split[0]);
     }
 
     public int GetCode(string symbol)

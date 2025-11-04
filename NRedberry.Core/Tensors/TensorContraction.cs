@@ -6,6 +6,7 @@ public sealed class TensorContraction : IComparable<TensorContraction>
 {
     public short TensorId { get; }
     public long[] IndexContractions { get; private set; }
+
     private int _hash = -1;
 
     public TensorContraction(short tensorId, long[] indexContractions)
@@ -16,7 +17,7 @@ public sealed class TensorContraction : IComparable<TensorContraction>
 
     public void SortContractions()
     {
-        IndexContractions = IndexContractions.OrderBy(c => c).ToArray();
+        IndexContractions = IndexContractions.Order().ToArray();
     }
 
     public bool ContainsFreeIndex()

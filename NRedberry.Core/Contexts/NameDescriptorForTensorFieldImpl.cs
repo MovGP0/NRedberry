@@ -54,7 +54,8 @@ public sealed class NameDescriptorForTensorFieldImpl: NameDescriptorForTensorFie
                 isZeroOrder = false;
         }
 
-        if (isZeroOrder) return this;
+        if (isZeroOrder)
+            return this;
 
         var derivativeDescriptor = new DerivativeDescriptor(orders);
         if (!derivatives.TryGetValue(derivativeDescriptor, out var nd))

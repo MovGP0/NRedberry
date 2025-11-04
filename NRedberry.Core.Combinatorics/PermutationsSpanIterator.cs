@@ -8,7 +8,8 @@
         private List<Permutation?> lowerLayer;
         private List<Permutation> nextLayer = [];
         private bool forward;
-        private int upperIndex, lowerIndex;
+        private int upperIndex;
+        private int lowerIndex;
 
         public PermutationsSpanIterator(List<T> permutations)
         {
@@ -36,6 +37,7 @@
         {
             Permutation? composition = null;
             while (composition == null)
+            {
                 if (forward)
                 {
                     composition = TryPair(upperLayer[upperIndex], lowerLayer[lowerIndex]);
@@ -49,6 +51,8 @@
                     composition = TryPair(lowerLayer[lowerIndex], upperLayer[upperIndex]);
                     forward = !forward;
                 }
+            }
+
             return composition;
         }
 
@@ -69,7 +73,7 @@
         {
             var composition = p0.Composition(p1);
             var setComposition = set.FirstOrDefault(x => x.CompareTo(composition) == 0);
-            if (setComposition != null && setComposition.Equals(composition))
+            if (setComposition?.Equals(composition) == true)
                 return null;
             if (setComposition != null)
                 throw new Exception("InconsistentGeneratorsException");
@@ -78,7 +82,9 @@
             return composition;
         }
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+        }
 
         public void Reset() => throw new NotImplementedException();
     }

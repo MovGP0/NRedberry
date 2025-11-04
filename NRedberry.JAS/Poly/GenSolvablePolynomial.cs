@@ -119,23 +119,27 @@ public class GenSolvablePolynomial<C> : GenPolynomial<C> where C : RingElem<C>
                         ExpVector e4 = relation.Left is null ? e2 : e2.Subtract(relation.Left);
                         Ring.Table.Update(e4, f2, product);
                     }
+
                     if (relation.Left is not null)
                     {
                         GenSolvablePolynomial<C> c1 = new (Ring, unit, relation.Left);
                         product = c1.Multiply(product);
                         Ring.Table.Update(e2, f2, product);
                     }
+
                     if (!f1.IsZero())
                     {
                         GenSolvablePolynomial<C> c2 = new (Ring, unit, f1);
                         product = product.Multiply(c2);
                     }
+
                     if (!e1.IsZero())
                     {
                         GenSolvablePolynomial<C> c1 = new (Ring, unit, e1);
                         product = c1.Multiply(product);
                     }
                 }
+
                 product = product.Multiply(a, b);
                 result = result.Sum(product);
             }

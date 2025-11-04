@@ -4,7 +4,10 @@ namespace NRedberry.Core.Tensors.Functions;
 
 public class ArcCot : ScalarFunction
 {
-    public ArcCot(Tensor argument) : base(argument) { }
+    public ArcCot(Tensor argument)
+        : base(argument)
+    {
+    }
 
     public override Tensor Derivative()
     {

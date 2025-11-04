@@ -9,9 +9,9 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.structure.BinaryFunctor
 /// </remarks>
-public interface BinaryFunctor<C1, C2, D> 
-    where C1 : Element<C1> 
-    where C2 : Element<C2> 
+public interface BinaryFunctor<C1, C2, D>
+    where C1 : Element<C1>
+    where C2 : Element<C2>
     where D : Element<D>
 {
     /// <summary>
