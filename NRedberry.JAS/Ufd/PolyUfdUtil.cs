@@ -47,7 +47,17 @@ public class PolyUfdUtil
     }
 
     public static GenPolynomial<AlgebraicNumber<C>> SubstituteConvertToAlgebraicCoefficients<C>(
-        GenPolynomialRing<AlgebraicNumber<C>> pfac, GenPolynomial<GenPolynomial<C>> B)
+        GenPolynomialRing<AlgebraicNumber<C>> pfac,
+        GenPolynomial<GenPolynomial<C>> B)
+        where C : GcdRingElem<C>
+    {
+        throw new NotImplementedException();
+    }
+
+    public static GenPolynomial<AlgebraicNumber<C>> SubstituteConvertToAlgebraicCoefficients<C>(
+        GenPolynomialRing<AlgebraicNumber<C>> pfac,
+        GenPolynomial<C> B,
+        long k)
         where C : GcdRingElem<C>
     {
         throw new NotImplementedException();

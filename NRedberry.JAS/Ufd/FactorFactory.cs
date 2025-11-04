@@ -17,6 +17,12 @@ public class FactorFactory
         throw new NotImplementedException();
     }
 
+    public static FactorAbstract<C> GetImplementation<C>(RingFactory<C> fac)
+        where C : GcdRingElem<C>
+    {
+        throw new NotImplementedException();
+    }
+
     public static FactorAbstract<ModLong> GetImplementation(ModLongRing fac)
     {
         throw new NotImplementedException();

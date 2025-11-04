@@ -17,9 +17,10 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
 {
     private static readonly HashSet<string> KnownVars = new(StringComparer.Ordinal);
 
-    public readonly RingFactory<C> CoFac;
-    public readonly int Nvar;
-    public readonly TermOrder Tord;
+    public RingFactory<C> CoFac { get; }
+    public int Nvar { get; }
+    public TermOrder Tord { get; }
+
     protected bool partial;
 
     public bool IsPartial => partial;
