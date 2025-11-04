@@ -1,5 +1,4 @@
-﻿using System;
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 

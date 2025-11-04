@@ -1,15 +1,8 @@
-﻿using System.Runtime.Serialization;
-
-namespace NRedberry.Core.Exceptions;
+﻿namespace NRedberry.Core.Exceptions;
 
 public sealed class IndexConverterException : Exception
 {
     public IndexConverterException()
-    {
-    }
-
-    public IndexConverterException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
     {
     }
 

@@ -9,4 +9,13 @@ public class InconsistentGeneratorsException : Exception
         : base(message)
     {
     }
+
+    public InconsistentGeneratorsException()
+    {
+    }
+
+    public InconsistentGeneratorsException(string? message, Exception? innerException)
+        : base(message, innerException)
+    {
+    }
 }
