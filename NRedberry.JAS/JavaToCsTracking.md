@@ -93,7 +93,7 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 | FactorAbsolute.java | FactorAbsolute.cs | ✅ Scaffolded | Abstract class for absolute factorization |
 | FactorAbstract.java | FactorAbstract.cs | ✅ Scaffolded | Base abstract factorization class |
 | FactorAlgebraic.java | FactorAlgebraic.cs | ✅ Scaffolded | Algebraic number coefficient factorization |
-| FactorComplex.java | FactorComplex.cs | ✅ Scaffolded | Complex coefficient factorization |
+| FactorComplex.java | FactorComplex.cs | ✅ Scaffolded | Complex coefficient factorization (blocked until FactorAbsolute/FactorFactory implementations land) |
 | FactorFactory.java | FactorFactory.cs | ✅ Scaffolded | Factory for selecting factorization algorithms |
 | FactorInteger.java | FactorInteger.cs | ✅ Scaffolded | Integer coefficient factorization (Hensel) |
 | Factorization.java | Factorization.cs | ✅ Scaffolded | Factorization interface |
@@ -120,8 +120,8 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 | SquarefreeAbstract.java | SquarefreeAbstract.cs | ✅ Scaffolded | Abstract squarefree base with methods |
 | SquarefreeFactory.java | SquarefreeFactory.cs | ✅ Scaffolded | Factory for squarefree decomposition |
 | SquarefreeFieldChar0.java | SquarefreeFieldChar0.cs | ✅ Scaffolded | Squarefree for fields char 0 |
-| SquarefreeFieldCharP.java | SquarefreeFieldCharP.cs | ✅ Scaffolded | Abstract squarefree for fields char p |
-| SquarefreeFiniteFieldCharP.java | SquarefreeFiniteFieldCharP.cs | ✅ Scaffolded | Squarefree for finite fields char p |
+| SquarefreeFieldCharP.java | SquarefreeFieldCharP.cs | ✅ Scaffolded | Abstract squarefree for fields char p – needs full port before dependents |
+| SquarefreeFiniteFieldCharP.java | SquarefreeFiniteFieldCharP.cs | ✅ Scaffolded | Blocked: relies on SquarefreeFieldCharP implementation |
 | SquarefreeInfiniteAlgebraicFieldCharP.java | SquarefreeInfiniteAlgebraicFieldCharP.cs | ✅ Scaffolded | Squarefree for infinite algebraic fields |
 | SquarefreeInfiniteFieldCharP.java | SquarefreeInfiniteFieldCharP.cs | ✅ Scaffolded | Squarefree for infinite fields char p |
 | SquarefreeRingChar0.java | SquarefreeRingChar0.cs | ✅ Scaffolded | Squarefree for rings char 0 |
