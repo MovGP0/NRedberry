@@ -11,8 +11,6 @@
 
   <ItemGroup>
     <PackageReference Include="Rationals" />
-    <PackageReference Include="Roslynator.Analyzers" />
-    <PackageReference Include="Roslynator.CSharp" />
     <PackageReference Include="IKVM" />
   </ItemGroup>
 
