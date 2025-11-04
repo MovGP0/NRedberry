@@ -21,6 +21,7 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
     public readonly int Nvar;
     public readonly TermOrder Tord;
     protected bool partial;
+
     public bool IsPartial => partial;
 
     protected string[]? vars;
@@ -181,7 +182,7 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
             throw new ArgumentException($"Variable array does not match number of variables: {v.Length} vs {Nvar}", nameof(v));
         }
 
-        string[] previous = vars ?? Array.Empty<string>();
+        string[] previous = vars ?? [];
         vars = v.ToArray();
         AddVars(vars);
         return previous;

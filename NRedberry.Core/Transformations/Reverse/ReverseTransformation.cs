@@ -8,7 +8,7 @@ namespace NRedberry.Core.Transformations.Reverse;
 /// </summary>
 public sealed class ReverseTransformation : TransformationToStringAble
 {
-    private readonly SingleReverse[] reversers = Array.Empty<SingleReverse>();
+    private readonly SingleReverse[] reversers = [];
 
     public ReverseTransformation(params IndexType[] types)
     {

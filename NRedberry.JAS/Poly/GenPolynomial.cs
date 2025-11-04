@@ -276,6 +276,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
             hashCode.Add(term.Key);
             hashCode.Add(term.Value);
         }
+
         return hashCode.ToHashCode();
     }
 
@@ -530,11 +531,11 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
             remainder = remainder.Subtract(product);
         }
 
-        return new[]
-        {
+        return
+        [
             quotient,
             remainder
-        };
+        ];
     }
 
     public GenPolynomial<C> ModInverse(GenPolynomial<C> modulus)
@@ -1065,6 +1066,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         {
             return "0";
         }
+
         StringBuilder builder = new();
         bool first = true;
         foreach (KeyValuePair<ExpVector, C> term in Terms)
@@ -1092,11 +1094,12 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
                     builder.Append(" + ");
                 }
             }
+
             bool printCoefficient = !coefficient.IsOne() || term.Key.IsZero();
             if (printCoefficient)
             {
                 string coefficientString = coefficient.ToString();
-                bool wrap = coefficientString.IndexOfAny(new[] { ' ', '+', '-' }) >= 0 && !coefficientString.StartsWith("(");
+                bool wrap = coefficientString.IndexOfAny([' ', '+', '-']) >= 0 && !coefficientString.StartsWith("(");
                 if (wrap)
                 {
                     builder.Append("( ");
@@ -1107,11 +1110,13 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
                 {
                     builder.Append(coefficientString);
                 }
+
                 if (!term.Key.IsZero())
                 {
                     builder.Append(' ');
                 }
             }
+
             if (!term.Key.IsZero())
             {
                 builder.Append(term.Key.ToString(variables));
@@ -1121,6 +1126,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
                 builder.Append('1');
             }
         }
+
         return builder.ToString();
     }
 }

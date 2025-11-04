@@ -52,7 +52,7 @@ public sealed class TermOrder
     }
 
     public TermOrder(long[] weightVector)
-        : this(weightVector == null ? throw new ArgumentNullException(nameof(weightVector)) : new[] { weightVector.ToArray() })
+        : this(weightVector == null ? throw new ArgumentNullException(nameof(weightVector)) : [weightVector.ToArray()])
     {
     }
 

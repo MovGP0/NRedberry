@@ -23,7 +23,7 @@ public class PolynomialList<C> : IComparable<PolynomialList<C>> where C : RingEl
 
     public PolynomialList<C> Copy()
     {
-        return new PolynomialList<C>(Ring, new List<GenPolynomial<C>>(Polynomials));
+        return new PolynomialList<C>(Ring, [..Polynomials]);
     }
 
     public override bool Equals(object? other)

@@ -215,7 +215,7 @@ public class RelationTable<C> where C : RingElem<C>
 
             if (!Table.TryGetValue(key, out List<RelationEntry>? part))
             {
-                Table[key] = new List<RelationEntry> { entry };
+                Table[key] = [entry];
                 return;
             }
 

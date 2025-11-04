@@ -68,7 +68,7 @@ public class OrderedPolynomialList<C> : PolynomialList<C>, IComparer<GenPolynomi
     {
         if (polynomials == null || polynomials.Count <= 1)
         {
-            return polynomials ?? new List<GenPolynomial<C>>();
+            return polynomials ?? [];
         }
 
         IComparer<ExpVector> comparer = ring.Tord.GetAscendComparator();

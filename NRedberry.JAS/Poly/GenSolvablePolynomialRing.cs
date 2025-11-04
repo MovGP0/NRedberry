@@ -29,7 +29,7 @@ public class GenSolvablePolynomialRing<C> : GenPolynomialRing<C> where C : RingE
     }
 
     public GenSolvablePolynomialRing(RingFactory<C> coefficientFactory, int variables, TermOrder order, string[]? variableNames, RelationTable<C>? relationTable)
-        : base(coefficientFactory, variables, order, variableNames ?? Array.Empty<string>())
+        : base(coefficientFactory, variables, order, variableNames ?? [])
     {
         Table = relationTable ?? new RelationTable<C>(this);
         ZERO = new GenSolvablePolynomial<C>(this);

@@ -100,7 +100,7 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
     public override string ToString()
     {
         string[]? variables = Ring.Ring.GetVars();
-        return Val.ToString(variables ?? Array.Empty<string>());
+        return Val.ToString(variables ?? []);
     }
 
     public int CompareTo(AlgebraicNumber<C>? other)

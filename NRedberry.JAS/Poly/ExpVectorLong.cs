@@ -288,7 +288,7 @@ public sealed class ExpVectorLong : ExpVector
 
     public override int[] DependencyOnVariables()
     {
-        List<int> indices = new ();
+        List<int> indices = [];
         for (int i = 0; i < _values.Length; i++)
         {
             if (_values[i] > 0)
