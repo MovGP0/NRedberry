@@ -14,8 +14,6 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 public class GreatestCommonDivisorModEval<MOD> : GreatestCommonDivisorAbstract<MOD>
     where MOD : GcdRingElem<MOD>, Modular
 {
-    private const bool Debug = false;
-
     protected readonly GreatestCommonDivisorAbstract<MOD> ModularEngine;
 
     public GreatestCommonDivisorModEval()
@@ -72,9 +70,7 @@ public class GreatestCommonDivisorModEval<MOD> : GreatestCommonDivisorAbstract<M
         {
             r = first;
             q = second;
-            long temp = degreeSecond;
-            degreeSecond = degreeFirst;
-            degreeFirst = temp;
+            (degreeSecond, degreeFirst) = (degreeFirst, degreeSecond);
         }
         else
         {
@@ -277,9 +273,7 @@ public class GreatestCommonDivisorModEval<MOD> : GreatestCommonDivisorAbstract<M
         {
             r = first;
             q = second;
-            long temp = degreeSecond;
-            degreeSecond = degreeFirst;
-            degreeFirst = temp;
+            (degreeSecond, degreeFirst) = (degreeFirst, degreeSecond);
         }
         else
         {

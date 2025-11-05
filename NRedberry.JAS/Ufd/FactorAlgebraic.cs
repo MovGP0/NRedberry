@@ -73,8 +73,7 @@ public class FactorAlgebraic<C> : FactorAbsolute<AlgebraicNumber<C>> where C : G
 
         while (!isSquarefree && shiftIndex < shifts.Length)
         {
-            long candidateShift = shifts[shiftIndex++];
-            selectedShift = candidateShift;
+            selectedShift = shifts[shiftIndex++];
 
             norm = PolyUfdUtil.Norm(polynomial, selectedShift);
             if (norm.IsZero() || norm.IsConstant())

@@ -1,3 +1,4 @@
+﻿using System.Text;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
@@ -11,37 +12,79 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ufd.HenselApprox
 /// </remarks>
-public class HenselApprox<MOD> where MOD : GcdRingElem<MOD>, Modular
+public sealed class HenselApprox<MOD>
+    where MOD : GcdRingElem<MOD>, Modular
 {
-    public readonly GenPolynomial<Arith.BigInteger> A;
-    public readonly GenPolynomial<Arith.BigInteger> B;
-    public readonly GenPolynomial<MOD> Am;
-    public readonly GenPolynomial<MOD> Bm;
-
     public HenselApprox(
-        GenPolynomial<Arith.BigInteger> A,
-        GenPolynomial<Arith.BigInteger> B,
-        GenPolynomial<MOD> Am,
-        GenPolynomial<MOD> Bm)
+        GenPolynomial<Arith.BigInteger> a,
+        GenPolynomial<Arith.BigInteger> b,
+        GenPolynomial<MOD> am,
+        GenPolynomial<MOD> bm)
     {
-        this.A = A;
-        this.B = B;
-        this.Am = Am;
-        this.Bm = Bm;
+        A = a ?? throw new ArgumentNullException(nameof(a));
+        B = b ?? throw new ArgumentNullException(nameof(b));
+        Am = am ?? throw new ArgumentNullException(nameof(am));
+        Bm = bm ?? throw new ArgumentNullException(nameof(bm));
     }
+
+    /// <summary>
+    /// Approximated polynomial with integer coefficients.
+    /// </summary>
+    public GenPolynomial<Arith.BigInteger> A { get; }
+
+    /// <summary>
+    /// Approximated polynomial with integer coefficients.
+    /// </summary>
+    public GenPolynomial<Arith.BigInteger> B { get; }
+
+    /// <summary>
+    /// Modular approximated polynomial with modular coefficients.
+    /// </summary>
+    public GenPolynomial<MOD> Am { get; }
+
+    /// <summary>
+    /// Modular approximated polynomial with modular coefficients.
+    /// </summary>
+    public GenPolynomial<MOD> Bm { get; }
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        StringBuilder builder = new();
+        builder.Append(A);
+        builder.Append(',');
+        builder.Append(B);
+        builder.Append(',');
+        builder.Append(Am);
+        builder.Append(',');
+        builder.Append(Bm);
+        return builder.ToString();
     }
 
     public override int GetHashCode()
     {
-        throw new NotImplementedException();
+        HashCode hashCode = new();
+        hashCode.Add(A);
+        hashCode.Add(B);
+        hashCode.Add(Am);
+        hashCode.Add(Bm);
+        return hashCode.ToHashCode();
     }
 
     public override bool Equals(object? obj)
     {
-        throw new NotImplementedException();
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
+        if (obj is not HenselApprox<MOD> other)
+        {
+            return false;
+        }
+
+        return A.Equals(other.A)
+            && B.Equals(other.B)
+            && Am.Equals(other.Am)
+            && Bm.Equals(other.Bm);
     }
 }
