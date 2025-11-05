@@ -8,4 +8,39 @@
     <ItemGroup>
         <None Update="*.java" CopyToOutputDirectory="Never" />
     </ItemGroup>
+    <ItemGroup>
+      <Compile Update="Poly\PolyUtil.Recursive.cs">
+        <DependentUpon>PolyUtil.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Poly\PolyUtil.RecursivePseudoRemainder.cs">
+        <DependentUpon>PolyUtil.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Poly\PolyUtil.RecursiveSparsePseudoRemainder.cs">
+        <DependentUpon>PolyUtil.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Poly\PolyUtil.Distribute.cs">
+        <DependentUpon>PolyUtil.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Poly\PolyUtil.IntegerFromModularCoefficients.cs">
+        <DependentUpon>PolyUtil.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Poly\PolyUtil.IntegerFromRationalCoefficients.cs">
+        <DependentUpon>PolyUtil.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Poly\PolyUtil.IntegerFromRationalCoefficientsFactor.cs">
+        <DependentUpon>PolyUtil.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Poly\PolyUtil.Map.cs">
+        <DependentUpon>PolyUtil.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Poly\PolyUtil.FromIntegerCoefficients.cs">
+        <DependentUpon>PolyUtil.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Poly\PolyUtil.FromAlgebraicCoefficients.cs">
+        <DependentUpon>PolyUtil.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Poly\PolyUtil.BaseDeriviative.cs">
+        <DependentUpon>PolyUtil.cs</DependentUpon>
+      </Compile>
+    </ItemGroup>
 </Project>
