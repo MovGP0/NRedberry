@@ -90,33 +90,33 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 ### Ufd (37 files)
 | Java File | C# File | Status       | Notes |
 |-----------|---------|--------------|-------|
-| FactorAbsolute.java | FactorAbsolute.cs | ✅ Scaffolded | Abstract class for absolute factorization |
-| FactorAbstract.java | FactorAbstract.cs | ✅ Scaffolded | Base abstract factorization class |
-| FactorAlgebraic.java | FactorAlgebraic.cs | ✅ Scaffolded | Algebraic number coefficient factorization |
-| FactorComplex.java | FactorComplex.cs | ✅ Scaffolded | Complex coefficient factorization (blocked until FactorAbsolute/FactorFactory implementations land) |
-| FactorFactory.java | FactorFactory.cs | ✅ Scaffolded | Factory for selecting factorization algorithms |
-| FactorInteger.java | FactorInteger.cs | ✅ Scaffolded | Integer coefficient factorization (Hensel) |
-| Factorization.java | Factorization.cs | ✅ Scaffolded | Factorization interface |
-| FactorModular.java | FactorModular.cs | ✅ Scaffolded | Modular coefficient factorization |
-| FactorQuotient.java | FactorQuotient.cs | ✅ Scaffolded | Quotient coefficient factorization |
-| FactorRational.java | FactorRational.cs | ✅ Scaffolded | Rational coefficient factorization |
-| Factors.java | Factors.cs | ✅ Scaffolded | Container for absolute factorization results |
-| GCDFactory.java | GCDFactory.cs | ✅ Scaffolded | Factory for GCD algorithm selection |
-| GreatestCommonDivisor.java | GreatestCommonDivisor.cs | ✅ Scaffolded | GCD interface with generic type parameter |
+| FactorAbsolute.java | FactorAbsolute.cs | ✔️ Complete | Abstract class for absolute factorization |
+| FactorAbstract.java | FactorAbstract.cs | ✔️ Complete | Base abstract factorization class |
+| FactorAlgebraic.java | FactorAlgebraic.cs | ✔️ Complete | Algebraic number coefficient factorization |
+| FactorComplex.java | FactorComplex.cs | ✔️ Complete | Complex coefficient factorization using algebraic extensions |
+| FactorFactory.java | FactorFactory.cs | ✔️ Complete | Factory for selecting factorization algorithms |
+| FactorInteger.java | FactorInteger.cs | ✔️ Complete | Integer coefficient factorization (Hensel) |
+| Factorization.java | Factorization.cs | ✔️ Complete | Factorization interface |
+| FactorModular.java | FactorModular.cs | ✔️ Complete | Modular coefficient factorization |
+| FactorQuotient.java | FactorQuotient.cs | ✔️ Complete | Quotient coefficient factorization |
+| FactorRational.java | FactorRational.cs | ✔️ Complete | Rational coefficient factorization |
+| Factors.java | Factors.cs | ✔️ Complete | Container for absolute factorization results |
+| GCDFactory.java | GCDFactory.cs | ✔️ Complete | Factory for GCD algorithm selection |
+| GreatestCommonDivisor.java | GreatestCommonDivisor.cs | ✔️ Complete | GCD interface with generic type parameter |
 | GreatestCommonDivisorAbstract.java | GreatestCommonDivisorAbstract.cs | ✔️ Complete | Abstract GCD base with interface methods |
 | GreatestCommonDivisorModEval.java | GreatestCommonDivisorModEval.cs | ✔️ Complete | GCD with modular evaluation algorithm |
 | GreatestCommonDivisorModular.java | GreatestCommonDivisorModular.cs | ✅ Scaffolded | GCD with Chinese remainder algorithm |
 | GreatestCommonDivisorPrimitive.java | GreatestCommonDivisorPrimitive.cs | ✔️ Complete | GCD with primitive polynomial remainder |
 | GreatestCommonDivisorSimple.java | GreatestCommonDivisorSimple.cs | ✔️ Complete | GCD with monic polynomial remainder |
 | GreatestCommonDivisorSubres.java | GreatestCommonDivisorSubres.cs | ✔️ Complete | GCD with subresultant remainder |
-| HenselApprox.java | HenselApprox.cs | ✅ Scaffolded | Container for Hensel algorithm results |
+| HenselApprox.java | HenselApprox.cs | ✔️ Complete | Container for Hensel algorithm results |
 | HenselMultUtil.java | HenselMultUtil.cs | ✅ Scaffolded | Hensel multivariate lifting utilities |
 | HenselUtil.java | HenselUtil.cs | ✅ Scaffolded | Hensel univariate lifting utilities |
-| NoLiftingException.java | NoLiftingException.cs | ✅ Scaffolded | |
+| NoLiftingException.java | NoLiftingException.cs | ✔️ Complete | Exception thrown when Hensel lifting fails |
 | PolyUfdUtil.java | PolyUfdUtil.cs | ✅ Scaffolded | Polynomial UFD utilities and conversions |
 | Quotient.java | Quotient.cs | ✅ Scaffolded | Quotient ring element (rational function) |
 | QuotientRing.java | QuotientRing.cs | ✅ Scaffolded | Quotient ring factory with generic type |
-| Squarefree.java | Squarefree.cs | ✅ Scaffolded | Squarefree decomposition interface |
+| Squarefree.java | Squarefree.cs | ✔️ Complete | Squarefree decomposition interface |
 | SquarefreeAbstract.java | SquarefreeAbstract.cs | ✅ Scaffolded | Abstract squarefree base with methods |
 | SquarefreeFactory.java | SquarefreeFactory.cs | ✅ Scaffolded | Factory for squarefree decomposition |
 | SquarefreeFieldChar0.java | SquarefreeFieldChar0.cs | ✅ Scaffolded | Squarefree for fields char 0 |

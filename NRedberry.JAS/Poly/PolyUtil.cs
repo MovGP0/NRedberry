@@ -1,6 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
-using BigInteger = NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith.BigInteger;
 
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
@@ -13,914 +11,110 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 /// <li>there is one file per method group (<c>PolyUtil.METHODNAME.cs</c>) because the file would be too large otherwise</li>
 /// </ul>
 /// </remarks>
-public static partial class PolyUtil
+public static partial class PolyUtil;
+
+internal sealed class AlgToPoly<C> : UnaryFunctor<AlgebraicNumber<C>, GenPolynomial<C>> where C : GcdRingElem<C>
 {
-    public static GenPolynomial<AlgebraicNumber<C>> ConvertToAlgebraicCoefficients<C>(GenPolynomialRing<AlgebraicNumber<C>> ring, GenPolynomial<C> polynomial)
-        where C : GcdRingElem<C>
+    public GenPolynomial<C> Eval(AlgebraicNumber<C> value)
+    {
+        return value is null ? null! : value.Val;
+    }
+}
+
+internal sealed class CoeffToAlg<C> : UnaryFunctor<C, AlgebraicNumber<C>> where C : GcdRingElem<C>
+{
+    private readonly AlgebraicNumberRing<C> _ring;
+    private readonly GenPolynomial<C> _zeroPolynomial;
+
+    public CoeffToAlg(AlgebraicNumberRing<C> ring)
     {
         ArgumentNullException.ThrowIfNull(ring);
-        ArgumentNullException.ThrowIfNull(polynomial);
-
-        AlgebraicNumberRing<C> algebraicRing = (AlgebraicNumberRing<C>)ring.CoFac;
-        return Map(ring, polynomial, new CoeffToAlg<C>(algebraicRing));
+        _ring = ring;
+        GenPolynomialRing<C> polynomialRing = ring.Ring;
+        _zeroPolynomial = new GenPolynomial<C>(polynomialRing);
     }
 
-    public static GenPolynomial<Complex<C>> ComplexFromAlgebraic<C>(GenPolynomialRing<Complex<C>> ring, GenPolynomial<AlgebraicNumber<C>> polynomial)
-        where C : GcdRingElem<C>
+    public AlgebraicNumber<C> Eval(C coefficient)
+    {
+        if (coefficient is null)
+        {
+            return _ring.GetZeroElement();
+        }
+
+        GenPolynomial<C> polynomial = _zeroPolynomial.Sum(coefficient);
+        return new AlgebraicNumber<C>(_ring, polynomial);
+    }
+}
+
+internal sealed class AlgebToCompl<C> : UnaryFunctor<AlgebraicNumber<C>, Complex<C>> where C : GcdRingElem<C>
+{
+    private readonly ComplexRing<C> _ring;
+
+    public AlgebToCompl(ComplexRing<C> ring)
     {
         ArgumentNullException.ThrowIfNull(ring);
-        ArgumentNullException.ThrowIfNull(polynomial);
-
-        ComplexRing<C> complexRing = (ComplexRing<C>)ring.CoFac;
-        return Map(ring, polynomial, new AlgebToCompl<C>(complexRing));
+        _ring = ring;
     }
 
-    public static GenPolynomial<AlgebraicNumber<C>> AlgebraicFromComplex<C>(GenPolynomialRing<AlgebraicNumber<C>> ring, GenPolynomial<Complex<C>> polynomial)
-        where C : GcdRingElem<C>
+    public Complex<C> Eval(AlgebraicNumber<C> value)
     {
-        ArgumentNullException.ThrowIfNull(ring);
-        ArgumentNullException.ThrowIfNull(polynomial);
-
-        AlgebraicNumberRing<C> algebraicRing = (AlgebraicNumberRing<C>)ring.CoFac;
-        return Map(ring, polynomial, new ComplToAlgeb<C>(algebraicRing));
-    }
-
-    public static GenPolynomial<C> ChineseRemainder<C>(GenPolynomialRing<C> ring, GenPolynomial<C> first, C modulusInverse, GenPolynomial<C> second)
-        where C : RingElem<C>, Modular
-    {
-        ArgumentNullException.ThrowIfNull(ring);
-        ArgumentNullException.ThrowIfNull(first);
-        ArgumentNullException.ThrowIfNull(modulusInverse);
-        ArgumentNullException.ThrowIfNull(second);
-
-        ModularRingFactory<C> modularFactory = (ModularRingFactory<C>)ring.CoFac;
-        GenPolynomial<C> result = new (ring);
-        GenPolynomial<C> firstCopy = first.Clone();
-
-        SortedDictionary<ExpVector, C> firstTerms = firstCopy.Terms;
-        SortedDictionary<ExpVector, C> secondTerms = second.Terms;
-        SortedDictionary<ExpVector, C> resultTerms = result.Terms;
-
-        C zeroFirst = first.Ring.CoFac.FromInteger(0);
-        C zeroSecond = second.Ring.CoFac.FromInteger(0);
-
-        foreach (KeyValuePair<ExpVector, C> term in secondTerms)
+        if (value.IsZero())
         {
-            ExpVector exponent = term.Key;
-            C secondCoefficient = term.Value;
-            if (firstTerms.TryGetValue(exponent, out C firstCoefficient))
-            {
-                firstTerms.Remove(exponent);
-                C coefficient = modularFactory.ChineseRemainder(firstCoefficient, modulusInverse, secondCoefficient);
-                if (!coefficient.IsZero())
-                {
-                    resultTerms[exponent] = coefficient;
-                }
-            }
-            else
-            {
-                C coefficient = modularFactory.ChineseRemainder(zeroFirst, modulusInverse, secondCoefficient);
-                if (!coefficient.IsZero())
-                {
-                    resultTerms[exponent] = coefficient;
-                }
-            }
+            return _ring.Zero;
         }
 
-        foreach (KeyValuePair<ExpVector, C> term in firstTerms)
+        if (value.IsOne())
         {
-            C coefficient = modularFactory.ChineseRemainder(term.Value, modulusInverse, zeroSecond);
-            if (!coefficient.IsZero())
-            {
-                resultTerms[term.Key] = coefficient;
-            }
+            return _ring.One;
         }
 
-        return result;
-    }
-
-    public static GenPolynomial<GenPolynomial<C>>? Monic<C>(GenPolynomial<GenPolynomial<C>> polynomial)
-        where C : RingElem<C>
-    {
-        if (polynomial.IsZero())
-        {
-            return polynomial;
-        }
-
-        GenPolynomial<C> leadingCoefficient = polynomial.LeadingBaseCoefficient();
-        C head = leadingCoefficient.LeadingBaseCoefficient();
-        if (!head.IsUnit())
-        {
-            return polynomial;
-        }
-
-        C inverse = head.Inverse();
-        GenPolynomial<C> unit = polynomial.Ring.CoFac.FromInteger(1);
-        GenPolynomial<C> multiplier = unit.Multiply(inverse);
-        return polynomial.Multiply(multiplier);
-    }
-
-    public static List<GenPolynomial<C>>? Monic<C>(List<GenPolynomial<C>>? polynomials)
-        where C : RingElem<C>
-    {
-        if (polynomials is null)
-        {
-            return null;
-        }
-
-        List<GenPolynomial<C>> result = new (polynomials.Count);
-        foreach (GenPolynomial<C>? polynomial in polynomials)
-        {
-            result.Add(polynomial is null ? null! : polynomial.Monic());
-        }
-
-        return result;
-    }
-
-    public static List<ExpVector?>? LeadingExpVector<C>(List<GenPolynomial<C>>? polynomials)
-        where C : RingElem<C>
-    {
-        if (polynomials is null)
-        {
-            return null;
-        }
-
-        List<ExpVector?> result = new (polynomials.Count);
-        foreach (GenPolynomial<C>? polynomial in polynomials)
-        {
-            result.Add(polynomial?.LeadingExpVector());
-        }
-
-        return result;
-    }
-
-    public static GenPolynomial<C> BaseSparsePseudoRemainder<C>(GenPolynomial<C> polynomial, GenPolynomial<C> divisor)
-        where C : RingElem<C>
-    {
-        ArgumentNullException.ThrowIfNull(polynomial);
-        ArgumentNullException.ThrowIfNull(divisor);
-
-        if (divisor.IsZero())
-        {
-            throw new ArithmeticException($"{polynomial} division by zero {divisor}");
-        }
-
-        if (polynomial.IsZero())
-        {
-            return polynomial;
-        }
-
-        if (divisor.IsOne())
-        {
-            return new GenPolynomial<C>(divisor.Ring);
-        }
-
-        C leadingDivisorCoefficient = divisor.LeadingBaseCoefficient();
-        ExpVector leadingDivisorExponent = divisor.LeadingExpVector() ?? throw new InvalidOperationException("Divisor must have a leading exponent.");
-        GenPolynomial<C> remainder = polynomial;
-
-        while (!remainder.IsZero())
-        {
-            ExpVector leadingRemainderExponent = remainder.LeadingExpVector() ?? throw new InvalidOperationException("Remainder must have a leading exponent.");
-            if (!leadingRemainderExponent.MultipleOf(leadingDivisorExponent))
-            {
-                break;
-            }
-
-            C leadingRemainderCoefficient = remainder.LeadingBaseCoefficient();
-            ExpVector exponentDifference = leadingRemainderExponent.Subtract(leadingDivisorExponent);
-            C remainderModulo = leadingRemainderCoefficient.Remainder(leadingDivisorCoefficient);
-            if (remainderModulo.IsZero())
-            {
-                C quotientCoefficient = leadingRemainderCoefficient.Divide(leadingDivisorCoefficient);
-                GenPolynomial<C> product = divisor.Multiply(quotientCoefficient, exponentDifference);
-                remainder = remainder.Subtract(product);
-            }
-            else
-            {
-                remainder = remainder.Multiply(leadingDivisorCoefficient);
-                GenPolynomial<C> product = divisor.Multiply(leadingRemainderCoefficient, exponentDifference);
-                remainder = remainder.Subtract(product);
-            }
-        }
-
-        return remainder;
-    }
-
-    public static GenPolynomial<C> BaseDensePseudoRemainder<C>(GenPolynomial<C> polynomial, GenPolynomial<C> divisor)
-        where C : RingElem<C>
-    {
-        ArgumentNullException.ThrowIfNull(polynomial);
-        ArgumentNullException.ThrowIfNull(divisor);
-
-        if (divisor.IsZero())
-        {
-            throw new ArithmeticException($"{polynomial} division by zero {divisor}");
-        }
-
-        if (polynomial.IsZero())
-        {
-            return polynomial;
-        }
-
-        if (divisor.Degree() <= 0)
-        {
-            return new GenPolynomial<C>(divisor.Ring);
-        }
-
-        long dividendDegree = polynomial.Degree(0);
-        long divisorDegree = divisor.Degree(0);
-        C leadingDivisorCoefficient = divisor.LeadingBaseCoefficient();
-        ExpVector leadingDivisorExponent = divisor.LeadingExpVector() ?? throw new InvalidOperationException("Divisor must have a leading exponent.");
-        GenPolynomial<C> remainder = polynomial;
-
-        for (long i = dividendDegree; i >= divisorDegree; i--)
-        {
-            if (remainder.IsZero())
-            {
-                return remainder;
-            }
-
-            long remainderDegree = remainder.Degree(0);
-            if (i == remainderDegree)
-            {
-                ExpVector leadingRemainderExponent = remainder.LeadingExpVector() ?? throw new InvalidOperationException("Remainder must have a leading exponent.");
-                C leadingRemainderCoefficient = remainder.LeadingBaseCoefficient();
-                ExpVector exponentDifference = leadingRemainderExponent.Subtract(leadingDivisorExponent);
-                remainder = remainder.Multiply(leadingDivisorCoefficient);
-                GenPolynomial<C> product = divisor.Multiply(leadingRemainderCoefficient, exponentDifference);
-                remainder = remainder.Subtract(product);
-            }
-            else
-            {
-                remainder = remainder.Multiply(leadingDivisorCoefficient);
-            }
-        }
-
-        return remainder;
-    }
-
-    public static GenPolynomial<C> BasePseudoDivide<C>(GenPolynomial<C> polynomial, GenPolynomial<C> divisor)
-        where C : RingElem<C>
-    {
-        ArgumentNullException.ThrowIfNull(polynomial);
-        ArgumentNullException.ThrowIfNull(divisor);
-
-        if (divisor.IsZero())
-        {
-            throw new ArithmeticException($"{polynomial} division by zero {divisor}");
-        }
-
-        if (polynomial.IsZero() || divisor.IsOne())
-        {
-            return polynomial;
-        }
-
-        C leadingDivisorCoefficient = divisor.LeadingBaseCoefficient();
-        ExpVector leadingDivisorExponent = divisor.LeadingExpVector() ?? throw new InvalidOperationException("Divisor must have a leading exponent.");
-        GenPolynomial<C> remainder = polynomial;
-        GenPolynomial<C> quotient = new (divisor.Ring);
-
-        while (!remainder.IsZero())
-        {
-            ExpVector leadingRemainderExponent = remainder.LeadingExpVector() ?? throw new InvalidOperationException("Remainder must have a leading exponent.");
-            if (!leadingRemainderExponent.MultipleOf(leadingDivisorExponent))
-            {
-                break;
-            }
-
-            C leadingRemainderCoefficient = remainder.LeadingBaseCoefficient();
-            ExpVector exponentDifference = leadingRemainderExponent.Subtract(leadingDivisorExponent);
-            C remainderModulo = leadingRemainderCoefficient.Remainder(leadingDivisorCoefficient);
-            if (remainderModulo.IsZero())
-            {
-                C quotientCoefficient = leadingRemainderCoefficient.Divide(leadingDivisorCoefficient);
-                quotient = quotient.Sum(quotientCoefficient, exponentDifference);
-                GenPolynomial<C> product = divisor.Multiply(quotientCoefficient, exponentDifference);
-                remainder = remainder.Subtract(product);
-            }
-            else
-            {
-                quotient = quotient.Multiply(leadingDivisorCoefficient);
-                quotient = quotient.Sum(leadingRemainderCoefficient, exponentDifference);
-                remainder = remainder.Multiply(leadingDivisorCoefficient);
-                GenPolynomial<C> product = divisor.Multiply(leadingRemainderCoefficient, exponentDifference);
-                remainder = remainder.Subtract(product);
-            }
-        }
-
-        return quotient;
-    }
-
-    public static GenPolynomial<GenPolynomial<C>> RecursiveDivide<C>(GenPolynomial<GenPolynomial<C>> polynomial, GenPolynomial<C> divisor)
-        where C : RingElem<C>
-    {
-        ArgumentNullException.ThrowIfNull(polynomial);
-        ArgumentNullException.ThrowIfNull(divisor);
-
-        if (divisor.IsZero())
-        {
-            throw new ArithmeticException($"division by zero {polynomial}, {divisor}");
-        }
-
-        if (polynomial.IsZero() || divisor.IsOne())
-        {
-            return polynomial;
-        }
-
-        GenPolynomial<GenPolynomial<C>> result = new (polynomial.Ring);
-        SortedDictionary<ExpVector, GenPolynomial<C>> resultTerms = result.Terms;
-
-        foreach (KeyValuePair<ExpVector, GenPolynomial<C>> term in polynomial.Terms)
-        {
-            GenPolynomial<C> quotient = BasePseudoDivide(term.Value, divisor);
-            if (quotient.IsZero())
-            {
-                throw new InvalidOperationException("Pseudo division produced zero coefficient unexpectedly.");
-            }
-
-            resultTerms[term.Key] = quotient;
-        }
-
-        return result;
-    }
-
-    public static GenPolynomial<GenPolynomial<C>> BaseRecursiveDivide<C>(GenPolynomial<GenPolynomial<C>> polynomial, C divisor)
-        where C : RingElem<C>
-    {
-        ArgumentNullException.ThrowIfNull(polynomial);
-        ArgumentNullException.ThrowIfNull(divisor);
-
-        if (divisor.IsZero())
-        {
-            throw new ArithmeticException($"division by zero {polynomial}, {divisor}");
-        }
-
-        if (polynomial.IsZero() || divisor.IsOne())
-        {
-            return polynomial;
-        }
-
-        GenPolynomial<GenPolynomial<C>> result = new (polynomial.Ring);
-        SortedDictionary<ExpVector, GenPolynomial<C>> resultTerms = result.Terms;
-
-        foreach (KeyValuePair<ExpVector, GenPolynomial<C>> term in polynomial.Terms)
-        {
-            GenPolynomial<C> quotient = CoefficientBasePseudoDivide(term.Value, divisor);
-            if (quotient.IsZero())
-            {
-                throw new InvalidOperationException("Coefficient pseudo division produced zero coefficient unexpectedly.");
-            }
-
-            resultTerms[term.Key] = quotient;
-        }
-
-        return result;
-    }
-
-    public static GenPolynomial<GenPolynomial<C>> RecursiveDensePseudoRemainder<C>(GenPolynomial<GenPolynomial<C>> polynomial, GenPolynomial<GenPolynomial<C>> divisor)
-        where C : RingElem<C>
-    {
-        ArgumentNullException.ThrowIfNull(polynomial);
-        ArgumentNullException.ThrowIfNull(divisor);
-
-        if (divisor.IsZero())
-        {
-            throw new ArithmeticException($"{polynomial} division by zero {divisor}");
-        }
-
-        if (polynomial.IsZero())
-        {
-            return polynomial;
-        }
-
-        if (divisor.Degree() <= 0)
-        {
-            return new GenPolynomial<GenPolynomial<C>>(polynomial.Ring);
-        }
-
-        long dividendDegree = polynomial.Degree(0);
-        long divisorDegree = divisor.Degree(0);
-        GenPolynomial<C> leadingDivisorCoefficient = divisor.LeadingBaseCoefficient();
-        ExpVector leadingDivisorExponent = divisor.LeadingExpVector() ?? throw new InvalidOperationException("Divisor must have a leading exponent.");
-        GenPolynomial<GenPolynomial<C>> remainder = polynomial;
-
-        for (long i = dividendDegree; i >= divisorDegree; i--)
-        {
-            if (remainder.IsZero())
-            {
-                return remainder;
-            }
-
-            long remainderDegree = remainder.Degree(0);
-            if (i == remainderDegree)
-            {
-                ExpVector leadingRemainderExponent = remainder.LeadingExpVector() ?? throw new InvalidOperationException("Remainder must have a leading exponent.");
-                GenPolynomial<C> leadingRemainderCoefficient = remainder.LeadingBaseCoefficient();
-                ExpVector exponentDifference = leadingRemainderExponent.Subtract(leadingDivisorExponent);
-                remainder = remainder.Multiply(leadingDivisorCoefficient);
-                GenPolynomial<GenPolynomial<C>> product = divisor.Multiply(leadingRemainderCoefficient, exponentDifference);
-                remainder = remainder.Subtract(product);
-            }
-            else
-            {
-                remainder = remainder.Multiply(leadingDivisorCoefficient);
-            }
-        }
-
-        return remainder;
-    }
-
-    public static GenPolynomial<GenPolynomial<C>> RecursivePseudoDivide<C>(GenPolynomial<GenPolynomial<C>> polynomial, GenPolynomial<GenPolynomial<C>> divisor)
-        where C : RingElem<C>
-    {
-        ArgumentNullException.ThrowIfNull(polynomial);
-        ArgumentNullException.ThrowIfNull(divisor);
-
-        if (divisor.IsZero())
-        {
-            throw new ArithmeticException($"{polynomial} division by zero {divisor}");
-        }
-
-        if (polynomial.IsZero())
-        {
-            return polynomial;
-        }
-
-        GenPolynomial<C> leadingDivisorCoefficient = divisor.LeadingBaseCoefficient();
-        ExpVector leadingDivisorExponent = divisor.LeadingExpVector() ?? throw new InvalidOperationException("Divisor must have a leading exponent.");
-        GenPolynomial<GenPolynomial<C>> remainder = polynomial;
-        GenPolynomial<GenPolynomial<C>> quotient = new (divisor.Ring);
-
-        while (!remainder.IsZero())
-        {
-            ExpVector leadingRemainderExponent = remainder.LeadingExpVector() ?? throw new InvalidOperationException("Remainder must have a leading exponent.");
-            if (!leadingRemainderExponent.MultipleOf(leadingDivisorExponent))
-            {
-                break;
-            }
-
-            GenPolynomial<C> leadingRemainderCoefficient = remainder.LeadingBaseCoefficient();
-            ExpVector exponentDifference = leadingRemainderExponent.Subtract(leadingDivisorExponent);
-            GenPolynomial<C> remainderModulo = BaseSparsePseudoRemainder(leadingRemainderCoefficient, leadingDivisorCoefficient);
-
-            if (remainderModulo.IsZero() && !leadingDivisorCoefficient.IsConstant())
-            {
-                GenPolynomial<C> quotientCoefficient = BasePseudoDivide(leadingRemainderCoefficient, leadingDivisorCoefficient);
-                quotient = quotient.Sum(quotientCoefficient, exponentDifference);
-                GenPolynomial<GenPolynomial<C>> product = divisor.Multiply(quotientCoefficient, exponentDifference);
-                remainder = remainder.Subtract(product);
-            }
-            else
-            {
-                quotient = quotient.Multiply(leadingDivisorCoefficient);
-                quotient = quotient.Sum(leadingRemainderCoefficient, exponentDifference);
-                remainder = remainder.Multiply(leadingDivisorCoefficient);
-                GenPolynomial<GenPolynomial<C>> product = divisor.Multiply(leadingRemainderCoefficient, exponentDifference);
-                remainder = remainder.Subtract(product);
-            }
-        }
-
-        return quotient;
-    }
-
-    public static GenPolynomial<GenPolynomial<C>> CoefficientPseudoDivide<C>(GenPolynomial<GenPolynomial<C>> polynomial, GenPolynomial<C> divisor)
-        where C : RingElem<C>
-    {
-        ArgumentNullException.ThrowIfNull(polynomial);
-        ArgumentNullException.ThrowIfNull(divisor);
-
-        if (divisor.IsZero())
-        {
-            throw new ArithmeticException($"{polynomial} division by zero {divisor}");
-        }
-
-        if (polynomial.IsZero())
-        {
-            return polynomial;
-        }
-
-        GenPolynomial<GenPolynomial<C>> result = new (polynomial.Ring);
-        SortedDictionary<ExpVector, GenPolynomial<C>> resultTerms = result.Terms;
-
-        foreach (KeyValuePair<ExpVector, GenPolynomial<C>> term in polynomial.Terms)
-        {
-            GenPolynomial<C> quotient = BasePseudoDivide(term.Value, divisor);
-            if (!quotient.IsZero())
-            {
-                resultTerms[term.Key] = quotient;
-            }
-        }
-
-        return result;
-    }
-
-    public static GenPolynomial<C> CoefficientBasePseudoDivide<C>(GenPolynomial<C> polynomial, C divisor)
-        where C : RingElem<C>
-    {
-        ArgumentNullException.ThrowIfNull(polynomial);
-        ArgumentNullException.ThrowIfNull(divisor);
-
-        if (divisor.IsZero())
-        {
-            throw new ArithmeticException($"{polynomial} division by zero {divisor}");
-        }
-
-        if (polynomial.IsZero())
-        {
-            return polynomial;
-        }
-
-        GenPolynomial<C> result = new (polynomial.Ring);
-        SortedDictionary<ExpVector, C> resultTerms = result.Terms;
+        GenPolynomial<C> polynomial = value.Val;
+        C real = _ring.Ring.FromInteger(0);
+        C imaginary = _ring.Ring.FromInteger(0);
 
         foreach (KeyValuePair<ExpVector, C> term in polynomial.Terms)
         {
-            C quotient = term.Value.Divide(divisor);
-            if (!quotient.IsZero())
+            long exponent = term.Key.GetVal(0);
+            if (exponent == 0)
             {
-                resultTerms[term.Key] = quotient;
-            }
-        }
-
-        return result;
-    }
-
-    public static C EvaluateMain<C>(RingFactory<C> coefficientFactory, GenPolynomial<C> polynomial, C value)
-        where C : RingElem<C>
-    {
-        ArgumentNullException.ThrowIfNull(coefficientFactory);
-        ArgumentNullException.ThrowIfNull(polynomial);
-
-        if (polynomial.IsZero())
-        {
-            return coefficientFactory.FromInteger(0);
-        }
-
-        if (polynomial.Ring.Nvar != 1)
-        {
-            throw new ArgumentException("evaluateMain requires a univariate polynomial.", nameof(polynomial));
-        }
-
-        if (value is null || value.IsZero())
-        {
-            return GetTrailingCoefficient(polynomial);
-        }
-
-        C? result = default;
-        long previousExponent = -1;
-
-        foreach (KeyValuePair<ExpVector, C> term in polynomial.Terms)
-        {
-            ExpVector exponent = term.Key;
-            long currentExponent = exponent.GetVal(0);
-            if (result is null)
-            {
-                result = term.Value;
+                real = term.Value;
             }
             else
             {
-                for (long i = currentExponent; i < previousExponent; i++)
-                {
-                    result = result.Multiply(value);
-                }
-
-                result = result.Sum(term.Value);
-            }
-
-            previousExponent = currentExponent;
-        }
-
-        if (result is null)
-        {
-            return coefficientFactory.FromInteger(0);
-        }
-
-        for (long i = 0; i < previousExponent; i++)
-        {
-            result = result.Multiply(value);
-        }
-
-        return result;
-    }
-
-    public static GenPolynomial<C> EvaluateFirstRec<C>(
-        GenPolynomialRing<C> coefficientRing,
-        GenPolynomialRing<C> destinationRing,
-        GenPolynomial<GenPolynomial<C>> polynomial,
-        C value)
-        where C : RingElem<C>
-    {
-        ArgumentNullException.ThrowIfNull(coefficientRing);
-        ArgumentNullException.ThrowIfNull(destinationRing);
-        ArgumentNullException.ThrowIfNull(polynomial);
-        ArgumentNullException.ThrowIfNull(value);
-
-        if (polynomial.IsZero())
-        {
-            return new GenPolynomial<C>(destinationRing);
-        }
-
-        GenPolynomial<C> result = new (destinationRing);
-        SortedDictionary<ExpVector, C> resultTerms = result.Terms;
-        foreach (KeyValuePair<ExpVector, GenPolynomial<C>> term in polynomial.Terms)
-        {
-            C evaluated = EvaluateMain(coefficientRing.CoFac, term.Value, value);
-            if (!evaluated.IsZero())
-            {
-                resultTerms[term.Key] = evaluated;
+                imaginary = term.Value;
             }
         }
 
-        return result;
+        return new Complex<C>(_ring, real, imaginary);
     }
+}
 
-    public static GenPolynomial<GenPolynomial<C>> Interpolate<C>(
-        GenPolynomialRing<GenPolynomial<C>> ring,
-        GenPolynomial<GenPolynomial<C>> source,
-        GenPolynomial<C> modulus,
-        C modulusInverse,
-        GenPolynomial<C> evaluation,
-        C evaluationPoint)
-        where C : RingElem<C>
+internal sealed class ComplToAlgeb<C> : UnaryFunctor<Complex<C>, AlgebraicNumber<C>> where C : GcdRingElem<C>
+{
+    private readonly AlgebraicNumberRing<C> _ring;
+    private readonly GenPolynomialRing<C> _polynomialRing;
+
+    public ComplToAlgeb(AlgebraicNumberRing<C> ring)
     {
         ArgumentNullException.ThrowIfNull(ring);
-        ArgumentNullException.ThrowIfNull(source);
-        ArgumentNullException.ThrowIfNull(modulus);
-        ArgumentNullException.ThrowIfNull(modulusInverse);
-        ArgumentNullException.ThrowIfNull(evaluation);
-        ArgumentNullException.ThrowIfNull(evaluationPoint);
-
-        GenPolynomial<GenPolynomial<C>> result = new (ring);
-        GenPolynomial<GenPolynomial<C>> working = source.Clone();
-
-        SortedDictionary<ExpVector, GenPolynomial<C>> sourceTerms = working.Terms;
-        SortedDictionary<ExpVector, C> evaluationTerms = evaluation.Terms;
-        SortedDictionary<ExpVector, GenPolynomial<C>> resultTerms = result.Terms;
-
-        GenPolynomialRing<C> coefficientRing = (GenPolynomialRing<C>)ring.CoFac;
-        RingFactory<C> coefficientFactory = coefficientRing.CoFac;
-
-        foreach (KeyValuePair<ExpVector, C> entry in evaluationTerms)
-        {
-            ExpVector exponent = entry.Key;
-            C entryValue = entry.Value;
-            if (sourceTerms.TryGetValue(exponent, out GenPolynomial<C>? existing))
-            {
-                sourceTerms.Remove(exponent);
-                GenPolynomial<C> interpolated = Interpolate(coefficientRing, existing, modulus, modulusInverse, entryValue, evaluationPoint);
-                if (!interpolated.IsZero())
-                {
-                    resultTerms[exponent] = interpolated;
-                }
-            }
-            else
-            {
-                GenPolynomial<C> interpolated = Interpolate(
-                    coefficientRing,
-                    new GenPolynomial<C>(coefficientRing),
-                    modulus,
-                    modulusInverse,
-                    entryValue,
-                    evaluationPoint);
-                if (!interpolated.IsZero())
-                {
-                    resultTerms[exponent] = interpolated;
-                }
-            }
-        }
-
-        foreach (KeyValuePair<ExpVector, GenPolynomial<C>> entry in sourceTerms)
-        {
-            GenPolynomial<C> interpolated = Interpolate(
-                coefficientRing,
-                entry.Value,
-                modulus,
-                modulusInverse,
-                coefficientFactory.FromInteger(0),
-                evaluationPoint);
-
-            if (!interpolated.IsZero())
-            {
-                resultTerms[entry.Key] = interpolated;
-            }
-        }
-
-        return result;
+        _ring = ring;
+        _polynomialRing = ring.Ring;
     }
 
-    public static GenPolynomial<C> Interpolate<C>(
-        GenPolynomialRing<C> ring,
-        GenPolynomial<C> polynomial,
-        GenPolynomial<C> modulus,
-        C modulusInverse,
-        C targetValue,
-        C evaluationPoint)
-        where C : RingElem<C>
+    public AlgebraicNumber<C> Eval(Complex<C> value)
     {
-        ArgumentNullException.ThrowIfNull(ring);
-        ArgumentNullException.ThrowIfNull(polynomial);
-        ArgumentNullException.ThrowIfNull(modulus);
-        ArgumentNullException.ThrowIfNull(modulusInverse);
-        ArgumentNullException.ThrowIfNull(targetValue);
-        ArgumentNullException.ThrowIfNull(evaluationPoint);
-
-        C evaluated = EvaluateMain(ring.CoFac, polynomial, evaluationPoint);
-        C difference = targetValue.Subtract(evaluated);
-        if (difference.IsZero())
+        if (value is null)
         {
-            return polynomial;
+            return _ring.GetZeroElement();
         }
 
-        C scaled = difference.Multiply(modulusInverse);
-        return modulus.Multiply(scaled).Sum(polynomial);
-    }
-
-    public static long CoeffMaxDegree<C>(GenPolynomial<GenPolynomial<C>> polynomial)
-        where C : RingElem<C>
-    {
-        ArgumentNullException.ThrowIfNull(polynomial);
-
-        if (polynomial.IsZero())
+        GenPolynomial<C> polynomial = new (_polynomialRing, value.Re);
+        if (!value.Im.IsZero())
         {
-            return 0;
+            ExpVector exponent = ExpVector.Create(_polynomialRing.Nvar, _polynomialRing.Nvar - 1, 1);
+            polynomial = polynomial.Sum(value.Im, exponent);
         }
 
-        long degree = 0;
-        foreach (GenPolynomial<C> coefficient in polynomial.Terms.Values)
-        {
-            long current = coefficient.Degree();
-            if (current > degree)
-            {
-                degree = current;
-            }
-        }
-
-        return degree;
-    }
-
-    public static BigInteger FactorBound(ExpVector exponent)
-    {
-        ArgumentNullException.ThrowIfNull(exponent);
-        if (exponent.IsZero())
-        {
-            return BigInteger.One;
-        }
-
-        int bits = 0;
-        System.Numerics.BigInteger product = System.Numerics.BigInteger.One;
-
-        for (int i = 0; i < exponent.Length(); i++)
-        {
-            long value = exponent.GetVal(i);
-            if (value <= 0)
-            {
-                continue;
-            }
-
-            bits += (int)(2 * value - 1);
-            System.Numerics.BigInteger factor = new(value - 1);
-            product *= factor;
-        }
-
-        bits += PopCount(product) + 1;
-        bits /= 2;
-
-        System.Numerics.BigInteger result = System.Numerics.BigInteger.One << (bits + 1);
-        return new BigInteger(result);
-    }
-
-    private static int PopCount(System.Numerics.BigInteger value)
-    {
-        value = System.Numerics.BigInteger.Abs(value);
-        int count = 0;
-        while (value > System.Numerics.BigInteger.Zero)
-        {
-            if (!value.IsEven)
-            {
-                count++;
-            }
-
-            value >>= 1;
-        }
-
-        return count;
-    }
-
-    private static C GetTrailingCoefficient<C>(GenPolynomial<C> polynomial)
-        where C : RingElem<C>
-    {
-        if (polynomial.Terms.Count == 0)
-        {
-            return polynomial.Ring.CoFac.FromInteger(0);
-        }
-
-        return polynomial.Terms.Last().Value;
-    }
-
-    private sealed class AlgToPoly<C> : UnaryFunctor<AlgebraicNumber<C>, GenPolynomial<C>> where C : GcdRingElem<C>
-    {
-        public GenPolynomial<C> Eval(AlgebraicNumber<C> value)
-        {
-            return value is null ? null! : value.Val;
-        }
-    }
-
-    private sealed class CoeffToAlg<C> : UnaryFunctor<C, AlgebraicNumber<C>> where C : GcdRingElem<C>
-    {
-        private readonly AlgebraicNumberRing<C> _ring;
-        private readonly GenPolynomial<C> _zeroPolynomial;
-
-        public CoeffToAlg(AlgebraicNumberRing<C> ring)
-        {
-            ArgumentNullException.ThrowIfNull(ring);
-            _ring = ring;
-            GenPolynomialRing<C> polynomialRing = ring.Ring;
-            _zeroPolynomial = new GenPolynomial<C>(polynomialRing);
-        }
-
-        public AlgebraicNumber<C> Eval(C coefficient)
-        {
-            if (coefficient is null)
-            {
-                return _ring.GetZeroElement();
-            }
-
-            GenPolynomial<C> polynomial = _zeroPolynomial.Sum(coefficient);
-            return new AlgebraicNumber<C>(_ring, polynomial);
-        }
-    }
-
-    private sealed class AlgebToCompl<C> : UnaryFunctor<AlgebraicNumber<C>, Complex<C>> where C : GcdRingElem<C>
-    {
-        private readonly ComplexRing<C> _ring;
-
-        public AlgebToCompl(ComplexRing<C> ring)
-        {
-            ArgumentNullException.ThrowIfNull(ring);
-            _ring = ring;
-        }
-
-        public Complex<C> Eval(AlgebraicNumber<C> value)
-        {
-            if (value.IsZero())
-            {
-                return _ring.Zero;
-            }
-
-            if (value.IsOne())
-            {
-                return _ring.One;
-            }
-
-            GenPolynomial<C> polynomial = value.Val;
-            C real = _ring.Ring.FromInteger(0);
-            C imaginary = _ring.Ring.FromInteger(0);
-
-            foreach (KeyValuePair<ExpVector, C> term in polynomial.Terms)
-            {
-                long exponent = term.Key.GetVal(0);
-                if (exponent == 0)
-                {
-                    real = term.Value;
-                }
-                else
-                {
-                    imaginary = term.Value;
-                }
-            }
-
-            return new Complex<C>(_ring, real, imaginary);
-        }
-    }
-
-    private sealed class ComplToAlgeb<C> : UnaryFunctor<Complex<C>, AlgebraicNumber<C>> where C : GcdRingElem<C>
-    {
-        private readonly AlgebraicNumberRing<C> _ring;
-        private readonly GenPolynomialRing<C> _polynomialRing;
-
-        public ComplToAlgeb(AlgebraicNumberRing<C> ring)
-        {
-            ArgumentNullException.ThrowIfNull(ring);
-            _ring = ring;
-            _polynomialRing = ring.Ring;
-        }
-
-        public AlgebraicNumber<C> Eval(Complex<C> value)
-        {
-            if (value is null)
-            {
-                return _ring.GetZeroElement();
-            }
-
-            GenPolynomial<C> polynomial = new (_polynomialRing, value.Re);
-            if (!value.Im.IsZero())
-            {
-                ExpVector exponent = ExpVector.Create(_polynomialRing.Nvar, _polynomialRing.Nvar - 1, 1);
-                polynomial = polynomial.Sum(value.Im, exponent);
-            }
-
-            return new AlgebraicNumber<C>(_ring, polynomial);
-        }
+        return new AlgebraicNumber<C>(_ring, polynomial);
     }
 }
