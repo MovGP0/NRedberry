@@ -26,4 +26,29 @@ public class SquarefreeRingChar0<C> : SquarefreeAbstract<C> where C : GcdRingEle
     {
         throw new NotImplementedException();
     }
+
+    public override GenPolynomial<GenPolynomial<C>> RecursiveUnivariateSquarefreePart(GenPolynomial<GenPolynomial<C>> polynomial)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SortedDictionary<GenPolynomial<GenPolynomial<C>>, long> RecursiveUnivariateSquarefreeFactors(GenPolynomial<GenPolynomial<C>> polynomial)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override GenPolynomial<C> SquarefreePart(GenPolynomial<C> polynomial)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SortedDictionary<GenPolynomial<C>, long> SquarefreeFactors(GenPolynomial<C> polynomial)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SortedDictionary<C, long> SquarefreeFactors(C coefficient)
+    {
+        throw new NotImplementedException();
+    }
 }

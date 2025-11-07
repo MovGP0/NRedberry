@@ -22,4 +22,29 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C> : SquarefreeFieldCharP<Alg
     {
         throw new NotImplementedException();
     }
+
+    public override GenPolynomial<GenPolynomial<AlgebraicNumber<C>>> RecursiveUnivariateSquarefreePart(GenPolynomial<GenPolynomial<AlgebraicNumber<C>>> polynomial)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SortedDictionary<GenPolynomial<GenPolynomial<AlgebraicNumber<C>>>, long> RecursiveUnivariateSquarefreeFactors(GenPolynomial<GenPolynomial<AlgebraicNumber<C>>> polynomial)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override GenPolynomial<AlgebraicNumber<C>> SquarefreePart(GenPolynomial<AlgebraicNumber<C>> polynomial)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SortedDictionary<GenPolynomial<AlgebraicNumber<C>>, long> SquarefreeFactors(GenPolynomial<AlgebraicNumber<C>> polynomial)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SortedDictionary<AlgebraicNumber<C>, long> SquarefreeFactors(AlgebraicNumber<C> coefficient)
+    {
+        throw new NotImplementedException();
+    }
 }

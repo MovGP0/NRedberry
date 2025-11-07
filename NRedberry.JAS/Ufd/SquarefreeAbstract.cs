@@ -14,37 +14,145 @@ public abstract class SquarefreeAbstract<C> : Squarefree<C> where C : GcdRingEle
 {
     protected readonly GreatestCommonDivisorAbstract<C> engine;
 
-    protected SquarefreeAbstract(GreatestCommonDivisorAbstract<C>? engine = null)
+    protected SquarefreeAbstract(GreatestCommonDivisorAbstract<C> engine)
     {
-        this.engine = engine ?? GCDFactory.GetProxy<C>(null!);
+        ArgumentNullException.ThrowIfNull(engine);
+        this.engine = engine;
     }
 
-    public abstract GenPolynomial<C> BaseSquarefreePart(GenPolynomial<C> P);
+    public abstract GenPolynomial<C> BaseSquarefreePart(GenPolynomial<C> polynomial);
 
-    public abstract SortedDictionary<GenPolynomial<C>, long> BaseSquarefreeFactors(GenPolynomial<C> P);
+    public abstract SortedDictionary<GenPolynomial<C>, long> BaseSquarefreeFactors(GenPolynomial<C> polynomial);
 
-    public virtual GenPolynomial<C> SquarefreePart(GenPolynomial<C> P)
+    public abstract GenPolynomial<GenPolynomial<C>> RecursiveUnivariateSquarefreePart(
+        GenPolynomial<GenPolynomial<C>> polynomial);
+
+    public abstract SortedDictionary<GenPolynomial<GenPolynomial<C>>, long> RecursiveUnivariateSquarefreeFactors(
+        GenPolynomial<GenPolynomial<C>> polynomial);
+
+    public abstract GenPolynomial<C> SquarefreePart(GenPolynomial<C> polynomial);
+
+    public virtual bool IsSquarefree(GenPolynomial<C> polynomial)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(polynomial);
+
+        GenPolynomial<C> squarefree = SquarefreePart(polynomial);
+        GenPolynomial<C> normalized = polynomial;
+        if (polynomial.Ring.CoFac.IsField())
+        {
+            normalized = normalized.Monic();
+        }
+        else
+        {
+            normalized = engine.BasePrimitivePart(normalized);
+        }
+
+        return normalized.Equals(squarefree);
     }
 
-    public virtual bool IsSquarefree(GenPolynomial<C> P)
+    public abstract SortedDictionary<GenPolynomial<C>, long> SquarefreeFactors(GenPolynomial<C> polynomial);
+
+    public SortedDictionary<GenPolynomial<C>, long>? NormalizeFactorization(
+        SortedDictionary<GenPolynomial<C>, long>? factors)
     {
-        throw new NotImplementedException();
+        if (factors == null || factors.Count <= 1)
+        {
+            return factors;
+        }
+
+        List<GenPolynomial<C>> entries = new(factors.Keys);
+        GenPolynomial<C> first = entries[0];
+        if (first.Ring.Characteristic().Sign != 0)
+        {
+            // Coefficients are ordered (positive characteristic), no normalization required.
+            return factors;
+        }
+
+        long firstExponent = factors[first];
+        SortedDictionary<GenPolynomial<C>, long> normalized = new(factors.Comparer);
+
+        for (int i = 1; i < entries.Count; i++)
+        {
+            GenPolynomial<C> factor = entries[i];
+            long exponent = factors[factor];
+            if (factor.Signum() < 0)
+            {
+                factor = factor.Negate();
+                if ((exponent & 1L) != 0)
+                {
+                    first = first.Negate();
+                }
+            }
+
+            normalized[factor] = exponent;
+        }
+
+        if (!first.IsOne())
+        {
+            normalized[first] = firstExponent;
+        }
+
+        return normalized;
     }
 
-    public virtual SortedDictionary<GenPolynomial<C>, long> SquarefreeFactors(GenPolynomial<C> P)
+    public bool IsFactorization(GenPolynomial<C> polynomial, List<GenPolynomial<C>> factors)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(polynomial);
+        ArgumentNullException.ThrowIfNull(factors);
+
+        GenPolynomial<C> product = CreateUnit(polynomial.Ring);
+        foreach (GenPolynomial<C> factor in factors)
+        {
+            product = product.Multiply(factor);
+        }
+
+        return IsEqualUpToSign(polynomial, product);
     }
 
-    public virtual GenPolynomial<C> RecursiveUnivariateSquarefreePart(GenPolynomial<C> P)
+    public bool IsFactorization(GenPolynomial<C> polynomial, SortedDictionary<GenPolynomial<C>, long> factors)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(polynomial);
+        ArgumentNullException.ThrowIfNull(factors);
+
+        if (polynomial.IsZero())
+        {
+            return factors.Count == 0;
+        }
+
+        GenPolynomial<C> product = CreateUnit(polynomial.Ring);
+        foreach (KeyValuePair<GenPolynomial<C>, long> entry in factors)
+        {
+            long exponent = entry.Value;
+            if (exponent == 0)
+            {
+                continue;
+            }
+
+            GenPolynomial<C> term = Power<GenPolynomial<C>>.PositivePower(entry.Key, exponent);
+            product = product.Multiply(term);
+        }
+
+        if (IsEqualUpToSign(polynomial, product))
+        {
+            return true;
+        }
+
+        // Normalize to monic representatives if possible.
+        GenPolynomial<C> monicPolynomial = polynomial.Monic();
+        GenPolynomial<C> monicProduct = product.Monic();
+        return IsEqualUpToSign(monicPolynomial, monicProduct);
     }
 
-    public virtual SortedDictionary<GenPolynomial<C>, long> RecursiveUnivariateSquarefreeFactors(GenPolynomial<C> P)
+    public abstract SortedDictionary<C, long> SquarefreeFactors(C coefficient);
+
+    private static GenPolynomial<C> CreateUnit(GenPolynomialRing<C> ring)
     {
-        throw new NotImplementedException();
+        C one = ring.CoFac.FromInteger(1);
+        return new GenPolynomial<C>(ring, one);
+    }
+
+    private static bool IsEqualUpToSign(GenPolynomial<C> left, GenPolynomial<C> right)
+    {
+        return left.Equals(right) || left.Equals(right.Negate());
     }
 }
