@@ -13,32 +13,18 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 public class SquarefreeInfiniteAlgebraicFieldCharP<C> : SquarefreeFieldCharP<AlgebraicNumber<C>>
     where C : GcdRingElem<C>
 {
-    public SquarefreeInfiniteAlgebraicFieldCharP(GreatestCommonDivisorAbstract<AlgebraicNumber<C>>? engine = null)
-        : base(engine)
+    public SquarefreeInfiniteAlgebraicFieldCharP(RingFactory<AlgebraicNumber<C>> fac)
+        : base(fac)
     {
     }
 
-    public override GenPolynomial<AlgebraicNumber<C>> BaseSquarefreePRoot(GenPolynomial<AlgebraicNumber<C>> P)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override GenPolynomial<GenPolynomial<AlgebraicNumber<C>>> RecursiveUnivariateSquarefreePart(GenPolynomial<GenPolynomial<AlgebraicNumber<C>>> polynomial)
+    public override GenPolynomial<AlgebraicNumber<C>>? BaseSquarefreePRoot(GenPolynomial<AlgebraicNumber<C>> polynomial)
     {
         throw new NotImplementedException();
     }
 
-    public override SortedDictionary<GenPolynomial<GenPolynomial<AlgebraicNumber<C>>>, long> RecursiveUnivariateSquarefreeFactors(GenPolynomial<GenPolynomial<AlgebraicNumber<C>>> polynomial)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override GenPolynomial<AlgebraicNumber<C>> SquarefreePart(GenPolynomial<AlgebraicNumber<C>> polynomial)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override SortedDictionary<GenPolynomial<AlgebraicNumber<C>>, long> SquarefreeFactors(GenPolynomial<AlgebraicNumber<C>> polynomial)
+    public override GenPolynomial<GenPolynomial<AlgebraicNumber<C>>>? RecursiveUnivariateRootCharacteristic(
+        GenPolynomial<GenPolynomial<AlgebraicNumber<C>>> polynomial)
     {
         throw new NotImplementedException();
     }

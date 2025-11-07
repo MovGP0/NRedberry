@@ -210,6 +210,21 @@ public class AlgebraicNumberRing<C> : RingFactory<AlgebraicNumber<C>> where C : 
         return new AlgebraicNumber<C>(this, GenPolynomialRing<C>.One);
     }
 
+    public long TotalExtensionDegree()
+    {
+        long degree = Modul.Degree(0);
+        RingFactory<C> coefficientFactory = Ring.CoFac;
+        Type factoryType = coefficientFactory.GetType();
+        if (factoryType.IsGenericType && factoryType.GetGenericTypeDefinition() == typeof(AlgebraicNumberRing<>))
+        {
+            dynamic nestedRing = coefficientFactory;
+            long nestedDegree = (long)nestedRing.TotalExtensionDegree();
+            degree = degree == 0 ? nestedDegree : degree * nestedDegree;
+        }
+
+        return degree;
+    }
+
     public override string ToString()
     {
         return $"AlgebraicNumberRing[ {Modul} | isField={_isField} :: {Ring} ]";
