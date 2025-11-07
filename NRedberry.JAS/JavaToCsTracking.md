@@ -105,7 +105,7 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 | GreatestCommonDivisor.java | GreatestCommonDivisor.cs | ✔️ Complete | GCD interface with generic type parameter |
 | GreatestCommonDivisorAbstract.java | GreatestCommonDivisorAbstract.cs | ✔️ Complete | Abstract GCD base with interface methods |
 | GreatestCommonDivisorModEval.java | GreatestCommonDivisorModEval.cs | ✔️ Complete | GCD with modular evaluation algorithm |
-| GreatestCommonDivisorModular.java | GreatestCommonDivisorModular.cs | ✅ Scaffolded | GCD with Chinese remainder algorithm |
+| GreatestCommonDivisorModular.java | GreatestCommonDivisorModular.cs | ✔️ Complete | GCD with Chinese remainder algorithm |
 | GreatestCommonDivisorPrimitive.java | GreatestCommonDivisorPrimitive.cs | ✔️ Complete | GCD with primitive polynomial remainder |
 | GreatestCommonDivisorSimple.java | GreatestCommonDivisorSimple.cs | ✔️ Complete | GCD with monic polynomial remainder |
 | GreatestCommonDivisorSubres.java | GreatestCommonDivisorSubres.cs | ✔️ Complete | GCD with subresultant remainder |
