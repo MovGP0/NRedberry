@@ -97,6 +97,11 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
     {
     }
 
+    public GenPolynomialRing(RingFactory<C> cf, GenPolynomialRing<AlgebraicNumber<C>> other)
+        : this(cf, other?.Nvar ?? throw new ArgumentNullException(nameof(other)), other.Tord, other.vars)
+    {
+    }
+
     public GenPolynomialRing<C> Copy()
     {
         return new GenPolynomialRing<C>(CoFac, this);
