@@ -117,11 +117,11 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 | Quotient.java | Quotient.cs | ✅ Scaffolded | Quotient ring element (rational function) |
 | QuotientRing.java | QuotientRing.cs | ✅ Scaffolded | Quotient ring factory with generic type |
 | Squarefree.java | Squarefree.cs | ✔️ Complete | Squarefree decomposition interface |
-| SquarefreeAbstract.java | SquarefreeAbstract.cs | ✅ Scaffolded | Abstract squarefree base with methods |
-| SquarefreeFactory.java | SquarefreeFactory.cs | ✅ Scaffolded | Factory for squarefree decomposition |
-| SquarefreeFieldChar0.java | SquarefreeFieldChar0.cs | ✅ Scaffolded | Squarefree for fields char 0 |
-| SquarefreeFieldCharP.java | SquarefreeFieldCharP.cs | ✅ Scaffolded | Abstract squarefree for fields char p – needs full port before dependents |
-| SquarefreeFiniteFieldCharP.java | SquarefreeFiniteFieldCharP.cs | ✅ Scaffolded | Blocked: relies on SquarefreeFieldCharP implementation |
+| SquarefreeAbstract.java | SquarefreeAbstract.cs | ✔️ Complete | Abstract squarefree base with methods |
+| SquarefreeFactory.java | SquarefreeFactory.cs | ✔️ Complete | Factory for squarefree decomposition |
+| SquarefreeFieldChar0.java | SquarefreeFieldChar0.cs | ✔️ Complete | Squarefree for fields char 0 |
+| SquarefreeFieldCharP.java | SquarefreeFieldCharP.cs | ✔️ Complete | Abstract squarefree for fields char p – needs full port before dependents |
+| SquarefreeFiniteFieldCharP.java | SquarefreeFiniteFieldCharP.cs | ✔️ Complete | Blocked: relies on SquarefreeFieldCharP implementation |
 | SquarefreeInfiniteAlgebraicFieldCharP.java | SquarefreeInfiniteAlgebraicFieldCharP.cs | ✅ Scaffolded | Squarefree for infinite algebraic fields |
 | SquarefreeInfiniteFieldCharP.java | SquarefreeInfiniteFieldCharP.cs | ✅ Scaffolded | Squarefree for infinite fields char p |
 | SquarefreeRingChar0.java | SquarefreeRingChar0.cs | ✅ Scaffolded | Squarefree for rings char 0 |
