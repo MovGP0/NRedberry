@@ -80,7 +80,7 @@ public static class SquarefreeFactory
 
         if (fac.Characteristic().Sign == 0)
         {
-            return new SquarefreeRingChar0<C>();
+            return new SquarefreeRingChar0<C>(fac);
         }
 
         throw new ArgumentException($"No squarefree factorization implementation for {fac.GetType().Name}.", nameof(fac));
@@ -101,7 +101,7 @@ public static class SquarefreeFactory
     public static SquarefreeAbstract<Arith.BigInteger> GetImplementation(Arith.BigInteger fac)
     {
         ArgumentNullException.ThrowIfNull(fac);
-        return new SquarefreeRingChar0<Arith.BigInteger>();
+        return new SquarefreeRingChar0<Arith.BigInteger>(fac);
     }
 
     public static SquarefreeAbstract<BigRational> GetImplementation(BigRational fac)

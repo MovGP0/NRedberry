@@ -124,7 +124,7 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 | SquarefreeFiniteFieldCharP.java | SquarefreeFiniteFieldCharP.cs | ✔️ Complete | Blocked: relies on SquarefreeFieldCharP implementation |
 | SquarefreeInfiniteAlgebraicFieldCharP.java | SquarefreeInfiniteAlgebraicFieldCharP.cs | ✅ Scaffolded | Squarefree for infinite algebraic fields |
 | SquarefreeInfiniteFieldCharP.java | SquarefreeInfiniteFieldCharP.cs | ✅ Scaffolded | Squarefree for infinite fields char p |
-| SquarefreeRingChar0.java | SquarefreeRingChar0.cs | ✅ Scaffolded | Squarefree for rings char 0 |
+| SquarefreeRingChar0.java | SquarefreeRingChar0.cs | ✔️ Complete | Squarefree for rings char 0 |
 
 ### Util (5 files)
 | Java File | C# File | Status | Notes |
