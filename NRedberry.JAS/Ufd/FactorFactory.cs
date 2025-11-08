@@ -5,7 +5,8 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Factorization algorithms factory. Select appropriate factorization engine based on the coefficient types.
+/// Factorization algorithms factory. Select appropriate factorization engine
+/// based on the coefficient types.
 /// </summary>
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ufd.FactorFactory

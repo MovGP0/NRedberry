@@ -4,7 +4,7 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Greatest common divisor algorithms abstract base class.
+/// Greatest common divisor algorithms.
 /// </summary>
 /// <typeparam name="C">coefficient type</typeparam>
 /// <remarks>

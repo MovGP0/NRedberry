@@ -9,16 +9,33 @@
 /// </remarks>
 public sealed class ExpVectorShort : ExpVector
 {
+    /// <summary>
+    /// Largest short exponent representable.
+    /// </summary>
     public static readonly long MaxShort = short.MaxValue / 2L;
+
+    /// <summary>
+    /// Smallest short exponent representable.
+    /// </summary>
     public static readonly long MinShort = short.MinValue / 2L;
 
     internal readonly short[] _values;
 
+    /// <summary>
+    /// Creates a short-backed exponent vector of the requested length.
+    /// </summary>
+    /// <param name="length">Number of variables.</param>
     public ExpVectorShort(int length)
         : this(new short[length])
     {
     }
 
+    /// <summary>
+    /// Creates a vector and initializes the specified entry while checking range bounds.
+    /// </summary>
+    /// <param name="length">Number of variables.</param>
+    /// <param name="index">Index to set.</param>
+    /// <param name="exponent">Value placed at <paramref name="index"/>.</param>
     public ExpVectorShort(int length, int index, long exponent)
         : this(new short[length])
     {
@@ -30,6 +47,10 @@ public sealed class ExpVectorShort : ExpVector
         _values[index] = ConvertToShort(exponent);
     }
 
+    /// <summary>
+    /// Creates a vector from a long array with explicit range validation.
+    /// </summary>
+    /// <param name="values">Source exponent array.</param>
     public ExpVectorShort(long[] values)
     {
         ArgumentNullException.ThrowIfNull(values);
@@ -40,6 +61,10 @@ public sealed class ExpVectorShort : ExpVector
         }
     }
 
+    /// <summary>
+    /// Internal constructor that takes ownership of the provided short array.
+    /// </summary>
+    /// <param name="values">Array representing the exponent vector.</param>
     public ExpVectorShort(short[] values)
     {
         ArgumentNullException.ThrowIfNull(values);

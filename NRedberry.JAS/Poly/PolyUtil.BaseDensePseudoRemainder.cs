@@ -4,6 +4,14 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 public static partial class PolyUtil
 {
+    /// <summary>
+    /// Computes the dense pseudo remainder of two univariate polynomials where the divisor is non-zero.
+    /// </summary>
+    /// <typeparam name="C">Coefficient type.</typeparam>
+    /// <param name="polynomial">Dividend polynomial.</param>
+    /// <param name="divisor">Non-zero divisor polynomial.</param>
+    /// <returns>Remainder satisfying <c>lc(divisor)^(deg(dividend)-deg(divisor)) * dividend = quotient * divisor + remainder</c>.</returns>
+    /// <remarks>Original Java method: PolyUtil#baseDensePseudoRemainder.</remarks>
     public static GenPolynomial<C> BaseDensePseudoRemainder<C>(GenPolynomial<C> polynomial, GenPolynomial<C> divisor)
         where C : RingElem<C>
     {

@@ -4,6 +4,15 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 public static partial class PolyUtil
 {
+    /// <summary>
+    /// Evaluates a multivariate polynomial at a given value for its main (last) variable, returning a polynomial in the remaining variables.
+    /// </summary>
+    /// <typeparam name="C">Coefficient type.</typeparam>
+    /// <param name="coefficientRing">Coefficient polynomial ring factory.</param>
+    /// <param name="polynomial">Distributed polynomial to evaluate.</param>
+    /// <param name="value">Value substituted for the main variable.</param>
+    /// <returns>The polynomial with the last variable specialized to <paramref name="value"/>.</returns>
+    /// <remarks>Original Java method: PolyUtil#evaluateMain (GenPolynomialRing overload).</remarks>
     public static GenPolynomial<C> EvaluateMain<C>(
         GenPolynomialRing<C> coefficientRing,
         GenPolynomial<C> polynomial,
@@ -28,6 +37,9 @@ public static partial class PolyUtil
         return EvaluateMainRecursive(coefficientRing, recursivePolynomial, value);
     }
 
+    /// <summary>
+    /// Evaluates a recursive univariate polynomial using repeated multiplication (Horner scheme).
+    /// </summary>
     private static GenPolynomial<C> EvaluateMainRecursive<C>(
         GenPolynomialRing<C> coefficientRing,
         GenPolynomial<GenPolynomial<C>> polynomial,

@@ -5,8 +5,8 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Quotient ring factory based on GenPolynomial with RingElem interface.
-/// Objects of this class are immutable.
+/// Quotient ring factory based on GenPolynomial with RingElem interface. Objects
+/// of this class are immutable.
 /// </summary>
 /// <typeparam name="C">coefficient type</typeparam>
 /// <remarks>

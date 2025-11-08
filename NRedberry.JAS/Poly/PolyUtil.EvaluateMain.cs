@@ -4,6 +4,15 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 public static partial class PolyUtil
 {
+    /// <summary>
+    /// Evaluates a univariate polynomial at the supplied coefficient value (its main variable).
+    /// </summary>
+    /// <typeparam name="C">Coefficient type.</typeparam>
+    /// <param name="coefficientFactory">Coefficient ring factory.</param>
+    /// <param name="polynomial">Univariate polynomial to evaluate.</param>
+    /// <param name="value">Value substituted for the main variable.</param>
+    /// <returns>The scalar result <c>polynomial(value)</c>.</returns>
+    /// <remarks>Original Java method: PolyUtil#evaluateMain (RingFactory overload).</remarks>
     public static C EvaluateMain<C>(RingFactory<C> coefficientFactory, GenPolynomial<C> polynomial, C value)
         where C : RingElem<C>
     {

@@ -5,8 +5,11 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Util;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Abstract factorization algorithms class. This class contains implementations of all methods of the
-/// Factorization interface, except the method for factorization of a squarefree polynomial.
+/// Abstract factorization algorithms class. This class contains implementations
+/// of all methods of the <code>Factorization</code> interface, except the method
+/// for factorization of a squarefree polynomial. The methods to obtain
+/// squarefree polynomials delegate the computation to the
+/// <code>GreatestCommonDivisor</code> classes and are included for convenience.
 /// </summary>
 /// <typeparam name="C">coefficient type</typeparam>
 /// <remarks>

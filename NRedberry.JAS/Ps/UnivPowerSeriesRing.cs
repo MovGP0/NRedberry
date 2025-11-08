@@ -5,9 +5,10 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ps;
 
 /// <summary>
-/// Univariate power series ring implementation. Uses lazy evaluated generating function for coefficients.
+/// Univariate power series ring implementation. Uses lazy evaluated generating functions for coefficients,
+/// provides zero/one constants, and mirrors the Java version by exposing truncation, variable name, and random sampling.
 /// </summary>
-/// <typeparam name="C">ring element type</typeparam>
+/// <typeparam name="C">Ring element type.</typeparam>
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ps.UnivPowerSeriesRing
 /// </remarks>

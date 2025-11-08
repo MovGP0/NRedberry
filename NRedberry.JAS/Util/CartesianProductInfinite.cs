@@ -3,7 +3,8 @@ using System.Collections;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Util;
 
 /// <summary>
-/// Cartesian product of infinite components with iterator. Works also for finite iterables.
+/// Cartesian product of infinite components with iterator. Works also for finite
+/// iterables.
 /// </summary>
 /// <typeparam name="E">element type</typeparam>
 /// <remarks>

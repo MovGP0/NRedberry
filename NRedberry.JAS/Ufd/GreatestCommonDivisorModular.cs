@@ -5,7 +5,8 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Greatest common divisor algorithms with modular computation and Chinese remainder accumulation.
+/// Greatest common divisor algorithms with modular computation and chinese
+/// remainder algorithm.
 /// </summary>
 /// <typeparam name="MOD">modular coefficient type</typeparam>
 /// <remarks>

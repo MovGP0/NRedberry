@@ -6,6 +6,15 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 public static partial class HenselUtil
 {
+    /// <summary>
+    /// Lifts an extended Euclidean relation <c>S*A + T*B = 1</c> to precision <c>p^k</c> for modular polynomials.
+    /// </summary>
+    /// <typeparam name="MOD">Modular coefficient type.</typeparam>
+    /// <param name="A">First modular polynomial.</param>
+    /// <param name="B">Second modular polynomial.</param>
+    /// <param name="k">Desired lifting exponent.</param>
+    /// <returns>Array containing <c>[S, T]</c>.</returns>
+    /// <remarks>Original Java method: HenselUtil#liftExtendedEuclidean(A,B,k).</remarks>
     public static GenPolynomial<MOD>[] LiftExtendedEuclidean<MOD>(
         GenPolynomial<MOD> A,
         GenPolynomial<MOD> B,
@@ -91,6 +100,14 @@ public static partial class HenselUtil
         return new[] { S, T };
     }
 
+    /// <summary>
+    /// Constructs and lifts a family of extended Euclidean relations so that <c>∑ s_i B_i = 1</c> with <c>B_i = Π_{j≠i} A_j</c>.
+    /// </summary>
+    /// <typeparam name="MOD">Modular coefficient type.</typeparam>
+    /// <param name="A">List of pairwise coprime modular polynomials.</param>
+    /// <param name="k">Desired lifting exponent.</param>
+    /// <returns>Coefficients <c>[s₀,…,sₙ₋₁]</c> satisfying the lifted relation.</returns>
+    /// <remarks>Original Java method: HenselUtil#liftExtendedEuclidean(List,k).</remarks>
     public static List<GenPolynomial<MOD>> LiftExtendedEuclidean<MOD>(
         List<GenPolynomial<MOD>> A,
         long k)

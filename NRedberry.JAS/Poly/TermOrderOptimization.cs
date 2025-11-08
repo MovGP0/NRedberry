@@ -12,6 +12,9 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 /// </remarks>
 public static class TermOrderOptimization
 {
+    /// <summary>
+    /// Builds a matrix of monomial degrees for a single polynomial.
+    /// </summary>
     public static List<GenPolynomial<BigInteger>>? DegreeMatrix<C>(GenPolynomial<C>? polynomial)
         where C : RingElem<C>
     {
@@ -43,6 +46,9 @@ public static class TermOrderOptimization
         return degreeMatrix;
     }
 
+    /// <summary>
+    /// Aggregates degree matrices across multiple polynomials.
+    /// </summary>
     public static List<GenPolynomial<BigInteger>>? DegreeMatrix<C>(ICollection<GenPolynomial<C>> polynomials)
         where C : RingElem<C>
     {
@@ -64,6 +70,9 @@ public static class TermOrderOptimization
         return result;
     }
 
+    /// <summary>
+    /// Adds an exponent vector to the degree matrix by updating each entry.
+    /// </summary>
     public static List<GenPolynomial<BigInteger>> ExpVectorAdd(List<GenPolynomial<BigInteger>> degreeMatrix, ExpVector exponent)
     {
         ArgumentNullException.ThrowIfNull(degreeMatrix);
@@ -81,6 +90,9 @@ public static class TermOrderOptimization
         return degreeMatrix;
     }
 
+    /// <summary>
+    /// Computes an optimal variable permutation based on the degree matrix lex ordering.
+    /// </summary>
     public static List<int> OptimalPermutation(List<GenPolynomial<BigInteger>> degreeMatrix)
     {
         ArgumentNullException.ThrowIfNull(degreeMatrix);
@@ -121,6 +133,9 @@ public static class TermOrderOptimization
         return permutation;
     }
 
+    /// <summary>
+    /// Returns the inverse of a previously computed permutation.
+    /// </summary>
     public static List<int> InversePermutation(List<int> permutation)
     {
         if (permutation == null || permutation.Count <= 1)
@@ -137,6 +152,9 @@ public static class TermOrderOptimization
         return inverse;
     }
 
+    /// <summary>
+    /// Applies a permutation to a string array representing variable names.
+    /// </summary>
     public static string[] StringArrayPermutation(List<int> permutation, string[] array)
     {
         if (array == null || array.Length <= 1)
@@ -155,6 +173,9 @@ public static class TermOrderOptimization
         return result;
     }
 
+    /// <summary>
+    /// Applies a permutation to a long array, preserving length.
+    /// </summary>
     public static long[] LongArrayPermutation(List<int> permutation, long[] array)
     {
         if (array == null || array.Length <= 1)
@@ -173,6 +194,9 @@ public static class TermOrderOptimization
         return result;
     }
 
+    /// <summary>
+    /// Permutes an exponent vector using the given permutation.
+    /// </summary>
     public static ExpVector Permutation(List<int> permutation, ExpVector exponent)
     {
         if (exponent is null)
@@ -184,6 +208,9 @@ public static class TermOrderOptimization
         return ExpVector.Create(values);
     }
 
+    /// <summary>
+    /// Applies a variable permutation to the polynomial's exponents within the supplied ring.
+    /// </summary>
     public static GenPolynomial<C>? Permutation<C>(List<int> permutation, GenPolynomialRing<C> ring, GenPolynomial<C>? polynomial)
         where C : RingElem<C>
     {

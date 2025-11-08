@@ -4,7 +4,8 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 
 /// <summary>
 /// Immutable arbitrary-precision rational numbers. BigRational class based on
-/// BigInteger and implementing the RingElem interface.
+/// System.Numerics.BigInteger (mirroring java.math.BigInteger) and implementing
+/// the RingElem interface. The SAC2 static methods are also provided.
 /// </summary>
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.arith.BigRational

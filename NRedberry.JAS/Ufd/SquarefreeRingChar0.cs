@@ -5,7 +5,7 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Squarefree decomposition for (commutative) rings of characteristic 0.
+/// Squarefree decomposition for coefficient rings of characteristic 0.
 /// </summary>
 /// <typeparam name="C">coefficient type</typeparam>
 /// <remarks>

@@ -4,7 +4,8 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Greatest common divisor algorithms factory.
+/// Greatest common divisor algorithms factory. Select appropriate GCD engine
+/// based on the coefficient types.
 /// </summary>
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ufd.GCDFactory

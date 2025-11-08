@@ -4,6 +4,14 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 public static partial class PolyUtil
 {
+    /// <summary>
+    /// Substitutes a polynomial into the main variable of a univariate polynomial.
+    /// </summary>
+    /// <typeparam name="C">Coefficient type.</typeparam>
+    /// <param name="polynomial">Univariate polynomial.</param>
+    /// <param name="substitution">Polynomial to insert for the variable.</param>
+    /// <returns>The composition <c>polynomial(substitution)</c>.</returns>
+    /// <remarks>Original Java method: PolyUtil#substituteMain.</remarks>
     public static GenPolynomial<C> SubstituteMain<C>(GenPolynomial<C> polynomial, GenPolynomial<C> substitution)
         where C : RingElem<C>
     {
@@ -12,6 +20,9 @@ public static partial class PolyUtil
         return SubstituteUnivariate(polynomial, substitution);
     }
 
+    /// <summary>
+    /// Helper that composes two univariate polynomials via repeated multiplication.
+    /// </summary>
     private static GenPolynomial<C> SubstituteUnivariate<C>(GenPolynomial<C> polynomial, GenPolynomial<C> substitution)
         where C : RingElem<C>
     {

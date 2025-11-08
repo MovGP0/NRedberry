@@ -11,11 +11,21 @@ public sealed class ExpVectorLong : ExpVector
 {
     internal readonly long[] _values;
 
+    /// <summary>
+    /// Creates a long-backed exponent vector of the requested length.
+    /// </summary>
+    /// <param name="length">Number of variables.</param>
     public ExpVectorLong(int length)
         : this(new long[length])
     {
     }
 
+    /// <summary>
+    /// Creates a vector and sets a single exponent at <paramref name="index"/>.
+    /// </summary>
+    /// <param name="length">Number of variables.</param>
+    /// <param name="index">Index to set.</param>
+    /// <param name="exponent">Value stored.</param>
     public ExpVectorLong(int length, int index, long exponent)
         : this(new long[length])
     {
@@ -27,12 +37,19 @@ public sealed class ExpVectorLong : ExpVector
         _values[index] = exponent;
     }
 
+    /// <summary>
+    /// Creates a vector from the provided array reference.
+    /// </summary>
+    /// <param name="values">Source array.</param>
     public ExpVectorLong(long[] values)
     {
         ArgumentNullException.ThrowIfNull(values);
         _values = values;
     }
 
+    /// <summary>
+    /// Copies the underlying <see cref="long"/> array.
+    /// </summary>
     public override ExpVector Clone()
     {
         long[] result = new long[_values.Length];
@@ -40,6 +57,9 @@ public sealed class ExpVectorLong : ExpVector
         return new ExpVectorLong(result);
     }
 
+    /// <summary>
+    /// Returns a copy of the internal <see cref="long"/> storage.
+    /// </summary>
     public override long[] GetVal()
     {
         long[] result = new long[_values.Length];
@@ -52,6 +72,9 @@ public sealed class ExpVectorLong : ExpVector
         return _values[index];
     }
 
+    /// <summary>
+    /// Gets the length of the vector.
+    /// </summary>
     public override int Length()
     {
         return _values.Length;

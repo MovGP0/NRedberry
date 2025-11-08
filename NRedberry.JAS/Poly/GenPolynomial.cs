@@ -21,6 +21,10 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
 
     private IComparer<ExpVector> Comparator => Ring.Tord.GetDescendComparator();
 
+    /// <summary>
+    /// Constructs the zero polynomial for the supplied ring.
+    /// </summary>
+    /// <param name="ring">Polynomial ring factory.</param>
     public GenPolynomial(GenPolynomialRing<C> ring)
     {
         ArgumentNullException.ThrowIfNull(ring);
@@ -28,6 +32,11 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         Terms = CreateDictionary();
     }
 
+    /// <summary>
+    /// Constructs the constant polynomial <c>coefficient</c>.
+    /// </summary>
+    /// <param name="ring">Polynomial ring factory.</param>
+    /// <param name="coefficient">Coefficient placed at the zero exponent.</param>
     public GenPolynomial(GenPolynomialRing<C> ring, C coefficient)
         : this(ring)
     {
@@ -38,6 +47,12 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         }
     }
 
+    /// <summary>
+    /// Constructs the monomial <c>coefficient * x^exponent</c>.
+    /// </summary>
+    /// <param name="ring">Polynomial ring factory.</param>
+    /// <param name="coefficient">Coefficient placed at <paramref name="exponent"/>.</param>
+    /// <param name="exponent">Exponent vector.</param>
     public GenPolynomial(GenPolynomialRing<C> ring, C coefficient, ExpVector exponent)
         : this(ring)
     {
@@ -64,11 +79,17 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         }
     }
 
+    /// <summary>
+    /// Creates a deep copy of this polynomial, including the term map.
+    /// </summary>
     public GenPolynomial<C> Clone()
     {
         return new GenPolynomial<C>(Ring, Terms);
     }
 
+    /// <summary>
+    /// Formats the polynomial with its ring information and listed terms.
+    /// </summary>
     public override string ToString()
     {
         string[]? variables = Ring.GetVars();
@@ -116,11 +137,17 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return builder.ToString();
     }
 
+    /// <summary>
+    /// Returns the number of non-zero terms stored in this polynomial.
+    /// </summary>
     public int Length()
     {
         return Terms.Count;
     }
 
+    /// <summary>
+    /// Returns a cloned map of exponents to coefficients for external inspection.
+    /// </summary>
     public SortedDictionary<ExpVector, C> GetMap()
     {
         SortedDictionary<ExpVector, C> copy = CreateDictionary();
@@ -132,6 +159,11 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return copy;
     }
 
+    /// <summary>
+    /// Inserts or removes a coefficient in the internal term map.
+    /// </summary>
+    /// <param name="exponent">Exponent to update.</param>
+    /// <param name="coefficient">Coefficient to store (zero removes the term).</param>
     public void DoPutToMap(ExpVector exponent, C coefficient)
     {
         ArgumentNullException.ThrowIfNull(exponent);
@@ -146,11 +178,17 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         Terms[exponent] = coefficient;
     }
 
+    /// <summary>
+    /// Determines whether the polynomial has no terms.
+    /// </summary>
     public bool IsZero()
     {
         return Terms.Count == 0;
     }
 
+    /// <summary>
+    /// Determines whether the polynomial equals one.
+    /// </summary>
     public bool IsOne()
     {
         if (Terms.Count != 1)
@@ -162,6 +200,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return term.Key.Equals(Ring.Evzero) && term.Value.IsOne();
     }
 
+    /// <summary>
+    /// Determines whether the polynomial is a unit (constant invertible coefficient).
+    /// </summary>
     public bool IsUnit()
     {
         if (Terms.Count != 1)
@@ -177,6 +218,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return coefficient.IsUnit();
     }
 
+    /// <summary>
+    /// Determines whether the polynomial is constant (only zero exponent).
+    /// </summary>
     public bool IsConstant()
     {
         if (Terms.Count != 1)
@@ -187,6 +231,11 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return Terms.ContainsKey(Ring.Evzero);
     }
 
+    /// <summary>
+    /// Lexicographically compares two sorted polynomial term sequences.
+    /// </summary>
+    /// <param name="other">Polynomial to compare against.</param>
+    /// <returns>Sign of the comparison.</returns>
     public int CompareTo(GenPolynomial<C>? other)
     {
         if (other is null)
@@ -229,6 +278,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return 0;
     }
 
+    /// <summary>
+    /// Compares by polynomial value using <see cref="CompareTo"/>.
+    /// </summary>
     public override bool Equals(object? obj)
     {
         if (ReferenceEquals(this, obj))
@@ -251,14 +303,14 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
             return false;
         }
 
-        foreach (KeyValuePair<ExpVector, C> pair in Terms)
+        foreach (var (expVector, c) in Terms)
         {
-            if (!other.Terms.TryGetValue(pair.Key, out C value))
+            if (!other.Terms.TryGetValue(expVector, out C value))
             {
                 return false;
             }
 
-            if (!pair.Value.Equals(value))
+            if (!c.Equals(value))
             {
                 return false;
             }
@@ -267,6 +319,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return true;
     }
 
+    /// <summary>
+    /// Combines the hash of the ring and term map for dictionary lookups.
+    /// </summary>
     public override int GetHashCode()
     {
         HashCode hashCode = new();
@@ -280,6 +335,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return hashCode.ToHashCode();
     }
 
+    /// <summary>
+    /// Returns the polynomial with every coefficient replaced by its absolute value.
+    /// </summary>
     public GenPolynomial<C> Abs()
     {
         if (IsZero())
@@ -296,6 +354,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return this;
     }
 
+    /// <summary>
+    /// Returns the negation of this polynomial.
+    /// </summary>
     public GenPolynomial<C> Negate()
     {
         SortedDictionary<ExpVector, C> result = CreateDictionary();
@@ -307,6 +368,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return new GenPolynomial<C>(Ring, result, false);
     }
 
+    /// <summary>
+    /// Returns the signum of the polynomial representation.
+    /// </summary>
     public int Signum()
     {
         if (IsZero())
@@ -318,11 +382,18 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return leading.Signum();
     }
 
+    /// <summary>
+    /// Returns the number of variables in the underlying ring.
+    /// </summary>
     public int NumberOfVariables()
     {
         return Ring.Nvar;
     }
 
+    /// <summary>
+    /// Adds another polynomial to this one.
+    /// </summary>
+    /// <param name="other">Polynomial to add.</param>
     public GenPolynomial<C> Sum(GenPolynomial<C> other)
     {
         ArgumentNullException.ThrowIfNull(other);
@@ -335,6 +406,11 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return new GenPolynomial<C>(Ring, result, false);
     }
 
+    /// <summary>
+    /// Adds a monomial to the polynomial.
+    /// </summary>
+    /// <param name="coefficient">Coefficient of the monomial.</param>
+    /// <param name="exponent">Exponent vector.</param>
     public GenPolynomial<C> Sum(C coefficient, ExpVector exponent)
     {
         ArgumentNullException.ThrowIfNull(coefficient);
@@ -344,12 +420,20 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return new GenPolynomial<C>(Ring, result, false);
     }
 
+    /// <summary>
+    /// Adds a constant term to the polynomial.
+    /// </summary>
+    /// <param name="coefficient">Constant coefficient.</param>
     public GenPolynomial<C> Sum(C coefficient)
     {
         ArgumentNullException.ThrowIfNull(coefficient);
         return Sum(coefficient, Ring.Evzero);
     }
 
+    /// <summary>
+    /// Subtracts another polynomial from this one.
+    /// </summary>
+    /// <param name="other">Polynomial to subtract.</param>
     public GenPolynomial<C> Subtract(GenPolynomial<C> other)
     {
         ArgumentNullException.ThrowIfNull(other);
@@ -362,6 +446,11 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return new GenPolynomial<C>(Ring, result, false);
     }
 
+    /// <summary>
+    /// Subtracts a monomial from the polynomial.
+    /// </summary>
+    /// <param name="coefficient">Coefficient of the monomial.</param>
+    /// <param name="exponent">Exponent vector.</param>
     public GenPolynomial<C> Subtract(C coefficient, ExpVector exponent)
     {
         ArgumentNullException.ThrowIfNull(coefficient);
@@ -369,12 +458,20 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return Sum(coefficient.Negate(), exponent);
     }
 
+    /// <summary>
+    /// Subtracts a constant term from the polynomial.
+    /// </summary>
+    /// <param name="coefficient">Constant coefficient.</param>
     public GenPolynomial<C> Subtract(C coefficient)
     {
         ArgumentNullException.ThrowIfNull(coefficient);
         return Sum(coefficient.Negate());
     }
 
+    /// <summary>
+    /// Multiplies two polynomials.
+    /// </summary>
+    /// <param name="other">Polynomial to multiply.</param>
     public GenPolynomial<C> Multiply(GenPolynomial<C> other)
     {
         ArgumentNullException.ThrowIfNull(other);
@@ -397,6 +494,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return new GenPolynomial<C>(Ring, result, false);
     }
 
+    /// <summary>
+    /// Returns the monic version of this polynomial by dividing by the leading coefficient.
+    /// </summary>
     public GenPolynomial<C> Monic()
     {
         if (IsZero())
@@ -413,6 +513,10 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return Multiply(leading.Inverse());
     }
 
+    /// <summary>
+    /// Multiplies every term by the given coefficient.
+    /// </summary>
+    /// <param name="coefficient">Coefficient multiplier.</param>
     public GenPolynomial<C> Multiply(C coefficient)
     {
         ArgumentNullException.ThrowIfNull(coefficient);
@@ -430,6 +534,11 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return new GenPolynomial<C>(Ring, result, false);
     }
 
+    /// <summary>
+    /// Multiplies each term and shifts exponents by the specified vector.
+    /// </summary>
+    /// <param name="coefficient">Coefficient multiplier.</param>
+    /// <param name="exponent">Exponent shift.</param>
     public GenPolynomial<C> Multiply(C coefficient, ExpVector exponent)
     {
         ArgumentNullException.ThrowIfNull(coefficient);
@@ -449,6 +558,10 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return new GenPolynomial<C>(Ring, result, false);
     }
 
+    /// <summary>
+    /// Shifts exponents by the provided vector without changing coefficients.
+    /// </summary>
+    /// <param name="exponent">Exponent shift.</param>
     public GenPolynomial<C> Multiply(ExpVector exponent)
     {
         ArgumentNullException.ThrowIfNull(exponent);
@@ -467,6 +580,10 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return new GenPolynomial<C>(Ring, result, false);
     }
 
+    /// <summary>
+    /// Divides every coefficient by the provided field element.
+    /// </summary>
+    /// <param name="divisor">Coefficient divisor.</param>
     public GenPolynomial<C> Divide(C divisor)
     {
         ArgumentNullException.ThrowIfNull(divisor);
@@ -495,6 +612,11 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return new GenPolynomial<C>(Ring, result, false);
     }
 
+    /// <summary>
+    /// Computes the quotient and remainder of division by <paramref name="divisor"/>.
+    /// </summary>
+    /// <param name="divisor">Polynomial divisor.</param>
+    /// <returns>Array containing quotient and remainder.</returns>
     public GenPolynomial<C>[] QuotientRemainder(GenPolynomial<C> divisor)
     {
         ArgumentNullException.ThrowIfNull(divisor);
@@ -538,6 +660,10 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         ];
     }
 
+    /// <summary>
+    /// Computes the modular inverse of this polynomial modulo <paramref name="modulus"/>.
+    /// </summary>
+    /// <param name="modulus">Modulus polynomial.</param>
     public GenPolynomial<C> ModInverse(GenPolynomial<C> modulus)
     {
         ArgumentNullException.ThrowIfNull(modulus);
@@ -563,12 +689,19 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return inverse;
     }
 
+    /// <summary>
+    /// Divides this polynomial by another, returning an exact quotient (throws otherwise).
+    /// </summary>
+    /// <param name="other">Divisor polynomial.</param>
     public GenPolynomial<C> Divide(GenPolynomial<C> other)
     {
         ArgumentNullException.ThrowIfNull(other);
         return QuotientRemainder(other)[0];
     }
 
+    /// <summary>
+    /// Computes the multiplicative inverse if this is unit constant; otherwise throws.
+    /// </summary>
     public GenPolynomial<C> Inverse()
     {
         if (IsUnit())
@@ -580,12 +713,19 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         throw new NotInvertibleException($"element not invertible {this} :: {Ring}");
     }
 
+    /// <summary>
+    /// Computes the remainder when dividing by another polynomial.
+    /// </summary>
+    /// <param name="other">Divisor polynomial.</param>
     public GenPolynomial<C> Remainder(GenPolynomial<C> other)
     {
         ArgumentNullException.ThrowIfNull(other);
         return QuotientRemainder(other)[1];
     }
 
+    /// <summary>
+    /// Computes the greatest common divisor with another polynomial.
+    /// </summary>
     public GenPolynomial<C> Gcd(GenPolynomial<C> other)
     {
         ArgumentNullException.ThrowIfNull(other);
@@ -616,6 +756,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return a.Monic();
     }
 
+    /// <summary>
+    /// Extended GCD performing Bézout coefficients.
+    /// </summary>
     public GenPolynomial<C>[] Egcd(GenPolynomial<C> other)
     {
         GenPolynomial<C>[] result = new GenPolynomial<C>[3];
@@ -692,6 +835,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return result;
     }
 
+    /// <summary>
+    /// Half extended GCD variant returning [g, s] with s*this = g.
+    /// </summary>
     public GenPolynomial<C>[] Hegcd(GenPolynomial<C> other)
     {
         GenPolynomial<C>[] result = new GenPolynomial<C>[2];
@@ -746,11 +892,17 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return result;
     }
 
+    /// <summary>
+    /// Returns the polynomial ring factory that owns this element.
+    /// </summary>
     public ElemFactory<GenPolynomial<C>> Factory()
     {
         return Ring;
     }
 
+    /// <summary>
+    /// Enumerates the terms (monomials) in descending order.
+    /// </summary>
     public IEnumerator<Monomial<C>> GetEnumerator()
     {
         foreach (KeyValuePair<ExpVector, C> term in Terms)
@@ -764,6 +916,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return GetEnumerator();
     }
 
+    /// <summary>
+    /// Returns the leading monomial according to the ring's term order.
+    /// </summary>
     public Monomial<C>? LeadingMonomial()
     {
         if (Terms.Count == 0)
@@ -775,6 +930,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return new Monomial<C>(term.Key, term.Value);
     }
 
+    /// <summary>
+    /// Returns the exponent vector of the leading term.
+    /// </summary>
     public ExpVector? LeadingExpVector()
     {
         if (Terms.Count == 0)
@@ -785,6 +943,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return Terms.First().Key;
     }
 
+    /// <summary>
+    /// Returns the coefficient of the leading term.
+    /// </summary>
     public C LeadingBaseCoefficient()
     {
         if (Terms.Count == 0)
@@ -795,6 +956,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return Terms.First().Value;
     }
 
+    /// <summary>
+    /// Returns the exponent vector of the trailing term.
+    /// </summary>
     public ExpVector? TrailingExpVector()
     {
         if (Terms.Count == 0)
@@ -805,6 +969,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return Terms.Last().Key;
     }
 
+    /// <summary>
+    /// Returns the coefficient of the trailing term.
+    /// </summary>
     public C TrailingBaseCoefficient()
     {
         if (Terms.Count == 0)
@@ -815,12 +982,18 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return Terms.Last().Value;
     }
 
+    /// <summary>
+    /// Retrieves the coefficient for the specified exponent.
+    /// </summary>
     public C Coefficient(ExpVector exponent)
     {
         ArgumentNullException.ThrowIfNull(exponent);
         return Terms.TryGetValue(exponent, out C? value) ? value : Ring.CoFac.FromInteger(0);
     }
 
+    /// <summary>
+    /// Returns the degree in the specified variable.
+    /// </summary>
     public long Degree(int index)
     {
         if (Terms.Count == 0)
@@ -847,6 +1020,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return degree;
     }
 
+    /// <summary>
+    /// Returns the total degree (sum of all exponents) for the leading term.
+    /// </summary>
     public long Degree()
     {
         if (Terms.Count == 0)
@@ -867,6 +1043,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return degree;
     }
 
+    /// <summary>
+    /// Returns the exponent vector of the term with maximal lexicographical order.
+    /// </summary>
     public ExpVector DegreeVector()
     {
         if (Terms.Count == 0)
@@ -890,6 +1069,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return ExpVector.Create(degrees);
     }
 
+    /// <summary>
+    /// Returns the maximal norm among all coefficients.
+    /// </summary>
     public C MaxNorm()
     {
         C norm = Ring.CoFac.FromInteger(0);
@@ -905,6 +1087,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return norm;
     }
 
+    /// <summary>
+    /// Returns the sum of absolute values of coefficients.
+    /// </summary>
     public C SumNorm()
     {
         C norm = Ring.CoFac.FromInteger(0);
@@ -916,6 +1101,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return norm;
     }
 
+    /// <summary>
+    /// Embeds the polynomial into an extended ring by adding new variables at the front.
+    /// </summary>
     public GenPolynomial<C> Extend(GenPolynomialRing<C> extendedRing, int index, long exponent)
     {
         ArgumentNullException.ThrowIfNull(extendedRing);
@@ -940,6 +1128,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return result;
     }
 
+    /// <summary>
+    /// Embeds the polynomial into an extended ring by adding lower-order variables.
+    /// </summary>
     public GenPolynomial<C> ExtendLower(GenPolynomialRing<C> extendedRing, int index, long exponent)
     {
         ArgumentNullException.ThrowIfNull(extendedRing);
@@ -964,6 +1155,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return result;
     }
 
+    /// <summary>
+    /// Contracts the polynomial by removing leading variables.
+    /// </summary>
     public SortedDictionary<ExpVector, GenPolynomial<C>> Contract(GenPolynomialRing<C> contractedRing)
     {
         ArgumentNullException.ThrowIfNull(contractedRing);
@@ -994,6 +1188,9 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return contracted;
     }
 
+    /// <summary>
+    /// Reverses the variable order according to the provided ring.
+    /// </summary>
     public GenPolynomial<C> Reverse(GenPolynomialRing<C> reversedRing)
     {
         ArgumentNullException.ThrowIfNull(reversedRing);
@@ -1059,6 +1256,10 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         }
     }
 
+    /// <summary>
+    /// Formats the polynomial using the given variable names.
+    /// </summary>
+    /// <param name="variables">Names matching the ring variables.</param>
     public string ToString(string[] variables)
     {
         ArgumentNullException.ThrowIfNull(variables);

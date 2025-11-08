@@ -4,6 +4,14 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 public static partial class PolyUtil
 {
+    /// <summary>
+    /// Performs pseudo-division for recursive polynomials.
+    /// </summary>
+    /// <typeparam name="C">Coefficient type.</typeparam>
+    /// <param name="polynomial">Recursive dividend.</param>
+    /// <param name="divisor">Non-zero recursive divisor.</param>
+    /// <returns>Quotient satisfying the pseudo-division identity.</returns>
+    /// <remarks>Original Java method: PolyUtil#recursivePseudoDivide.</remarks>
     public static GenPolynomial<GenPolynomial<C>> RecursivePseudoDivide<C>(GenPolynomial<GenPolynomial<C>> polynomial, GenPolynomial<GenPolynomial<C>> divisor)
         where C : RingElem<C>
     {

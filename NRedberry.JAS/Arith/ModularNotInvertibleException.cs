@@ -16,6 +16,13 @@ public class ModularNotInvertibleException : NotInvertibleException
     public readonly object? F1;
     public readonly object? F2;
 
+    /// <summary>
+    /// Creates a new exception that remembers the non-trivial factors uncovered during inversion.
+    /// </summary>
+    /// <param name="message">Description of the failure.</param>
+    /// <param name="f">GcdRingElem that equals <paramref name="f1"/> * <paramref name="f2"/>.</param>
+    /// <param name="f1">First factor.</param>
+    /// <param name="f2">Second factor.</param>
     public ModularNotInvertibleException(
         string message,
         object? f = null,
@@ -28,6 +35,13 @@ public class ModularNotInvertibleException : NotInvertibleException
         F2 = f2;
     }
 
+    /// <summary>
+    /// Creates a new exception that wraps another failure while keeping the factor candidates.
+    /// </summary>
+    /// <param name="innerException">The original failure that triggered this exception.</param>
+    /// <param name="f">GcdRingElem that equals <paramref name="f1"/> * <paramref name="f2"/>.</param>
+    /// <param name="f1">First factor.</param>
+    /// <param name="f2">Second factor.</param>
     public ModularNotInvertibleException(
         Exception innerException,
         object? f = null,

@@ -5,7 +5,8 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Greatest common divisor algorithms with modular evaluation algorithm for recursion.
+/// Greatest common divisor algorithms with modular evaluation algorithm for
+/// recursion.
 /// </summary>
 /// <typeparam name="MOD">modular coefficient type</typeparam>
 /// <remarks>

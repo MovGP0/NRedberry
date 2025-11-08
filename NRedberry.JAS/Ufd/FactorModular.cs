@@ -5,7 +5,8 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Modular coefficients factorization algorithms.
+/// Modular coefficients factorization algorithms. This class implements
+/// factorization methods for polynomials over (prime) modular integers.
 /// </summary>
 /// <typeparam name="MOD">modular coefficient type</typeparam>
 /// <remarks>

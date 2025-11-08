@@ -4,7 +4,8 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Quotient ring element, basically a rational function.
+/// Quotient, i.e. rational function, based on GenPolynomial with RingElem
+/// interface. Objects of this class are immutable.
 /// </summary>
 /// <typeparam name="C">coefficient type</typeparam>
 /// <remarks>

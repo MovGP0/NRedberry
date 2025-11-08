@@ -4,19 +4,20 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Gb;
 
 /// <summary>
-/// Polynomial Reduction abstract class. Implements common S-Polynomial, normalform, criterion 4 module criterion and irreducible set.
+/// Polynomial reduction abstract base that implements the shared S-polynomial evaluation,
+/// normalform, criterion 4 module test, and irreducible-set helpers.
 /// </summary>
-/// <typeparam name="C">coefficient type</typeparam>
+/// <typeparam name="C">Coefficient type that implements <see cref="RingElem{T}"/>.</typeparam>
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.gb.ReductionAbstract
 /// </remarks>
 public abstract class ReductionAbstract<C> : Reduction<C> where C : RingElem<C>
 {
     /// <summary>
-    /// Irreducible set.
+    /// Builds the irreducible, monic basis of <paramref name="Pp"/> so that every result is in normal form and the ideals agree.
     /// </summary>
-    /// <param name="Pp">polynomial list</param>
-    /// <returns>a list P of monic polynomials which are in normalform wrt. P and with ideal(Pp) = ideal(P).</returns>
+    /// <param name="Pp">Polynomial list.</param>
+    /// <returns>A list <c>P</c> of monic polynomials that are in normal form with respect to each other and satisfy ideal(Pp) = ideal(P).</returns>
     public virtual List<GenPolynomial<C>> IrreducibleSet(List<GenPolynomial<C>> Pp)
     {
         List<GenPolynomial<C>> result = [];
@@ -94,10 +95,10 @@ public abstract class ReductionAbstract<C> : Reduction<C> where C : RingElem<C>
     }
 
     /// <summary>
-    /// Normalform.
+    /// Computes the normalform of <paramref name="A"/> with respect to <paramref name="P"/>.
     /// </summary>
-    /// <param name="P">polynomial list</param>
-    /// <param name="A">polynomial</param>
-    /// <returns>nf(A) with respect to P.</returns>
+    /// <param name="P">Polynomial list.</param>
+    /// <param name="A">Polynomial to reduce.</param>
+    /// <returns>nf(A) with respect to <paramref name="P"/>.</returns>
     public abstract GenPolynomial<C> Normalform(List<GenPolynomial<C>> P, GenPolynomial<C> A);
 }

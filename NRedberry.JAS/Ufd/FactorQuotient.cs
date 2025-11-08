@@ -4,7 +4,9 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Quotient coefficients factorization algorithms.
+/// Rational function coefficients factorization algorithms. This class
+/// implements factorization methods for polynomials over rational functions,
+/// that is, with coefficients from class <code>application.Quotient</code>.
 /// </summary>
 /// <typeparam name="C">coefficient type</typeparam>
 /// <remarks>

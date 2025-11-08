@@ -12,20 +12,39 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 /// </remarks>
 public class PolynomialList<C> : IComparable<PolynomialList<C>> where C : RingElem<C>
 {
+    /// <summary>
+    /// Ring factory associated with the stored polynomials.
+    /// </summary>
     public readonly GenPolynomialRing<C> Ring;
+
+    /// <summary>
+    /// Stored list of polynomials.
+    /// </summary>
     public readonly List<GenPolynomial<C>> Polynomials;
 
+    /// <summary>
+    /// Constructs the polynomial list backed by the supplied ring and data.
+    /// </summary>
+    /// <param name="r">Polynomial ring factory.</param>
+    /// <param name="l">Polynomials stored in the list.</param>
     public PolynomialList(GenPolynomialRing<C> r, List<GenPolynomial<C>> l)
     {
         Ring = r ?? throw new ArgumentNullException(nameof(r));
         Polynomials = l ?? throw new ArgumentNullException(nameof(l));
     }
 
+    /// <summary>
+    /// Creates a shallow copy of the polynomial list.
+    /// </summary>
+    /// <returns>A new list with the same ring and polynomials.</returns>
     public PolynomialList<C> Copy()
     {
         return new PolynomialList<C>(Ring, [..Polynomials]);
     }
 
+    /// <summary>
+    /// Compares two polynomial lists by their ring context and lexicographical ordering.
+    /// </summary>
     public override bool Equals(object? other)
     {
         if (ReferenceEquals(this, other))
@@ -46,6 +65,11 @@ public class PolynomialList<C> : IComparable<PolynomialList<C>> where C : RingEl
         return CompareTo(list) == 0;
     }
 
+    /// <summary>
+    /// Performs a lexicographical comparison of the sorted polynomial sequences.
+    /// </summary>
+    /// <param name="other">Another list to compare against.</param>
+    /// <returns>Sign of the first differing polynomial, or 0 for equality.</returns>
     public int CompareTo(PolynomialList<C>? other)
     {
         if (other is null)
@@ -78,6 +102,9 @@ public class PolynomialList<C> : IComparable<PolynomialList<C>> where C : RingEl
         return 0;
     }
 
+    /// <summary>
+    /// Computes a hash code that combines the ring and each polynomial.
+    /// </summary>
     public override int GetHashCode()
     {
         HashCode hash = new ();
@@ -90,6 +117,9 @@ public class PolynomialList<C> : IComparable<PolynomialList<C>> where C : RingEl
         return hash.ToHashCode();
     }
 
+    /// <summary>
+    /// Formats the polynomial list with the ring header and each element.
+    /// </summary>
     public override string ToString()
     {
         StringBuilder builder = new ();

@@ -9,16 +9,33 @@
 /// </remarks>
 public sealed class ExpVectorByte : ExpVector
 {
+    /// <summary>
+    /// Largest exponent representable in this storage unit.
+    /// </summary>
     public static readonly long MaxByte = sbyte.MaxValue / 2L;
+
+    /// <summary>
+    /// Smallest exponent representable in this storage unit.
+    /// </summary>
     public static readonly long MinByte = sbyte.MinValue / 2L;
 
     internal readonly sbyte[] _values;
 
+    /// <summary>
+    /// Initializes a zero vector of the given length using byte storage.
+    /// </summary>
+    /// <param name="length">Number of variables.</param>
     public ExpVectorByte(int length)
         : this(new sbyte[length])
     {
     }
 
+    /// <summary>
+    /// Initializes a vector and sets a single exponent while enforcing the byte range.
+    /// </summary>
+    /// <param name="length">Number of variables.</param>
+    /// <param name="index">Index to set.</param>
+    /// <param name="exponent">Value placed at <paramref name="index"/>.</param>
     public ExpVectorByte(int length, int index, long exponent)
         : this(new sbyte[length])
     {
@@ -30,6 +47,10 @@ public sealed class ExpVectorByte : ExpVector
         _values[index] = ConvertToSByte(exponent);
     }
 
+    /// <summary>
+    /// Initializes from a long array while verifying each exponent fits within the byte limits.
+    /// </summary>
+    /// <param name="values">Source exponents.</param>
     public ExpVectorByte(long[] values)
     {
         ArgumentNullException.ThrowIfNull(values);
@@ -40,12 +61,19 @@ public sealed class ExpVectorByte : ExpVector
         }
     }
 
+    /// <summary>
+    /// Initializes directly from a byte array (internal helper for cloning).
+    /// </summary>
+    /// <param name="values">Byte array representing exponent values.</param>
     public ExpVectorByte(sbyte[] values)
     {
         ArgumentNullException.ThrowIfNull(values);
         _values = values;
     }
 
+    /// <summary>
+    /// Copies the entire byte array to preserve immutability.
+    /// </summary>
     public override ExpVector Clone()
     {
         sbyte[] result = new sbyte[_values.Length];
@@ -53,6 +81,9 @@ public sealed class ExpVectorByte : ExpVector
         return new ExpVectorByte(result);
     }
 
+    /// <summary>
+    /// Returns a <see cref="long"/> representation of the exponent array.
+    /// </summary>
     public override long[] GetVal()
     {
         long[] result = new long[_values.Length];
@@ -64,16 +95,29 @@ public sealed class ExpVectorByte : ExpVector
         return result;
     }
 
+    /// <summary>
+    /// Reads the exponent at the specified index.
+    /// </summary>
+    /// <param name="index">Position to read.</param>
     public override long GetVal(int index)
     {
         return _values[index];
     }
 
+    /// <summary>
+    /// Length of the exponent vector.
+    /// </summary>
     public override int Length()
     {
         return _values.Length;
     }
 
+    /// <summary>
+    /// Extends the vector with additional variables and sets a specific exponent.
+    /// </summary>
+    /// <param name="count">Number of variables to append.</param>
+    /// <param name="index">Position inside the new prefix to assign.</param>
+    /// <param name="exponent">Value stored at <paramref name="index"/>.</param>
     public override ExpVector Extend(int count, int index, long exponent)
     {
         if (count < 0)
@@ -92,6 +136,12 @@ public sealed class ExpVectorByte : ExpVector
         return new ExpVectorByte(result);
     }
 
+    /// <summary>
+    /// Extends with extra lower-order variables and sets one exponent near the tail.
+    /// </summary>
+    /// <param name="count">Number of variables to append.</param>
+    /// <param name="index">Offset inside the appended block.</param>
+    /// <param name="exponent">Value stored at the appended position.</param>
     public override ExpVector ExtendLower(int count, int index, long exponent)
     {
         if (count < 0)
@@ -110,6 +160,11 @@ public sealed class ExpVectorByte : ExpVector
         return new ExpVectorByte(result);
     }
 
+    /// <summary>
+    /// Contracts the vector by copying a contiguous subarray starting at <paramref name="index"/>.
+    /// </summary>
+    /// <param name="index">Start of the resulting slice.</param>
+    /// <param name="length">Length of the slice.</param>
     public override ExpVector Contract(int index, int length)
     {
         if (length < 0)
@@ -127,6 +182,9 @@ public sealed class ExpVectorByte : ExpVector
         return new ExpVectorByte(result);
     }
 
+    /// <summary>
+    /// Reverses the order of all variables.
+    /// </summary>
     public override ExpVector Reverse()
     {
         sbyte[] result = new sbyte[_values.Length];
@@ -138,6 +196,10 @@ public sealed class ExpVectorByte : ExpVector
         return new ExpVectorByte(result);
     }
 
+    /// <summary>
+    /// Reverses only the first <paramref name="variables"/> entries.
+    /// </summary>
+    /// <param name="variables">Number of leading entries to reverse.</param>
     public override ExpVector Reverse(int variables)
     {
         if (variables <= 0 || variables > _values.Length)
@@ -155,6 +217,10 @@ public sealed class ExpVectorByte : ExpVector
         return new ExpVectorByte(result);
     }
 
+    /// <summary>
+    /// Concatenates this vector with <paramref name="vector"/>.
+    /// </summary>
+    /// <param name="vector">Vector to append.</param>
     public override ExpVector Combine(ExpVector vector)
     {
         ArgumentNullException.ThrowIfNull(vector);
@@ -175,6 +241,9 @@ public sealed class ExpVectorByte : ExpVector
         return new ExpVectorByte(result);
     }
 
+    /// <summary>
+    /// Computes the component-wise absolute value of the vector.
+    /// </summary>
     public override ExpVector Abs()
     {
         sbyte[] result = new sbyte[_values.Length];
@@ -187,6 +256,9 @@ public sealed class ExpVectorByte : ExpVector
         return new ExpVectorByte(result);
     }
 
+    /// <summary>
+    /// Negates each exponent.
+    /// </summary>
     public override ExpVector Negate()
     {
         sbyte[] result = new sbyte[_values.Length];
@@ -198,6 +270,9 @@ public sealed class ExpVectorByte : ExpVector
         return new ExpVectorByte(result);
     }
 
+    /// <summary>
+    /// Computes the sign of the vector (<c>0</c> if zero, <c>-1</c> if any entry negative, otherwise <c>1</c>).
+    /// </summary>
     public override int Signum()
     {
         int sign = 0;
@@ -218,6 +293,10 @@ public sealed class ExpVectorByte : ExpVector
         return sign;
     }
 
+    /// <summary>
+    /// Adds two exponent vectors component-wise, enforcing byte range.
+    /// </summary>
+    /// <param name="vector">Other vector to add.</param>
     public override ExpVector Sum(ExpVector vector)
     {
         ArgumentNullException.ThrowIfNull(vector);
@@ -233,6 +312,10 @@ public sealed class ExpVectorByte : ExpVector
         return new ExpVectorByte(result);
     }
 
+    /// <summary>
+    /// Subtracts <paramref name="vector"/> from this vector component-wise.
+    /// </summary>
+    /// <param name="vector">Vector to subtract.</param>
     public override ExpVector Subtract(ExpVector vector)
     {
         ArgumentNullException.ThrowIfNull(vector);
@@ -248,6 +331,9 @@ public sealed class ExpVectorByte : ExpVector
         return new ExpVectorByte(result);
     }
 
+    /// <summary>
+    /// Sums all exponents.
+    /// </summary>
     public override long TotalDeg()
     {
         long total = 0;
@@ -259,6 +345,9 @@ public sealed class ExpVectorByte : ExpVector
         return total;
     }
 
+    /// <summary>
+    /// Finds the maximum exponent in the vector.
+    /// </summary>
     public override long MaxDeg()
     {
         long max = 0;
@@ -273,6 +362,10 @@ public sealed class ExpVectorByte : ExpVector
         return max;
     }
 
+    /// <summary>
+    /// Computes the component-wise maximum with another vector.
+    /// </summary>
+    /// <param name="vector">Vector to compare.</param>
     public override ExpVector Lcm(ExpVector vector)
     {
         ArgumentNullException.ThrowIfNull(vector);
@@ -288,6 +381,10 @@ public sealed class ExpVectorByte : ExpVector
         return new ExpVectorByte(result);
     }
 
+    /// <summary>
+    /// Computes the component-wise minimum with another vector.
+    /// </summary>
+    /// <param name="vector">Vector to compare.</param>
     public override ExpVector Gcd(ExpVector vector)
     {
         ArgumentNullException.ThrowIfNull(vector);
@@ -303,6 +400,9 @@ public sealed class ExpVectorByte : ExpVector
         return new ExpVectorByte(result);
     }
 
+    /// <summary>
+    /// Identifies indices with positive exponents.
+    /// </summary>
     public override int[] DependencyOnVariables()
     {
         List<int> indices = [];
@@ -317,6 +417,10 @@ public sealed class ExpVectorByte : ExpVector
         return indices.ToArray();
     }
 
+    /// <summary>
+    /// Returns true when this vector dominates the other component-wise.
+    /// </summary>
+    /// <param name="vector">Vector to compare.</param>
     public override bool MultipleOf(ExpVector vector)
     {
         ArgumentNullException.ThrowIfNull(vector);
@@ -334,6 +438,9 @@ public sealed class ExpVectorByte : ExpVector
         return true;
     }
 
+    /// <summary>
+    /// Inverse lexicographical comparison against another vector.
+    /// </summary>
     public override int InvLexCompareTo(ExpVector vector)
     {
         ArgumentNullException.ThrowIfNull(vector);
@@ -356,6 +463,9 @@ public sealed class ExpVectorByte : ExpVector
         return 0;
     }
 
+    /// <summary>
+    /// Inverse lex comparison restricted to <paramref name="begin"/>..&lt;<paramref name="end"/>.
+    /// </summary>
     public override int InvLexCompareTo(ExpVector vector, int begin, int end)
     {
         ArgumentNullException.ThrowIfNull(vector);
@@ -380,6 +490,9 @@ public sealed class ExpVectorByte : ExpVector
         return 0;
     }
 
+    /// <summary>
+    /// Inverse graded lexicographical comparison.
+    /// </summary>
     public override int InvGradCompareTo(ExpVector vector)
     {
         ArgumentNullException.ThrowIfNull(vector);
@@ -429,6 +542,9 @@ public sealed class ExpVectorByte : ExpVector
         return comparison;
     }
 
+    /// <summary>
+    /// Inverse graded comparison limited to a range.
+    /// </summary>
     public override int InvGradCompareTo(ExpVector vector, int begin, int end)
     {
         ArgumentNullException.ThrowIfNull(vector);
@@ -480,6 +596,9 @@ public sealed class ExpVectorByte : ExpVector
         return comparison;
     }
 
+    /// <summary>
+    /// Reverse inverse lex comparison: iterate from the end backwards.
+    /// </summary>
     public override int RevInvLexCompareTo(ExpVector vector)
     {
         ArgumentNullException.ThrowIfNull(vector);
@@ -502,6 +621,9 @@ public sealed class ExpVectorByte : ExpVector
         return 0;
     }
 
+    /// <summary>
+    /// Reverse inverse lex comparison limited to a subrange.
+    /// </summary>
     public override int RevInvLexCompareTo(ExpVector vector, int begin, int end)
     {
         ArgumentNullException.ThrowIfNull(vector);
@@ -526,6 +648,9 @@ public sealed class ExpVectorByte : ExpVector
         return 0;
     }
 
+    /// <summary>
+    /// Reverse inverse graded lex comparison for the entire vector.
+    /// </summary>
     public override int RevInvGradCompareTo(ExpVector vector)
     {
         ArgumentNullException.ThrowIfNull(vector);
@@ -575,6 +700,9 @@ public sealed class ExpVectorByte : ExpVector
         return comparison;
     }
 
+    /// <summary>
+    /// Reverse inverse graded lex comparison on a slice.
+    /// </summary>
     public override int RevInvGradCompareTo(ExpVector vector, int begin, int end)
     {
         ArgumentNullException.ThrowIfNull(vector);
@@ -626,6 +754,11 @@ public sealed class ExpVectorByte : ExpVector
         return comparison;
     }
 
+    /// <summary>
+    /// Weighted inverse lex comparison using the provided weights matrix.
+    /// </summary>
+    /// <param name="weights">Weight rows used for tiebreakers.</param>
+    /// <param name="vector">Vector to compare.</param>
     public override int InvWeightCompareTo(long[][] weights, ExpVector vector)
     {
         ArgumentNullException.ThrowIfNull(weights);

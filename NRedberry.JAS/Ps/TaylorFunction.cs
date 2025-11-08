@@ -3,9 +3,10 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ps;
 
 /// <summary>
-/// Interface for functions capable for Taylor series expansion.
+/// Interface for functions capable of Taylor series expansion; mirrors the Java version including
+/// derivative and evaluation helpers.
 /// </summary>
-/// <typeparam name="C">ring element type</typeparam>
+/// <typeparam name="C">ring element type.</typeparam>
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ps.TaylorFunction
 /// </remarks>

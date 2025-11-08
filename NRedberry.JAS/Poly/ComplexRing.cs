@@ -14,6 +14,10 @@ public class ComplexRing<C> : RingFactory<Complex<C>> where C : RingElem<C>
 {
     private static readonly Random RandomSource = new ();
 
+    /// <summary>
+    /// Initializes the complex ring factory with a factory for the real coefficients.
+    /// </summary>
+    /// <param name="ring">Factory for the underlying real and imaginary parts.</param>
     public ComplexRing(RingFactory<C> ring)
     {
         ArgumentNullException.ThrowIfNull(ring);

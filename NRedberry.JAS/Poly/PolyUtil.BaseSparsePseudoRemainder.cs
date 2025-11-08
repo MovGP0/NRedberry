@@ -4,6 +4,14 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 public static partial class PolyUtil
 {
+    /// <summary>
+    /// Computes the sparse pseudo remainder of two univariate polynomials.
+    /// </summary>
+    /// <typeparam name="C">Coefficient type.</typeparam>
+    /// <param name="polynomial">Dividend polynomial.</param>
+    /// <param name="divisor">Non-zero divisor polynomial.</param>
+    /// <returns>Remainder satisfying <c>lc(divisor)^k * dividend = quotient * divisor + remainder</c> with <c>k ≤ deg(dividend)-deg(divisor)</c>.</returns>
+    /// <remarks>Original Java method: PolyUtil#baseSparsePseudoRemainder.</remarks>
     public static GenPolynomial<C> BaseSparsePseudoRemainder<C>(GenPolynomial<C> polynomial, GenPolynomial<C> divisor)
         where C : RingElem<C>
     {

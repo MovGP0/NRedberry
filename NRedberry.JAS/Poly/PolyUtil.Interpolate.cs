@@ -4,6 +4,18 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 public static partial class PolyUtil
 {
+    /// <summary>
+    /// Performs modular interpolation on the first variable of a recursive polynomial so that evaluation and residue constraints are met.
+    /// </summary>
+    /// <typeparam name="C">Coefficient type.</typeparam>
+    /// <param name="ring">Result polynomial ring.</param>
+    /// <param name="source">Polynomial providing residue information.</param>
+    /// <param name="modulus">Interpolation modulus.</param>
+    /// <param name="modulusInverse">Inverse of <c>modulus(evaluationPoint)</c> in the coefficient ring.</param>
+    /// <param name="evaluation">Polynomial specifying target evaluations.</param>
+    /// <param name="evaluationPoint">Point at which the evaluation holds.</param>
+    /// <returns>Polynomial whose residue modulo <paramref name="modulus"/> matches <paramref name="source"/> and whose evaluation matches <paramref name="evaluation"/>.</returns>
+    /// <remarks>Original Java method: PolyUtil#interpolate (recursive overload).</remarks>
     public static GenPolynomial<GenPolynomial<C>> Interpolate<C>(
         GenPolynomialRing<GenPolynomial<C>> ring,
         GenPolynomial<GenPolynomial<C>> source,
@@ -77,6 +89,18 @@ public static partial class PolyUtil
         return result;
     }
 
+    /// <summary>
+    /// Performs univariate interpolation ensuring a polynomial satisfies both a residue and an evaluation constraint.
+    /// </summary>
+    /// <typeparam name="C">Coefficient type.</typeparam>
+    /// <param name="ring">Result polynomial ring.</param>
+    /// <param name="polynomial">Polynomial providing the residue constraint.</param>
+    /// <param name="modulus">Interpolation modulus.</param>
+    /// <param name="modulusInverse">Inverse of <c>modulus(evaluationPoint)</c>.</param>
+    /// <param name="targetValue">Desired evaluation value.</param>
+    /// <param name="evaluationPoint">Point at which the evaluation matches.</param>
+    /// <returns>Interpolated polynomial.</returns>
+    /// <remarks>Original Java method: PolyUtil#interpolate (univariate overload).</remarks>
     public static GenPolynomial<C> Interpolate<C>(
         GenPolynomialRing<C> ring,
         GenPolynomial<C> polynomial,

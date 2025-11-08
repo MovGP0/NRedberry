@@ -14,24 +14,36 @@ public class GenSolvablePolynomial<C> : GenPolynomial<C> where C : RingElem<C>
 {
     public new GenSolvablePolynomialRing<C> Ring { get; }
 
+    /// <summary>
+    /// Creates an empty solvable polynomial in the given ring.
+    /// </summary>
     public GenSolvablePolynomial(GenSolvablePolynomialRing<C> ring)
         : base(ring)
     {
         Ring = ring ?? throw new ArgumentNullException(nameof(ring));
     }
 
+    /// <summary>
+    /// Creates the monomial <c>coefficient * x^exponent</c> within the solvable ring.
+    /// </summary>
     public GenSolvablePolynomial(GenSolvablePolynomialRing<C> ring, C coefficient, ExpVector exponent)
         : base(ring, coefficient, exponent)
     {
         Ring = ring ?? throw new ArgumentNullException(nameof(ring));
     }
 
+    /// <summary>
+    /// Internal constructor copying from a dictionary of terms.
+    /// </summary>
     internal GenSolvablePolynomial(GenSolvablePolynomialRing<C> ring, IDictionary<ExpVector, C> terms, bool copy = true)
         : base(ring, terms, copy)
     {
         Ring = ring ?? throw new ArgumentNullException(nameof(ring));
     }
 
+    /// <summary>
+    /// Rewraps a base polynomial into the solvable polynomial ring.
+    /// </summary>
     private GenSolvablePolynomial<C> FromBase(GenPolynomial<C> polynomial)
     {
         if (polynomial is GenSolvablePolynomial<C> solvable && solvable.Ring.Equals(Ring))
@@ -42,16 +54,25 @@ public class GenSolvablePolynomial<C> : GenPolynomial<C> where C : RingElem<C>
         return new GenSolvablePolynomial<C>(Ring, polynomial.CloneTerms(), copy: false);
     }
 
+    /// <summary>
+    /// Returns the solvable polynomial ring factory.
+    /// </summary>
     public new GenSolvablePolynomialRing<C> Factory()
     {
         return Ring;
     }
 
+    /// <summary>
+    /// Clones this solvable polynomial.
+    /// </summary>
     public GenSolvablePolynomial<C> Copy()
     {
         return new GenSolvablePolynomial<C>(Ring, CloneTerms(), copy: false);
     }
 
+    /// <summary>
+    /// Adds another solvable polynomial.
+    /// </summary>
     public GenSolvablePolynomial<C> Sum(GenSolvablePolynomial<C> other)
     {
         ArgumentNullException.ThrowIfNull(other);
@@ -68,6 +89,9 @@ public class GenSolvablePolynomial<C> : GenPolynomial<C> where C : RingElem<C>
         return base.Equals(obj);
     }
 
+    /// <summary>
+    /// Multiplies two solvable polynomials respecting the table relation.
+    /// </summary>
     public GenSolvablePolynomial<C> Multiply(GenSolvablePolynomial<C> other)
     {
         ArgumentNullException.ThrowIfNull(other);
@@ -148,6 +172,9 @@ public class GenSolvablePolynomial<C> : GenPolynomial<C> where C : RingElem<C>
         return result;
     }
 
+    /// <summary>
+    /// Multiplies three solvable polynomials in order.
+    /// </summary>
     public GenSolvablePolynomial<C> Multiply(GenSolvablePolynomial<C> left, GenSolvablePolynomial<C> right)
     {
         ArgumentNullException.ThrowIfNull(left);
@@ -170,12 +197,18 @@ public class GenSolvablePolynomial<C> : GenPolynomial<C> where C : RingElem<C>
         return left.Multiply(this).Multiply(right);
     }
 
+    /// <summary>
+    /// Scales the polynomial by a coefficient.
+    /// </summary>
     public new GenSolvablePolynomial<C> Multiply(C coefficient)
     {
         ArgumentNullException.ThrowIfNull(coefficient);
         return FromBase(base.Multiply(coefficient));
     }
 
+    /// <summary>
+    /// Multiplies by two coefficients sequentially.
+    /// </summary>
     public GenSolvablePolynomial<C> Multiply(C left, C right)
     {
         ArgumentNullException.ThrowIfNull(left);
@@ -183,6 +216,9 @@ public class GenSolvablePolynomial<C> : GenPolynomial<C> where C : RingElem<C>
         return Multiply(left).Multiply(right);
     }
 
+    /// <summary>
+    /// Shifts exponents by the given vector.
+    /// </summary>
     public new GenSolvablePolynomial<C> Multiply(ExpVector exponent)
     {
         ArgumentNullException.ThrowIfNull(exponent);
@@ -195,6 +231,9 @@ public class GenSolvablePolynomial<C> : GenPolynomial<C> where C : RingElem<C>
         return Multiply(monomial);
     }
 
+    /// <summary>
+    /// Multiplies and shifts by a coefficient and exponent pair.
+    /// </summary>
     public new GenSolvablePolynomial<C> Multiply(C coefficient, ExpVector exponent)
     {
         ArgumentNullException.ThrowIfNull(coefficient);
@@ -208,6 +247,9 @@ public class GenSolvablePolynomial<C> : GenPolynomial<C> where C : RingElem<C>
         return Multiply(monomial);
     }
 
+    /// <summary>
+    /// Handles multiplication of two exponent vectors representing monomials.
+    /// </summary>
     public GenSolvablePolynomial<C> Multiply(ExpVector leftExponent, ExpVector rightExponent)
     {
         ArgumentNullException.ThrowIfNull(leftExponent);
@@ -226,6 +268,9 @@ public class GenSolvablePolynomial<C> : GenPolynomial<C> where C : RingElem<C>
         return Multiply(unit, leftExponent, unit, rightExponent);
     }
 
+    /// <summary>
+    /// Multiplies monomials with separate coefficients and exponents.
+    /// </summary>
     public GenSolvablePolynomial<C> Multiply(C leftCoefficient, ExpVector leftExponent, C rightCoefficient, ExpVector rightExponent)
     {
         ArgumentNullException.ThrowIfNull(leftCoefficient);

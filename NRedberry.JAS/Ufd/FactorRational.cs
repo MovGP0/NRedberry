@@ -4,7 +4,8 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Rational number coefficients factorization algorithms.
+/// Rational number coefficients factorization algorithms. This class implements
+/// factorization methods for polynomials over rational numbers.
 /// </summary>
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ufd.FactorRational

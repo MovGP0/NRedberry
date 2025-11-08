@@ -4,7 +4,7 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 
 /// <summary>
-/// ModIntegerRing factory for ModInteger elements.
+/// ModIntegerRing factory with RingFactory interface. Effectively immutable.
 /// </summary>
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.arith.ModIntegerRing

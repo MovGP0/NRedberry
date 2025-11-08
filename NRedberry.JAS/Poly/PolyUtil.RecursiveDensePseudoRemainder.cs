@@ -4,6 +4,14 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 public static partial class PolyUtil
 {
+    /// <summary>
+    /// Computes the dense pseudo remainder for recursive polynomials.
+    /// </summary>
+    /// <typeparam name="C">Coefficient type.</typeparam>
+    /// <param name="polynomial">Recursive dividend.</param>
+    /// <param name="divisor">Non-zero recursive divisor.</param>
+    /// <returns>Remainder satisfying <c>lc(divisor)^k * polynomial = quotient * divisor + remainder</c>.</returns>
+    /// <remarks>Original Java method: PolyUtil#recursiveDensePseudoRemainder.</remarks>
     public static GenPolynomial<GenPolynomial<C>> RecursiveDensePseudoRemainder<C>(GenPolynomial<GenPolynomial<C>> polynomial, GenPolynomial<GenPolynomial<C>> divisor)
         where C : RingElem<C>
     {

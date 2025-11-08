@@ -4,6 +4,16 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 public static partial class PolyUtil
 {
+    /// <summary>
+    /// Evaluates a recursive polynomial at a value plugged into its first (lowest) variable.
+    /// </summary>
+    /// <typeparam name="C">Coefficient type.</typeparam>
+    /// <param name="coefficientRing">Coefficient polynomial ring in the first variable.</param>
+    /// <param name="destinationRing">Ring spanning the remaining variables.</param>
+    /// <param name="polynomial">Recursive polynomial to evaluate.</param>
+    /// <param name="value">Coefficient value substituted for the first variable.</param>
+    /// <returns>The partially evaluated polynomial.</returns>
+    /// <remarks>Original Java method: PolyUtil#evaluateFirstRec.</remarks>
     public static GenPolynomial<C> EvaluateFirstRec<C>(
         GenPolynomialRing<C> coefficientRing,
         GenPolynomialRing<C> destinationRing,

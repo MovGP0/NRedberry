@@ -6,6 +6,15 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 public static partial class HenselUtil
 {
+    /// <summary>
+    /// Lifts a set of monic modular factors of a polynomial to higher p-adic precision.
+    /// </summary>
+    /// <typeparam name="MOD">Modular coefficient type.</typeparam>
+    /// <param name="C">Integral polynomial to be factored.</param>
+    /// <param name="F">List of monic modular factors.</param>
+    /// <param name="k">Desired lifting exponent.</param>
+    /// <returns>List of lifted factors mod <c>p^k</c>.</returns>
+    /// <remarks>Original Java method: HenselUtil#liftHenselMonic.</remarks>
     public static List<GenPolynomial<MOD>> LiftHenselMonic<MOD>(
         GenPolynomial<BigInteger> C,
         List<GenPolynomial<MOD>> F,

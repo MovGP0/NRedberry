@@ -4,6 +4,12 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 public static partial class PolyUtil
 {
+    /// <summary>
+    /// Computes the coefficient bound used for factor searches (following SACIPOL.IPFCB).
+    /// </summary>
+    /// <param name="exponent">Degree vector of the polynomial.</param>
+    /// <returns>A power-of-two bound limiting the product of factor norms.</returns>
+    /// <remarks>Original Java method: PolyUtil#factorBound.</remarks>
     public static BigInteger FactorBound(ExpVector exponent)
     {
         ArgumentNullException.ThrowIfNull(exponent);

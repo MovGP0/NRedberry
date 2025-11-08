@@ -5,6 +5,16 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 public static partial class PolyUtil
 {
+    /// <summary>
+    /// Applies the Chinese remainder algorithm to the coefficients of two polynomials whose coefficient moduli are coprime.
+    /// </summary>
+    /// <typeparam name="C">Coefficient type implementing modular arithmetic.</typeparam>
+    /// <param name="ring">Target polynomial ring with combined modulus.</param>
+    /// <param name="first">First polynomial.</param>
+    /// <param name="modulusInverse">Inverse of the first modulus in the second modulus ring.</param>
+    /// <param name="second">Second polynomial.</param>
+    /// <returns>Polynomial whose coefficients satisfy both congruences.</returns>
+    /// <remarks>Original Java method: PolyUtil#chineseRemainder.</remarks>
     public static GenPolynomial<C> ChineseRemainder<C>(GenPolynomialRing<C> ring, GenPolynomial<C> first, C modulusInverse, GenPolynomial<C> second)
         where C : RingElem<C>, Modular
     {

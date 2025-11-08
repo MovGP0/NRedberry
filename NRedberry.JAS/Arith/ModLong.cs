@@ -5,6 +5,7 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 /// <summary>
 /// ModLong class with RingElem interface. Objects of this class are immutable.
 /// </summary>
+/// <seealso cref="ModInteger"/>
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.arith.ModLong
 /// </remarks>

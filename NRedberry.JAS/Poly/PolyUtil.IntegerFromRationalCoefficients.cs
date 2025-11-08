@@ -5,6 +5,13 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 public static partial class PolyUtil
 {
+    /// <summary>
+    /// Converts a polynomial with rational coefficients into one with integer coefficients by clearing denominators.
+    /// </summary>
+    /// <param name="resultRing">Target polynomial ring over integers.</param>
+    /// <param name="polynomial">Polynomial with <see cref="BigRational"/> coefficients.</param>
+    /// <returns>Polynomial with integer coefficients obtained via the common denominator.</returns>
+    /// <remarks>Original Java method: PolyUtil#integerFromRationalCoefficients.</remarks>
     public static GenPolynomial<BigInteger> IntegerFromRationalCoefficients(GenPolynomialRing<BigInteger> resultRing, GenPolynomial<BigRational> polynomial)
     {
         ArgumentNullException.ThrowIfNull(resultRing);

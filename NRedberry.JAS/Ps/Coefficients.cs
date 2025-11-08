@@ -3,10 +3,10 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ps;
 
 /// <summary>
-/// Abstract class for generating functions for coefficients of power series.
-/// Was an interface, now this class handles the caching itself.
+/// Abstract base that mirrors the original {@code Coefficients} interface and now handles
+/// coefficient-generation caching internally while remaining {@cSerializable}.
 /// </summary>
-/// <typeparam name="C">ring element type</typeparam>
+/// <typeparam name="C">ring element type.</typeparam>
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ps.Coefficients
 /// </remarks>
@@ -35,10 +35,10 @@ public abstract class Coefficients<C> where C : RingElem<C>
     }
 
     /// <summary>
-    /// Get cached coefficient or generate coefficient.
+    /// Looks up a coefficient in the cache or delegates to <see cref="Generate(int)"/> when missing.
     /// </summary>
-    /// <param name="index">of requested coefficient</param>
-    /// <returns>coefficient at index.</returns>
+    /// <param name="index">Index of the requested coefficient.</param>
+    /// <returns>Coefficient at <paramref name="index"/>.</returns>
     public C Get(int index)
     {
         if (CoeffCache == null)

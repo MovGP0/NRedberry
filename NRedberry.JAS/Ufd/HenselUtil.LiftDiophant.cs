@@ -6,6 +6,16 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 public static partial class HenselUtil
 {
+    /// <summary>
+    /// Lifts a modular Diophantine equation <c>A*S1 + B*S2 = C</c> to precision <c>p^k</c>.
+    /// </summary>
+    /// <typeparam name="MOD">Modular coefficient type.</typeparam>
+    /// <param name="A">First modular polynomial.</param>
+    /// <param name="B">Second modular polynomial.</param>
+    /// <param name="C">Target polynomial.</param>
+    /// <param name="k">Desired lifting exponent.</param>
+    /// <returns>List containing the lifted coefficients [S1, S2].</returns>
+    /// <remarks>Original Java method: HenselUtil#liftDiophant(A,B,C,k).</remarks>
     public static List<GenPolynomial<MOD>> LiftDiophant<MOD>(
         GenPolynomial<MOD> A,
         GenPolynomial<MOD> B,
@@ -70,6 +80,15 @@ public static partial class HenselUtil
         return solution;
     }
 
+    /// <summary>
+    /// Lifts a system of Diophantine equations <c>∑ s_i * Π_{j≠i} A_j = C</c> to precision <c>p^k</c>.
+    /// </summary>
+    /// <typeparam name="MOD">Modular coefficient type.</typeparam>
+    /// <param name="A">List of modular polynomials.</param>
+    /// <param name="C">Target polynomial.</param>
+    /// <param name="k">Desired lifting exponent.</param>
+    /// <returns>Coefficients <c>[s₁,…,sₙ]</c> that satisfy the lifted equation.</returns>
+    /// <remarks>Original Java method: HenselUtil#liftDiophant(List,C,k).</remarks>
     public static List<GenPolynomial<MOD>> LiftDiophant<MOD>(
         List<GenPolynomial<MOD>> A,
         GenPolynomial<MOD> C,
@@ -114,6 +133,16 @@ public static partial class HenselUtil
         return solution;
     }
 
+    /// <summary>
+    /// Lifts Bézout coefficients so that <c>A*s1 + B*s2 = x^exponent</c> modulo <c>p^k</c>.
+    /// </summary>
+    /// <typeparam name="MOD">Modular coefficient type.</typeparam>
+    /// <param name="A">First modular polynomial.</param>
+    /// <param name="B">Second modular polynomial.</param>
+    /// <param name="exponent">Exponent of the monomial target.</param>
+    /// <param name="k">Desired lifting exponent.</param>
+    /// <returns>Coefficients [s1, s2] satisfying the lifted relation.</returns>
+    /// <remarks>Original Java method: HenselUtil#liftDiophant(A,B,e,k).</remarks>
     public static List<GenPolynomial<MOD>> LiftDiophant<MOD>(
         GenPolynomial<MOD> A,
         GenPolynomial<MOD> B,
@@ -164,6 +193,15 @@ public static partial class HenselUtil
         return new List<GenPolynomial<MOD>> { r1, r2 };
     }
 
+    /// <summary>
+    /// Lifts a family of modular polynomials so that <c>∑ s_i * Π_{j≠i} A_j = x^exponent</c> modulo <c>p^k</c>.
+    /// </summary>
+    /// <typeparam name="MOD">Modular coefficient type.</typeparam>
+    /// <param name="A">List of modular polynomials.</param>
+    /// <param name="exponent">Exponent of the monomial target.</param>
+    /// <param name="k">Desired lifting exponent.</param>
+    /// <returns>Lifted coefficient list.</returns>
+    /// <remarks>Original Java method: HenselUtil#liftDiophant(List,e,k).</remarks>
     public static List<GenPolynomial<MOD>> LiftDiophant<MOD>(
         List<GenPolynomial<MOD>> A,
         long exponent,

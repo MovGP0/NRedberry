@@ -13,6 +13,10 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 /// </remarks>
 public static partial class PolyUtil;
 
+/// <summary>
+/// Converts algebraic numbers into their polynomial representation.
+/// </summary>
+/// <remarks>Matches the Java helper used inside <c>PolyUtil</c>.</remarks>
 internal sealed class AlgToPoly<C> : UnaryFunctor<AlgebraicNumber<C>, GenPolynomial<C>> where C : GcdRingElem<C>
 {
     public GenPolynomial<C> Eval(AlgebraicNumber<C> value)
@@ -21,6 +25,10 @@ internal sealed class AlgToPoly<C> : UnaryFunctor<AlgebraicNumber<C>, GenPolynom
     }
 }
 
+/// <summary>
+/// Wraps coefficients from the base ring into algebraic-number elements for the given algebraic number ring.
+/// </summary>
+/// <remarks>Matches the Java helper used inside <c>PolyUtil</c>.</remarks>
 internal sealed class CoeffToAlg<C> : UnaryFunctor<C, AlgebraicNumber<C>> where C : GcdRingElem<C>
 {
     private readonly AlgebraicNumberRing<C> _ring;
@@ -46,6 +54,10 @@ internal sealed class CoeffToAlg<C> : UnaryFunctor<C, AlgebraicNumber<C>> where 
     }
 }
 
+/// <summary>
+/// Translates an algebraic number into the corresponding complex element within the complex ring.
+/// </summary>
+/// <remarks>Matches the Java helper used inside <c>PolyUtil</c>.</remarks>
 internal sealed class AlgebToCompl<C> : UnaryFunctor<AlgebraicNumber<C>, Complex<C>> where C : GcdRingElem<C>
 {
     private readonly ComplexRing<C> _ring;
@@ -89,6 +101,10 @@ internal sealed class AlgebToCompl<C> : UnaryFunctor<AlgebraicNumber<C>, Complex
     }
 }
 
+/// <summary>
+/// Converts a complex element into the corresponding algebraic number expression.
+/// </summary>
+/// <remarks>Matches the Java helper used inside <c>PolyUtil</c>.</remarks>
 internal sealed class ComplToAlgeb<C> : UnaryFunctor<Complex<C>, AlgebraicNumber<C>> where C : GcdRingElem<C>
 {
     private readonly AlgebraicNumberRing<C> _ring;

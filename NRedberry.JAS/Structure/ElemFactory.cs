@@ -3,7 +3,8 @@ using System.Numerics;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 
 /// <summary>
-/// Element factory interface. Defines embedding of integers, parsing and random element construction.
+/// Element factory interface that defines generator queries, integer embeddings, parsing, random construction, and cloning.
+/// Mirrors the Java version, which also implements <c>Serializable</c>.
 /// </summary>
 /// <typeparam name="C">element type</typeparam>
 /// <remarks>

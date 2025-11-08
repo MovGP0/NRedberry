@@ -4,6 +4,14 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 public static partial class PolyUtil
 {
+    /// <summary>
+    /// Converts a polynomial into its recursive representation, splitting variables between head and coefficient part.
+    /// </summary>
+    /// <typeparam name="C">Coefficient type.</typeparam>
+    /// <param name="recursiveRing">Recursive polynomial ring factory.</param>
+    /// <param name="polynomial">Polynomial to convert.</param>
+    /// <returns>Recursive polynomial representation.</returns>
+    /// <remarks>Original Java method: PolyUtil#recursive (single polynomial overload).</remarks>
     public static GenPolynomial<GenPolynomial<C>> Recursive<C>(GenPolynomialRing<GenPolynomial<C>> recursiveRing, GenPolynomial<C> polynomial)
         where C : RingElem<C>
     {
@@ -39,6 +47,14 @@ public static partial class PolyUtil
         return result;
     }
 
+    /// <summary>
+    /// Converts a list of polynomials into their recursive representations.
+    /// </summary>
+    /// <typeparam name="C">Coefficient type.</typeparam>
+    /// <param name="recursiveRing">Recursive polynomial ring factory.</param>
+    /// <param name="polynomials">Polynomials to convert.</param>
+    /// <returns>List of recursive polynomials.</returns>
+    /// <remarks>Original Java method: PolyUtil#recursive (list overload).</remarks>
     public static List<GenPolynomial<GenPolynomial<C>>> Recursive<C>(GenPolynomialRing<GenPolynomial<C>> recursiveRing, List<GenPolynomial<C>> polynomials)
         where C : RingElem<C>
     {

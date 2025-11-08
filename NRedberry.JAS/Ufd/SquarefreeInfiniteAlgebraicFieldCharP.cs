@@ -6,7 +6,8 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Squarefree decomposition for infinite algebraic extensions of characteristic p fields.
+/// Squarefree decomposition for algebraic extensions of infinite coefficient
+/// fields of characteristic p &gt; 0.
 /// </summary>
 /// <typeparam name="C">coefficient type</typeparam>
 /// <remarks>

@@ -5,12 +5,12 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ps;
 
 /// <summary>
-/// Univariate power series implementation. Uses inner classes and lazy evaluated generating function for coefficients.
-/// All ring element methods use lazy evaluation except where noted otherwise. Eager evaluated methods are
-/// ToString(), CompareTo(), Equals(), Evaluate(), or they use the Order() method, like
-/// Signum(), Abs(), Divide(), Remainder() and Gcd().
+/// Univariate power series implementation with lazily evaluated coefficient-generating functions.
+/// Inner helper classes provide the lazy generators, while eager evaluation is limited to <c>ToString()</c>,
+/// <c>CompareTo()</c>, <c>Equals()</c>, <c>Evaluate()</c>, and any method that uses <c>Order()</c> (for
+/// example, <c>Signum()</c>, <c>Abs()</c>, <c>Divide()</c>, <c>Remainder()</c>, and <c>Gcd()</c>).
 /// </summary>
-/// <typeparam name="C">ring element type</typeparam>
+/// <typeparam name="C">Ring element type.</typeparam>
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ps.UnivPowerSeries
 /// </remarks>

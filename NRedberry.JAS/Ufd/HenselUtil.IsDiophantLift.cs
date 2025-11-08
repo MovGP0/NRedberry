@@ -6,6 +6,17 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 public static partial class HenselUtil
 {
+    /// <summary>
+    /// Checks whether two modular polynomials and their Bézout coefficients lift to a target Diophantine relation.
+    /// </summary>
+    /// <typeparam name="MOD">Modular coefficient type.</typeparam>
+    /// <param name="A">First modular polynomial.</param>
+    /// <param name="B">Second modular polynomial.</param>
+    /// <param name="S1">First Bézout coefficient.</param>
+    /// <param name="S2">Second Bézout coefficient.</param>
+    /// <param name="C">Target polynomial.</param>
+    /// <returns><see langword="true"/> if <c>A*S1 + B*S2 = C</c>.</returns>
+    /// <remarks>Original Java method: HenselUtil#isDiophantLift(A,B,S1,S2,C).</remarks>
     public static bool IsDiophantLift<MOD>(
         GenPolynomial<MOD> A,
         GenPolynomial<MOD> B,
@@ -44,6 +55,15 @@ public static partial class HenselUtil
         return combination.Equals(C);
     }
 
+    /// <summary>
+    /// Checks whether a collection of modular polynomials and coefficients lifts to a target product relation.
+    /// </summary>
+    /// <typeparam name="MOD">Modular coefficient type.</typeparam>
+    /// <param name="A">List of modular polynomials.</param>
+    /// <param name="S">List of Bézout coefficients.</param>
+    /// <param name="C">Target polynomial.</param>
+    /// <returns><see langword="true"/> if the lifted relation holds.</returns>
+    /// <remarks>Original Java method: HenselUtil#isDiophantLift(List,List,C).</remarks>
     public static bool IsDiophantLift<MOD>(
         List<GenPolynomial<MOD>> A,
         List<GenPolynomial<MOD>> S,

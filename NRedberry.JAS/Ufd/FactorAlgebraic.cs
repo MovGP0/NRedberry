@@ -4,7 +4,9 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Algebraic number coefficients factorization algorithms.
+/// Algebraic number coefficients factorization algorithms. This class implements
+/// factorization methods for polynomials over algebraic numbers over rational
+/// numbers or over (prime) modular integers.
 /// </summary>
 /// <typeparam name="C">coefficient type</typeparam>
 /// <remarks>

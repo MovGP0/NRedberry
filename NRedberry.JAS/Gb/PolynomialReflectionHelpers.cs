@@ -4,10 +4,19 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Gb;
 
+/// <summary>
+/// Reflection-based helpers that access GenPolynomial members in cases where the original Java APIs exposed internals unavailable in the ported C# types.
+/// </summary>
 internal static class PolynomialReflectionHelpers
 {
     private const BindingFlags Flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
+    /// <summary>
+    /// Attempts to recover the polynomial ring associated with a polynomial via known properties, fields, or factories.
+    /// </summary>
+    /// <typeparam name="C">Coefficient type.</typeparam>
+    /// <param name="polynomial">Polynomial whose ring is requested.</param>
+    /// <returns>The detected ring, or <see langword="null"/> when it cannot be inferred.</returns>
     public static GenPolynomialRing<C>? GetPolynomialRing<C>(GenPolynomial<C>? polynomial) where C : RingElem<C>
     {
         if (polynomial == null)

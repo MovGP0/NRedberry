@@ -170,6 +170,12 @@ public class RelationTable<C> where C : RingElem<C>
         return builder.ToString();
     }
 
+    /// <summary>
+    /// Inserts or updates the non-commutative relation between the two exponent vectors.
+    /// </summary>
+    /// <param name="e">Left exponent vector.</param>
+    /// <param name="f">Right exponent vector.</param>
+    /// <param name="p">Solvable polynomial describing their product.</param>
     public void Update(ExpVector e, ExpVector f, GenSolvablePolynomial<C> p)
     {
         ArgumentNullException.ThrowIfNull(e);
@@ -237,6 +243,12 @@ public class RelationTable<C> where C : RingElem<C>
         }
     }
 
+    /// <summary>
+    /// Updates the relation table using the leading terms of two polynomials.
+    /// </summary>
+    /// <param name="first">First polynomial.</param>
+    /// <param name="second">Second polynomial.</param>
+    /// <param name="product">Solvable polynomial product.</param>
     public void Update(GenPolynomial<C> first, GenPolynomial<C> second, GenSolvablePolynomial<C> product)
     {
         ArgumentNullException.ThrowIfNull(first);

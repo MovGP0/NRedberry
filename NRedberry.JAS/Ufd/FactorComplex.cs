@@ -4,7 +4,11 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Complex coefficients factorization algorithms.
+/// Complex coefficients factorization algorithms. This class implements
+/// factorization methods for polynomials over Complex numbers via the algebraic
+/// number C(i) over rational numbers or over (prime) modular integers. <b>Note:</b>
+/// Decomposition to linear factors is only via absolute factorization since
+/// Complex are not the analytic complex numbers.
 /// </summary>
 /// <typeparam name="C">coefficient type</typeparam>
 /// <remarks>

@@ -5,9 +5,9 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Vector;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Gb;
 
 /// <summary>
-/// Gröbner Bases abstract class. Implements common Gröbner bases and GB test methods.
+/// Gröbner bases abstract class implementing common Gröbner-base routines and GB test methods.
 /// </summary>
-/// <typeparam name="C">coefficient type</typeparam>
+/// <typeparam name="C">Coefficient type that implements <see cref="RingElem{T}"/>.</typeparam>
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.gb.GroebnerBase
 /// </remarks>

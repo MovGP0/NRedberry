@@ -11,6 +11,12 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 /// </remarks>
 public class Complex<C> : GcdRingElem<Complex<C>> where C : RingElem<C>
 {
+    /// <summary>
+    /// Creates a complex element with the provided real and imaginary parts.
+    /// </summary>
+    /// <param name="ring">Factory that owns this complex data structure.</param>
+    /// <param name="r">Real part.</param>
+    /// <param name="i">Imaginary part.</param>
     public Complex(ComplexRing<C> ring, C r, C i)
     {
         ArgumentNullException.ThrowIfNull(ring);
@@ -21,16 +27,30 @@ public class Complex<C> : GcdRingElem<Complex<C>> where C : RingElem<C>
         Im = i;
     }
 
+    /// <summary>
+    /// Creates a complex element using <paramref name="r"/> as the real part and zero imaginary part.
+    /// </summary>
+    /// <param name="ring">Factory that owns this complex data structure.</param>
+    /// <param name="r">Real part.</param>
     public Complex(ComplexRing<C> ring, C r)
         : this(ring, r, ring.Ring.FromInteger(0))
     {
     }
 
+    /// <summary>
+    /// Creates a complex element from an integer real part with an implicit zero imaginary part.
+    /// </summary>
+    /// <param name="ring">Factory that owns this complex data structure.</param>
+    /// <param name="r">Integer real part.</param>
     public Complex(ComplexRing<C> ring, long r)
         : this(ring, ring.Ring.FromInteger(r))
     {
     }
 
+    /// <summary>
+    /// Creates the additive identity (zero) complex element for the ring.
+    /// </summary>
+    /// <param name="ring">Factory that owns this complex data structure.</param>
     public Complex(ComplexRing<C> ring)
         : this(ring, ring.Ring.FromInteger(0))
     {

@@ -6,8 +6,8 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Integer coefficients factorization algorithms. This class implements factorization methods
-/// for polynomials over integers.
+/// Integer coefficients factorization algorithms. This class implements
+/// factorization methods for polynomials over integers.
 /// </summary>
 /// <typeparam name="MOD">modular coefficient type</typeparam>
 /// <remarks>

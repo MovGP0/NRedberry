@@ -31,11 +31,18 @@ public sealed class TermOrder
     private IComparer<ExpVector> horder;
     private IComparer<ExpVector> lorder;
 
+    /// <summary>
+    /// Initializes the default inverse graded lex term order.
+    /// </summary>
     public TermOrder()
     {
         InitializeSingle(DEFAULT_EVORD);
     }
 
+    /// <summary>
+    /// Initializes the specified term order.
+    /// </summary>
+    /// <param name="evord">One of the <c>TermOrder</c> constants.</param>
     public TermOrder(int evord)
     {
         InitializeSingle(evord);
@@ -46,16 +53,29 @@ public sealed class TermOrder
     /// </summary>
     /// <param name="length">Maximum number of exponents to compare.</param>
     /// <param name="split">Index where the second block starts.</param>
+    /// <summary>
+    /// Creates a split term order where the same order applies to both blocks.
+    /// </summary>
+    /// <param name="length">Maximum exponent length.</param>
+    /// <param name="split">Index where the second block begins.</param>
     public TermOrder(int length, int split)
     {
         InitializeSplit(DEFAULT_EVORD, DEFAULT_EVORD, length, split);
     }
 
+    /// <summary>
+    /// Constructs a weighted term order from a single weight vector.
+    /// </summary>
+    /// <param name="weightVector">Weight vector for a weighted lex order.</param>
     public TermOrder(long[] weightVector)
         : this(weightVector == null ? throw new ArgumentNullException(nameof(weightVector)) : [weightVector.ToArray()])
     {
     }
 
+    /// <summary>
+    /// Constructs a weighted term order using the provided weight matrix.
+    /// </summary>
+    /// <param name="w">Matrix of weight vectors.</param>
     public TermOrder(long[][] w)
     {
         if (w == null || w.Length == 0)
@@ -82,6 +102,9 @@ public sealed class TermOrder
     /// <param name="secondOrder">Order for the second block.</param>
     /// <param name="length">Maximum number of exponents considered.</param>
     /// <param name="split">Index where the second block starts.</param>
+    /// <summary>
+    /// Creates a split term order with independent orders for each block.
+    /// </summary>
     public TermOrder(int firstOrder, int secondOrder, int length, int split)
     {
         InitializeSplit(firstOrder, secondOrder, length, split);
@@ -94,6 +117,9 @@ public sealed class TermOrder
     public IComparer<ExpVector> GetDescendComparator() => horder;
     public IComparer<ExpVector> GetAscendComparator() => lorder;
 
+    /// <summary>
+    /// Extends the term order when adding new variables.
+    /// </summary>
     public TermOrder Extend(int length, int extendBy)
     {
         if (weight != null)
@@ -125,6 +151,9 @@ public sealed class TermOrder
         return new TermOrder(DEFAULT_EVORD, evord, length + extendBy, extendBy);
     }
 
+    /// <summary>
+    /// Contracts the term order by removing variables from the front.
+    /// </summary>
     public TermOrder Contract(int start, int newLength)
     {
         if (weight != null)
@@ -165,11 +194,17 @@ public sealed class TermOrder
         return new TermOrder(evord2);
     }
 
+    /// <summary>
+    /// Reverses the variable order completely.
+    /// </summary>
     public TermOrder Reverse()
     {
         return Reverse(false);
     }
 
+    /// <summary>
+    /// Reverses the variable order optionally in partial blocks.
+    /// </summary>
     public TermOrder Reverse(bool partial)
     {
         if (weight != null)
@@ -196,6 +231,9 @@ public sealed class TermOrder
         return new TermOrder(Revert(evord2), Revert(evord), evend2, evend2 - evbeg2);
     }
 
+    /// <summary>
+    /// Returns the reverse counterpart of the given order constant.
+    /// </summary>
     public static int Revert(int order)
     {
         return order switch
@@ -212,6 +250,9 @@ public sealed class TermOrder
         };
     }
 
+    /// <summary>
+    /// Formats the term order by describing weight rows and splits.
+    /// </summary>
     public override string ToString()
     {
         StringBuilder builder = new ();
@@ -277,6 +318,9 @@ public sealed class TermOrder
         return builder.ToString();
     }
 
+    /// <summary>
+    /// Equality compares all internal order parameters and weights.
+    /// </summary>
     public override bool Equals(object? obj)
     {
         if (ReferenceEquals(this, obj))
@@ -325,6 +369,9 @@ public sealed class TermOrder
         return true;
     }
 
+    /// <summary>
+    /// Computes a hash code from the order parameters and weight matrix.
+    /// </summary>
     public override int GetHashCode()
     {
         HashCode hash = new ();

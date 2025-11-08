@@ -4,6 +4,7 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 
 /// <summary>
 /// ModInteger class with GcdRingElem interface. Objects of this class are immutable.
+/// The SAC2 static methods are also provided.
 /// </summary>
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.arith.ModInteger
@@ -23,6 +24,8 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
     /// <summary>
     /// The constructor creates a ModInteger object from a ModIntegerRing and a value part.
     /// </summary>
+    /// <param name="m">ModIntegerRing.</param>
+    /// <param name="a">Element value.</param>
     public ModInteger(ModIntegerRing m, BigInteger a)
     {
         ArgumentNullException.ThrowIfNull(m);
@@ -34,6 +37,8 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
     /// <summary>
     /// The constructor creates a ModInteger object from a ModIntegerRing and a long value part.
     /// </summary>
+    /// <param name="m">ModIntegerRing.</param>
+    /// <param name="a">long.</param>
     public ModInteger(ModIntegerRing m, long a)
         : this(m, new BigInteger(a))
     {
@@ -42,6 +47,8 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
     /// <summary>
     /// The constructor creates a ModInteger object from a ModIntegerRing and a String value part.
     /// </summary>
+    /// <param name="m">ModIntegerRing.</param>
+    /// <param name="s">String.</param>
     public ModInteger(ModIntegerRing m, string s)
         : this(m, BigInteger.Parse(s.Trim()))
     {
@@ -50,6 +57,7 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
     /// <summary>
     /// The constructor creates a 0 ModInteger object from a given ModIntegerRing.
     /// </summary>
+    /// <param name="m">ModIntegerRing.</param>
     public ModInteger(ModIntegerRing m)
         : this(m, BigInteger.Zero)
     {

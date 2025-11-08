@@ -4,6 +4,14 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 public static partial class PolyUtil
 {
+    /// <summary>
+    /// Performs the sparse pseudo-division of two univariate polynomials (or exact divisions in multivariate cases).
+    /// </summary>
+    /// <typeparam name="C">Coefficient type.</typeparam>
+    /// <param name="polynomial">Dividend polynomial.</param>
+    /// <param name="divisor">Non-zero divisor polynomial.</param>
+    /// <returns>Quotient satisfying <c>lc(divisor)^k * dividend = quotient * divisor + remainder</c> for some <c>k ≤ deg(dividend)-deg(divisor)</c>.</returns>
+    /// <remarks>Original Java method: PolyUtil#basePseudoDivide.</remarks>
     public static GenPolynomial<C> BasePseudoDivide<C>(GenPolynomial<C> polynomial, GenPolynomial<C> divisor)
         where C : RingElem<C>
     {

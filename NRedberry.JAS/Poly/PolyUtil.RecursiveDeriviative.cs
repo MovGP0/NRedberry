@@ -5,6 +5,13 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 public static partial class PolyUtil
 {
+    /// <summary>
+    /// Computes the derivative of a recursive polynomial with respect to its main variable.
+    /// </summary>
+    /// <typeparam name="C">Coefficient type.</typeparam>
+    /// <param name="polynomial">Recursive univariate polynomial.</param>
+    /// <returns>The derivative polynomial.</returns>
+    /// <remarks>Original Java method: PolyUtil#recursiveDeriviative.</remarks>
     public static GenPolynomial<GenPolynomial<C>> RecursiveDeriviative<C>(GenPolynomial<GenPolynomial<C>> polynomial)
         where C : RingElem<C>
     {

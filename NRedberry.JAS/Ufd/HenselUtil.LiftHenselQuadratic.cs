@@ -6,6 +6,18 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 public static partial class HenselUtil
 {
+    /// <summary>
+    /// Quadratic Hensel lifting that refines factors A and B along with Bézout coefficients so that <c>C = A₁ · B₁</c> modulo higher powers of p.
+    /// </summary>
+    /// <typeparam name="MOD">Modular coefficient type.</typeparam>
+    /// <param name="C">Integral polynomial being factored.</param>
+    /// <param name="M">Coefficient bound for lifted factors.</param>
+    /// <param name="A">First modular factor.</param>
+    /// <param name="B">Second modular factor.</param>
+    /// <param name="S">Initial Bézout coefficient for A.</param>
+    /// <param name="T">Initial Bézout coefficient for B.</param>
+    /// <returns>Hensel approximation containing lifted factors and coefficients.</returns>
+    /// <remarks>Original Java method: HenselUtil#liftHenselQuadratic(C,M,A,B,S,T).</remarks>
     public static HenselApprox<MOD> LiftHenselQuadratic<MOD>(
         GenPolynomial<BigInteger> C,
         BigInteger M,
@@ -177,6 +189,16 @@ public static partial class HenselUtil
         return new HenselApprox<MOD>(Ai, Bi, A1p, B1p);
     }
 
+    /// <summary>
+    /// Quadratic Hensel lifting that derives Bézout coefficients internally before refining the factors.
+    /// </summary>
+    /// <typeparam name="MOD">Modular coefficient type.</typeparam>
+    /// <param name="C">Integral polynomial being factored.</param>
+    /// <param name="M">Coefficient bound for lifted factors.</param>
+    /// <param name="A">First modular factor.</param>
+    /// <param name="B">Second modular factor.</param>
+    /// <returns>Hensel approximation with lifted factors.</returns>
+    /// <remarks>Original Java method: HenselUtil#liftHenselQuadratic(C,M,A,B).</remarks>
     public static HenselApprox<MOD> LiftHenselQuadratic<MOD>(
         GenPolynomial<BigInteger> C,
         BigInteger M,

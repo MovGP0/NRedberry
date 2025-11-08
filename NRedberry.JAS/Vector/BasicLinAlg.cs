@@ -3,8 +3,9 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Vector;
 
 /// <summary>
-/// Basic linear algebra methods. Implements Basic linear algebra computations and tests.
-/// Note: will use wrong method dispatch in JRE when used with GenSolvablePolynomial.
+/// Basic linear algebra methods. Implements Basic linear algebra computations
+/// and tests. <b>Note:</b> will use wrong method dispatch in JRE when used with
+/// GenSolvablePolynomial.
 /// </summary>
 /// <typeparam name="C">coefficient type</typeparam>
 /// <remarks>

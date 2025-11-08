@@ -3,9 +3,10 @@ using System.Numerics;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 
 /// <summary>
-/// Power class to compute powers of RingElem.
+/// Power helper that implements binary exponentiation for <see cref="RingElem{C}"/> and <see cref="MonoidElem{C}"/>,
+/// including positive exponent routines, factory-aware power methods, and modular exponentiation/backward-compatible conveniences.
 /// </summary>
-/// <typeparam name="C">ring element type</typeparam>
+/// <typeparam name="C">ring element type.</typeparam>
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.structure.Power
 /// </remarks>

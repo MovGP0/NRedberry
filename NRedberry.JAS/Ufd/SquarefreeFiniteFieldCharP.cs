@@ -6,7 +6,7 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Squarefree decomposition for finite fields of characteristic p.
+/// Squarefree decomposition for finite coefficient fields of characteristic p.
 /// </summary>
 /// <typeparam name="C">coefficient type</typeparam>
 /// <remarks>

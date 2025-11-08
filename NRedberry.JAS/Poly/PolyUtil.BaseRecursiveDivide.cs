@@ -4,6 +4,14 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 public static partial class PolyUtil
 {
+    /// <summary>
+    /// Divides a recursive polynomial by an element of the coefficient ring using coefficient pseudo-division.
+    /// </summary>
+    /// <typeparam name="C">Coefficient type.</typeparam>
+    /// <param name="polynomial">Recursive polynomial to divide.</param>
+    /// <param name="divisor">Coefficient ring element.</param>
+    /// <returns>The quotient polynomial <c>polynomial / divisor</c>.</returns>
+    /// <remarks>Original Java method: PolyUtil#baseRecursiveDivide.</remarks>
     public static GenPolynomial<GenPolynomial<C>> BaseRecursiveDivide<C>(GenPolynomial<GenPolynomial<C>> polynomial, C divisor)
         where C : RingElem<C>
     {

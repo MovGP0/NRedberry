@@ -18,6 +18,11 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
 
     public GenPolynomial<C> Val { get; }
 
+    /// <summary>
+    /// Creates an algebraic number from the specified ring context and polynomial representative.
+    /// </summary>
+    /// <param name="ring">Ring that owns this algebraic number.</param>
+    /// <param name="value">Polynomial to be reduced modulo the ring's modulus.</param>
     public AlgebraicNumber(AlgebraicNumberRing<C> ring, GenPolynomial<C> value)
     {
         ArgumentNullException.ThrowIfNull(ring);
@@ -37,36 +42,61 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
         }
     }
 
+    /// <summary>
+    /// Creates the additive identity algebraic number for the provided ring.
+    /// </summary>
+    /// <param name="ring">Ring that owns this algebraic number.</param>
     public AlgebraicNumber(AlgebraicNumberRing<C> ring)
         : this(ring, GenPolynomialRing<C>.Zero)
     {
     }
 
+    /// <summary>
+    /// Gets the polynomial representative stored in this algebraic number.
+    /// </summary>
+    /// <returns>Polynomial value reduced modulo the modulus.</returns>
     public GenPolynomial<C> GetVal()
     {
         return Val;
     }
 
+    /// <summary>
+    /// Returns the owning algebraic number ring factory.
+    /// </summary>
+    /// <returns>The ring that created this number.</returns>
     public AlgebraicNumberRing<C> Factory()
     {
         return Ring;
     }
 
+    /// <summary>
+    /// Returns an identical algebraic number instance.
+    /// </summary>
+    /// <returns>A new object sharing the same ring and polynomial.</returns>
     public AlgebraicNumber<C> Clone()
     {
         return new AlgebraicNumber<C>(Ring, Val);
     }
 
+    /// <summary>
+    /// Determines whether this element represents zero.
+    /// </summary>
     public bool IsZero()
     {
         return Val.IsZero();
     }
 
+    /// <summary>
+    /// Determines whether this element represents one.
+    /// </summary>
     public bool IsOne()
     {
         return Val.IsOne();
     }
 
+    /// <summary>
+    /// Determines whether this element is a unit (invertible) within its ring.
+    /// </summary>
     public bool IsUnit()
     {
         if (_isUnit > 0)
@@ -96,12 +126,20 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
         return unit;
     }
 
+    /// <summary>
+    /// Formats the algebraic number using the ring variables (if available).
+    /// </summary>
     public override string ToString()
     {
         string[]? variables = Ring.Ring.GetVars();
         return Val.ToString(variables ?? []);
     }
 
+    /// <summary>
+    /// Compares two algebraic numbers first by their modulus and then by their polynomial value.
+    /// </summary>
+    /// <param name="other">Other algebraic number.</param>
+    /// <returns>Sign of the comparison.</returns>
     public int CompareTo(AlgebraicNumber<C>? other)
     {
         if (other is null)
@@ -121,6 +159,9 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
         return Val.CompareTo(other.Val);
     }
 
+    /// <summary>
+    /// Determines reference and value equality within the same ring context.
+    /// </summary>
     public override bool Equals(object? obj)
     {
         if (ReferenceEquals(this, obj))
@@ -141,6 +182,9 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
         return CompareTo(other) == 0;
     }
 
+    /// <summary>
+    /// Hashes the polynomial and ring components.
+    /// </summary>
     public override int GetHashCode()
     {
         HashCode hashCode = new();
@@ -149,33 +193,55 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
         return hashCode.ToHashCode();
     }
 
+    /// <summary>
+    /// Returns the absolute value of the embedded polynomial.
+    /// </summary>
     public AlgebraicNumber<C> Abs()
     {
         return new AlgebraicNumber<C>(Ring, Val.Abs());
     }
 
+    /// <summary>
+    /// Returns the negation of this algebraic number.
+    /// </summary>
     public AlgebraicNumber<C> Negate()
     {
         return new AlgebraicNumber<C>(Ring, Val.Negate());
     }
 
+    /// <summary>
+    /// Signum of the polynomial part.
+    /// </summary>
     public int Signum()
     {
         return Val.Signum();
     }
 
+    /// <summary>
+    /// Subtracts another algebraic number.
+    /// </summary>
+    /// <param name="other">Operand.</param>
+    /// <returns>Result of subtraction.</returns>
     public AlgebraicNumber<C> Subtract(AlgebraicNumber<C> other)
     {
         ArgumentNullException.ThrowIfNull(other);
         return new AlgebraicNumber<C>(Ring, Val.Subtract(other.Val));
     }
 
+    /// <summary>
+    /// Divides by another algebraic number (throws if not invertible).
+    /// </summary>
+    /// <param name="other">Divisor.</param>
     public AlgebraicNumber<C> Divide(AlgebraicNumber<C> other)
     {
         ArgumentNullException.ThrowIfNull(other);
         return Multiply(other.Inverse());
     }
 
+    /// <summary>
+    /// Computes the multiplicative inverse using polynomial modular inversion.
+    /// </summary>
+    /// <exception cref="AlgebraicNotInvertibleException">Thrown when the modulus shares a non-unit gcd.</exception>
     public AlgebraicNumber<C> Inverse()
     {
         try
@@ -199,6 +265,11 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
         }
     }
 
+    /// <summary>
+    /// Computes the remainder when dividing by another algebraic number.
+    /// </summary>
+    /// <param name="other">Divisor.</param>
+    /// <returns>Polynomial remainder.</returns>
     public AlgebraicNumber<C> Remainder(AlgebraicNumber<C> other)
     {
         if (other.IsZero())
@@ -220,6 +291,11 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
         return new AlgebraicNumber<C>(Ring, remainder);
     }
 
+    /// <summary>
+    /// Computes the greatest common divisor with another algebraic number.
+    /// </summary>
+    /// <param name="other">Other operand.</param>
+    /// <returns>GCD result.</returns>
     public AlgebraicNumber<C> Gcd(AlgebraicNumber<C> other)
     {
         ArgumentNullException.ThrowIfNull(other);
@@ -243,6 +319,10 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
         return new AlgebraicNumber<C>(Ring, gcd);
     }
 
+    /// <summary>
+    /// Extended GCD algorithm returning [g, s, t] such that s*this + t*other = g.
+    /// </summary>
+    /// <param name="other">Other operand.</param>
     public AlgebraicNumber<C>[] Egcd(AlgebraicNumber<C> other)
     {
         AlgebraicNumber<C>[] result = new AlgebraicNumber<C>[3];
@@ -311,6 +391,10 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
         return result;
     }
 
+    /// <summary>
+    /// Multiplies two algebraic numbers.
+    /// </summary>
+    /// <param name="other">Operand to multiply.</param>
     public AlgebraicNumber<C> Multiply(AlgebraicNumber<C> other)
     {
         ArgumentNullException.ThrowIfNull(other);
@@ -318,6 +402,10 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
         return new AlgebraicNumber<C>(Ring, product);
     }
 
+    /// <summary>
+    /// Adds two algebraic numbers.
+    /// </summary>
+    /// <param name="other">Operand to add.</param>
     public AlgebraicNumber<C> Sum(AlgebraicNumber<C> other)
     {
         ArgumentNullException.ThrowIfNull(other);

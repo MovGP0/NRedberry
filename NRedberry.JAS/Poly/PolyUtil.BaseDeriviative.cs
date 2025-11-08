@@ -4,6 +4,13 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 public static partial class PolyUtil
 {
+    /// <summary>
+    /// Calculates the derivative of a univariate polynomial with respect to its main variable.
+    /// </summary>
+    /// <typeparam name="C">Coefficient type.</typeparam>
+    /// <param name="polynomial">Polynomial whose derivative is required.</param>
+    /// <returns>The derivative polynomial.</returns>
+    /// <remarks>Original Java method: PolyUtil#baseDeriviative.</remarks>
     public static GenPolynomial<C> BaseDeriviative<C>(GenPolynomial<C> polynomial)
         where C : RingElem<C>
     {

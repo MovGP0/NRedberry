@@ -4,20 +4,21 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Gb;
 
 /// <summary>
-/// Polynomial Reduction sequential use algorithm. Implements normalform.
+/// Polynomial reduction sequential-use algorithm that implements the normalform.
 /// </summary>
-/// <typeparam name="C">coefficient type (should be FieldElem)</typeparam>
+/// <typeparam name="C">Coefficient type that should represent a field element.</typeparam>
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.gb.ReductionSeq
 /// </remarks>
 public class ReductionSeq<C> : ReductionAbstract<C> where C : RingElem<C>
 {
     /// <summary>
-    /// Normalform.
+    /// Computes the normalform of <paramref name="Ap"/> with respect to the sequential list <paramref name="Pp"/>.
+    /// Coefficients must come from a field.
     /// </summary>
-    /// <param name="Pp">polynomial list</param>
-    /// <param name="Ap">polynomial</param>
-    /// <returns>nf(Ap) with respect to Pp.</returns>
+    /// <param name="Pp">Polynomial list used as divisors.</param>
+    /// <param name="Ap">Polynomial to reduce.</param>
+    /// <returns>nf(Ap) with respect to <paramref name="Pp"/>.</returns>
     public override GenPolynomial<C> Normalform(List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap)
     {
         if (Pp == null || Pp.Count == 0)

@@ -4,7 +4,8 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Polynomial ufd utilities, like conversion between different representations and Hensel lifting.
+/// Polynomial ufd utilities, like conversion between different representations
+/// and Hensel lifting.
 /// </summary>
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ufd.PolyUfdUtil

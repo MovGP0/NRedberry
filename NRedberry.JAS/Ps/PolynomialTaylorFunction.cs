@@ -4,9 +4,10 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ps;
 
 /// <summary>
-/// Polynomial functions capable for Taylor series expansion.
+/// Polynomial functions capable of Taylor series expansion and implementing the
+/// {@link TaylorFunction} behavior from the Java source.
 /// </summary>
-/// <typeparam name="C">ring element type</typeparam>
+/// <typeparam name="C">ring element type.</typeparam>
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ps.PolynomialTaylorFunction
 /// </remarks>

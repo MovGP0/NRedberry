@@ -4,7 +4,8 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Greatest common divisor algorithms with subresultant polynomial remainder sequence.
+/// Greatest common divisor algorithms with subresultant polynomial remainder
+/// sequence.
 /// </summary>
 /// <typeparam name="C">coefficient type</typeparam>
 /// <remarks>

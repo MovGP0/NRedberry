@@ -4,7 +4,8 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 
 /// <summary>
 /// BigComplex class based on BigRational implementing the RingElem respectively
-/// the StarRingElem interface. Objects of this class are immutable.
+/// the StarRingElem interface. Objects of this class are immutable. The SAC2
+/// static methods are also provided.
 /// </summary>
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.arith.BigComplex

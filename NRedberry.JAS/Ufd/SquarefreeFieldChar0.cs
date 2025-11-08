@@ -4,7 +4,7 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 
 /// <summary>
-/// Squarefree decomposition for fields of characteristic 0.
+/// Squarefree decomposition for coefficient fields of characteristic 0.
 /// </summary>
 /// <typeparam name="C">coefficient type</typeparam>
 /// <remarks>

@@ -9,16 +9,33 @@
 /// </remarks>
 public sealed class ExpVectorInteger : ExpVector
 {
+    /// <summary>
+    /// Largest integer representable by this storage unit.
+    /// </summary>
     public static readonly long MaxInt = int.MaxValue / 2L;
+
+    /// <summary>
+    /// Smallest integer representable by this storage unit.
+    /// </summary>
     public static readonly long MinInt = int.MinValue / 2L;
 
     internal readonly int[] _values;
 
+    /// <summary>
+    /// Creates an integer-backed exponent vector with the given length.
+    /// </summary>
+    /// <param name="length">Number of variables.</param>
     public ExpVectorInteger(int length)
         : this(new int[length])
     {
     }
 
+    /// <summary>
+    /// Creates an exponent vector and initializes a single entry.
+    /// </summary>
+    /// <param name="length">Number of variables.</param>
+    /// <param name="index">Index to set.</param>
+    /// <param name="exponent">Value placed at <paramref name="index"/>.</param>
     public ExpVectorInteger(int length, int index, long exponent)
         : this(new int[length])
     {
@@ -30,6 +47,10 @@ public sealed class ExpVectorInteger : ExpVector
         _values[index] = ConvertToInt(exponent);
     }
 
+    /// <summary>
+    /// Creates an exponent vector from a <see cref="long"/> array while enforcing storage limits.
+    /// </summary>
+    /// <param name="values">Source exponent array.</param>
     public ExpVectorInteger(long[] values)
     {
         ArgumentNullException.ThrowIfNull(values);
@@ -40,6 +61,10 @@ public sealed class ExpVectorInteger : ExpVector
         }
     }
 
+    /// <summary>
+    /// Internal constructor that consumes an existing int array.
+    /// </summary>
+    /// <param name="values">Array used directly as storage.</param>
     public ExpVectorInteger(int[] values)
     {
         ArgumentNullException.ThrowIfNull(values);

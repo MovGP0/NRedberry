@@ -5,6 +5,13 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
 public static partial class PolyUtil
 {
+    /// <summary>
+    /// Clears denominators in a rational-coefficient polynomial while tracking the numerator GCD and denominator LCM.
+    /// </summary>
+    /// <param name="resultRing">Target polynomial ring over integers.</param>
+    /// <param name="polynomial">Polynomial with <see cref="BigRational"/> coefficients.</param>
+    /// <returns>An array <c>[gcd, lcm, convertedPolynomial]</c> matching the Java helper.</returns>
+    /// <remarks>Original Java method: PolyUtil#integerFromRationalCoefficientsFactor.</remarks>
     public static object[] IntegerFromRationalCoefficientsFactor(GenPolynomialRing<BigInteger> resultRing, GenPolynomial<BigRational> polynomial)
     {
         ArgumentNullException.ThrowIfNull(resultRing);
