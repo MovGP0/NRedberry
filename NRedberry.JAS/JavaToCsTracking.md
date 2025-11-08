@@ -1,4 +1,4 @@
-﻿# Java to C# Scaffolding Tracking
+# Java to C# Scaffolding Tracking
 
 This document tracks the scaffolding status of all Java files in the NRedberry.JAS project.
 
@@ -114,8 +114,8 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 | HenselUtil.java | HenselUtil.cs | ✅ Scaffolded | Hensel univariate lifting utilities |
 | NoLiftingException.java | NoLiftingException.cs | ✔️ Complete | Exception thrown when Hensel lifting fails |
 | PolyUfdUtil.java | PolyUfdUtil.cs | ✅ Scaffolded | Polynomial UFD utilities and conversions |
-| Quotient.java | Quotient.cs | ✅ Scaffolded | Quotient ring element (rational function) |
-| QuotientRing.java | QuotientRing.cs | ✅ Scaffolded | Quotient ring factory with generic type |
+| Quotient.java | Quotient.cs | ?? Complete | Quotient ring element (rational function) |
+| QuotientRing.java | QuotientRing.cs | ?? Complete | Quotient ring factory with generic type |
 | Squarefree.java | Squarefree.cs | ✔️ Complete | Squarefree decomposition interface |
 | SquarefreeAbstract.java | SquarefreeAbstract.cs | ✔️ Complete | Abstract squarefree base with methods |
 | SquarefreeFactory.java | SquarefreeFactory.cs | ✔️ Complete | Factory for squarefree decomposition |
