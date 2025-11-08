@@ -1,141 +1,145 @@
-# Java to C# Scaffolding Tracking
+# Java to C# Tracking
 
-This document tracks the scaffolding status of all Java files in the NRedberry.JAS project.
-
-## Status Legend
-- ✅ **Scaffolded** - Class skeleton with public methods/properties created, throwing NotImplementedException
-- ✔️ **Complete** - Fully implemented
+This document tracks the status of all files in the NRedberry.JAS project.
 
 ## Files
 
 ### Arith (12 files)
-| Java File | C# File | Status | Notes |
-|-----------|---------|--------|-------|
-| BigComplex.java | BigComplex.cs | ✔️ Complete | |
-| BigInteger.java | BigInteger.cs | ✔️ Complete | |
-| BigRational.java | BigRational.cs | ✔️ Complete | |
-| Combinatoric.java | Combinatoric.cs | ✔️ Complete | |
-| ModInteger.java | ModInteger.cs | ✔️ Complete | |
-| ModIntegerRing.java | ModIntegerRing.cs | ✔️ Complete | |
-| ModLong.java | ModLong.cs | ✔️ Complete | |
-| ModLongRing.java | ModLongRing.cs | ✔️ Complete | |
-| Modular.java | Modular.cs | ✔️ Complete | |
-| ModularNotInvertibleException.java | ModularNotInvertibleException.cs | ✔️ Complete | |
-| ModularRingFactory.java | ModularRingFactory.cs | ✔️ Complete | |
-| PrimeList.java | PrimeList.cs | ✔️ Complete | |
+
+| Java File                          | C# File                          | Status | Notes |
+|------------------------------------|----------------------------------|--------|-------|
+| BigComplex.java                    | BigComplex.cs                    |        |       |
+| BigInteger.java                    | BigInteger.cs                    |        |       |
+| BigRational.java                   | BigRational.cs                   |        |       |
+| Combinatoric.java                  | Combinatoric.cs                  |        |       |
+| ModInteger.java                    | ModInteger.cs                    |        |       |
+| ModIntegerRing.java                | ModIntegerRing.cs                |        |       |
+| ModLong.java                       | ModLong.cs                       |        |       |
+| ModLongRing.java                   | ModLongRing.cs                   |        |       |
+| Modular.java                       | Modular.cs                       |        |       |
+| ModularNotInvertibleException.java | ModularNotInvertibleException.cs |        |       |
+| ModularRingFactory.java            | ModularRingFactory.cs            |        |       |
+| PrimeList.java                     | PrimeList.cs                     |        |       |
 
 ### Gb (4 files)
-| Java File | C# File | Status | Notes |
-|-----------|---------|--------|-------|
-| GroebnerBase.java | GroebnerBase.cs | ✔️ Complete | |
-| Reduction.java | Reduction.cs | ✔️ Complete | |
-| ReductionAbstract.java | ReductionAbstract.cs | ✔️ Complete | |
-| ReductionSeq.java | ReductionSeq.cs | ✔️ Complete | |
+
+| Java File              | C# File              | Status | Notes |
+|------------------------|----------------------|--------|-------|
+| GroebnerBase.java      | GroebnerBase.cs      |        |       |
+| Reduction.java         | Reduction.cs         |        |       |
+| ReductionAbstract.java | ReductionAbstract.cs |        |       |
+| ReductionSeq.java      | ReductionSeq.cs      |        |       |
 
 ### Poly (24 files)
-| Java File | C# File | Status    | Notes |
-|-----------|---------|-----------|-------|
-| AlgebraicNotInvertibleException.java | AlgebraicNotInvertibleException.cs | ✔️ Complete | |
-| AlgebraicNumber.java | AlgebraicNumber.cs | ✔️ Complete | Algebraic number with GenPolynomial value |
-| AlgebraicNumberRing.java | AlgebraicNumberRing.cs | ✔️ Complete | Factory for AlgebraicNumber |
-| Complex.java | Complex.cs | ✔️ Complete | |
-| ComplexRing.java | ComplexRing.cs | ✔️ Complete | |
-| ExpVector.java | ExpVector.cs | ✔️ Complete | Core compare/order helpers and random generation ported |
-| ExpVectorByte.java | ExpVectorByte.cs | ✔️ Complete | |
-| ExpVectorInteger.java | ExpVectorInteger.cs | ✔️ Complete | |
-| ExpVectorLong.java | ExpVectorLong.cs | ✔️ Complete | |
-| ExpVectorPair.java | ExpVectorPair.cs | ✔️ Complete | |
-| ExpVectorShort.java | ExpVectorShort.cs | ✔️ Complete | |
-| GenPolynomial.java | GenPolynomial.cs | ✔️ Complete | |
-| GenPolynomialRing.java | GenPolynomialRing.cs | ✔️ Complete | |
-| GenSolvablePolynomial.java | GenSolvablePolynomial.cs | ✔️ Complete | |
-| GenSolvablePolynomialRing.java | GenSolvablePolynomialRing.cs | ✔️ Complete | |
-| Monomial.java | Monomial.cs | ✔️ Complete | |
-| OptimizedPolynomialList.java | OptimizedPolynomialList.cs | ✔️ Complete | Permutation metadata & string output |
-| OrderedPolynomialList.java | OrderedPolynomialList.cs | ✔️ Complete | Implements sorting & comparer wrappers |
-| PolyIterator.java | PolyIterator.cs | ✔️ Complete | Implements IEnumerator<Monomial<C>> adaptor
-| PolynomialComparator.java | PolynomialComparator.cs | ✔️ Complete | Standard IComparer implementation
-| PolynomialList.java | PolynomialList.cs | ✔️ Complete | Equality/compare/toString implemented |
-| PolyUtil.java | PolyUtil.cs | ? Scaffolded | Initial conversion utilities plus SubstituteMain implemented; further methods pending
-| RelationTable.java | RelationTable.cs | ✅ Scaffolded | Minimal storage; relation ops pending |
-| TermOrder.java | TermOrder.cs | ✔️ Complete | Single/split/weight orders with extend/contract/reverse |
-| TermOrderOptimization.java | TermOrderOptimization.cs | ✅ Scaffolded | Variable permutation optimization |
+
+| Java File                            | C# File                      | Status | Notes |
+|--------------------------------------|------------------------------|--------|-------|
+| AlgebraicNotInvertibleException.java |                              |        |       |
+| AlgebraicNumber.java                 | AlgebraicNumber.cs           |        |       |
+| AlgebraicNumberRing.java             | AlgebraicNumberRing.cs       |        |       |
+| Complex.java                         | Complex.cs                   |        |       |
+| ComplexRing.java                     | ComplexRing.cs               |        |       |
+| ExpVector.java                       | ExpVector.cs                 |        |       |
+| ExpVectorByte.java                   | ExpVectorByte.cs             |        |       |
+| ExpVectorInteger.java                | ExpVectorInteger.cs          |        |       |
+| ExpVectorLong.java                   | ExpVectorLong.cs             |        |       |
+| ExpVectorPair.java                   | ExpVectorPair.cs             |        |       |
+| ExpVectorShort.java                  | ExpVectorShort.cs            |        |       |
+| GenPolynomial.java                   | GenPolynomial.cs             |        |       |
+| GenPolynomialRing.java               | GenPolynomialRing.cs         |        |       |
+| GenSolvablePolynomial.java           | GenSolvablePolynomial.cs     |        |       |
+| GenSolvablePolynomialRing.java       | GenSolvablePolynomialRing.cs |        |       |
+| Monomial.java                        | Monomial.cs                  |        |       |
+| OptimizedPolynomialList.java         | OptimizedPolynomialList.cs   |        |       |
+| OrderedPolynomialList.java           | OrderedPolynomialList.cs     |        |       |
+| PolyIterator.java                    | PolyIterator.cs              |        |       |
+| PolynomialComparator.java            | PolynomialComparator.cs      |        |       |
+| PolynomialList.java                  | PolynomialList.cs            |        |       |
+| PolyUtil.java                        | PolyUtil.cs                  |        |       |
+| RelationTable.java                   | RelationTable.cs             |        |       |
+| TermOrder.java                       | TermOrder.cs                 |        |       |
+| TermOrderOptimization.java           | TermOrderOptimization.cs     |        |       |
 
 ### Ps (5 files)
-| Java File | C# File | Status | Notes |
-|-----------|---------|--------|-------|
-| Coefficients.java | Coefficients.cs | ✔️ Complete | |
-| PolynomialTaylorFunction.java | PolynomialTaylorFunction.cs | ✔️ Complete | |
-| TaylorFunction.java | TaylorFunction.cs | ✔️ Complete | |
-| UnivPowerSeries.java | UnivPowerSeries.cs | ✔️ Complete | |
-| UnivPowerSeriesRing.java | UnivPowerSeriesRing.cs | ✔️ Complete | |
+
+| Java File                     | C# File                     | Status | Notes |
+|-------------------------------|-----------------------------|--------|-------|
+| Coefficients.java             | Coefficients.cs             |        |       |
+| PolynomialTaylorFunction.java | PolynomialTaylorFunction.cs |        |       |
+| TaylorFunction.java           | TaylorFunction.cs           |        |       |
+| UnivPowerSeries.java          | UnivPowerSeries.cs          |        |       |
+| UnivPowerSeriesRing.java      | UnivPowerSeriesRing.cs      |        |       |
 
 ### Structure (13 files)
-| Java File | C# File | Status | Notes |
-|-----------|---------|--------|-------|
-| AbelianGroupElem.java | AbelianGroupElem.cs | ✔️ Complete | |
-| AbelianGroupFactory.java | AbelianGroupFactory.cs | ✔️ Complete | |
-| BinaryFunctor.java | BinaryFunctor.cs | ✔️ Complete | |
-| Element.java | Element.cs | ✔️ Complete | |
-| ElemFactory.java | ElemFactory.cs | ✔️ Complete | |
-| GcdRingElem.java | GcdRingElem.cs | ✔️ Complete | |
-| MonoidElem.java | MonoidElem.cs | ✔️ Complete | |
-| MonoidFactory.java | MonoidFactory.cs | ✔️ Complete | |
-| NotInvertibleException.java | NotInvertibleException.cs | ✔️ Complete | |
-| Power.java | Power.cs | ✔️ Complete | |
-| RingElem.java | RingElem.cs | ✔️ Complete | |
-| RingFactory.java | RingFactory.cs | ✔️ Complete | |
-| UnaryFunctor.java | UnaryFunctor.cs | ✔️ Complete | |
+
+| Java File                   | C# File                   | Status | Notes |
+|-----------------------------|---------------------------|--------|-------|
+| AbelianGroupElem.java       | AbelianGroupElem.cs       |        |       |
+| AbelianGroupFactory.java    | AbelianGroupFactory.cs    |        |       |
+| BinaryFunctor.java          | BinaryFunctor.cs          |        |       |
+| Element.java                | Element.cs                |        |       |
+| ElemFactory.java            | ElemFactory.cs            |        |       |
+| GcdRingElem.java            | GcdRingElem.cs            |        |       |
+| MonoidElem.java             | MonoidElem.cs             |        |       |
+| MonoidFactory.java          | MonoidFactory.cs          |        |       |
+| NotInvertibleException.java | NotInvertibleException.cs |        |       |
+| Power.java                  | Power.cs                  |        |       |
+| RingElem.java               | RingElem.cs               |        |       |
+| RingFactory.java            | RingFactory.cs            |        |       |
+| UnaryFunctor.java           | UnaryFunctor.cs           |        |       |
 
 ### Ufd (37 files)
-| Java File | C# File | Status       | Notes |
-|-----------|---------|--------------|-------|
-| FactorAbsolute.java | FactorAbsolute.cs | ✔️ Complete | Abstract class for absolute factorization |
-| FactorAbstract.java | FactorAbstract.cs | ✔️ Complete | Base abstract factorization class |
-| FactorAlgebraic.java | FactorAlgebraic.cs | ✔️ Complete | Algebraic number coefficient factorization |
-| FactorComplex.java | FactorComplex.cs | ✔️ Complete | Complex coefficient factorization using algebraic extensions |
-| FactorFactory.java | FactorFactory.cs | ✔️ Complete | Factory for selecting factorization algorithms |
-| FactorInteger.java | FactorInteger.cs | ✔️ Complete | Integer coefficient factorization (Hensel) |
-| Factorization.java | Factorization.cs | ✔️ Complete | Factorization interface |
-| FactorModular.java | FactorModular.cs | ✔️ Complete | Modular coefficient factorization |
-| FactorQuotient.java | FactorQuotient.cs | ✔️ Complete | Quotient coefficient factorization |
-| FactorRational.java | FactorRational.cs | ✔️ Complete | Rational coefficient factorization |
-| Factors.java | Factors.cs | ✔️ Complete | Container for absolute factorization results |
-| GCDFactory.java | GCDFactory.cs | ✔️ Complete | Factory for GCD algorithm selection |
-| GreatestCommonDivisor.java | GreatestCommonDivisor.cs | ✔️ Complete | GCD interface with generic type parameter |
-| GreatestCommonDivisorAbstract.java | GreatestCommonDivisorAbstract.cs | ✔️ Complete | Abstract GCD base with interface methods |
-| GreatestCommonDivisorModEval.java | GreatestCommonDivisorModEval.cs | ✔️ Complete | GCD with modular evaluation algorithm |
-| GreatestCommonDivisorModular.java | GreatestCommonDivisorModular.cs | ✔️ Complete | GCD with Chinese remainder algorithm |
-| GreatestCommonDivisorPrimitive.java | GreatestCommonDivisorPrimitive.cs | ✔️ Complete | GCD with primitive polynomial remainder |
-| GreatestCommonDivisorSimple.java | GreatestCommonDivisorSimple.cs | ✔️ Complete | GCD with monic polynomial remainder |
-| GreatestCommonDivisorSubres.java | GreatestCommonDivisorSubres.cs | ✔️ Complete | GCD with subresultant remainder |
-| HenselApprox.java | HenselApprox.cs | ✔️ Complete | Container for Hensel algorithm results |
-| HenselMultUtil.java | HenselMultUtil.cs | ✔️ Complete | Hensel multivariate lifting utilities |
-| HenselUtil.java | HenselUtil.cs | ✔️ Complete | Hensel univariate lifting utilities |
-| NoLiftingException.java | NoLiftingException.cs | ✔️ Complete | Exception thrown when Hensel lifting fails |
-| PolyUfdUtil.java | PolyUfdUtil.cs | ✔️ Complete | Integral/quotient conversion, algebraic substitution, norm/Kronecker helpers |
-| Quotient.java | Quotient.cs | ✔️ Complete | Quotient ring element (rational function) |
-| QuotientRing.java | QuotientRing.cs | ✔️ Complete | Quotient ring factory with generic type |
-| Squarefree.java | Squarefree.cs | ✔️ Complete | Squarefree decomposition interface |
-| SquarefreeAbstract.java | SquarefreeAbstract.cs | ✔️ Complete | Abstract squarefree base with methods |
-| SquarefreeFactory.java | SquarefreeFactory.cs | ✔️ Complete | Factory for squarefree decomposition |
-| SquarefreeFieldChar0.java | SquarefreeFieldChar0.cs | ✔️ Complete | Squarefree for fields char 0 |
-| SquarefreeFieldCharP.java | SquarefreeFieldCharP.cs | ✔️ Complete | Abstract squarefree for fields char p – needs full port before dependents |
-| SquarefreeFiniteFieldCharP.java | SquarefreeFiniteFieldCharP.cs | ✔️ Complete | Blocked: relies on SquarefreeFieldCharP implementation |
-| SquarefreeInfiniteAlgebraicFieldCharP.java | SquarefreeInfiniteAlgebraicFieldCharP.cs | ✔️ Complete | Squarefree for infinite algebraic fields |
-| SquarefreeInfiniteFieldCharP.java | SquarefreeInfiniteFieldCharP.cs | ✔️ Complete | Squarefree for infinite fields char p |
-| SquarefreeRingChar0.java | SquarefreeRingChar0.cs | ✔️ Complete | Squarefree for rings char 0 |
+
+| Java File                                  | C# File                                  | Status | Notes |
+|--------------------------------------------|------------------------------------------|--------|-------|
+| FactorAbsolute.java                        | FactorAbsolute.cs                        |        |       |
+| FactorAbstract.java                        | FactorAbstract.cs                        |        |       |
+| FactorAlgebraic.java                       | FactorAlgebraic.cs                       |        |       |
+| FactorComplex.java                         | FactorComplex.cs                         |        |       |
+| FactorFactory.java                         | FactorFactory.cs                         |        |       |
+| FactorInteger.java                         | FactorInteger.cs                         |        |       |
+| Factorization.java                         | Factorization.cs                         |        |       |
+| FactorModular.java                         | FactorModular.cs                         |        |       |
+| FactorQuotient.java                        | FactorQuotient.cs                        |        |       |
+| FactorRational.java                        | FactorRational.cs                        |        |       |
+| Factors.java                               | Factors.cs                               |        |       |
+| GCDFactory.java                            | GCDFactory.cs                            |        |       |
+| GreatestCommonDivisor.java                 | GreatestCommonDivisor.cs                 |        |       |
+| GreatestCommonDivisorAbstract.java         | GreatestCommonDivisorAbstract.cs         |        |       |
+| GreatestCommonDivisorModEval.java          | GreatestCommonDivisorModEval.cs          |        |       |
+| GreatestCommonDivisorModular.java          | GreatestCommonDivisorModular.cs          |        |       |
+| GreatestCommonDivisorPrimitive.java        | GreatestCommonDivisorPrimitive.cs        |        |       |
+| GreatestCommonDivisorSimple.java           | GreatestCommonDivisorSimple.cs           |        |       |
+| GreatestCommonDivisorSubres.java           | GreatestCommonDivisorSubres.cs           |        |       |
+| HenselApprox.java                          | HenselApprox.cs                          |        |       |
+| HenselMultUtil.java                        | HenselMultUtil.cs                        |        |       |
+| HenselUtil.java                            | HenselUtil.cs                            |        |       |
+| NoLiftingException.java                    | NoLiftingException.cs                    |        |       |
+| PolyUfdUtil.java                           | PolyUfdUtil.cs                           |        |       |
+| Quotient.java                              | Quotient.cs                              |        |       |
+| QuotientRing.java                          | QuotientRing.cs                          |        |       |
+| Squarefree.java                            | Squarefree.cs                            |        |       |
+| SquarefreeAbstract.java                    | SquarefreeAbstract.cs                    |        |       |
+| SquarefreeFactory.java                     | SquarefreeFactory.cs                     |        |       |
+| SquarefreeFieldChar0.java                  | SquarefreeFieldChar0.cs                  |        |       |
+| SquarefreeFieldCharP.java                  | SquarefreeFieldCharP.cs                  |        |       |
+| SquarefreeFiniteFieldCharP.java            | SquarefreeFiniteFieldCharP.cs            |        |       |
+| SquarefreeInfiniteAlgebraicFieldCharP.java | SquarefreeInfiniteAlgebraicFieldCharP.cs |        |       |
+| SquarefreeInfiniteFieldCharP.java          | SquarefreeInfiniteFieldCharP.cs          |        |       |
+| SquarefreeRingChar0.java                   | SquarefreeRingChar0.cs                   |        |       |
 
 ### Util (5 files)
-| Java File | C# File | Status | Notes |
-|-----------|---------|--------|-------|
-| CartesianProduct.java | CartesianProduct.cs | ✔️ Complete | |
-| CartesianProductInfinite.java | CartesianProductInfinite.cs | ✔️ Complete | |
-| KsubSet.java | KsubSet.cs | ✔️ Complete | |
-| ListUtil.java | ListUtil.cs | ✔️ Complete | |
-| LongIterable.java | LongIterable.cs | ✔️ Complete | |
+
+| Java File                     | C# File                     | Status | Notes |
+|-------------------------------|-----------------------------|--------|-------|
+| CartesianProduct.java         | CartesianProduct.cs         |        |       |
+| CartesianProductInfinite.java | CartesianProductInfinite.cs |        |       |
+| KsubSet.java                  | KsubSet.cs                  |        |       |
+| ListUtil.java                 | ListUtil.cs                 |        |       |
+| LongIterable.java             | LongIterable.cs             |        |       |
 
 ### Vector (1 file)
-| Java File | C# File | Status | Notes |
-|-----------|---------|--------|-------|
-| BasicLinAlg.java | BasicLinAlg.cs | ✔️ Complete | |
+
+| Java File        | C# File        | Status | Notes |
+|------------------|----------------|--------|-------|
+| BasicLinAlg.java | BasicLinAlg.cs |        |       |
