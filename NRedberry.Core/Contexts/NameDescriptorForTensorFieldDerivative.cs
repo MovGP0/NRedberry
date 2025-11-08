@@ -3,7 +3,6 @@ using System.Text;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Groups;
 using NRedberry.Core.Indices;
-using NotImplementedException = sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 namespace NRedberry.Contexts;
 

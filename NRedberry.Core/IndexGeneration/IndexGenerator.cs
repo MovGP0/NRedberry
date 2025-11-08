@@ -1,6 +1,4 @@
-﻿using NotImplementedException = sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-namespace NRedberry.Core;
+﻿namespace NRedberry.Core;
 
 public sealed class IndexGenerator : ICloneable, ICloneable<IndexGenerator>
 {

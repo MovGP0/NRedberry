@@ -2,7 +2,6 @@
 using System.Collections.Immutable;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Combinatorics.Symmetries;
-using NotImplementedException = sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 namespace NRedberry.Core.Indices;
 

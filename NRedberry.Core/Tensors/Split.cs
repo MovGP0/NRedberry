@@ -1,6 +1,5 @@
 using NRedberry.Core.Indices;
 using NRedberry.Core.Numbers;
-using NotImplementedException = sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 namespace NRedberry.Core.Tensors;
 
