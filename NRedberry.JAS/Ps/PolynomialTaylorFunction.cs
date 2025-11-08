@@ -36,6 +36,6 @@ public class PolynomialTaylorFunction<C> : TaylorFunction<C> where C : RingElem<
 
     public C Evaluate(C a)
     {
-        return PolyUtil.EvaluateMain(null!, pol, a);
+        return PolyUtil.EvaluateMain(pol.Ring.CoFac, pol, a);
     }
 }

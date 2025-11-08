@@ -1,4 +1,4 @@
-﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 
@@ -10,125 +10,33 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ufd.HenselUtil
 /// </remarks>
-public static class HenselUtil
+public static partial class HenselUtil
 {
     private const bool Debug = false;
 
-    public static HenselApprox<MOD> LiftHenselQuadratic<MOD>(
-        GenPolynomial<BigInteger> C,
-        BigInteger M,
-        GenPolynomial<MOD> A,
-        GenPolynomial<MOD> B,
-        GenPolynomial<MOD> S,
-        GenPolynomial<MOD> T)
-        where MOD : GcdRingElem<MOD>, Modular
+    internal static GenPolynomialRing<BigInteger> CreateIntegerPolynomialRing<C>(GenPolynomialRing<C> template)
+        where C : RingElem<C>
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(template);
+        return new GenPolynomialRing<BigInteger>(
+            new BigInteger(),
+            template.Nvar,
+            template.Tord,
+            template.GetVars());
     }
 
-    public static HenselApprox<MOD> LiftHenselQuadratic<MOD>(
-        GenPolynomial<BigInteger> C,
-        BigInteger M,
-        GenPolynomial<MOD> A,
-        GenPolynomial<MOD> B)
-        where MOD : GcdRingElem<MOD>, Modular
+    internal static GenPolynomialRing<T> CreatePolynomialRingFromTemplate<T, C>(
+        RingFactory<T> coefficientFactory,
+        GenPolynomialRing<C> template)
+        where T : RingElem<T>
+        where C : RingElem<C>
     {
-        throw new NotImplementedException();
-    }
-
-    public static GenPolynomial<MOD>[] LiftExtendedEuclidean<MOD>(
-        GenPolynomial<MOD> A,
-        GenPolynomial<MOD> B,
-        long k)
-        where MOD : GcdRingElem<MOD>, Modular
-    {
-        throw new NotImplementedException();
-    }
-
-    public static List<GenPolynomial<MOD>> LiftExtendedEuclidean<MOD>(
-        List<GenPolynomial<MOD>> A,
-        long k)
-        where MOD : GcdRingElem<MOD>, Modular
-    {
-        throw new NotImplementedException();
-    }
-
-    public static List<GenPolynomial<MOD>> LiftDiophant<MOD>(
-        GenPolynomial<MOD> A,
-        GenPolynomial<MOD> B,
-        GenPolynomial<MOD> C,
-        long k)
-        where MOD : GcdRingElem<MOD>, Modular
-    {
-        throw new NotImplementedException();
-    }
-
-    public static List<GenPolynomial<MOD>> LiftDiophant<MOD>(
-        List<GenPolynomial<MOD>> A,
-        GenPolynomial<MOD> C,
-        long k)
-        where MOD : GcdRingElem<MOD>, Modular
-    {
-        throw new NotImplementedException();
-    }
-
-    public static List<GenPolynomial<MOD>> LiftDiophant<MOD>(
-        GenPolynomial<MOD> A,
-        GenPolynomial<MOD> B,
-        long exponent,
-        long k)
-        where MOD : GcdRingElem<MOD>, Modular
-    {
-        throw new NotImplementedException();
-    }
-
-    public static List<GenPolynomial<MOD>> LiftDiophant<MOD>(
-        List<GenPolynomial<MOD>> A,
-        long exponent,
-        long k)
-        where MOD : GcdRingElem<MOD>, Modular
-    {
-        throw new NotImplementedException();
-    }
-
-    public static bool IsDiophantLift<MOD>(
-        GenPolynomial<MOD> A,
-        GenPolynomial<MOD> B,
-        GenPolynomial<MOD> S1,
-        GenPolynomial<MOD> S2,
-        GenPolynomial<MOD> C)
-        where MOD : GcdRingElem<MOD>, Modular
-    {
-        throw new NotImplementedException();
-    }
-
-    public static bool IsDiophantLift<MOD>(
-        List<GenPolynomial<MOD>> A,
-        List<GenPolynomial<MOD>> S,
-        GenPolynomial<MOD> C)
-        where MOD : GcdRingElem<MOD>, Modular
-    {
-        throw new NotImplementedException();
-    }
-
-    public static List<GenPolynomial<MOD>> DiophantQuadraticLift<MOD>(
-        GenPolynomial<MOD> A,
-        GenPolynomial<MOD> B,
-        GenPolynomial<MOD> C,
-        GenPolynomial<MOD> S,
-        GenPolynomial<MOD> T,
-        long k)
-        where MOD : GcdRingElem<MOD>, Modular
-    {
-        throw new NotImplementedException();
-    }
-
-    public static List<GenPolynomial<MOD>> LiftHenselMonic<MOD>(
-        GenPolynomial<BigInteger> C,
-        List<GenPolynomial<MOD>> F,
-        long k)
-        where MOD : GcdRingElem<MOD>, Modular
-    {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(coefficientFactory);
+        ArgumentNullException.ThrowIfNull(template);
+        return new GenPolynomialRing<T>(
+            coefficientFactory,
+            template.Nvar,
+            template.Tord,
+            template.GetVars());
     }
 }

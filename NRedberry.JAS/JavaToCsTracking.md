@@ -110,8 +110,8 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 | GreatestCommonDivisorSimple.java | GreatestCommonDivisorSimple.cs | ✔️ Complete | GCD with monic polynomial remainder |
 | GreatestCommonDivisorSubres.java | GreatestCommonDivisorSubres.cs | ✔️ Complete | GCD with subresultant remainder |
 | HenselApprox.java | HenselApprox.cs | ✔️ Complete | Container for Hensel algorithm results |
-| HenselMultUtil.java | HenselMultUtil.cs | ✅ Scaffolded | Hensel multivariate lifting utilities |
-| HenselUtil.java | HenselUtil.cs | ✅ Scaffolded | Hensel univariate lifting utilities |
+| HenselMultUtil.java | HenselMultUtil.cs | ✔️ Complete | Hensel multivariate lifting utilities |
+| HenselUtil.java | HenselUtil.cs | ✔️ Complete | Hensel univariate lifting utilities |
 | NoLiftingException.java | NoLiftingException.cs | ✔️ Complete | Exception thrown when Hensel lifting fails |
 | PolyUfdUtil.java | PolyUfdUtil.cs | ✅ Scaffolded | Polynomial UFD utilities and conversions |
 | Quotient.java | Quotient.cs | ?? Complete | Quotient ring element (rational function) |

@@ -12,5 +12,8 @@
       <Compile Update="Poly\PolyUtil.*.cs">
         <DependentUpon>PolyUtil.cs</DependentUpon>
       </Compile>
+      <Compile Update="Ufd\HenselUtil.*.cs">
+        <DependentUpon>HenselUtil.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 </Project>
