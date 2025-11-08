@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Gb;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
@@ -52,8 +50,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C> : SquarefreeFieldCharP<Alg
         GenPolynomial<C> value = coefficient.Val;
         if (!value.IsOne())
         {
-            SortedDictionary<GenPolynomial<C>, long> valueFactors = aengine.SquarefreeFactors(value);
-            foreach (KeyValuePair<GenPolynomial<C>, long> entry in valueFactors)
+            foreach (KeyValuePair<GenPolynomial<C>, long> entry in aengine.SquarefreeFactors(value))
             {
                 AlgebraicNumber<C> factor = new(coefficient.Ring, entry.Key);
                 factors[factor] = entry.Value;
@@ -166,8 +163,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C> : SquarefreeFieldCharP<Alg
             foreach (Monomial<AlgebraicNumber<C>> monomial in powered)
             {
                 ExpVector exponent = monomial.E;
-                GenPolynomial<C> coefficientPolynomial = monomial.C.Val;
-                foreach (Monomial<C> coefficientMonomial in coefficientPolynomial)
+                foreach (Monomial<C> coefficientMonomial in monomial.C.Val)
                 {
                     ExpVector innerExponent = coefficientMonomial.E;
                     C cc = coefficientMonomial.C;
@@ -216,8 +212,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C> : SquarefreeFieldCharP<Alg
             foreach (Monomial<AlgebraicNumber<C>> monomial in powered)
             {
                 ExpVector exponent = monomial.E;
-                GenPolynomial<C> coefficientPolynomial = monomial.C.Val;
-                foreach (Monomial<C> coefficientMonomial in coefficientPolynomial)
+                foreach (Monomial<C> coefficientMonomial in monomial.C.Val)
                 {
                     ExpVector innerExponent = coefficientMonomial.E;
                     C cc = coefficientMonomial.C;

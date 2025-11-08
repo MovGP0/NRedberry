@@ -200,5 +200,6 @@ public sealed class Context
     }
 
     public OutputFormat GetDefaultOutputFormat() => defaultOutputFormat;
+
     public OutputFormat DefaultOutputFormat => defaultOutputFormat;
 }

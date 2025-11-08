@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Numerics;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
@@ -111,8 +110,7 @@ public class SquarefreeInfiniteFieldCharP<C> : SquarefreeFieldCharP<Quotient<C>>
         GenPolynomial<C> denominator = coefficient.Den;
         if (!numerator.IsOne())
         {
-            SortedDictionary<GenPolynomial<C>, long> numeratorFactors = qengine.SquarefreeFactors(numerator);
-            foreach (KeyValuePair<GenPolynomial<C>, long> entry in numeratorFactors)
+            foreach (KeyValuePair<GenPolynomial<C>, long> entry in qengine.SquarefreeFactors(numerator))
             {
                 if (entry.Key.IsZero())
                 {
