@@ -261,6 +261,9 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
     public static BigInteger operator /(BigInteger a, BigInteger b) => new(a.Val / b.Val);
     public static BigInteger operator %(BigInteger a, BigInteger b) => new(a.Val % b.Val);
 
+    public static implicit operator BigInteger(System.Numerics.BigInteger val) => new(val);
+    public static explicit operator System.Numerics.BigInteger(BigInteger val) => val.Val;
+
     /// <summary>
     /// Absolute value of this.
     /// </summary>
