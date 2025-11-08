@@ -56,7 +56,7 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 | PolyIterator.java | PolyIterator.cs | ✔️ Complete | Implements IEnumerator<Monomial<C>> adaptor
 | PolynomialComparator.java | PolynomialComparator.cs | ✔️ Complete | Standard IComparer implementation
 | PolynomialList.java | PolynomialList.cs | ✔️ Complete | Equality/compare/toString implemented |
-| PolyUtil.java | PolyUtil.cs | ✅ Scaffolded | Initial conversion utilities implemented; further methods pending
+| PolyUtil.java | PolyUtil.cs | ? Scaffolded | Initial conversion utilities plus SubstituteMain implemented; further methods pending
 | RelationTable.java | RelationTable.cs | ✅ Scaffolded | Minimal storage; relation ops pending |
 | TermOrder.java | TermOrder.cs | ✔️ Complete | Single/split/weight orders with extend/contract/reverse |
 | TermOrderOptimization.java | TermOrderOptimization.cs | ✅ Scaffolded | Variable permutation optimization |
@@ -113,9 +113,9 @@ This document tracks the scaffolding status of all Java files in the NRedberry.J
 | HenselMultUtil.java | HenselMultUtil.cs | ✔️ Complete | Hensel multivariate lifting utilities |
 | HenselUtil.java | HenselUtil.cs | ✔️ Complete | Hensel univariate lifting utilities |
 | NoLiftingException.java | NoLiftingException.cs | ✔️ Complete | Exception thrown when Hensel lifting fails |
-| PolyUfdUtil.java | PolyUfdUtil.cs | ✅ Scaffolded | Polynomial UFD utilities and conversions |
-| Quotient.java | Quotient.cs | ?? Complete | Quotient ring element (rational function) |
-| QuotientRing.java | QuotientRing.cs | ?? Complete | Quotient ring factory with generic type |
+| PolyUfdUtil.java | PolyUfdUtil.cs | ✔️ Complete | Integral/quotient conversion, algebraic substitution, norm/Kronecker helpers |
+| Quotient.java | Quotient.cs | ✔️ Complete | Quotient ring element (rational function) |
+| QuotientRing.java | QuotientRing.cs | ✔️ Complete | Quotient ring factory with generic type |
 | Squarefree.java | Squarefree.cs | ✔️ Complete | Squarefree decomposition interface |
 | SquarefreeAbstract.java | SquarefreeAbstract.cs | ✔️ Complete | Abstract squarefree base with methods |
 | SquarefreeFactory.java | SquarefreeFactory.cs | ✔️ Complete | Factory for squarefree decomposition |
