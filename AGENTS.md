@@ -24,6 +24,7 @@
 - Nullable reference types are enabled—prefer non-nullable signatures and guard inputs explicitly.
 - The solution relies on Roslynator analyzers; run `dotnet format` or address warnings before sending reviews. Mirror
   existing JavaDoc-style comments (`/** ... */`) when porting descriptive docs from the Java codebase.
+- use `ArgumentNullException.ThrowIfNull(param);` for null-guarding method parameters/arguments.
 
 ## Testing Guidelines
 
