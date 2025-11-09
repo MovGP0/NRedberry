@@ -414,7 +414,10 @@ public static partial class ArraysUtils
     {
         int[] permutation = new int[target.Length];
         for (int i = 1; i < target.Length; ++i)
+        {
             permutation[i] = i;
+        }
+
         QuickSort(target, 0, target.Length, permutation);
         return permutation;
     }
