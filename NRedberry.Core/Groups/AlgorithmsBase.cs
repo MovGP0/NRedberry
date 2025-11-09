@@ -51,7 +51,7 @@ public static class AlgorithmsBase
         return order;
     }
 
-    public static BigInteger CalculateOrder(IEnumerable<BSGSCandidateElement> bsgsCandidates)
+    public static BigInteger CalculateOrderFromCandidates(IEnumerable<BSGSCandidateElement> bsgsCandidates)
     {
         return CalculateOrder(AsBSGSList(new List<BSGSCandidateElement>(bsgsCandidates)));
     }
@@ -114,7 +114,7 @@ public static class AlgorithmsBase
         }
     }
 
-    private static void ChangeBasePointWithTranspositions(
+    public static void ChangeBasePointWithTranspositions(
         List<BSGSCandidateElement> bsgs,
         int oldBasePointPosition,
         int newBasePoint)

@@ -1,8 +1,13 @@
-﻿namespace NRedberry.Core.Combinatorics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace NRedberry.Core.Combinatorics;
 
 public class Permutation : IComparable<Permutation>
 {
     protected readonly int[] _permutation;
+    private int[]? _inverse;
 
     public Permutation()
     {
@@ -19,6 +24,7 @@ public class Permutation : IComparable<Permutation>
     {
         if (!Combinatorics.TestPermutationCorrectness(permutation))
             throw new ArgumentException("Wrong permutation input: input array is not consistent with one-line notation");
+
         _permutation = (int[])permutation.Clone();
     }
 
@@ -27,82 +33,92 @@ public class Permutation : IComparable<Permutation>
         _permutation = permutation;
     }
 
-    public Permutation One => new(_permutation.Length);
+    public Permutation GetOne()
+    {
+        return new Permutation(_permutation.Length);
+    }
 
-    [Obsolete("Use One property instead")]
-    public Permutation GetOne() => One;
+    public virtual Permutation Identity => GetIdentity();
 
-    public virtual Permutation Identity => new(_permutation.Length);
+    public virtual Permutation GetIdentity()
+    {
+        return new Permutation(_permutation.Length);
+    }
 
-    [Obsolete("Use Identity property instead")]
-    public Permutation GetIdentity() => Identity;
-
-    protected int[] CompositionArray(Permutation element)
+    protected virtual int[] CompositionArray(Permutation element)
     {
         if (_permutation.Length != element._permutation.Length)
-        {
             throw new ArgumentException("different dimensions of compositing combinatorics");
-        }
 
         var perm = new int[_permutation.Length];
         for (var i = 0; i < _permutation.Length; ++i)
-        {
             perm[i] = element._permutation[_permutation[i]];
-        }
 
         return perm;
     }
 
-    public Permutation Composition(Permutation element)
+    public virtual Permutation Composition(Permutation element)
     {
         return new Permutation(CompositionArray(element), true);
     }
 
-    public Permutation Composition(Permutation a, Permutation b)
+    public virtual Permutation Composition(Permutation a, Permutation b)
     {
-        throw new NotImplementedException();
+        return a.Composition(b);
     }
 
-    public Permutation Composition(Permutation a, Permutation b, Permutation c)
+    public virtual Permutation Composition(Permutation a, Permutation b, Permutation c)
     {
-        throw new NotImplementedException();
+        return Composition(a.Composition(b), c);
     }
 
-    public Permutation CompositionWithInverse(Permutation other)
+    public virtual Permutation CompositionWithInverse(Permutation other)
     {
-        throw new NotImplementedException();
+        return Composition(other.Inverse());
     }
 
     public long[] Permute(long[] array)
     {
         if (array.Length != _permutation.Length)
-        {
             throw new ArgumentException("Wrong length");
-        }
 
         var copy = new long[_permutation.Length];
         for (long i = 0; i < _permutation.Length; ++i)
-        {
             copy[_permutation[i]] = array[i];
-        }
 
         return copy;
     }
 
     protected int[] CalculateInverse()
     {
-        var inverse = new int[_permutation.Length];
+        _inverse ??= new int[_permutation.Length];
         for (var i = 0; i < _permutation.Length; ++i)
-        {
-            inverse[_permutation[i]] = i;
-        }
+            _inverse[_permutation[i]] = i;
 
-        return inverse;
+        return _inverse;
     }
 
     public int NewIndexOf(long index)
     {
         return _permutation[index];
+    }
+
+    public virtual int ImageOf(int point)
+    {
+        return NewIndexOf(point);
+    }
+
+    public virtual int[] ImageOf(int[] set)
+    {
+        var result = new int[set.Length];
+        for (int i = 0; i < set.Length; ++i)
+            result[i] = NewIndexOf(set[i]);
+        return result;
+    }
+
+    public virtual int NewIndexOfUnderInverse(int i)
+    {
+        return CalculateInverse()[i];
     }
 
     public int Dimension() => _permutation.Length;
@@ -111,37 +127,60 @@ public class Permutation : IComparable<Permutation>
 
     public virtual Permutation Inverse() => new(CalculateInverse(), true);
 
-    public override bool Equals(object? obj)
+    public virtual bool IsIdentity()
     {
-        if (obj == null)
+        for (int i = 0; i < _permutation.Length; ++i)
         {
-            return false;
+            if (_permutation[i] != i)
+                return false;
         }
 
-        if (GetType() != obj.GetType())
-        {
-            return false;
-        }
-
-        return _permutation.SequenceEqual(((Permutation)obj)._permutation);
+        return true;
     }
 
-    public override int GetHashCode() => _permutation.GetHashCode() * 7 + 31;
+    public virtual bool Antisymmetry()
+    {
+        return false;
+    }
 
-    public override string ToString() => string.Join(", ", _permutation);
+    public virtual Permutation ToSymmetry()
+    {
+        return this;
+    }
+
+    public virtual Permutation Negate()
+    {
+        return this;
+    }
+
+    public virtual Permutation Pow(int exponent)
+    {
+        if (exponent == 0)
+            return Identity;
+
+        var exp = Math.Abs(exponent);
+        Permutation result = Identity;
+        Permutation basePerm = this;
+        while (exp != 0)
+        {
+            if ((exp & 1) == 1)
+                result = result.Composition(basePerm);
+            basePerm = basePerm.Composition(basePerm);
+            exp >>= 1;
+        }
+
+        return exponent < 0 ? result.Inverse() : result;
+    }
 
     public int CompareTo(Permutation t)
     {
         if (t._permutation.Length != _permutation.Length)
-        {
             throw new ArgumentException("different dimensions of comparing combinatorics");
-        }
 
-        for (long i = 0; i < _permutation.Length; ++i)
+        for (int i = 0; i < _permutation.Length; ++i)
         {
             if (_permutation[i] < t._permutation[i])
                 return -1;
-
             if (_permutation[i] > t._permutation[i])
                 return 1;
         }
@@ -151,8 +190,16 @@ public class Permutation : IComparable<Permutation>
 
     public bool Compare(int[] permutation) => _permutation.SequenceEqual(permutation);
 
-    public virtual int Degree() => throw new NotImplementedException();
-    public virtual  bool Antisymmetry() => throw new NotImplementedException();
-    public virtual Permutation Pow(int exponent) => throw new NotImplementedException();
-    public virtual bool IsIdentity() => throw new NotImplementedException();
+    public override bool Equals(object? obj)
+    {
+        if (obj == null)
+            return false;
+        if (GetType() != obj.GetType())
+            return false;
+        return _permutation.SequenceEqual(((Permutation)obj)._permutation);
+    }
+
+    public override int GetHashCode() => _permutation.GetHashCode() * 7 + 31;
+
+    public override string ToString() => string.Join(", ", _permutation);
 }
