@@ -97,6 +97,8 @@ public class InducedOrdering : IComparer<int>
     /// <returns>The least point.</returns>
     public int Min(IntArrayList array) => array.Min();
 
+    public int Min(IList<int> list) => list.Min();
+
     /// <summary>
     /// Returns the greatest point under this ordering in the specified array.
     /// </summary>

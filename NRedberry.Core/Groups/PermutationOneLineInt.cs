@@ -1,15 +1,17 @@
-﻿using System.Numerics;
+﻿using System.Collections.Immutable;
+using System.Numerics;
 using NRedberry.Core.Combinatorics;
-using NRedberry.Core.Utils;
 
 namespace NRedberry.Core.Groups;
 
 public class PermutationOneLineInt : Permutation
 {
     private readonly int[] _permutation;
-    private readonly int _internalDegree;
-    private readonly bool _isIdentity;
     private readonly bool _antisymmetry;
+    private BigInteger _order;
+    private bool _orderIsOdd;
+    private int _parity;
+    private int[] _lengthsOfCycles;
 
     public PermutationOneLineInt(bool antisymmetry, int[][] cycles)
         : this(antisymmetry, Permutations.ConvertCyclesToOneLine(cycles))
@@ -32,8 +34,8 @@ public class PermutationOneLineInt : Permutation
             throw new ArgumentException("Inconsistent permutation.");
         _permutation = (int[])permutation.Clone();
         _antisymmetry = antisymmetry;
-        _isIdentity = Permutations.IsIdentity(permutation);
-        _internalDegree = Permutations.InternalDegree(permutation);
+        IsIdentity = Permutations.IsIdentity(permutation);
+        Degree = Permutations.InternalDegree(permutation);
     }
 
     public PermutationOneLineInt(
@@ -42,10 +44,10 @@ public class PermutationOneLineInt : Permutation
         int internalDegree,
         int[] permutation)
     {
-        _isIdentity = isIdentity;
+        IsIdentity = isIdentity;
         _permutation = permutation;
         _antisymmetry = antisymmetry;
-        _internalDegree = internalDegree;
+        Degree = internalDegree;
         if (antisymmetry && Permutations.OrderOfPermutationIsOdd(permutation))
             throw new InconsistentGeneratorsException();
     }
@@ -57,16 +59,13 @@ public class PermutationOneLineInt : Permutation
         int[] permutation,
         bool identity)
     {
-        _isIdentity = isIdentity;
+        IsIdentity = isIdentity;
         _permutation = permutation;
         _antisymmetry = antisymmetry;
-        _internalDegree = internalDegree;
+        Degree = internalDegree;
     }
 
-    public int Length()
-    {
-        return _permutation.Length;
-    }
+    public int Length => _permutation.Length;
 
     public bool Antisymmetry()
     {
@@ -75,12 +74,12 @@ public class PermutationOneLineInt : Permutation
 
     public Permutation ToSymmetry()
     {
-        return _antisymmetry ? new PermutationOneLineInt(_isIdentity, false, _internalDegree, _permutation, true) : this;
+        return _antisymmetry ? new PermutationOneLineInt(IsIdentity, false, Degree, _permutation, true) : this;
     }
 
     public Permutation Negate()
     {
-        return new PermutationOneLineInt(false, _antisymmetry ^ true, _internalDegree, _permutation);
+        return new PermutationOneLineInt(false, _antisymmetry ^ true, Degree, _permutation);
     }
 
     public int[] OneLine()
@@ -88,9 +87,9 @@ public class PermutationOneLineInt : Permutation
         return (int[])_permutation.Clone();
     }
 
-    public IntArray OneLineImmutable()
+    public ImmutableArray<int> OneLineImmutable()
     {
-        return new IntArray(_permutation);
+        return [.._permutation];
     }
 
     public int[][] Cycles()
@@ -100,17 +99,17 @@ public class PermutationOneLineInt : Permutation
 
     public int NewIndexOf(int i)
     {
-        return i < _internalDegree ? _permutation[i] : i;
+        return i < Degree ? _permutation[i] : i;
     }
 
     public int ImageOf(int i)
     {
-        return i < _internalDegree ? _permutation[i] : i;
+        return i < Degree ? _permutation[i] : i;
     }
 
     public int[] ImageOf(int[] set)
     {
-        if (_isIdentity)
+        if (IsIdentity)
             return (int[])set.Clone();
         int[] result = new int[set.Length];
         for (int i = 0; i < set.Length; ++i)
@@ -120,7 +119,7 @@ public class PermutationOneLineInt : Permutation
 
     public int[] Permute(int[] array)
     {
-        if (_isIdentity)
+        if (IsIdentity)
             return (int[])array.Clone();
         int[] result = new int[array.Length];
         for (int i = 0; i < array.Length; ++i)
@@ -130,7 +129,7 @@ public class PermutationOneLineInt : Permutation
 
     public char[] Permute(char[] array)
     {
-        if (_isIdentity)
+        if (IsIdentity)
             return (char[])array.Clone();
         char[] result = new char[array.Length];
         for (int i = 0; i < array.Length; ++i)
@@ -140,7 +139,7 @@ public class PermutationOneLineInt : Permutation
 
     public T[] Permute<T>(T[] array)
     {
-        if (_isIdentity)
+        if (IsIdentity)
             return (T[])array.Clone();
         T[] result = new T[array.Length];
         for (int i = 0; i < array.Length; ++i)
@@ -150,7 +149,7 @@ public class PermutationOneLineInt : Permutation
 
     public List<T> Permute<T>(List<T> set)
     {
-        if (_isIdentity)
+        if (IsIdentity)
             return [..set];
         List<T> list = new List<T>(set.Count);
         for (int i = 0; i < set.Count; ++i)
@@ -183,12 +182,12 @@ public class PermutationOneLineInt : Permutation
 
     public Permutation Composition(Permutation other)
     {
-        if (_isIdentity)
+        if (IsIdentity)
             return other;
-        if (other.IsIdentity())
+        if (other.IsIdentity)
             return this;
 
-        int newLength = Math.Max(Degree(), other.Degree());
+        int newLength = Math.Max(Degree, other.Degree);
         int newInternalDegree = -1;
         int[] result = new int[newLength];
         bool resultIsIdentity = true;
@@ -215,14 +214,14 @@ public class PermutationOneLineInt : Permutation
 
     public Permutation Composition(Permutation a, Permutation b)
     {
-        if (_isIdentity)
+        if (IsIdentity)
             return a.Composition(b);
-        if (a.IsIdentity())
+        if (a.IsIdentity)
             return Composition(b);
-        if (b.IsIdentity())
+        if (b.IsIdentity)
             return Composition(a);
 
-        int newLength = Math.Max(Math.Max(Degree(), a.Degree()), b.Degree());
+        int newLength = Math.Max(Math.Max(Degree, a.Degree), b.Degree);
         int newInternalDegree = -1;
         int[] result = new int[newLength];
         bool resultIsIdentity = true;
@@ -249,16 +248,16 @@ public class PermutationOneLineInt : Permutation
 
     public Permutation Composition(Permutation a, Permutation b, Permutation c)
     {
-        if (_isIdentity)
+        if (IsIdentity)
             return a.Composition(b, c);
-        if (a.IsIdentity())
+        if (a.IsIdentity)
             return Composition(b, c);
-        if (b.IsIdentity())
+        if (b.IsIdentity)
             return Composition(a, c);
-        if (c.IsIdentity())
+        if (c.IsIdentity)
             return Composition(a, b);
 
-        int newLength = Math.Max(c.Degree(), Math.Max(Math.Max(Degree(), a.Degree()), b.Degree()));
+        int newLength = Math.Max(c.Degree, Math.Max(Math.Max(Degree, a.Degree), b.Degree));
         int[] result = new int[newLength];
         int newInternalDegree = -1;
         bool resultIsIdentity = true;
@@ -285,9 +284,9 @@ public class PermutationOneLineInt : Permutation
 
     public Permutation CompositionWithInverse(Permutation other)
     {
-        if (_isIdentity)
+        if (IsIdentity)
             return other.Inverse();
-        if (other.IsIdentity())
+        if (other.IsIdentity)
             return this;
 
         return Composition(other.Inverse());
@@ -295,53 +294,41 @@ public class PermutationOneLineInt : Permutation
 
     public Permutation Inverse()
     {
-        if (_isIdentity)
+        if (IsIdentity)
             return this;
         int[] inv = new int[_permutation.Length];
         for (int i = _permutation.Length - 1; i >= 0; --i)
             inv[_permutation[i]] = i;
 
-        return new PermutationOneLineInt(false, _antisymmetry, _internalDegree, inv, true);
+        return new PermutationOneLineInt(false, _antisymmetry, Degree, inv, true);
     }
 
-    public bool IsIdentity()
-    {
-        return _isIdentity;
-    }
+    public bool IsIdentity { get; }
 
-    public override Permutation Identity
+    public Permutation Identity
     {
         get
         {
-            if (_isIdentity)
+            if (IsIdentity)
                 return this;
             return Permutations.CreateIdentityPermutation(_permutation.Length);
         }
     }
 
-    public BigInteger Order()
-    {
-        return Permutations.OrderOfPermutation(_permutation);
-    }
+    BigInteger Permutation.Order => Permutations.OrderOfPermutation(_permutation);
 
-    public bool OrderIsOdd()
-    {
-        return !_isIdentity && Permutations.OrderOfPermutationIsOdd(_permutation);
-    }
+    bool Permutation.OrderIsOdd => !IsIdentity && Permutations.OrderOfPermutationIsOdd(_permutation);
 
-    public int Degree()
-    {
-        return _internalDegree;
-    }
+    public int Degree { get; }
 
     public Permutation Pow(int exponent)
     {
-        if (_isIdentity)
+        if (IsIdentity)
             return this;
         if (exponent < 0)
             return Inverse().Pow(-exponent);
         Permutation basePerm = this;
-        Permutation result = GetIdentity();
+        Permutation result = Identity;
         while (exponent != 0)
         {
             if ((exponent % 2) == 1)
@@ -364,9 +351,9 @@ public class PermutationOneLineInt : Permutation
         Permutation that = (Permutation)obj;
         if (_antisymmetry != that.Antisymmetry())
             return false;
-        if (_internalDegree != that.Degree())
+        if (Degree != that.Degree)
             return false;
-        for (int i = 0; i < _internalDegree; ++i)
+        for (int i = 0; i < Degree; ++i)
         {
             if (NewIndexOf(i) != that.NewIndexOf(i))
                 return false;
@@ -378,16 +365,13 @@ public class PermutationOneLineInt : Permutation
     public override int GetHashCode()
     {
         int result = 1;
-        for (int i = 0; i < _internalDegree; ++i)
+        for (int i = 0; i < Degree; ++i)
             result = 31 * result + _permutation[i];
         result = 31 * result + (_antisymmetry ? 1 : 0);
         return result;
     }
 
-    public int Parity()
-    {
-        return Permutations.Parity(_permutation);
-    }
+    public int Parity => Permutations.Parity(_permutation);
 
     public Permutation MoveRight(int size)
     {
@@ -400,8 +384,10 @@ public class PermutationOneLineInt : Permutation
         int k = i;
         for (; i < p.Length; ++i)
             p[i] = _permutation[i - k] + size;
-        return new PermutationOneLineInt(_isIdentity, _antisymmetry, size + _internalDegree, p, true);
+        return new PermutationOneLineInt(IsIdentity, _antisymmetry, size + Degree, p, true);
     }
+
+    int[] Permutation.LengthsOfCycles => _lengthsOfCycles;
 
     public int[] LengthsOfCycles()
     {
@@ -426,7 +412,7 @@ public class PermutationOneLineInt : Permutation
 
     public int CompareTo(Permutation t)
     {
-        int max = Math.Max(Degree(), t.Degree());
+        int max = Math.Max(Degree, t.Degree);
         if (_antisymmetry != t.Antisymmetry())
             return _antisymmetry ? -1 : 1;
         for (int i = 0; i < max; ++i)

@@ -3,6 +3,7 @@ using System.Text;
 
 namespace NRedberry.Core.Utils;
 
+[Obsolete("Use List<int> instead")]
 public sealed class IntArrayList : IList<int>
 {
     internal int[] Data => data;

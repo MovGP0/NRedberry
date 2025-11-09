@@ -37,7 +37,7 @@ public static class AlgorithmsBase
     public static bool MembershipTest(IReadOnlyList<BSGSElement> bsgs, Permutation permutation)
     {
         StripContainer container = Strip(bsgs, permutation);
-        return container.TerminationLevel == bsgs.Count && container.Remainder.IsIdentity();
+        return container.TerminationLevel == bsgs.Count && container.Remainder.IsIdentity;
     }
 
     public static BigInteger CalculateOrder(IReadOnlyList<BSGSElement> bsgs)
@@ -89,7 +89,7 @@ public static class AlgorithmsBase
         return copy;
     }
 
-    public static int[] GetBaseAsArray(IReadOnlyList<BSGSElement> bsgs)
+    public static int[] GetBaseAsArray<T>(IReadOnlyList<T> bsgs) where T : BSGSElement
     {
         int[] baseArray = new int[bsgs.Count];
         for (int i = 0; i < baseArray.Length; ++i)

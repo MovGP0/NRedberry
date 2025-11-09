@@ -16,7 +16,7 @@
             set = [];
             upperLayer =
             [
-                permutations[0].GetOne()
+                permutations[0]
             ];
             lowerLayer = permutations.Cast<Permutation?>().ToList();
         }

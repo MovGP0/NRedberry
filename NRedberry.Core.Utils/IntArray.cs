@@ -2,6 +2,7 @@ using System.Collections;
 
 namespace NRedberry.Core.Utils;
 
+[Obsolete("use ImmutableArray<int> instead")]
 public sealed class IntArray : IEnumerable<int>
 {
     public static readonly IntArray EmptyArray = new([]);

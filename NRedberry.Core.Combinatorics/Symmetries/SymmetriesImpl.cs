@@ -25,26 +25,7 @@ public class SymmetriesImpl : AbstractSymmetries
 
     public override bool Add(Symmetry symmetry)
     {
-        if (symmetry.Dimension() != Dimension())
-            throw new ArgumentException();
-        var it = new PermutationsSpanIterator<Symmetry>(Basis);
-        //TODO BOTTLENECK review
-        while (it.MoveNext())
-        {
-            var s = it.Current;
-            if (s.Equals(symmetry))
-                return false;
-        }
-
-        Basis.Add(symmetry);
-        //BOTTLENECK
-        //checking consistense
-        it = new PermutationsSpanIterator<Symmetry>(Basis);
-        while (it.MoveNext())
-        {
-        }
-
-        return true;
+        throw new NotImplementedException();
     }
 
     public override bool AddUnsafe(Symmetry symmetry)

@@ -27,4 +27,10 @@
     <ProjectReference Include="..\NRedberry.JAS\NRedberry.JAS.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Groups\Permutations.*.cs">
+      <DependentUpon>Permutations.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>

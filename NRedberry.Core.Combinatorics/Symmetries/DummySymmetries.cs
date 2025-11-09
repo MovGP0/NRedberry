@@ -12,9 +12,7 @@ public abstract class DummySymmetries : AbstractSymmetries
 
     public override bool Add(Symmetry symmetry)
     {
-        if (symmetry.Dimension() != Dimension || symmetry.IsAntiSymmetry())
-            throw new ArgumentException();
-        return false;
+        throw new NotImplementedException();
     }
 
     public override bool AddUnsafe(Symmetry symmetry)

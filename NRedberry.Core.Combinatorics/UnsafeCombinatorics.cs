@@ -4,7 +4,7 @@ public static class UnsafeCombinatorics
 {
     public static Permutation CreateUnsafe(int[] permutation)
     {
-        return new Permutation(permutation, true);
+        throw new NotImplementedException();
     }
 
     public static Symmetry CreateUnsafe(int[] permutation, bool sign)

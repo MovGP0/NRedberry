@@ -1,205 +1,269 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Immutable;
+using System.Numerics;
 
 namespace NRedberry.Core.Combinatorics;
 
-public class Permutation : IComparable<Permutation>
+/// <summary>
+/// Interface describing a single permutation.
+/// See <c>Permutations.CreatePermutation(bool, int[])</c> and
+/// <c>Permutations.CreatePermutation(bool, int[][])</c> for how to construct permutations.
+/// </summary>
+/// <remarks>
+/// This is a C# transcription of the Java interface
+/// <c>cc.redberry.core.groups.permutations.Permutation</c>.
+/// The semantics of the methods are kept as close as possible to the original:
+/// one-line notation, disjoint cycles, composition order
+/// (“this * other” means apply <c>this</c> first, then <c>other</c>), antisymmetry flag,
+/// and the various helpers around conjugation, commutators, and powers.
+/// </remarks>
+public interface Permutation : IComparable<Permutation>
 {
-    protected readonly int[] _permutation;
-    private int[]? _inverse;
+    /// <summary>
+    /// Returns array that represents this permutation in one-line notation.
+    /// </summary>
+    /// <returns>Array that represents this permutation in one-line notation.</returns>
+    int[] OneLine();
 
-    public Permutation()
-    {
-    }
+    /// <summary>
+    /// Returns immutable array that represents this permutation in one-line notation.
+    /// </summary>
+    /// <returns>Immutable array that represents this permutation in one-line notation.</returns>
+    ImmutableArray<int> OneLineImmutable();
 
-    public Permutation(int dimension)
-    {
-        _permutation = new int[dimension];
-        for (var i = 0; i < dimension; ++i)
-            _permutation[i] = i;
-    }
+    /// <summary>
+    /// Returns an array of disjoint cycles that represent this permutation.
+    /// </summary>
+    /// <returns>Array of disjoint cycles that represent this permutation.</returns>
+    int[][] Cycles();
 
-    public Permutation(int[] permutation)
-    {
-        if (!Combinatorics.TestPermutationCorrectness(permutation))
-            throw new ArgumentException("Wrong permutation input: input array is not consistent with one-line notation");
+    /// <summary>
+    /// Returns image of specified point under the action of this permutation.
+    /// </summary>
+    /// <param name="i">Point.</param>
+    /// <returns>Image of specified point under the action of this permutation.</returns>
+    int NewIndexOf(int i);
 
-        _permutation = (int[])permutation.Clone();
-    }
+    /// <summary>
+    /// Returns image of specified point under the action of this permutation.
+    /// This method is the same as <see cref="NewIndexOf(int)"/>.
+    /// </summary>
+    /// <param name="i">Point.</param>
+    /// <returns>Image of specified point under the action of this permutation.</returns>
+    int ImageOf(int i);
 
-    public Permutation(int[] permutation, bool notClone)
-    {
-        _permutation = permutation;
-    }
+    /// <summary>
+    /// Returns image of specified set of points under the action of this permutation.
+    /// </summary>
+    /// <param name="set">Set of points.</param>
+    /// <returns>Image of the specified set under this permutation.</returns>
+    int[] ImageOf(int[] set);
 
-    public Permutation GetOne()
-    {
-        return new Permutation(_permutation.Length);
-    }
+    /// <summary>
+    /// Permutes array and returns the result.
+    /// </summary>
+    /// <param name="array">Array to permute.</param>
+    /// <returns>Permuted array.</returns>
+    int[] Permute(int[] array);
 
-    public virtual Permutation Identity => GetIdentity();
+    /// <summary>
+    /// Permutes array and returns the result.
+    /// </summary>
+    /// <param name="array">Array to permute.</param>
+    /// <returns>Permuted array.</returns>
+    char[] Permute(char[] array);
 
-    public virtual Permutation GetIdentity()
-    {
-        return new Permutation(_permutation.Length);
-    }
+    /// <summary>
+    /// Permutes array and returns the result.
+    /// </summary>
+    /// <typeparam name="T">Element type.</typeparam>
+    /// <param name="array">Array to permute.</param>
+    /// <returns>Permuted array.</returns>
+    T[] Permute<T>(T[] array);
 
-    protected virtual int[] CompositionArray(Permutation element)
-    {
-        if (_permutation.Length != element._permutation.Length)
-            throw new ArgumentException("different dimensions of compositing combinatorics");
+    /// <summary>
+    /// Permutes list and returns the result.
+    /// </summary>
+    /// <typeparam name="T">Element type.</typeparam>
+    /// <param name="list">List to permute.</param>
+    /// <returns>Permuted list.</returns>
+    List<T> Permute<T>(List<T> list);
 
-        var perm = new int[_permutation.Length];
-        for (var i = 0; i < _permutation.Length; ++i)
-            perm[i] = element._permutation[_permutation[i]];
+    /// <summary>
+    /// Returns conjugation of specified element by this permutation, i.e. <c>this⁻¹ * p * this</c>.
+    /// </summary>
+    /// <param name="p">Permutation to conjugate.</param>
+    /// <returns>Conjugation of specified element by this permutation.</returns>
+    /// <exception cref="Exception">
+    /// Should be thrown if the result of composition is inconsistent symmetry
+    /// (antisymmetry with odd parity of permutation).
+    /// </exception>
+    Permutation Conjugate(Permutation p);
 
-        return perm;
-    }
+    /// <summary>
+    /// Returns commutator of this and specified permutation, i.e. <c>this⁻¹ * p⁻¹ * this * p</c>.
+    /// </summary>
+    /// <param name="p">Permutation.</param>
+    /// <returns>Commutator of this and specified permutation.</returns>
+    /// <exception cref="Exception">
+    /// Should be thrown if the result of composition is inconsistent symmetry
+    /// (antisymmetry with odd parity of permutation).
+    /// </exception>
+    Permutation Commutator(Permutation p);
 
-    public virtual Permutation Composition(Permutation element)
-    {
-        return new Permutation(CompositionArray(element), true);
-    }
+    /// <summary>
+    /// Returns image of specified point under the action of inverse of this permutation.
+    /// </summary>
+    /// <param name="i">Point.</param>
+    /// <returns>Image of specified point under the action of inverse of this permutation.</returns>
+    int NewIndexOfUnderInverse(int i);
 
-    public virtual Permutation Composition(Permutation a, Permutation b)
-    {
-        return a.Composition(b);
-    }
+    /// <summary>
+    /// Returns <c>true</c> if this permutation is antisymmetry and <c>false</c> otherwise.
+    /// </summary>
+    /// <returns><c>true</c> if this permutation is antisymmetry; otherwise <c>false</c>.</returns>
+    bool Antisymmetry();
 
-    public virtual Permutation Composition(Permutation a, Permutation b, Permutation c)
-    {
-        return Composition(a.Composition(b), c);
-    }
+    /// <summary>
+    /// If this is antisymmetry, then converts this permutation to symmetry.
+    /// </summary>
+    /// <returns>Same permutation with <c>false</c> antisymmetry.</returns>
+    Permutation ToSymmetry();
 
-    public virtual Permutation CompositionWithInverse(Permutation other)
-    {
-        return Composition(other.Inverse());
-    }
+    /// <summary>
+    /// Changes sign (symmetry to antisymmetry and vice versa) of this permutation.
+    /// </summary>
+    /// <returns>Same permutation with changed sign.</returns>
+    Permutation Negate();
 
-    public long[] Permute(long[] array)
-    {
-        if (array.Length != _permutation.Length)
-            throw new ArgumentException("Wrong length");
+    /// <summary>
+    /// Returns the result of <c>this * other</c>.
+    /// Applying the resulting permutation is equivalent to applying <paramref name="other"/> after <c>this</c>.
+    /// </summary>
+    /// <param name="other">Other permutation.</param>
+    /// <returns>The result of <c>this * other</c>.</returns>
+    /// <exception cref="Exception">
+    /// Should be thrown if the result of composition is inconsistent symmetry
+    /// (antisymmetry with odd parity of permutation).
+    /// </exception>
+    Permutation Composition(Permutation other);
 
-        var copy = new long[_permutation.Length];
-        for (long i = 0; i < _permutation.Length; ++i)
-            copy[_permutation[i]] = array[i];
+    /// <summary>
+    /// Returns the result of <c>this * a * b</c>.
+    /// Applying the resulting permutation is equivalent to applying <c>b</c> after <c>a</c> after <c>this</c>.
+    /// </summary>
+    /// <param name="a">First permutation.</param>
+    /// <param name="b">Second permutation.</param>
+    /// <returns>The result of <c>this * a * b</c>.</returns>
+    /// <exception cref="Exception">
+    /// Should be thrown if the result of composition is inconsistent symmetry
+    /// (antisymmetry with odd permutation parity).
+    /// </exception>
+    Permutation Composition(Permutation a, Permutation b);
 
-        return copy;
-    }
+    /// <summary>
+    /// Returns the result of <c>this * a * b * c</c>.
+    /// Applying the resulting permutation is equivalent to applying <c>c</c> after <c>b</c> after <c>a</c> after <c>this</c>.
+    /// </summary>
+    /// <param name="a">First permutation.</param>
+    /// <param name="b">Second permutation.</param>
+    /// <param name="c">Third permutation.</param>
+    /// <returns>The result of <c>this * a * b * c</c>.</returns>
+    /// <exception cref="Exception">
+    /// Should be thrown if the result of composition is inconsistent symmetry
+    /// (antisymmetry with odd permutation parity).
+    /// </exception>
+    Permutation Composition(Permutation a, Permutation b, Permutation c);
 
-    protected int[] CalculateInverse()
-    {
-        _inverse ??= new int[_permutation.Length];
-        for (var i = 0; i < _permutation.Length; ++i)
-            _inverse[_permutation[i]] = i;
+    /// <summary>
+    /// Returns the result of <c>this * other⁻¹</c>.
+    /// Applying the resulting permutation is equivalent to applying <c>other⁻¹</c> after <c>this</c>.
+    /// </summary>
+    /// <param name="other">Other permutation.</param>
+    /// <returns>The result of <c>this * other⁻¹</c>.</returns>
+    /// <exception cref="Exception">
+    /// Should be thrown if the result of composition is inconsistent symmetry
+    /// (antisymmetry with odd permutation parity).
+    /// </exception>
+    Permutation CompositionWithInverse(Permutation other);
 
-        return _inverse;
-    }
+    /// <summary>
+    /// Returns the inverse permutation of this.
+    /// </summary>
+    /// <returns>The inverse permutation of this.</returns>
+    Permutation Inverse();
 
-    public int NewIndexOf(long index)
-    {
-        return _permutation[index];
-    }
+    /// <summary>
+    /// Returns <c>true</c> if this represents identity permutation.
+    /// </summary>
+    /// <returns><c>true</c> if this is identity permutation.</returns>
+    bool IsIdentity { get; }
 
-    public virtual int ImageOf(int point)
-    {
-        return NewIndexOf(point);
-    }
+    /// <summary>
+    /// Returns the identity permutation with the degree of this permutation.
+    /// </summary>
+    /// <returns>Identity permutation with the degree of this permutation.</returns>
+    Permutation Identity { get; }
 
-    public virtual int[] ImageOf(int[] set)
-    {
-        var result = new int[set.Length];
-        for (int i = 0; i < set.Length; ++i)
-            result[i] = NewIndexOf(set[i]);
-        return result;
-    }
+    /// <summary>
+    /// Calculates and returns the order of this permutation.
+    /// </summary>
+    /// <returns>Order of this permutation.</returns>
+    BigInteger Order { get; }
 
-    public virtual int NewIndexOfUnderInverse(int i)
-    {
-        return CalculateInverse()[i];
-    }
+    /// <summary>
+    /// Returns <c>true</c> if order of this permutation is odd and <c>false</c> otherwise.
+    /// </summary>
+    /// <returns><c>true</c> if order of this permutation is odd; otherwise <c>false</c>.</returns>
+    bool OrderIsOdd { get; }
 
-    public int Dimension() => _permutation.Length;
+    /// <summary>
+    /// Returns a largest moved point plus one.
+    /// </summary>
+    /// <returns>Largest moved point plus one.</returns>
+    int Degree { get; }
 
-    public int[] GetPermutation() => _permutation;
+    /// <summary>
+    /// Returns length of the underlying array (at low-level).
+    /// </summary>
+    /// <returns>Length of the underlying array (at low-level).</returns>
+    int Length { get; }
 
-    public virtual Permutation Inverse() => new(CalculateInverse(), true);
+    /// <summary>
+    /// Returns this raised to the specified exponent.
+    /// </summary>
+    /// <param name="exponent">Exponent.</param>
+    /// <returns>This permutation raised to the specified exponent.</returns>
+    Permutation Pow(int exponent);
 
-    public virtual bool IsIdentity()
-    {
-        for (int i = 0; i < _permutation.Length; ++i)
-        {
-            if (_permutation[i] != i)
-                return false;
-        }
+    /// <summary>
+    /// Returns parity of this permutation.
+    /// </summary>
+    /// <returns>Parity of this permutation.</returns>
+    int Parity { get; }
 
-        return true;
-    }
+    /// <summary>
+    /// Inserts identity action on the set [0, 1, ..., size - 1];
+    /// as result the degree of resulting permutation will be <c>size + degree(this)</c>.
+    /// </summary>
+    /// <param name="size">Size of the set.</param>
+    /// <returns>Permutation moved to the right by the specified size.</returns>
+    Permutation MoveRight(int size);
 
-    public virtual bool Antisymmetry()
-    {
-        return false;
-    }
+    /// <summary>
+    /// Returns lengths of cycles in disjoint cycle notation.
+    /// </summary>
+    /// <returns>Lengths of cycles in disjoint cycle notation.</returns>
+    int[] LengthsOfCycles { get; }
 
-    public virtual Permutation ToSymmetry()
-    {
-        return this;
-    }
+    /// <summary>
+    /// Returns a string representation of this permutation in one-line notation.
+    /// </summary>
+    /// <returns>A string representation of this permutation in one-line notation.</returns>
+    string ToStringOneLine();
 
-    public virtual Permutation Negate()
-    {
-        return this;
-    }
-
-    public virtual Permutation Pow(int exponent)
-    {
-        if (exponent == 0)
-            return Identity;
-
-        var exp = Math.Abs(exponent);
-        Permutation result = Identity;
-        Permutation basePerm = this;
-        while (exp != 0)
-        {
-            if ((exp & 1) == 1)
-                result = result.Composition(basePerm);
-            basePerm = basePerm.Composition(basePerm);
-            exp >>= 1;
-        }
-
-        return exponent < 0 ? result.Inverse() : result;
-    }
-
-    public int CompareTo(Permutation t)
-    {
-        if (t._permutation.Length != _permutation.Length)
-            throw new ArgumentException("different dimensions of comparing combinatorics");
-
-        for (int i = 0; i < _permutation.Length; ++i)
-        {
-            if (_permutation[i] < t._permutation[i])
-                return -1;
-            if (_permutation[i] > t._permutation[i])
-                return 1;
-        }
-
-        return 0;
-    }
-
-    public bool Compare(int[] permutation) => _permutation.SequenceEqual(permutation);
-
-    public override bool Equals(object? obj)
-    {
-        if (obj == null)
-            return false;
-        if (GetType() != obj.GetType())
-            return false;
-        return _permutation.SequenceEqual(((Permutation)obj)._permutation);
-    }
-
-    public override int GetHashCode() => _permutation.GetHashCode() * 7 + 31;
-
-    public override string ToString() => string.Join(", ", _permutation);
+    /// <summary>
+    /// Returns a string representation of this permutation in disjoint cycles notation.
+    /// </summary>
+    /// <returns>A string representation of this permutation in disjoint cycles notation.</returns>
+    string ToStringCycles();
 }

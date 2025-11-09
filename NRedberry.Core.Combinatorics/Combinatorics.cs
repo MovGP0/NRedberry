@@ -21,12 +21,12 @@ public static class Combinatorics
 
     public static bool IsIdentity(Permutation permutation)
     {
-        return IsIdentity(permutation.GetPermutation());
+        return IsIdentity(permutation);
     }
 
     public static bool IsIdentity(Symmetry symmetry)
     {
-        return !symmetry.IsAntiSymmetry() && IsIdentity(symmetry.GetPermutation());
+        return !symmetry.IsAntiSymmetry() && IsIdentity(symmetry);
     }
 
     public static int[] CreateIdentity(int dimension)

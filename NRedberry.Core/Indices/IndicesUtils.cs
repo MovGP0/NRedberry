@@ -272,9 +272,9 @@ public sealed class IndicesUtils
 
     public static bool IsPermutationConsistentWithIndices(int[] indices, Permutation permutation)
     {
-        if (indices.Length != permutation.Dimension())
+        if (indices.Length != permutation.Length)
             return false;
-        for (int i = 0; i < permutation.Dimension(); ++i)
+        for (int i = 0; i < permutation.Length; ++i)
         {
             if (GetRawTypeInt(indices[i]) != GetRawTypeInt(indices[permutation.NewIndexOf(i)]))
                 return false;

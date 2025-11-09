@@ -59,7 +59,7 @@ public static class AlgorithmsBacktrack
             throw new ArgumentException("Specified subgroup is not a subgroup of specified group.");
 
         int size = group.Count;
-        Permutation identity = group[0].StabilizerGeneratorsReference[0].GetIdentity();
+        Permutation identity = group[0].StabilizerGeneratorsReference[0].Identity;
 
         if (subgroup.Count == 0)
             subgroup.Add(new BSGSCandidateElement(baseArray[0], new List<Permutation>(), degree));
@@ -108,7 +108,7 @@ public static class AlgorithmsBacktrack
 
                 ++level;
 
-                if (word[level - 1].IsIdentity())
+                if (word[level - 1].IsIdentity)
                 {
                     sortedOrbits[level] = cachedSortedOrbits[level];
                 }
@@ -232,7 +232,7 @@ public static class AlgorithmsBacktrack
         int size = group.Count;
         int level = size - 1;
         Permutation[] word = new Permutation[size];
-        Permutation identity = group[0].StabilizerGeneratorsReference[0].GetIdentity();
+        Permutation identity = group[0].StabilizerGeneratorsReference[0].Identity;
 
         int[][] cachedSortedOrbits = new int[size][];
         int[][] sortedOrbits = new int[size][];
@@ -256,7 +256,7 @@ public static class AlgorithmsBacktrack
                 && IsMinimalInOrbit(subgroupRebase[level].OrbitListReference, image, ordering))
             {
                 ++level;
-                if (word[level - 1].IsIdentity())
+                if (word[level - 1].IsIdentity)
                 {
                     sortedOrbits[level] = cachedSortedOrbits[level];
                 }
@@ -344,7 +344,7 @@ public static class AlgorithmsBacktrack
         for (int level = 0; level < group.Count; ++level)
         {
             int image = transversal.NewIndexOf(baseArray[level]);
-            IntArrayList orbit = Permutations.GetOrbitList(candidates[level].StabilizerGeneratorsReference, image, degree);
+            IList<int> orbit = Permutations.GetOrbitList(candidates[level].StabilizerGeneratorsReference.AsReadOnly(), image, degree);
             minimalImage[level] = ordering.Min(orbit);
             ReplaceBasePointWithRedundancy(candidates, level, image);
             transversal = transversal
@@ -379,7 +379,7 @@ public static class AlgorithmsBacktrack
 
         System.Diagnostics.Debug.Assert(smaller.Count == larger.Count);
 
-        Permutation identity = smaller[0].StabilizerGeneratorsReference[0].GetIdentity();
+        Permutation identity = smaller[0].StabilizerGeneratorsReference[0].Identity;
         Permutation[] intersectionWord = new Permutation[smaller.Count];
         for (int i = 0; i < intersectionWord.Length; ++i)
             intersectionWord[i] = identity;
@@ -387,7 +387,7 @@ public static class AlgorithmsBacktrack
         BacktrackSearchPayload payload = new IntersectionPayload(larger, baseArray, intersectionWord);
         IIndicator<Permutation> intersectionProperty = new IntersectionIndicator(larger);
 
-        SubgroupSearchWithPayload(smaller, intersection, payload, intersectionProperty);
+        SubgroupSearchWithPayload(smaller.OfType<BSGSElement>().ToList(), intersection, payload, intersectionProperty);
     }
 
     private static void RebaseWithRedundancy(List<BSGSCandidateElement> group, int[] baseArray, int degree)

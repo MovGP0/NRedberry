@@ -11,8 +11,7 @@ public class PermutationsGenerator<T> : IEnumerator<T> where T : Permutation
 
     public PermutationsGenerator(Permutation permutation)
     {
-        var array = (int[])permutation.GetPermutation().Clone();
-        generator = new IntPermutationsGenerator(array);
+        throw new NotImplementedException();
     }
 
     public bool MoveNext()

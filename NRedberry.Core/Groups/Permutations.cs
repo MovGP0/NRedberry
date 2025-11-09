@@ -1,4 +1,5 @@
-﻿using System.Collections;
+using System.Collections;
+using System.Collections.Generic;
 using System.Numerics;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
@@ -430,7 +431,7 @@ public static partial class Permutations
     public static int InternalDegree<T>(List<T> permutations)
         where T: Permutation
     {
-        return permutations.Select(p => p.Degree()).Prepend(0).Max();
+        return permutations.Select(p => p.Degree).Prepend(0).Max();
     }
 
     /// <summary>
@@ -442,7 +443,7 @@ public static partial class Permutations
     public static int InternalDegree<T>(IReadOnlyCollection<T> permutations)
         where T: Permutation
     {
-        return permutations.Select(p => p.Degree()).Prepend(0).Max();
+        return permutations.Select(p => p.Degree).Prepend(0).Max();
     }
 
     public static int Parity(int[] permutation)
@@ -775,8 +776,31 @@ public static partial class Permutations
         return -1; // This should never happen if the function is called correctly
     }
 
-    public static IntArrayList GetOrbitList(IReadOnlyList<Permutation> stabilizerGenerators, int point, int degree)
+    public static IList<int> GetOrbitList(IEnumerable<Permutation> stabilizerGenerators, int point, int degree)
     {
-        throw new NotImplementedException();
+        var orbitList = new IntArrayList();
+        orbitList.Add(point);
+
+        if (stabilizerGenerators is null)
+            return orbitList;
+
+        var seen = new BitArray(degree);
+        seen.Set(point, true);
+
+        for (int orbitIndex = 0; orbitIndex < orbitList.Count; ++orbitIndex)
+        {
+            int current = orbitList[orbitIndex];
+            foreach (Permutation generator in stabilizerGenerators)
+            {
+                int imageOfPoint = generator.NewIndexOf(current);
+                if (!seen.Get(imageOfPoint))
+                {
+                    orbitList.Add(imageOfPoint);
+                    seen.Set(imageOfPoint, true);
+                }
+            }
+        }
+
+        return orbitList;
     }
 }

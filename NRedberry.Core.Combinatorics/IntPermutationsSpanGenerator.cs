@@ -7,26 +7,20 @@ public sealed class IntPermutationsSpanGenerator : IntCombinatorialGenerator, II
 
     public IntPermutationsSpanGenerator(params int[][] permutations)
     {
-        this.permutations = new List<Permutation>(permutations.Length);
-        foreach (var p in permutations)
-        {
-            this.permutations.Add(new Permutation(p));
-        }
-
-        innerIterator = new PermutationsSpanIterator<Permutation>(this.permutations);
+        throw new NotImplementedException();
     }
 
     public override void Reset() => innerIterator = new PermutationsSpanIterator<Permutation>(permutations);
 
-    public int[] GetReference() => innerIterator.Current!.GetPermutation();
+    public int[] GetReference() => throw new NotImplementedException();
 
-    private int[] Next() => innerIterator.Current!.GetPermutation();
+    private int[] Next() => throw new NotImplementedException();
 
     public int[]? Take() => MoveNext() ? Next() : null;
 
     public override bool MoveNext() => innerIterator.MoveNext();
 
-    public override int[] Current => innerIterator.Current!.GetPermutation();
+    public override int[] Current => throw new NotImplementedException();
 
     public override void Dispose()
     {

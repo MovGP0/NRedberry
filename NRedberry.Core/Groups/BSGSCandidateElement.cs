@@ -38,7 +38,7 @@ public sealed class BSGSCandidateElement : BSGSElement
         int capacity = -1;
         foreach (var p in stabilizerGenerators)
         {
-            capacity = Math.Max(capacity, p.Degree());
+            capacity = Math.Max(capacity, p.Degree);
         }
 
         return capacity;
@@ -46,7 +46,7 @@ public sealed class BSGSCandidateElement : BSGSElement
 
     public void AddStabilizer(Permutation stabilizer)
     {
-        InternalDegree = Math.Max(InternalDegree, stabilizer.Degree());
+        InternalDegree = Math.Max(InternalDegree, stabilizer.Degree);
         StabilizerGenerators.Add(stabilizer);
         RecalculateOrbitAndSchreierVector();
     }

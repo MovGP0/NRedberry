@@ -227,7 +227,7 @@ public class IndicesSymmetries : IEnumerable<Symmetry>
             throw new ArgumentException("No such type: " + IndexTypeMethods.GetType(type));
         }
 
-        if (data.Length != symmetry.Dimension())
+        if (data.Length != symmetry.Length)
         {
             throw new ArgumentException("Wrong symmetry length.");
         }
@@ -261,7 +261,7 @@ public class IndicesSymmetries : IEnumerable<Symmetry>
         var data = StructureOfIndices.GetTypeData(type);
         if (data == null)
             throw new ArgumentException("No such type: " + IndexTypeMethods.GetType(type));
-        if (data.Length != symmetry.Dimension())
+        if (data.Length != symmetry.Length)
             throw new ArgumentException("Wrong symmetry length.");
         int[] s = new int[StructureOfIndices.Size];
         int i = 0;
