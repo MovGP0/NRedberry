@@ -10,7 +10,6 @@
       <ProjectReference Include="..\NRedberry.Core.Combinatorics\NRedberry.Core.Combinatorics.csproj" />
       <ProjectReference Include="..\NRedberry.Core.Entities\NRedberry.Core.Entities.csproj" />
       <ProjectReference Include="..\NRedberry.Core.Exceptions\NRedberry.Core.Exceptions.csproj" />
-      <ProjectReference Include="..\NRedberry.Core.Tests\NRedberry.Core.Tests.csproj" />
       <ProjectReference Include="..\NRedberry.Core.Utils\NRedberry.Core.Utils.csproj" />
       <ProjectReference Include="..\NRedberry.Core\NRedberry.Core.csproj" />
     </ItemGroup>
