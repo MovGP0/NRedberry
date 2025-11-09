@@ -54,43 +54,52 @@ public class GroebnerBase<C> where C : RingElem<C>
             return 1;
         }
 
-        GenPolynomial<C>? first = F[0];
-        GenPolynomialRing<C>? pfac = PolynomialReflectionHelpers.GetPolynomialRing(first);
-        if (pfac is null)
+        GenPolynomial<C>? first = null;
+        foreach (GenPolynomial<C>? polynomial in F)
         {
-            throw new InvalidOperationException("Unable to determine polynomial ring from input.");
+            if (polynomial is not null)
+            {
+                first = polynomial;
+                break;
+            }
         }
 
-        if (pfac.Nvar <= 0)
+        if (first is null)
+        {
+            return 1;
+        }
+
+        GenPolynomialRing<C>? polynomialRing = first.Ring;
+        if (polynomialRing is null)
+        {
+            throw new InvalidOperationException("Polynomial ring must be provided.");
+        }
+
+        if (polynomialRing.Nvar <= 0)
         {
             return -1;
         }
 
         HashSet<int> dependentVariables = [];
-        foreach (GenPolynomial<C>? p in F)
+        foreach (GenPolynomial<C>? polynomial in F)
         {
-            if (p is null)
+            if (polynomial?.IsZero() != false)
             {
                 continue;
             }
 
-            if (PolynomialReflectionHelpers.IsZero(p))
-            {
-                continue;
-            }
-
-            if (PolynomialReflectionHelpers.IsConstant(p))
+            if (polynomial.IsConstant())
             {
                 return -1;
             }
 
-            object? expVector = PolynomialReflectionHelpers.LeadingExpVector(p);
-            if (expVector is null)
+            ExpVector? leadingExponent = polynomial.LeadingExpVector();
+            if (leadingExponent is null)
             {
                 continue;
             }
 
-            int[]? dependency = PolynomialReflectionHelpers.DependencyOnVariables(expVector);
+            int[]? dependency = leadingExponent.DependencyOnVariables();
             if (dependency is null)
             {
                 continue;
@@ -102,7 +111,7 @@ public class GroebnerBase<C> where C : RingElem<C>
             }
         }
 
-        if (pfac.Nvar == dependentVariables.Count)
+        if (polynomialRing.Nvar == dependentVariables.Count)
         {
             return 0;
         }
