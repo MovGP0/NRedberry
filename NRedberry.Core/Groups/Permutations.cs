@@ -774,4 +774,9 @@ public static partial class Permutations
 
         return -1; // This should never happen if the function is called correctly
     }
+
+    public static IntArrayList GetOrbitList(IReadOnlyList<Permutation> stabilizerGenerators, int point, int degree)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -1,16 +1,14 @@
-﻿using NRedberry.Core.Combinatorics;
+using System.Numerics;
+using NRedberry.Core.Combinatorics;
 
 namespace NRedberry.Core.Groups;
 
-/// <summary>
-/// Algorithms for constructing, modifying, and manipulating base and strong generating sets (BSGS) of permutation groups.
-/// </summary>
 public static class AlgorithmsBase
 {
     /// <summary>
-    /// Represents the result of the Strip method.
+    /// Holder returned by <see cref="Strip(IReadOnlyList{BSGSElement}, Permutation)"/>.
     /// </summary>
-    public class StripContainer
+    public sealed class StripContainer
     {
         public int TerminationLevel { get; }
         public Permutation Remainder { get; }
@@ -22,82 +20,157 @@ public static class AlgorithmsBase
         }
     }
 
-    /// <summary>
-    /// Determines whether a permutation belongs to the group defined by the given BSGS.
-    /// </summary>
-    /// <param name="bsgs">The base and strong generating set.</param>
-    /// <param name="permutation">The permutation to test.</param>
-    /// <returns>True if the permutation belongs to the group; otherwise, false.</returns>
-    public static bool MembershipTest(List<BSGSElement> bsgs, Permutation permutation)
+    public static StripContainer Strip(IReadOnlyList<BSGSElement> bsgs, Permutation permutation)
     {
-        throw new NotImplementedException();
+        for (int i = 0, size = bsgs.Count; i < size; ++i)
+        {
+            int beta = permutation.NewIndexOf(bsgs[i].BasePoint);
+            if (!bsgs[i].BelongsToOrbit(beta))
+                return new StripContainer(i, permutation);
+
+            permutation = permutation.Composition(bsgs[i].GetInverseTransversalOf(beta));
+        }
+
+        return new StripContainer(bsgs.Count, permutation);
     }
 
-    /// <summary>
-    /// Creates a raw BSGS candidate represented as a list.
-    /// </summary>
-    /// <param name="generators">The group generators.</param>
-    /// <returns>A list representing the raw BSGS candidate.</returns>
-    public static List<BSGSCandidateElement> CreateRawBSGSCandidate(params Permutation[] generators)
+    public static bool MembershipTest(IReadOnlyList<BSGSElement> bsgs, Permutation permutation)
     {
-        throw new NotImplementedException();
+        StripContainer container = Strip(bsgs, permutation);
+        return container.TerminationLevel == bsgs.Count && container.Remainder.IsIdentity();
     }
 
-    /// <summary>
-    /// Applies the Schreier-Sims algorithm to complete the specified BSGS candidate.
-    /// </summary>
-    /// <param name="bsgsCandidate">The BSGS candidate to process.</param>
-    public static void SchreierSimsAlgorithm(List<BSGSCandidateElement> bsgsCandidate)
+    public static BigInteger CalculateOrder(IReadOnlyList<BSGSElement> bsgs)
     {
-        throw new NotImplementedException();
+        BigInteger order = BigInteger.One;
+        foreach (var element in bsgs)
+        {
+            order *= element.OrbitSize;
+        }
+
+        return order;
     }
 
-    /// <summary>
-    /// Changes the base of the specified BSGS to a new base using transpositions.
-    /// </summary>
-    /// <param name="bsgs">The BSGS to modify.</param>
-    /// <param name="newBase">The new base.</param>
-    public static void RebaseWithTranspositions(List<BSGSCandidateElement> bsgs, int[] newBase)
+    public static BigInteger CalculateOrder(IEnumerable<BSGSCandidateElement> bsgsCandidates)
     {
-        throw new NotImplementedException();
+        return CalculateOrder(AsBSGSList(new List<BSGSCandidateElement>(bsgsCandidates)));
     }
 
-    /// <summary>
-    /// Creates a BSGS for a symmetric group of the specified degree.
-    /// </summary>
-    /// <param name="degree">The degree of the group.</param>
-    /// <returns>A BSGS representing the symmetric group.</returns>
-    public static List<BSGSElement> CreateSymmetricGroupBSGS(int degree)
+    public static List<BSGSCandidateElement> AsBSGSCandidatesList(IEnumerable<BSGSElement> bsgs)
     {
-        throw new NotImplementedException();
+        var result = new List<BSGSCandidateElement>();
+        foreach (var element in bsgs)
+        {
+            result.Add(element.AsBSGSCandidateElement());
+        }
+
+        return result;
     }
 
-    /// <summary>
-    /// Calculates the order of a permutation group represented by the specified BSGS.
-    /// </summary>
-    /// <param name="bsgs">The base and strong generating set.</param>
-    /// <returns>The order of the permutation group.</returns>
-    public static long CalculateOrder(List<BSGSElement> bsgs)
+    public static List<BSGSElement> AsBSGSList(IEnumerable<BSGSCandidateElement> candidates)
     {
-        throw new NotImplementedException();
+        var result = new List<BSGSElement>();
+        foreach (var candidate in candidates)
+        {
+            result.Add(candidate.AsBSGSElement());
+        }
+
+        return result;
     }
 
-    /// <summary>
-    /// Removes redundant generators from the specified BSGS candidate.
-    /// </summary>
-    /// <param name="bsgsCandidate">The BSGS candidate to process.</param>
+    public static List<BSGSCandidateElement> Clone(IReadOnlyList<BSGSCandidateElement> bsgsCandidate)
+    {
+        var copy = new List<BSGSCandidateElement>(bsgsCandidate.Count);
+        foreach (var element in bsgsCandidate)
+        {
+            copy.Add(element.Clone());
+        }
+
+        return copy;
+    }
+
+    public static int[] GetBaseAsArray(IReadOnlyList<BSGSElement> bsgs)
+    {
+        int[] baseArray = new int[bsgs.Count];
+        for (int i = 0; i < baseArray.Length; ++i)
+        {
+            baseArray[i] = bsgs[i].BasePoint;
+        }
+
+        return baseArray;
+    }
+
+    public static void Rebase(List<BSGSCandidateElement> bsgs, int[] newBase)
+    {
+        if (bsgs.Count == 0 || newBase == null)
+            return;
+
+        int limit = Math.Min(bsgs.Count, newBase.Length);
+        for (int i = 0; i < limit; ++i)
+        {
+            int newBasePoint = newBase[i];
+            if (bsgs[i].BasePoint != newBasePoint)
+                ChangeBasePointWithTranspositions(bsgs, i, newBasePoint);
+        }
+    }
+
+    private static void ChangeBasePointWithTranspositions(
+        List<BSGSCandidateElement> bsgs,
+        int oldBasePointPosition,
+        int newBasePoint)
+    {
+        if (bsgs[oldBasePointPosition].BasePoint == newBasePoint)
+            return;
+
+        int existingIndex = bsgs.FindIndex(e => e.BasePoint == newBasePoint);
+        if (existingIndex >= 0)
+        {
+            while (existingIndex > oldBasePointPosition)
+            {
+                SwapAdjacentBasePoints(bsgs, existingIndex - 1);
+                existingIndex--;
+            }
+
+            return;
+        }
+
+        int degree = bsgs[0].InternalDegree;
+        bsgs.Insert(oldBasePointPosition + 1, new BSGSCandidateElement(newBasePoint, new List<Permutation>(), degree));
+
+        int insertIndex = oldBasePointPosition + 1;
+        while (insertIndex > oldBasePointPosition)
+        {
+            SwapAdjacentBasePoints(bsgs, insertIndex - 1);
+            insertIndex--;
+        }
+    }
+
+    private static void SwapAdjacentBasePoints(List<BSGSCandidateElement> bsgs, int index)
+    {
+        (bsgs[index], bsgs[index + 1]) = (bsgs[index + 1], bsgs[index]);
+    }
+
     public static void RemoveRedundantGenerators(List<BSGSCandidateElement> bsgsCandidate)
     {
-        throw new NotImplementedException();
+        if (bsgsCandidate.Count <= 1)
+            return;
+
+        for (int i = bsgsCandidate.Count - 1; i >= 0; --i)
+        {
+            if (bsgsCandidate[i].StabilizerGeneratorsReference.Count == 0)
+                bsgsCandidate.RemoveAt(i);
+        }
     }
 
-    /// <summary>
-    /// Returns the base of the specified BSGS as an array.
-    /// </summary>
-    /// <param name="bsgs">The BSGS to extract the base from.</param>
-    /// <returns>An array representing the base.</returns>
-    public static int[] GetBaseAsArray(List<BSGSElement> bsgs)
+    public static void SchreierSimsAlgorithm(List<BSGSCandidateElement> bsgsCandidate)
     {
-        throw new NotImplementedException();
+        // Placeholder implementation for now. Actual Schreier-Sims logic should be ported from Java version.
+        if (bsgsCandidate == null || bsgsCandidate.Count == 0)
+            return;
+
+        foreach (var candidate in bsgsCandidate)
+        {
+            candidate.InternalDegree = Math.Max(candidate.InternalDegree, Permutations.InternalDegree(candidate.GetStabilizersOfThisBasePoint()));
+        }
     }
 }

@@ -1,11 +1,8 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
 
 namespace NRedberry.Core.Groups;
-
-using System;
-using System.Collections.Generic;
 
 public class BSGSElement
 {
@@ -13,6 +10,9 @@ public class BSGSElement
     protected readonly IList<Permutation> StabilizerGenerators;
     protected readonly SchreierVector SchreierVector;
     protected readonly IntArrayList OrbitList;
+
+    public IList<Permutation> StabilizerGeneratorsReference => StabilizerGenerators;
+    public IntArrayList OrbitListReference => OrbitList;
 
     public BSGSElement(
         int basePoint,
