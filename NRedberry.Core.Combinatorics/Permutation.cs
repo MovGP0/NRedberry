@@ -27,10 +27,15 @@ public class Permutation : IComparable<Permutation>
         _permutation = permutation;
     }
 
-    public Permutation GetOne()
-    {
-        return new Permutation(_permutation.Length);
-    }
+    public Permutation One => new(_permutation.Length);
+
+    [Obsolete("Use One property instead")]
+    public Permutation GetOne() => One;
+
+    public virtual Permutation Identity => new(_permutation.Length);
+
+    [Obsolete("Use Identity property instead")]
+    public Permutation GetIdentity() => Identity;
 
     protected int[] CompositionArray(Permutation element)
     {

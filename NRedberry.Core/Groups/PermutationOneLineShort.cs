@@ -319,11 +319,14 @@ public class PermutationOneLineShort : Permutation
         return _isIdentity;
     }
 
-    public Permutation GetIdentity()
+    public override Permutation Identity
     {
-        if (_isIdentity)
-            return this;
-        return Permutations.CreateIdentityPermutation(_permutation.Length);
+        get
+        {
+            if (_isIdentity)
+                return this;
+            return Permutations.CreateIdentityPermutation(_permutation.Length);
+        }
     }
 
     public BigInteger Order()
