@@ -276,3 +276,5 @@ Some types and methods need to be replaced with .NET types:
 | GetONE()          | One                 | Property with getter instead of method |
 | GetZERO()         | Zero                | Property with getter instead of method |
 | LengthsOfCycles() | LengthsOfCycles     | Property with getter instead of method |
+| GetNumerator()    | Numerator           | Property with getter instead of method |
+| GetDenominator()  | Denominator         | Property with getter instead of method |

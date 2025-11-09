@@ -274,8 +274,8 @@ public sealed class Complex : Tensor, INumber<Complex>
         if (IsNumeric())
             return new Complex(abs2.Pow(0.5));
         Rational abs2r = (Rational) abs2;
-        BigInteger num = abs2r.GetNumerator();
-        BigInteger den = abs2r.GetDenominator();
+        BigInteger num = abs2r.Numerator;
+        BigInteger den = abs2r.Denominator;
 
         BigInteger nR = NumberUtils.Sqrt(num);
         if (!NumberUtils.IsSqrt(num, nR))

@@ -106,9 +106,6 @@ public sealed class Rational : Real
         Fraction = rational;
     }
 
-    public BigInteger GetNumerator() => Fraction.Numerator;
-    public BigInteger GetDenominator() => Fraction.Denominator;
-
     public BigInteger Numerator => Fraction.Numerator;
     public BigInteger Denominator => Fraction.Denominator;
 

@@ -1,5 +1,6 @@
 ﻿namespace NRedberry.Core.Concurrent;
 
+[Obsolete("Replace with an array with only one element: [element]")]
 public class Singleton<T> : IOutputPortUnsafe<T>
     where T:class
 {
