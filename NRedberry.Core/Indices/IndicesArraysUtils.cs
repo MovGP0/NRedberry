@@ -1,11 +1,11 @@
-using NRedberry.Core.Utils;
+using System.Collections.Immutable;
 
 namespace NRedberry.Core.Indices;
 
 public static class IndicesArraysUtils
 {
-    public static void ArrayCopy(IntArray source, int srcPos, int[] dest, int destPos, int length)
+    public static void ArrayCopy(ImmutableArray<int> source, int srcPos, int[] dest, int destPos, int length)
     {
-        Array.Copy(source.InnerArray, srcPos, dest, destPos, length);
+        Array.Copy(source.ToArray(), srcPos, dest, destPos, length);
     }
 }

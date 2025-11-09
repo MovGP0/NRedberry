@@ -9,16 +9,16 @@ public class BSGSElement
     public readonly int BasePoint;
     protected readonly IList<Permutation> StabilizerGenerators;
     protected readonly SchreierVector SchreierVector;
-    protected readonly IntArrayList OrbitList;
+    protected readonly List<int> OrbitList;
 
     public IList<Permutation> StabilizerGeneratorsReference => StabilizerGenerators;
-    public IntArrayList OrbitListReference => OrbitList;
+    public List<int> OrbitListReference => OrbitList;
 
     public BSGSElement(
         int basePoint,
         IReadOnlyCollection<Permutation> stabilizerGenerators,
         SchreierVector schreierVector,
-        IntArrayList orbitList)
+        List<int> orbitList)
     {
         BasePoint = basePoint;
         StabilizerGenerators = stabilizerGenerators.ToList();

@@ -38,7 +38,7 @@ public sealed class DiracSimplify1 : AbstractFeynCalcTransformation
         throw new NotImplementedException();
     }
 
-    protected override Tensor? TransformLine(ProductOfGammas productOfGammas, IntArrayList modifiedElements)
+    protected override Tensor? TransformLine(ProductOfGammas productOfGammas, List<int> modifiedElements)
     {
         throw new NotImplementedException();
     }

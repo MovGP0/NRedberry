@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using NRedberry.Core.Tensors;
 using NRedberry.Core.Utils;
 
@@ -8,7 +9,7 @@ namespace NRedberry.Physics.Feyncalc;
 /// </summary>
 public sealed class DiracOrderTransformation : AbstractFeynCalcTransformation
 {
-    private readonly Dictionary<IntArray, Cached> _cache = new();
+    private readonly Dictionary<ImmutableArray<int>, Cached> _cache = new();
 
     public DiracOrderTransformation(DiracOptions options)
         : base(options, null)
@@ -16,7 +17,7 @@ public sealed class DiracOrderTransformation : AbstractFeynCalcTransformation
         throw new NotImplementedException();
     }
 
-    protected override Tensor? TransformLine(ProductOfGammas productOfGammas, IntArrayList modifiedElements)
+    protected override Tensor? TransformLine(ProductOfGammas productOfGammas, List<int> modifiedElements)
     {
         throw new NotImplementedException();
     }

@@ -402,7 +402,7 @@ public static class AlgorithmsBacktrack
         }
     }
 
-    private static bool IsMinimalInOrbit(IntArrayList orbit, int point, InducedOrdering ordering)
+    private static bool IsMinimalInOrbit(List<int> orbit, int point, InducedOrdering ordering)
     {
         bool belongsToOrbit = false;
         for (int i = orbit.Count - 1; i >= 0; --i)

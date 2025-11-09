@@ -28,7 +28,7 @@ public sealed class BSGSCandidateElement : BSGSElement
         int basePoint,
         List<Permutation> stabilizerGenerators,
         SchreierVector schreierVector,
-        IntArrayList orbitList)
+        List<int> orbitList)
         : base(basePoint, stabilizerGenerators, schreierVector, orbitList)
     {
     }

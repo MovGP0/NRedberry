@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Immutable;
 using NRedberry.Core.Utils;
 
 namespace NRedberry.Core.Indices;
@@ -30,20 +31,11 @@ public class EmptyIndices : Indices
         return indices.Size() == 0;
     }
 
-    public IntArray GetUpper()
-    {
-        return IntArray.EmptyArray;
-    }
+    public ImmutableArray<int> GetUpper() => [];
 
-    public IntArray GetLower()
-    {
-        return IntArray.EmptyArray;
-    }
+    public ImmutableArray<int> GetLower() => [];
 
-    public IntArray GetAllIndices()
-    {
-        return IntArray.EmptyArray;
-    }
+    public ImmutableArray<int> GetAllIndices() => [];
 
     public int Size(IndexType type)
     {

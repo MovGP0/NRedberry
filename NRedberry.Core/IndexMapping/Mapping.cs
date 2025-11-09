@@ -1,4 +1,5 @@
-﻿using NRedberry.Core.Tensors;
+﻿using System.Collections.Immutable;
+using NRedberry.Core.Tensors;
 using NRedberry.Core.Transformations.Symmetrization;
 using NRedberry.Core.Utils;
 
@@ -65,12 +66,12 @@ public sealed class Mapping : ITransformation
         throw new NotImplementedException();
     }
 
-    public IntArray GetFromNames()
+    public ImmutableArray<int> GetFromNames()
     {
         throw new NotImplementedException();
     }
 
-    public IntArray GetToData()
+    public ImmutableArray<int> GetToData()
     {
         throw new NotImplementedException();
     }

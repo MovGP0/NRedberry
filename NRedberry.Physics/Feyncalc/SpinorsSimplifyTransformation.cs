@@ -80,7 +80,7 @@ public sealed class SpinorsSimplifyTransformation : AbstractTransformationWithGa
         throw new NotImplementedException();
     }
 
-    private Tensor[] CreateLine(int length, IntArrayList gamma5Positions)
+    private Tensor[] CreateLine(int length, List<int> gamma5Positions)
     {
         throw new NotImplementedException();
     }

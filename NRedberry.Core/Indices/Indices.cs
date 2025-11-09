@@ -1,14 +1,14 @@
-using NRedberry.Core.Utils;
+using System.Collections.Immutable;
 
 namespace NRedberry.Core.Indices;
 
 public interface Indices : IEquatable<object>, IEnumerable<int>
 {
-    IntArray GetUpper();
-    IntArray GetLower();
-    IntArray GetAllIndices();
+    ImmutableArray<int> GetUpper();
+    ImmutableArray<int> GetLower();
+    ImmutableArray<int> GetAllIndices();
 
-    IntArray AllIndices => GetAllIndices();
+    ImmutableArray<int> AllIndices => GetAllIndices();
 
     int Size();
     int Size(IndexType type);

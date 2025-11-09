@@ -13,11 +13,11 @@ public sealed class ProductOfGammas
     public int Offset => throw new NotImplementedException();
     public int Length => throw new NotImplementedException();
     public ProductContent ProductContent => throw new NotImplementedException();
-    public IntArrayList GPositions => throw new NotImplementedException();
-    public IntArrayList G5Positions => throw new NotImplementedException();
+    public List<int> GPositions => throw new NotImplementedException();
+    public List<int> G5Positions => throw new NotImplementedException();
     public GraphType GraphType => throw new NotImplementedException();
 
-    public ProductOfGammas(int offset, ProductContent productContent, IntArrayList gPositions, IntArrayList g5Positions, GraphType graphType)
+    public ProductOfGammas(int offset, ProductContent productContent, List<int> gPositions, List<int> g5Positions, GraphType graphType)
     {
         throw new NotImplementedException();
     }

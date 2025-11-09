@@ -1,26 +1,28 @@
-﻿namespace NRedberry.Core.Groups;
+﻿using NRedberry.Core.Combinatorics;
+
+namespace NRedberry.Core.Groups;
 
 /// <summary>
 /// Skeleton port of cc.redberry.core.groups.permutations.RandomPermutation.
 /// </summary>
 public static class RandomPermutation
 {
-    public static void Randomness(IList<IPermutation> generators)
+    public static void Randomness(IList<Permutation> generators)
     {
         throw new NotImplementedException();
     }
 
-    public static void Randomness(IList<IPermutation> generators, int baseSize, int iterations, Random random)
+    public static void Randomness(IList<Permutation> generators, int baseSize, int iterations, Random random)
     {
         throw new NotImplementedException();
     }
 
-    public static IPermutation Random(IList<IPermutation> generators)
+    public static Permutation Random(IList<Permutation> generators)
     {
         throw new NotImplementedException();
     }
 
-    public static IPermutation Random(IList<IPermutation> generators, Random random)
+    public static Permutation Random(IList<Permutation> generators, Random random)
     {
         throw new NotImplementedException();
     }

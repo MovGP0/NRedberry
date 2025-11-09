@@ -95,8 +95,6 @@ public class InducedOrdering : IComparer<int>
     /// </summary>
     /// <param name="array">The array.</param>
     /// <returns>The least point.</returns>
-    public int Min(IntArrayList array) => array.Min();
-
     public int Min(IList<int> list) => list.Min();
 
     /// <summary>
@@ -105,11 +103,4 @@ public class InducedOrdering : IComparer<int>
     /// <param name="array">The array.</param>
     /// <returns>The greatest point.</returns>
     public int Max(int[] array) => array.Max();
-
-    /// <summary>
-    /// Returns the greatest point under this ordering in the specified <see cref="IntArrayList"/>.
-    /// </summary>
-    /// <param name="array">The array.</param>
-    /// <returns>The greatest point.</returns>
-    public int Max(IntArrayList array) => array.Max();
 }

@@ -1,12 +1,13 @@
-﻿using System.Numerics;
-using NRedberry.Core.Utils;
+﻿using System.Collections.Immutable;
+using System.Numerics;
+using NRedberry.Core.Combinatorics;
 
 namespace NRedberry.Core.Groups;
 
 /// <summary>
 /// Skeleton port of cc.redberry.core.groups.permutations.PermutationOneLineAbstract.
 /// </summary>
-public abstract class PermutationOneLineAbstract : IPermutation
+public abstract class PermutationOneLineAbstract : Permutation
 {
     protected PermutationOneLineAbstract(bool isIdentity, bool antisymmetry)
     {
@@ -18,32 +19,26 @@ public abstract class PermutationOneLineAbstract : IPermutation
         throw new NotImplementedException();
     }
 
-    public virtual bool IsIdentity()
+    public virtual bool IsIdentity => throw new NotImplementedException();
+
+    public virtual Permutation Pow(int exponent)
     {
         throw new NotImplementedException();
     }
 
-    public virtual IPermutation Pow(int exponent)
+    public virtual Permutation Identity => throw new NotImplementedException();
+
+    public virtual Permutation CompositionWithInverse(Permutation other)
     {
         throw new NotImplementedException();
     }
 
-    public virtual IPermutation GetIdentity()
+    public virtual Permutation Conjugate(Permutation permutation)
     {
         throw new NotImplementedException();
     }
 
-    public virtual IPermutation CompositionWithInverse(IPermutation other)
-    {
-        throw new NotImplementedException();
-    }
-
-    public virtual IPermutation Conjugate(IPermutation permutation)
-    {
-        throw new NotImplementedException();
-    }
-
-    public virtual IPermutation Commutator(IPermutation permutation)
+    public virtual Permutation Commutator(Permutation permutation)
     {
         throw new NotImplementedException();
     }
@@ -73,7 +68,7 @@ public abstract class PermutationOneLineAbstract : IPermutation
         throw new NotImplementedException();
     }
 
-    public virtual int CompareTo(IPermutation? other)
+    public virtual int CompareTo(Permutation? other)
     {
         throw new NotImplementedException();
     }
@@ -83,7 +78,7 @@ public abstract class PermutationOneLineAbstract : IPermutation
         throw new NotImplementedException();
     }
 
-    public virtual IntArray OneLineImmutable()
+    public virtual ImmutableArray<int> OneLineImmutable()
     {
         throw new NotImplementedException();
     }
@@ -103,70 +98,52 @@ public abstract class PermutationOneLineAbstract : IPermutation
         throw new NotImplementedException();
     }
 
-    public virtual IPermutation ToSymmetry()
+    public virtual Permutation ToSymmetry()
     {
         throw new NotImplementedException();
     }
 
-    public virtual IPermutation Negate()
+    public virtual Permutation Negate()
     {
         throw new NotImplementedException();
     }
 
-    public virtual IPermutation Composition(IPermutation other)
+    public virtual Permutation Composition(Permutation other)
     {
         throw new NotImplementedException();
     }
 
-    public virtual IPermutation Composition(IPermutation a, IPermutation b)
+    public virtual Permutation Composition(Permutation a, Permutation b)
     {
         throw new NotImplementedException();
     }
 
-    public virtual IPermutation Composition(IPermutation a, IPermutation b, IPermutation c)
+    public virtual Permutation Composition(Permutation a, Permutation b, Permutation c)
     {
         throw new NotImplementedException();
     }
 
-    public virtual IPermutation Inverse()
+    public virtual Permutation Inverse()
     {
         throw new NotImplementedException();
     }
 
-    public virtual BigInteger Order()
+    public virtual BigInteger Order => throw new NotImplementedException();
+
+    public virtual bool OrderIsOdd => throw new NotImplementedException();
+
+    public virtual int Degree => throw new NotImplementedException();
+
+    public virtual int Length => throw new NotImplementedException();
+
+    public virtual int Parity => throw new NotImplementedException();
+
+    public virtual Permutation MoveRight(int size)
     {
         throw new NotImplementedException();
     }
 
-    public virtual bool OrderIsOdd()
-    {
-        throw new NotImplementedException();
-    }
-
-    public virtual int Degree()
-    {
-        throw new NotImplementedException();
-    }
-
-    public virtual int Length()
-    {
-        throw new NotImplementedException();
-    }
-
-    public virtual int Parity()
-    {
-        throw new NotImplementedException();
-    }
-
-    public virtual IPermutation MoveRight(int size)
-    {
-        throw new NotImplementedException();
-    }
-
-    public virtual int[] LengthsOfCycles()
-    {
-        throw new NotImplementedException();
-    }
+    public virtual int[] LengthsOfCycles => throw new NotImplementedException();
 
     public virtual string ToStringOneLine()
     {

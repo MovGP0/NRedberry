@@ -8,9 +8,9 @@ namespace NRedberry.Core.Groups;
 
 public static partial class Permutations
 {
-    public static IntArrayList GetOrbitList(IEnumerable<Permutation> stabilizerGenerators, int point, int degree)
+    public static List<int> GetOrbitList(IEnumerable<Permutation> stabilizerGenerators, int point, int degree)
     {
-        var orbitList = new IntArrayList();
+        var orbitList = new List<int>();
         orbitList.Add(point);
         var generators = stabilizerGenerators ?? Enumerable.Empty<Permutation>();
 

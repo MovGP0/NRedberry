@@ -31,7 +31,7 @@ public abstract class AbstractFeynCalcTransformation : AbstractTransformationWit
         throw new NotImplementedException();
     }
 
-    protected virtual Tensor? TransformLine(ProductOfGammas productOfGammas, IntArrayList modifiedElements)
+    protected virtual Tensor? TransformLine(ProductOfGammas productOfGammas, List<int> modifiedElements)
     {
         throw new NotImplementedException();
     }

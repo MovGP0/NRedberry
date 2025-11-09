@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Immutable;
 using System.Text;
 using NRedberry.Contexts;
 using NRedberry.Core.Utils;
@@ -37,7 +38,7 @@ public abstract class AbstractIndices : Indices
         return ul;
     }
 
-    public IntArray GetUpper()
+    public ImmutableArray<int> GetUpper()
     {
         UpperLowerIndices ul = upperLower;
         if (ul == null)
@@ -46,10 +47,10 @@ public abstract class AbstractIndices : Indices
             upperLower = ul;
         }
 
-        return new IntArray(ul.Upper);
+        return [..ul.Upper];
     }
 
-    public IntArray GetLower()
+    public ImmutableArray<int> GetLower()
     {
         UpperLowerIndices ul = upperLower;
         if (ul is null)
@@ -58,12 +59,12 @@ public abstract class AbstractIndices : Indices
             upperLower = ul;
         }
 
-        return new IntArray(ul.Lower);
+        return [..ul.Lower];
     }
 
-    public IntArray GetAllIndices()
+    public ImmutableArray<int> GetAllIndices()
     {
-        return new IntArray(Data);
+        return [..Data];
     }
 
     public abstract Indices GetOfType(IndexType type);

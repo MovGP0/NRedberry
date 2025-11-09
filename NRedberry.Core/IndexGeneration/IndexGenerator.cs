@@ -12,7 +12,7 @@ public sealed class IndexGenerator : ICloneable, ICloneable<IndexGenerator>
     }
 
     public IndexGenerator(Indices.Indices indices)
-        : this(indices.AllIndices.Copy())
+        : this(indices.AllIndices.ToArray())
     {
     }
 

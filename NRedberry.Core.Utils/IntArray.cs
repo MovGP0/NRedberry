@@ -1,8 +1,9 @@
 using System.Collections;
+using System.Collections.Immutable;
 
 namespace NRedberry.Core.Utils;
 
-[Obsolete("use ImmutableArray<int> instead")]
+[Obsolete("use ImmutableArray<int> instead", true)]
 public sealed class IntArray : IEnumerable<int>
 {
     public static readonly IntArray EmptyArray = new([]);
@@ -84,9 +85,9 @@ public sealed class IntArray : IEnumerable<int>
         if (ReferenceEquals(this, obj))
             return true;
 
-        if (obj is IntArray other)
+        if (obj is ImmutableArray<int> other)
         {
-            return InnerArray.Equals(other.InnerArray);
+            return InnerArray.SequenceEqual(other.ToArray());
         }
 
         return false;

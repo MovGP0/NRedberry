@@ -19,7 +19,7 @@ public sealed class SimplifyGamma5Transformation : AbstractFeynCalcTransformatio
         throw new NotImplementedException();
     }
 
-    protected override Tensor? TransformLine(ProductOfGammas productOfGammas, IntArrayList modifiedElements)
+    protected override Tensor? TransformLine(ProductOfGammas productOfGammas, List<int> modifiedElements)
     {
         throw new NotImplementedException();
     }
