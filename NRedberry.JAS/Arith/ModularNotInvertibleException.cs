@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 
@@ -10,11 +10,26 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.arith.ModularNotInvertibleException
 /// </remarks>
-public class ModularNotInvertibleException : NotInvertibleException
+public sealed class ModularNotInvertibleException : NotInvertibleException
 {
-    public readonly object? F;
-    public readonly object? F1;
-    public readonly object? F2;
+    public object? F { get; }
+    public object? F1 { get; }
+    public object? F2 { get; }
+
+    public ModularNotInvertibleException()
+        : base("ModularNotInvertibleException")
+    {
+    }
+
+    public ModularNotInvertibleException(string message)
+        : base(message)
+    {
+    }
+
+    public ModularNotInvertibleException(string message, Exception innerException)
+        : base(message, innerException)
+    {
+    }
 
     /// <summary>
     /// Creates a new exception that remembers the non-trivial factors uncovered during inversion.
@@ -52,6 +67,11 @@ public class ModularNotInvertibleException : NotInvertibleException
         F = f;
         F1 = f1;
         F2 = f2;
+    }
+
+    public ModularNotInvertibleException(Exception innerException)
+        : base(innerException)
+    {
     }
 
     public override string ToString()

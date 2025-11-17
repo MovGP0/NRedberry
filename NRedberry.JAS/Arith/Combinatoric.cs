@@ -6,7 +6,7 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.arith.Combinatoric
 /// </remarks>
-public class Combinatoric
+public static class Combinatoric
 {
     /// <summary>
     /// Factorial.
