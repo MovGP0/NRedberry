@@ -12,7 +12,7 @@ public static class SimpleTensorExtensions
      * @return {@code true} if specified tensor is a Kronecker tensor
      */
     public static bool IsKronecker(this Context context, SimpleTensor t) {
-        return context.nameManager.IsKroneckerOrMetric(t.Name)
+        return context.NameManager.IsKroneckerOrMetric(t.Name)
             && !IndicesUtils.HaveEqualStates(t.Indices[0], t.Indices[1]);
     }
 
@@ -23,7 +23,7 @@ public static class SimpleTensorExtensions
      * @return {@code true} if specified tensor is a metric tensor
      */
     public static bool IsMetric(this Context context, SimpleTensor t) {
-        return context.nameManager.IsKroneckerOrMetric(t.Name)
+        return context.NameManager.IsKroneckerOrMetric(t.Name)
             && IndicesUtils.HaveEqualStates(t.Indices[0], t.Indices[1]);
     }
 
@@ -34,7 +34,7 @@ public static class SimpleTensorExtensions
      * @return {@code true} if specified tensor is a metric or a Kronecker tensor
      */
     public static bool IsKroneckerOrMetric(this Context context, SimpleTensor t) {
-        return context.nameManager.IsKroneckerOrMetric(t.Name);
+        return context.NameManager.IsKroneckerOrMetric(t.Name);
     }
 
     /**
@@ -57,7 +57,7 @@ public static class SimpleTensorExtensions
         }
 
         SimpleIndices indices = IndicesFactory.CreateSimple(null, (int)index1, (int)index2);
-        var nd = context.nameManager.MapNameDescriptor(context.nameManager.GetKroneckerName(), new StructureOfIndices(indices));
+        var nd = context.NameManager.MapNameDescriptor(context.NameManager.GetKroneckerName(), new StructureOfIndices(indices));
         var name = nd.Id;
         return Tensor.SimpleTensor(name, indices);
     }
@@ -89,7 +89,7 @@ public static class SimpleTensorExtensions
         }
 
         var indices = IndicesFactory.CreateSimple(null, (int)index1, (int)index2);
-        var nd = context.nameManager.MapNameDescriptor(context.nameManager.GetMetricName(), new StructureOfIndices(indices));
+        var nd = context.NameManager.MapNameDescriptor(context.NameManager.GetMetricName(), new StructureOfIndices(indices));
         var name = nd.Id;
         return Tensor.SimpleTensor(name, indices);
     }

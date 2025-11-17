@@ -3,53 +3,41 @@ using NRedberry.Core.Parsers;
 namespace NRedberry.Contexts;
 
 /// <summary>
-/// This class represents Redberry context. It stores all Redberry session data (in some sense it stores static data).
-/// <p>Management of current Redberry context is made through {@link ContextManager} class.
-/// Context of Redberry is attached to the current thread, so that any thread created from the outside of Redebrry
-/// will hold a unique instance of {@link Context} object. In such a way tensors created in one thread can not
-/// be used in the other thread because they are in some sense "attached" to the initial thread. However, if thread is
-/// created through the executor service which is obtained from {@link ContextManager#getExecutorService()}, it will
-/// share the same context as initial thread (such threads could hold concurrent computations regarding single context,
-/// the appropriate synchronization is assumed). In order to create a new session of Redberry with a particular context,
-/// an instance of this class should be set as a current context via {@link ContextManager#setCurrentContext(Context)}.</p>
+/// Represents a Redberry context that stores all session state.
 /// </summary>
+/// <remarks>
+/// Management of the current context is performed via <see cref="ContextManager"/>, and a context is
+/// bound to the current thread. Threads created externally obtain their own <see cref="Context"/>
+/// instance, so tensors from one thread must not be reused in another. Threads created via the executor
+/// service from <see cref="ContextManager.GetExecutorService"/> share the same context and must be
+/// synchronized appropriately. To start a new session with a specific context, set it via
+/// <see cref="ContextManager.SetCurrentContext(Context)"/>.
+/// </remarks>
 public sealed class Context
 {
-    ///<summary>
-    /// NameManager has a sense of namespace
-    /// </summary>
-    public NameManager nameManager;
-
-    /// <summary>
-    ///  Defaults output format can be changed during the session
-    /// </summary>
-    private OutputFormat defaultOutputFormat;
-
-    private IndexConverterManager converterManager;
-    private ParseManager parseManager;
+    private IndexConverterManager ConverterManager { get; }
+    private ParseManager ParseManager { get; }
 
     /// <summary>
     /// Holds information about metric types.
     /// This is a "map" from (byte) type to (bit) isMetric
     /// </summary>
-    public LongBackedBitArray metricTypes = new(128);
+    public LongBackedBitArray metricTypes { get; set; } = new(128);
 
-    /**
-     * Creates context from the settings
-     *
-     * @param contextSettings settings
-     * @see ContextSettings
-     */
+    /// <summary>
+    /// Creates a context using supplied settings.
+    /// </summary>
+    /// <param name="contextSettings">Configuration for parsers, converters, names, and defaults.</param>
     public Context(ContextSettings contextSettings)
     {
-        parseManager = new ParseManager(contextSettings.Parser());
-        converterManager = contextSettings.ConverterManager;
-        nameManager = new NameManager(
+        ParseManager = new ParseManager(contextSettings.Parser());
+        ConverterManager = contextSettings.ConverterManager;
+        NameManager = new NameManager(
             contextSettings.NameManagerSeed,
             contextSettings.Kronecker,
             contextSettings.MetricName);
 
-        defaultOutputFormat = contextSettings.DefaultOutputFormat;
+        DefaultOutputFormat = contextSettings.DefaultOutputFormat;
 
         foreach (IndexType type in contextSettings.MetricTypes)
         {
@@ -57,149 +45,133 @@ public sealed class Context
         }
     }
 
-    private readonly object _resetTensorNamesLock = new();
-    /**
-     * This method resets all tensor names in the namespace.
-     *
-     * <p>Any tensor created before this method call becomes invalid, and
-     * must not be used! This method is mainly used in unit tests, so
-     * avoid invocations of this method in general computations.</p>
-     */
-    public  void ResetTensorNames()
+    private readonly Lock _resetTensorNamesLock = new();
+
+    /// <summary>
+    /// Resets all tensor names in the namespace.
+    /// </summary>
+    /// <remarks>
+    /// Any tensor created before this call becomes invalid. Primarily intended for unit tests; avoid
+    /// using it during normal computations.
+    /// </remarks>
+    public void ResetTensorNames()
     {
         lock (_resetTensorNamesLock)
         {
-            nameManager.Reset();
+            NameManager.Reset();
         }
     }
 
-    private readonly object _resetTensorNames = new();
-    /**
-     * This method resets all tensor names in the namespace and sets a
-     * specified seed to the {@link NameManager}. If this method is invoked
-     * with constant seed before any interactions with Redberry, further
-     * behaviour of Redberry will be fully deterministic from run to run
-     * (order of summands and multipliers will be fixed, computation time
-     * will be pretty constant, hash codes will be the same).
-     *
-     * <p>Any tensor created before this method call becomes invalid, and
-     * must not be used! This method is mainly used in unit tests, so
-     * avoid invocations of this method in general computations.</p>
-     */
+    /// <summary>
+    /// Resets all tensor names and seeds the <see cref="NameManager"/> deterministically.
+    /// </summary>
+    /// <param name="seed">Seed applied to <see cref="NameManager"/> for deterministic runs.</param>
+    /// <remarks>
+    /// Any tensor created before this call becomes invalid. Primarily intended for unit tests; avoid
+    /// using it during normal computations.
+    /// </remarks>
     public void ResetTensorNames(int seed)
     {
-        lock (_resetTensorNames)
+        lock (_resetTensorNamesLock)
         {
-            nameManager.Reset(seed);
+            NameManager.Reset(seed);
         }
     }
 
-    /**
-     * Sets the default output format. After this step, all expressions
-     * will be printed according to the specified output format.
-     *
-     * @param defaultOutputFormat output format
-     */
-    public void SetDefaultOutputFormat(OutputFormat defaultOutputFormat) {
-        this.defaultOutputFormat = defaultOutputFormat;
+    /// <summary>
+    /// Sets the default output format for expression printing.
+    /// </summary>
+    /// <param name="defaultOutputFormat">Output format.</param>
+    public void SetDefaultOutputFormat(OutputFormat defaultOutputFormat)
+    {
+        this.DefaultOutputFormat = defaultOutputFormat;
     }
 
-    /**
-     * Returns index converter manager of current session.
-     *
-     * @return index converter manager of current session
-     */
-    public IndexConverterManager GetIndexConverterManager() {
-        return converterManager;
+    /// <summary>
+    /// Gets the index converter manager of the current session.
+    /// </summary>
+    public IndexConverterManager GetIndexConverterManager()
+    {
+        return ConverterManager;
     }
 
-    /**
-     * Returns the name manager (namespace) of current session.
-     *
-     * @return the name manager (namespace) of current session.
-     */
-    public NameManager GetNameManager() {
-        return nameManager;
+    /// <summary>
+    /// Gets the name manager (namespace) of the current session.
+    /// </summary>
+    public NameManager NameManager { get; set; }
+
+    /// <summary>
+    /// Gets the <see cref="NameDescriptor"/> for the specified tensor name id.
+    /// </summary>
+    /// <param name="nameId">Integer tensor name.</param>
+    public NameDescriptor GetNameDescriptor(int nameId)
+    {
+        return NameManager.GetNameDescriptor(nameId);
     }
 
-    /**
-     * Returns {@code NameDescriptor} corresponding to the specified {@code int} nameId.
-     *
-     * @param nameId integer name of tensor
-     * @return corresponding  {@code NameDescriptor}
-     */
-    public NameDescriptor GetNameDescriptor(int nameId) {
-        return nameManager.GetNameDescriptor(nameId);
+    /// <summary>
+    /// Gets the string representation of the Kronecker delta name.
+    /// </summary>
+    public string GetKroneckerName()
+    {
+        return NameManager.GetKroneckerName();
     }
 
-    /**
-     * Returns string representation of Kronecker delta name
-     *
-     * @return string representation of Kronecker delta name
-     */
-    public string GetKroneckerName() {
-        return nameManager.GetKroneckerName();
+    /// <summary>
+    /// Gets the string representation of the metric tensor name.
+    /// </summary>
+    public string GetMetricName()
+    {
+        return NameManager.GetMetricName();
     }
 
-    /**
-     * Returns string representation of metric tensor name
-     *
-     * @return string representation of metric tensor name
-     */
-    public string GetMetricName() {
-        return nameManager.GetMetricName();
+    /// <summary>
+    /// Sets the default metric tensor name used for printing.
+    /// </summary>
+    /// <param name="name">String representation of the metric tensor name.</param>
+    public void SetMetricName(string name)
+    {
+        NameManager.SetMetricName(name);
     }
 
-    /**
-     * Sets the default metric tensor name. After this step, metric tensor
-     * will be printed with the specified string name.
-     *
-     * @param name string representation of metric tensor name
-     */
-    public void SetMetricName(string name) {
-        nameManager.SetMetricName(name);
+    /// <summary>
+    /// Sets the default Kronecker tensor name used for printing.
+    /// </summary>
+    /// <param name="name">String representation of the Kronecker tensor name.</param>
+    public void SetKroneckerName(string name)
+    {
+        NameManager.SetKroneckerName(name);
     }
 
-    /**
-     * Sets the default Kronecker tensor name. After this step, Kronecker tensor
-     * will be printed with the specified string name.
-     *
-     * @param name string representation of Kronecker tensor name
-     */
-    public void SetKroneckerName(string name) {
-        nameManager.SetKroneckerName(name);
+    /// <summary>
+    /// Gets the parse manager for the current session.
+    /// </summary>
+    public ParseManager GetParseManager()
+    {
+        return ParseManager;
     }
 
-    /**
-     * Returns parse manager of current session
-     *
-     * @return parse manager of current session
-     */
-    public ParseManager GetParseManager() {
-        return parseManager;
-    }
-
-    /**
-     * Returns true if metric is defined for the specified index type.
-     *
-     * @param type index type
-     * @return true if metric is defined for the specified index type
-     */
-    public bool IsMetric(byte type) {
+    /// <summary>
+    /// Returns <c>true</c> if a metric is defined for the specified index type.
+    /// </summary>
+    /// <param name="type">Index type.</param>
+    public bool IsMetric(byte type)
+    {
         return metricTypes[type];
     }
 
-    /**
-     * Returns the current context of Redberry session.
-     *
-     * @return the current context of Redberry session.
-     */
+    /// <summary>
+    /// Gets the current context of the Redberry session.
+    /// </summary>
     public static Context Get()
     {
         return ContextManager.GetCurrentContext();
     }
 
-    public OutputFormat GetDefaultOutputFormat() => defaultOutputFormat;
+    public OutputFormat GetDefaultOutputFormat() => DefaultOutputFormat;
 
-    public OutputFormat DefaultOutputFormat => defaultOutputFormat;
+    /// <summary>
+    /// Default output format; can be updated during the session.
+    /// </summary>
+    public OutputFormat DefaultOutputFormat { get; private set; }
 }

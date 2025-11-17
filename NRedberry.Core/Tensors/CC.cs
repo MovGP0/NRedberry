@@ -40,10 +40,7 @@ public static class CC
          *
          * @return the name manager (namespace) of current session.
          */
-    public static NameManager GetNameManager()
-    {
-        return Current.GetNameManager();
-    }
+    public static NameManager NameManager => Current.NameManager;
 
     /**
          * Returns index converter manager of current session.

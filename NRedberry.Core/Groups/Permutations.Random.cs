@@ -47,6 +47,6 @@ public static partial class Permutations
 
     private static Random GetRandomSource()
     {
-        return Context.Get().GetNameManager().GetRandomGenerator();
+        return Context.Get().NameManager.GetRandomGenerator();
     }
 }

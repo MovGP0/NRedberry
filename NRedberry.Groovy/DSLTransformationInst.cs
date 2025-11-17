@@ -76,7 +76,8 @@ public sealed class DSLTransformationInst<T> : DSLTransformation<T>, Transformat
 
     private void TryRegisterAsContextListener()
     {
-        var context = Contexts.CC.Current();
+        var context = Contexts.CC.Current;
+
         var registerMethod = context
             .GetType()
             .GetMethod("RegisterListener", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
