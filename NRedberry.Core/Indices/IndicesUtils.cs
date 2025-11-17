@@ -203,12 +203,13 @@ public sealed class IndicesUtils
 
     public static string ToString(long index, OutputFormat mode)
     {
-        return (GetState(index) ? "^{" : "_{") + Context.Get().GetIndexConverterManager().GetSymbol(index, mode) + "}";
+        return (GetState(index) ? "^{" : "_{") + Context.Get().ConverterManager.GetSymbol(index, mode) + "}";
     }
 
     public static string ToString(long index)
     {
-        return ToString(index, Context.Get().GetDefaultOutputFormat());
+        Context tempQualifier = Context.Get();
+        return ToString(index, tempQualifier.DefaultOutputFormat);
     }
 
     public static string ToString(int[] indices, OutputFormat mode)
@@ -224,8 +225,7 @@ public sealed class IndicesUtils
     public static int ParseIndex(string @string)
     {
         bool state = @string[0] == '^';
-        var nameWithType = Context.Get()
-            .GetIndexConverterManager()
+        var nameWithType = Context.Get().ConverterManager
             .GetCode(@string[1] == '{' ? @string.Substring(2, @string.Length - 1) : @string[1..]);
 
         return state ? (int)(0x80000000 ^ nameWithType) : nameWithType;

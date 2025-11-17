@@ -15,14 +15,30 @@ namespace NRedberry.Contexts;
 /// </remarks>
 public sealed class Context
 {
-    private IndexConverterManager ConverterManager { get; }
-    private ParseManager ParseManager { get; }
+    /// <summary>
+    /// Gets the index converter manager of the current session.
+    /// </summary>
+    public IndexConverterManager ConverterManager { get; }
+
+    public ParseManager ParseManager { get; }
 
     /// <summary>
     /// Holds information about metric types.
     /// This is a "map" from (byte) type to (bit) isMetric
     /// </summary>
     public LongBackedBitArray metricTypes { get; set; } = new(128);
+
+    /// <summary>
+    /// Gets the name manager (namespace) of the current session.
+    /// </summary>
+    public NameManager NameManager { get; }
+
+    /// <summary>
+    /// Default output format; can be updated during the session.
+    /// </summary>
+    public OutputFormat DefaultOutputFormat { get; set; }
+
+    private readonly Lock _resetTensorNamesLock = new();
 
     /// <summary>
     /// Creates a context using supplied settings.
@@ -44,8 +60,6 @@ public sealed class Context
             metricTypes.Set(type.GetType().GetHashCode());
         }
     }
-
-    private readonly Lock _resetTensorNamesLock = new();
 
     /// <summary>
     /// Resets all tensor names in the namespace.
@@ -79,99 +93,43 @@ public sealed class Context
     }
 
     /// <summary>
-    /// Sets the default output format for expression printing.
-    /// </summary>
-    /// <param name="defaultOutputFormat">Output format.</param>
-    public void SetDefaultOutputFormat(OutputFormat defaultOutputFormat)
-    {
-        this.DefaultOutputFormat = defaultOutputFormat;
-    }
-
-    /// <summary>
-    /// Gets the index converter manager of the current session.
-    /// </summary>
-    public IndexConverterManager GetIndexConverterManager()
-    {
-        return ConverterManager;
-    }
-
-    /// <summary>
-    /// Gets the name manager (namespace) of the current session.
-    /// </summary>
-    public NameManager NameManager { get; set; }
-
-    /// <summary>
     /// Gets the <see cref="NameDescriptor"/> for the specified tensor name id.
     /// </summary>
     /// <param name="nameId">Integer tensor name.</param>
-    public NameDescriptor GetNameDescriptor(int nameId)
+    public NameDescriptor GetNameDescriptor(int nameId) => NameManager.GetNameDescriptor(nameId);
+
+    /// <summary>
+    /// The string representation of the Kronecker delta name.
+    /// </summary>
+    public string KroneckerName
     {
-        return NameManager.GetNameDescriptor(nameId);
+        get => NameManager.KroneckerName;
+        set => NameManager.KroneckerName = value;
     }
 
     /// <summary>
-    /// Gets the string representation of the Kronecker delta name.
+    /// The string representation of the metric tensor name.
     /// </summary>
-    public string GetKroneckerName()
+    public string MetricName
     {
-        return NameManager.GetKroneckerName();
+        get => NameManager.MetricName;
+        set => NameManager.MetricName = value;
     }
 
-    /// <summary>
-    /// Gets the string representation of the metric tensor name.
-    /// </summary>
-    public string GetMetricName()
+    public string DiracDeltaName
     {
-        return NameManager.GetMetricName();
-    }
-
-    /// <summary>
-    /// Sets the default metric tensor name used for printing.
-    /// </summary>
-    /// <param name="name">String representation of the metric tensor name.</param>
-    public void SetMetricName(string name)
-    {
-        NameManager.SetMetricName(name);
-    }
-
-    /// <summary>
-    /// Sets the default Kronecker tensor name used for printing.
-    /// </summary>
-    /// <param name="name">String representation of the Kronecker tensor name.</param>
-    public void SetKroneckerName(string name)
-    {
-        NameManager.SetKroneckerName(name);
-    }
-
-    /// <summary>
-    /// Gets the parse manager for the current session.
-    /// </summary>
-    public ParseManager GetParseManager()
-    {
-        return ParseManager;
+        get => NameManager.DiracDeltaName;
+        set => NameManager.DiracDeltaName = value;
     }
 
     /// <summary>
     /// Returns <c>true</c> if a metric is defined for the specified index type.
     /// </summary>
     /// <param name="type">Index type.</param>
-    public bool IsMetric(byte type)
-    {
-        return metricTypes[type];
-    }
+    public bool IsMetric(byte type) => metricTypes[type];
 
     /// <summary>
     /// Gets the current context of the Redberry session.
     /// </summary>
-    public static Context Get()
-    {
-        return ContextManager.GetCurrentContext();
-    }
-
-    public OutputFormat GetDefaultOutputFormat() => DefaultOutputFormat;
-
-    /// <summary>
-    /// Default output format; can be updated during the session.
-    /// </summary>
-    public OutputFormat DefaultOutputFormat { get; private set; }
+    public static Context Get() => ContextManager.GetCurrentContext();
 }

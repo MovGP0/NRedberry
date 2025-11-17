@@ -141,7 +141,7 @@ public abstract class AbstractIndices : Indices
                 currentState = stateMode;
             }
 
-            sb.Append(Context.Get().GetIndexConverterManager().GetSymbol(Data[i], mode));
+            sb.Append(Context.Get().ConverterManager.GetSymbol(Data[i], mode));
         }
 
         sb.Append("}");
@@ -152,7 +152,8 @@ public abstract class AbstractIndices : Indices
 
     public override string ToString()
     {
-        return ToString(Context.Get().GetDefaultOutputFormat());
+        Context tempQualifier = Context.Get();
+        return ToString(tempQualifier.DefaultOutputFormat);
     }
 
     IEnumerator IEnumerable.GetEnumerator()

@@ -57,7 +57,7 @@ public static class SimpleTensorExtensions
         }
 
         SimpleIndices indices = IndicesFactory.CreateSimple(null, (int)index1, (int)index2);
-        var nd = context.NameManager.MapNameDescriptor(context.NameManager.GetKroneckerName(), new StructureOfIndices(indices));
+        var nd = context.NameManager.MapNameDescriptor(context.NameManager.KroneckerName, new StructureOfIndices(indices));
         var name = nd.Id;
         return Tensor.SimpleTensor(name, indices);
     }
@@ -89,7 +89,7 @@ public static class SimpleTensorExtensions
         }
 
         var indices = IndicesFactory.CreateSimple(null, (int)index1, (int)index2);
-        var nd = context.NameManager.MapNameDescriptor(context.NameManager.GetMetricName(), new StructureOfIndices(indices));
+        var nd = context.NameManager.MapNameDescriptor(context.NameManager.MetricName, new StructureOfIndices(indices));
         var name = nd.Id;
         return Tensor.SimpleTensor(name, indices);
     }

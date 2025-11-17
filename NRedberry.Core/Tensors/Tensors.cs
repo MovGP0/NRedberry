@@ -1,3 +1,5 @@
+using NRedberry.Contexts;
+
 namespace NRedberry.Core.Tensors;
 
 public static class Tensors
@@ -15,7 +17,7 @@ public static class Tensors
 
     public static Tensor Parse(string expression)
     {
-        return CC.Current.GetParseManager().Parse(expression);
+        return CC.Current.ParseManager.Parse(expression);
     }
 
     /// <summary>

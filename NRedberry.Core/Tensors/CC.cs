@@ -49,7 +49,7 @@ public static class CC
          */
     public static IndexConverterManager GetIndexConverterManager()
     {
-        return Current.GetIndexConverterManager();
+        return Current.ConverterManager;
     }
 
     /**
@@ -59,7 +59,7 @@ public static class CC
          */
     public static OutputFormat GetDefaultOutputFormat()
     {
-        return Current.GetDefaultOutputFormat();
+        return Current.DefaultOutputFormat;
     }
 
     /**
@@ -71,7 +71,7 @@ public static class CC
          */
     public static void SetDefaultOutputFormat(OutputFormat defaultOutputFormat)
     {
-        Current.SetDefaultOutputFormat(defaultOutputFormat);
+        Current.DefaultOutputFormat = defaultOutputFormat;
     }
 
     /**

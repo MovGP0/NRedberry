@@ -25,8 +25,11 @@ public sealed class NameManager
     private readonly HashSet<string> stringNames = [];
     private readonly StringGenerator stringGenerator = new();
     private readonly Dictionary<NameAndStructureOfIndices, NameDescriptor> fromStructure = new();
+
     private readonly string[] kroneckerAndMetricNames = ["d", "g"];
-    private volatile string diracDeltaName = "DiracDelta";
+
+    public string DiracDeltaName { get; set; } = "DiracDelta";
+
     private readonly List<int> kroneckerAndMetricIds = [];
 
     public NameManager(long? seed, string kronecker, string metric)
@@ -52,36 +55,24 @@ public sealed class NameManager
         return kroneckerAndMetricIds.BinarySearch(name) >= 0;
     }
 
-    public string GetKroneckerName()
+    public string KroneckerName
     {
-        return kroneckerAndMetricNames[0];
+        get => kroneckerAndMetricNames[0];
+        set
+        {
+            kroneckerAndMetricNames[0] = value;
+            Rebuild();
+        }
     }
 
-    public string GetMetricName()
+    public string MetricName
     {
-        return kroneckerAndMetricNames[1];
-    }
-
-    public void SetKroneckerName(string name)
-    {
-        kroneckerAndMetricNames[0] = name;
-        Rebuild();
-    }
-
-    public void SetMetricName(string name)
-    {
-        kroneckerAndMetricNames[1] = name;
-        Rebuild();
-    }
-
-    public string GetDiracDeltaName()
-    {
-        return diracDeltaName;
-    }
-
-    public void SetDiracDeltaName(string name)
-    {
-        diracDeltaName = name;
+        get => kroneckerAndMetricNames[1];
+        set
+        {
+            kroneckerAndMetricNames[1] = value;
+            Rebuild();
+        }
     }
 
     private void Rebuild()
@@ -107,7 +98,7 @@ public sealed class NameManager
     private NameDescriptor CreateDescriptor(string sname, StructureOfIndices[] structuresOfIndices, int id)
     {
         if (structuresOfIndices.Length != 1)
-            return new NameDescriptorForTensorFieldImpl(sname, structuresOfIndices, id, sname.Equals(diracDeltaName) && structuresOfIndices.Length == 3);
+            return new NameDescriptorForTensorFieldImpl(sname, structuresOfIndices, id, sname.Equals(DiracDeltaName) && structuresOfIndices.Length == 3);
 
         var its = structuresOfIndices[0];
         if (its.Size != 2)
@@ -145,7 +136,7 @@ public sealed class NameManager
         return new NameDescriptorForSimpleTensor(sname, structuresOfIndices, id);
     }
 
-    //USE IT ONLY INSIDE LOCK!!!
+    /// <remarks>USE IT ONLY INSIDE LOCK!!!</remarks>
     private void RegisterDescriptor(NameDescriptor descriptor)
     {
         fromId[descriptor.Id] = descriptor;
