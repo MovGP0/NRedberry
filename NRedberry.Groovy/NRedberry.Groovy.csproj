@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\NRedberry.Core\NRedberry.Core.csproj" />
+    </ItemGroup>
+
 </Project>
