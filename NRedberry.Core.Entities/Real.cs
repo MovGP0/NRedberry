@@ -59,7 +59,7 @@ public abstract class Real : INumber<Real>, IComparable<Real>
     public abstract bool IsNumeric();
     public abstract bool IsInteger();
     public abstract bool IsNatural();
-    public abstract int CompareTo(Real other);
+    public abstract int CompareTo(Real? other);
 
     public IField<Real> Field => throw new NotImplementedException();
 }

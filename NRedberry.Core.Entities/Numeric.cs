@@ -1,8 +1,9 @@
-﻿using System.Numerics;
+﻿using System.Globalization;
+using System.Numerics;
 
 namespace NRedberry;
 
-public sealed class Numeric : Real
+public sealed class Numeric : Real, IEquatable<Numeric>
 {
     /// <summary>
     /// A constant holding 0 value.
@@ -42,7 +43,7 @@ public sealed class Numeric : Real
     /// <summary>
     /// A constant holding the smallest positive normal value of type double, 2^-1022.
     /// </summary>
-    public static readonly Numeric MinNormal = new(double.MinValue);
+    public static readonly Numeric MinNormal = new(BitConverter.Int64BitsToDouble(0x0010000000000000));
 
     /// <summary>
     /// A constant holding the smallest positive nonzero value of type double, 2^-1074.
@@ -68,243 +69,320 @@ public sealed class Numeric : Real
 
     public static Numeric FromNumber<T>(INumber<T> value)
     {
-        if(value is null)
-            throw new ArgumentNullException(nameof(value));
-        return new Numeric(value.DoubleValue());
+        ArgumentNullException.ThrowIfNull(value);
+        return CreateNumeric(value.DoubleValue());
     }
 
     public override Real Add(Real a)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(a);
+        return Add(a.DoubleValue());
     }
 
     public override Real Add(Rationals.Rational fraction)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(fraction);
+        return Add((double)fraction);
     }
 
     public override Real Subtract(Real a)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(a);
+        return Subtract(a.DoubleValue());
     }
 
     public override Real Negate()
     {
-        throw new NotImplementedException();
+        return CreateNumeric(-Value);
     }
 
     public override Real Multiply(int n)
     {
-        throw new NotImplementedException();
+        return n == 1 ? this : CreateNumeric(Value * n);
     }
 
     public override Real Multiply(Real a)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(a);
+        return Multiply(a.DoubleValue());
     }
 
     public override Real Divide(Real a)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(a);
+        return Divide(a.DoubleValue());
     }
 
     public override Real Reciprocal()
     {
-        throw new NotImplementedException();
+        return CreateNumeric(1.0 / Value);
     }
 
     public override int SigNum()
     {
-        throw new NotImplementedException();
+        return Value > 0 ? 1 : Value == 0 ? 0 : -1;
     }
 
     public override int IntValue()
     {
-        throw new NotImplementedException();
+        return (int)Value;
     }
 
     public override long LongValue()
     {
-        throw new NotImplementedException();
+        return (long)Value;
     }
 
     public override double DoubleValue()
     {
-        throw new NotImplementedException();
+        return Value;
     }
 
     public override float FloatValue()
     {
-        throw new NotImplementedException();
+        return (float)Value;
     }
 
     public override Real GetNumericValue()
     {
-        throw new NotImplementedException();
+        return this;
     }
 
     public override Real Abs()
     {
-        throw new NotImplementedException();
+        return Value >= 0 ? this : Negate();
     }
 
     public override Real Add(double bg)
     {
-        throw new NotImplementedException();
+        return bg == 0.0 ? this : CreateNumeric(Value + bg);
     }
 
     public override Real Add(int i)
     {
-        throw new NotImplementedException();
+        return Add((double)i);
     }
 
     public override Real Add(long l)
     {
-        throw new NotImplementedException();
+        return Add((double)l);
     }
 
     public override Real Add(BigInteger bg)
     {
-        throw new NotImplementedException();
+        return Add((double)bg);
     }
 
     public override Real Add(Rational fraction)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(fraction);
+        return Add(fraction.DoubleValue());
     }
 
     public override Real Subtract(double bg)
     {
-        throw new NotImplementedException();
+        return Add(-bg);
     }
 
     public override Real Subtract(int i)
     {
-        throw new NotImplementedException();
+        return Add(-(double)i);
     }
 
     public override Real Subtract(long l)
     {
-        throw new NotImplementedException();
+        return Add(-(double)l);
     }
 
     public override Real Subtract(BigInteger bg)
     {
-        throw new NotImplementedException();
+        return Add(-(double)bg);
     }
 
     public override Real Subtract(Rational fraction)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(fraction);
+        return Add(-fraction.DoubleValue());
     }
 
     public override Real Divide(double d)
     {
-        throw new NotImplementedException();
+        return d == 1.0 ? this : CreateNumeric(Value / d);
     }
 
     public override Real Divide(int i)
     {
-        throw new NotImplementedException();
+        return Divide((double)i);
     }
 
     public override Real Divide(long l)
     {
-        throw new NotImplementedException();
+        return Divide((double)l);
     }
 
     public override Real Divide(BigInteger bg)
     {
-        throw new NotImplementedException();
+        return Divide((double)bg);
     }
 
     public override Real Divide(Rational fraction)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(fraction);
+        return Divide(fraction.DoubleValue());
     }
 
     public override Real Multiply(double d)
     {
-        throw new NotImplementedException();
+        return d == 1.0 ? this : CreateNumeric(Value * d);
     }
 
     public override Real Multiply(long l)
     {
-        throw new NotImplementedException();
+        return Multiply((double)l);
     }
 
     public override Real Multiply(BigInteger bg)
     {
-        throw new NotImplementedException();
+        return Multiply((double)bg);
     }
 
     public override Real Multiply(Rational fraction)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(fraction);
+        return Multiply(fraction.DoubleValue());
     }
 
     public override Real Pow(double exponent)
     {
-        throw new NotImplementedException();
+        return CreateNumeric(Math.Pow(Value, exponent));
     }
 
     public override Real Pow(BigInteger exponent)
     {
-        throw new NotImplementedException();
+        return Pow((double)exponent);
     }
 
     public override Real Pow(long exponent)
     {
-        throw new NotImplementedException();
+        return Pow((double)exponent);
     }
 
     public override Real Pow(int exponent)
     {
-        throw new NotImplementedException();
+        return Pow((double)exponent);
     }
 
     public override bool IsInfinite()
     {
-        throw new NotImplementedException();
+        return double.IsInfinity(Value);
     }
 
     public override bool IsNaN()
     {
-        throw new NotImplementedException();
+        return double.IsNaN(Value);
     }
 
     public override bool IsZero()
     {
-        throw new NotImplementedException();
+        return Value == 0.0;
     }
 
     public override bool IsOne()
     {
-        throw new NotImplementedException();
+        return Value == 1.0;
     }
 
     public override bool IsMinusOne()
     {
-        throw new NotImplementedException();
+        return Value == -1.0;
     }
 
     public override bool IsNumeric()
     {
-        throw new NotImplementedException();
+        return true;
     }
 
     public override bool IsInteger()
     {
-        throw new NotImplementedException();
+        return false;
     }
 
     public override bool IsNatural()
     {
-        throw new NotImplementedException();
+        return false;
     }
 
-    public override int CompareTo(Real other)
+    public override int CompareTo(Real? other)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(other);
+        return Value.CompareTo(other.DoubleValue());
+    }
+
+    public override string ToString()
+    {
+        return Value.ToString(CultureInfo.InvariantCulture);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(this, obj))
+            return true;
+        if (obj is null)
+            return false;
+        if (obj is Numeric numeric)
+            return Equals(numeric);
+        if (obj is INumber number)
+            return BitConverter.DoubleToInt64Bits(Value) == BitConverter.DoubleToInt64Bits(number.DoubleValue());
+        return false;
+    }
+
+    public bool Equals(Numeric? other)
+    {
+        if (other is null)
+            return false;
+        return BitConverter.DoubleToInt64Bits(Value) == BitConverter.DoubleToInt64Bits(other.Value);
+    }
+
+    public override int GetHashCode()
+    {
+        if (Value == One.Value)
+            return 1;
+        if (Value == MinusOne.Value)
+            return -1;
+
+        var bits = BitConverter.DoubleToInt64Bits(Value * Value);
+        var hash = (int)(bits ^ (bits >> 32));
+        return Value > 0.0 ? hash : -hash;
+    }
+
+    public static bool operator ==(Numeric? left, Numeric? right)
+    {
+        if (ReferenceEquals(left, right))
+            return true;
+        if (left is null || right is null)
+            return false;
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(Numeric? left, Numeric? right)
+    {
+        return !(left == right);
+    }
+
+    private static Numeric CreateNumeric(double value)
+    {
+        if (value == 0.0)
+            return Zero;
+        if (value == 1.0)
+            return One;
+        if (value == -1.0)
+            return MinusOne;
+        if (double.IsPositiveInfinity(value))
+            return PositiveInfinity;
+        if (double.IsNegativeInfinity(value))
+            return NegativeInfinity;
+        if (double.IsNaN(value))
+            return NaN;
+        return new Numeric(value);
     }
 }

@@ -12,13 +12,13 @@ public sealed class Complex : Tensor, INumber<Complex>
 
     public static implicit operator Complex32(Complex c) => new((float)c.Real.ToDouble(), (float)c.Imaginary.ToDouble());
 
-    public static readonly Complex ComplexNaN = new(Numeric.NaN, Numeric.NaN);
-    public static readonly Complex RealPositiveInfinity = new(Numeric.PositiveInfinity, Numeric.Zero);
-    public static readonly Complex RealNegativeInfinity = new(Numeric.NegativeInfinity, Numeric.Zero);
-    public static readonly Complex ImaginaryPositiveInfinity = new(Numeric.Zero, Numeric.PositiveInfinity);
-    public static readonly Complex ImaginaryNegativeInfinity = new(Numeric.Zero, Numeric.NegativeInfinity);
-    public static readonly Complex ComplexNegativeInfinity = new(Numeric.NegativeInfinity, Numeric.NegativeInfinity);
-    public static readonly Complex ComplexPositiveInfinity = new(Numeric.PositiveInfinity, Numeric.PositiveInfinity);
+    public static readonly Complex ComplexNaN = new(NRedberry.Numeric.NaN, NRedberry.Numeric.NaN);
+    public static readonly Complex RealPositiveInfinity = new(NRedberry.Numeric.PositiveInfinity, NRedberry.Numeric.Zero);
+    public static readonly Complex RealNegativeInfinity = new(NRedberry.Numeric.NegativeInfinity, NRedberry.Numeric.Zero);
+    public static readonly Complex ImaginaryPositiveInfinity = new(NRedberry.Numeric.Zero, NRedberry.Numeric.PositiveInfinity);
+    public static readonly Complex ImaginaryNegativeInfinity = new(NRedberry.Numeric.Zero, NRedberry.Numeric.NegativeInfinity);
+    public static readonly Complex ComplexNegativeInfinity = new(NRedberry.Numeric.NegativeInfinity, NRedberry.Numeric.NegativeInfinity);
+    public static readonly Complex ComplexPositiveInfinity = new(NRedberry.Numeric.PositiveInfinity, NRedberry.Numeric.PositiveInfinity);
     public static readonly Complex ComplexInfinity = ComplexPositiveInfinity;
     public static readonly Complex Zero = new(Rational.Zero, Rational.Zero);
     public static readonly Complex One = new(Rational.One, Rational.Zero);
@@ -52,7 +52,7 @@ public sealed class Complex : Tensor, INumber<Complex>
         if (real is Numeric)
         {
             Real = real.GetNumericValue();
-            Imaginary = Numeric.Zero;
+            Imaginary = NRedberry.Numeric.Zero;
         }
         else
         {
@@ -72,22 +72,22 @@ public sealed class Complex : Tensor, INumber<Complex>
     }
 
     public Complex(double real, double imaginary)
-        : this(new Numeric(real), new Numeric(imaginary))
+        : this(new NRedberry.Numeric(real), new NRedberry.Numeric(imaginary))
     {
     }
 
     public Complex(int real, double imaginary)
-        : this(new Numeric(real), new Numeric(imaginary))
+        : this(new NRedberry.Numeric(real), new NRedberry.Numeric(imaginary))
     {
     }
 
     public Complex(double real, int imaginary)
-        : this(new Numeric(real), new Numeric(imaginary))
+        : this(new NRedberry.Numeric(real), new NRedberry.Numeric(imaginary))
     {
     }
 
     public Complex(double real)
-        : this(new Numeric(real), Numeric.Zero)
+        : this(new NRedberry.Numeric(real), NRedberry.Numeric.Zero)
     {
     }
 

@@ -12,9 +12,9 @@ public static class NumberUtils
             throw new ArgumentNullException(nameof(o));
     }
 
-    public static Numeric CreateNumeric(double value)
+    public static NRedberry.Numeric CreateNumeric(double value)
     {
-        return new Numeric(value);
+        return new NRedberry.Numeric(value);
     }
 
     public static Rational CreateRational(Rationals.Rational value)
