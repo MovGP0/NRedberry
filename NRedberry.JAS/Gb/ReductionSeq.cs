@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Gb;
@@ -21,77 +21,71 @@ public class ReductionSeq<C> : ReductionAbstract<C> where C : RingElem<C>
     /// <returns>nf(Ap) with respect to <paramref name="Pp"/>.</returns>
     public override GenPolynomial<C> Normalform(List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap)
     {
-        if (Pp == null || Pp.Count == 0)
+        if (Pp.Count == 0)
         {
             return Ap;
         }
 
-        if (Ap == null || PolynomialReflectionHelpers.IsZero(Ap))
+        if (Ap.IsZero())
         {
             return Ap;
         }
 
-        if (!PolynomialReflectionHelpers.CoefficientFieldIsField(Ap))
+        if (!Ap.Ring.CoFac.IsField())
         {
             throw new ArgumentException("coefficients not from a field");
         }
 
-        List<GenPolynomial<C>> polynomials = new(Pp.Count);
-        foreach (GenPolynomial<C>? p in Pp)
+        int length = Pp.Count;
+        GenPolynomial<C>[] polynomials = new GenPolynomial<C>[length];
+        for (int index = 0; index < length; index++)
         {
-            if (p != null)
-            {
-                polynomials.Add(p);
-            }
+            polynomials[index] = Pp[index];
         }
 
-        List<object?> leadingTerms = [];
-        List<object?> leadingCoefficients = [];
-        List<GenPolynomial<C>> filtered = [];
-
-        foreach (GenPolynomial<C> poly in polynomials)
+        ExpVector?[] leadingTerms = new ExpVector?[length];
+        C?[] leadingCoefficients = new C?[length];
+        GenPolynomial<C>[] filtered = new GenPolynomial<C>[length];
+        int count = 0;
+        for (int i = 0; i < length; i++)
         {
-            object? monomial = PolynomialReflectionHelpers.LeadingMonomial(poly);
+            GenPolynomial<C> polynomial = polynomials[i];
+            Monomial<C>? monomial = polynomial.LeadingMonomial();
             if (monomial == null)
             {
                 continue;
             }
 
-            filtered.Add(poly);
-            leadingTerms.Add(PolynomialReflectionHelpers.GetMapEntryKey(monomial));
-            leadingCoefficients.Add(PolynomialReflectionHelpers.GetMapEntryValue(monomial));
+            filtered[count] = polynomial;
+            leadingTerms[count] = monomial.Exponent();
+            leadingCoefficients[count] = monomial.Coefficient();
+            count++;
         }
 
-        int count = filtered.Count;
         if (count == 0)
         {
             return Ap;
         }
 
-        GenPolynomial<C> remainder = PolynomialReflectionHelpers.GetZeroPolynomial(Ap);
+        GenPolynomial<C> remainder = new(Ap.Ring);
         GenPolynomial<C> current = Ap;
 
-        while (PolynomialReflectionHelpers.Length(current) > 0)
+        while (current.Length() > 0)
         {
-            object? leadMonomial = PolynomialReflectionHelpers.LeadingMonomial(current);
+            Monomial<C>? leadMonomial = current.LeadingMonomial();
             if (leadMonomial == null)
             {
                 break;
             }
 
-            object? expVector = PolynomialReflectionHelpers.GetMapEntryKey(leadMonomial);
-            if (expVector == null)
-            {
-                break;
-            }
-
-            C coefficient = (C)PolynomialReflectionHelpers.GetMapEntryValue(leadMonomial)!;
+            ExpVector expVector = leadMonomial.Exponent();
+            C coefficient = leadMonomial.Coefficient();
 
             int reducerIndex = -1;
             for (int i = 0; i < count; i++)
             {
-                object? divisorExp = leadingTerms[i];
-                if (divisorExp != null && PolynomialReflectionHelpers.ExpVectorMultipleOf(expVector, divisorExp))
+                ExpVector? divisorExp = leadingTerms[i];
+                if (divisorExp != null && expVector.MultipleOf(divisorExp))
                 {
                     reducerIndex = i;
                     break;
@@ -100,18 +94,18 @@ public class ReductionSeq<C> : ReductionAbstract<C> where C : RingElem<C>
 
             if (reducerIndex < 0)
             {
-                remainder = PolynomialReflectionHelpers.SumMonomial(remainder, coefficient, expVector);
-                current = PolynomialReflectionHelpers.SubtractMonomial(current, coefficient, expVector);
+                remainder = remainder.Sum(coefficient, expVector);
+                current = current.Subtract(coefficient, expVector);
                 continue;
             }
 
-            object? divisorVector = leadingTerms[reducerIndex]!;
-            object? diffVector = PolynomialReflectionHelpers.ExpVectorSubtract(expVector, divisorVector);
+            ExpVector divisorVector = leadingTerms[reducerIndex]!;
+            ExpVector diffVector = expVector.Subtract(divisorVector);
 
-            C divisorCoeff = (C)leadingCoefficients[reducerIndex]!;
-            C quotientCoeff = PolynomialReflectionHelpers.DivideCoefficient(coefficient, divisorCoeff);
-            GenPolynomial<C> product = PolynomialReflectionHelpers.MultiplyMonomial(filtered[reducerIndex], quotientCoeff, diffVector!);
-            current = PolynomialReflectionHelpers.SubtractPolynomial(current, product);
+            C divisorCoeff = leadingCoefficients[reducerIndex]!;
+            C quotientCoeff = coefficient.Divide(divisorCoeff);
+            GenPolynomial<C> product = filtered[reducerIndex].Multiply(quotientCoeff, diffVector);
+            current = current.Subtract(product);
         }
 
         return remainder;

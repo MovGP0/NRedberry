@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Gb;
@@ -21,48 +21,45 @@ public abstract class ReductionAbstract<C> : Reduction<C> where C : RingElem<C>
     public virtual List<GenPolynomial<C>> IrreducibleSet(List<GenPolynomial<C>> Pp)
     {
         List<GenPolynomial<C>> result = [];
-        if (Pp is not null)
+        if (Pp != null)
         {
             foreach (GenPolynomial<C>? poly in Pp)
             {
-                if (poly is null)
+                if (poly.Length() == 0)
                 {
                     continue;
                 }
 
-                if (PolynomialReflectionHelpers.Length(poly) != 0)
+                GenPolynomial<C> monic = poly.Monic();
+                if (monic.IsOne())
                 {
-                    GenPolynomial<C> monic = PolynomialReflectionHelpers.Monic(poly);
-                    if (PolynomialReflectionHelpers.IsOne(monic))
-                    {
-                        result.Clear();
-                        result.Add(monic);
-                        return result;
-                    }
-
+                    result.Clear();
                     result.Add(monic);
+                    return result;
                 }
+
+                result.Add(monic);
             }
         }
 
-        int l = result.Count;
-        if (l <= 1)
+        int count = result.Count;
+        if (count <= 1)
         {
             return result;
         }
 
         int irreducibleCount = 0;
-        while (irreducibleCount != l)
+        while (irreducibleCount != count)
         {
-            GenPolynomial<C> a = result[0];
+            GenPolynomial<C> polynomial = result[0];
             result.RemoveAt(0);
-            object? leadingBefore = PolynomialReflectionHelpers.LeadingExpVector(a);
+            ExpVector? leadingBefore = polynomial.LeadingExpVector();
 
-            a = Normalform(result, a);
-            if (PolynomialReflectionHelpers.Length(a) == 0)
+            polynomial = Normalform(result, polynomial);
+            if (polynomial.Length() == 0)
             {
-                l--;
-                if (l <= 1)
+                count--;
+                if (count <= 1)
                 {
                     return result;
                 }
@@ -70,25 +67,25 @@ public abstract class ReductionAbstract<C> : Reduction<C> where C : RingElem<C>
                 continue;
             }
 
-            object? leadingAfter = PolynomialReflectionHelpers.LeadingExpVector(a);
-            if (leadingAfter is null || PolynomialReflectionHelpers.Signum(leadingAfter) == 0)
+            ExpVector? leadingAfter = polynomial.LeadingExpVector();
+            if (leadingAfter == null || leadingAfter.Signum() == 0)
             {
                 result.Clear();
-                result.Add(PolynomialReflectionHelpers.Monic(a));
+                result.Add(polynomial.Monic());
                 return result;
             }
 
-            if (Equals(leadingBefore, leadingAfter))
+            if (leadingBefore?.Equals(leadingAfter) == true)
             {
                 irreducibleCount++;
             }
             else
             {
                 irreducibleCount = 0;
-                a = PolynomialReflectionHelpers.Monic(a);
+                polynomial = polynomial.Monic();
             }
 
-            result.Add(a);
+            result.Add(polynomial);
         }
 
         return result;
