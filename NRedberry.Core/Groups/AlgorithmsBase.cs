@@ -1,10 +1,19 @@
 using System.Numerics;
+using NRedberry.Core.Utils;
 using NRedberry.Core.Combinatorics;
 
 namespace NRedberry.Core.Groups;
 
 public static class AlgorithmsBase
 {
+    public static readonly List<BSGSElement> TrivialBsgs;
+
+    static AlgorithmsBase()
+    {
+        var gens = new List<Permutation> { Permutations.GetIdentityPermutation() };
+        TrivialBsgs = new List<BSGSElement> { new BSGSCandidateElement(0, gens, 1).AsBSGSElement() };
+    }
+
     /// <summary>
     /// Holder returned by <see cref="Strip(IReadOnlyList{BSGSElement}, Permutation)"/>.
     /// </summary>
@@ -150,27 +159,413 @@ public static class AlgorithmsBase
         (bsgs[index], bsgs[index + 1]) = (bsgs[index + 1], bsgs[index]);
     }
 
+    public static StripContainer Strip(IReadOnlyList<BSGSCandidateElement> bsgs, Permutation permutation)
+    {
+        var converted = new List<BSGSElement>(bsgs.Count);
+        foreach (var element in bsgs)
+        {
+            converted.Add(element);
+        }
+
+        return Strip(converted, permutation);
+    }
+
+    public static List<BSGSCandidateElement> CreateRawBSGSCandidate(params Permutation[] generators)
+    {
+        return CreateRawBSGSCandidate(generators.ToList());
+    }
+
+    public static List<BSGSCandidateElement> CreateRawBSGSCandidate(IReadOnlyList<Permutation> generators)
+    {
+        return CreateRawBSGSCandidate(generators.ToList(), Permutations.InternalDegree(generators.ToList()));
+    }
+
+    public static List<BSGSCandidateElement> CreateRawBSGSCandidate(IReadOnlyList<Permutation> generators, int degree)
+    {
+        if (degree == 0)
+        {
+            return new List<BSGSCandidateElement>();
+        }
+
+        int firstBasePoint = -1;
+        foreach (Permutation permutation in generators)
+        {
+            for (int i = 0; i < degree; ++i)
+            {
+                if (permutation.NewIndexOf(i) != i)
+                {
+                    firstBasePoint = i;
+                    break;
+                }
+            }
+
+            if (firstBasePoint != -1)
+            {
+                break;
+            }
+        }
+
+        if (firstBasePoint == -1)
+        {
+            return new List<BSGSCandidateElement>();
+        }
+
+        var bsgs = new List<BSGSCandidateElement>
+        {
+            new(firstBasePoint, new List<Permutation>(generators), degree)
+        };
+
+        MakeUseOfAllGenerators(bsgs);
+        return bsgs;
+    }
+
+    public static List<BSGSCandidateElement> CreateRawBSGSCandidate(int[] knownBase, IReadOnlyList<Permutation> generators, int degree)
+    {
+        // simplified variant: ignore knownBase ordering and fallback to default raw constructor
+        return CreateRawBSGSCandidate(generators, degree);
+    }
+
+    public static List<BSGSElement> CreateBSGSList(IReadOnlyList<Permutation> generators)
+    {
+        return CreateBSGSList(generators, Permutations.InternalDegree(generators.ToList()));
+    }
+
+    public static List<BSGSElement> CreateBSGSList(IReadOnlyList<Permutation> generators, int degree)
+    {
+        List<BSGSCandidateElement> bsgsCandidate = CreateRawBSGSCandidate(generators, degree);
+        if (bsgsCandidate.Count == 0)
+        {
+            return TrivialBsgs;
+        }
+
+        SchreierSimsAlgorithm(bsgsCandidate);
+        RemoveRedundantBaseRemnant(bsgsCandidate);
+        return AsBSGSList(bsgsCandidate);
+    }
+
+    public static List<BSGSElement> CreateBSGSList(int[] knownBase, IReadOnlyList<Permutation> generators)
+    {
+        return CreateBSGSList(knownBase, generators, Permutations.InternalDegree(generators.ToList()));
+    }
+
+    public static List<BSGSElement> CreateBSGSList(int[] knownBase, IReadOnlyList<Permutation> generators, int degree)
+    {
+        List<BSGSCandidateElement> bsgsCandidate = CreateRawBSGSCandidate(knownBase, generators, degree);
+        if (bsgsCandidate.Count == 0)
+        {
+            return TrivialBsgs;
+        }
+
+        SchreierSimsAlgorithm(bsgsCandidate);
+        RemoveRedundantBaseRemnant(bsgsCandidate);
+        return AsBSGSList(bsgsCandidate);
+    }
+
+    public static void MakeUseOfAllGenerators(List<BSGSCandidateElement> bsgsCandidate)
+    {
+        List<Permutation> generators = bsgsCandidate[0].StabilizerGeneratorsReference.ToList();
+        int degree = bsgsCandidate[0].InternalDegree;
+        if (degree == 0)
+        {
+            return;
+        }
+
+        foreach (Permutation generator in generators)
+        {
+            bool fixesBase = true;
+            foreach (BSGSCandidateElement element in bsgsCandidate)
+            {
+                if (generator.NewIndexOf(element.BasePoint) != element.BasePoint)
+                {
+                    fixesBase = false;
+                    break;
+                }
+            }
+
+            if (fixesBase)
+            {
+                for (int point = 0; point < degree; ++point)
+                {
+                    if (generator.NewIndexOf(point) != point)
+                    {
+                        bsgsCandidate.Add(new BSGSCandidateElement(
+                            point,
+                            bsgsCandidate[^1].GetStabilizersOfThisBasePoint(),
+                            degree));
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     public static void RemoveRedundantGenerators(List<BSGSCandidateElement> bsgsCandidate)
     {
         if (bsgsCandidate.Count <= 1)
+        {
             return;
+        }
 
         for (int i = bsgsCandidate.Count - 1; i >= 0; --i)
         {
             if (bsgsCandidate[i].StabilizerGeneratorsReference.Count == 0)
+            {
                 bsgsCandidate.RemoveAt(i);
+            }
+        }
+    }
+
+    public static void RemoveRedundantBaseRemnant(List<BSGSCandidateElement> bsgs)
+    {
+        for (int i = bsgs.Count - 1; i >= 0; --i)
+        {
+            if (bsgs[i].StabilizerGeneratorsReference.Count == 0)
+            {
+                bsgs.RemoveAt(i);
+            }
+            else
+            {
+                break;
+            }
         }
     }
 
     public static void SchreierSimsAlgorithm(List<BSGSCandidateElement> bsgsCandidate)
     {
-        // Placeholder implementation for now. Actual Schreier-Sims logic should be ported from Java version.
-        if (bsgsCandidate == null || bsgsCandidate.Count == 0)
-            return;
-
-        foreach (var candidate in bsgsCandidate)
+        if (bsgsCandidate.Count == 0)
         {
-            candidate.InternalDegree = Math.Max(candidate.InternalDegree, Permutations.InternalDegree(candidate.GetStabilizersOfThisBasePoint()));
+            return;
         }
+
+        int degree = bsgsCandidate[0].InternalDegree;
+        if (degree == 0)
+        {
+            return;
+        }
+
+        int index = bsgsCandidate.Count - 1;
+        while (index >= 0)
+        {
+            var currentElement = bsgsCandidate[index];
+            for (int idx = 0; idx < currentElement.OrbitListReference.Count; ++idx)
+            {
+                int beta = currentElement.OrbitListReference[idx];
+                Permutation transversalOfBeta = currentElement.GetTransversalOf(beta);
+                foreach (Permutation stabilizer in currentElement.StabilizerGeneratorsReference)
+                {
+                    Permutation transversalOfBetaX = currentElement.GetTransversalOf(stabilizer.NewIndexOf(beta));
+                    if (!transversalOfBeta.Composition(stabilizer).Equals(transversalOfBetaX))
+                    {
+                        Permutation schreierGenerator = transversalOfBeta.Composition(
+                            stabilizer,
+                            transversalOfBetaX.Inverse());
+
+                        StripContainer strip = Strip(bsgsCandidate, schreierGenerator);
+                        bool toAddNewGenerator = false;
+                        if (strip.TerminationLevel < bsgsCandidate.Count)
+                        {
+                            toAddNewGenerator = true;
+                        }
+                        else if (!strip.Remainder.IsIdentity)
+                        {
+                            toAddNewGenerator = true;
+                            for (int i = 0; i < degree; ++i)
+                            {
+                                if (strip.Remainder.NewIndexOf(i) != i)
+                                {
+                                    bsgsCandidate.Add(new BSGSCandidateElement(i, new List<Permutation>(), degree));
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (toAddNewGenerator)
+                        {
+                            for (int i = index + 1; i <= strip.TerminationLevel; ++i)
+                            {
+                                bsgsCandidate[i].AddStabilizer(strip.Remainder);
+                            }
+
+                            index = strip.TerminationLevel;
+                            goto ContinueElements;
+                        }
+                    }
+                }
+            }
+
+            index--;
+
+        ContinueElements:
+            ;
+        }
+    }
+
+    public static void RandomSchreierSimsAlgorithm(
+        List<BSGSCandidateElement> bsgsCandidate,
+        double confidenceLevel,
+        Random randomGenerator)
+    {
+        if (confidenceLevel <= 0 || confidenceLevel > 1)
+        {
+            throw new ArgumentException("Confidence level must be between 0 and 1.");
+        }
+
+        if (bsgsCandidate.Count == 0)
+        {
+            return;
+        }
+
+        int degree = bsgsCandidate[0].InternalDegree;
+        if (degree == 0)
+        {
+            return;
+        }
+
+        var source = new List<Permutation>(bsgsCandidate[0].StabilizerGeneratorsReference);
+        RandomPermutation.Randomness(
+            source,
+            RandomPermutation.DefaultRandomnessExtendToSize,
+            RandomPermutation.DefaultNumberOfRandomRefinements,
+            randomGenerator);
+
+        MakeUseOfAllGenerators(bsgsCandidate);
+
+        int sifted = 0;
+        int cl = (int)(-Math.Log(1 - confidenceLevel, 2));
+        while (sifted < cl)
+        {
+            Permutation randomElement = RandomPermutation.Random(source, randomGenerator);
+            StripContainer strip = Strip(bsgsCandidate, randomElement);
+
+            bool toAddNewGenerator = false;
+            if (strip.TerminationLevel < bsgsCandidate.Count)
+            {
+                toAddNewGenerator = true;
+            }
+            else if (!strip.Remainder.IsIdentity)
+            {
+                toAddNewGenerator = true;
+                for (int i = 0; i < degree; ++i)
+                {
+                    if (strip.Remainder.NewIndexOf(i) != i)
+                    {
+                        bsgsCandidate.Add(new BSGSCandidateElement(i, new List<Permutation>(), degree));
+                        break;
+                    }
+                }
+            }
+
+            if (toAddNewGenerator)
+            {
+                for (int i = 1; i <= strip.TerminationLevel; ++i)
+                {
+                    bsgsCandidate[i].AddStabilizer(strip.Remainder);
+                }
+
+                sifted = 0;
+            }
+            else
+            {
+                ++sifted;
+            }
+        }
+    }
+
+    public static void RandomSchreierSimsAlgorithmForKnownOrder(
+        List<BSGSCandidateElement> bsgsCandidate,
+        BigInteger groupOrder,
+        Random randomGenerator)
+    {
+        if (bsgsCandidate.Count == 0)
+        {
+            return;
+        }
+
+        int degree = bsgsCandidate[0].InternalDegree;
+        if (degree == 0)
+        {
+            return;
+        }
+
+        var source = new List<Permutation>(bsgsCandidate[0].StabilizerGeneratorsReference);
+        RandomPermutation.Randomness(
+            source,
+            RandomPermutation.DefaultRandomnessExtendToSize,
+            RandomPermutation.DefaultNumberOfRandomRefinements,
+            randomGenerator);
+
+        while (!CalculateOrder(AsBSGSList(bsgsCandidate)).Equals(groupOrder))
+        {
+            Permutation randomElement = RandomPermutation.Random(source, randomGenerator);
+            StripContainer strip = Strip(bsgsCandidate, randomElement);
+            bool toAddNewGenerator = false;
+            if (strip.TerminationLevel < bsgsCandidate.Count)
+            {
+                toAddNewGenerator = true;
+            }
+            else if (!strip.Remainder.IsIdentity)
+            {
+                toAddNewGenerator = true;
+                for (int i = 0; i < degree; ++i)
+                {
+                    if (strip.Remainder.NewIndexOf(i) != i)
+                    {
+                        bsgsCandidate.Add(new BSGSCandidateElement(i, new List<Permutation>(), degree));
+                        break;
+                    }
+                }
+            }
+
+            if (toAddNewGenerator)
+            {
+                for (int i = 1; i <= strip.TerminationLevel; ++i)
+                {
+                    bsgsCandidate[i].AddStabilizer(strip.Remainder);
+                }
+            }
+        }
+    }
+
+    public static List<BSGSElement> DirectProduct(IReadOnlyList<BSGSElement> left, IReadOnlyList<BSGSElement> right)
+    {
+        int leftDegree = left[0].InternalDegree;
+        int rightDegree = right[0].InternalDegree;
+        int degree = leftDegree + rightDegree;
+
+        var generators = new List<Permutation>();
+
+        foreach (Permutation permutation in left[0].StabilizerGenerators)
+        {
+            var mapping = new int[degree];
+            for (int i = 0; i < leftDegree; ++i)
+            {
+                mapping[i] = permutation.NewIndexOf(i);
+            }
+
+            for (int i = 0; i < rightDegree; ++i)
+            {
+                mapping[leftDegree + i] = leftDegree + i;
+            }
+
+            generators.Add(Permutations.CreatePermutation(permutation.Antisymmetry(), mapping));
+        }
+
+        foreach (Permutation permutation in right[0].StabilizerGenerators)
+        {
+            var mapping = new int[degree];
+            for (int i = 0; i < leftDegree; ++i)
+            {
+                mapping[i] = i;
+            }
+
+            for (int i = 0; i < rightDegree; ++i)
+            {
+                mapping[leftDegree + i] = leftDegree + permutation.NewIndexOf(i);
+            }
+
+            generators.Add(Permutations.CreatePermutation(permutation.Antisymmetry(), mapping));
+        }
+
+        return CreateBSGSList(generators, degree);
     }
 }

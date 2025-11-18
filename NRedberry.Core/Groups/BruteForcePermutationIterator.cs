@@ -64,6 +64,10 @@ public sealed class BruteForcePermutationIterator : IEnumerator<Permutation>
         // No resources to dispose
     }
 
+    /// <summary>
+    /// named "next1" in source code
+    /// </summary>
+    /// <returns></returns>
     private Permutation GetNextPermutation()
     {
         Permutation? composition = null;
@@ -90,6 +94,9 @@ public sealed class BruteForcePermutationIterator : IEnumerator<Permutation>
         return composition!;
     }
 
+    /// <summary>
+    /// named "nexIndices" in source code
+    /// </summary>
     private void AdvanceIndices()
     {
         if (++upperIndex < upperLayer.Count)

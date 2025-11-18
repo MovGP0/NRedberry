@@ -31,6 +31,9 @@
     <Compile Update="Groups\Permutations.*.cs">
       <DependentUpon>Permutations.cs</DependentUpon>
     </Compile>
+    <Compile Update="Groups\PermutationGroup.*.cs">
+      <DependentUpon>PermutationGroup.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

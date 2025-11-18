@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace NRedberry.Core.Utils;
 
 public static partial class ArraysUtils
@@ -60,6 +62,41 @@ public static partial class ArraysUtils
         RangeCheck(target.Length, fromIndex, toIndex);
         RangeCheck(coSort.Length, fromIndex, toIndex);
         QuickSort1(target, fromIndex, toIndex - fromIndex, coSort);
+    }
+
+    public static void QuickSort(int[] target, IComparer<int> comparator)
+    {
+        Array.Sort(target, comparator);
+    }
+
+    public static void QuickSort(int[] target, int fromIndex, int toIndex, IComparer<int> comparator)
+    {
+        RangeCheck(target.Length, fromIndex, toIndex);
+        Array.Sort(target, fromIndex, toIndex - fromIndex, comparator);
+    }
+
+    public static void QuickSort(int[] target, int[] coSort, IComparer<int> comparator)
+    {
+        Array.Sort(target, coSort, comparator);
+    }
+
+    public static void QuickSort(int[] target, int fromIndex, int toIndex, int[] coSort, IComparer<int> comparator)
+    {
+        RangeCheck(target.Length, fromIndex, toIndex);
+        RangeCheck(coSort.Length, fromIndex, toIndex);
+        Array.Sort(target, coSort, fromIndex, toIndex - fromIndex, comparator);
+    }
+
+    public static void QuickSort<T, TCo>(T[] target, TCo[] coSort) where T : IComparable<T>
+    {
+        Array.Sort(target, coSort);
+    }
+
+    public static void QuickSort<T, TCo>(T[] target, int fromIndex, int toIndex, TCo[] coSort) where T : IComparable<T>
+    {
+        RangeCheck(target.Length, fromIndex, toIndex);
+        RangeCheck(coSort.Length, fromIndex, toIndex);
+        Array.Sort(target, coSort, fromIndex, toIndex - fromIndex, Comparer<T>.Default);
     }
 
     private static void QuickSort1(long[] target, int fromIndex, int length, long[] coSort)

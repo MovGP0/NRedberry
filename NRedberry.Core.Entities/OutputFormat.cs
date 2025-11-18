@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace NRedberry.Contexts;
+namespace NRedberry;
 
 /// <summary>
 /// Defines formats of string representation of expressions in Redberry.

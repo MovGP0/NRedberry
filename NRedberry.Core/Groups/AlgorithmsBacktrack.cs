@@ -390,7 +390,7 @@ public static class AlgorithmsBacktrack
         SubgroupSearchWithPayload(smaller.OfType<BSGSElement>().ToList(), intersection, payload, intersectionProperty);
     }
 
-    private static void RebaseWithRedundancy(List<BSGSCandidateElement> group, int[] baseArray, int degree)
+    public static void RebaseWithRedundancy(List<BSGSCandidateElement> group, int[] baseArray, int degree)
     {
         AlgorithmsBase.Rebase(group, baseArray);
         if (group.Count < baseArray.Length)

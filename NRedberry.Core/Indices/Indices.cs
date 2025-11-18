@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using NRedberry.Contexts;
 
 namespace NRedberry.Core.Indices;
 

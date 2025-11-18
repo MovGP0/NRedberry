@@ -1,8 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using NRedberry.Core.Combinatorics;
-using NRedberry.Core.Utils;
 
 namespace NRedberry.Core.Groups;
 
