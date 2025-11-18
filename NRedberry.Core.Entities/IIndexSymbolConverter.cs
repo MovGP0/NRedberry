@@ -1,4 +1,6 @@
-﻿namespace NRedberry;
+﻿using NRedberry.Contexts;
+
+namespace NRedberry;
 
 /// <summary>
 /// Interface defining common functionality for string-integer converters for indices of the same particular type.

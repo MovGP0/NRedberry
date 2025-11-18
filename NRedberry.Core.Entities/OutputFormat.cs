@@ -1,11 +1,11 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 
-namespace NRedberry;
+namespace NRedberry.Contexts;
 
 /// <summary>
 /// Defines formats of string representation of expressions in Redberry.
 /// </summary>
-public struct OutputFormat : IEquatable<OutputFormat>
+public sealed record OutputFormat
 {
     /// <summary>
     /// This format specifies expressions to be outputted in the LaTeX notation.
@@ -55,13 +55,14 @@ public struct OutputFormat : IEquatable<OutputFormat>
     /// Unique identifier.
     /// </summary>
     public int Id { get; }
+
     /// <summary>
-    /// Prefix, which specifies the upper index (e.g., '^' in LaTeX).
+    /// Prefix that specifies the upper index (e.g., '^' in LaTeX).
     /// </summary>
     public string UpperIndexPrefix { get; }
 
     /// <summary>
-    /// Prefix, which specifies the lower index (e.g., '_' in LaTeX).
+    /// Prefix that specifies the lower index (e.g., '_' in LaTeX).
     /// </summary>
     public string LowerIndexPrefix { get; }
 
@@ -71,12 +72,15 @@ public struct OutputFormat : IEquatable<OutputFormat>
     public bool PrintMatrixIndices { get; }
 
     private OutputFormat(OutputFormat format, bool printMatrixIndices)
-        :this(format.Id, format.UpperIndexPrefix, format.LowerIndexPrefix, printMatrixIndices)
+        : this(format.Id, format.UpperIndexPrefix, format.LowerIndexPrefix, printMatrixIndices)
     {
     }
 
     private OutputFormat(int id, string upperIndexPrefix, string lowerIndexPrefix, bool printMatrixIndices = true)
     {
+        ArgumentNullException.ThrowIfNull(upperIndexPrefix);
+        ArgumentNullException.ThrowIfNull(lowerIndexPrefix);
+
         Id = id;
         UpperIndexPrefix = upperIndexPrefix;
         LowerIndexPrefix = lowerIndexPrefix;
@@ -102,16 +106,19 @@ public struct OutputFormat : IEquatable<OutputFormat>
     }
 
     /// <summary>
-    /// Returns whether this and oth defines same format.
+    /// Returns whether this and other define the same format (compares by <see cref="Id"/>).
     /// </summary>
-    /// <param name="other">other format</param>
-    /// <returns>whether this and oth defines same format</returns>
+    /// <param name="other">Other format.</param>
+    /// <returns><c>true</c> if both formats share the same identifier.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Is(OutputFormat other)
-        => Id == other.Id;
+    {
+        return Id == other.Id;
+    }
 
     /// <summary>
-    /// Returns the appropriate prefix based on the integer state.
+    /// Returns <see cref="LowerIndexPrefix"/> if <paramref name="intState"/> is 0 and
+    /// <see cref="UpperIndexPrefix"/> if <paramref name="intState"/> is 1.
     /// </summary>
     /// <param name="intState">Integer state (0 - lower, 1 - upper).</param>
     /// <returns>Prefix.</returns>
@@ -121,42 +128,23 @@ public struct OutputFormat : IEquatable<OutputFormat>
         {
             0 => LowerIndexPrefix,
             1 => UpperIndexPrefix,
-            _ => throw new ArgumentException("Not a state int")
+            _ => throw new ArgumentException("Not a state int", nameof(intState))
         };
     }
 
     /// <summary>
-    /// Returns the appropriate prefix based on the raw integer state.
+    /// Returns <see cref="LowerIndexPrefix"/> if <paramref name="rawIntState"/> is 0 and
+    /// <see cref="UpperIndexPrefix"/> if <paramref name="rawIntState"/> is <c>0x80000000</c>.
     /// </summary>
-    /// <param name="rawIntState">Raw integer state (0 - lower, <see cref="int.MaxValue"/> - upper).</param>
+    /// <param name="rawIntState">Raw integer state (0 - lower, 0x80000000 - upper).</param>
     /// <returns>Prefix.</returns>
     public string GetPrefixFromRawIntState(int rawIntState)
     {
         return rawIntState switch
         {
             0 => LowerIndexPrefix,
-            int.MaxValue => UpperIndexPrefix,
-            _ => throw new ArgumentException("Not a state int")
+            unchecked((int)0x80000000) => UpperIndexPrefix,
+            _ => throw new ArgumentException("Not a state int", nameof(rawIntState))
         };
     }
-
-    public bool Equals(OutputFormat other)
-    {
-        return Id == other.Id
-            && UpperIndexPrefix == other.UpperIndexPrefix
-            && LowerIndexPrefix == other.LowerIndexPrefix
-            && PrintMatrixIndices == other.PrintMatrixIndices;
-    }
-
-    public override bool Equals(object? obj)
-        => obj is OutputFormat other && Equals(other);
-
-    public override int GetHashCode()
-        => HashCode.Combine(Id, UpperIndexPrefix, LowerIndexPrefix, PrintMatrixIndices);
-
-    public static bool operator ==(OutputFormat left, OutputFormat right)
-        => left.Equals(right);
-
-    public static bool operator !=(OutputFormat left, OutputFormat right)
-        => !left.Equals(right);
 }
