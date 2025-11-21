@@ -5,14 +5,21 @@ namespace NRedberry.Core.Utils.Stretces;
 /// </summary>
 public class StretchIterator
 {
+    private readonly object[] _elements;
+    private readonly IIntObjectProvider _provider;
+    private int _pointer;
+
     /// <summary>
     /// Initializes a new iterator over the provided elements.
     /// </summary>
     /// <param name="elements">Source elements.</param>
     /// <param name="provider">Converter to integer stretch values.</param>
-    public StretchIterator(object[] elements, IntObjectProvider provider)
+    public StretchIterator(object[] elements, IIntObjectProvider provider)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(elements);
+        ArgumentNullException.ThrowIfNull(provider);
+        _elements = elements;
+        _provider = provider;
     }
 
     /// <summary>
@@ -21,7 +28,7 @@ public class StretchIterator
     /// <returns><c>true</c> if another stretch is available.</returns>
     public bool HasNext()
     {
-        throw new NotImplementedException();
+        return _pointer < _elements.Length;
     }
 
     /// <summary>
@@ -30,7 +37,15 @@ public class StretchIterator
     /// <returns>The next stretch.</returns>
     public Stretch Next()
     {
-        throw new NotImplementedException();
+        int i = _pointer;
+        int value = _provider.Get(_elements[i]);
+        int begin = i;
+        while (++i < _elements.Length && _provider.Get(_elements[i]) == value)
+        {
+        }
+
+        _pointer = i;
+        return new Stretch(begin, i - begin);
     }
 
     /// <summary>
@@ -38,7 +53,7 @@ public class StretchIterator
     /// </summary>
     public void Remove()
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException("Remove is not supported.");
     }
 
     /// <summary>
@@ -48,6 +63,15 @@ public class StretchIterator
     /// <returns>An enumerable that produces stretches.</returns>
     public static IEnumerable<Stretch> GoHash(object[] elements)
     {
-        throw new NotImplementedException();
+        return Enumerate();
+
+        IEnumerable<Stretch> Enumerate()
+        {
+            var iterator = new StretchIterator(elements, IIntObjectProvider.HashProvider);
+            while (iterator.HasNext())
+            {
+                yield return iterator.Next();
+            }
+        }
     }
 }

@@ -1,17 +1,25 @@
+using System.Collections;
+using System.Collections.Generic;
+
 namespace NRedberry.Core.Utils.Stretces;
 
 /// <summary>
 /// Port of cc.redberry.core.utils.stretces.StretchIteratorS.
 /// </summary>
-public class StretchIteratorS
+public sealed class StretchIteratorS : IEnumerator<Stretch>, IEnumerable<Stretch>
 {
+    private readonly short[] _values;
+    private int _pointer;
+    private Stretch? _current;
+
     /// <summary>
     /// Initializes a new iterator over short values.
     /// </summary>
     /// <param name="values">Value array.</param>
     public StretchIteratorS(short[] values)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(values);
+        _values = values;
     }
 
     /// <summary>
@@ -20,7 +28,7 @@ public class StretchIteratorS
     /// <returns><c>true</c> if more stretches remain.</returns>
     public bool HasNext()
     {
-        throw new NotImplementedException();
+        return _pointer < _values.Length;
     }
 
     /// <summary>
@@ -29,16 +37,20 @@ public class StretchIteratorS
     /// <returns>The next stretch.</returns>
     public Stretch Next()
     {
-        throw new NotImplementedException();
+        int i = _pointer;
+        int value = _values[i];
+        int begin = i;
+        while (++i < _values.Length && _values[i] == value)
+        {
+        }
+
+        _pointer = i;
+        return new Stretch(begin, i - begin);
     }
 
-    /// <summary>
-    /// Returns this iterator as an enumerable sequence.
-    /// </summary>
-    /// <returns>The iterator instance.</returns>
     public IEnumerator<Stretch> Iterator()
     {
-        throw new NotImplementedException();
+        return this;
     }
 
     /// <summary>
@@ -46,6 +58,36 @@ public class StretchIteratorS
     /// </summary>
     public void Remove()
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException("Remove is not supported.");
     }
+
+    public bool MoveNext()
+    {
+        if (!HasNext())
+        {
+            _current = null;
+            return false;
+        }
+
+        _current = Next();
+        return true;
+    }
+
+    public void Reset()
+    {
+        _pointer = 0;
+        _current = null;
+    }
+
+    public Stretch Current => _current ?? throw new InvalidOperationException("Enumeration has not started.");
+
+    object IEnumerator.Current => Current;
+
+    public void Dispose()
+    {
+    }
+
+    public IEnumerator<Stretch> GetEnumerator() => this;
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

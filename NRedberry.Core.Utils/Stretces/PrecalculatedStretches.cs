@@ -7,13 +7,16 @@ namespace NRedberry.Core.Utils.Stretces;
 /// </summary>
 public class PrecalculatedStretches : IEnumerable<Stretch>
 {
+    private readonly int[] _values;
+
     /// <summary>
     /// Initializes a new instance from raw integer values.
     /// </summary>
     /// <param name="values">Precomputed values.</param>
-    public PrecalculatedStretches(int[] values)
+    public PrecalculatedStretches(params int[] values)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(values);
+        _values = values;
     }
 
     /// <summary>
@@ -21,31 +24,28 @@ public class PrecalculatedStretches : IEnumerable<Stretch>
     /// </summary>
     /// <param name="elements">Elements to convert.</param>
     /// <param name="provider">Converter from element to integer.</param>
-    public PrecalculatedStretches(object[] elements, IntObjectProvider provider)
+    public PrecalculatedStretches(object[] elements, IIntObjectProvider provider)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(elements);
+        ArgumentNullException.ThrowIfNull(provider);
+        _values = new int[elements.Length];
+        for (int i = 0; i < elements.Length; ++i)
+        {
+            _values[i] = provider.Get(elements[i]);
+        }
     }
 
     /// <summary>
     /// Gets the raw pre-calculated values.
     /// </summary>
     /// <returns>The raw values.</returns>
-    public int[] GetRawValues()
-    {
-        throw new NotImplementedException();
-    }
+    public int[] RawValues => [.._values];
 
     /// <summary>
     /// Returns an enumerator over stretch instances.
     /// </summary>
     /// <returns>The enumerator.</returns>
-    public IEnumerator<Stretch> GetEnumerator()
-    {
-        throw new NotImplementedException();
-    }
+    public IEnumerator<Stretch> GetEnumerator() => new StretchIteratorI(_values);
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

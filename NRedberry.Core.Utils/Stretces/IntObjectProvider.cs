@@ -10,20 +10,21 @@ public interface IIntObjectProvider
     /// </summary>
     /// <param name="element">The element to convert.</param>
     /// <returns>The integer representation.</returns>
-    int Get(object element) => element.GetHashCode();
+    int Get(object element);
 
     /// <summary>
     /// Default provider that uses <see cref="object.GetHashCode"/>.
     /// </summary>
-    static IIntObjectProvider HashProvider(object element) => new IntObjectProvider(element);
+    static IIntObjectProvider HashProvider { get; } = new HashIntObjectProvider();
 }
 
 /// <summary>
 /// Default provider that uses <see cref="object.GetHashCode"/>.
 /// </summary>
-public sealed class IntObjectProvider(object element) : IIntObjectProvider
+public sealed class HashIntObjectProvider : IIntObjectProvider
 {
-    private object Element { get; } = element;
-
-    public int Get(object element) => Element.GetHashCode();
+    public int Get(object element)
+    {
+        return element?.GetHashCode() ?? 0;
+    }
 }
