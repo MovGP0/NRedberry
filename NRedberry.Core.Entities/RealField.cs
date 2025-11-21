@@ -7,9 +7,7 @@ public sealed class RealField : IField<Real>
     public Real Zero => Rational.Zero;
     public Real One => Rational.One;
 
-    public TC GetRuntimeClass<TC>()
-        where TC : IFieldElement<Real>
-        => (TC)(IFieldElement<Real>)null;
+    public Type GetRuntimeClass() => typeof(Real);
 
     private static Lazy<RealField> RealFieldFactory => new(() => new RealField());
 

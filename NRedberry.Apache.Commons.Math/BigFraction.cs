@@ -74,7 +74,9 @@ public sealed class BigFraction : IFieldElement<BigFraction>, IEquatable<BigFrac
         return new(Denominator, Numerator);
     }
 
-    public IField<BigFraction> Field => throw new NotImplementedException();
+    private static readonly BigFractionField BigFractionField = new();
+
+    public IField<BigFraction> Field => BigFractionField;
 
     public static BigFraction operator +(BigFraction a, BigFraction b) => a.Add(b);
 

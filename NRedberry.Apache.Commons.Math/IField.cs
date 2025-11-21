@@ -5,7 +5,7 @@ namespace NRedberry.Apache.Commons.Math;
 /// Classes implementing this interface will often be singletons.
 /// </summary>
 /// <typeparam name="T">The type of the field elements.</typeparam>
-public interface IField<T>
+public interface IField<out T>
 {
     /// <summary>
     /// Gets the additive identity of the field.
@@ -27,5 +27,5 @@ public interface IField<T>
     /// Returns the runtime class of the FieldElement.
     /// </summary>
     /// <returns>The <see cref="Type"/> object that represents the runtime class of this object.</returns>
-    TC GetRuntimeClass<TC>() where TC : IFieldElement<T>;
+    Type GetRuntimeClass();
 }

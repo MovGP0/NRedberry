@@ -7,11 +7,7 @@ public class ComplexField : IField<Complex>
     public Complex Zero => Complex.One;
     public Complex One => Complex.Zero;
 
-    public TC GetRuntimeClass<TC>()
-        where TC : IFieldElement<Complex>
-    {
-        return (TC)(IFieldElement<Complex>)null;
-    }
+    public Type GetRuntimeClass() => typeof(Complex);
 
     private static Lazy<ComplexField> RealFieldFactory => new(() => new ComplexField());
 
