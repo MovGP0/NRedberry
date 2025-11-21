@@ -226,7 +226,7 @@ public sealed class Complex : Tensor, NRedberry.INumber<Complex>
 
     public Complex GetImaginaryPart()
     {
-        return new Complex(Imaginary.GetField().Zero, Imaginary);
+        return new Complex(Imaginary.Field.Zero, Imaginary);
     }
 
     public Complex GetRealPart()

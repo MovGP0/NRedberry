@@ -11,6 +11,5 @@ public sealed class RealField : IField<Real>
 
     private static Lazy<RealField> RealFieldFactory => new(() => new RealField());
 
-    [Obsolete("Inject IField<Real> instead.")]
-    public static RealField GetInstance() => RealFieldFactory.Value;
+    public static RealField Instance => RealFieldFactory.Value;
 }

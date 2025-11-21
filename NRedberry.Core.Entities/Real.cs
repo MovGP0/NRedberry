@@ -13,13 +13,6 @@ public abstract class Real : INumber<Real>, IComparable<Real>
     public abstract Real Multiply(Real a);
     public abstract Real Divide(Real a);
     public abstract Real Reciprocal();
-
-    [Obsolete("Inject IField<Real> instead.")]
-    public IField<Real> GetField()
-    {
-        return RealField.GetInstance();
-    }
-
     public abstract int SigNum();
     public abstract int IntValue();
     public abstract long LongValue();
@@ -61,5 +54,5 @@ public abstract class Real : INumber<Real>, IComparable<Real>
     public abstract bool IsNatural();
     public abstract int CompareTo(Real? other);
 
-    public IField<Real> Field => throw new NotImplementedException();
+    public IField<Real> Field => RealField.Instance;
 }
