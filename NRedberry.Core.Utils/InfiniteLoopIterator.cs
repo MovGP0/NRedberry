@@ -7,30 +7,49 @@ namespace NRedberry.Core.Utils;
 /// </summary>
 public sealed class InfiniteLoopIterator<T> : IEnumerator<T>
 {
-    private readonly T[] items = [];
-    private int pointer;
+    private readonly T[] _items;
+    private int _pointer;
 
-    public InfiniteLoopIterator(T[] items)
+    public InfiniteLoopIterator(params T[] items)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(items);
+        _items = items;
+        _pointer = 0;
     }
 
     public bool MoveNext()
     {
-        throw new NotImplementedException();
+        if (_items.Length == 0)
+        {
+            return false;
+        }
+
+        if (_pointer == _items.Length)
+        {
+            _pointer = 0;
+        }
+
+        return true;
     }
 
-    public void Reset()
+    public void Reset() => _pointer = 0;
+
+    public T Current
     {
-        throw new NotImplementedException();
-    }
+        get
+        {
+            if (_items.Length == 0)
+            {
+                throw new InvalidOperationException("Sequence is empty.");
+            }
 
-    public T Current => throw new NotImplementedException();
+            return _items[_pointer++];
+        }
+    }
 
     object IEnumerator.Current => Current!;
 
     public void Dispose()
     {
-        throw new NotImplementedException();
     }
 }

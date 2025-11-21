@@ -4,11 +4,9 @@ namespace NRedberry.Indices;
 
 public interface Indices : IEquatable<object>, IEnumerable<int>
 {
-    ImmutableArray<int> GetUpper();
-    ImmutableArray<int> GetLower();
-    ImmutableArray<int> GetAllIndices();
-
-    ImmutableArray<int> AllIndices => GetAllIndices();
+    ImmutableArray<int> UpperIndices { get; }
+    ImmutableArray<int> LowerIndices { get; }
+    ImmutableArray<int> AllIndices { get; }
 
     int Size();
     int Size(IndexType type);

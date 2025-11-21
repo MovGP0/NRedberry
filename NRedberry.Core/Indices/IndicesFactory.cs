@@ -19,7 +19,7 @@ public static class IndicesFactory
             return EmptySimpleIndices.emptySimpleIndicesInstance;
         if (indices is SimpleIndicesAbstract simpleIndicesAbstract)
             return new SimpleIndicesIsolated(simpleIndicesAbstract.Data, symmetries);
-        return new SimpleIndicesIsolated(indices.GetAllIndices().ToArray(), symmetries);
+        return new SimpleIndicesIsolated(indices.AllIndices.ToArray(), symmetries);
     }
 
     public static Indices Create(Indices indices)

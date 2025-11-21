@@ -2,7 +2,6 @@
 using System.Collections.Immutable;
 using System.Text;
 using NRedberry.Contexts;
-using NRedberry.Core.Utils;
 
 namespace NRedberry.Indices;
 
@@ -15,52 +14,59 @@ public abstract class AbstractIndices(int[] data) : Indices
 {
     public int[] Data { get; } = data;
 
-    private UpperLowerIndices? upperLower;
+    //TODO: private WeakReference<UpperLowerIndices?> _upperLower = new(null);
+    private UpperLowerIndices? _upperLower;
 
     protected abstract UpperLowerIndices CalculateUpperLower();
 
     public abstract int[] GetSortedData();
 
-    protected UpperLowerIndices GetUpperLowerIndices()
+    protected UpperLowerIndices UpperLowerIndices
     {
-        UpperLowerIndices ul = upperLower;
-        if (ul == null)
+        get
         {
-            ul = CalculateUpperLower();
-            upperLower = ul;
-        }
+            UpperLowerIndices? ul = _upperLower;
+            if (ul is null)
+            {
+                ul = CalculateUpperLower();
+                _upperLower = ul;
+            }
 
-        return ul;
+            return ul;
+        }
     }
 
-    public ImmutableArray<int> GetUpper()
+    public ImmutableArray<int> UpperIndices
     {
-        UpperLowerIndices ul = upperLower;
-        if (ul == null)
+        get
         {
-            ul = CalculateUpperLower();
-            upperLower = ul;
-        }
+            UpperLowerIndices? ul = _upperLower;
+            if (ul is null)
+            {
+                ul = CalculateUpperLower();
+                _upperLower = ul;
+            }
 
-        return [..ul.Upper];
+            return [..ul.Upper];
+        }
     }
 
-    public ImmutableArray<int> GetLower()
+    public ImmutableArray<int> LowerIndices
     {
-        UpperLowerIndices ul = upperLower;
-        if (ul is null)
+        get
         {
-            ul = CalculateUpperLower();
-            upperLower = ul;
+            UpperLowerIndices? ul = _upperLower;
+            if (ul is null)
+            {
+                ul = CalculateUpperLower();
+                _upperLower = ul;
+            }
+
+            return [..ul.Lower];
         }
-
-        return [..ul.Lower];
     }
 
-    public ImmutableArray<int> GetAllIndices()
-    {
-        return [..Data];
-    }
+    public ImmutableArray<int> AllIndices => [.. Data];
 
     public abstract Indices GetOfType(IndexType type);
 
@@ -68,6 +74,7 @@ public abstract class AbstractIndices(int[] data) : Indices
     {
         if (ReferenceEquals(this, indices))
             return true;
+
         if (indices is EmptyIndices)
             return Data.Length == 0;
 
@@ -89,7 +96,7 @@ public abstract class AbstractIndices(int[] data) : Indices
 
     public int Get(int position) => Data[position];
 
-    public override int GetHashCode() => EnumerableEx.GetHashCode(Data);
+    public override int GetHashCode() => HashCode.Combine(Data);
 
     public IEnumerator<int> GetEnumerator()
     {
@@ -151,8 +158,5 @@ public abstract class AbstractIndices(int[] data) : Indices
         return ToString(tempQualifier.DefaultOutputFormat);
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

@@ -30,11 +30,11 @@ public class EmptyIndices : Indices
         return indices.Size() == 0;
     }
 
-    public ImmutableArray<int> GetUpper() => [];
+    public ImmutableArray<int> UpperIndices => [];
 
-    public ImmutableArray<int> GetLower() => [];
+    public ImmutableArray<int> LowerIndices => [];
 
-    public ImmutableArray<int> GetAllIndices() => [];
+    public ImmutableArray<int> AllIndices => [];
 
     public int Size(IndexType type)
     {

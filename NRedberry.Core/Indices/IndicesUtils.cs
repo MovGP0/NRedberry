@@ -195,7 +195,7 @@ public sealed class IndicesUtils
 
     public static int[] GetSortedDistinctIndicesNames(Indices indices)
     {
-        int[] indsArray = indices.GetAllIndices().ToArray(); // Assuming copy() is equivalent to ToArray()
+        int[] indsArray = indices.AllIndices.ToArray(); // Assuming copy() is equivalent to ToArray()
         for (int i = 0; i < indsArray.Length; ++i)
             indsArray[i] = GetNameWithType(indsArray[i]);
         return indsArray.GetSortedDistinct();
@@ -249,7 +249,7 @@ public sealed class IndicesUtils
 
     public static int[] GetFree(int[] indices)
     {
-        return IndicesFactory.CreateSimple(null, indices).GetFree().GetAllIndices().ToArray();
+        return IndicesFactory.CreateSimple(null, indices).GetFree().AllIndices.ToArray();
     }
 
     public static bool HaveEqualStates(int index1, int index2)
