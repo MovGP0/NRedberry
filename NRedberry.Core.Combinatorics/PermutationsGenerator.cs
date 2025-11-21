@@ -1,39 +1,54 @@
-﻿namespace NRedberry.Core.Combinatorics;
+﻿using System.Collections;
 
-public class PermutationsGenerator<T> : IEnumerator<T> where T : Permutation
+namespace NRedberry.Core.Combinatorics;
+
+/// <summary>
+/// Wraps <see cref="IntPermutationsGenerator"/> to yield <see cref="Symmetry"/> instances.
+/// </summary>
+/// <typeparam name="T">Permutation subtype.</typeparam>
+public sealed class PermutationsGenerator<T> : IEnumerator<T>
+    where T : Permutation
 {
-    private IntPermutationsGenerator generator;
+    private readonly IntPermutationsGenerator _generator;
+    private T? _current;
 
-    public PermutationsGenerator(int dimension)
-    {
-        generator = new IntPermutationsGenerator(dimension);
-    }
+    public PermutationsGenerator(int dimension) => _generator = new IntPermutationsGenerator(dimension);
 
-    public PermutationsGenerator(Permutation permutation)
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool MoveNext()
-    {
-        return generator.MoveNext();
-    }
+    public PermutationsGenerator(Permutation permutation) => _generator = new IntPermutationsGenerator(permutation.OneLine());
 
     public T Current
     {
         get
         {
-            generator.MoveNext();
-            return (T)Activator.CreateInstance(typeof(T), generator.Permutation.Clone(), false);
+            if (_current == null)
+            {
+                throw new InvalidOperationException("Enumeration has not started. Call MoveNext.");
+            }
+
+            return _current;
         }
+    }
+
+    object IEnumerator.Current => Current;
+
+    public bool MoveNext()
+    {
+        if (!_generator.MoveNext())
+        {
+            _current = default;
+            return false;
+        }
+
+        var next = _generator.Next();
+        _current = (T)(Permutation)new Symmetry(next, false, true);
+        return true;
     }
 
     public void Reset()
     {
-        generator.Reset();
+        _generator.Reset();
+        _current = default;
     }
-
-    object System.Collections.IEnumerator.Current => Current;
 
     public void Dispose()
     {

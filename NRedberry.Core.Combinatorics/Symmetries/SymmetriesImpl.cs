@@ -18,14 +18,21 @@ public class SymmetriesImpl : AbstractSymmetries
     {
     }
 
-    public int Dimension()
-    {
-        return base.Dimension;
-    }
-
     public override bool Add(Symmetry symmetry)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(symmetry);
+        if (symmetry.Length != Dimension)
+        {
+            throw new ArgumentException("Symmetry dimension mismatch.");
+        }
+
+        if (Basis.Any(existing => existing.Equals(symmetry)))
+        {
+            return false;
+        }
+
+        Basis.Add(symmetry);
+        return true;
     }
 
     public override bool AddUnsafe(Symmetry symmetry)
@@ -39,26 +46,20 @@ public class SymmetriesImpl : AbstractSymmetries
         return new PermutationsSpanIterator<Symmetry>(Basis);
     }
 
-    public bool IsEmpty()
-    {
-        return false;
-    }
+    public bool IsEmpty => false;
 
-    public List<Symmetry> GetBasisSymmetries()
-    {
-        return [..Basis]; // Return a new list to preserve encapsulation
-    }
+    public List<Symmetry> BasisSymmetries => [..Basis];
 
-    public override Symmetries Clone()
-    {
-        return new SymmetriesImpl(Dimension(), [..Basis]);
-    }
+    public override Symmetries Clone() => new SymmetriesImpl(Dimension, [.. Basis]);
 
     public override string ToString()
     {
         var sb = new StringBuilder();
         foreach (var s in Basis)
+        {
             sb.AppendLine(s.ToString());
+        }
+
         return sb.ToString();
     }
 }
