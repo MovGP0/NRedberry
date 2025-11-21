@@ -1,6 +1,7 @@
+using NRedberry.Contexts;
 using NRedberry.Contexts.Defaults;
 
-namespace NRedberry.Contexts;
+namespace NRedberry.Tensors.Functions;
 
 /**
      * This class implements context management logic.

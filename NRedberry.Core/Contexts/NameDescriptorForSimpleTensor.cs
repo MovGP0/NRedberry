@@ -1,5 +1,5 @@
-﻿using NRedberry.Core.Indices;
-using NRedberry.Core.Tensors;
+﻿using NRedberry.Indices;
+using NRedberry.Tensors;
 
 namespace NRedberry.Contexts;
 
@@ -19,8 +19,6 @@ internal sealed class NameDescriptorForSimpleTensor(
         new(name, indexTypeStructures)
     ];
 
-    private SimpleTensor? cachedSymbol;
-
     [Pure]
     public override string GetName(SimpleIndices? indices, OutputFormat outputFormat)
     {
@@ -33,16 +31,18 @@ internal sealed class NameDescriptorForSimpleTensor(
         return key;
     }
 
-    public void SetCachedInstance(SimpleTensor symbol)
-    {
-        if (cachedSymbol != null)
-        {
-            throw new InvalidOperationException("Symbol is already created.");
-        }
-
-        cachedSymbol = symbol;
-    }
-
     [Pure]
-    public SimpleTensor GetCachedSymbol() => cachedSymbol;
+    public SimpleTensor CachedSymbol
+    {
+        get;
+        set
+        {
+            if (field is not null)
+            {
+                throw new InvalidOperationException("Symbol is already created.");
+            }
+
+            field = value;
+        }
+    }
 }

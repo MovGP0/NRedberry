@@ -1,4 +1,4 @@
-﻿namespace NRedberry.Core.Graphs;
+﻿namespace NRedberry.Graphs;
 
 public class PrimitiveSubgraph
 {

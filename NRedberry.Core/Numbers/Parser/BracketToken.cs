@@ -1,4 +1,4 @@
-namespace NRedberry.Core.Numbers.Parser;
+namespace NRedberry.Numbers.Parser;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/number/parser/BracketToken.java

@@ -1,16 +1,11 @@
-﻿using NRedberry.Core.Maths;
-using NRedberry.Core.Numbers;
+﻿using NRedberry.Maths;
+using NRedberry.Numbers;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
-public abstract class MultiTensor : Tensor
+public abstract class MultiTensor(Indices.Indices indices) : Tensor
 {
-    public override Indices.Indices Indices { get; }
-
-    protected MultiTensor(Indices.Indices indices)
-    {
-        Indices = indices;
-    }
+    public override Indices.Indices Indices { get; } = indices;
 
     public Tensor Remove(Tensor tensor)
     {

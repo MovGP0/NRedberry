@@ -1,6 +1,6 @@
-﻿using NRedberry.Core.Indices;
+﻿using NRedberry.Indices;
 
-namespace NRedberry.Core.Tensors.Functions;
+namespace NRedberry.Tensors.Functions;
 
 public abstract class ScalarFunction : Tensor
 {

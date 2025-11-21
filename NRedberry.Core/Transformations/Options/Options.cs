@@ -1,4 +1,4 @@
-namespace NRedberry.Core.Transformations.Options;
+namespace NRedberry.Transformations.Options;
 
 /// <summary>
 /// Marks a constructor parameter as carrying transformation options.

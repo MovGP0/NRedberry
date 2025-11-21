@@ -1,23 +1,18 @@
-﻿using NRedberry.Core.Indices;
+﻿using NRedberry.Indices;
 
 namespace NRedberry.Contexts;
 
 /// <summary>
 /// Specific implementation of <see cref="NameDescriptor"/> for Kronecker and metric tensors.
 /// </summary>
-internal sealed class NameDescriptorForMetricAndKronecker : NameDescriptor
+internal sealed class NameDescriptorForMetricAndKronecker(string[] names, byte type, int id)
+    : NameDescriptor(CreateIndicesTypeStructures(type), id)
 {
     /// <summary>
     /// First name for Kronecker, second for metric
     /// Same instance as in NameManager
     /// </summary>
-    private readonly string[] _names;
-
-    public NameDescriptorForMetricAndKronecker(string[] names, byte type, int id)
-        : base(CreateIndicesTypeStructures(type), id)
-    {
-        _names = names;
-    }
+    private readonly string[] _names = names;
 
     private static StructureOfIndices[] CreateIndicesTypeStructures(byte type)
     {

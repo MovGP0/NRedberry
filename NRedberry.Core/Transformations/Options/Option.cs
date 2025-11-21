@@ -1,4 +1,4 @@
-namespace NRedberry.Core.Transformations.Options;
+namespace NRedberry.Transformations.Options;
 
 /// <summary>
 /// Marks a constructor parameter or a public field as a configurable option.

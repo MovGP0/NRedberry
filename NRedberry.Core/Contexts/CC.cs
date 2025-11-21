@@ -38,20 +38,17 @@ public static class CC
     /// Returns the index converter manager of the current session.
     /// </summary>
     /// <returns>The index converter manager of the current session.</returns>
-    public static IndexConverterManager GetIndexConverterManager() => Current.ConverterManager;
+    public static IndexConverterManager IndexConverterManager => Current.ConverterManager;
 
     /// <summary>
     /// Returns the current default output format.
     /// </summary>
     /// <returns>The current default output format.</returns>
-    public static OutputFormat GetDefaultOutputFormat() => Current.DefaultOutputFormat;
-
-    /// <summary>
-    /// Sets the default output format.
-    /// After this step, all expressions will be printed according to the specified output format.
-    /// </summary>
-    /// <param name="defaultOutputFormat">The output format.</param>
-    public static void SetDefaultOutputFormat(OutputFormat defaultOutputFormat) => Current.DefaultOutputFormat = defaultOutputFormat;
+    public static OutputFormat DefaultOutputFormat
+    {
+        get => Current.DefaultOutputFormat;
+        set => Current.DefaultOutputFormat = value;
+    }
 
     /// <summary>
     /// Resets all tensor names in the namespace.

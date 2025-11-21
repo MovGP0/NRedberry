@@ -1,6 +1,6 @@
-﻿using NRedberry.Core.Tensors;
+﻿using NRedberry.Tensors;
 
-namespace NRedberry.Core.Indices;
+namespace NRedberry.Indices;
 
 public sealed class InconsistentIndicesException: TensorException
 {

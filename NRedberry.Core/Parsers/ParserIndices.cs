@@ -1,4 +1,4 @@
-namespace NRedberry.Core.Parsers;
+namespace NRedberry.Parsers;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/parser/ParserIndices.java

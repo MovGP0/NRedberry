@@ -1,13 +1,8 @@
-﻿namespace NRedberry.Core.Tensors;
+﻿namespace NRedberry.Tensors;
 
-public sealed class SimpleTensorFactory : TensorFactory
+public sealed class SimpleTensorFactory(SimpleTensor simpleTensor) : TensorFactory
 {
-    private SimpleTensor SimpleTensor { get; }
-
-    public SimpleTensorFactory(SimpleTensor simpleTensor)
-    {
-        SimpleTensor = simpleTensor ?? throw new ArgumentNullException(nameof(simpleTensor));
-    }
+    private SimpleTensor SimpleTensor { get; } = simpleTensor ?? throw new ArgumentNullException(nameof(simpleTensor));
 
     public Tensor Create(params Tensor[] tensors)
     {

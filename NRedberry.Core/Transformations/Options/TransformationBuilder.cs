@@ -1,6 +1,6 @@
-using NRedberry.Core.Transformations.Symmetrization;
+using NRedberry.Transformations.Symmetrization;
 
-namespace NRedberry.Core.Transformations.Options;
+namespace NRedberry.Transformations.Options;
 
 /// <summary>
 /// Skeleton port of cc.redberry.core.transformations.options.TransformationBuilder.

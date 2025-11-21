@@ -12,40 +12,32 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ufd.HenselApprox
 /// </remarks>
-public sealed class HenselApprox<MOD>
+public sealed class HenselApprox<MOD>(
+    GenPolynomial<Arith.BigInteger> a,
+    GenPolynomial<Arith.BigInteger> b,
+    GenPolynomial<MOD> am,
+    GenPolynomial<MOD> bm)
     where MOD : GcdRingElem<MOD>, Modular
 {
-    public HenselApprox(
-        GenPolynomial<Arith.BigInteger> a,
-        GenPolynomial<Arith.BigInteger> b,
-        GenPolynomial<MOD> am,
-        GenPolynomial<MOD> bm)
-    {
-        A = a ?? throw new ArgumentNullException(nameof(a));
-        B = b ?? throw new ArgumentNullException(nameof(b));
-        Am = am ?? throw new ArgumentNullException(nameof(am));
-        Bm = bm ?? throw new ArgumentNullException(nameof(bm));
-    }
+    /// <summary>
+    /// Approximated polynomial with integer coefficients.
+    /// </summary>
+    public GenPolynomial<Arith.BigInteger> A { get; } = a ?? throw new ArgumentNullException(nameof(a));
 
     /// <summary>
     /// Approximated polynomial with integer coefficients.
     /// </summary>
-    public GenPolynomial<Arith.BigInteger> A { get; }
-
-    /// <summary>
-    /// Approximated polynomial with integer coefficients.
-    /// </summary>
-    public GenPolynomial<Arith.BigInteger> B { get; }
+    public GenPolynomial<Arith.BigInteger> B { get; } = b ?? throw new ArgumentNullException(nameof(b));
 
     /// <summary>
     /// Modular approximated polynomial with modular coefficients.
     /// </summary>
-    public GenPolynomial<MOD> Am { get; }
+    public GenPolynomial<MOD> Am { get; } = am ?? throw new ArgumentNullException(nameof(am));
 
     /// <summary>
     /// Modular approximated polynomial with modular coefficients.
     /// </summary>
-    public GenPolynomial<MOD> Bm { get; }
+    public GenPolynomial<MOD> Bm { get; } = bm ?? throw new ArgumentNullException(nameof(bm));
 
     public override string ToString()
     {

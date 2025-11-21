@@ -1,14 +1,9 @@
-﻿using NRedberry.Core.Numbers;
+﻿using NRedberry.Numbers;
 
-namespace NRedberry.Core.Tensors.Functions;
+namespace NRedberry.Tensors.Functions;
 
-public class Log : ScalarFunction
+public class Log(Tensor argument) : ScalarFunction(argument)
 {
-    public Log(Tensor argument)
-        : base(argument)
-    {
-    }
-
     public override Tensor Derivative()
     {
         return Argument.Pow(Complex.MinusOne);

@@ -1,4 +1,4 @@
-namespace NRedberry.Core.Graphs;
+namespace NRedberry.Graphs;
 
 /// <summary>
 /// Some basic types of graphs that are used to interpret matrices products.

@@ -1,15 +1,10 @@
-﻿namespace NRedberry.Core.Concurrent;
+﻿namespace NRedberry.Concurrent;
 
 [Obsolete("Replace with an array with only one element: [element]")]
-public class Singleton<T> : IOutputPortUnsafe<T>
-    where T:class
+public class Singleton<T>(T element) : IOutputPortUnsafe<T>
+    where T : class
 {
-    private T? _element;
-
-    public Singleton(T element)
-    {
-        _element = element;
-    }
+    private T? _element = element;
 
     public T? Take()
     {

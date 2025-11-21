@@ -1,19 +1,13 @@
 ﻿using System.Collections;
-using NRedberry.Core.Tensors;
-using NRedberry.Core.Tensors.Iterators;
+using NRedberry.Tensors;
+using NRedberry.Tensors.Iterators;
 
-namespace NRedberry.Core.TensorGenerators;
+namespace NRedberry.TensorGenerators;
 
-public sealed class GeneratedTensor
+public sealed class GeneratedTensor(SimpleTensor[] coefficients, Tensor tensor)
 {
-    public SimpleTensor[] Coefficients { get; }
-    public Tensor Tensor { get; }
-
-    public GeneratedTensor(SimpleTensor[] coefficients, Tensor tensor)
-    {
-        Coefficients = coefficients;
-        Tensor = tensor;
-    }
+    public SimpleTensor[] Coefficients { get; } = coefficients;
+    public Tensor Tensor { get; } = tensor;
 }
 
 public sealed class SymbolsGenerator : IEnumerator<SimpleTensor>

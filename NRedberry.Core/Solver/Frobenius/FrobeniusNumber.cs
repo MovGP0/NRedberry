@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace NRedberry.Core.Solver.Frobenius;
+namespace NRedberry.Solver.Frobenius;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/solver/frobenius/FrobeniusNumber.java

@@ -1,6 +1,6 @@
-using NRedberry.Core.Numbers;
+using NRedberry.Numbers;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
 public sealed class SumBuilder : AbstractSumBuilder
 {
@@ -34,7 +34,7 @@ public sealed class SumBuilder : AbstractSumBuilder
 
     protected override Split Split(Tensor tensor)
     {
-        return NRedberry.Core.Tensors.Split.SplitIndexless(tensor);
+        return NRedberry.Tensors.Split.SplitIndexless(tensor);
     }
 
     public override TensorBuilder Clone()

@@ -1,7 +1,7 @@
 ﻿using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
 
-namespace NRedberry.Core.Groups;
+namespace NRedberry.Groups;
 
 public sealed partial class PermutationGroup
 {
@@ -137,32 +137,24 @@ public sealed partial class PermutationGroup
         return CreatePermutationGroupFromBSGS(AlgorithmsBase.AsBSGSList(stabilizer));
     }
 
-    private sealed class SetwiseStabilizerSearchTest : IBacktrackSearchTestFunction, IIndicator<Permutation>
+    private sealed class SetwiseStabilizerSearchTest(int[] @base, int[] set)
+        : IBacktrackSearchTestFunction, IIndicator<Permutation>
     {
-        private readonly int[] _base;
-        private readonly int[] _set;
-
-        public SetwiseStabilizerSearchTest(int[] @base, int[] set)
-        {
-            _base = @base;
-            _set = set;
-        }
-
         public bool Test(Permutation permutation, int level)
         {
-            if (level < _set.Length)
+            if (level < set.Length)
             {
-                return Array.BinarySearch(_set, permutation.NewIndexOf(_base[level])) >= 0;
+                return Array.BinarySearch(set, permutation.NewIndexOf(@base[level])) >= 0;
             }
 
-            return Array.BinarySearch(_set, permutation.NewIndexOf(_base[level])) < 0;
+            return Array.BinarySearch(set, permutation.NewIndexOf(@base[level])) < 0;
         }
 
         public bool Is(Permutation permutation)
         {
-            foreach (int s in _set)
+            foreach (int s in set)
             {
-                if (Array.BinarySearch(_set, permutation.NewIndexOf(s)) < 0)
+                if (Array.BinarySearch(set, permutation.NewIndexOf(s)) < 0)
                 {
                     return false;
                 }

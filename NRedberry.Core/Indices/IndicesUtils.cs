@@ -1,9 +1,9 @@
 ﻿using NRedberry.Contexts;
 using NRedberry.Core.Combinatorics;
-using NRedberry.Core.Maths;
-using CC = NRedberry.Core.Tensors.CC;
+using NRedberry.Maths;
+using CC = NRedberry.Tensors.CC;
 
-namespace NRedberry.Core.Indices;
+namespace NRedberry.Indices;
 
 /// <summary>
 /// This class provides static methods to work with individual index and indices objects.

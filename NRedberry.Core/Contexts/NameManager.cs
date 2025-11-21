@@ -1,7 +1,6 @@
 using System.Collections.Concurrent;
-using NRedberry.Core.Indices;
-using NRedberry.Core.Parsers;
-using NRedberry.Core.Tensors;
+using NRedberry.Indices;
+using NRedberry.Parsers;
 
 namespace NRedberry.Contexts;
 
@@ -11,7 +10,7 @@ namespace NRedberry.Contexts;
 /// identifiers for simple tensors and fields from raw data.These identifiers are the same for tensors
 /// with the same mathematical nature.They are generated randomly in order to obtain the uniform distribution
 /// through Redberry session.Each session of Redberry holds only one instance of this class, it can be obtained
-/// through <see cref="Tensors.CC.GetNameManager()"/>.
+/// through <see cref="Tensors.Tensors.CC.GetNameManager()"/>.
 /// </summary>
 public sealed class NameManager
 {

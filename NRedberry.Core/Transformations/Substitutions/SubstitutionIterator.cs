@@ -1,7 +1,7 @@
-﻿using NRedberry.Core.Tensors;
-using NRedberry.Core.Tensors.Iterators;
+﻿using NRedberry.Tensors;
+using NRedberry.Tensors.Iterators;
 
-namespace NRedberry.Core.Transformations.Substitutions;
+namespace NRedberry.Transformations.Substitutions;
 
 /// <summary>
 /// Skeleton port of cc.redberry.core.transformations.substitutions.SubstitutionIterator.

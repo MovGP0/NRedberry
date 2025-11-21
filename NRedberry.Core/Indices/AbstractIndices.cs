@@ -4,23 +4,18 @@ using System.Text;
 using NRedberry.Contexts;
 using NRedberry.Core.Utils;
 
-namespace NRedberry.Core.Indices;
+namespace NRedberry.Indices;
 
 /// <summary>
 /// Basic abstract <see cref="Indices"/> implementation.
 /// Indices are stored as final integer array.
 /// </summary>
 /// <remarks>https://github.com/redberry-cas/core/blob/master/src/main/java/cc/redberry/core/indices/AbstractIndices.java</remarks>
-public abstract class AbstractIndices : Indices
+public abstract class AbstractIndices(int[] data) : Indices
 {
-    public int[] Data { get; }
+    public int[] Data { get; } = data;
 
     private UpperLowerIndices? upperLower;
-
-    protected AbstractIndices(int[] data)
-    {
-        Data = data;
-    }
 
     protected abstract UpperLowerIndices CalculateUpperLower();
 

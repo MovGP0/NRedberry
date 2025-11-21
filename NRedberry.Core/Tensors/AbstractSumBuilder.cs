@@ -1,6 +1,6 @@
-using NRedberry.Core.Numbers;
+using NRedberry.Numbers;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
 public abstract class AbstractSumBuilder : TensorBuilder
 {

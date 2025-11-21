@@ -1,4 +1,5 @@
-using NRedberry.Core.Parsers;
+using NRedberry.Parsers;
+using NRedberry.Tensors.Functions;
 
 namespace NRedberry.Contexts;
 

@@ -1,6 +1,4 @@
-using NRedberry.Contexts;
-
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
 public static class Tensors
 {

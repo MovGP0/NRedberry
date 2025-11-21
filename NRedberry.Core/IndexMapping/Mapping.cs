@@ -1,9 +1,8 @@
 ﻿using System.Collections.Immutable;
-using NRedberry.Core.Tensors;
-using NRedberry.Core.Transformations.Symmetrization;
-using NRedberry.Core.Utils;
+using NRedberry.Tensors;
+using NRedberry.Transformations.Symmetrization;
 
-namespace NRedberry.Core.IndexMapping;
+namespace NRedberry.IndexMapping;
 
 /// <summary>
 /// Skeleton port of cc.redberry.core.indexmapping.Mapping.

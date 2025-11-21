@@ -1,7 +1,7 @@
-using NRedberry.Core.Tensors;
-using NRedberry.Core.Transformations.Symmetrization;
+using NRedberry.Tensors;
+using NRedberry.Transformations.Symmetrization;
 
-namespace NRedberry.Core.Solver;
+namespace NRedberry.Solver;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/solver/InverseTensor.java

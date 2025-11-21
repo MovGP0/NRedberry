@@ -1,6 +1,6 @@
-using NRedberry.Core.Numbers;
+using NRedberry.Numbers;
 
-namespace NRedberry.Core.Tensors.Functions;
+namespace NRedberry.Tensors.Functions;
 
 public sealed class ArcCosFactory : ScalarFunctionFactory
 {

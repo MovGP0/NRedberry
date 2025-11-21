@@ -1,7 +1,7 @@
 ﻿using NRedberry.Contexts;
-using NRedberry.Core.Indices;
+using NRedberry.Indices;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
 public static class SimpleTensorExtensions
 {

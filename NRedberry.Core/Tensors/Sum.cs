@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
-using NRedberry.Core.Numbers;
 using NRedberry.Core.Utils;
+using NRedberry.Numbers;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
 public sealed class Sum : MultiTensor
 {

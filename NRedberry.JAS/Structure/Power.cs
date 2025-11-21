@@ -10,18 +10,12 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.structure.Power
 /// </remarks>
-public class Power<C> where C : RingElem<C>
+public class Power<C>(RingFactory<C>? fac)
+    where C : RingElem<C>
 {
-    private readonly RingFactory<C>? fac;
-
     public Power()
+        : this(null)
     {
-        this.fac = null;
-    }
-
-    public Power(RingFactory<C>? fac)
-    {
-        this.fac = fac;
     }
 
     public static C PositivePower(C a, long n)

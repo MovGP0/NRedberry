@@ -1,18 +1,10 @@
-﻿using NRedberry.Core.Indices;
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
+using NRedberry.Indices;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
-public sealed class IndexMapper : IIndexMapping
+public sealed class IndexMapper(int[] from, int[] to) : IIndexMapping
 {
-    public IndexMapper(int[] from, int[] to) {
-        this.from = from;
-        this.to = to;
-    }
-
-    private int[] from;
-    private int[] to;
-
     public int Map(int index)
     {
          int position = Arrays.BinarySearch(from, IndicesUtils.GetNameWithType(index));

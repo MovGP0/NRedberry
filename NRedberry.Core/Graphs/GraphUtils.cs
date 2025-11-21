@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using NRedberry.Core.Utils;
 
-namespace NRedberry.Core.Graphs;
+namespace NRedberry.Graphs;
 
 public static class GraphUtils
 {

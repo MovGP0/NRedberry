@@ -1,7 +1,7 @@
 ﻿using System.Collections;
-using NRedberry.Core.Tensors;
+using NRedberry.Tensors;
 
-namespace NRedberry.Core.Indices;
+namespace NRedberry.Indices;
 
 public sealed class IndicesBuilder : IEnumerable<int>, ICloneable<IndicesBuilder>
 {

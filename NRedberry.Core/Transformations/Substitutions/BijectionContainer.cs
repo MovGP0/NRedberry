@@ -1,6 +1,6 @@
-﻿using NRedberry.Core.IndexMapping;
+﻿using NRedberry.IndexMapping;
 
-namespace NRedberry.Core.Transformations.Substitutions;
+namespace NRedberry.Transformations.Substitutions;
 
 /// <summary>
 /// Skeleton port of cc.redberry.core.transformations.substitutions.SumBijectionPort.BijectionContainer.

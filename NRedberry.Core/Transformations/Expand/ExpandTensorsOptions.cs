@@ -1,4 +1,4 @@
-﻿namespace NRedberry.Core.Transformations.Expand;
+﻿namespace NRedberry.Transformations.Expand;
 
 /// <summary>
 /// Skeleton port of cc.redberry.core.transformations.expand.ExpandTensorsOptions.

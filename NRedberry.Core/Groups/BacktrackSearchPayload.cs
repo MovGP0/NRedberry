@@ -1,6 +1,6 @@
 ﻿using NRedberry.Core.Combinatorics;
 
-namespace NRedberry.Core.Groups;
+namespace NRedberry.Groups;
 
 /// <summary>
 /// Abstract class that implements the backtracking search payload and test function logic.

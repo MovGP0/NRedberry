@@ -1,18 +1,13 @@
-using NRedberry.Core.Tensors;
+using NRedberry.Tensors;
 
-namespace NRedberry.Core.Parsers;
+namespace NRedberry.Parsers;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/parser/ParseTokenSimpleTensor.java
  */
 
-public class ParseTokenSimpleTensor : ParseToken
+public class ParseTokenSimpleTensor(TokenType tokenType, params ParseToken[] content) : ParseToken(tokenType, content)
 {
-    public ParseTokenSimpleTensor(TokenType tokenType, params ParseToken[] content)
-        : base(tokenType, content)
-    {
-    }
-
     public override Indices.Indices GetIndices()
     {
         throw new NotImplementedException();

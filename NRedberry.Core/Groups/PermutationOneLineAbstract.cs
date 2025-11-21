@@ -2,7 +2,7 @@
 using System.Numerics;
 using NRedberry.Core.Combinatorics;
 
-namespace NRedberry.Core.Groups;
+namespace NRedberry.Groups;
 
 /// <summary>
 /// Skeleton port of cc.redberry.core.groups.permutations.PermutationOneLineAbstract.

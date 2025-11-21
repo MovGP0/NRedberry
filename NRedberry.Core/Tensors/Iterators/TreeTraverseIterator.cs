@@ -1,6 +1,6 @@
 using NRedberry.Core.Utils;
 
-namespace NRedberry.Core.Tensors.Iterators;
+namespace NRedberry.Tensors.Iterators;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/tensor/iterator/TreeTraverseIterator.java

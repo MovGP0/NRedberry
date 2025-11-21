@@ -22,11 +22,6 @@ public abstract class ExpVector : AbelianGroupElem<ExpVector>
 
     private const string FactoryNotImplementedMessage = "No factory implemented for ExpVector.";
 
-    protected ExpVector()
-    {
-        _hash = 0;
-    }
-
     /// <summary>
     /// Supported storage representations for exponent arrays.
     /// </summary>

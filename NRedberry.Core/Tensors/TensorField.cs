@@ -1,23 +1,15 @@
-﻿using NRedberry.Core.Indices;
+﻿using NRedberry.Indices;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
-public sealed class TensorField : SimpleTensor
+public sealed class TensorField(int name, SimpleIndices indices, Tensor[] args, SimpleIndices[] argIndices)
+    : SimpleTensor(name, indices)
 {
-    private Tensor[] Args { get; }
-    private SimpleIndices[] ArgIndices { get; }
-
-    public TensorField(int name, SimpleIndices indices, Tensor[] args, SimpleIndices[] argIndices)
-        : base(name, indices)
-    {
-        Args = args;
-        ArgIndices = argIndices;
-    }
+    private Tensor[] Args { get; } = args;
+    private SimpleIndices[] ArgIndices { get; } = argIndices;
 
     public TensorField(TensorField field, Tensor[] args)
-        : base(field.Name, field.SimpleIndices)
+        : this(field.Name, field.SimpleIndices, args, field.ArgIndices)
     {
-        Args = args;
-        ArgIndices = field.ArgIndices;
     }
 }

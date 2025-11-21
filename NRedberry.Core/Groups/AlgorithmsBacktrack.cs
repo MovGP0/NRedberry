@@ -2,7 +2,7 @@ using System.Numerics;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
 
-namespace NRedberry.Core.Groups;
+namespace NRedberry.Groups;
 
 /// <summary>
 /// Algorithms using backtrack search in permutation groups, including subgroup search, stabilizers, coset representatives,
@@ -455,31 +455,24 @@ public static class AlgorithmsBacktrack
         return true;
     }
 
-    private sealed class IntersectionPayload : BacktrackSearchPayload
+    private sealed class IntersectionPayload(
+        List<BSGSCandidateElement> larger,
+        int[] baseArray,
+        Permutation[] intersectionWord)
+        : BacktrackSearchPayload
     {
-        private readonly List<BSGSCandidateElement> _larger;
-        private readonly int[] _base;
-        private readonly Permutation[] _intersectionWord;
-
-        public IntersectionPayload(List<BSGSCandidateElement> larger, int[] baseArray, Permutation[] intersectionWord)
-        {
-            _larger = larger;
-            _base = baseArray;
-            _intersectionWord = intersectionWord;
-        }
-
         public override void BeforeLevelIncrement(int level)
         {
-            int image = WordReference[level].NewIndexOf(_base[level]);
+            int image = WordReference[level].NewIndexOf(baseArray[level]);
             if (level == 0)
             {
-                _intersectionWord[level] = _larger[level].GetTransversalOf(image);
+                intersectionWord[level] = larger[level].GetTransversalOf(image);
             }
             else
             {
-                _intersectionWord[level] = _larger[level]
-                    .GetTransversalOf(_intersectionWord[level - 1].NewIndexOfUnderInverse(image))
-                    .Composition(_intersectionWord[level - 1]);
+                intersectionWord[level] = larger[level]
+                    .GetTransversalOf(intersectionWord[level - 1].NewIndexOfUnderInverse(image))
+                    .Composition(intersectionWord[level - 1]);
             }
         }
 
@@ -490,26 +483,19 @@ public static class AlgorithmsBacktrack
         public override bool Test(Permutation permutation, int level)
         {
             if (level == 0)
-                return _larger[level].BelongsToOrbit(WordReference[level].NewIndexOf(_base[level]));
+                return larger[level].BelongsToOrbit(WordReference[level].NewIndexOf(baseArray[level]));
 
-            int image = WordReference[level].NewIndexOf(_base[level]);
-            int prevImage = _intersectionWord[level - 1].NewIndexOfUnderInverse(image);
-            return _larger[level].BelongsToOrbit(prevImage);
+            int image = WordReference[level].NewIndexOf(baseArray[level]);
+            int prevImage = intersectionWord[level - 1].NewIndexOfUnderInverse(image);
+            return larger[level].BelongsToOrbit(prevImage);
         }
     }
 
-    private sealed class IntersectionIndicator : IIndicator<Permutation>
+    private sealed class IntersectionIndicator(List<BSGSCandidateElement> larger) : IIndicator<Permutation>
     {
-        private readonly List<BSGSCandidateElement> _larger;
-
-        public IntersectionIndicator(List<BSGSCandidateElement> larger)
-        {
-            _larger = larger;
-        }
-
         public bool Is(Permutation @object)
         {
-            return AlgorithmsBase.MembershipTest(_larger, @object);
+            return AlgorithmsBase.MembershipTest(larger, @object);
         }
     }
 }

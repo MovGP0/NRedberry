@@ -1,6 +1,6 @@
 ﻿using NRedberry.Core.Combinatorics;
 
-namespace NRedberry.Core.Groups;
+namespace NRedberry.Groups;
 
 /// <summary>
 /// Test function applied at each level of the search tree. If it is not applicable at some level, it must return true.

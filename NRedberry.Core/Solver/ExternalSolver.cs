@@ -1,6 +1,6 @@
-using NRedberry.Core.Tensors;
+using NRedberry.Tensors;
 
-namespace NRedberry.Core.Solver;
+namespace NRedberry.Solver;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/solver/ExternalSolver.java

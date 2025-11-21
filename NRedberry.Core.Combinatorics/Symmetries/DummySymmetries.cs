@@ -3,13 +3,8 @@
 /// <summary>
 /// src\main\java\cc\redberry\core\combinatorics\symmetries\DummySymmetries.java
 /// </summary>
-public abstract class DummySymmetries : AbstractSymmetries
+public abstract class DummySymmetries(int dimension, List<Symmetry> basis) : AbstractSymmetries(dimension, basis)
 {
-    protected DummySymmetries(int dimension, List<Symmetry> basis)
-        : base(dimension, basis)
-    {
-    }
-
     public override bool Add(Symmetry symmetry)
     {
         throw new NotImplementedException();

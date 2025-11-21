@@ -1,18 +1,13 @@
-using NRedberry.Core.Tensors;
+using NRedberry.Tensors;
 
-namespace NRedberry.Core.Parsers;
+namespace NRedberry.Parsers;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/parser/ParseTokenNumber.java
  */
 
-public class ParseTokenNumber : ParseToken
+public class ParseTokenNumber(TokenType tokenType, params ParseToken[] content) : ParseToken(tokenType, content)
 {
-    public ParseTokenNumber(TokenType tokenType, params ParseToken[] content)
-        : base(tokenType, content)
-    {
-    }
-
     public override Indices.Indices GetIndices()
     {
         throw new NotImplementedException();

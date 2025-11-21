@@ -1,4 +1,4 @@
-﻿namespace NRedberry.Core.Indices;
+﻿namespace NRedberry.Indices;
 
 /// <summary>
 ///  Additional specification for indices of simple tensors (see <see cref="Tensors.SimpleTensor"/>).

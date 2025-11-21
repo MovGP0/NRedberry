@@ -1,4 +1,4 @@
-namespace NRedberry.Core.Tensors.Iterators;
+namespace NRedberry.Tensors.Iterators;
 
 public enum TraversePermission
 {

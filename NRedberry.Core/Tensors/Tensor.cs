@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using NRedberry.Contexts;
-using NRedberry.Core.Indices;
+using NRedberry.Indices;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
 public abstract class Tensor : IComparable<Tensor>, IEnumerable<Tensor>
 {

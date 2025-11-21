@@ -12,24 +12,18 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ufd.GreatestCommonDivisorModular
 /// </remarks>
-public class GreatestCommonDivisorModular<MOD> : GreatestCommonDivisorAbstract<BigInteger>
+public class GreatestCommonDivisorModular<MOD>(bool simple) : GreatestCommonDivisorAbstract<BigInteger>
     where MOD : GcdRingElem<MOD>, Modular
 {
     private const int PrimeBudget = 30;
     private const int GcdPrimeLimit = 10;
 
-    protected readonly GreatestCommonDivisorAbstract<MOD> modularEngine;
-    protected readonly GreatestCommonDivisorAbstract<BigInteger> integerFallback;
+    protected readonly GreatestCommonDivisorAbstract<MOD> modularEngine = simple ? new GreatestCommonDivisorSimple<MOD>() : new GreatestCommonDivisorModEval<MOD>();
+    protected readonly GreatestCommonDivisorAbstract<BigInteger> integerFallback = new GreatestCommonDivisorSubres<BigInteger>();
 
     public GreatestCommonDivisorModular()
         : this(false)
     {
-    }
-
-    public GreatestCommonDivisorModular(bool simple)
-    {
-        modularEngine = simple ? new GreatestCommonDivisorSimple<MOD>() : new GreatestCommonDivisorModEval<MOD>();
-        integerFallback = new GreatestCommonDivisorSubres<BigInteger>();
     }
 
     public override GenPolynomial<BigInteger> BaseGcd(GenPolynomial<BigInteger> first, GenPolynomial<BigInteger> second)

@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Diagnostics;
-using NRedberry.Core.Indices;
-using NRedberry.Core.Tensors;
-using static NRedberry.Core.Indices.IndicesUtils;
+using NRedberry.Indices;
+using NRedberry.Tensors;
+using static NRedberry.Indices.IndicesUtils;
 
-namespace NRedberry.Core.Graphs;
+namespace NRedberry.Graphs;
 
 public sealed class PrimitiveSubgraphPartition
 {

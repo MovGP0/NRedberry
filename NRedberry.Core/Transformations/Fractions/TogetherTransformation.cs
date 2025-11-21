@@ -1,7 +1,7 @@
-using NRedberry.Core.Tensors;
-using NRedberry.Core.Transformations.Symmetrization;
+using NRedberry.Tensors;
+using NRedberry.Transformations.Symmetrization;
 
-namespace NRedberry.Core.Transformations.Fractions;
+namespace NRedberry.Transformations.Fractions;
 
 /// <summary>
 /// Skeleton port of cc.redberry.core.transformations.fractions.TogetherTransformation.

@@ -1,8 +1,8 @@
-﻿using NRedberry.Core.Concurrent;
-using NRedberry.Core.Tensors;
-using NRedberry.Core.Transformations.Symmetrization;
+﻿using NRedberry.Concurrent;
+using NRedberry.Tensors;
+using NRedberry.Transformations.Symmetrization;
 
-namespace NRedberry.Core.Transformations.Expand;
+namespace NRedberry.Transformations.Expand;
 
 /// <summary>
 /// Skeleton port of cc.redberry.core.transformations.expand.ExpandUtils.

@@ -1,8 +1,8 @@
-﻿using NRedberry.Core.Indices;
-using NRedberry.Core.Utils;
-using Complex = NRedberry.Core.Numbers.Complex;
+﻿using NRedberry.Core.Utils;
+using NRedberry.Indices;
+using Complex = NRedberry.Numbers.Complex;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
 public sealed class Product : MultiTensor
 {
@@ -200,20 +200,12 @@ public sealed class Product : MultiTensor
         return (int)h;
     }
 
-    private class ScaffoldWrapper : IComparable<ScaffoldWrapper>
+    private class ScaffoldWrapper(int[] inds, Tensor t, TensorContraction tc) : IComparable<ScaffoldWrapper>
     {
-        public readonly int[] Inds;
-        public readonly Tensor T;
-        public readonly TensorContraction Tc;
-        public readonly long HashWithIndices;
-
-        public ScaffoldWrapper(int[] inds, Tensor t, TensorContraction tc)
-        {
-            Inds = inds;
-            T = t;
-            Tc = tc;
-            HashWithIndices = Hc(t, inds);
-        }
+        public readonly int[] Inds = inds;
+        public readonly Tensor T = t;
+        public readonly TensorContraction Tc = tc;
+        public readonly long HashWithIndices = Hc(t, inds);
 
         public int CompareTo(ScaffoldWrapper o)
         {

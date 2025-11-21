@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using NRedberry.Contexts;
-using NRedberry.Core.Tensors;
-using NRedberry.Core.Transformations.Options;
-using NRedberry.Core.Transformations.Symmetrization;
+using NRedberry.Tensors;
+using NRedberry.Transformations.Options;
+using NRedberry.Transformations.Symmetrization;
 
 namespace NRedberry.Groovy;
 
@@ -31,7 +31,7 @@ public sealed class DSLTransformationInst<T> : DSLTransformation<T>, Transformat
 
     public override string ToString()
     {
-        return ToString(Contexts.CC.GetDefaultOutputFormat());
+        return ToString(Contexts.CC.DefaultOutputFormat);
     }
 
     public string ToString(OutputFormat outputFormat)

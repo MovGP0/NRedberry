@@ -1,14 +1,9 @@
-﻿using NRedberry.Core.Numbers;
+﻿using NRedberry.Numbers;
 
-namespace NRedberry.Core.Tensors.Functions;
+namespace NRedberry.Tensors.Functions;
 
-public sealed class Cos : ScalarFunction
+public sealed class Cos(Tensor argument) : ScalarFunction(argument)
 {
-    public Cos(Tensor argument)
-        : base(argument)
-    {
-    }
-
     public override Tensor Derivative() => Complex.MinusOne.Multiply(new Sin(Argument));
 
     public override int GetHashCode() => 11 * Argument.GetHashCode();

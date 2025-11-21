@@ -1,4 +1,4 @@
-namespace NRedberry.Core.Transformations.Options;
+namespace NRedberry.Transformations.Options;
 
 /// <summary>
 /// Represents a set of user-specified options that may require additional initialization.

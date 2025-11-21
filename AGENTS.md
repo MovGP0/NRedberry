@@ -263,20 +263,23 @@ using System.Threading.Tasks;
 
 Some types and methods need to be replaced with .NET types:
 
-| Java Type         | .NET Type           | Notes                                    |
-|-------------------|---------------------|------------------------------------------|
-| IntArray          | ImmutableArray<int> | Different type                           |
-| IntArrayList      | List<int>           | Different type                           |
-| Degree()          | Degree              | Property with getter instead of method   |
-| Length()          | Length              | Property with getter instead of method   |
-| Parity()          | Parity              | Property with getter instead of method   |
-| GetIdentity()     | Identity            | Property with getter instead of method   |
-| IsIdentity()      | IsIdentity          | Property with getter instead of method   |
-| Order()           | Order               | Property with getter instead of method   |
-| OrderIsOdd()      | OrderIsOdd          | Property with getter instead of method   |
-| GetONE()          | One                 | Property with getter instead of method   |
-| GetZERO()         | Zero                | Property with getter instead of method   |
-| LengthsOfCycles() | LengthsOfCycles     | Property with getter instead of method   |
-| GetNumerator()    | Numerator           | Property with getter instead of method   |
-| GetDenominator()  | Denominator         | Property with getter instead of method   |
-| GG.GetRandomGenerator() | System.Random.Shared | System property instead of custom method |
+| Java Type                                                    | .NET Type           | Notes                                    |
+|--------------------------------------------------------------|---------------------|------------------------------------------|
+| IntArray                                                     | ImmutableArray<int> | Different type                           |
+| IntArrayList                                                 | List<int>           | Different type                           |
+| Degree()                                                     | Degree              | Property with getter instead of method   |
+| Length()                                                     | Length              | Property with getter instead of method   |
+| Parity()                                                     | Parity              | Property with getter instead of method   |
+| GetIdentity()                                                | Identity            | Property with getter instead of method   |
+| IsIdentity()                                                 | IsIdentity          | Property with getter instead of method   |
+| Order()                                                      | Order               | Property with getter instead of method   |
+| OrderIsOdd()                                                 | OrderIsOdd          | Property with getter instead of method   |
+| GetONE()                                                     | One                 | Property with getter instead of method   |
+| GetZERO()                                                    | Zero                | Property with getter instead of method   |
+| LengthsOfCycles()                                            | LengthsOfCycles     | Property with getter instead of method   |
+| GetNumerator()                                               | Numerator           | Property with getter instead of method   |
+| GetDenominator()                                             | Denominator         | Property with getter instead of method   |
+| CC.GetRandomGenerator()                                      | System.Random.Shared | System property instead of custom method |
+| CC.GetNameManager()                                          | CC.NameManager     | Property with getter instead of method   |
+| CC.GetIndexConverterManager()                                | CC.IndexConverterManager | Property with getter instead of method   |
+| CC.GetDefaultOutputFormat() / CC.SetDefaultOutputFormat(OutputFormat) | CC.DefaultOutputFormat | Property with getter instead of method   |

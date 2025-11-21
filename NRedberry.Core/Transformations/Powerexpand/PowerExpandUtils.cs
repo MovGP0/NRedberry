@@ -1,7 +1,7 @@
-using NRedberry.Core.Tensors;
 using NRedberry.Core.Utils;
+using NRedberry.Tensors;
 
-namespace NRedberry.Core.Transformations.Powerexpand;
+namespace NRedberry.Transformations.Powerexpand;
 
 /// <summary>
 /// Skeleton port of cc.redberry.core.transformations.powerexpand.PowerExpandUtils.

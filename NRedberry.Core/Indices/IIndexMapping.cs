@@ -1,4 +1,4 @@
-namespace NRedberry.Core.Indices;
+namespace NRedberry.Indices;
 
 /// <summary>
 /// This interface defines the mapping functionality for

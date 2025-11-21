@@ -1,17 +1,12 @@
-namespace NRedberry.Core.Tensors.Playground;
+namespace NRedberry.Tensors.Playground;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/tensor/playground/IAlgorithm.java
  */
 
-public abstract class IAlgorithm
+public abstract class IAlgorithm(string name)
 {
-    protected IAlgorithm(string name)
-    {
-        Name = name;
-    }
-
-    public string Name { get; }
+    public string Name { get; } = name;
 
     public long Timing { get; protected set; }
 

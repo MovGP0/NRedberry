@@ -1,6 +1,6 @@
 using NRedberry.Contexts.Defaults;
 
-namespace NRedberry.Core.Indices;
+namespace NRedberry.Indices;
 
 public static class IndexTypeMethods
 {

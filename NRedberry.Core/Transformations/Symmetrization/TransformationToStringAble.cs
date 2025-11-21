@@ -1,6 +1,4 @@
-using NRedberry.Contexts;
-
-namespace NRedberry.Core.Transformations.Symmetrization;
+namespace NRedberry.Transformations.Symmetrization;
 
 /// <summary>
 /// Represents a transformation that can provide a formatted textual description.

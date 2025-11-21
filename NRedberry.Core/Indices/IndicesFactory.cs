@@ -1,8 +1,8 @@
-﻿namespace NRedberry.Core.Indices;
+﻿namespace NRedberry.Indices;
 
 public static class IndicesFactory
 {
-    public static readonly Indices EmptyIndices = NRedberry.Core.Indices.EmptyIndices.EmptyIndicesInstance;
+    public static readonly Indices EmptyIndices = NRedberry.Indices.EmptyIndices.EmptyIndicesInstance;
 
     public static readonly SimpleIndices emptySimpleIndices = EmptySimpleIndices.emptySimpleIndicesInstance;
 

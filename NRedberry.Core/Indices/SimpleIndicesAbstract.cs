@@ -2,7 +2,7 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
 
-namespace NRedberry.Core.Indices;
+namespace NRedberry.Indices;
 
 public abstract class SimpleIndicesAbstract : AbstractIndices, SimpleIndices
 {

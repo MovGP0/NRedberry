@@ -15,12 +15,7 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 public class GreatestCommonDivisorModEval<MOD> : GreatestCommonDivisorAbstract<MOD>
     where MOD : GcdRingElem<MOD>, Modular
 {
-    protected readonly GreatestCommonDivisorAbstract<MOD> ModularEngine;
-
-    public GreatestCommonDivisorModEval()
-    {
-        ModularEngine = new GreatestCommonDivisorSimple<MOD>();
-    }
+    protected readonly GreatestCommonDivisorAbstract<MOD> ModularEngine = new GreatestCommonDivisorSimple<MOD>();
 
     public override GenPolynomial<MOD> BaseGcd(GenPolynomial<MOD> first, GenPolynomial<MOD> second)
     {

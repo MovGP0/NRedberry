@@ -1,8 +1,8 @@
-﻿using NRedberry.Core.Combinatorics;
-using NRedberry.Core.Concurrent;
+﻿using NRedberry.Concurrent;
+using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
 
-namespace NRedberry.Core.Groups;
+namespace NRedberry.Groups;
 
 /// <summary>
 /// An iterator over group elements that scans the group in the ordering induced by the base.

@@ -1,4 +1,4 @@
-namespace NRedberry.Core.Tensors.Iterators;
+namespace NRedberry.Tensors.Iterators;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/tensor/iterator/Payload.java

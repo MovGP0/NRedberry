@@ -1,5 +1,5 @@
 using NRedberry.Core.Exceptions;
-using NRedberry.Core.Indices;
+using NRedberry.Indices;
 
 namespace NRedberry.Contexts;
 

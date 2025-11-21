@@ -1,7 +1,7 @@
-﻿using NRedberry.Core.Tensors;
-using NRedberry.Core.Transformations.Expand;
+﻿using NRedberry.Tensors;
+using NRedberry.Transformations.Expand;
 
-namespace NRedberry.Core.Transformations.Symmetrization;
+namespace NRedberry.Transformations.Symmetrization;
 
 /// <summary>
 /// Skeleton port of cc.redberry.core.transformations.ExpandTensorsAndEliminateTransformation.

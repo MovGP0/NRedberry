@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 
-namespace NRedberry.Core.Indices;
+namespace NRedberry.Indices;
 
 public static class IndicesArraysUtils
 {

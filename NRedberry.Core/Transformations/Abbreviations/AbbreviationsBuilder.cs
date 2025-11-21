@@ -1,7 +1,7 @@
-using NRedberry.Core.Tensors;
-using NRedberry.Core.Transformations.Symmetrization;
+using NRedberry.Tensors;
+using NRedberry.Transformations.Symmetrization;
 
-namespace NRedberry.Core.Transformations.Abbreviations;
+namespace NRedberry.Transformations.Abbreviations;
 
 /// <summary>
 /// Skeleton port of cc.redberry.core.transformations.abbreviations.AbbreviationsBuilder.

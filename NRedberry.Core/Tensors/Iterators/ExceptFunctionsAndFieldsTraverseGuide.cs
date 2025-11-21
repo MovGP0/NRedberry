@@ -1,6 +1,6 @@
-using NRedberry.Core.Tensors.Functions;
+using NRedberry.Tensors.Functions;
 
-namespace NRedberry.Core.Tensors.Iterators;
+namespace NRedberry.Tensors.Iterators;
 
 public class ExceptFunctionsAndFieldsTraverseGuide : TraverseGuide
 {

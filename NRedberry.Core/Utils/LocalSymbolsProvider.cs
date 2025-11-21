@@ -1,7 +1,7 @@
-using NRedberry.Core.Concurrent;
-using NRedberry.Core.Tensors;
+using NRedberry.Concurrent;
+using NRedberry.Tensors;
 
-namespace NRedberry.Core.Utils;
+namespace NRedberry.Utils;
 
 /// <summary>
 /// Skeleton port of cc.redberry.core.utils.LocalSymbolsProvider.

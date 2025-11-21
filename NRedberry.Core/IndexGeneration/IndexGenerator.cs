@@ -1,4 +1,4 @@
-﻿namespace NRedberry.Core;
+﻿namespace NRedberry.IndexGeneration;
 
 public sealed class IndexGenerator : ICloneable, ICloneable<IndexGenerator>
 {

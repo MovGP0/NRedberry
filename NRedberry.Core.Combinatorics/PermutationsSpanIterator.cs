@@ -1,25 +1,18 @@
 ﻿namespace NRedberry.Core.Combinatorics
 {
-    public class PermutationsSpanIterator<T> : IEnumerator<T> where T : Permutation
+    public class PermutationsSpanIterator<T>(List<T> permutations) : IEnumerator<T>
+        where T : Permutation
     {
-        private SortedSet<Permutation> set;
+        private SortedSet<Permutation> set = [];
         public IEnumerator<Permutation> iterator;
-        private List<Permutation> upperLayer;
-        private List<Permutation?> lowerLayer;
+
+        private List<Permutation> upperLayer = [permutations[0]];
+
+        private List<Permutation?> lowerLayer = permutations.Cast<Permutation?>().ToList();
         private List<Permutation> nextLayer = [];
         private bool forward;
         private int upperIndex;
         private int lowerIndex;
-
-        public PermutationsSpanIterator(List<T> permutations)
-        {
-            set = [];
-            upperLayer =
-            [
-                permutations[0]
-            ];
-            lowerLayer = permutations.Cast<Permutation?>().ToList();
-        }
 
         private Permutation? current;
 

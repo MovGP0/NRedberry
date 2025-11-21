@@ -1,8 +1,8 @@
-﻿using NRedberry.Core.Indices;
-using NRedberry.Core.Numbers;
-using NRedberry.Core.Tensors.Functions;
+﻿using NRedberry.Indices;
+using NRedberry.Numbers;
+using NRedberry.Tensors.Functions;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
 public static class TensorUtils
 {

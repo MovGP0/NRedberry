@@ -1,6 +1,7 @@
 using System.Numerics;
+using NRedberry.Apache.Commons.Math;
 
-namespace NRedberry.Apache.Commons.Math;
+namespace NRedberry.Numbers;
 
 public interface INumber<T> : IFieldElement<T>
 {

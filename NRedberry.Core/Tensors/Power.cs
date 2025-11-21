@@ -1,20 +1,14 @@
-﻿using NRedberry.Core.Indices;
+﻿using NRedberry.Indices;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
 /// <summary>
 /// Representation of mathematical power <i>A^B</i>.
 /// </summary>
-public sealed class Power : Tensor
+public sealed class Power(Tensor a, Tensor power) : Tensor
 {
-    private Tensor argument { get; set; }
-    public Tensor power { get; set; }
-
-    public Power(Tensor a, Tensor power)
-    {
-        argument = a;
-        this.power = power;
-    }
+    private Tensor argument { get; set; } = a;
+    public Tensor power { get; set; } = power;
 
     public override int GetHashCode()
     {

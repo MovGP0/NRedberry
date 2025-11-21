@@ -1,7 +1,7 @@
-using NRedberry.Core.Concurrent;
-using NRedberry.Core.Indices;
+using NRedberry.Concurrent;
+using NRedberry.Indices;
 
-namespace NRedberry.Core.IndexMapping;
+namespace NRedberry.IndexMapping;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/indexmapping/MappingsPort.java

@@ -388,14 +388,9 @@ public class UnivPowerSeries<C> : RingElem<UnivPowerSeries<C>> where C : RingEle
 
     ElemFactory<UnivPowerSeries<C>> Element<UnivPowerSeries<C>>.Factory() => Factory();
 
-    private sealed class LambdaCoefficients : Coefficients<C>
+    private sealed class LambdaCoefficients(Func<int, Func<int, C>, C> generator) : Coefficients<C>
     {
-        private readonly Func<int, Func<int, C>, C> generator;
-
-        public LambdaCoefficients(Func<int, Func<int, C>, C> generator)
-        {
-            this.generator = generator ?? throw new ArgumentNullException(nameof(generator));
-        }
+        private readonly Func<int, Func<int, C>, C> generator = generator ?? throw new ArgumentNullException(nameof(generator));
 
         protected override C Generate(int index) => generator(index, idx => Get(idx));
     }
@@ -410,15 +405,8 @@ public class UnivPowerSeries<C> : RingElem<UnivPowerSeries<C>> where C : RingEle
         public C Eval(C c1, C c2) => c1.Subtract(c2);
     }
 
-    private sealed class MultiplyFunctor : UnaryFunctor<C, C>
+    private sealed class MultiplyFunctor(C factor) : UnaryFunctor<C, C>
     {
-        private readonly C factor;
-
-        public MultiplyFunctor(C factor)
-        {
-            this.factor = factor;
-        }
-
         public C Eval(C c) => c.Multiply(factor);
     }
 

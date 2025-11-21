@@ -1,6 +1,6 @@
 ﻿using NRedberry.Contexts;
 
-namespace NRedberry.Core.Parsers;
+namespace NRedberry.Parsers;
 
 public static class ContextSettingsExtensions
 {

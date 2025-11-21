@@ -37,21 +37,11 @@ public class LongIterable : IEnumerable<long>
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-    private sealed class LongEnumerator : IEnumerator<long>
+    private sealed class LongEnumerator(bool nonNegative, long upperBound) : IEnumerator<long>
     {
-        private readonly bool nonNegative;
-        private readonly long upperBound;
         private long nextValue;
         private long current;
-        private bool hasNext;
-
-        public LongEnumerator(bool nonNegative, long upperBound)
-        {
-            this.nonNegative = nonNegative;
-            this.upperBound = upperBound;
-            nextValue = 0L;
-            hasNext = true;
-        }
+        private bool hasNext = true;
 
         public long Current => current;
 

@@ -5,17 +5,11 @@ namespace NRedberry.Core.Combinatorics.Symmetries
     /// <summary>
     /// src\main\java\cc\redberry\core\combinatorics\symmetries\AbstractSymmetries.java
     /// </summary>
-    public abstract class AbstractSymmetries : Symmetries
+    public abstract class AbstractSymmetries(int dimension, List<Symmetry> basis) : Symmetries
     {
-        protected int Dimension { get; }
+        protected int Dimension { get; } = dimension;
 
-        protected readonly List<Symmetry> Basis;
-
-        protected AbstractSymmetries(int dimension, List<Symmetry> basis)
-        {
-            Dimension = dimension;
-            Basis = basis;
-        }
+        protected readonly List<Symmetry> Basis = basis;
 
         public override int GetHashCode()
         {

@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using NRedberry.Core.Combinatorics;
 
-namespace NRedberry.Core.Groups;
+namespace NRedberry.Groups;
 
 public sealed partial class PermutationGroup
 {

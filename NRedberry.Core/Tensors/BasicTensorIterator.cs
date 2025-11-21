@@ -1,15 +1,10 @@
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
-public sealed class BasicTensorIterator : IEnumerator<Tensor>
+public sealed class BasicTensorIterator(Tensor tensor) : IEnumerator<Tensor>
 {
-    private Tensor Tensor { get; }
+    private Tensor Tensor { get; } = tensor ?? throw new ArgumentNullException(nameof(tensor));
     private int Position { get; set; } = -1;
     private int Size => Tensor.Size;
-
-    public BasicTensorIterator(Tensor tensor)
-    {
-        Tensor = tensor ?? throw new ArgumentNullException(nameof(tensor));
-    }
 
     public object Current => Tensor[Position];
 

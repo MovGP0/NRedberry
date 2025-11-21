@@ -1,30 +1,21 @@
 using System.Collections.Immutable;
 using NRedberry.Core.Combinatorics;
 
-namespace NRedberry.Core.Groups;
+namespace NRedberry.Groups;
 
-public class BSGSElement
+public class BSGSElement(
+    int basePoint,
+    IReadOnlyCollection<Permutation> stabilizerGenerators,
+    SchreierVector schreierVector,
+    List<int> orbitList)
 {
-    public readonly int BasePoint;
-    public readonly IList<Permutation> StabilizerGenerators;
-    protected readonly SchreierVector SchreierVector;
-    protected readonly List<int> OrbitList;
+    public readonly int BasePoint = basePoint;
+    public readonly IList<Permutation> StabilizerGenerators = stabilizerGenerators.ToList();
+    protected readonly SchreierVector SchreierVector = schreierVector;
+    protected readonly List<int> OrbitList = orbitList;
 
     public IList<Permutation> StabilizerGeneratorsReference => StabilizerGenerators;
     public List<int> OrbitListReference => OrbitList;
-
-    public BSGSElement(
-        int basePoint,
-        IReadOnlyCollection<Permutation> stabilizerGenerators,
-        SchreierVector schreierVector,
-        List<int> orbitList)
-    {
-        BasePoint = basePoint;
-        StabilizerGenerators = stabilizerGenerators.ToList();
-        SchreierVector = schreierVector;
-        OrbitList = orbitList;
-        InternalDegree = Permutations.InternalDegree(stabilizerGenerators);
-    }
 
     public IList<Permutation> GetStabilizerGeneratorsReference()
     {
@@ -80,7 +71,7 @@ public class BSGSElement
         return OrbitList[index];
     }
 
-    public int InternalDegree { get; set; }
+    public int InternalDegree { get; set; } = Permutations.InternalDegree(stabilizerGenerators);
 
     public override string ToString()
     {

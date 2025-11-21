@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
-using NRedberry.Core.Tensors;
 using NRedberry.Core.Utils;
+using NRedberry.Tensors;
 
 namespace NRedberry.Physics.Feyncalc;
 

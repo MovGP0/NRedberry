@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
-using NRedberry.Core.Tensors;
+using NRedberry.Tensors;
 
-namespace NRedberry.Core.Parsers;
+namespace NRedberry.Parsers;
 
 public class ParseToken
 {

@@ -1,10 +1,9 @@
 ﻿using System.Numerics;
-using System.Runtime.CompilerServices;
 using System.Text;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
 
-namespace NRedberry.Core.Groups;
+namespace NRedberry.Groups;
 
 /// <summary>
 /// Transcription of cc.redberry.core.groups.permutations.PermutationGroup.

@@ -1,4 +1,4 @@
-namespace NRedberry.Core.Indices;
+namespace NRedberry.Indices;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/indices/ShortArrayFactory.java

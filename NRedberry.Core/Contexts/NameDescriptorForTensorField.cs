@@ -1,28 +1,21 @@
-﻿using NRedberry.Core.Indices;
+﻿using NRedberry.Indices;
 
 namespace NRedberry.Contexts;
 
-public abstract class NameDescriptorForTensorField : NameDescriptor
+public abstract class NameDescriptorForTensorField(
+    StructureOfIndices[] indexTypeStructures,
+    int id,
+    int[] orders,
+    string name,
+    bool isDiracDelta)
+    : NameDescriptor(indexTypeStructures, id)
 {
-    public int[] Orders { get; }
-    public string Name { get; }
+    public int[] Orders { get; } = orders;
+    public string Name { get; } = name;
 
-    private int[][] _indicesPartitionMapping;
+    private int[][]? _indicesPartitionMapping;
 
-    public bool IsDiracDelta { get; }
-
-    protected NameDescriptorForTensorField(
-        StructureOfIndices[] indexTypeStructures,
-        int id,
-        int[] orders,
-        string name,
-        bool isDiracDelta)
-        : base(indexTypeStructures, id)
-    {
-        Orders = orders;
-        Name = name;
-        IsDiracDelta = isDiracDelta;
-    }
+    public bool IsDiracDelta { get; } = isDiracDelta;
 
     public int[] GetDerivativeOrders()
     {

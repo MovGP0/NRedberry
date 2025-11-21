@@ -1,4 +1,4 @@
-namespace NRedberry.Core.Transformations.Factor;
+namespace NRedberry.Transformations.Factor;
 
 public sealed class SingularFactorizationEngine
 {

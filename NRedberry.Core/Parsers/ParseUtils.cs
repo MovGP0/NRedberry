@@ -1,6 +1,6 @@
-using NRedberry.Core.Tensors;
+using NRedberry.Tensors;
 
-namespace NRedberry.Core.Parsers;
+namespace NRedberry.Parsers;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/parser/ParseUtils.java

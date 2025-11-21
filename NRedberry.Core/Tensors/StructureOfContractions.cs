@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
 public sealed class StructureOfContractions
 {

@@ -1,12 +1,7 @@
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
-internal class SplitNumbers : Split
+internal class SplitNumbers(Tensor factor, Tensor summand) : Split(factor, summand)
 {
-    public SplitNumbers(Tensor factor, Tensor summand)
-        : base(factor, summand)
-    {
-    }
-
     public override TensorBuilder GetBuilder()
     {
         TensorBuilder builder = new ComplexSumBuilder();

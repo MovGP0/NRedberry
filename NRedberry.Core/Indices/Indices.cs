@@ -1,7 +1,6 @@
 using System.Collections.Immutable;
-using NRedberry.Contexts;
 
-namespace NRedberry.Core.Indices;
+namespace NRedberry.Indices;
 
 public interface Indices : IEquatable<object>, IEnumerable<int>
 {

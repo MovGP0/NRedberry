@@ -1,19 +1,13 @@
 ﻿using System.Text;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
-public sealed class TensorContraction : IComparable<TensorContraction>
+public sealed class TensorContraction(short tensorId, long[] indexContractions) : IComparable<TensorContraction>
 {
-    public short TensorId { get; }
-    public long[] IndexContractions { get; private set; }
+    public short TensorId { get; } = tensorId;
+    public long[] IndexContractions { get; private set; } = indexContractions;
 
     private int _hash = -1;
-
-    public TensorContraction(short tensorId, long[] indexContractions)
-    {
-        TensorId = tensorId;
-        IndexContractions = indexContractions;
-    }
 
     public void SortContractions()
     {

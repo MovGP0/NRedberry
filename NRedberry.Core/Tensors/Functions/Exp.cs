@@ -1,12 +1,7 @@
-﻿namespace NRedberry.Core.Tensors.Functions;
+﻿namespace NRedberry.Tensors.Functions;
 
-public class Exp : ScalarFunction
+public class Exp(Tensor argument) : ScalarFunction(argument)
 {
-    public Exp(Tensor argument)
-        : base(argument)
-    {
-    }
-
     public override Tensor Derivative() => this;
 
     protected override string FunctionName() => "Exp";

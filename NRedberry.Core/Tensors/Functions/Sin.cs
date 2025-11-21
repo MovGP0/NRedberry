@@ -1,12 +1,7 @@
-﻿namespace NRedberry.Core.Tensors.Functions;
+﻿namespace NRedberry.Tensors.Functions;
 
-public sealed class Sin : ScalarFunction
+public sealed class Sin(Tensor argument) : ScalarFunction(argument)
 {
-    public Sin(Tensor argument)
-        : base(argument)
-    {
-    }
-
     public override Tensor Derivative()
     {
         return new Cos(Argument);

@@ -1,8 +1,8 @@
-using NRedberry.Core.Groups;
-using NRedberry.Core.Indices;
-using NRedberry.Core.Tensors;
+using NRedberry.Groups;
+using NRedberry.Indices;
+using NRedberry.Tensors;
 
-namespace NRedberry.Core.Transformations.Symmetrization;
+namespace NRedberry.Transformations.Symmetrization;
 
 /// <summary>
 /// Skeleton port of cc.redberry.core.transformations.symmetrization.SymmetrizeTransformation.

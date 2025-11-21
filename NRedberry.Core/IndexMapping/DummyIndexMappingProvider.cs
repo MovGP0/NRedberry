@@ -1,6 +1,6 @@
-using NRedberry.Core.Concurrent;
+using NRedberry.Concurrent;
 
-namespace NRedberry.Core.IndexMapping;
+namespace NRedberry.IndexMapping;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/indexmapping/DummyIndexMappingProvider.java

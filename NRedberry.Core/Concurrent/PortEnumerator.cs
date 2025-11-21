@@ -1,17 +1,12 @@
 ﻿using System.Collections;
 
-namespace NRedberry.Core.Concurrent;
+namespace NRedberry.Concurrent;
 
 [Obsolete("replace with IEnumerable<T>.")]
-public sealed class PortEnumerator<T> : IEnumerator<T>
+public sealed class PortEnumerator<T>(IOutputPortUnsafe<T> opu) : IEnumerator<T>
     where T : class
 {
-    private IOutputPortUnsafe<T> Opu { get; }
-
-    public PortEnumerator(IOutputPortUnsafe<T> opu)
-    {
-        Opu = opu;
-    }
+    private IOutputPortUnsafe<T> Opu { get; } = opu;
 
     public bool MoveNext()
     {

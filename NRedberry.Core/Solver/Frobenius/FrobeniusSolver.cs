@@ -1,6 +1,6 @@
-using NRedberry.Core.Concurrent;
+using NRedberry.Concurrent;
 
-namespace NRedberry.Core.Solver.Frobenius;
+namespace NRedberry.Solver.Frobenius;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/solver/frobenius/FrobeniusSolver.java

@@ -1,6 +1,6 @@
-using NRedberry.Core.Transformations.Symmetrization;
+using NRedberry.Transformations.Symmetrization;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/tensor/Expression.java

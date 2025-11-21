@@ -1,6 +1,6 @@
 ﻿using NRedberry.Apache.Commons.Math;
 
-namespace NRedberry.Core.Numbers;
+namespace NRedberry.Numbers;
 
 public class ComplexField : IField<Complex>
 {

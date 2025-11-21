@@ -1,4 +1,4 @@
-﻿namespace NRedberry.Core.Groups;
+﻿namespace NRedberry.Groups;
 
 public sealed partial class PermutationGroup
 {

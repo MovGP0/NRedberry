@@ -521,14 +521,9 @@ public sealed class TermOrder
         return copy;
     }
 
-    private sealed class ExpVectorComparer : IComparer<ExpVector>
+    private sealed class ExpVectorComparer(Func<ExpVector, ExpVector, int> comparer) : IComparer<ExpVector>
     {
-        private readonly Func<ExpVector, ExpVector, int> comparer;
-
-        public ExpVectorComparer(Func<ExpVector, ExpVector, int> comparer)
-        {
-            this.comparer = comparer ?? throw new ArgumentNullException(nameof(comparer));
-        }
+        private readonly Func<ExpVector, ExpVector, int> comparer = comparer ?? throw new ArgumentNullException(nameof(comparer));
 
         public int Compare(ExpVector? x, ExpVector? y)
         {

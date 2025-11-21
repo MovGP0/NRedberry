@@ -1,14 +1,9 @@
-﻿using NRedberry.Core.Numbers;
+﻿using NRedberry.Numbers;
 
-namespace NRedberry.Core.Tensors.Functions;
+namespace NRedberry.Tensors.Functions;
 
-public class Cot : ScalarFunction
+public class Cot(Tensor argument) : ScalarFunction(argument)
 {
-    public Cot(Tensor argument)
-        : base(argument)
-    {
-    }
-
     public override Tensor Derivative()
     {
         return new Sin(Argument).Pow(Complex.MinusTwo);

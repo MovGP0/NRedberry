@@ -1,20 +1,8 @@
-﻿namespace NRedberry.Core.Tensors.Functions;
+﻿namespace NRedberry.Tensors.Functions;
 
-public sealed class ScalarFunctionBuilder : TensorBuilder
+public sealed class ScalarFunctionBuilder(ScalarFunctionFactory factory, Tensor? arg = null) : TensorBuilder
 {
-    private readonly ScalarFunctionFactory factory;
-    private Tensor arg;
-
-    public ScalarFunctionBuilder(ScalarFunctionFactory factory)
-    {
-        this.factory = factory;
-    }
-
-    public ScalarFunctionBuilder(ScalarFunctionFactory factory, Tensor arg)
-    {
-        this.factory = factory;
-        this.arg = arg;
-    }
+    private Tensor? arg = arg;
 
     public Tensor Build()
     {

@@ -1,4 +1,4 @@
-﻿namespace NRedberry.Core.Tensors;
+﻿namespace NRedberry.Tensors;
 
 public class TensorException : Exception
 {

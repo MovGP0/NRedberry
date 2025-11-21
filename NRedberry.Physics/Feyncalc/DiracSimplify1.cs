@@ -1,6 +1,6 @@
-using NRedberry.Core.Parsers;
-using NRedberry.Core.Tensors;
 using NRedberry.Core.Utils;
+using NRedberry.Parsers;
+using NRedberry.Tensors;
 
 namespace NRedberry.Physics.Feyncalc;
 

@@ -1,7 +1,6 @@
-using NRedberry.Core.Graphs;
-using NRedberry.Core.Indices;
-using NRedberry.Core.Tensors;
 using NRedberry.Core.Utils;
+using NRedberry.Graphs;
+using NRedberry.Tensors;
 
 namespace NRedberry.Physics.Feyncalc;
 
@@ -37,7 +36,7 @@ public sealed class ProductOfGammas
         throw new NotImplementedException();
     }
 
-    public Indices GetIndices()
+    public Indices.Indices GetIndices()
     {
         throw new NotImplementedException();
     }

@@ -1,8 +1,9 @@
-﻿using NRedberry.Core.Indices;
-using NRedberry.Core.Numbers;
-using NRedberry.Core.Tensors.Functions;
+﻿using NRedberry.IndexGeneration;
+using NRedberry.Indices;
+using NRedberry.Numbers;
+using NRedberry.Tensors.Functions;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
 /// <summary>
 /// Renames dummy indices of tensor prohibiting some dummy index to be equal to one of the specified forbidden indices.

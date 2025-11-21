@@ -1,6 +1,6 @@
-﻿using NRedberry.Core.Tensors;
+﻿using NRedberry.Tensors;
 
-namespace NRedberry.Core.Transformations.Symmetrization;
+namespace NRedberry.Transformations.Symmetrization;
 
 public class TransformationException : TensorException
 {

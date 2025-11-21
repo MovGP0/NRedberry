@@ -1,18 +1,12 @@
-using NRedberry.Core.Indices;
-using NRedberry.Core.Numbers;
+using NRedberry.Indices;
+using NRedberry.Numbers;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
-public class Split
+public class Split(Tensor factor, Tensor summand)
 {
-    public Tensor Factor { get; }
-    public Tensor Summand { get; }
-
-    public Split(Tensor factor, Tensor summand)
-    {
-        Factor = factor;
-        Summand = summand;
-    }
+    public Tensor Factor { get; } = factor;
+    public Tensor Summand { get; } = summand;
 
     public virtual TensorBuilder GetBuilder()
     {

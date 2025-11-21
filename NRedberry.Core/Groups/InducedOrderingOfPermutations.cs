@@ -1,6 +1,6 @@
 using NRedberry.Core.Combinatorics;
 
-namespace NRedberry.Core.Groups;
+namespace NRedberry.Groups;
 
 /// <summary>
 /// Ordering of permutations induced by the ordering on Ω(n) supplied by a base.

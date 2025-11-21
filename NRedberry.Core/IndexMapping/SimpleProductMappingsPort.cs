@@ -1,7 +1,7 @@
-using NRedberry.Core.Concurrent;
-using NRedberry.Core.Tensors;
+using NRedberry.Concurrent;
+using NRedberry.Tensors;
 
-namespace NRedberry.Core.IndexMapping;
+namespace NRedberry.IndexMapping;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/indexmapping/SimpleProductMappingsPort.java

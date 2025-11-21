@@ -1,7 +1,7 @@
-﻿using NRedberry.Core.IndexMapping;
-using NRedberry.Core.Tensors;
+﻿using NRedberry.IndexMapping;
+using NRedberry.Tensors;
 
-namespace NRedberry.Core.Transformations.Substitutions;
+namespace NRedberry.Transformations.Substitutions;
 
 /// <summary>
 /// Skeleton port of cc.redberry.core.transformations.substitutions.PrimitiveSubstitution.

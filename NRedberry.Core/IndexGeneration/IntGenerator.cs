@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using NRedberry.Core.Utils;
 
-namespace NRedberry.Core;
+namespace NRedberry.IndexGeneration;
 
 public sealed class IntGenerator : ICloneable<IntGenerator>, IEnumerator<int>
 {

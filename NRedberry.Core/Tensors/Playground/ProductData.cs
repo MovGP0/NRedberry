@@ -1,18 +1,12 @@
-namespace NRedberry.Core.Tensors.Playground;
+namespace NRedberry.Tensors.Playground;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/tensor/playground/ProductData.java
  */
 
-public sealed class ProductData
+public sealed class ProductData(Tensor[] data, Indices.Indices indices)
 {
-    public ProductData(Tensor[] data, Indices.Indices indices)
-    {
-        Data = data;
-        Indices = indices;
-    }
+    public Tensor[] Data { get; } = data;
 
-    public Tensor[] Data { get; }
-
-    public Indices.Indices Indices { get; }
+    public Indices.Indices Indices { get; } = indices;
 }

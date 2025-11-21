@@ -3,15 +3,9 @@
 namespace NRedberry.Core.Utils;
 
 [Obsolete("Consider using Enumerable.Return(element) instead.")]
-public sealed class SingleIterator<T> : IEnumerator<T>
+public sealed class SingleIterator<T>(T element) : IEnumerator<T>
 {
-    private readonly T _element;
     private bool _ended;
-
-    public SingleIterator(T element)
-    {
-        _element = element;
-    }
 
     public T Current
     {
@@ -22,7 +16,7 @@ public sealed class SingleIterator<T> : IEnumerator<T>
                 throw new InvalidOperationException("Enumeration already finished.");
             }
 
-            return _element;
+            return element;
         }
     }
 

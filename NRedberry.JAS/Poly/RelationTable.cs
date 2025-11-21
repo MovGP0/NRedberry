@@ -14,18 +14,13 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.poly.RelationTable
 /// </remarks>
-public class RelationTable<C> where C : RingElem<C>
+public class RelationTable<C>(GenSolvablePolynomialRing<C> ring)
+    where C : RingElem<C>
 {
     private readonly object _syncRoot = new ();
 
-    public Dictionary<List<int>, List<RelationEntry>> Table { get; }
-    public GenSolvablePolynomialRing<C> Ring { get; }
-
-    public RelationTable(GenSolvablePolynomialRing<C> ring)
-    {
-        Ring = ring ?? throw new ArgumentNullException(nameof(ring));
-        Table = new Dictionary<List<int>, List<RelationEntry>>(new SequenceComparer());
-    }
+    public Dictionary<List<int>, List<RelationEntry>> Table { get; } = new(new SequenceComparer());
+    public GenSolvablePolynomialRing<C> Ring { get; } = ring ?? throw new ArgumentNullException(nameof(ring));
 
     public override bool Equals(object? obj)
     {
@@ -593,16 +588,10 @@ public class RelationTable<C> where C : RingElem<C>
         }
     }
 
-    public sealed class RelationEntry
+    public sealed class RelationEntry(ExpVectorPair pair, GenSolvablePolynomial<C> polynomial)
     {
-        public RelationEntry(ExpVectorPair pair, GenSolvablePolynomial<C> polynomial)
-        {
-            Pair = pair ?? throw new ArgumentNullException(nameof(pair));
-            Polynomial = polynomial ?? throw new ArgumentNullException(nameof(polynomial));
-        }
-
-        public ExpVectorPair Pair { get; }
-        public GenSolvablePolynomial<C> Polynomial { get; }
+        public ExpVectorPair Pair { get; } = pair ?? throw new ArgumentNullException(nameof(pair));
+        public GenSolvablePolynomial<C> Polynomial { get; } = polynomial ?? throw new ArgumentNullException(nameof(polynomial));
 
         public override bool Equals(object? obj)
         {
@@ -642,18 +631,12 @@ public class RelationTable<C> where C : RingElem<C>
     }
 }
 
-public sealed class TableRelation<C> where C : RingElem<C>
+public sealed class TableRelation<C>(ExpVector? first, ExpVector? second, GenSolvablePolynomial<C> product)
+    where C : RingElem<C>
 {
-    public TableRelation(ExpVector? first, ExpVector? second, GenSolvablePolynomial<C> product)
-    {
-        Product = product ?? throw new ArgumentNullException(nameof(product));
-        Left = first;
-        Right = second;
-    }
-
-    public ExpVector? Left { get; }
-    public ExpVector? Right { get; }
-    public GenSolvablePolynomial<C> Product { get; }
+    public ExpVector? Left { get; } = first;
+    public ExpVector? Right { get; } = second;
+    public GenSolvablePolynomial<C> Product { get; } = product ?? throw new ArgumentNullException(nameof(product));
 
     internal ExpVectorPair Pair => new (Left ?? Product.LeadingExpVector() ?? Product.Ring.Evzero, Right ?? Product.Ring.Evzero);
 

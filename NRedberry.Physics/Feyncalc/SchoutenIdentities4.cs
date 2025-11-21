@@ -1,7 +1,7 @@
-using NRedberry.Core.Indices;
-using NRedberry.Core.Numbers;
-using NRedberry.Core.Tensors;
-using NRedberry.Core.Transformations.Symmetrization;
+using NRedberry.Indices;
+using NRedberry.Numbers;
+using NRedberry.Tensors;
+using NRedberry.Transformations.Symmetrization;
 
 namespace NRedberry.Physics.Feyncalc;
 
@@ -45,16 +45,10 @@ public sealed class SchoutenIdentities4 : ITransformation
         throw new NotImplementedException();
     }
 
-    private sealed class Mapping0
+    private sealed class Mapping0(Complex factor, IIndexMapping mapping)
     {
-        public Mapping0(Complex factor, IIndexMapping mapping)
-        {
-            Factor = factor;
-            Mapping = mapping;
-        }
+        public Complex Factor { get; } = factor;
 
-        public Complex Factor { get; }
-
-        public IIndexMapping Mapping { get; }
+        public IIndexMapping Mapping { get; } = mapping;
     }
 }

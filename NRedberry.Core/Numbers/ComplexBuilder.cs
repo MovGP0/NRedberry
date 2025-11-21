@@ -1,6 +1,6 @@
-﻿using NRedberry.Core.Tensors;
+﻿using NRedberry.Tensors;
 
-namespace NRedberry.Core.Numbers;
+namespace NRedberry.Numbers;
 
 internal sealed class ComplexBuilder(Complex complex): TensorBuilder
 {

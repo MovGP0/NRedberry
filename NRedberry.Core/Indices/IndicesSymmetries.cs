@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Combinatorics.Symmetries;
 
-namespace NRedberry.Core.Indices;
+namespace NRedberry.Indices;
 
 /// <summary>
 /// Representation of permutational symmetries of indices of simple tensors.

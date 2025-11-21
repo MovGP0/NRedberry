@@ -1,20 +1,15 @@
-using NRedberry.Core.Parsers;
-using NRedberry.Core.Tensors;
-using NRedberry.Core.Transformations.Symmetrization;
+using NRedberry.Parsers;
+using NRedberry.Tensors;
+using NRedberry.Transformations.Symmetrization;
 
 namespace NRedberry.Contexts;
 
-public sealed class ParseManager
+public sealed class ParseManager(Parser parser)
 {
     public IList<IParseTokenTransformer> DefaultParserPreprocessors = new List<IParseTokenTransformer>();
     public IList<ITransformation> DefaultTensorPreprocessors = new List<ITransformation>();
 
-    public Parser Parser { get; }
-
-    public ParseManager(Parser parser)
-    {
-        Parser = parser;
-    }
+    public Parser Parser { get; } = parser;
 
     public Tensor Parse(string expression, IEnumerable<ITransformation> tensorPreprocessors, IEnumerable<IParseTokenTransformer> nodesPreprocessors)
     {

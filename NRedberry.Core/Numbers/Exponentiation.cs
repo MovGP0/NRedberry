@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace NRedberry.Core.Numbers;
+namespace NRedberry.Numbers;
 
 public static class Exponentiation
 {

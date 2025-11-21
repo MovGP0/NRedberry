@@ -1,14 +1,9 @@
-﻿using NRedberry.Core.Numbers;
+﻿using NRedberry.Numbers;
 
-namespace NRedberry.Core.Tensors.Functions;
+namespace NRedberry.Tensors.Functions;
 
-public class ArcCot : ScalarFunction
+public class ArcCot(Tensor argument) : ScalarFunction(argument)
 {
-    public ArcCot(Tensor argument)
-        : base(argument)
-    {
-    }
-
     public override Tensor Derivative()
     {
         return Tensors.Sum(Complex.One, Argument.Pow(Complex.Two)).Pow(Complex.MinusOne).Multiply(Complex.MinusOne);

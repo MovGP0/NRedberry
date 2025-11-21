@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Numerics;
-using NRedberry.Core.Tensors;
-using NRedberry.Core.Transformations.Options;
-using NRedberry.Core.Transformations.Symmetrization;
-using Complex = NRedberry.Core.Numbers.Complex;
+using NRedberry.Transformations.Options;
+using NRedberry.Transformations.Symmetrization;
+using Complex = NRedberry.Numbers.Complex;
 
 namespace NRedberry.Groovy;
 
@@ -131,7 +130,7 @@ public class DSLTransformation<T>(Type clazz)
                     => null,
 
                 string s
-                    => Tensors.Parse(s),
+                    => Tensors.Tensors.Parse(s),
 
                 ITransformation transformation
                     => transformation,

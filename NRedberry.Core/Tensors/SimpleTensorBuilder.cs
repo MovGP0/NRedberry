@@ -1,13 +1,8 @@
-﻿namespace NRedberry.Core.Tensors;
+﻿namespace NRedberry.Tensors;
 
-public sealed class SimpleTensorBuilder : TensorBuilder
+public sealed class SimpleTensorBuilder(SimpleTensor tensor) : TensorBuilder
 {
-    private SimpleTensor Tensor { get; }
-
-    public SimpleTensorBuilder(SimpleTensor tensor)
-    {
-        Tensor = tensor ?? throw new ArgumentNullException(nameof(tensor));
-    }
+    private SimpleTensor Tensor { get; } = tensor ?? throw new ArgumentNullException(nameof(tensor));
 
     public Tensor Build()
     {

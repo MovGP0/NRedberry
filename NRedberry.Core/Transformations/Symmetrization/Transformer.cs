@@ -1,21 +1,11 @@
-﻿using NRedberry.Core.Tensors;
-using NRedberry.Core.Tensors.Iterators;
+﻿using NRedberry.Tensors;
+using NRedberry.Tensors.Iterators;
 
-namespace NRedberry.Core.Transformations.Symmetrization;
+namespace NRedberry.Transformations.Symmetrization;
 
-public class Transformer : ITransformation
+public class Transformer(TraverseState state, ITransformation[] transformations, TraverseGuide guide)
+    : ITransformation
 {
-    private readonly TraverseState state;
-    private readonly ITransformation[] transformations;
-    private readonly TraverseGuide guide;
-
-    public Transformer(TraverseState state, ITransformation[] transformations, TraverseGuide guide)
-    {
-        this.state = state;
-        this.transformations = transformations;
-        this.guide = guide;
-    }
-
     public Transformer(TraverseState state, ITransformation[] transformations)
         : this(state, transformations, TraverseGuide.All)
     {

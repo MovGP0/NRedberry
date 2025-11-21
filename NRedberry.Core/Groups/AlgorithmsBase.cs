@@ -1,8 +1,7 @@
 using System.Numerics;
-using NRedberry.Core.Utils;
 using NRedberry.Core.Combinatorics;
 
-namespace NRedberry.Core.Groups;
+namespace NRedberry.Groups;
 
 public static class AlgorithmsBase
 {
@@ -17,16 +16,10 @@ public static class AlgorithmsBase
     /// <summary>
     /// Holder returned by <see cref="Strip(IReadOnlyList{BSGSElement}, Permutation)"/>.
     /// </summary>
-    public sealed class StripContainer
+    public sealed class StripContainer(int terminationLevel, Permutation remainder)
     {
-        public int TerminationLevel { get; }
-        public Permutation Remainder { get; }
-
-        public StripContainer(int terminationLevel, Permutation remainder)
-        {
-            TerminationLevel = terminationLevel;
-            Remainder = remainder;
-        }
+        public int TerminationLevel { get; } = terminationLevel;
+        public Permutation Remainder { get; } = remainder;
     }
 
     public static StripContainer Strip(IReadOnlyList<BSGSElement> bsgs, Permutation permutation)

@@ -12,13 +12,9 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ufd.FactorModular
 /// </remarks>
-public class FactorModular<MOD> : FactorAbsolute<MOD> where MOD : GcdRingElem<MOD>, Modular
+public class FactorModular<MOD>(RingFactory<MOD> cfac) : FactorAbsolute<MOD>(cfac)
+    where MOD : GcdRingElem<MOD>, Modular
 {
-    public FactorModular(RingFactory<MOD> cfac)
-        : base(cfac)
-    {
-    }
-
     public SortedDictionary<long, GenPolynomial<MOD>> BaseDistinctDegreeFactors(GenPolynomial<MOD> P)
     {
         ArgumentNullException.ThrowIfNull(P);

@@ -4,7 +4,7 @@ using System.Text;
 using NRedberry.Contexts;
 using NRedberry.Core.Utils;
 
-namespace NRedberry.Core.Indices;
+namespace NRedberry.Indices;
 
 /// <summary>
 /// The unique identification information about indices objects. This class contains

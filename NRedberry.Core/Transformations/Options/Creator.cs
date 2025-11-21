@@ -1,4 +1,4 @@
-namespace NRedberry.Core.Transformations.Options;
+namespace NRedberry.Transformations.Options;
 
 /// <summary>
 /// Indicates that the annotated constructor should be used when building a transformation from options.

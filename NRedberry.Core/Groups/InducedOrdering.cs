@@ -1,9 +1,4 @@
-﻿using NRedberry.Core.Utils;
-
-namespace NRedberry.Core.Groups;
-
-using System;
-using System.Collections.Generic;
+﻿namespace NRedberry.Groups;
 
 public class InducedOrdering : IComparer<int>
 {

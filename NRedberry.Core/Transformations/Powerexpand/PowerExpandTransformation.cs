@@ -1,8 +1,8 @@
-using NRedberry.Core.Tensors;
-using NRedberry.Core.Transformations.Symmetrization;
 using NRedberry.Core.Utils;
+using NRedberry.Tensors;
+using NRedberry.Transformations.Symmetrization;
 
-namespace NRedberry.Core.Transformations.Powerexpand;
+namespace NRedberry.Transformations.Powerexpand;
 
 /// <summary>
 /// Skeleton port of cc.redberry.core.transformations.powerexpand.PowerExpandTransformation.

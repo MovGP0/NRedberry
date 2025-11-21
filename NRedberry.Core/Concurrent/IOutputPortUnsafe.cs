@@ -1,4 +1,4 @@
-﻿namespace NRedberry.Core.Concurrent;
+﻿namespace NRedberry.Concurrent;
 
 [Obsolete("replace with IEnumerable<T>.")]
 public interface IOutputPortUnsafe<out T>

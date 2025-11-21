@@ -1,8 +1,9 @@
-﻿using NRedberry.Core.Indices;
-using NRedberry.Core.Tensors;
-using NRedberry.Core.Tensors.Functions;
+﻿using NRedberry.Core.Utils;
+using NRedberry.Indices;
+using NRedberry.Tensors;
+using NRedberry.Tensors.Functions;
 
-namespace NRedberry.Core.Utils;
+namespace NRedberry.Utils;
 
 public static class TensorHashCalculator
 {

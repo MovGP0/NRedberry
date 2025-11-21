@@ -1,4 +1,4 @@
-namespace NRedberry.Core.Tensors.Playground;
+namespace NRedberry.Tensors.Playground;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/tensor/playground/GraphStructure.java

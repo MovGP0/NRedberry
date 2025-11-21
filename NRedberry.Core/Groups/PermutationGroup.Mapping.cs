@@ -1,7 +1,7 @@
 ﻿using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
 
-namespace NRedberry.Core.Groups;
+namespace NRedberry.Groups;
 
 public sealed partial class PermutationGroup
 {
@@ -48,22 +48,13 @@ public sealed partial class PermutationGroup
         return new BacktrackSearch(AlgorithmsBase.AsBSGSList(bsgs), mapping, mapping);
     }
 
-    private sealed class SearchForMapping : IBacktrackSearchTestFunction, IIndicator<Permutation>
+    private sealed class SearchForMapping(int[] from, int[] to) : IBacktrackSearchTestFunction, IIndicator<Permutation>
     {
-        private readonly int[] _from;
-        private readonly int[] _to;
-
-        public SearchForMapping(int[] from, int[] to)
-        {
-            _from = from;
-            _to = to;
-        }
-
         public bool Test(Permutation permutation, int level)
         {
-            if (level < _from.Length)
+            if (level < from.Length)
             {
-                return permutation.NewIndexOf(_from[level]) == _to[level];
+                return permutation.NewIndexOf(from[level]) == to[level];
             }
 
             return true;

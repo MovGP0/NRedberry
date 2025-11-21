@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Text;
 using NRedberry.Core.Combinatorics;
-using NRedberry.Core.Groups;
-using NRedberry.Core.Indices;
+using NRedberry.Groups;
+using NRedberry.Indices;
 
 namespace NRedberry.Contexts;
 

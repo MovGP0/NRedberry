@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
-using NRedberry.Core.Tensors;
+using NRedberry.Tensors;
 
-namespace NRedberry.Core.Numbers;
+namespace NRedberry.Numbers;
 
 public static class NumberUtils
 {

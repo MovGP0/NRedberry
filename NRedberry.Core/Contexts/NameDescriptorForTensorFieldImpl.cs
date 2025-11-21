@@ -1,21 +1,16 @@
-﻿using NRedberry.Core.Indices;
+﻿using NRedberry.Indices;
 
 namespace NRedberry.Contexts;
 
-public sealed class NameDescriptorForTensorFieldImpl: NameDescriptorForTensorField
+public sealed class NameDescriptorForTensorFieldImpl(
+    string name,
+    StructureOfIndices[] indexTypeStructures,
+    int id,
+    bool isDiracDelta)
+    : NameDescriptorForTensorField(indexTypeStructures, id, new int[indexTypeStructures.Length - 1], name, isDiracDelta)
 {
     readonly Dictionary<DerivativeDescriptor, NameDescriptorForTensorFieldDerivative> derivatives = new();
-    readonly NameAndStructureOfIndices[] keys;
-
-    public NameDescriptorForTensorFieldImpl(
-        string name,
-        StructureOfIndices[] indexTypeStructures,
-        int id,
-        bool isDiracDelta)
-        : base(indexTypeStructures, id, new int[indexTypeStructures.Length - 1], name, isDiracDelta)
-    {
-        keys = [new NameAndStructureOfIndices(name, indexTypeStructures)];
-    }
+    readonly NameAndStructureOfIndices[] keys = [new NameAndStructureOfIndices(name, indexTypeStructures)];
 
     public override NameAndStructureOfIndices[] GetKeys()
     {

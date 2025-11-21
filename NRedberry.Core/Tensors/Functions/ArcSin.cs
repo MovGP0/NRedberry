@@ -1,14 +1,9 @@
-﻿using NRedberry.Core.Numbers;
+﻿using NRedberry.Numbers;
 
-namespace NRedberry.Core.Tensors.Functions;
+namespace NRedberry.Tensors.Functions;
 
-public class ArcSin : ScalarFunction
+public class ArcSin(Tensor argument) : ScalarFunction(argument)
 {
-    public ArcSin(Tensor argument)
-        : base(argument)
-    {
-    }
-
     public override Tensor Derivative()
     {
         return TensorExtensions.Sum(Complex.One, Argument.Pow(Complex.Two)).Pow(Complex.MinusOneHalf);

@@ -1,4 +1,4 @@
-﻿namespace NRedberry.Core.Tensors.Iterators;
+﻿namespace NRedberry.Tensors.Iterators;
 
 public sealed class FromChildToParentIterator : TreeIteratorAbstract
 {
@@ -16,15 +16,18 @@ public sealed class FromChildToParentIterator : TreeIteratorAbstract
 /// <summary>
 /// An iterator for tensors that allows the programmer to traverse the tensor
 /// tree structure, modify the tensor during iteration, and obtain information
-/// about iterator current position in the tensor.A { @code TensorTreeIterator }
-/// has current element, so all methods are defined in terms of the cursor
-/// position. *<p>Example: <blockquote><pre>
-///      Tensor tensor = Tensors.parse("Cos[a+b+Sin[x]]");
-/// TensorIterator iterator = new TreeTraverseIterator(tensor);
+/// about iterator current position in the tensor.
+/// A <see cref="TensorTreeIterator"/> has current element,
+/// so all methods are defined in terms of the cursor position.
+/// </summary>
+/// <example>
+/// <code>
+/// Tensor tensor = Tensors.Parse("Cos[a+b+Sin[x]]");
+/// TensorIterator states = new TreeTraverseIterator(tensor);
 /// TraverseState state;
-///      while ((state = iterator.next()) != null)
-/// System.out.println(state + " " + iterator.depth() + " " + iterator.current());
-/// </pre></blockquote> This code will print: <blockquote><pre>
+/// foreach (var state in states)
+///     Console.WriteLine(state + " " + state.Depth + " " + state.Current);
+/// </code> This code will print: <code>
 /// Entering   Cos[a + b + Sin[y * c + x]]
 /// Entering   a+b+Sin[y * c + x]
 /// Entering   a
@@ -45,23 +48,12 @@ public sealed class FromChildToParentIterator : TreeIteratorAbstract
 /// Leaving   Sin[y * c + x]
 /// Leaving   a+b+Sin[y * c + x]
 /// Leaving   Cos[a + b + Sin[y * c + x]]
-/// </pre></blockquote> </p>
-/// </summary>
-public sealed class TreeTraverseIterator
+/// </code>
+/// </example>
+public sealed class TreeTraverseIterator(Tensor tensor, TraverseGuide? guide = null)
 {
-    private Tensor tensor;
-    private TraverseGuide guide;
-
-    public TreeTraverseIterator(Tensor tensor)
-    {
-        this.tensor = tensor;
-    }
-
-    public TreeTraverseIterator(Tensor tensor, TraverseGuide guide)
-    {
-        this.tensor = tensor;
-        this.guide = guide;
-    }
+    private Tensor tensor = tensor;
+    private TraverseGuide? guide = guide;
 
     public int Depth { get; set; }
 

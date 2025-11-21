@@ -1,4 +1,4 @@
-﻿namespace NRedberry.Core.Parsers;
+﻿namespace NRedberry.Parsers;
 
 /// <summary>
 /// Parser of mathematical expressions.

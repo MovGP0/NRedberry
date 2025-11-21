@@ -1,19 +1,14 @@
 ﻿using System.Text;
 using NRedberry.Contexts;
-using NRedberry.Core.Indices;
+using NRedberry.Indices;
+using NRedberry.Tensors.Functions;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
-public class SimpleTensor : Tensor, IEquatable<SimpleTensor>
+public class SimpleTensor(int name, SimpleIndices indices) : Tensor, IEquatable<SimpleTensor>
 {
-    public SimpleIndices SimpleIndices { get; }
+    public SimpleIndices SimpleIndices { get; } = indices ?? throw new ArgumentNullException(nameof(indices));
     public override Indices.Indices Indices => SimpleIndices;
-
-    public SimpleTensor(int name, SimpleIndices indices)
-    {
-        Name = name;
-        SimpleIndices = indices ?? throw new ArgumentNullException(nameof(indices));
-    }
 
     /// <summary>
     /// Returns the name (unique identifier) of this tensor.
@@ -22,7 +17,7 @@ public class SimpleTensor : Tensor, IEquatable<SimpleTensor>
     /// name of this tensor
     /// </returns>
     /// <seealso cref="NameDescriptor"/>
-    public int Name { get; }
+    public int Name { get; } = name;
 
     /**
          * Returns the name (unique identifier) of this tensor

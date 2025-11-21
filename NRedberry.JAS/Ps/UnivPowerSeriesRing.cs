@@ -148,34 +148,19 @@ public class UnivPowerSeriesRing<C> : RingFactory<UnivPowerSeries<C>> where C : 
         return new UnivPowerSeries<C>(this, new TaylorCoefficients(this, f, a));
     }
 
-    private sealed class LambdaCoefficients : Coefficients<C>
+    private sealed class LambdaCoefficients(Func<int, Func<int, C>, C> generator) : Coefficients<C>
     {
-        private readonly Func<int, Func<int, C>, C> generator;
-
-        public LambdaCoefficients(Func<int, Func<int, C>, C> generator)
-        {
-            this.generator = generator ?? throw new ArgumentNullException(nameof(generator));
-        }
+        private readonly Func<int, Func<int, C>, C> generator = generator ?? throw new ArgumentNullException(nameof(generator));
 
         protected override C Generate(int index) => generator(index, idx => Get(idx));
     }
 
-    private sealed class TaylorCoefficients : Coefficients<C>
+    private sealed class TaylorCoefficients(UnivPowerSeriesRing<C> owner, TaylorFunction<C> function, C expansionPoint)
+        : Coefficients<C>
     {
-        private readonly UnivPowerSeriesRing<C> owner;
-        private TaylorFunction<C> derivative;
-        private readonly C expansionPoint;
+        private TaylorFunction<C> derivative = function;
         private long k;
-        private long factorial;
-
-        public TaylorCoefficients(UnivPowerSeriesRing<C> owner, TaylorFunction<C> function, C expansionPoint)
-        {
-            this.owner = owner;
-            derivative = function;
-            this.expansionPoint = expansionPoint;
-            k = 0;
-            factorial = 1;
-        }
+        private long factorial = 1;
 
         protected override C Generate(int index)
         {

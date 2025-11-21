@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using NRedberry.Core.Combinatorics;
 
-namespace NRedberry.Core.Groups;
+namespace NRedberry.Groups;
 
 /// <summary>
 /// Brute-force iterator over all permutations in a group specified by the generation set.

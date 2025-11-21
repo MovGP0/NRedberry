@@ -1,12 +1,12 @@
 ﻿using System.Numerics;
 using NRedberry.Apache.Commons.Math;
-using NRedberry.Core.Indices;
-using NRedberry.Core.Tensors;
+using NRedberry.Indices;
+using NRedberry.Tensors;
 using Complex32 = System.Numerics.Complex;
 
-namespace NRedberry.Core.Numbers;
+namespace NRedberry.Numbers;
 
-public sealed class Complex : Tensor, INumber<Complex>
+public sealed class Complex : Tensor, NRedberry.INumber<Complex>
 {
     public static readonly Complex ComplexNaN = new(NRedberry.Numeric.NaN, NRedberry.Numeric.NaN);
     public static readonly Complex RealPositiveInfinity = new(NRedberry.Numeric.PositiveInfinity, NRedberry.Numeric.Zero);

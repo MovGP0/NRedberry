@@ -1,6 +1,6 @@
-﻿using NRedberry.Core.Utils;
+﻿using NRedberry.Utils;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
 public sealed class TensorWrapper(Tensor tensor) : IComparable<TensorWrapper>
 {

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Numerics;
 
-namespace NRedberry.Core.Groups;
+namespace NRedberry.Groups;
 
 public static partial class Permutations
 {

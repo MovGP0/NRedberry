@@ -1,4 +1,4 @@
-﻿namespace NRedberry.Core.Maths;
+﻿namespace NRedberry.Maths;
 
 public static class MathUtils
 {

@@ -10,15 +10,9 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.ufd.FactorRational
 /// </remarks>
-public class FactorRational : FactorAbsolute<BigRational>
+public class FactorRational() : FactorAbsolute<BigRational>(BigRational.One)
 {
-    private readonly FactorAbstract<BigInteger> _integerFactorEngine;
-
-    public FactorRational()
-        : base(BigRational.One)
-    {
-        _integerFactorEngine = FactorFactory.GetImplementation(BigInteger.One);
-    }
+    private readonly FactorAbstract<BigInteger> _integerFactorEngine = FactorFactory.GetImplementation(BigInteger.One);
 
     public override List<GenPolynomial<BigRational>> BaseFactorsSquarefree(GenPolynomial<BigRational> P)
     {

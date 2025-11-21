@@ -1,13 +1,7 @@
 ﻿namespace NRedberry;
 
-public sealed class UpperLowerIndices
+public sealed class UpperLowerIndices(int[] upper, int[] lower)
 {
-    public int[] Upper { get; }
-    public int[] Lower { get; }
-
-    public UpperLowerIndices(int[] upper, int[] lower)
-    {
-        Upper = upper;
-        Lower = lower;
-    }
+    public int[] Upper { get; } = upper;
+    public int[] Lower { get; } = lower;
 }

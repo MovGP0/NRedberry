@@ -1,6 +1,6 @@
 ﻿using NRedberry.Core.Combinatorics;
 
-namespace NRedberry.Core.Groups;
+namespace NRedberry.Groups;
 
 public static class RandomPermutation
 {

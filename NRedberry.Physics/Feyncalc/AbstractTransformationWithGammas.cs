@@ -1,7 +1,7 @@
-using NRedberry.Core.Parsers.Preprocessor;
-using NRedberry.Core.Tensors;
-using NRedberry.Core.Transformations.Substitutions;
-using NRedberry.Core.Transformations.Symmetrization;
+using NRedberry.Parsers.Preprocessor;
+using NRedberry.Tensors;
+using NRedberry.Transformations.Substitutions;
+using NRedberry.Transformations.Symmetrization;
 
 namespace NRedberry.Physics.Feyncalc;
 

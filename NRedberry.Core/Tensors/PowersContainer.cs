@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace NRedberry.Core.Tensors;
+namespace NRedberry.Tensors;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/tensor/PowersContainer.java

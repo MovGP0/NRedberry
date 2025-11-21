@@ -1,4 +1,4 @@
-namespace NRedberry.Core.Parsers.Preprocessor;
+namespace NRedberry.Parsers.Preprocessor;
 
 /*
  * Original: ./core/src/main/java/cc/redberry/core/parser/preprocessor/ChangeIndicesTypesAndTensorNames.java

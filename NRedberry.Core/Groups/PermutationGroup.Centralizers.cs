@@ -1,7 +1,7 @@
 ﻿using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
 
-namespace NRedberry.Core.Groups;
+namespace NRedberry.Groups;
 
 public sealed partial class PermutationGroup
 {
@@ -106,24 +106,14 @@ public sealed partial class PermutationGroup
 
     private PermutationGroup? _center;
 
-    private sealed class CentralizerSearchTest : IBacktrackSearchTestFunction, IIndicator<Permutation>
+    private sealed class CentralizerSearchTest(
+        List<BSGSCandidateElement> groupBsgs,
+        PermutationGroup subgroup,
+        int[] groupBase,
+        Permutation?[] mappings)
+        : IBacktrackSearchTestFunction, IIndicator<Permutation>
     {
-        private readonly List<BSGSCandidateElement> _groupBsgs;
-        private readonly PermutationGroup _subgroup;
-        private readonly Permutation?[] _mappings;
-        private readonly int[] _groupBase;
-
-        public CentralizerSearchTest(
-            List<BSGSCandidateElement> groupBsgs,
-            PermutationGroup subgroup,
-            int[] groupBase,
-            Permutation?[] mappings)
-        {
-            _groupBsgs = groupBsgs;
-            _subgroup = subgroup;
-            _groupBase = groupBase;
-            _mappings = mappings;
-        }
+        private readonly List<BSGSCandidateElement> _groupBsgs = groupBsgs;
 
         public bool Test(Permutation permutation, int level)
         {
@@ -132,20 +122,20 @@ public sealed partial class PermutationGroup
                 return true;
             }
 
-            if (_subgroup._internalDegree < _groupBase[level - 1]
-                && _groupBase[level - 1] != _groupBase[level])
+            if (subgroup._internalDegree < groupBase[level - 1]
+                && groupBase[level - 1] != groupBase[level])
             {
                 return true;
             }
 
-            if (_subgroup.IndexOfOrbit(_groupBase[level - 1]) != _subgroup.IndexOfOrbit(_groupBase[level]))
+            if (subgroup.IndexOfOrbit(groupBase[level - 1]) != subgroup.IndexOfOrbit(groupBase[level]))
             {
                 return true;
             }
 
-            Permutation mapping = _mappings[level - 1]!;
-            int expected = mapping.NewIndexOf(permutation.NewIndexOf(_groupBase[level - 1]));
-            return permutation.NewIndexOf(_groupBase[level]) == expected;
+            Permutation mapping = mappings[level - 1]!;
+            int expected = mapping.NewIndexOf(permutation.NewIndexOf(groupBase[level - 1]));
+            return permutation.NewIndexOf(groupBase[level]) == expected;
         }
 
         public bool Is(Permutation permutation)
@@ -155,7 +145,7 @@ public sealed partial class PermutationGroup
                 return false;
             }
 
-            foreach (Permutation p in _subgroup._generators)
+            foreach (Permutation p in subgroup._generators)
             {
                 if (!p.Commutator(permutation).IsIdentity)
                 {

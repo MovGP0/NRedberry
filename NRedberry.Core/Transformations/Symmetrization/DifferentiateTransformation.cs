@@ -1,8 +1,8 @@
-﻿using NRedberry.Core.Tensors;
-using NRedberry.Core.Tensors.Functions;
-using NRedberry.Core.Transformations.Substitutions;
+﻿using NRedberry.Tensors;
+using NRedberry.Tensors.Functions;
+using NRedberry.Transformations.Substitutions;
 
-namespace NRedberry.Core.Transformations.Symmetrization;
+namespace NRedberry.Transformations.Symmetrization;
 
 /// <summary>
 /// Skeleton port of cc.redberry.core.transformations.DifferentiateTransformation.

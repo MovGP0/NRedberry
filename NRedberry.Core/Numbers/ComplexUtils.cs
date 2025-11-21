@@ -1,6 +1,6 @@
 ﻿using Complex32 = System.Numerics.Complex;
 
-namespace NRedberry.Core.Numbers;
+namespace NRedberry.Numbers;
 
 public static class ComplexUtils
 {
