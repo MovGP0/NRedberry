@@ -3,39 +3,56 @@ using System.Collections;
 namespace NRedberry.Core.Utils;
 
 /// <summary>
-/// Skeleton port of cc.redberry.core.utils.IteratorWithProgress.
+/// Wraps an <see cref="IEnumerator{T}"/> and reports percentage progress as it iterates.
+/// Port of cc.redberry.core.utils.IteratorWithProgress.
 /// </summary>
 public class IteratorWithProgress<T> : IEnumerator<T>
 {
-    protected readonly IEnumerator<T> innerIterator;
-    protected readonly long totalCount;
-    protected readonly Consumer output = null!;
-    protected int previousPercent = -1;
-    protected long currentPosition;
+    private readonly IEnumerator<T> innerIterator;
+    private readonly long totalCount;
+    private readonly IConsumer consumer;
 
-    public IteratorWithProgress(IEnumerator<T> innerIterator, long totalCount, Consumer output)
+    private int prevPercent = -1;
+    private long currentPosition;
+
+    public IteratorWithProgress(IEnumerator<T> innerIterator, long totalCount, IConsumer consumer)
     {
-        throw new NotImplementedException();
+        this.innerIterator = innerIterator ?? throw new ArgumentNullException(nameof(innerIterator));
+        this.totalCount = totalCount;
+        this.consumer = consumer ?? throw new ArgumentNullException(nameof(consumer));
     }
 
     public bool MoveNext()
     {
-        throw new NotImplementedException();
+        if (!innerIterator.MoveNext())
+            return false;
+
+        ++currentPosition;
+        int percent = (int)(100.0 * currentPosition / totalCount);
+        if (percent != prevPercent)
+        {
+            consumer.Consume(percent);
+            prevPercent = percent;
+        }
+
+        return true;
     }
 
     public void Reset()
     {
-        throw new NotImplementedException();
+        innerIterator.Reset();
+        currentPosition = 0;
+        prevPercent = -1;
     }
 
-    public T Current => throw new NotImplementedException();
+    public T Current => innerIterator.Current;
 
     object IEnumerator.Current => Current!;
 
-    public void Dispose()
-    {
-        throw new NotImplementedException();
-    }
+    public void Dispose() => innerIterator.Dispose();
 
-    public delegate void Consumer(int value);
+    public interface IConsumer
+    {
+        void Consume(int percent);
+    }
 }
