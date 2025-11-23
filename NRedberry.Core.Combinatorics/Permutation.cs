@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Immutable;
 using System.Numerics;
 
@@ -16,7 +17,7 @@ namespace NRedberry.Core.Combinatorics;
 /// (“this * other” means apply <c>this</c> first, then <c>other</c>), antisymmetry flag,
 /// and the various helpers around conjugation, commutators, and powers.
 /// </remarks>
-public interface Permutation : IComparable<Permutation>
+public interface Permutation : IComparable<Permutation>, IEnumerable
 {
     /// <summary>
     /// Returns array that represents this permutation in one-line notation.
@@ -121,7 +122,7 @@ public interface Permutation : IComparable<Permutation>
     /// Returns <c>true</c> if this permutation is antisymmetry and <c>false</c> otherwise.
     /// </summary>
     /// <returns><c>true</c> if this permutation is antisymmetry; otherwise <c>false</c>.</returns>
-    bool Antisymmetry();
+    bool IsAntisymmetry { get; }
 
     /// <summary>
     /// If this is antisymmetry, then converts this permutation to symmetry.

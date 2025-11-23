@@ -95,7 +95,7 @@ internal sealed class NameDescriptorForTensorFieldDerivative : NameDescriptorFor
         int[][] mapping = baseStructure.GetPartitionMappings(partition);
 
         // Adding field symmetries
-        foreach (Permutation p in Parent.GetSymmetries().GetGenerators())
+        foreach (Permutation p in Parent.GetSymmetries().Generators)
         {
             Symmetries.AddSymmetry(ConvertPermutation(p, mapping[0], baseStructure.Size));
         }

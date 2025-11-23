@@ -8,13 +8,15 @@ namespace NRedberry.Indices;
 
 /// <summary>
 /// The unique identification information about indices objects. This class contains
-/// information about types of indices(number of indices of each type) and about
-/// states of non metric indices(if there are any).
+/// information about types of indices (number of indices of each type) and about
+/// states of non-metric indices (if there are any).
 /// </summary>
 public sealed class StructureOfIndices
 {
-    private readonly int[] typesCounts = new int[IndexTypeMethods.TypesCount];
+    public int[] TypesCounts { get; } = new int[IndexTypeMethods.TypesCount];
+
     private readonly BitArray[] states = new BitArray[IndexTypeMethods.TypesCount];
+
     private readonly long size;
 
     #region Constructors
@@ -37,7 +39,7 @@ public sealed class StructureOfIndices
 
     private StructureOfIndices(byte type, int count, params bool[] states)
     {
-        typesCounts[type] = count;
+        TypesCounts[type] = count;
         size = count;
         for (int i = 0; i < IndexTypeMethods.TypesCount; ++i)
         {
@@ -50,7 +52,7 @@ public sealed class StructureOfIndices
     {
         if (!CC.IsMetric(type))
             throw new ArgumentException("No states information provided for non metric type.");
-        typesCounts[type] = count;
+        TypesCounts[type] = count;
         size = count;
         for (int i = 0; i < IndexTypeMethods.TypesCount; ++i)
         {
@@ -70,7 +72,7 @@ public sealed class StructureOfIndices
         int size = 0;
         for (int i = 0; i < types.Length; ++i)
         {
-            typesCounts[types[i]] = count[i];
+            TypesCounts[types[i]] = count[i];
             size += count[i];
         }
 
@@ -100,7 +102,7 @@ public sealed class StructureOfIndices
             size += allCount[i];
         }
 
-        Array.Copy(allCount, 0, typesCounts, 0, allCount.Length);
+        Array.Copy(allCount, 0, TypesCounts, 0, allCount.Length);
         this.size = size;
     }
 
@@ -109,13 +111,13 @@ public sealed class StructureOfIndices
         size = indices.Size();
         int i;
         for (i = 0; i < size; ++i)
-            ++typesCounts[IndicesUtils.GetType(indices[i])];
+            ++TypesCounts[IndicesUtils.GetType(indices[i])];
         int[] pointers = new int[IndexTypeMethods.TypesCount];
         for (i = 0; i < IndexTypeMethods.TypesCount; ++i)
         {
             if (!CC.IsMetric((byte)i))
             {
-                states[i] = CreateBBBA(typesCounts[i]);
+                states[i] = CreateBBBA(TypesCounts[i]);
             }
             else
             {
@@ -214,7 +216,7 @@ public sealed class StructureOfIndices
 
     public int[] GetTypesCounts()
     {
-        return (int[]) typesCounts.Clone();
+        return (int[])TypesCounts.Clone();
     }
 
     StructureOfIndices(int[] indices)
@@ -222,13 +224,13 @@ public sealed class StructureOfIndices
         size = indices.Length;
         int i;
         for (i = 0; i < size; ++i)
-            ++typesCounts[IndicesUtils.GetType_(indices[i])];
+            ++TypesCounts[IndicesUtils.GetType_(indices[i])];
         int[] pointers = new int[IndexTypeMethods.TypesCount];
         for (i = 0; i < IndexTypeMethods.TypesCount; ++i)
         {
             if (!CC.IsMetric((byte)i))
             {
-                states[i] = CreateBBBA(typesCounts[i]);
+                states[i] = CreateBBBA(TypesCounts[i]);
             }
             else
             {
@@ -271,7 +273,7 @@ public sealed class StructureOfIndices
         if (size == 0)
             return true;
 
-        return typesCounts.SequenceEqual(other.GetTypesCounts())
+        return TypesCounts.SequenceEqual(other.GetTypesCounts())
             && states.SequenceEqual(other.GetStates(), new BitArrayEqualityComparer());
     }
 
@@ -280,7 +282,7 @@ public sealed class StructureOfIndices
         unchecked
         {
             int hash = 469;
-            foreach (var item in typesCounts)
+            foreach (var item in TypesCounts)
             {
                 hash = (hash * 23) + item.GetHashCode();
             }
@@ -298,13 +300,13 @@ public sealed class StructureOfIndices
     {
         int from = 0;
         for (int i = 0; i < type; ++i)
-            from += typesCounts[i];
-        return new TypeData(from, typesCounts[type], states[type]);
+            from += TypesCounts[i];
+        return new TypeData(from, TypesCounts[type], states[type]);
     }
 
     public int TypeCount(byte type)
     {
-        return typesCounts[type];
+        return TypesCounts[type];
     }
 
     public bool IsStructureOf(SimpleIndices indices)
@@ -319,7 +321,7 @@ public sealed class StructureOfIndices
         if (size == 0)
             return this;
         StructureOfIndices r = new StructureOfIndices((int)size);
-        Array.Copy(typesCounts, r.typesCounts, typesCounts.Length);
+        Array.Copy(TypesCounts, r.TypesCounts, TypesCounts.Length);
         for (int i = r.states.Length - 1; i >= 0; --i)
         {
             if (states[i] == null)
@@ -343,7 +345,7 @@ public sealed class StructureOfIndices
         StructureOfIndices r = new StructureOfIndices(newSize);
         for (int i = 0; i < IndexTypeMethods.TypesCount; ++i)
         {
-            r.typesCounts[i] = typesCounts[i] + oth.typesCounts[i];
+            r.TypesCounts[i] = TypesCounts[i] + oth.TypesCounts[i];
             if (states[i] == null)
                 continue;
             r.states[i] = states[i].Append(oth.states[i]); // Assuming BitArray.Append exists
@@ -359,8 +361,8 @@ public sealed class StructureOfIndices
         {
             c = 0;
             foreach (StructureOfIndices str in partition)
-                c += str.typesCounts[i];
-            if (c != typesCounts[i])
+                c += str.TypesCounts[i];
+            if (c != TypesCounts[i])
                 throw new ArgumentException("Not a partition.");
         }
 
@@ -380,7 +382,7 @@ public sealed class StructureOfIndices
                 i = 0;
                 for (j = 0; j < IndexTypeMethods.TypesCount; ++j)
                 {
-                    for (k = partition[c].typesCounts[j] - 1; k >= 0; --k)
+                    for (k = partition[c].TypesCounts[j] - 1; k >= 0; --k)
                         mappings[c][i++] = pointers[j]++;
                 }
 
@@ -399,7 +401,7 @@ public sealed class StructureOfIndices
         sb.Append('[');
         for (int i = 0; i < IndexTypeMethods.TypesCount; ++i)
         {
-            if (typesCounts[i] != 0)
+            if (TypesCounts[i] != 0)
             {
                 sb.Append('{');
                 if (states[i] == null)
@@ -407,21 +409,21 @@ public sealed class StructureOfIndices
                     for (int t = 0; ; ++t)
                     {
                         sb.Append(IndexTypeMethods.Values[i].GetShortString()); // Assuming GetShortString() exists
-                        if (t == typesCounts[i] - 1)
+                        if (t == TypesCounts[i] - 1)
                             break;
                         sb.Append(',');
                     }
                 }
                 else
                 {
-                    for (int t = 0; t < typesCounts[i]; ++t)
+                    for (int t = 0; t < TypesCounts[i]; ++t)
                     {
                         sb.Append('(');
                         sb.Append(IndexTypeMethods.Values[i].GetShortString()); // Assuming GetShortString() exists
                         sb.Append(',');
                         sb.Append(states[i].Get(t) ? 1 : 0); // Assuming Get() exists
                         sb.Append(')');
-                        if (t == typesCounts[i] - 1)
+                        if (t == TypesCounts[i] - 1)
                             break;
                         sb.Append(',');
                     }
@@ -436,6 +438,5 @@ public sealed class StructureOfIndices
         return sb.ToString();
     }
 
-    private static StructureOfIndices _empty = new();
-    public static StructureOfIndices Empty => _empty;
+    public static StructureOfIndices Empty { get; } = new();
 }

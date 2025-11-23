@@ -293,7 +293,7 @@ public sealed partial class PermutationGroup
                 .Replace("+", string.Empty, StringComparison.Ordinal)
                 .Replace("-", string.Empty, StringComparison.Ordinal);
 
-            if (gens[i].Antisymmetry())
+            if (gens[i].IsAntisymmetry)
             {
                 builder.Append("Permutations.createPermutation(true, new int[][]").Append(p).Append(")");
             }

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Immutable;
 using System.Numerics;
 
@@ -10,7 +11,6 @@ namespace NRedberry.Core.Combinatorics;
 public class Symmetry : Permutation
 {
     private readonly int[] _permutation;
-    private readonly bool _sign;
 
     private int[]? _inverse;
     private int[]? _lengthsOfCycles;
@@ -26,10 +26,10 @@ public class Symmetry : Permutation
         }
 
         _permutation = (int[])permutation.Clone();
-        _sign = sign;
+        IsAntisymmetry = sign;
         Degree = InternalDegree(_permutation);
-        IsIdentity = !_sign && Combinatorics.IsIdentity(permutation);
-        if (_sign && OrderOfPermutationIsOdd(_permutation))
+        IsIdentity = !IsAntisymmetry && Combinatorics.IsIdentity(permutation);
+        if (IsAntisymmetry && OrderOfPermutationIsOdd(_permutation))
         {
             throw new InconsistentGeneratorsException();
         }
@@ -43,7 +43,7 @@ public class Symmetry : Permutation
             _permutation[i] = i;
         }
 
-        _sign = false;
+        IsAntisymmetry = false;
         Degree = dimension;
         IsIdentity = true;
     }
@@ -56,10 +56,10 @@ public class Symmetry : Permutation
         }
 
         _permutation = notClone ? permutation : (int[])permutation.Clone();
-        _sign = sign;
+        IsAntisymmetry = sign;
         Degree = InternalDegree(_permutation);
-        IsIdentity = !_sign && Combinatorics.IsIdentity(permutation);
-        if (_sign && OrderOfPermutationIsOdd(_permutation))
+        IsIdentity = !IsAntisymmetry && Combinatorics.IsIdentity(permutation);
+        if (IsAntisymmetry && OrderOfPermutationIsOdd(_permutation))
         {
             throw new InconsistentGeneratorsException();
         }
@@ -67,7 +67,10 @@ public class Symmetry : Permutation
 
     public Symmetry One => new(_permutation.Length);
 
-    public bool IsAntiSymmetry() => _sign;
+    /// <summary>
+    /// Sign
+    /// </summary>
+    public bool IsAntisymmetry { get; }
 
     public int[] OneLine() => (int[])_permutation.Clone();
 
@@ -210,11 +213,9 @@ public class Symmetry : Permutation
         return _inverse![i];
     }
 
-    public bool Antisymmetry() => _sign;
+    public Permutation ToSymmetry() => IsAntisymmetry ? new Symmetry(_permutation, false, true) : this;
 
-    public Permutation ToSymmetry() => _sign ? new Symmetry(_permutation, false, true) : this;
-
-    public Permutation Negate() => new Symmetry(_permutation, !_sign, true);
+    public Permutation Negate() => new Symmetry(_permutation, !IsAntisymmetry, true);
 
     Permutation Permutation.Composition(Permutation other) => Composition(other);
 
@@ -244,7 +245,7 @@ public class Symmetry : Permutation
 
         try
         {
-            return new Symmetry(result, _sign ^ a.Antisymmetry() ^ b.Antisymmetry(), true);
+            return new Symmetry(result, IsAntisymmetry ^ a.IsAntisymmetry ^ b.IsAntisymmetry, true);
         }
         catch (InconsistentGeneratorsException)
         {
@@ -283,7 +284,7 @@ public class Symmetry : Permutation
 
         try
         {
-            return new Symmetry(result, _sign ^ a.Antisymmetry() ^ b.Antisymmetry() ^ c.Antisymmetry(), true);
+            return new Symmetry(result, IsAntisymmetry ^ a.IsAntisymmetry ^ b.IsAntisymmetry ^ c.IsAntisymmetry, true);
         }
         catch (InconsistentGeneratorsException)
         {
@@ -397,7 +398,7 @@ public class Symmetry : Permutation
             moved[i] = _permutation[i - offset] + size;
         }
 
-        return new Symmetry(moved, _sign, true);
+        return new Symmetry(moved, IsAntisymmetry, true);
     }
 
     public int[] LengthsOfCycles
@@ -411,13 +412,13 @@ public class Symmetry : Permutation
 
     public string ToStringOneLine()
     {
-        return (_sign ? "-" : "+") + string.Join(", ", _permutation);
+        return (IsAntisymmetry ? "-" : "+") + string.Join(", ", _permutation);
     }
 
     public string ToStringCycles()
     {
         string cycles = string.Join(", ", Cycles().Select(c => "{" + string.Join(", ", c) + "}"));
-        return (_sign ? "-" : "+") + cycles;
+        return (IsAntisymmetry ? "-" : "+") + cycles;
     }
 
     public Symmetry Composition(Permutation element)
@@ -441,7 +442,7 @@ public class Symmetry : Permutation
 
         try
         {
-            return new Symmetry(result, _sign ^ element.Antisymmetry(), true);
+            return new Symmetry(result, IsAntisymmetry ^ element.IsAntisymmetry, true);
         }
         catch (InconsistentGeneratorsException)
         {
@@ -462,7 +463,7 @@ public class Symmetry : Permutation
             inv[_permutation[i]] = i;
         }
 
-        return new Symmetry(inv, _sign, true);
+        return new Symmetry(inv, IsAntisymmetry, true);
     }
 
     public int CompareTo(Permutation? other)
@@ -473,9 +474,9 @@ public class Symmetry : Permutation
         }
 
         int max = Math.Max(Degree, other.Degree);
-        if (_sign != other.Antisymmetry())
+        if (IsAntisymmetry != other.IsAntisymmetry)
         {
-            return _sign ? -1 : 1;
+            return IsAntisymmetry ? -1 : 1;
         }
 
         for (int i = 0; i < max; ++i)
@@ -506,7 +507,7 @@ public class Symmetry : Permutation
             return false;
         }
 
-        if (_sign != other._sign)
+        if (IsAntisymmetry != other.IsAntisymmetry)
         {
             return false;
         }
@@ -535,11 +536,14 @@ public class Symmetry : Permutation
             hash = 31 * hash + _permutation[i];
         }
 
-        hash = 31 * hash + (_sign ? 1 : 0);
+        hash = 31 * hash + (IsAntisymmetry ? 1 : 0);
         return hash;
     }
 
     public override string ToString() => ToStringCycles();
+
+    public IEnumerator<int> GetEnumerator() => ((IEnumerable<int>)_permutation).GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     private void EnsureInverseCalculated()
     {

@@ -2,10 +2,7 @@
 
 public sealed partial class PermutationGroup
 {
-    public int[] GetPositionsInOrbits()
-    {
-        return _positionsInOrbits.ToArray();
-    }
+    public int[] PositionsInOrbits => _positionsInOrbits.ToArray();
 
     public int[] Orbit(int point)
     {

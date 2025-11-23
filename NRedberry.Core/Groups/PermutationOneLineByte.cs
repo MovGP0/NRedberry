@@ -2,14 +2,14 @@
 using System.Numerics;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
+using System.Collections;
 
 namespace NRedberry.Groups;
 
-public class PermutationOneLineByte : Permutation
+public class PermutationOneLineByte : Permutation, IEnumerable<sbyte>
 {
     private readonly sbyte[] _permutation;
     private readonly sbyte _internalDegree;
-    private readonly bool _antisymmetry;
     private int _parity;
     private int[] _lengthsOfCycles;
 
@@ -18,7 +18,7 @@ public class PermutationOneLineByte : Permutation
         if (!Permutations.TestPermutationCorrectness(permutation, antisymmetry))
             throw new ArgumentException("Inconsistent permutation: " + string.Join(", ", permutation));
         _permutation = (sbyte[])permutation.Clone();
-        _antisymmetry = antisymmetry;
+        IsAntisymmetry = antisymmetry;
         IsIdentity = Permutations.IsIdentity(permutation);
         _internalDegree = Permutations.InternalDegree(permutation);
     }
@@ -27,7 +27,7 @@ public class PermutationOneLineByte : Permutation
     {
         IsIdentity = isIdentity;
         _permutation = permutation;
-        _antisymmetry = antisymmetry;
+        IsAntisymmetry = antisymmetry;
         _internalDegree = internalDegree;
         if (antisymmetry && Permutations.OrderOfPermutationIsOdd(permutation))
             throw new InconsistentGeneratorsException();
@@ -37,7 +37,7 @@ public class PermutationOneLineByte : Permutation
     {
         IsIdentity = isIdentity;
         _permutation = permutation;
-        _antisymmetry = antisymmetry;
+        IsAntisymmetry = antisymmetry;
         _internalDegree = internalDegree;
     }
 
@@ -45,7 +45,7 @@ public class PermutationOneLineByte : Permutation
     {
         return new PermutationOneLineInt(
             IsIdentity,
-            _antisymmetry,
+            IsAntisymmetry,
             _internalDegree,
             ArraysUtils.ByteToInt(_permutation),
             true);
@@ -55,7 +55,7 @@ public class PermutationOneLineByte : Permutation
     {
         return new PermutationOneLineShort(
             IsIdentity,
-            _antisymmetry,
+            IsAntisymmetry,
             _internalDegree,
             ArraysUtils.ByteToShort(_permutation),
             true);
@@ -73,19 +73,16 @@ public class PermutationOneLineByte : Permutation
 
     public int Length => _permutation.Length;
 
-    public bool Antisymmetry()
-    {
-        return _antisymmetry;
-    }
+    public bool IsAntisymmetry { get; }
 
     public Permutation ToSymmetry()
     {
-        return _antisymmetry ? new PermutationOneLineByte(IsIdentity, false, _internalDegree, _permutation, true) : this;
+        return IsAntisymmetry ? new PermutationOneLineByte(IsIdentity, false, _internalDegree, _permutation, true) : this;
     }
 
     public Permutation Negate()
     {
-        return new PermutationOneLineByte(false, _antisymmetry ^ true, _internalDegree, _permutation);
+        return new PermutationOneLineByte(false, IsAntisymmetry ^ true, _internalDegree, _permutation);
     }
 
     public int[] OneLine()
@@ -211,7 +208,7 @@ public class PermutationOneLineByte : Permutation
         {
             return new PermutationOneLineByte(
                 resultIsIdentity,
-                _antisymmetry ^ other.Antisymmetry(),
+                IsAntisymmetry ^ other.IsAntisymmetry,
                 (sbyte)(newInternalDegree + 1),
                 result);
         }
@@ -248,7 +245,7 @@ public class PermutationOneLineByte : Permutation
         {
             return new PermutationOneLineByte(
                 resultIsIdentity,
-                _antisymmetry ^ a.Antisymmetry() ^ b.Antisymmetry(),
+                IsAntisymmetry ^ a.IsAntisymmetry ^ b.IsAntisymmetry,
                 (sbyte)(newInternalDegree + 1),
                 result);
         }
@@ -287,7 +284,7 @@ public class PermutationOneLineByte : Permutation
         {
             return new PermutationOneLineByte(
                 resultIsIdentity,
-                _antisymmetry ^ a.Antisymmetry() ^ b.Antisymmetry() ^ c.Antisymmetry(),
+                IsAntisymmetry ^ a.IsAntisymmetry ^ b.IsAntisymmetry ^ c.IsAntisymmetry,
                 (sbyte)(newInternalDegree + 1),
                 result);
         }
@@ -318,7 +315,7 @@ public class PermutationOneLineByte : Permutation
             inv[_permutation[i]] = i;
         }
 
-        return new PermutationOneLineByte(false, _antisymmetry, _internalDegree, inv, true);
+        return new PermutationOneLineByte(false, IsAntisymmetry, _internalDegree, inv, true);
     }
 
     public bool IsIdentity { get; }
@@ -368,7 +365,7 @@ public class PermutationOneLineByte : Permutation
             return false;
 
         Permutation that = (Permutation)obj;
-        if (_antisymmetry != that.Antisymmetry())
+        if (IsAntisymmetry != that.IsAntisymmetry)
             return false;
         if (_internalDegree != that.Degree)
             return false;
@@ -386,7 +383,7 @@ public class PermutationOneLineByte : Permutation
         int result = 1;
         for (int i = 0; i < _internalDegree; ++i)
             result = 31 * result + _permutation[i];
-        result = 31 * result + (_antisymmetry ? 1 : 0);
+        result = 31 * result + (IsAntisymmetry ? 1 : 0);
         return result;
     }
 
@@ -404,7 +401,7 @@ public class PermutationOneLineByte : Permutation
         int k = i;
         for (; i < p.Length; ++i)
             p[i] = (sbyte)(_permutation[i - k] + size);
-        return new PermutationOneLineByte(IsIdentity, _antisymmetry, (sbyte)(size + _internalDegree), p, true);
+        return new PermutationOneLineByte(IsIdentity, IsAntisymmetry, (sbyte)(size + _internalDegree), p, true);
     }
 
     int[] Permutation.LengthsOfCycles => _lengthsOfCycles;
@@ -421,20 +418,20 @@ public class PermutationOneLineByte : Permutation
 
     public string ToStringOneLine()
     {
-        return (_antisymmetry ? "-" : "+") + string.Join(", ", _permutation);
+        return (IsAntisymmetry ? "-" : "+") + string.Join(", ", _permutation);
     }
 
     public string ToStringCycles()
     {
         string cycles = string.Join(", ", Cycles().Select(c => "{" + string.Join(", ", c) + "}"));
-        return (_antisymmetry ? "-" : "+") + cycles;
+        return (IsAntisymmetry ? "-" : "+") + cycles;
     }
 
     public int CompareTo(Permutation t)
     {
         int max = Math.Max(Degree, t.Degree);
-        if (_antisymmetry != t.Antisymmetry())
-            return _antisymmetry ? -1 : 1;
+        if (IsAntisymmetry != t.IsAntisymmetry)
+            return IsAntisymmetry ? -1 : 1;
         for (int i = 0; i < max; ++i)
         {
             if (NewIndexOf(i) < t.NewIndexOf(i))
@@ -445,4 +442,7 @@ public class PermutationOneLineByte : Permutation
 
         return 0;
     }
+
+    public IEnumerator<sbyte> GetEnumerator() => ((IEnumerable<sbyte>)_permutation).GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

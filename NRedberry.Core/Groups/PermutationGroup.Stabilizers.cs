@@ -93,7 +93,7 @@ public sealed partial class PermutationGroup
                     perm[j] = mapping[permutation.NewIndexOf(closure[j])];
                 }
 
-                newStabs.Add(Permutations.CreatePermutation(permutation.Antisymmetry(), perm));
+                newStabs.Add(Permutations.CreatePermutation(permutation.IsAntisymmetry, perm));
             }
 
             stab.Add(new BSGSCandidateElement(mapping[element.BasePoint], newStabs, newDegree));

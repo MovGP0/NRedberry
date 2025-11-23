@@ -540,7 +540,7 @@ public static class AlgorithmsBase
                 mapping[leftDegree + i] = leftDegree + i;
             }
 
-            generators.Add(Permutations.CreatePermutation(permutation.Antisymmetry(), mapping));
+            generators.Add(Permutations.CreatePermutation(permutation.IsAntisymmetry, mapping));
         }
 
         foreach (Permutation permutation in right[0].StabilizerGenerators)
@@ -556,7 +556,7 @@ public static class AlgorithmsBase
                 mapping[leftDegree + i] = leftDegree + permutation.NewIndexOf(i);
             }
 
-            generators.Add(Permutations.CreatePermutation(permutation.Antisymmetry(), mapping));
+            generators.Add(Permutations.CreatePermutation(permutation.IsAntisymmetry, mapping));
         }
 
         return CreateBSGSList(generators, degree);

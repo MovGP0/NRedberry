@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+using System.Collections;
+using System.Collections.Immutable;
 using System.Numerics;
 using NRedberry.Core.Combinatorics;
 
@@ -7,17 +8,14 @@ namespace NRedberry.Groups;
 /// <summary>
 /// Skeleton port of cc.redberry.core.groups.permutations.PermutationOneLineAbstract.
 /// </summary>
-public abstract class PermutationOneLineAbstract : Permutation
+public abstract class PermutationOneLineAbstract : Permutation, IEnumerable<int>
 {
     protected PermutationOneLineAbstract(bool isIdentity, bool antisymmetry)
     {
         throw new NotImplementedException();
     }
 
-    public virtual bool Antisymmetry()
-    {
-        throw new NotImplementedException();
-    }
+    public virtual bool IsAntisymmetry => throw new NotImplementedException();
 
     public virtual bool IsIdentity => throw new NotImplementedException();
 
@@ -159,4 +157,7 @@ public abstract class PermutationOneLineAbstract : Permutation
     {
         throw new NotImplementedException();
     }
+
+    public virtual IEnumerator<int> GetEnumerator() => ((IEnumerable<int>)OneLine()).GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

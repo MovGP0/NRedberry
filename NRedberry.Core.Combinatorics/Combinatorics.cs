@@ -26,7 +26,7 @@ public static class Combinatorics
 
     public static bool IsIdentity(Symmetry symmetry)
     {
-        return !symmetry.IsAntiSymmetry() && IsIdentity(symmetry);
+        return !symmetry.IsAntisymmetry && IsIdentity(symmetry);
     }
 
     public static int[] CreateIdentity(int dimension)

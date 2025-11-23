@@ -21,14 +21,20 @@ public sealed class SimpleIndicesIsolated : SimpleIndicesAbstract
     {
         get
         {
-            if (symmetries == null)
-                symmetries = new IndicesSymmetries(new StructureOfIndices(this));
+            if (symmetries is null)
+            {
+                symmetries = IndicesSymmetries.Create(new StructureOfIndices(this));
+            }
+
             return symmetries;
         }
         set
         {
             if (!value.StructureOfIndices.IsStructureOf(this))
+            {
                 throw new ArgumentException("Illegal symmetries instance.");
+            }
+
             symmetries = value;
         }
     }

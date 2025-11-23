@@ -20,7 +20,7 @@ namespace NRedberry.Core.Combinatorics.Symmetries
         public abstract Symmetries Clone();
 
         int Symmetries.Dimension => Dimension;
-        public bool IsEmpty => Basis.Count == 0;
+        public virtual bool IsEmpty => Basis.Count == 0;
 
         public abstract bool Add(Symmetry symmetry);
         public abstract bool AddUnsafe(Symmetry symmetry);
