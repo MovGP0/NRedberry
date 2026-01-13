@@ -10,8 +10,8 @@ public abstract class NameDescriptorForTensorField(
     bool isDiracDelta)
     : NameDescriptor(indexTypeStructures, id)
 {
-    public int[] Orders { get; } = orders;
-    public string Name { get; } = name;
+    public int[] Orders { get; } = ValidateOrders(orders);
+    public string Name { get; } = ValidateName(name);
 
     private int[][]? _indicesPartitionMapping;
 
@@ -30,14 +30,17 @@ public abstract class NameDescriptorForTensorField(
     private void EnsurePartitionInitialized()
     {
         if (_indicesPartitionMapping != null)
+        {
             return;
+        }
 
         if (!IsDerivative())
         {
-            int[][] ret = new int[IndexTypeStructures.Length][];
+            var ret = new int[IndexTypeStructures.Length][];
             Array.Fill(ret, [], 1, ret.Length - 1);
             ret[0] = Enumerable.Range(0, IndexTypeStructures[0].Size).ToArray();
             _indicesPartitionMapping = ret;
+            return;
         }
 
         var parent = GetParent();
@@ -67,4 +70,16 @@ public abstract class NameDescriptorForTensorField(
     public abstract bool IsDerivative();
 
     public abstract NameDescriptorForTensorField GetDerivative(params int[] orders);
+
+    protected static int[] ValidateOrders(int[] orders)
+    {
+        ArgumentNullException.ThrowIfNull(orders);
+        return (int[])orders.Clone();
+    }
+
+    private static string ValidateName(string name)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+        return name;
+    }
 }

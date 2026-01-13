@@ -24,7 +24,7 @@ public sealed class IntPermutationsSpanGenerator
 
     public override void Reset() => _innerIterator = new PermutationsSpanIterator<Permutation>(_permutations);
 
-    public int[] GetReference() => _innerIterator.Current.OneLine();
+    public override int[] GetReference() => _innerIterator.Current.OneLine();
 
     private int[] Next() => _innerIterator.Current.OneLine();
 

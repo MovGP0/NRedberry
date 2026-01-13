@@ -1,9 +1,17 @@
 namespace NRedberry.Core.Combinatorics;
 
+/// <summary>
+/// Iterator over all N-tuples chosen from ranges [0..K_i).
+/// </summary>
+/// <remarks>
+/// The calculation of the next tuple occurs only on the invocation of Take. Take returns the same reference on each
+/// invocation, so clone the array if you need to keep it.
+/// </remarks>
 public sealed class IntTuplesPort : IIntCombinatorialPort
 {
     private readonly int[] upperBounds;
     private readonly int[] current;
+    private int lastUpdateDepth = -1;
 
     public IntTuplesPort(params int[] upperBounds)
     {
@@ -13,11 +21,14 @@ public sealed class IntTuplesPort : IIntCombinatorialPort
         current[upperBounds.Length - 1] = -1;
     }
 
-    private static void CheckWithException(IEnumerable<int> upperBounds)
+    private static void CheckWithException(int[] upperBounds)
     {
-        if (upperBounds.Any(i => i < 0))
+        foreach (var upperBound in upperBounds)
         {
-            throw new ArgumentException("Upper bound cannot be negative.");
+            if (upperBound < 0)
+            {
+                throw new ArgumentException("Upper bound cannot be negative.");
+            }
         }
     }
 
@@ -32,7 +43,7 @@ public sealed class IntTuplesPort : IIntCombinatorialPort
             next = true;
         }
 
-        while (--pointer >= 0 && next)
+        while (next && --pointer >= 0)
         {
             next = false;
             ++current[pointer];
@@ -43,12 +54,26 @@ public sealed class IntTuplesPort : IIntCombinatorialPort
             }
         }
 
+        if (lastUpdateDepth != -1)
+        {
+            lastUpdateDepth = pointer;
+        }
+        else
+        {
+            lastUpdateDepth = 0;
+        }
+
         if (next)
         {
             return null;
         }
 
         return current;
+    }
+
+    public int GetLastUpdateDepth()
+    {
+        return lastUpdateDepth;
     }
 
     public void Reset()

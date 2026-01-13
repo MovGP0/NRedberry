@@ -5,6 +5,7 @@ namespace NRedberry;
 
 public interface INumber
 {
+    BigInteger BigIntValue() => new BigInteger(LongValue());
     int IntValue();
     long LongValue();
     double DoubleValue();

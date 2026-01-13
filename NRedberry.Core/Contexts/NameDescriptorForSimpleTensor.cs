@@ -12,9 +12,9 @@ internal sealed class NameDescriptorForSimpleTensor(
     int id)
     : NameDescriptor(indexTypeStructures, id)
 {
-    public string Name { get; } = name;
+    public string Name { get; } = ValidateName(name);
 
-    private readonly NameAndStructureOfIndices[] key =
+    private readonly NameAndStructureOfIndices[] _keys =
     [
         new(name, indexTypeStructures)
     ];
@@ -28,11 +28,11 @@ internal sealed class NameDescriptorForSimpleTensor(
     [Pure]
     public override NameAndStructureOfIndices[] GetKeys()
     {
-        return key;
+        return _keys;
     }
 
     [Pure]
-    public SimpleTensor CachedSymbol
+    public SimpleTensor? CachedSymbol
     {
         get;
         set
@@ -42,7 +42,14 @@ internal sealed class NameDescriptorForSimpleTensor(
                 throw new InvalidOperationException("Symbol is already created.");
             }
 
+            ArgumentNullException.ThrowIfNull(value);
             field = value;
         }
+    }
+
+    private static string ValidateName(string name)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+        return name;
     }
 }

@@ -37,7 +37,7 @@ public abstract class SymbolArrayConverter : IIndexSymbolConverter
         throw new IndexConverterException();
     }
 
-    public string GetSymbol(long code, OutputFormat mode)
+    public string GetSymbol(int code, OutputFormat mode)
     {
         try
         {

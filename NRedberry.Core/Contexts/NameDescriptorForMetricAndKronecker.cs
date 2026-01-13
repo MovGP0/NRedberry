@@ -12,7 +12,7 @@ internal sealed class NameDescriptorForMetricAndKronecker(string[] names, byte t
     /// First name for Kronecker, second for metric
     /// Same instance as in NameManager
     /// </summary>
-    private readonly string[] _names = names;
+    private readonly string[] _names = ValidateNames(names);
 
     private static StructureOfIndices[] CreateIndicesTypeStructures(byte type)
     {
@@ -21,6 +21,17 @@ internal sealed class NameDescriptorForMetricAndKronecker(string[] names, byte t
             ? StructureOfIndices.Create(type, 2, true, false)
             : StructureOfIndices.Create(type, 2);
         return structures;
+    }
+
+    private static string[] ValidateNames(string[] names)
+    {
+        ArgumentNullException.ThrowIfNull(names);
+        if (names.Length < 2)
+        {
+            throw new ArgumentException("Expected at least two names.", nameof(names));
+        }
+
+        return names;
     }
 
     /// <summary>
@@ -37,10 +48,7 @@ internal sealed class NameDescriptorForMetricAndKronecker(string[] names, byte t
 
     public override string GetName(SimpleIndices? indices, OutputFormat outputFormat)
     {
-        if (indices == null)
-        {
-            throw new ArgumentNullException(nameof(indices));
-        }
+        ArgumentNullException.ThrowIfNull(indices);
 
         bool metric = IndicesUtils.HaveEqualStates(indices[0], indices[1]);
         return metric ? _names[1] : _names[0];

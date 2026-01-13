@@ -2,9 +2,16 @@ using System.Collections;
 
 namespace NRedberry;
 
-public sealed class TypeData(int from, int length, BitArray states)
+public sealed class TypeData
 {
-    public int From { get; } = from;
-    public int Length { get; } = length;
-    public BitArray States { get; } = (BitArray)states.Clone();
+    public TypeData(int from, int length, BitArray? states)
+    {
+        From = from;
+        Length = length;
+        States = states == null ? null : (BitArray)states.Clone();
+    }
+
+    public int From { get; }
+    public int Length { get; }
+    public BitArray? States { get; }
 }

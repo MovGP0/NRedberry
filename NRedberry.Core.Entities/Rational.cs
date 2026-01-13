@@ -276,6 +276,11 @@ public sealed class Rational : Real
         return ConvertToLong(integerPart);
     }
 
+    public BigInteger BigIntValue()
+    {
+        return Fraction.Numerator / Fraction.Denominator;
+    }
+
     public override float FloatValue()
     {
         var value = (float)Fraction;

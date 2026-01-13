@@ -47,7 +47,7 @@ public sealed class IndexWithStrokeConverter : IIndexSymbolConverter
         return converter.ApplicableToSymbol(GetBase(symbol));
     }
 
-    public string GetSymbol(long code, OutputFormat mode)
+    public string GetSymbol(int code, OutputFormat mode)
     {
         return converter.GetSymbol(code, mode) + strokesString;
     }

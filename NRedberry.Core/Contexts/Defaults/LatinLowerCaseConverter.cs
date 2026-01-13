@@ -31,7 +31,7 @@ public sealed class LatinLowerCaseConverter : IIndexSymbolConverter
         return symbol[0] - 0x61;
     }
 
-    public string GetSymbol(long code, OutputFormat mode)
+    public string GetSymbol(int code, OutputFormat mode)
     {
         long number = code + 0x61;
         if (number > 0x7A)

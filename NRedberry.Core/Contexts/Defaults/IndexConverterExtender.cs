@@ -68,7 +68,7 @@ public sealed class IndexConverterExtender(IIndexSymbolConverter innerConverter)
         return num * (1 + innerConverter.MaxNumberOfSymbols) + innerConverter.GetCode(split[0]);
     }
 
-    public string GetSymbol(long code, OutputFormat mode)
+    public string GetSymbol(int code, OutputFormat mode)
     {
         var subscript = (int)(code / (innerConverter.MaxNumberOfSymbols + 1));
         var symbol = innerConverter.GetSymbol(code % (innerConverter.MaxNumberOfSymbols + 1), mode);

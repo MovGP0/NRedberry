@@ -38,7 +38,9 @@ public sealed class ProgressReporter
     {
         long current = Interlocked.Increment(ref progress);
         if (current > limit)
+        {
             return false;
+        }
 
         double pr = Round((double)current / limit);
         double target = Round(previousShown + percentStep);
@@ -78,12 +80,11 @@ public sealed class ProgressReporter
             sb.Append(percentStr);
             i += percentStr.Length;
         }
+
         for (; i < barLength; ++i)
             sb.Append(' ');
         sb.Append(']');
         sb.Append('\n');
-
         Console.Write(sb.ToString());
     }
 }
-

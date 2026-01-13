@@ -3,6 +3,13 @@ using NRedberry.Core.Combinatorics.Extensions;
 
 namespace NRedberry.Core.Combinatorics;
 
+/// <summary>
+/// Iterator (output port pattern) over all distinct N-tuples chosen from N sets of integers.
+/// </summary>
+/// <remarks>
+/// The calculation of the next tuple occurs only on the invocation of Take. Take returns the same reference on each
+/// invocation, so clone the returned array if you need to keep it.
+/// </remarks>
 public sealed class IntDistinctTuplesPort : IIntCombinatorialPort
 {
     private readonly BitArray previousMask;
@@ -80,11 +87,11 @@ public sealed class IntDistinctTuplesPort : IIntCombinatorialPort
         }
     }
 
-    public int[] Take()
+    public int[]? Take()
     {
         if (state == 1)
         {
-            return [];
+            return null;
         }
 
         if (state == unchecked((byte)-1))
@@ -113,7 +120,7 @@ public sealed class IntDistinctTuplesPort : IIntCombinatorialPort
                 if (i == 0)
                 {
                     state = 1;
-                    return [];
+                    return null;
                 }
 
                 combination[i] = 0;

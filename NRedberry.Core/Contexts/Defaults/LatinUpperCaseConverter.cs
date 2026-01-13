@@ -28,11 +28,11 @@ public sealed class LatinUpperCaseConverter : IIndexSymbolConverter
 
     public int GetCode(string symbol) => symbol[0] - 0x41;
 
-    public string GetSymbol(long code, OutputFormat mode) // assuming OutputFormat is a defined type
+    public string GetSymbol(int code, OutputFormat mode)
     {
         long number = code + 0x41;
         if (number > 0x5A)
-            throw new IndexConverterException(); // assuming IndexConverterException is a defined type
+            throw new IndexConverterException();
         return ((char) number).ToString();
     }
 

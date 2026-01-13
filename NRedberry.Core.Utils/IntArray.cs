@@ -1,10 +1,9 @@
 using System.Collections;
-using System.Collections.Immutable;
 
 namespace NRedberry.Core.Utils;
 
 [Obsolete("use ImmutableArray<int> instead", true)]
-public sealed class IntArray : IEnumerable<int>
+public sealed class IntArray : IEnumerable<int>, IEquatable<IntArray>
 {
     public static readonly IntArray EmptyArray = new([]);
     public readonly int[] InnerArray;
@@ -67,7 +66,58 @@ public sealed class IntArray : IEnumerable<int>
     /// <returns>True if arrays are equal; otherwise, false.</returns>
     public bool EqualsToArray(int[] array)
     {
-        return Equals(InnerArray, array);
+        return AreArraysEqual(InnerArray, array);
+    }
+
+    public bool Equals(IntArray? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return AreArraysEqual(InnerArray, other.InnerArray);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is IntArray other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        HashCode hashCode = new();
+        foreach (int value in InnerArray)
+        {
+            hashCode.Add(value);
+        }
+
+        return 497 + hashCode.ToHashCode();
+    }
+
+    public static bool operator ==(IntArray? left, IntArray? right)
+    {
+        return Equals(left, right);
+    }
+
+    public static bool operator !=(IntArray? left, IntArray? right)
+    {
+        return !Equals(left, right);
+    }
+
+    public override string ToString()
+    {
+        return $"[{string.Join(", ", InnerArray)}]";
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 
     public IEnumerator<int> GetEnumerator()
@@ -78,33 +128,26 @@ public sealed class IntArray : IEnumerable<int>
         }
     }
 
-    public override bool Equals(object? obj)
+    private static bool AreArraysEqual(int[] left, int[] right)
     {
-        if (obj is null)
-            return false;
-        if (ReferenceEquals(this, obj))
-            return true;
-
-        if (obj is ImmutableArray<int> other)
+        if (ReferenceEquals(left, right))
         {
-            return InnerArray.SequenceEqual(other.ToArray());
+            return true;
         }
 
-        return false;
-    }
+        if (left.Length != right.Length)
+        {
+            return false;
+        }
 
-    public override int GetHashCode()
-    {
-        return 497 + InnerArray.GetHashCode();
-    }
+        for (int i = 0; i < left.Length; i++)
+        {
+            if (left[i] != right[i])
+            {
+                return false;
+            }
+        }
 
-    public override string ToString()
-    {
-        return string.Join(", ", InnerArray);
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
+        return true;
     }
 }

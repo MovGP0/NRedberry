@@ -19,5 +19,5 @@ public interface IIntCombinatorialPort : IOutputPortUnsafe<int[]>
 
     /// <summary>Calculates and returns the next combination or <value>null</value>, if no more combinations exist.</summary>
     /// <returns>The next combination or <value>null</value>, if no more combinations exist</returns>
-    int[]? Take();
+    new int[]? Take();
 }

@@ -20,7 +20,7 @@ public interface IIndexSymbolConverter
     /// <param name="outputFormat">The output format.</param>
     /// <returns>The string representation of the specified integer index, according to the specified output format.</returns>
     /// <exception cref="IndexConverterException">Thrown if the code does not correspond to this converter.</exception>
-    string GetSymbol(long code, OutputFormat outputFormat);
+    string GetSymbol(int code, OutputFormat outputFormat);
 
     /// <summary>
     /// Gets the integer representation from the specified string representation of a single index.

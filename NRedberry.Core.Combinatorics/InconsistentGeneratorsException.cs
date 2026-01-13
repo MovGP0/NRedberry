@@ -1,15 +1,8 @@
-﻿using System.Runtime.Serialization;
+﻿namespace NRedberry.Core.Combinatorics;
 
-namespace NRedberry.Core.Combinatorics;
-
-public sealed class InconsistentGeneratorsException : ApplicationException
+public sealed class InconsistentGeneratorsException : Exception
 {
     public InconsistentGeneratorsException()
-    {
-    }
-
-    public InconsistentGeneratorsException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
     {
     }
 

@@ -21,12 +21,12 @@ public static class Combinatorics
 
     public static bool IsIdentity(Permutation permutation)
     {
-        return IsIdentity(permutation);
+        return IsIdentity(permutation.OneLine());
     }
 
     public static bool IsIdentity(Symmetry symmetry)
     {
-        return !symmetry.IsAntisymmetry && IsIdentity(symmetry);
+        return symmetry.IsIdentity;
     }
 
     public static int[] CreateIdentity(int dimension)
@@ -141,7 +141,7 @@ public static class Combinatorics
 
     public static bool TestPermutationCorrectness(long[] permutation)
     {
-        var clone = (long[])permutation.Clone();
+        var clone = (int[])permutation.Clone();
         Array.Sort(clone);
 
         for (var i = 0; i < clone.Length; i++)
@@ -157,7 +157,7 @@ public static class Combinatorics
 
     public static bool TestPermutationCorrectness(int[] permutation)
     {
-        var clone = (long[])permutation.Clone();
+        var clone = (int[])permutation.Clone();
         Array.Sort(clone);
 
         for (var i = 0; i < clone.Length; i++)

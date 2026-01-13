@@ -2,11 +2,10 @@
 
 namespace NRedberry.Contexts;
 
-/// <inheritdoc />
 /// <summary>
-/// Container for the structure of indices(see { @link cc.redberry.core.indices.StructureOfIndices}) of tensor
-/// and its string name.Two simple tensors are considered to have different mathematical nature if and only if
-/// their { @code IndicesTypeStructureAndName} are not equal.
+/// Container for the structure of indices of a tensor and its string name.
+/// Two simple tensors are considered to have different mathematical nature
+/// if and only if their name and structure are not equal.
 /// </summary>
 public sealed class NameAndStructureOfIndices : IEquatable<NameAndStructureOfIndices>
 {
@@ -27,7 +26,10 @@ public sealed class NameAndStructureOfIndices : IEquatable<NameAndStructureOfInd
     /// <param name="structure">structure of tensor indices</param>
     public NameAndStructureOfIndices(string name, StructureOfIndices[] structure)
     {
-        Name = name ?? throw new ArgumentNullException(nameof(name));
+        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(structure);
+
+        Name = name;
         Structure = structure;
     }
 
@@ -43,15 +45,36 @@ public sealed class NameAndStructureOfIndices : IEquatable<NameAndStructureOfInd
     }
 
     public override int GetHashCode()
-        => HashCode.Combine(Name, Structure);
+    {
+        HashCode hashCode = new();
+        hashCode.Add(Name, StringComparer.Ordinal);
+        foreach (var entry in Structure)
+        {
+            hashCode.Add(entry);
+        }
+
+        return hashCode.ToHashCode();
+    }
 
     public bool Equals(NameAndStructureOfIndices? other)
     {
         if (other is null)
+        {
             return false;
+        }
+
         if (ReferenceEquals(this, other))
+        {
             return true;
-        return string.Equals(Name, other.Name)
-            && Equals(Structure, other.Structure);
+        }
+
+        return string.Equals(Name, other.Name, StringComparison.Ordinal)
+            && Structure.SequenceEqual(other.Structure);
     }
+
+    public static bool operator ==(NameAndStructureOfIndices? left, NameAndStructureOfIndices? right)
+        => Equals(left, right);
+
+    public static bool operator !=(NameAndStructureOfIndices? left, NameAndStructureOfIndices? right)
+        => !Equals(left, right);
 }

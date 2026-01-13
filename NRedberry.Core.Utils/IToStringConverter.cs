@@ -11,3 +11,10 @@ public interface IToStringConverter<in T>
 {
     string ToString(T t);
 }
+
+public static class ToStringConverters
+{
+    public static readonly IToStringConverter<int> Default = new DefaultToStringConverter();
+    public static readonly IToStringConverter<int> Hex = new HexToStringConverter();
+    public static readonly IToStringConverter<int> Binary = new BinaryToStringConverter();
+}

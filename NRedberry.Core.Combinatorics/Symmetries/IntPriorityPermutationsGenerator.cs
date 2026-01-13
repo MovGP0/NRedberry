@@ -5,7 +5,7 @@ public sealed class IntPriorityPermutationsGenerator : IIntCombinatorialPort
     private readonly IntPermutationsGenerator generator;
     private readonly List<PermutationPriorityTuple> tuples = [];
     private readonly HashSet<PermutationPriorityTuple> set = [];
-    private int[] last = [];
+    private int[]? last;
     private int lastTuplePointer;
 
     public IntPriorityPermutationsGenerator(int dimension)
@@ -18,7 +18,7 @@ public sealed class IntPriorityPermutationsGenerator : IIntCombinatorialPort
         generator = new IntPermutationsGenerator(initialPermutation);
     }
 
-    public int[] Take()
+    public int[]? Take()
     {
         if (lastTuplePointer == tuples.Count)
         {
@@ -27,7 +27,7 @@ public sealed class IntPriorityPermutationsGenerator : IIntCombinatorialPort
             {
                 if (!generator.MoveNext())
                 {
-                    return [];
+                    return null;
                 }
 
                 next = generator.Current;
@@ -43,7 +43,7 @@ public sealed class IntPriorityPermutationsGenerator : IIntCombinatorialPort
 
     public void Nice()
     {
-        if (last.Length == 0)
+        if (last is null)
         {
             var index = lastTuplePointer - 1;
             var nPriority = ++tuples[index].Priority;
@@ -67,10 +67,13 @@ public sealed class IntPriorityPermutationsGenerator : IIntCombinatorialPort
     {
         generator.Reset();
         lastTuplePointer = 0;
-        last = [];
+        last = null;
     }
 
     public int[] GetReference() => tuples[lastTuplePointer - 1].Permutation;
 
-    private void Swap(int i, int j) => (tuples[i], tuples[j]) = (tuples[j], tuples[i]);
+    private void Swap(int i, int j)
+    {
+        (tuples[i], tuples[j]) = (tuples[j], tuples[i]);
+    }
 }

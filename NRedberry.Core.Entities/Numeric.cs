@@ -128,6 +128,11 @@ public sealed class Numeric : Real, IEquatable<Numeric>
         return (int)Value;
     }
 
+    public BigInteger BigIntValue()
+    {
+        return new BigInteger(Value);
+    }
+
     public override long LongValue()
     {
         return (long)Value;

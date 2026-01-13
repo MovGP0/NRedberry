@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace NRedberry.Core.Utils;
 
 public static partial class ArraysUtils
@@ -10,6 +8,18 @@ public static partial class ArraysUtils
     }
 
     public static void QuickSort(long[] target, int fromIndex, int toIndex, long[] coSort)
+    {
+        RangeCheck(target.Length, fromIndex, toIndex);
+        RangeCheck(coSort.Length, fromIndex, toIndex);
+        QuickSort1(target, fromIndex, toIndex - fromIndex, coSort);
+    }
+
+    public static void QuickSort(short[] target, int[] coSort)
+    {
+        QuickSort(target, 0, target.Length, coSort);
+    }
+
+    public static void QuickSort(short[] target, int fromIndex, int toIndex, int[] coSort)
     {
         RangeCheck(target.Length, fromIndex, toIndex);
         RangeCheck(coSort.Length, fromIndex, toIndex);
@@ -66,25 +76,30 @@ public static partial class ArraysUtils
 
     public static void QuickSort(int[] target, IComparer<int> comparator)
     {
-        Array.Sort(target, comparator);
+        QuickSort1(target, 0, target.Length, comparator);
     }
 
     public static void QuickSort(int[] target, int fromIndex, int toIndex, IComparer<int> comparator)
     {
         RangeCheck(target.Length, fromIndex, toIndex);
-        Array.Sort(target, fromIndex, toIndex - fromIndex, comparator);
+        QuickSort1(target, fromIndex, toIndex - fromIndex, comparator);
     }
 
     public static void QuickSort(int[] target, int[] coSort, IComparer<int> comparator)
     {
-        Array.Sort(target, coSort, comparator);
+        QuickSort1(target, 0, target.Length, coSort, comparator);
     }
 
     public static void QuickSort(int[] target, int fromIndex, int toIndex, int[] coSort, IComparer<int> comparator)
     {
         RangeCheck(target.Length, fromIndex, toIndex);
         RangeCheck(coSort.Length, fromIndex, toIndex);
-        Array.Sort(target, coSort, fromIndex, toIndex - fromIndex, comparator);
+        if (ReferenceEquals(target, coSort))
+        {
+            throw new ArgumentException("Same array references.");
+        }
+
+        QuickSort1(target, fromIndex, toIndex - fromIndex, coSort, comparator);
     }
 
     public static void QuickSort<T, TCo>(T[] target, TCo[] coSort) where T : IComparable<T>
@@ -168,6 +183,100 @@ public static partial class ArraysUtils
             QuickSort1(target, n - s, s, coSort);
     }
 
+    private static void QuickSort1(short[] target, int fromIndex, int length, int[] coSort)
+    {
+        QuickSort2(target, fromIndex, length, coSort);
+    }
+
+    private static void QuickSort2(short[] target, int fromIndex, int length, int[] coSort)
+    {
+        if (length < 7)
+        {
+            for (int i = fromIndex; i < length + fromIndex; i++)
+            {
+                for (int j = i; j > fromIndex && target[j - 1] > target[j]; j--)
+                {
+                    Swap(target, j, j - 1, coSort);
+                }
+            }
+
+            return;
+        }
+
+        int m = fromIndex + (length >> 1);
+        if (length > 7)
+        {
+            int l = fromIndex;
+            int n = fromIndex + length - 1;
+            if (length > 40)
+            {
+                int s = length / 8;
+                l = Med3(target, l, l + s, l + 2 * s);
+                m = Med3(target, m - s, m, m + s);
+                n = Med3(target, n - 2 * s, n - s, n);
+            }
+
+            m = Med3(target, l, m, n);
+        }
+
+        short v = target[m];
+
+        int a = fromIndex;
+        int b = a;
+        int c = fromIndex + length - 1;
+        int d = c;
+        while (true)
+        {
+            while (b <= c && target[b] <= v)
+            {
+                if (target[b] == v)
+                {
+                    Swap(target, a++, b, coSort);
+                }
+
+                b++;
+            }
+
+            while (c >= b && target[c] >= v)
+            {
+                if (target[c] == v)
+                {
+                    Swap(target, c, d--, coSort);
+                }
+
+                c--;
+            }
+
+            if (b > c)
+            {
+                break;
+            }
+
+            Swap(target, b++, c--, coSort);
+        }
+
+        int n1 = fromIndex + length;
+        int s1 = Math.Min(a - fromIndex, b - a);
+        Vecswap(target, fromIndex, b - s1, s1, coSort);
+        s1 = Math.Min(d - c, n1 - d - 1);
+        Vecswap(target, b, n1 - s1, s1, coSort);
+
+        if ((s1 = b - a) > 1)
+        {
+            QuickSort2(target, fromIndex, s1, coSort);
+        }
+
+        if ((s1 = d - c) > 1)
+        {
+            QuickSort2(target, n1 - s1, s1, coSort);
+        }
+    }
+
+    private static int Med3(short[] x, int a, int b, int c)
+    {
+        return x[a] < x[b] ? x[b] < x[c] ? b : x[a] < x[c] ? c : a : x[b] > x[c] ? b : x[a] > x[c] ? c : a;
+    }
+
     private static void QuickSort1(int[] target, int fromIndex, int length, int[] coSort)
     {
         if (target == coSort)
@@ -241,6 +350,189 @@ public static partial class ArraysUtils
             QuickSort2(target, fromIndex, s2, coSort);
         if ((s2 = d - c) > 1)
             QuickSort2(target, n2 - s2, s2, coSort);
+    }
+
+    private static void QuickSort1(int[] target, int fromIndex, int length, IComparer<int> comparator)
+    {
+        if (length < 7)
+        {
+            for (int i = fromIndex; i < length + fromIndex; i++)
+            {
+                for (int j = i; j > fromIndex && comparator.Compare(target[j - 1], target[j]) > 0; j--)
+                {
+                    Swap(target, j, j - 1);
+                }
+            }
+
+            return;
+        }
+
+        int m = fromIndex + (length >> 1);
+        if (length > 7)
+        {
+            int l = fromIndex;
+            int n = fromIndex + length - 1;
+            if (length > 40)
+            {
+                int s = length / 8;
+                l = Med3(target, l, l + s, l + 2 * s, comparator);
+                m = Med3(target, m - s, m, m + s, comparator);
+                n = Med3(target, n - 2 * s, n - s, n, comparator);
+            }
+
+            m = Med3(target, l, m, n, comparator);
+        }
+
+        int v = target[m];
+
+        int a = fromIndex;
+        int b = a;
+        int c = fromIndex + length - 1;
+        int d = c;
+        while (true)
+        {
+            while (b <= c && comparator.Compare(target[b], v) <= 0)
+            {
+                if (comparator.Compare(target[b], v) == 0)
+                {
+                    Swap(target, a++, b);
+                }
+
+                b++;
+            }
+
+            while (c >= b && comparator.Compare(target[c], v) >= 0)
+            {
+                if (comparator.Compare(target[c], v) == 0)
+                {
+                    Swap(target, c, d--);
+                }
+
+                c--;
+            }
+
+            if (b > c)
+            {
+                break;
+            }
+
+            Swap(target, b++, c--);
+        }
+
+        int n1 = fromIndex + length;
+        int s1 = Math.Min(a - fromIndex, b - a);
+        Vecswap(target, fromIndex, b - s1, s1);
+        s1 = Math.Min(d - c, n1 - d - 1);
+        Vecswap(target, b, n1 - s1, s1);
+
+        if ((s1 = b - a) > 1)
+        {
+            QuickSort1(target, fromIndex, s1, comparator);
+        }
+
+        if ((s1 = d - c) > 1)
+        {
+            QuickSort1(target, n1 - s1, s1, comparator);
+        }
+    }
+
+    private static void QuickSort1(int[] target, int fromIndex, int length, int[] coSort, IComparer<int> comparator)
+    {
+        if (length < 7)
+        {
+            for (int i = fromIndex; i < length + fromIndex; i++)
+            {
+                for (int j = i; j > fromIndex && comparator.Compare(target[j - 1], target[j]) > 0; j--)
+                {
+                    Swap(target, j, j - 1, coSort);
+                }
+            }
+
+            return;
+        }
+
+        int m = fromIndex + (length >> 1);
+        if (length > 7)
+        {
+            int l = fromIndex;
+            int n = fromIndex + length - 1;
+            if (length > 40)
+            {
+                int s = length / 8;
+                l = Med3(target, l, l + s, l + 2 * s, comparator);
+                m = Med3(target, m - s, m, m + s, comparator);
+                n = Med3(target, n - 2 * s, n - s, n, comparator);
+            }
+
+            m = Med3(target, l, m, n, comparator);
+        }
+
+        int v = target[m];
+
+        int a = fromIndex;
+        int b = a;
+        int c = fromIndex + length - 1;
+        int d = c;
+        while (true)
+        {
+            while (b <= c && comparator.Compare(target[b], v) <= 0)
+            {
+                if (comparator.Compare(target[b], v) == 0)
+                {
+                    Swap(target, a++, b, coSort);
+                }
+
+                b++;
+            }
+
+            while (c >= b && comparator.Compare(target[c], v) >= 0)
+            {
+                if (comparator.Compare(target[c], v) == 0)
+                {
+                    Swap(target, c, d--, coSort);
+                }
+
+                c--;
+            }
+
+            if (b > c)
+            {
+                break;
+            }
+
+            Swap(target, b++, c--, coSort);
+        }
+
+        int n1 = fromIndex + length;
+        int s1 = Math.Min(a - fromIndex, b - a);
+        Vecswap(target, fromIndex, b - s1, s1, coSort);
+        s1 = Math.Min(d - c, n1 - d - 1);
+        Vecswap(target, b, n1 - s1, s1, coSort);
+
+        if ((s1 = b - a) > 1)
+        {
+            QuickSort1(target, fromIndex, s1, coSort, comparator);
+        }
+
+        if ((s1 = d - c) > 1)
+        {
+            QuickSort1(target, n1 - s1, s1, coSort, comparator);
+        }
+    }
+
+    private static int Med3(int[] x, int a, int b, int c, IComparer<int> comparator)
+    {
+        return comparator.Compare(x[a], x[b]) < 0
+            ? comparator.Compare(x[b], x[c]) < 0 ? b : comparator.Compare(x[a], x[c]) < 0 ? c : a
+            : comparator.Compare(x[b], x[c]) > 0 ? b : comparator.Compare(x[a], x[c]) > 0 ? c : a;
+    }
+
+    private static void Vecswap(int[] x, int a, int b, int n)
+    {
+        for (int i = 0; i < n; i++, a++, b++)
+        {
+            Swap(x, a, b);
+        }
     }
 
     private static void QuickSort1(int[] target, int fromIndex, int length, long[] coSort)

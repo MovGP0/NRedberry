@@ -24,7 +24,10 @@
 - Nullable reference types are enabled—prefer non-nullable signatures and guard inputs explicitly.
 - The solution relies on Roslynator analyzers; run `dotnet format` or address warnings before sending reviews. Mirror
   existing JavaDoc-style comments (`/** ... */`) when porting descriptive docs from the Java codebase.
+- Keep blank lines consistent to satisfy Roslynator formatting rules: add a blank line between a closing brace and the
+  next statement (RCS0008) and avoid stray blank lines before closing braces (RCS0063).
 - use `ArgumentNullException.ThrowIfNull(param);` for null-guarding method parameters/arguments.
+- When updating `IIndexSymbolConverter.GetSymbol`, update all converters plus `IndexConverterManager` to match the signature and prevent CS0535 build errors.
 
 ## Testing Guidelines
 
@@ -241,6 +244,7 @@ public override int GetHashCode()
 
 - Do not try to port multiple files at once; implement one file at a time
 - Always try to execute a build after every file; fix the build errors
+- Roslynator RCS0003 requires a blank line between using directives and the namespace declaration
 - Do not use PowerShell to execute Python and do not use Python to execute PowerShell. Use either.
 - Python scripts can mess up line endings in C# files (issues with the difference between \n and \r). Prefer a
   PowerShell script with a regex for file encoding and line ending fixes.

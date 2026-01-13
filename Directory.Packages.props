@@ -6,6 +6,8 @@
     <PackageVersion Include="JetBrains.Annotations" Version="2025.2.2" />
     <PackageVersion Include="Rationals" Version="2.3.0" />
     <PackageVersion Include="IKVM" Version="8.14.0" />
+    <PackageVersion Include="Shouldly" Version="4.3.0" />
+    <PackageVersion Include="Shouldly.FromAssert" Version="1.1.37" />
     <PackageVersion Include="NetEscapades.EnumGenerators" Version="1.0.0-beta14" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.14.1" />

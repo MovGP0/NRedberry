@@ -2,21 +2,10 @@
 
 namespace NRedberry.Contexts;
 
-///<summary>
-/// Object of this class represents unique type of simple tensor or tensor fields (unique name).
-///
-/// <p>It holds the information about string name of simple tensor, structure of its indices and arguments
-/// (in case of tensor field). Two simple tensors are considered to have different mathematical nature if and only if
-/// their name descriptors are not equal. Each simple tensor with unique mathematical nature have its own unique integer
-/// identifier, which is hold in the name descriptor. For example, tensors A_mn and A_ij have the same mathematical
-/// origin and thus have the same integer identifier and both have the same name descriptor (the same reference). In
-/// contrast, for example, tensors A_mn and A_i have different mathematical origin and different integer identifiers.</p>
-///
-/// <p>This class have no public constructors, since Redberry takes care about its creation (see {@link NameManager}).
-/// The only way to receive name descriptor from raw information about tensor is through
-/// {@link NameManager#mapNameDescriptor(String, cc.redberry.core.indices.StructureOfIndices...)}.
-/// In order to receive the descriptor from a simple tensor object, one should use
-/// {@link cc.redberry.core.tensor.SimpleTensor#getNameDescriptor()} method.</p>
+/// <summary>
+/// Represents the unique type of a simple tensor or tensor field (unique name).
+/// It holds the string name, the structure of indices, and argument structures (for tensor fields).
+/// Two simple tensors differ in mathematical nature if and only if their name descriptors are not equal.
 /// </summary>
 public abstract class NameDescriptor
 {
@@ -37,6 +26,7 @@ public abstract class NameDescriptor
 
     protected NameDescriptor(StructureOfIndices[] indexTypeStructures, int id)
     {
+        ArgumentNullException.ThrowIfNull(indexTypeStructures);
         if (indexTypeStructures.Length == 0)
         {
             throw new ArgumentException();
@@ -49,6 +39,7 @@ public abstract class NameDescriptor
 
     public void RegisterInNameManager(NameManager nameManager)
     {
+        ArgumentNullException.ThrowIfNull(nameManager);
         if (NameManager != null && !ReferenceEquals(NameManager, nameManager))
         {
             throw new InvalidOperationException("Already registered in another name manager.");
@@ -89,7 +80,6 @@ public abstract class NameDescriptor
     /// <returns>structure of indices of tensors and their arguments</returns>
     public StructureOfIndices[] GetStructuresOfIndices()
     {
-        //todo clone() ?
         return IndexTypeStructures;
     }
 
@@ -105,7 +95,7 @@ public abstract class NameDescriptor
 
     public override string ToString()
     {
-        return GetName(null, OutputFormat.Redberry) + ":" + IndexTypeStructures;
+        return $"{GetName(null, OutputFormat.Redberry)}:{IndexTypeStructures}";
     }
 
     /// <summary>

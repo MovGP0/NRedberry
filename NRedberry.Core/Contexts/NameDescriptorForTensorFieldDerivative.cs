@@ -11,7 +11,12 @@ internal sealed class NameDescriptorForTensorFieldDerivative : NameDescriptorFor
     public NameDescriptorForTensorFieldImpl Parent { get; }
 
     public NameDescriptorForTensorFieldDerivative(int id, int[] orders, NameDescriptorForTensorFieldImpl parent)
-        : base(GenerateStructures(parent, orders), id, orders, GenerateName(orders, parent), parent.IsDiracDelta)
+        : base(
+            GenerateStructures(ValidateParent(parent), ValidateOrders(orders)),
+            id,
+            orders,
+            GenerateName(orders, ValidateParent(parent)),
+            ValidateParent(parent).IsDiracDelta)
     {
         Parent = parent;
         InitializeSymmetries();
@@ -63,20 +68,21 @@ internal sealed class NameDescriptorForTensorFieldDerivative : NameDescriptorFor
     public override NameDescriptorForTensorField GetDerivative(params int[] orders)
     {
         if (orders.Length != IndexTypeStructures.Length - 1)
+        {
             throw new ArgumentException();
+        }
 
         var resOrder = Orders.ToArray();
         for (var i = orders.Length - 1; i >= 0; --i)
+        {
             resOrder[i] += orders[i];
+        }
 
         return Parent.GetDerivative(resOrder);
     }
 
     private void InitializeSymmetries()
     {
-        // Implementation of InitializeSymmetries similar to Java code
-        // The logic for InitializeSymmetries needs to be adapted based on
-        // the specific implementations of the relevant classes and methods in C#
         var baseStructure = StructuresOfIndices[0];
 
         StructureOfIndices[] partition = new StructureOfIndices[1 + Orders.Sum()];
@@ -134,13 +140,16 @@ internal sealed class NameDescriptorForTensorFieldDerivative : NameDescriptorFor
         }
     }
 
-    static int[] ConvertPermutation(Permutation permutation, int[] mapping, int newDimension)
+    private static int[] ConvertPermutation(Permutation permutation, int[] mapping, int newDimension)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(permutation);
+        return ConvertPermutation(permutation.OneLine(), mapping, newDimension);
     }
 
-    static int[] ConvertPermutation(int[] permutation, int[] mapping, int newDimension)
+    private static int[] ConvertPermutation(int[] permutation, int[] mapping, int newDimension)
     {
+        ArgumentNullException.ThrowIfNull(permutation);
+        ArgumentNullException.ThrowIfNull(mapping);
         Debug.Assert(permutation.Length == mapping.Length, "Permutation and mapping arrays must be of the same length.");
 
         var result = new int[newDimension];
@@ -152,7 +161,9 @@ internal sealed class NameDescriptorForTensorFieldDerivative : NameDescriptorFor
         for (var i = permutation.Length - 1; i >= 0; --i)
         {
             if (mapping[i] == -1)
+            {
                 continue;
+            }
 
             var k = mapping[permutation[i]];
             Debug.Assert(k != -1, "Mapping at the permuted index must not be -1.");
@@ -170,7 +181,9 @@ internal sealed class NameDescriptorForTensorFieldDerivative : NameDescriptorFor
         {
             sb.Append(orders[i]);
             if (i < orders.Length - 1)
+            {
                 sb.Append(',');
+            }
         }
 
         sb.Append(')');
@@ -183,9 +196,23 @@ internal sealed class NameDescriptorForTensorFieldDerivative : NameDescriptorFor
         for (var i = 0; i < orders.Length; ++i)
         {
             for (var j = 0; j < orders[i]; ++j)
+            {
                 structureOfIndices[0] = structureOfIndices[0].Append(structureOfIndices[i + 1].GetInverted());
+            }
         }
 
         return structureOfIndices;
+    }
+
+    private static int[] ValidateOrders(int[] orders)
+    {
+        ArgumentNullException.ThrowIfNull(orders);
+        return orders;
+    }
+
+    private static NameDescriptorForTensorFieldImpl ValidateParent(NameDescriptorForTensorFieldImpl parent)
+    {
+        ArgumentNullException.ThrowIfNull(parent);
+        return parent;
     }
 }
