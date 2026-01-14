@@ -1,36 +1,34 @@
-﻿using System.Collections;
 using NRedberry.Core.Utils;
 
 namespace NRedberry.IndexGeneration;
 
-public sealed class IntGenerator : ICloneable<IntGenerator>, IEnumerator<int>
+public sealed class IntGenerator : ICloneable<IntGenerator>
 {
-    private static int[] EMPTY_ARRAY = [-1];
-    private int[] EngagedData;
-
-    private int Counter { get; set; }
-    private int Match { get; set; }
+    private static readonly int[] s_emptyArray = [-1];
+    private readonly int[] _engagedData;
+    private int _counter;
+    private int _match;
 
     public IntGenerator()
-        : this(EMPTY_ARRAY)
+        : this(s_emptyArray)
     {
     }
 
     private IntGenerator(int[] engagedData, int counter, int match)
     {
-        EngagedData = engagedData;
-        Counter = counter;
-        Match = match;
+        _engagedData = engagedData;
+        _counter = counter;
+        _match = match;
     }
 
     public IntGenerator(int[] engagedData)
     {
-        EngagedData = engagedData;
-        Counter = -1;
-        Match = 0;
-        Array.Sort(EngagedData);
-        var shift = 0;
-        var i = 0;
+        _engagedData = engagedData;
+        _counter = -1;
+        _match = 0;
+        Array.Sort(_engagedData);
+        int shift = 0;
+        int i = 0;
         while (i + shift + 1 < engagedData.Length)
         {
             if (engagedData[i + shift] == engagedData[i + shift + 1])
@@ -54,71 +52,41 @@ public sealed class IntGenerator : ICloneable<IntGenerator>, IEnumerator<int>
 
     public void MergeFrom(IntGenerator intGenerator)
     {
-        if (intGenerator.EngagedData != EngagedData)
+        if (intGenerator._engagedData != _engagedData)
         {
             throw new ArgumentException(nameof(intGenerator));
         }
 
-        if (intGenerator.Counter > Counter)
+        if (intGenerator._counter > _counter)
         {
-            Counter = intGenerator.Counter;
-            Match = intGenerator.Match;
+            _counter = intGenerator._counter;
+            _match = intGenerator._match;
         }
     }
 
-    [Obsolete("Use IEnumerator interface instead", true)]
     public int GetNext()
     {
-        Counter++;
-        while (Match < EngagedData.Length && EngagedData[Match] == Counter)
+        _counter++;
+        while (_match < _engagedData.Length && _engagedData[_match] == _counter)
         {
-            Match++;
-            Counter++;
+            _match++;
+            _counter++;
         }
 
-        return Counter;
+        return _counter;
     }
 
     public bool Contains(int index)
     {
-        if (Counter >= index)
+        if (_counter >= index)
         {
             return true;
         }
 
-        return Arrays.BinarySearch(EngagedData, Match, EngagedData.Length, index) >= 0;
+        return Arrays.BinarySearch(_engagedData, _match, _engagedData.Length, index) >= 0;
     }
 
-    #region ICloneable<IntGenerator>
-
-    public IntGenerator Clone() => new(EngagedData, Counter, Match);
+    public IntGenerator Clone() => new(_engagedData, _counter, _match);
 
     object ICloneable.Clone() => Clone();
-
-    #endregion
-
-    #region IEnumerator<int>
-
-    public int Current
-    {
-        get
-        {
-            if (Counter < 0 || Counter >= EngagedData.Length)
-                throw new InvalidOperationException();
-            return Counter;
-        }
-    }
-
-    object IEnumerator.Current => Current;
-
-    public bool MoveNext() => ++Counter < EngagedData.Length;
-
-    public void Reset() => Counter = -1;
-
-    public void Dispose()
-    {
-        // nothing to dispose
-    }
-
-    #endregion
 }

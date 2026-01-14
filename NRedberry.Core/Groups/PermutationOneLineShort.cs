@@ -1,8 +1,8 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections;
+using System.Collections.Immutable;
 using System.Numerics;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
-using System.Collections;
 
 namespace NRedberry.Groups;
 

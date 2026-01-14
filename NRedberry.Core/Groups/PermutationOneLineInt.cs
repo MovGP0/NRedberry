@@ -1,17 +1,13 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections;
+using System.Collections.Immutable;
 using System.Numerics;
 using NRedberry.Core.Combinatorics;
-using System.Collections;
 
 namespace NRedberry.Groups;
 
 public class PermutationOneLineInt : Permutation
 {
     private readonly int[] _permutation;
-    private BigInteger _order;
-    private bool _orderIsOdd;
-    private int _parity;
-    private int[] _lengthsOfCycles;
 
     public PermutationOneLineInt(bool antisymmetry, int[][] cycles)
         : this(antisymmetry, Permutations.ConvertCyclesToOneLine(cycles))
@@ -395,12 +391,7 @@ public class PermutationOneLineInt : Permutation
         return new PermutationOneLineInt(IsIdentity, IsAntisymmetry, size + Degree, p, true);
     }
 
-    int[] Permutation.LengthsOfCycles => _lengthsOfCycles;
-
-    public int[] LengthsOfCycles()
-    {
-        return Permutations.LengthsOfCycles(_permutation);
-    }
+    public int[] LengthsOfCycles => Permutations.LengthsOfCycles(_permutation);
 
     public override string ToString()
     {

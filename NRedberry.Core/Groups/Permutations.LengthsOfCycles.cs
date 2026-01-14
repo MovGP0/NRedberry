@@ -1,3 +1,5 @@
+using System.Collections;
+
 namespace NRedberry.Groups;
 
 public static partial class Permutations
@@ -9,24 +11,24 @@ public static partial class Permutations
     /// <returns>An array of cycles lengths.</returns>
     public static int[] LengthsOfCycles(sbyte[] permutation)
     {
-        var sizes = new List<int>();
-        var seen = new bool[permutation.Length];
+        List<int> sizes = [];
+        BitArray seen = new BitArray(permutation.Length);
         int counter = 0;
 
         while (counter < permutation.Length)
         {
-            int start = Array.IndexOf(seen, false);
+            int start = NextZeroBit(seen);
             if (permutation[start] == start)
             {
                 counter++;
-                seen[start] = true;
+                seen.Set(start, true);
                 continue;
             }
 
             int size = 0;
-            while (!seen[start])
+            while (!seen.Get(start))
             {
-                seen[start] = true;
+                seen.Set(start, true);
                 counter++;
                 size++;
                 start = permutation[start];
@@ -45,24 +47,24 @@ public static partial class Permutations
     /// <returns>An array of cycles lengths.</returns>
     public static int[] LengthsOfCycles(int[] permutation)
     {
-        var sizes = new List<int>();
-        var seen = new bool[permutation.Length];
+        List<int> sizes = [];
+        BitArray seen = new BitArray(permutation.Length);
         int counter = 0;
 
         while (counter < permutation.Length)
         {
-            int start = Array.IndexOf(seen, false);
+            int start = NextZeroBit(seen);
             if (permutation[start] == start)
             {
                 counter++;
-                seen[start] = true;
+                seen.Set(start, true);
                 continue;
             }
 
             int size = 0;
-            while (!seen[start])
+            while (!seen.Get(start))
             {
-                seen[start] = true;
+                seen.Set(start, true);
                 counter++;
                 size++;
                 start = permutation[start];
@@ -81,24 +83,24 @@ public static partial class Permutations
     /// <returns>An array of cycles lengths.</returns>
     public static int[] LengthsOfCycles(short[] permutation)
     {
-        var sizes = new List<int>();
-        var seen = new bool[permutation.Length];
+        List<int> sizes = [];
+        BitArray seen = new BitArray(permutation.Length);
         int counter = 0;
 
         while (counter < permutation.Length)
         {
-            int start = Array.IndexOf(seen, false);
+            int start = NextZeroBit(seen);
             if (permutation[start] == start)
             {
                 counter++;
-                seen[start] = true;
+                seen.Set(start, true);
                 continue;
             }
 
             int size = 0;
-            while (!seen[start])
+            while (!seen.Get(start))
             {
-                seen[start] = true;
+                seen.Set(start, true);
                 counter++;
                 size++;
                 start = permutation[start];

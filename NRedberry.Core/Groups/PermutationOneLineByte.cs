@@ -1,8 +1,8 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections;
+using System.Collections.Immutable;
 using System.Numerics;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
-using System.Collections;
 
 namespace NRedberry.Groups;
 
@@ -10,8 +10,6 @@ public class PermutationOneLineByte : Permutation, IEnumerable<sbyte>
 {
     private readonly sbyte[] _permutation;
     private readonly sbyte _internalDegree;
-    private int _parity;
-    private int[] _lengthsOfCycles;
 
     public PermutationOneLineByte(bool antisymmetry, params sbyte[] permutation)
     {
@@ -191,7 +189,7 @@ public class PermutationOneLineByte : Permutation, IEnumerable<sbyte>
             return this;
 
         int newLength = Math.Max(Degree, other.Degree);
-        if (newLength > byte.MaxValue)
+        if (newLength > sbyte.MaxValue)
             return ToLargerRepresentation(newLength).Composition(other);
 
         sbyte newInternalDegree = -1;
@@ -228,7 +226,7 @@ public class PermutationOneLineByte : Permutation, IEnumerable<sbyte>
             return Composition(a);
 
         int newLength = Math.Max(Math.Max(Degree, a.Degree), b.Degree);
-        if (newLength > byte.MaxValue)
+        if (newLength > sbyte.MaxValue)
             return ToLargerRepresentation(newLength).Composition(a, b);
 
         sbyte newInternalDegree = -1;
@@ -404,12 +402,7 @@ public class PermutationOneLineByte : Permutation, IEnumerable<sbyte>
         return new PermutationOneLineByte(IsIdentity, IsAntisymmetry, (sbyte)(size + _internalDegree), p, true);
     }
 
-    int[] Permutation.LengthsOfCycles => _lengthsOfCycles;
-
-    public int[] LengthsOfCycles()
-    {
-        return Permutations.LengthsOfCycles(_permutation);
-    }
+    public int[] LengthsOfCycles => Permutations.LengthsOfCycles(_permutation);
 
     public override string ToString()
     {
