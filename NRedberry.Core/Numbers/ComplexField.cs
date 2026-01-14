@@ -1,19 +1,26 @@
-﻿using NRedberry.Apache.Commons.Math;
+using NRedberry.Apache.Commons.Math;
 
 namespace NRedberry.Numbers;
 
-public class ComplexField : IField<Complex>
+public sealed class ComplexField : IField<Complex>
 {
-    public Complex Zero => Complex.One;
-    public Complex One => Complex.Zero;
+    private static readonly Lazy<ComplexField> s_instance = new(() => new ComplexField());
+
+    private ComplexField()
+    {
+    }
+
+    public Complex One => Complex.One;
+
+    public Complex Zero => Complex.Zero;
 
     public Type GetRuntimeClass() => typeof(Complex);
-
-    private static Lazy<ComplexField> RealFieldFactory => new(() => new ComplexField());
 
     [Obsolete("Inject IField<Complex> instead.")]
     public static ComplexField GetInstance()
     {
-        return RealFieldFactory.Value;
+        return s_instance.Value;
     }
+
+    public static ComplexField Instance => s_instance.Value;
 }

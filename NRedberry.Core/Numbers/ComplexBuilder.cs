@@ -1,12 +1,29 @@
-﻿using NRedberry.Tensors;
+using NRedberry.Tensors;
 
 namespace NRedberry.Numbers;
 
-internal sealed class ComplexBuilder(Complex complex): TensorBuilder
+internal sealed class ComplexBuilder : TensorBuilder
 {
-    public Tensor Build() => complex;
+    private readonly Complex complex;
 
-    public void Put(Tensor tensor) => throw new InvalidOperationException("Can not put to Complex tensor builder!");
+    public ComplexBuilder(Complex complex)
+    {
+        ArgumentNullException.ThrowIfNull(complex);
+        this.complex = complex;
+    }
 
-    public TensorBuilder Clone() => this;
+    public Tensor Build()
+    {
+        return complex;
+    }
+
+    public void Put(Tensor tensor)
+    {
+        throw new InvalidOperationException("Can not put to Complex tensor builder!");
+    }
+
+    public TensorBuilder Clone()
+    {
+        return this;
+    }
 }

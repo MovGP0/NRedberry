@@ -14,9 +14,7 @@ public interface SimpleIndices : Indices
     /// <summary>
     /// Compares simple indices taking into account possible permutations according to the symmetries.
     /// </summary>
-    /// <param name="indices>
-    /// indices to compare with this
-    /// </param>
+    /// <param name="indices">Indices to compare with this.</param>
     /// <returns>
     /// <value>true</value> if specified indices can be obtained via permutations (specified by symmetries) of this indices.
     /// </returns>

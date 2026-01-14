@@ -1,4 +1,4 @@
-# Repository Guidelines
+﻿# Repository Guidelines
 
 ## Project Structure & Module Organization
 
@@ -245,10 +245,15 @@ public override int GetHashCode()
 - Do not try to port multiple files at once; implement one file at a time
 - Always try to execute a build after every file; fix the build errors
 - When a build error is encountered, update `AGENTS.md` with a note describing the root cause and the preventative step(s) needed to avoid the error in the future.
-- Roslynator RCS0003 requires a blank line between using directives and the namespace declaration
+- Build error note: `IndicesBuilder.cs` referenced obsolete `IntArray` ([Obsolete(..., true)]), causing CS0619; prevent by avoiding `IntArray`/`IntArrayList` in new ports and using `ImmutableArray<int>`/`List<int>` or `IEnumerable<int>` overloads instead.
+- Build error note: `IndicesUtils.cs` used high-bit hex constants like `0x80000000`/`0x80FFFFFF`/`0xFF000000` without casts, which the compiler treated as `uint` (CS0266); prevent by using `unchecked((int)...)` (or named `int` masks) for signed constants with the high bit set.
+- Build error note: `NRedberry.Core/Indices/IndicesUtils.cs` calls `GetSortedDistinct` as an extension method on `int[]`; keep the `this int[]` signature in `NRedberry.Maths.MathUtils.GetSortedDistinct` (or update call sites) to avoid CS1061.
+- Build error note: Roslynator RCS1058 flagged `result = result * currentBase;` in `NumberUtils.cs`; prefer compound assignments like `result *= currentBase;`.
+- Build error note: `INumberTokenParser<T>` should constrain to `NRedberry.INumber<T>` (not `NRedberry.Numbers.INumber<T>`); the latter broke Complex/Real implementations with CS0311/CS0314.
+- Build error note: after constraining `INumberTokenParser<T>` to `NRedberry.INumber<T>`, also add the same constraint to `NumberParser<T>`, `BracketToken<T>`, and `OperatorToken<T>` to avoid CS0314.
+- Build error note: RCS0063 flagged trailing blank lines in Parser.cs; remove extra blank lines at file end to satisfy Roslynator.\r\n- Build error note (2026-01-14): ParseToken.GetIndices must return Indices.Indices (not Indices), because Indices is a namespace; this avoids CS0118 and override mismatch CS0508.\r\n- Build error note (2026-01-14): Roslynator RCS1111 flags switch cases with multiple statements; wrap the case body in braces.\r\n- Build error note (2026-01-14): In ParseToken.cs, Tensors.Sum resolved to the Sum type because Tensors matches a namespace; use NRedberry.Tensors.Tensors.Sum(...) (or a using alias) to call the static method.\r\n- Build error note (2026-01-14): AbstractSumBuilder.Build/Put must be marked virtual so SumBuilder overrides compile (CS0506).\r\nRoslynator RCS0003 requires a blank line between using directives and the namespace declaration
 - Do not use PowerShell to execute Python and do not use Python to execute PowerShell. Use either.
-- Python scripts can mess up line endings in C# files (issues with the difference between \n and \r). Prefer a
-  PowerShell script with a regex for file encoding and line ending fixes.
+- Python scripts can mess up line endings in C# files (issues with the difference between \n and \r). Prefer a PowerShell script with a regex for file encoding and line ending fixes.
 
 ## Global usings
 
@@ -319,3 +324,11 @@ Some types and methods need to be replaced with .NET types:
 - NEVER stop before pushing - that leaves work stranded locally
 - NEVER say "ready to push when you are" - YOU must push
 - If push fails, resolve and retry until it succeeds
+
+
+
+
+
+
+
+

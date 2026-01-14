@@ -5,6 +5,7 @@ namespace NRedberry.Numbers.Parser;
  */
 
 public interface INumberTokenParser<T>
+    where T : NRedberry.INumber<T>
 {
     T Parse(string expression, NumberParser<T> parser);
 }

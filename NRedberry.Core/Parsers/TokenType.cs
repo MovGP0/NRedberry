@@ -17,5 +17,7 @@ public enum TokenType
     Power,
     Number,
     ScalarFunction,
+    Derivative,
+    Trace,
     Dummy
 }

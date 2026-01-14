@@ -1,92 +1,249 @@
-﻿using System.Numerics;
+using System.Numerics;
+using NRedberry;
+using NRedberry.Apache.Commons.Math;
 using NRedberry.Tensors;
 
 namespace NRedberry.Numbers;
 
 public static class NumberUtils
 {
+    private static readonly BigInteger s_two = new(2);
+    private static readonly BigFraction s_oneFraction = new(1, 1);
+
+    public static BigInteger TwoBigInt { get; } = new(2);
+
     [Obsolete("Check for null and throw ArgumentNullException instead.")]
     public static void CheckNotNull(object o)
     {
-        if(o is null)
+        if (o is null)
+        {
             throw new ArgumentNullException(nameof(o));
+        }
     }
 
-    public static NRedberry.Numeric CreateNumeric(double value)
+    public static Numeric CreateNumeric(double value)
     {
-        return new NRedberry.Numeric(value);
+        if (value == 0.0)
+        {
+            return Numeric.Zero;
+        }
+
+        if (value == 1.0)
+        {
+            return Numeric.One;
+        }
+
+        if (double.IsPositiveInfinity(value))
+        {
+            return Numeric.PositiveInfinity;
+        }
+
+        if (double.IsNegativeInfinity(value))
+        {
+            return Numeric.NegativeInfinity;
+        }
+
+        if (double.IsNaN(value))
+        {
+            return Numeric.NaN;
+        }
+
+        return new Numeric(value);
     }
 
-    public static Rational CreateRational(Rationals.Rational value)
+    public static Rational CreateRational(BigFraction fraction)
     {
-        return new Rational(value);
+        ArgumentNullException.ThrowIfNull(fraction);
+        if (fraction.Numerator.IsZero)
+        {
+            return Rational.Zero;
+        }
+
+        if (fraction.Equals(s_oneFraction))
+        {
+            return Rational.One;
+        }
+
+        return new Rational(fraction.Numerator, fraction.Denominator);
     }
 
-    public static BigInteger Two = new(2);
-
+    /// <summary>
+    /// Computes the integer square root of a number.
+    /// </summary>
+    /// <param name="value">The number.</param>
+    /// <returns>The integer square root, i.e. the largest number whose square doesn't exceed <paramref name="value"/>.</returns>
     public static BigInteger Sqrt(BigInteger value)
     {
-        if(value.Sign < 0)
-            throw new ArgumentOutOfRangeException(nameof(value), value, "square root of negative number");
-        var result = Rationals.Rational.RationalRoot(new Rationals.Rational(value), 2);
-        return result.WholePart;
+        if (value.Sign < 0)
+        {
+            throw new ArithmeticException("square root of negative number");
+        }
+
+        if (value.IsZero)
+        {
+            return BigInteger.Zero;
+        }
+
+        int bitLength = GetBitLength(value);
+        BigInteger root = BigInteger.One << (bitLength / 2);
+        while (!IsSqrtBounds(value, root))
+        {
+            root = (root + (value / root)) / s_two;
+        }
+
+        return root;
     }
 
-    public static bool IsSqrtXxx(BigInteger value, BigInteger root)
+    private static bool IsSqrtBounds(BigInteger value, BigInteger root)
     {
-        var number = new Rationals.Rational(value);
-        var lowerBound = Rationals.Rational.Pow(new Rationals.Rational(root), 2);
-        var upperBound = Rationals.Rational.Pow(Rationals.Rational.Add(new Rationals.Rational(root), 1), 2);
-        return lowerBound.CompareTo(number) <= 0
-            && number.CompareTo(upperBound) < 0;
+        BigInteger lowerBound = root * root;
+        BigInteger upperBound = (root + BigInteger.One) * (root + BigInteger.One);
+        return lowerBound.CompareTo(value) <= 0 && value.CompareTo(upperBound) < 0;
     }
 
     public static bool IsSqrt(BigInteger value, BigInteger root)
     {
-        var number = new Rationals.Rational(value);
-        var power = Rationals.Rational.Pow(new Rationals.Rational(root), 2);
-        return number.CompareTo(power) == 0;
+        return value.CompareTo(root * root) == 0;
     }
 
     public static bool IsIntegerOdd(Complex complex)
     {
+        ArgumentNullException.ThrowIfNull(complex);
         if (complex.IsInteger())
-            return Math.Abs(complex.Real.DoubleValue()) % 2 == 1;
+        {
+            BigInteger value = GetBigIntValue(complex.Real);
+            return value % TwoBigInt != BigInteger.Zero;
+        }
+
         return false;
     }
 
     public static bool IsIntegerEven(Complex complex)
     {
+        ArgumentNullException.ThrowIfNull(complex);
         if (complex.IsInteger())
-            return complex.Real.DoubleValue() % 2 == 0;
+        {
+            BigInteger value = GetBigIntValue(complex.Real);
+            return value % TwoBigInt == BigInteger.Zero;
+        }
+
         return false;
     }
 
     public static bool IsZeroOrIndeterminate(Complex complex)
     {
-        return complex.IsZero() || double.IsInfinity(complex.Real.DoubleValue()) || double.IsNaN(complex.Real.DoubleValue());
+        ArgumentNullException.ThrowIfNull(complex);
+        return complex.IsZero() || complex.IsInfinite() || complex.IsNaN();
     }
 
     public static bool IsIndeterminate(Complex complex)
     {
-        return double.IsInfinity(complex.Real.DoubleValue()) || double.IsNaN(complex.Real.DoubleValue());
+        ArgumentNullException.ThrowIfNull(complex);
+        return complex.IsInfinite() || complex.IsNaN();
     }
 
     public static bool IsRealNegative(Complex complex)
     {
-        return complex.IsReal() && Math.Sign(complex.Real.DoubleValue()) < 0;
+        ArgumentNullException.ThrowIfNull(complex);
+        return complex.IsReal() && complex.Real.SigNum() < 0;
     }
 
     public static bool IsRealNumerical(Tensor tensor)
     {
+        ArgumentNullException.ThrowIfNull(tensor);
         if (tensor is Complex complex && complex.IsReal())
+        {
             return true;
+        }
+
         foreach (Tensor t in tensor)
         {
             if (!IsRealNumerical(t))
+            {
                 return false;
+            }
         }
 
         return true;
+    }
+
+    public static BigInteger Pow(BigInteger baseValue, BigInteger exponent)
+    {
+        BigInteger result = BigInteger.One;
+        BigInteger currentBase = baseValue;
+        BigInteger currentExponent = exponent;
+        while (currentExponent.Sign > 0)
+        {
+            if (!currentExponent.IsEven)
+            {
+                result *= currentBase;
+            }
+
+            currentBase *= currentBase;
+            currentExponent >>= 1;
+        }
+
+        return result;
+    }
+
+    public static long Pow(long baseValue, long exponent)
+    {
+        long result = 1;
+        long currentBase = baseValue;
+        long currentExponent = exponent;
+        while (currentExponent > 0)
+        {
+            if (currentExponent % 2 == 1)
+            {
+                result *= currentBase;
+            }
+
+            currentBase *= currentBase;
+            currentExponent >>= 1;
+        }
+
+        return result;
+    }
+
+    public static BigInteger Factorial(int n)
+    {
+        BigInteger result = BigInteger.One;
+        int value = n;
+        while (value != 0)
+        {
+            result *= value;
+            --value;
+        }
+
+        return result;
+    }
+
+    private static BigInteger GetBigIntValue(Real real)
+    {
+        return real switch
+        {
+            Rational rational => rational.BigIntValue(),
+            Numeric numeric => numeric.BigIntValue(),
+            _ => new BigInteger(real.DoubleValue())
+        };
+    }
+
+    private static int GetBitLength(BigInteger value)
+    {
+        if (value.Sign < 0)
+        {
+            value = BigInteger.Abs(value);
+        }
+
+        byte[] bytes = value.ToByteArray();
+        int msb = bytes[^1];
+        int bitLength = (bytes.Length - 1) * 8;
+        while (msb != 0)
+        {
+            msb >>= 1;
+            bitLength++;
+        }
+
+        return bitLength;
     }
 }

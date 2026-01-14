@@ -1,6 +1,6 @@
 ﻿namespace NRedberry.Indices;
 
-sealed class EmptySimpleIndices : EmptyIndices, SimpleIndices
+internal sealed class EmptySimpleIndices : EmptyIndices, SimpleIndices
 {
     public static readonly EmptySimpleIndices emptySimpleIndicesInstance = new();
 
@@ -21,6 +21,7 @@ sealed class EmptySimpleIndices : EmptyIndices, SimpleIndices
         get => IndicesSymmetries.EmptySymmetries;
         set
         {
+            ArgumentNullException.ThrowIfNull(value);
             if (value.StructureOfIndices.Size != 0)
             {
                 throw new InvalidOperationException("Symmetries dimensions are not equal to indices size.");
@@ -28,9 +29,12 @@ sealed class EmptySimpleIndices : EmptyIndices, SimpleIndices
         }
     }
 
-    public SimpleIndices ApplyIndexMapping(IIndexMapping mapping) => this;
+    public new SimpleIndices ApplyIndexMapping(IIndexMapping mapping) => this;
+
     public override bool Equals(object? obj) => obj is EmptyIndices;
+
     public bool EqualsWithSymmetries(SimpleIndices indices) => indices == emptySimpleIndicesInstance;
+
     public override int GetHashCode() => 453679;
 
     public StructureOfIndices StructureOfIndices => StructureOfIndices.Empty;

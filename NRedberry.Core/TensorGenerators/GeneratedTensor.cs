@@ -4,10 +4,19 @@ using NRedberry.Tensors.Iterators;
 
 namespace NRedberry.TensorGenerators;
 
-public sealed class GeneratedTensor(SimpleTensor[] coefficients, Tensor tensor)
+public sealed class GeneratedTensor
 {
-    public SimpleTensor[] Coefficients { get; } = coefficients;
-    public Tensor Tensor { get; } = tensor;
+    public GeneratedTensor(SimpleTensor[] coefficients, Tensor generatedTensor)
+    {
+        ArgumentNullException.ThrowIfNull(coefficients);
+        ArgumentNullException.ThrowIfNull(generatedTensor);
+
+        Coefficients = coefficients;
+        Tensor = generatedTensor;
+    }
+
+    public SimpleTensor[] Coefficients { get; }
+    public Tensor Tensor { get; }
 }
 
 public sealed class SymbolsGenerator : IEnumerator<SimpleTensor>

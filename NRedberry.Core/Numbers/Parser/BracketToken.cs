@@ -5,6 +5,7 @@ namespace NRedberry.Numbers.Parser;
  */
 
 public sealed class BracketToken<T> : INumberTokenParser<T>
+    where T : NRedberry.INumber<T>
 {
     public static BracketToken<T> Instance { get; } = new();
 

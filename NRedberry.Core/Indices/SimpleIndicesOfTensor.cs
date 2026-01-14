@@ -1,9 +1,9 @@
-﻿namespace NRedberry.Indices;
+namespace NRedberry.Indices;
 
 public sealed class SimpleIndicesOfTensor : SimpleIndicesAbstract
 {
-    public SimpleIndicesOfTensor(int[] data, IndicesSymmetries symmetries)
-        : base(data, symmetries)
+    public SimpleIndicesOfTensor(int[] data, IndicesSymmetries? symmetries)
+        : base(data, symmetries!)
     {
     }
 
@@ -17,50 +17,9 @@ public sealed class SimpleIndicesOfTensor : SimpleIndicesAbstract
         return new SimpleIndicesOfTensor(true, data, symmetries);
     }
 
-    protected override UpperLowerIndices CalculateUpperLower()
+    public new IndicesSymmetries Symmetries
     {
-        throw new NotImplementedException();
+        get => symmetries ?? throw new InvalidOperationException("Symmetries are not set.");
+        set => throw new NotSupportedException();
     }
-
-    public override int[] GetSortedData()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override Indices GetFree()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override Indices GetInverted()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override Indices GetOfType(IndexType type)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void TestConsistentWithException()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override Indices ApplyIndexMapping(IIndexMapping mapping)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override short[] GetDiffIds()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override int Size(IndexType type)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override int this[IndexType type, int position] => throw new NotImplementedException();
 }

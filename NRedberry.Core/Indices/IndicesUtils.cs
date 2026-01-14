@@ -1,4 +1,5 @@
-﻿using NRedberry.Contexts;
+using System.Collections.Immutable;
+using NRedberry.Contexts;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Maths;
 using CC = NRedberry.Tensors.CC;
@@ -87,6 +88,18 @@ namespace NRedberry.Indices;
 /// <remarks>https://github.com/redberry-cas/core/blob/master/src/main/java/cc/redberry/core/indices/IndicesUtils.java</remarks>
 public sealed class IndicesUtils
 {
+    public const int UpperRawStateInt = unchecked((int)0x80000000);
+    public const int LowerRawStateInt = unchecked((int)0x80000000);
+
+    private const int NameWithTypeMask = 0x7FFFFFFF;
+    private const int TypeMask = 0x7F000000;
+    private const int TypeStateMask = unchecked((int)0xFF000000);
+    private const int TypeUpdateMask = unchecked((int)0x80FFFFFF);
+
+    private IndicesUtils()
+    {
+    }
+
     public static int CreateIndex(int name, IndexType type, bool state)
     {
         return CreateIndex(name, type.GetType_(), state);
@@ -94,37 +107,37 @@ public sealed class IndicesUtils
 
     public static int CreateIndex(int name, byte type, bool state)
     {
-        return (int)((name & 0xFFFF) | ((0x7F & type) << 24) | (state ? 0x80000000 : 0));
+        return (name & 0xFFFF) | ((0x7F & type) << 24) | (state ? UpperRawStateInt : 0);
     }
 
     public static int GetRawStateInt(int index)
     {
-        return (int)(index & 0x80000000);
+        return index & UpperRawStateInt;
     }
 
-    public static long GetStateInt(long index)
+    public static int GetStateInt(int index)
     {
-        return (int)((index & 0x80000000) >> 31);
+        return (index & UpperRawStateInt) >>> 31;
     }
 
-    public static bool GetState(long index)
+    public static bool GetState(int index)
     {
-        return (index & 0x80000000) == 0x80000000;
+        return (index & UpperRawStateInt) == UpperRawStateInt;
     }
 
     public static int InverseIndexState(int index)
     {
-        return (int)(0x80000000 ^ index);
+        return UpperRawStateInt ^ index;
     }
 
     public static int GetNameWithType(int index)
     {
-        return index & 0x7FFFFFFF;
+        return index & NameWithTypeMask;
     }
 
     public static int SetType(byte type, int index)
     {
-        return (int)(0x80FFFFFF & index) | ((0x7F & type) << 24);
+        return (TypeUpdateMask & index) | ((0x7F & type) << 24);
     }
 
     public static int SetType(IndexType type, int index)
@@ -134,7 +147,22 @@ public sealed class IndicesUtils
 
     public static int SetRawState(int rawState, int index)
     {
-        return rawState | index;
+        return rawState | (index & NameWithTypeMask);
+    }
+
+    public static int SetState(bool state, int index)
+    {
+        return SetRawState(state ? UpperRawStateInt : 0, index);
+    }
+
+    public static int Raise(int index)
+    {
+        return SetRawState(UpperRawStateInt, index);
+    }
+
+    public static int Lower(int index)
+    {
+        return SetRawState(0, index);
     }
 
     public static int GetNameWithoutType(int index)
@@ -144,111 +172,146 @@ public sealed class IndicesUtils
 
     public static byte GetType(int index)
     {
-        return (byte)((index & 0x7FFFFFFF) >> 24);
+        return (byte)((index & NameWithTypeMask) >>> 24);
     }
 
     public static IndexType GetTypeEnum(int index)
     {
-        foreach (IndexType type in Enum.GetValues(typeof(IndexType)))
-        {
-            if (type.GetType_() == GetType_(index))
-                return type;
-        }
-
-        throw new Exception("Unknown type");
+        return IndexTypeMethods.GetType(GetType(index));
     }
 
-    public static long GetTypeInt(long index)
+    public static int GetTypeInt(int index)
     {
-        return (index & 0x7FFFFFFF) >> 24;
+        return (index & NameWithTypeMask) >>> 24;
     }
 
-    public static long GetRawTypeInt(long index)
+    public static int GetRawTypeInt(int index)
     {
-        return index & 0x7F000000;
+        return index & TypeMask;
     }
 
-    public static byte GetTypeWithState(long index)
+    public static byte GetTypeWithState(int index)
     {
-        return (byte)(index >> 24);
+        return (byte)(index >>> 24);
     }
 
-    public static bool HasEqualTypeAndName(long index0, long index1)
+    public static bool HasEqualTypeAndName(int index0, int index1)
     {
-        return (index0 & 0x7FFFFFFF) == (index1 & 0x7FFFFFFF);
+        return (index0 & NameWithTypeMask) == (index1 & NameWithTypeMask);
     }
 
-    public static bool HasEqualTypes(long index0, long index1)
+    public static bool HasEqualTypes(int index0, int index1)
     {
-        return (index0 & 0x7F000000) == (index1 & 0x7F000000);
+        return (index0 & TypeMask) == (index1 & TypeMask);
     }
 
-    public static bool HasEqualTypesAndStates(long index0, long index1)
+    public static bool HasEqualTypesAndStates(int index0, int index1)
     {
-        return (index0 & 0xFF000000) == (index1 & 0xFF000000);
+        return (index0 & TypeStateMask) == (index1 & TypeStateMask);
     }
 
-    public static bool AreContracted(long index0, long index1)
+    public static bool AreContracted(int index0, int index1)
     {
-        return (index0 ^ index1) == 0x80000000;
+        return (index0 ^ index1) == UpperRawStateInt;
     }
 
     public static int[] GetSortedDistinctIndicesNames(Indices indices)
     {
-        int[] indsArray = indices.AllIndices.ToArray(); // Assuming copy() is equivalent to ToArray()
+        ArgumentNullException.ThrowIfNull(indices);
+        int[] indsArray = indices.AllIndices.ToArray();
         for (int i = 0; i < indsArray.Length; ++i)
+        {
             indsArray[i] = GetNameWithType(indsArray[i]);
+        }
+
         return indsArray.GetSortedDistinct();
     }
 
-    public static string ToString(long index, OutputFormat mode)
+    public static string ToString(int index, OutputFormat mode)
     {
-        return (GetState(index) ? "^{" : "_{") + Context.Get().ConverterManager.GetSymbol(index, mode) + "}";
+        return (GetState(index) ? "^" : "_") + Context.Get().ConverterManager.GetSymbol(index, mode);
     }
 
-    public static string ToString(long index)
+    public static string ToString(int index)
     {
-        Context tempQualifier = Context.Get();
-        return ToString(index, tempQualifier.DefaultOutputFormat);
+        return ToString(index, Context.Get().DefaultOutputFormat);
     }
 
     public static string ToString(int[] indices, OutputFormat mode)
     {
+        ArgumentNullException.ThrowIfNull(indices);
         return IndicesFactory.CreateSimple(null, indices).ToString(mode);
     }
 
     public static string ToString(int[] indices)
     {
+        ArgumentNullException.ThrowIfNull(indices);
         return ToString(indices, CC.GetDefaultOutputFormat());
     }
 
     public static int ParseIndex(string @string)
     {
+        ArgumentNullException.ThrowIfNull(@string);
+        @string = @string.Trim();
         bool state = @string[0] == '^';
-        var nameWithType = Context.Get().ConverterManager
-            .GetCode(@string[1] == '{' ? @string.Substring(2, @string.Length - 1) : @string[1..]);
+        int start = 0;
+        if (@string[0] == '^' || @string[0] == '_')
+        {
+            start = 1;
+        }
 
-        return state ? (int)(0x80000000 ^ nameWithType) : nameWithType;
+        int nameWithType;
+        if (@string[start] == '{')
+        {
+            nameWithType = Context.Get().ConverterManager
+                .GetCode(@string.Substring(start + 1, @string.Length - start - 2));
+        }
+        else
+        {
+            nameWithType = Context.Get().ConverterManager.GetCode(@string.Substring(start));
+        }
+
+        return state ? (UpperRawStateInt ^ nameWithType) : nameWithType;
     }
 
     public static int[] GetIndicesNames(Indices indices)
     {
-        var a = new int[indices.Size()];
+        ArgumentNullException.ThrowIfNull(indices);
+        int[] a = new int[indices.Size()];
         for (int i = indices.Size() - 1; i >= 0; --i)
+        {
             a[i] = GetNameWithType(indices[i]);
+        }
+
         return a;
     }
 
     public static int[] GetIndicesNames(int[] indices)
     {
+        ArgumentNullException.ThrowIfNull(indices);
         int[] a = new int[indices.Length];
         for (int i = a.Length - 1; i >= 0; --i)
+        {
             a[i] = GetNameWithType(indices[i]);
+        }
+
+        return a;
+    }
+
+    public static int[] GetIndicesNames(ImmutableArray<int> indices)
+    {
+        int[] a = new int[indices.Length];
+        for (int i = a.Length - 1; i >= 0; --i)
+        {
+            a[i] = GetNameWithType(indices[i]);
+        }
+
         return a;
     }
 
     public static int[] GetFree(int[] indices)
     {
+        ArgumentNullException.ThrowIfNull(indices);
         return IndicesFactory.CreateSimple(null, indices).GetFree().AllIndices.ToArray();
     }
 
@@ -259,12 +322,19 @@ public sealed class IndicesUtils
 
     public static bool IsPermutationConsistentWithIndices(int[] indices, int[] permutation)
     {
+        ArgumentNullException.ThrowIfNull(indices);
+        ArgumentNullException.ThrowIfNull(permutation);
         if (indices.Length != permutation.Length)
+        {
             return false;
+        }
+
         for (int i = 0; i < permutation.Length; ++i)
         {
             if (GetRawTypeInt(indices[i]) != GetRawTypeInt(indices[permutation[i]]))
+            {
                 return false;
+            }
         }
 
         return true;
@@ -272,12 +342,20 @@ public sealed class IndicesUtils
 
     public static bool IsPermutationConsistentWithIndices(int[] indices, Permutation permutation)
     {
-        if (indices.Length != permutation.Length)
+        ArgumentNullException.ThrowIfNull(indices);
+        ArgumentNullException.ThrowIfNull(permutation);
+        if (indices.Length < permutation.Degree)
+        {
             return false;
-        for (int i = 0; i < permutation.Length; ++i)
+        }
+
+        int degree = permutation.Degree;
+        for (int i = 0; i < degree; ++i)
         {
             if (GetRawTypeInt(indices[i]) != GetRawTypeInt(indices[permutation.NewIndexOf(i)]))
+            {
                 return false;
+            }
         }
 
         return true;
@@ -285,10 +363,18 @@ public sealed class IndicesUtils
 
     public static bool EqualsRegardlessOrder(Indices indices1, int[] indices2)
     {
+        ArgumentNullException.ThrowIfNull(indices1);
+        ArgumentNullException.ThrowIfNull(indices2);
         if (indices1 is EmptyIndices)
+        {
             return indices2.Length == 0;
+        }
+
         if (indices1.Size() != indices2.Length)
+        {
             return false;
+        }
+
         int[] temp = (int[])indices2.Clone();
         Array.Sort(temp);
         return ((AbstractIndices)indices1).GetSortedData().SequenceEqual(temp);
@@ -296,8 +382,13 @@ public sealed class IndicesUtils
 
     public static bool EqualsRegardlessOrder(int[] indices1, int[] indices2)
     {
+        ArgumentNullException.ThrowIfNull(indices1);
+        ArgumentNullException.ThrowIfNull(indices2);
         if (indices1.Length != indices2.Length)
+        {
             return false;
+        }
+
         int[] temp1 = (int[])indices1.Clone();
         int[] temp2 = (int[])indices2.Clone();
         Array.Sort(temp1);
@@ -307,6 +398,8 @@ public sealed class IndicesUtils
 
     public static bool HaveIntersections(Indices u, Indices v)
     {
+        ArgumentNullException.ThrowIfNull(u);
+        ArgumentNullException.ThrowIfNull(v);
         Indices uFree = u.GetFree();
         Indices vFree = v.GetFree();
         if (uFree.Size() > vFree.Size())
@@ -328,12 +421,10 @@ public sealed class IndicesUtils
         return false;
     }
 
-    public static byte GetType_(int index) {
-        return (byte) ((index & 0x7FFFFFFF) >>> 24);
-    }
-
     public static int[] GetIntersections(int[] freeIndices1, int[] freeIndices2)
     {
+        ArgumentNullException.ThrowIfNull(freeIndices1);
+        ArgumentNullException.ThrowIfNull(freeIndices2);
         //micro optimization
         if (freeIndices1.Length > freeIndices2.Length)
         {
@@ -341,13 +432,13 @@ public sealed class IndicesUtils
         }
 
         List<int> contracted = [];
-        foreach (var t in freeIndices1)
+        for (int i = 0; i < freeIndices1.Length; ++i)
         {
-            foreach (var t1 in freeIndices2)
+            for (int j = 0; j < freeIndices2.Length; ++j)
             {
-                if (t1 == InverseIndexState(t))
+                if (freeIndices2[j] == InverseIndexState(freeIndices1[i]))
                 {
-                    contracted.Add(GetNameWithType(t1));
+                    contracted.Add(GetNameWithType(freeIndices2[j]));
                 }
             }
         }
@@ -357,14 +448,55 @@ public sealed class IndicesUtils
 
     public static int[] GetIntersections(Indices u, Indices v)
     {
+        ArgumentNullException.ThrowIfNull(u);
+        ArgumentNullException.ThrowIfNull(v);
         if (u.Size() == 0 || v.Size() == 0)
+        {
             return [];
+        }
 
         Indices freeU = u.GetFree();
         Indices freeV = v.GetFree();
         if (freeU.Size() == 0 || freeV.Size() == 0)
+        {
             return [];
+        }
 
         return GetIntersections(((AbstractIndices)freeU).Data, ((AbstractIndices)freeV).Data);
+    }
+
+    public static bool ContainsNonMetric(Indices indices)
+    {
+        ArgumentNullException.ThrowIfNull(indices);
+        for (int i = 0; i < indices.Size(); ++i)
+        {
+            if (!CC.IsMetric(GetType(indices[i])))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static HashSet<IndexType> NonMetricTypes(Indices indices)
+    {
+        ArgumentNullException.ThrowIfNull(indices);
+        HashSet<IndexType> types = [];
+        for (int i = 0; i < indices.Size(); ++i)
+        {
+            int index = indices[i];
+            if (!CC.IsMetric(GetType(index)))
+            {
+                types.Add(GetTypeEnum(index));
+            }
+        }
+
+        return types;
+    }
+
+    public static byte GetType_(int index)
+    {
+        return GetType(index);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace NRedberry.Parsers;
+﻿using System.Text.RegularExpressions;
+
+namespace NRedberry.Parsers;
 
 /// <summary>
 /// Parser of mathematical expressions.
@@ -8,20 +10,25 @@ public sealed class Parser
     /// <summary>
     /// Default parser.
     /// </summary>
-    public static readonly Parser Default = new(
-    //    ParserBrackets.Instance,
-    //    ParserSum.Instance,
-    //    ParserProduct.Instance,
-    //    ParserSimpleTensor.Instance,
-    //    ParserTensorField.Instance,
-    //    ParserPower.Instance,
-    //    ParserNumber.Instance,
-    //    ParserFunctions.Instance,
-    //    ParserExpression.Instance,
-    //    ParserPowerAst.Instance
-    );
+    private static readonly ITokenParser[] DefaultTokenParsers =
+    [
+        ParserBrackets.Instance,
+        ParserSum.Instance,
+        ParserProduct.Instance,
+        ParserSimpleTensor.Instance,
+        ParserTensorField.Instance,
+        ParserDerivative.Instance,
+        ParserPower.Instance,
+        ParserNumber.Instance,
+        ParserFunctions.Instance,
+        ParserExpression.Instance
+    ];
 
-    private IEnumerable<ITokenParser> TokenParsers { get; }
+    public static readonly Parser Default = new((ITokenParser[])DefaultTokenParsers.Clone());
+
+    private readonly ITokenParser[] tokenParsers;
+
+    public bool AllowSameVariance { get; set; }
 
     /// <summary>
     /// Constructs Parser from a given parsers of AST nodes.
@@ -29,7 +36,10 @@ public sealed class Parser
     /// <param name="tokenParsers"></param>
     public Parser(params ITokenParser[] tokenParsers)
     {
-        TokenParsers = tokenParsers;
+        ArgumentNullException.ThrowIfNull(tokenParsers);
+
+        this.tokenParsers = tokenParsers;
+        Array.Sort(tokenParsers, NodeParserComparator.Instance);
     }
 
     /// <summary>
@@ -41,10 +51,15 @@ public sealed class Parser
     /// <exception cref="ParserException"></exception>
     public ParseToken Parse(string expression)
     {
-        if(string.IsNullOrEmpty(expression))
-            throw new ArgumentNullException(nameof(expression));
+        ArgumentNullException.ThrowIfNull(expression);
 
-        foreach(var tokenParser in TokenParsers)
+        expression = DeleteComments(expression);
+        if (expression.Length == 0)
+        {
+            throw new ArgumentException("Empty expression.", nameof(expression));
+        }
+
+        foreach (var tokenParser in tokenParsers)
         {
             var node = tokenParser.ParseToken(expression.Trim(), this);
             if (node is not null)
@@ -52,5 +67,11 @@ public sealed class Parser
         }
 
         throw new ParserException($"No appropriate parser for expression: \"{expression}\"");
+    }
+
+    private static string DeleteComments(string expression)
+    {
+        return Regex.Replace(expression, "//.*|(\"(?:\\\\[^\"]|\\\\\"|.)*?\")|(?s)/\\*.*?\\*/", string.Empty)
+            .Replace("\n", string.Empty, StringComparison.Ordinal);
     }
 }

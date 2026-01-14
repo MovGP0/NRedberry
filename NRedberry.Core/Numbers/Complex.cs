@@ -156,7 +156,22 @@ public sealed class Complex : Tensor, NRedberry.INumber<Complex>
 
     public override int GetHashCode()
     {
-        return 47 * (329 + Real.GetHashCode()) + Imaginary.GetHashCode();
+        int hash = HashWithSign();
+        unchecked
+        {
+            return hash * hash;
+        }
+    }
+
+    /// <summary>
+    /// The hash codes of opposite numbers are also opposite.
+    /// </summary>
+    public int HashWithSign()
+    {
+        unchecked
+        {
+            return Real.GetHashCode() + (329 * Imaginary.GetHashCode());
+        }
     }
 
     public override int Size

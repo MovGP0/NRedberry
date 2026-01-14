@@ -5,6 +5,7 @@ namespace NRedberry.Numbers.Parser;
  */
 
 public sealed class NumberParser<T>
+    where T : NRedberry.INumber<T>
 {
     public static NumberParser<Real> RealParser => throw new NotImplementedException();
 

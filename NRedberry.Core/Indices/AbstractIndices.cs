@@ -12,7 +12,7 @@ namespace NRedberry.Indices;
 /// <remarks>https://github.com/redberry-cas/core/blob/master/src/main/java/cc/redberry/core/indices/AbstractIndices.java</remarks>
 public abstract class AbstractIndices(int[] data) : Indices
 {
-    public int[] Data { get; } = data;
+    public int[] Data { get; } = data ?? throw new ArgumentNullException(nameof(data));
 
     //TODO: private WeakReference<UpperLowerIndices?> _upperLower = new(null);
     private UpperLowerIndices? _upperLower;
@@ -73,10 +73,14 @@ public abstract class AbstractIndices(int[] data) : Indices
     public bool EqualsRegardlessOrder(Indices indices)
     {
         if (ReferenceEquals(this, indices))
+        {
             return true;
+        }
 
         if (indices is EmptyIndices)
+        {
             return Data.Length == 0;
+        }
 
         return GetSortedData().SequenceEqual(((AbstractIndices)indices).GetSortedData());
     }
@@ -96,57 +100,156 @@ public abstract class AbstractIndices(int[] data) : Indices
 
     public int Get(int position) => Data[position];
 
-    public override int GetHashCode() => HashCode.Combine(Data);
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hash = 1;
+            for (int i = 0; i < Data.Length; ++i)
+            {
+                hash = (hash * 31) + Data[i];
+            }
+
+            return 291 + hash;
+        }
+    }
 
     public IEnumerator<int> GetEnumerator()
     {
-        throw new System.NotImplementedException();
+        return ((IEnumerable<int>)Data).GetEnumerator();
     }
 
     public override bool Equals(object? obj)
     {
-        if (ReferenceEquals(obj, null))
+        if (obj is not AbstractIndices other)
+        {
             return false;
+        }
 
-        if (GetType() != obj.GetType())
-            return false;
-
-        return Data.SequenceEqual(((AbstractIndices)obj).Data);
+        return Data.SequenceEqual(other.Data);
     }
 
     public string ToString(OutputFormat mode)
     {
         if (Data.Length == 0)
-            return string.Empty;
-        bool latex = mode == OutputFormat.LaTeX;
-        StringBuilder sb = new StringBuilder();
-        int stateMode = (Data[0] >> 31);
-        int currentState = stateMode;
-        if (stateMode == 0)
         {
-            sb.Append(latex ? "_{" : "_{");
+            return string.Empty;
+        }
+
+        StringBuilder sb = new();
+        if (mode.Is(OutputFormat.WolframMathematica) || mode.Is(OutputFormat.Maple))
+        {
+            for (int i = 0; ; i++)
+            {
+                int currentState = (int)((uint)Data[i] >> 31);
+                sb.Append(currentState == 1 ? mode.UpperIndexPrefix : mode.LowerIndexPrefix);
+                sb.Append(Context.Get().ConverterManager.GetSymbol(Data[i], mode));
+                if (i == Data.Length - 1)
+                {
+                    break;
+                }
+
+                sb.Append(',');
+            }
+        }
+        else if (mode.Is(OutputFormat.Cadabra))
+        {
+            List<int> nonMetricIndices = [];
+            List<int> metricIndices = new(Data.Length);
+            for (int i = 0; i < Data.Length; ++i)
+            {
+                if (CC.IsMetric(IndicesUtils.GetType(Data[i])))
+                {
+                    metricIndices.Add(Data[i]);
+                }
+                else
+                {
+                    nonMetricIndices.Add(Data[i]);
+                }
+            }
+
+            if (metricIndices.Count > 0)
+            {
+                sb.Append("_{");
+                for (int i = 0, size = metricIndices.Count - 1; ; ++i)
+                {
+                    sb.Append(Context.Get().ConverterManager.GetSymbol(metricIndices[i], mode));
+                    if (i == size)
+                    {
+                        break;
+                    }
+
+                    sb.Append(' ');
+                }
+
+                sb.Append('}');
+            }
+
+            if (nonMetricIndices.Count > 0)
+            {
+                int currentState = (int)((uint)nonMetricIndices[0] >> 31);
+                sb.Append(mode.LowerIndexPrefix).Append('{');
+                int lastState = currentState;
+                for (int i = 0, size = nonMetricIndices.Count - 1; ; ++i)
+                {
+                    currentState = (int)((uint)nonMetricIndices[i] >> 31);
+                    if (lastState != currentState)
+                    {
+                        sb.Append('}').Append(mode.GetPrefixFromIntState(currentState)).Append('{');
+                        lastState = currentState;
+                    }
+
+                    sb.Append(Context.Get().ConverterManager.GetSymbol(nonMetricIndices[i], mode));
+                    if (i == size)
+                    {
+                        break;
+                    }
+
+                    if (currentState == (int)((uint)nonMetricIndices[i + 1] >> 31))
+                    {
+                        sb.Append(' ');
+                    }
+                }
+
+                sb.Append('}');
+            }
         }
         else
         {
-            sb.Append(latex ? "^{" : "^{");
-        }
+            string latexBrackets = mode.Is(OutputFormat.LaTeX) ? "{}" : string.Empty;
 
-        for (int i = 0; i < Data.Length; i++)
-        {
-            stateMode = Data[i] >> 31;
-            if (currentState != stateMode)
+            int totalToPrint = 0;
+            int lastState = -1;
+            for (int i = 0; i < Data.Length; i++)
             {
-                if (currentState == 0)
-                    sb.Append(latex ? "}{}^{" : "}^{");
-                if (currentState == 1)
-                    sb.Append(latex ? "}{}_{" : "}_{");
-                currentState = stateMode;
+                if (!CC.IsMetric(IndicesUtils.GetType(Data[i])) && !mode.PrintMatrixIndices)
+                {
+                    continue;
+                }
+
+                int currentState = (int)((uint)Data[i] >> 31);
+                if (lastState != currentState)
+                {
+                    if (totalToPrint != 0)
+                    {
+                        sb.Append('}');
+                    }
+
+                    sb.Append(latexBrackets).Append(mode.GetPrefixFromIntState(currentState)).Append('{');
+                    lastState = currentState;
+                }
+
+                sb.Append(Context.Get().ConverterManager.GetSymbol(Data[i], mode));
+                ++totalToPrint;
             }
 
-            sb.Append(Context.Get().ConverterManager.GetSymbol(Data[i], mode));
+            sb.Append('}');
+            if (totalToPrint == 0)
+            {
+                return string.Empty;
+            }
         }
 
-        sb.Append("}");
         return sb.ToString();
     }
 

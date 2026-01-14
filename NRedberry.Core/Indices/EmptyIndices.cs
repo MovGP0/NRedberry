@@ -8,6 +8,7 @@ public class EmptyIndices : Indices
     public static readonly EmptyIndices EmptyIndicesInstance = new();
 
     public int this[int position] => throw new ArgumentOutOfRangeException(nameof(position), position, "Size is zero.");
+
     public int this[IndexType type, int position] => throw new ArgumentOutOfRangeException(nameof(position), position, "Size is zero.");
 
     public Indices GetInverted()
@@ -27,14 +28,15 @@ public class EmptyIndices : Indices
 
     public bool EqualsRegardlessOrder(Indices indices)
     {
+        ArgumentNullException.ThrowIfNull(indices);
         return indices.Size() == 0;
     }
 
-    public ImmutableArray<int> UpperIndices => [];
+    public ImmutableArray<int> UpperIndices => ImmutableArray<int>.Empty;
 
-    public ImmutableArray<int> LowerIndices => [];
+    public ImmutableArray<int> LowerIndices => ImmutableArray<int>.Empty;
 
-    public ImmutableArray<int> AllIndices => [];
+    public ImmutableArray<int> AllIndices => ImmutableArray<int>.Empty;
 
     public int Size(IndexType type)
     {
@@ -72,7 +74,7 @@ public class EmptyIndices : Indices
 
     public IEnumerator<int> GetEnumerator()
     {
-        throw new NotImplementedException();
+        return ((IEnumerable<int>)Array.Empty<int>()).GetEnumerator();
     }
 
     public override bool Equals(object? obj)

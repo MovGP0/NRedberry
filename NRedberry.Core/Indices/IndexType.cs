@@ -31,6 +31,11 @@ public static class IndexTypeMethods
         { IndexType.Matrix4, new IndexWithStrokeConverter(IndexConverterExtender.GreekUpperEx, 1) },
     };
 
+    private static readonly Dictionary<IndexType, string> ShortNames = new();
+    private static readonly IndexType[] ByteToEnum = new IndexType[TypesCount];
+    private static readonly byte[] AllBytes;
+    private static readonly IIndexSymbolConverter[] AllConverters;
+
     public static IndexType[] Values { get; } =
     [
         IndexType.LatinLower,
@@ -43,16 +48,38 @@ public static class IndexTypeMethods
         IndexType.Matrix4
     ];
 
+    static IndexTypeMethods()
+    {
+        foreach ((string shortName, IndexType indexType) in CommonNames)
+        {
+            ShortNames[indexType] = shortName;
+        }
+
+        int length = Values.Length;
+        AllBytes = new byte[length];
+        AllConverters = new IIndexSymbolConverter[length];
+        for (int i = 0; i < length; ++i)
+        {
+            IndexType indexType = Values[i];
+            IIndexSymbolConverter converter = ConverterMap[indexType];
+            byte type = converter.Type;
+            ByteToEnum[type] = indexType;
+            AllBytes[i] = type;
+            AllConverters[i] = converter;
+        }
+    }
+
     public static string GetShortString(this IndexType indexType)
     {
-        return CommonNames.Any(e => e.Value == indexType)
-            ? CommonNames.First(e => e.Value == indexType).Key
+        return ShortNames.TryGetValue(indexType, out string? shortName)
+            ? shortName
             : indexType.ToString();
     }
 
-    public static IndexType FromShortString(string stringVal)
+    public static IndexType? FromShortString(string stringVal)
     {
-        return CommonNames[stringVal];
+        ArgumentNullException.ThrowIfNull(stringVal);
+        return CommonNames.TryGetValue(stringVal, out IndexType type) ? type : null;
     }
 
     public static IIndexSymbolConverter GetSymbolConverter(this IndexType indexType)
@@ -67,30 +94,23 @@ public static class IndexTypeMethods
 
     public static byte[] GetBytes()
     {
-        byte[] bytes = new byte[TypesCount];
-        for (byte i = 0; i < TypesCount; ++i)
-            bytes[i] = i;
-        return bytes;
+        return (byte[])AllBytes.Clone();
     }
 
     public static IndexType GetType_(byte type) => GetType(type);
 
     public static IndexType GetType(byte type)
     {
-        foreach (IndexType indexType in Enum.GetValues(typeof(IndexType)))
+        if (type >= TypesCount)
         {
-            if (indexType.GetType_() == type)
-                return indexType;
+            throw new ArgumentException("No such type: " + type);
         }
 
-        throw new ArgumentException("No such type: " + type);
+        return ByteToEnum[type];
     }
 
     public static IIndexSymbolConverter[] GetAllConverters()
     {
-        List<IIndexSymbolConverter> converters = [];
-        foreach (IndexType type in Enum.GetValues(typeof(IndexType)))
-            converters.Add(type.GetSymbolConverter());
-        return converters.ToArray();
+        return (IIndexSymbolConverter[])AllConverters.Clone();
     }
 }

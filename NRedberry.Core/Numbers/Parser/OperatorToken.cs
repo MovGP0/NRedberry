@@ -5,6 +5,7 @@ namespace NRedberry.Numbers.Parser;
  */
 
 public abstract class OperatorToken<T> : INumberTokenParser<T>
+    where T : NRedberry.INumber<T>
 {
     protected OperatorToken(char operationSymbol, char operationInverseSymbol)
     {

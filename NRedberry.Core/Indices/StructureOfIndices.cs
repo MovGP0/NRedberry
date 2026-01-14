@@ -17,14 +17,17 @@ public sealed class StructureOfIndices
 
     private readonly BitArray[] states = new BitArray[IndexTypeMethods.TypesCount];
 
-    private readonly long size;
+    public int Size { get; }
+
+    public int Count { get; }
 
     #region Constructors
 
     //for empty instance
     private StructureOfIndices()
     {
-        size = 0;
+        Size = 0;
+        Count = 0;
         for (int i = 0; i < IndexTypeMethods.TypesCount; ++i)
         {
             if (!CC.IsMetric((byte)i))
@@ -34,13 +37,15 @@ public sealed class StructureOfIndices
 
     private StructureOfIndices(int size)
     {
-        this.size = size;
+        Size = size;
+        Count = size;
     }
 
     private StructureOfIndices(byte type, int count, params bool[] states)
     {
         TypesCounts[type] = count;
-        size = count;
+        Size = count;
+        Count = count;
         for (int i = 0; i < IndexTypeMethods.TypesCount; ++i)
         {
             if (!CC.IsMetric((byte)i))
@@ -53,7 +58,8 @@ public sealed class StructureOfIndices
         if (!CC.IsMetric(type))
             throw new ArgumentException("No states information provided for non metric type.");
         TypesCounts[type] = count;
-        size = count;
+        Size = count;
+        Count = count;
         for (int i = 0; i < IndexTypeMethods.TypesCount; ++i)
         {
             if (!CC.IsMetric((byte)i))
@@ -76,7 +82,8 @@ public sealed class StructureOfIndices
             size += count[i];
         }
 
-        this.size = size;
+        Size = size;
+        Count = size;
         for (int i = 0; i < IndexTypeMethods.TypesCount; ++i)
         {
             if (!CC.IsMetric((byte)i))
@@ -103,14 +110,16 @@ public sealed class StructureOfIndices
         }
 
         Array.Copy(allCount, 0, TypesCounts, 0, allCount.Length);
-        this.size = size;
+        Size = size;
+        Count = size;
     }
 
     internal StructureOfIndices(SimpleIndices indices)
     {
-        size = indices.Size();
+        Size = indices.Size();
+        Count = Size;
         int i;
-        for (i = 0; i < size; ++i)
+        for (i = 0; i < Size; ++i)
             ++TypesCounts[IndicesUtils.GetType(indices[i])];
         int[] pointers = new int[IndexTypeMethods.TypesCount];
         for (i = 0; i < IndexTypeMethods.TypesCount; ++i)
@@ -125,7 +134,7 @@ public sealed class StructureOfIndices
             }
         }
 
-        for (i = 0; i < size; ++i)
+        for (i = 0; i < Size; ++i)
         {
             var type = IndicesUtils.GetType(indices[i]);
             if (pointers[type] != -1)
@@ -221,9 +230,10 @@ public sealed class StructureOfIndices
 
     StructureOfIndices(int[] indices)
     {
-        size = indices.Length;
+        Size = indices.Length;
+        Count = Size;
         int i;
-        for (i = 0; i < size; ++i)
+        for (i = 0; i < Size; ++i)
             ++TypesCounts[IndicesUtils.GetType_(indices[i])];
         int[] pointers = new int[IndexTypeMethods.TypesCount];
         for (i = 0; i < IndexTypeMethods.TypesCount; ++i)
@@ -239,7 +249,7 @@ public sealed class StructureOfIndices
         }
 
         byte type;
-        for (i = 0; i < size; ++i)
+        for (i = 0; i < Size; ++i)
         {
             type = IndicesUtils.GetType_(indices[i]);
             if (pointers[type] != -1)
@@ -258,9 +268,6 @@ public sealed class StructureOfIndices
         return new BitArray(size);
     }
 
-    public int Size => (int)size;
-    public int Count => (int)size;
-
     public override bool Equals(object? obj)
     {
         if (obj == null)
@@ -268,9 +275,9 @@ public sealed class StructureOfIndices
         if (GetType() != obj.GetType())
             return false;
         StructureOfIndices other = (StructureOfIndices) obj;
-        if (size != other.Size)
+        if (Size != other.Size)
             return false;
-        if (size == 0)
+        if (Size == 0)
             return true;
 
         return TypesCounts.SequenceEqual(other.GetTypesCounts())
@@ -311,24 +318,31 @@ public sealed class StructureOfIndices
 
     public bool IsStructureOf(SimpleIndices indices)
     {
-        if (size != indices.Size())
+        if (Size != indices.Size())
             return false;
         return Equals(indices.StructureOfIndices);
     }
 
     public StructureOfIndices GetInverted()
     {
-        if (size == 0)
+        if (Size == 0)
             return this;
-        StructureOfIndices r = new StructureOfIndices((int)size);
+        StructureOfIndices r = new StructureOfIndices(Size);
         Array.Copy(TypesCounts, r.TypesCounts, TypesCounts.Length);
         for (int i = r.states.Length - 1; i >= 0; --i)
         {
             if (states[i] == null)
+            {
                 continue;
-            if (states[i] == BitArrayExtensions.Empty) // Assuming BitArrayExtensions.Empty property is defined in your BitArray implementation
+            }
+
+            if (states[i].Count == 0)
+            {
                 r.states[i] = BitArrayExtensions.Empty;
-            r.states[i] = (BitArray) states[i].Clone();
+                continue;
+            }
+
+            r.states[i] = (BitArray)states[i].Clone();
             r.states[i].Not();
         }
 
@@ -337,11 +351,11 @@ public sealed class StructureOfIndices
 
     public StructureOfIndices Append(StructureOfIndices oth)
     {
-        if (size == 0)
+        if (Size == 0)
             return oth;
         if (oth.Size == 0)
             return this;
-        int newSize = (int)size + oth.Size;
+        int newSize = Size + oth.Size;
         StructureOfIndices r = new StructureOfIndices(newSize);
         for (int i = 0; i < IndexTypeMethods.TypesCount; ++i)
         {
@@ -352,6 +366,80 @@ public sealed class StructureOfIndices
         }
 
         return r;
+    }
+
+    public StructureOfIndices Pow(int count)
+    {
+        if (Size == 0 || count == 0)
+        {
+            return Empty;
+        }
+
+        if (count == 1)
+        {
+            return this;
+        }
+
+        int newSize = Size * count;
+        StructureOfIndices r = new StructureOfIndices(newSize);
+        for (int i = 0; i < IndexTypeMethods.TypesCount; ++i)
+        {
+            r.TypesCounts[i] = count * TypesCounts[i];
+            if (states[i] == null)
+            {
+                continue;
+            }
+
+            r.states[i] = Times(states[i], count);
+        }
+
+        return r;
+    }
+
+    public StructureOfIndices Subtract(StructureOfIndices other)
+    {
+        ArgumentNullException.ThrowIfNull(other);
+        int newSize = Size - other.Size;
+        if (newSize < 0)
+        {
+            throw new ArgumentException();
+        }
+
+        if (other.Size == 0)
+        {
+            return this;
+        }
+
+        StructureOfIndices r = new StructureOfIndices(newSize);
+        for (int i = 0; i < IndexTypeMethods.TypesCount; ++i)
+        {
+            int count = TypesCounts[i] - other.TypesCounts[i];
+            if (count < 0)
+            {
+                throw new ArgumentException("Other is larger then this.");
+            }
+
+            r.TypesCounts[i] = count;
+            if (states[i] == null)
+            {
+                continue;
+            }
+
+            if (other.states[i] == null)
+            {
+                throw new ArgumentException($"Inconsistent structures: {this} and {other}");
+            }
+
+            int otherCount = other.states[i].Count;
+            if (!BitArrayEquals(CopyRange(states[i], states[i].Count - otherCount, otherCount), other.states[i]))
+            {
+                throw new ArgumentException("Nonmetric states are different");
+            }
+
+            r.states[i] = CopyRange(states[i], 0, states[i].Count - otherCount);
+        }
+
+        return newSize == 0 ? Empty : r;
     }
 
     public int[][] GetPartitionMappings(params StructureOfIndices[] partition)
@@ -395,7 +483,7 @@ public sealed class StructureOfIndices
 
     public override string ToString()
     {
-        if (size == 0)
+        if (Size == 0)
             return "[]";
         StringBuilder sb = new StringBuilder();
         sb.Append('[');
@@ -436,6 +524,49 @@ public sealed class StructureOfIndices
         sb.Remove(sb.Length - 1, 1);
         sb.Append(']');
         return sb.ToString();
+    }
+
+    private static bool BitArrayEquals(BitArray left, BitArray right)
+    {
+        return new BitArrayEqualityComparer().Equals(left, right);
+    }
+
+    private static BitArray CopyRange(BitArray source, int start, int length)
+    {
+        if (length <= 0)
+        {
+            return BitArrayExtensions.Empty;
+        }
+
+        BitArray result = new BitArray(length);
+        for (int i = 0; i < length; ++i)
+        {
+            result[i] = source[start + i];
+        }
+
+        return result;
+    }
+
+    private static BitArray Times(BitArray source, int count)
+    {
+        if (count <= 0 || source.Count == 0)
+        {
+            return BitArrayExtensions.Empty;
+        }
+
+        BitArray result = new BitArray(source.Count * count);
+        int offset = 0;
+        for (int i = 0; i < count; ++i)
+        {
+            for (int j = 0; j < source.Count; ++j)
+            {
+                result[offset + j] = source[j];
+            }
+
+            offset += source.Count;
+        }
+
+        return result;
     }
 
     public static StructureOfIndices Empty { get; } = new();
