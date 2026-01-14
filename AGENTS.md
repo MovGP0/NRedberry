@@ -244,6 +244,7 @@ public override int GetHashCode()
 
 - Do not try to port multiple files at once; implement one file at a time
 - Always try to execute a build after every file; fix the build errors
+- When a build error is encountered, update `AGENTS.md` with a note describing the root cause and the preventative step(s) needed to avoid the error in the future.
 - Roslynator RCS0003 requires a blank line between using directives and the namespace declaration
 - Do not use PowerShell to execute Python and do not use Python to execute PowerShell. Use either.
 - Python scripts can mess up line endings in C# files (issues with the difference between \n and \r). Prefer a
@@ -287,6 +288,11 @@ Some types and methods need to be replaced with .NET types:
 | CC.GetNameManager()                                          | CC.NameManager     | Property with getter instead of method   |
 | CC.GetIndexConverterManager()                                | CC.IndexConverterManager | Property with getter instead of method   |
 | CC.GetDefaultOutputFormat() / CC.SetDefaultOutputFormat(OutputFormat) | CC.DefaultOutputFormat | Property with getter instead of method   |
+
+# Issue tracking
+
+- Before starting any work, run 'bd onboard' to understand the current project state and available issues.
+- Do not make any file changes without a bd ticket
 
 ## Landing the Plane (Session Completion)
 
