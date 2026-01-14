@@ -1,18 +1,29 @@
-using System.Collections.Immutable;
 using NRedberry.Core.Combinatorics;
 
 namespace NRedberry.Groups;
 
-public class BSGSElement(
-    int basePoint,
-    IReadOnlyCollection<Permutation> stabilizerGenerators,
-    SchreierVector schreierVector,
-    List<int> orbitList)
+public class BSGSElement
 {
-    public readonly int BasePoint = basePoint;
-    public readonly IList<Permutation> StabilizerGenerators = stabilizerGenerators.ToList();
-    protected readonly SchreierVector SchreierVector = schreierVector;
-    protected readonly List<int> OrbitList = orbitList;
+    public BSGSElement(
+        int basePoint,
+        IReadOnlyCollection<Permutation> stabilizerGenerators,
+        SchreierVector schreierVector,
+        List<int> orbitList)
+    {
+        BasePoint = basePoint;
+        StabilizerGenerators = new List<Permutation>(stabilizerGenerators);
+        SchreierVector = schreierVector;
+        OrbitList = orbitList;
+        InternalDegree = Permutations.InternalDegree(stabilizerGenerators);
+    }
+
+    public int BasePoint { get; }
+
+    public IList<Permutation> StabilizerGenerators { get; }
+
+    protected SchreierVector SchreierVector { get; }
+
+    protected List<int> OrbitList { get; }
 
     public IList<Permutation> StabilizerGeneratorsReference => StabilizerGenerators;
     public List<int> OrbitListReference => OrbitList;
@@ -36,9 +47,11 @@ public class BSGSElement(
     public Permutation GetInverseTransversalOf(int point)
     {
         if (SchreierVector[point] == -2)
+        {
             throw new ArgumentException("Specified point does not belong to orbit of this base element.");
+        }
 
-        var stabilizerGenerators = StabilizerGenerators.ToImmutableArray();
+        var stabilizerGenerators = StabilizerGenerators;
         var temp = Permutations.CreateIdentityPermutation(SchreierVector.Length);
         while (SchreierVector[temp.NewIndexOf(point)] != -1)
         {
@@ -71,7 +84,7 @@ public class BSGSElement(
         return OrbitList[index];
     }
 
-    public int InternalDegree { get; set; } = Permutations.InternalDegree(stabilizerGenerators);
+    public int InternalDegree { get; protected internal set; }
 
     public override string ToString()
     {

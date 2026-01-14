@@ -8,7 +8,7 @@ namespace NRedberry.Groups;
 /// </summary>
 public sealed class BruteForcePermutationIterator : IEnumerator<Permutation>
 {
-    private static readonly Comparison<Permutation> JustPermutationComparator =
+    public static readonly Comparison<Permutation> JustPermutationComparator =
         (o1, o2) => o1.CompareTo(o2);
 
     private readonly SortedSet<Permutation> set;

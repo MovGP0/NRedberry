@@ -9,6 +9,11 @@ namespace NRedberry.Groups;
 public interface IBacktrackSearchTestFunction
 {
     /// <summary>
+    /// Always returns true.
+    /// </summary>
+    public static IBacktrackSearchTestFunction True { get; } = new TrueBacktrackSearchTestFunction();
+
+    /// <summary>
     /// Tests a permutation at the specified level. If the test returns false, no further permutations
     /// with the same partial base image will be scanned in the search tree.
     /// </summary>

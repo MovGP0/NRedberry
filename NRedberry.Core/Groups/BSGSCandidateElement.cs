@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using NRedberry.Core.Combinatorics;
+﻿using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
 
 namespace NRedberry.Groups;
@@ -59,14 +58,13 @@ public sealed class BSGSCandidateElement : BSGSElement
 
         for (int orbitIndex = 0; orbitIndex < OrbitList.Count; ++orbitIndex)
         {
-            var stabilizerGenerators = StabilizerGenerators.ToImmutableArray();
-            foreach (var stabilizer in stabilizerGenerators)
+            for (int stabilizerIndex = 0, size = StabilizerGenerators.Count; stabilizerIndex < size; ++stabilizerIndex)
             {
-                int imageOfPoint = stabilizer.NewIndexOf(OrbitList[orbitIndex]);
+                int imageOfPoint = StabilizerGenerators[stabilizerIndex].NewIndexOf(OrbitList[orbitIndex]);
                 if (SchreierVector[imageOfPoint] == -2)
                 {
                     OrbitList.Add(imageOfPoint);
-                    SchreierVector[imageOfPoint] = stabilizerGenerators.IndexOf(stabilizer);
+                    SchreierVector[imageOfPoint] = stabilizerIndex;
                 }
             }
         }

@@ -11,21 +11,28 @@ public class InducedOrdering : IComparer<int>
     /// <param name="baseArray">Base permutation group.</param>
     public InducedOrdering(int[] baseArray)
     {
-        if (baseArray == null || baseArray.Length == 0)
-            throw new ArgumentException("Base array must not be null or empty.", nameof(baseArray));
+        ArgumentNullException.ThrowIfNull(baseArray);
+        if (baseArray.Length == 0)
+        {
+            throw new ArgumentException("Base array must not be empty.", nameof(baseArray));
+        }
 
         degree = Max(baseArray) + 1;
         positions = new int[degree + 2];
 
         Array.Fill(positions, -1);
         for (int i = 0; i < baseArray.Length; i++)
+        {
             positions[1 + baseArray[i]] = i;
+        }
 
         int next = baseArray.Length;
         for (int i = 1; i < degree + 1; i++)
         {
             if (positions[i] == -1)
+            {
                 positions[i] = next++;
+            }
         }
 
         positions[0] = int.MinValue;
@@ -46,9 +53,15 @@ public class InducedOrdering : IComparer<int>
     public int Compare(int a, int b)
     {
         if (a > positions.Length - 2)
+        {
             return b > positions.Length - 2 ? a.CompareTo(b) : 1;
+        }
+
         if (b > positions.Length - 2)
+        {
             return a > positions.Length - 2 ? a.CompareTo(b) : -1;
+        }
+
         return positions[a + 1].CompareTo(positions[b + 1]);
     }
 
@@ -58,7 +71,10 @@ public class InducedOrdering : IComparer<int>
     /// <param name="a">First point.</param>
     /// <param name="b">Second point.</param>
     /// <returns>The greatest point.</returns>
-    public int Max(int a, int b) => Compare(a, b) >= 0 ? a : b;
+    public int Max(int a, int b)
+    {
+        return Compare(a, b) >= 0 ? a : b;
+    }
 
     /// <summary>
     /// Returns the least point under this ordering.
@@ -66,36 +82,108 @@ public class InducedOrdering : IComparer<int>
     /// <param name="a">First point.</param>
     /// <param name="b">Second point.</param>
     /// <returns>The least point.</returns>
-    public int Min(int a, int b) => Compare(a, b) >= 0 ? b : a;
+    public int Min(int a, int b)
+    {
+        return Compare(a, b) >= 0 ? b : a;
+    }
 
     /// <summary>
     /// Returns the maximum element representative under this ordering.
     /// </summary>
-    public int MaxElement() => degree;
+    public int MaxElement()
+    {
+        return degree;
+    }
 
     /// <summary>
     /// Returns the minimum element representative under this ordering.
     /// </summary>
-    public int MinElement() => -1;
+    public int MinElement()
+    {
+        return -1;
+    }
 
     /// <summary>
     /// Returns the least point under this ordering in the specified array.
     /// </summary>
     /// <param name="array">The array.</param>
     /// <returns>The least point.</returns>
-    public int Min(int[] array) => array.Min();
+    public int Min(int[] array)
+    {
+        if (array.Length == 0)
+        {
+            throw new ArgumentException("Array must not be empty.", nameof(array));
+        }
+
+        int min = array[0];
+        for (int i = 1; i < array.Length; i++)
+        {
+            min = Min(min, array[i]);
+        }
+
+        return min;
+    }
 
     /// <summary>
     /// Returns the least point under this ordering in the specified <see cref="IntArrayList"/>.
     /// </summary>
     /// <param name="array">The array.</param>
     /// <returns>The least point.</returns>
-    public int Min(IList<int> list) => list.Min();
+    public int Min(IList<int> list)
+    {
+        if (list.Count == 0)
+        {
+            throw new ArgumentException("List must not be empty.", nameof(list));
+        }
+
+        int min = list[list.Count - 1];
+        for (int i = list.Count - 2; i >= 0; i--)
+        {
+            min = Min(min, list[i]);
+        }
+
+        return min;
+    }
 
     /// <summary>
     /// Returns the greatest point under this ordering in the specified array.
     /// </summary>
     /// <param name="array">The array.</param>
     /// <returns>The greatest point.</returns>
-    public int Max(int[] array) => array.Max();
+    public int Max(int[] array)
+    {
+        if (array.Length == 0)
+        {
+            throw new ArgumentException("Array must not be empty.", nameof(array));
+        }
+
+        int max = array[0];
+        for (int i = 1; i < array.Length; i++)
+        {
+            max = Max(max, array[i]);
+        }
+
+        return max;
+    }
+
+    /// <summary>
+    /// Returns the greatest point under this ordering in the specified list.
+    /// </summary>
+    /// <param name="list">The list.</param>
+    /// <returns>The greatest point.</returns>
+    public int Max(IList<int> list)
+    {
+        if (list.Count == 0)
+        {
+            throw new ArgumentException("List must not be empty.", nameof(list));
+        }
+
+        int max = list[list.Count - 1];
+        for (int i = list.Count - 2; i >= 0; i--)
+        {
+            max = Max(max, list[i]);
+        }
+
+        return max;
+    }
 }

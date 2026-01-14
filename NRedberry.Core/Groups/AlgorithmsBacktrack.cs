@@ -41,6 +41,26 @@ public static class AlgorithmsBacktrack
     /// <summary>
     /// Searches for a subgroup with a precomputed base and ordering.
     /// </summary>
+    public static void SubgroupSearch(
+        List<BSGSElement> group,
+        List<BSGSCandidateElement> subgroup,
+        IBacktrackSearchTestFunction testFunction,
+        IIndicator<Permutation> property,
+        int[] baseArray,
+        InducedOrdering ordering)
+    {
+        SubgroupSearchWithPayload(
+            group,
+            subgroup,
+            BacktrackSearchPayload.CreateDefaultPayload(testFunction),
+            property,
+            baseArray,
+            ordering);
+    }
+
+    /// <summary>
+    /// Searches for a subgroup with a precomputed base and ordering.
+    /// </summary>
     public static void SubgroupSearchWithPayload(
         List<BSGSElement> group,
         List<BSGSCandidateElement> subgroup,
@@ -50,19 +70,25 @@ public static class AlgorithmsBacktrack
         InducedOrdering ordering)
     {
         if (group.Count == 0 || group[0].StabilizerGeneratorsReference.Count == 0)
+        {
             throw new ArgumentException("Empty group.");
+        }
 
         ____VISITED_NODES___[0] = 0;
 
         int degree = group[0].InternalDegree;
         if (subgroup.Count > 0 && subgroup[0].InternalDegree > degree)
+        {
             throw new ArgumentException("Specified subgroup is not a subgroup of specified group.");
+        }
 
         int size = group.Count;
         Permutation identity = group[0].StabilizerGeneratorsReference[0].Identity;
 
         if (subgroup.Count == 0)
+        {
             subgroup.Add(new BSGSCandidateElement(baseArray[0], new List<Permutation>(), degree));
+        }
 
         int level = size - 1;
         Permutation[] word = new Permutation[size];
@@ -104,7 +130,9 @@ public static class AlgorithmsBacktrack
             {
                 payload.BeforeLevelIncrement(level);
                 if (!AssertPartialBaseImage(level, word, baseArray, subgroupRebase))
+                {
                     throw new InvalidOperationException("Partial base image assertion failed.");
+                }
 
                 ++level;
 
@@ -164,10 +192,14 @@ public static class AlgorithmsBacktrack
             }
 
             while (level >= 0 && tuple[level] == group[level].OrbitListReference.Count - 1)
+            {
                 --level;
+            }
 
             if (level == -1)
+            {
                 return;
+            }
 
             if (level < subgroupLevel)
             {
@@ -382,7 +414,9 @@ public static class AlgorithmsBacktrack
         Permutation identity = smaller[0].StabilizerGeneratorsReference[0].Identity;
         Permutation[] intersectionWord = new Permutation[smaller.Count];
         for (int i = 0; i < intersectionWord.Length; ++i)
+        {
             intersectionWord[i] = identity;
+        }
 
         BacktrackSearchPayload payload = new IntersectionPayload(larger, baseArray, intersectionWord);
         IIndicator<Permutation> intersectionProperty = new IntersectionIndicator(larger);
@@ -425,7 +459,9 @@ public static class AlgorithmsBacktrack
     private static void ReplaceBasePointWithRedundancy(List<BSGSCandidateElement> group, int index, int newPoint)
     {
         if (group[index].BasePoint == newPoint)
+        {
             return;
+        }
 
         int oldSize = group.Count;
         AlgorithmsBase.ChangeBasePointWithTranspositions(group, index, newPoint);
@@ -449,53 +485,11 @@ public static class AlgorithmsBacktrack
         for (int i = 0; i <= level; ++i)
         {
             if (subgroupRebase[i].BasePoint != word[i].NewIndexOf(baseArray[i]))
+            {
                 return false;
+            }
         }
 
         return true;
-    }
-
-    private sealed class IntersectionPayload(
-        List<BSGSCandidateElement> larger,
-        int[] baseArray,
-        Permutation[] intersectionWord)
-        : BacktrackSearchPayload
-    {
-        public override void BeforeLevelIncrement(int level)
-        {
-            int image = WordReference[level].NewIndexOf(baseArray[level]);
-            if (level == 0)
-            {
-                intersectionWord[level] = larger[level].GetTransversalOf(image);
-            }
-            else
-            {
-                intersectionWord[level] = larger[level]
-                    .GetTransversalOf(intersectionWord[level - 1].NewIndexOfUnderInverse(image))
-                    .Composition(intersectionWord[level - 1]);
-            }
-        }
-
-        public override void AfterLevelIncrement(int level)
-        {
-        }
-
-        public override bool Test(Permutation permutation, int level)
-        {
-            if (level == 0)
-                return larger[level].BelongsToOrbit(WordReference[level].NewIndexOf(baseArray[level]));
-
-            int image = WordReference[level].NewIndexOf(baseArray[level]);
-            int prevImage = intersectionWord[level - 1].NewIndexOfUnderInverse(image);
-            return larger[level].BelongsToOrbit(prevImage);
-        }
-    }
-
-    private sealed class IntersectionIndicator(List<BSGSCandidateElement> larger) : IIndicator<Permutation>
-    {
-        public bool Is(Permutation @object)
-        {
-            return AlgorithmsBase.MembershipTest(larger, @object);
-        }
     }
 }

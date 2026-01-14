@@ -37,41 +37,7 @@ public abstract class BacktrackSearchPayload : IBacktrackSearchTestFunction
     /// <returns>A new instance of the default payload.</returns>
     public static BacktrackSearchPayload CreateDefaultPayload(IBacktrackSearchTestFunction test)
     {
-        return new DefaultPayload(test);
-    }
-
-    /// <summary>
-    /// Default implementation of BacktrackSearchPayload.
-    /// </summary>
-    private sealed class DefaultPayload : BacktrackSearchPayload
-    {
-        private readonly IBacktrackSearchTestFunction test;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DefaultPayload"/> class with the specified test function.
-        /// </summary>
-        /// <param name="test">The test function.</param>
-        public DefaultPayload(IBacktrackSearchTestFunction test)
-        {
-            this.test = test ?? throw new ArgumentNullException(nameof(test));
-        }
-
-        /// <inheritdoc />
-        public override void BeforeLevelIncrement(int level)
-        {
-            // No-op
-        }
-
-        /// <inheritdoc />
-        public override void AfterLevelIncrement(int level)
-        {
-            // No-op
-        }
-
-        public override bool Test(Permutation permutation, int level)
-        {
-            return test.Test(permutation, level);
-        }
+        return new DefaultBacktrackSearchPayload(test);
     }
 
     public abstract bool Test(Permutation permutation, int level);
