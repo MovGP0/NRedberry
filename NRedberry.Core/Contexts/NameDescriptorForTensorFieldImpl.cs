@@ -11,6 +11,7 @@ public sealed class NameDescriptorForTensorFieldImpl(
 {
     readonly Dictionary<DerivativeDescriptor, NameDescriptorForTensorFieldDerivative> derivatives = new();
     readonly NameAndStructureOfIndices[] keys = [new NameAndStructureOfIndices(name, indexTypeStructures)];
+    private readonly object lockObject = new();
 
     public override NameAndStructureOfIndices[] GetKeys()
     {
@@ -32,25 +33,33 @@ public sealed class NameDescriptorForTensorFieldImpl(
         return this;
     }
 
-    private readonly object lockObject = new();
-
     public override NameDescriptorForTensorField GetDerivative(params int[] orders)
     {
+        ArgumentNullException.ThrowIfNull(orders);
+
         if (orders.Length != IndexTypeStructures.Length - 1)
+        {
             throw new ArgumentException();
+        }
 
         bool isZeroOrder = true;
         foreach (int o in orders)
         {
             if (o < 0)
+            {
                 throw new ArgumentException("Negative derivative order.");
+            }
 
             if (o != 0)
+            {
                 isZeroOrder = false;
+            }
         }
 
         if (isZeroOrder)
+        {
             return this;
+        }
 
         var derivativeDescriptor = new DerivativeDescriptor(orders);
         if (!derivatives.TryGetValue(derivativeDescriptor, out var nd))
@@ -65,22 +74,6 @@ public sealed class NameDescriptorForTensorFieldImpl(
             }
         }
 
-        return nd;
-    }
-
-    private sealed class DerivativeDescriptor(int[] orders)
-    {
-        public readonly int[] Orders = orders;
-
-        public override bool Equals(object? obj)
-        {
-            return obj is DerivativeDescriptor that
-                && Orders.SequenceEqual(that.Orders);
-        }
-
-        public override int GetHashCode()
-        {
-            return Orders.Aggregate(17, (current, item) => current * 23 + item);
-        }
+        return nd!;
     }
 }

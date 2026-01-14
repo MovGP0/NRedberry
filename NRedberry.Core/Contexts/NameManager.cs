@@ -97,11 +97,15 @@ public sealed class NameManager
     private NameDescriptor CreateDescriptor(string sname, StructureOfIndices[] structuresOfIndices, int id)
     {
         if (structuresOfIndices.Length != 1)
+        {
             return new NameDescriptorForTensorFieldImpl(sname, structuresOfIndices, id, sname.Equals(DiracDeltaName) && structuresOfIndices.Length == 3);
+        }
 
         var its = structuresOfIndices[0];
         if (its.Size != 2)
+        {
             return new NameDescriptorForSimpleTensor(sname, structuresOfIndices, id);
+        }
 
         for (byte b = 0; b < IndexTypeExtensions.Length; ++b)
         {
@@ -119,12 +123,23 @@ public sealed class NameManager
                 else
                 {
                     if (sname.Equals(kroneckerAndMetricNames[1]))
+                    {
                         throw new ParserException("Metric is not specified for non metric index type.");
+                    }
 
                     if (sname.Equals(kroneckerAndMetricNames[0]))
                     {
-                        if (!its.GetTypeData(b).States[0] || its.GetTypeData(b).States[1])
+                        var typeData = its.GetTypeData(b);
+                        if (typeData == null)
+                        {
+                            continue;
+                        }
+
+                        var states = typeData.States;
+                        if (states == null || states.Length < 2 || !states[0] || states[1])
+                        {
                             throw new ParserException("Illegal Kronecker indices states.");
+                        }
 
                         return new NameDescriptorForMetricAndKronecker(kroneckerAndMetricNames, b, id);
                     }
@@ -190,7 +205,9 @@ public sealed class NameManager
         finally
         {
             if (rLocked)
+            {
                 readWriteLock.ExitReadLock();
+            }
         }
     }
 
@@ -261,7 +278,7 @@ public sealed class NameManager
         try
         {
             fromId.TryGetValue(nameId, out var descriptor);
-            return descriptor;
+            return descriptor!;
         }
         finally
         {
@@ -302,7 +319,9 @@ public sealed class NameManager
         finally
         {
             if (rLocked)
+            {
                 readWriteLock.ExitReadLock();
+            }
         }
     }
 
@@ -322,13 +341,6 @@ public sealed class NameManager
     public long GetSeed() => seed;
 
     public Random GetRandomGenerator() => random;
-
-    private sealed class StringGenerator
-    {
-        private long count;
-
-        public string NextString() => $"{DEFAULT_VAR_SYMBOL_PREFIX}{count++}";
-    }
 
     public const string DEFAULT_VAR_SYMBOL_PREFIX = "rc";
 }

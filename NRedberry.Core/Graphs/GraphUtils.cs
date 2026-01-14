@@ -7,6 +7,9 @@ public static class GraphUtils
 {
     public static int[] CalculateConnectedComponents(int[] _from, int[] _to, int vertices)
     {
+        ArgumentNullException.ThrowIfNull(_from);
+        ArgumentNullException.ThrowIfNull(_to);
+
         //Test for parameters consistence
         if (_from.Length != _to.Length)
         {
@@ -77,7 +80,7 @@ public static class GraphUtils
             stack.Push(new BreadthFirstPointer(m1, fromIndex[m1]));
 
             //Main algorithm (simple depth-first search)
-            while (stack.Count == 0)
+            while (stack.Count > 0)
             {
                 var pointer = stack.Peek();
 
@@ -104,7 +107,6 @@ public static class GraphUtils
 
                 if (fromIndex[pointsTo] != -1)
                 {
-                    //No edges from this vertex
                     stack.Push(new BreadthFirstPointer(pointsTo, fromIndex[pointsTo]));
                 }
             }
@@ -128,14 +130,10 @@ public static class GraphUtils
         return -1;
     }
 
-    private sealed class BreadthFirstPointer(int node, int edgePointer)
-    {
-        public int Vertex { get; } = node;
-        public int EdgePointer { get; set; } = edgePointer;
-    }
-
     public static int ComponentSize(int vertex, int[] components)
     {
+        ArgumentNullException.ThrowIfNull(components);
+
         if (vertex > components.Length - 1)
         {
             throw new IndexOutOfRangeException();

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Diagnostics;
 using NRedberry.Indices;
 using NRedberry.Tensors;
@@ -17,6 +17,7 @@ public sealed class PrimitiveSubgraphPartition
 
     public PrimitiveSubgraphPartition(ProductContent productContent, IndexType type)
     {
+        ArgumentNullException.ThrowIfNull(productContent);
         pc = productContent;
         fcs = pc.StructureOfContractions;
         size = pc.Size;
@@ -28,6 +29,7 @@ public sealed class PrimitiveSubgraphPartition
     public PrimitiveSubgraph[] Partition => (PrimitiveSubgraph[])partition.Clone();
 
     public static PrimitiveSubgraph[] CalculatePartition(Product p, IndexType type) => new PrimitiveSubgraphPartition(p.Content, type).Partition;
+
     public static PrimitiveSubgraph[] CalculatePartition(ProductContent p, IndexType type) => new PrimitiveSubgraphPartition(p, type).Partition;
 
     private PrimitiveSubgraph[] CalculatePartition()
@@ -46,16 +48,18 @@ public sealed class PrimitiveSubgraphPartition
 
     private PrimitiveSubgraph CalculateComponent(int pivot)
     {
-        LinkedList<int> positions = new LinkedList<int>();
+        LinkedList<int> positions = new();
         positions.AddLast(pivot);
 
-        var left = GetLinks(pivot);
+        int[] left = GetLinks(pivot);
         int[] right = left;
 
         Debug.Assert(left[0] != NO_LINKS || left[1] != NO_LINKS);
 
         if (left[0] == BRANCHING || left[1] == BRANCHING)
+        {
             return ProcessGraph(pivot);
+        }
 
         if (left[0] == left[1] && left[0] == pivot)
         {
@@ -63,29 +67,35 @@ public sealed class PrimitiveSubgraphPartition
             return new PrimitiveSubgraph(GraphType.Cycle, [pivot]);
         }
 
-        long leftPivot;
-        long rightPivot;
-        long lastLeftPivot = NOT_INITIALIZED;
-        long lastRightPivot = NOT_INITIALIZED;
+        int leftPivot;
+        int rightPivot;
+        int lastLeftPivot = NOT_INITIALIZED;
+        int lastRightPivot = NOT_INITIALIZED;
 
         while (left != DUMMY || right != DUMMY)
         {
             if (left[0] == BRANCHING || left[1] == BRANCHING || right[0] == BRANCHING || right[1] == BRANCHING)
+            {
                 return ProcessGraph(pivot);
+            }
 
             leftPivot = left[0];
             rightPivot = right[1];
 
-            Debug.Assert(leftPivot < 0 || !used.Get((int)leftPivot));
-            Debug.Assert(rightPivot < 0 || !used.Get((int)rightPivot));
+            Debug.Assert(leftPivot < 0 || !used.Get(leftPivot));
+            Debug.Assert(rightPivot < 0 || !used.Get(rightPivot));
 
             //Left end detection
             if (leftPivot == NO_LINKS || leftPivot == -1)
+            {
                 leftPivot = DUMMY_PIVOT;
+            }
 
             //Right end detection
             if (rightPivot == NO_LINKS || rightPivot == -1)
+            {
                 rightPivot = DUMMY_PIVOT;
+            }
 
             //Odd cycle detection
             if (leftPivot >= 0 && leftPivot == lastRightPivot)
@@ -97,23 +107,29 @@ public sealed class PrimitiveSubgraphPartition
 
             //Adding left pivot before cycle detection (if cycle, not to add closing node twice)
             if (leftPivot >= 0)
-                positions.AddFirst((int)leftPivot);
+            {
+                positions.AddFirst(leftPivot);
+            }
 
             //Even cycle detection
             if (leftPivot >= 0 && leftPivot == rightPivot)
             {
-                left = GetLinks((int)leftPivot);
+                left = GetLinks(leftPivot);
 
                 // Checking next (cycle closing) node
                 if (left[0] == BRANCHING || left[1] == BRANCHING)
+                {
                     return ProcessGraph(pivot);
+                }
 
                 return new PrimitiveSubgraph(GraphType.Cycle, DequeToArray(positions));
             }
 
             //Adding right pivot
             if (rightPivot >= 0)
-                positions.AddLast((int)rightPivot);
+            {
+                positions.AddLast(rightPivot);
+            }
 
             //Needed in odd cycle detection
             lastLeftPivot = leftPivot;
@@ -121,8 +137,8 @@ public sealed class PrimitiveSubgraphPartition
             lastRightPivot = rightPivot;
 
             //Next layer (breadth-first traversal)
-            left = GetLinks((int)leftPivot);
-            right = GetLinks((int)rightPivot);
+            left = GetLinks(leftPivot);
+            right = GetLinks(rightPivot);
         }
 
         return new PrimitiveSubgraph(GraphType.Line, DequeToArray(positions));
@@ -151,7 +167,9 @@ public sealed class PrimitiveSubgraphPartition
     private int[] GetLinks(int pivot)
     {
         if (pivot == DUMMY_PIVOT)
+        {
             return DUMMY;
+        }
 
         Debug.Assert(pivot >= 0);
 
@@ -165,22 +183,33 @@ public sealed class PrimitiveSubgraphPartition
             index = indices[i];
 
             if (GetType_(index) != type.GetType_())
+            {
                 continue;
+            }
 
             toTensorIndex = StructureOfContractions.ToPosition(contractions[i]);
-            long state = 1 - GetStateInt(index);
+            int state = 1 - (int)GetStateInt(index);
 
             if (links[state] >= -1 && links[state] != toTensorIndex)
+            {
                 links[state] = BRANCHING;
+            }
+
             if (links[state] == NOT_INITIALIZED)
+            {
                 links[state] = toTensorIndex;
+            }
         }
 
         if (links[0] == NOT_INITIALIZED)
+        {
             links[0] = NO_LINKS;
+        }
 
         if (links[1] == NOT_INITIALIZED)
+        {
             links[1] = NO_LINKS;
+        }
 
         return links;
     }
@@ -192,7 +221,7 @@ public sealed class PrimitiveSubgraphPartition
             pivot
         ];
 
-        Stack<int> stack = new Stack<int>();
+        Stack<int> stack = new();
         stack.Push(pivot);
         used.Set(pivot, true);
 
@@ -212,11 +241,16 @@ public sealed class PrimitiveSubgraphPartition
             {
                 index = indices[i];
                 if (GetType_(index) != type.GetType_())
+                {
                     continue;
+                }
 
                 toTensorIndex = StructureOfContractions.ToPosition(contractions[i]);
                 if (toTensorIndex == -1 || used.Get(toTensorIndex))
+                {
                     continue;
+                }
+
                 used.Set(toTensorIndex, true);
                 positions.Add(toTensorIndex);
                 stack.Push(toTensorIndex);

@@ -140,10 +140,10 @@ internal sealed class NameDescriptorForTensorFieldDerivative : NameDescriptorFor
         }
     }
 
-    private static int[] ConvertPermutation(Permutation permutation, int[] mapping, int newDimension)
+    private static Permutation ConvertPermutation(Permutation permutation, int[] mapping, int newDimension)
     {
         ArgumentNullException.ThrowIfNull(permutation);
-        return ConvertPermutation(permutation.OneLine(), mapping, newDimension);
+        return Permutations.CreatePermutation(permutation.IsAntisymmetry, ConvertPermutation(permutation.OneLine(), mapping, newDimension));
     }
 
     private static int[] ConvertPermutation(int[] permutation, int[] mapping, int newDimension)

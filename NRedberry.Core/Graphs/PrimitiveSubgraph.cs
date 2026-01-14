@@ -1,27 +1,23 @@
-﻿namespace NRedberry.Graphs;
+namespace NRedberry.Graphs;
 
-public class PrimitiveSubgraph
+public sealed class PrimitiveSubgraph
 {
+    private readonly int[] _partition;
+
     public PrimitiveSubgraph(GraphType graphType, int[] partition)
     {
+        ArgumentNullException.ThrowIfNull(partition);
         GraphType = graphType;
-        Partition = (int[])partition.Clone();
+        _partition = partition;
     }
 
     public GraphType GraphType { get; }
 
-    private int[] partition;
+    public int[] Partition => (int[])_partition.Clone();
 
-    public int[] Partition
-    {
-        get => (int[])partition.Clone();
-        private set => partition = value;
-    }
+    public int GetPosition(int i) => _partition[i];
 
-    public int GetPosition(int i) => Partition[i];
+    public int Size => _partition.Length;
 
-    public int Size => Partition.Length;
-    public int Length => Partition.Length;
-
-    public override string ToString() => $"{GraphType}: [{string.Join(", ", Partition)}]";
+    public override string ToString() => $"{GraphType}: [{string.Join(", ", _partition)}]";
 }
