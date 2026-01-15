@@ -1,4 +1,6 @@
+using NRedberry.Contexts;
 using NRedberry.Tensors;
+using NRedberry.Transformations.Symmetrization;
 
 namespace NRedberry.Parsers;
 
@@ -6,20 +8,34 @@ namespace NRedberry.Parsers;
  * Original: ./core/src/main/java/cc/redberry/core/parser/ParseTokenExpression.java
  */
 
-public class ParseTokenExpression(TokenType tokenType, params ParseToken[] content) : ParseToken(tokenType, content)
+public class ParseTokenExpression : ParseToken
 {
-    public override Indices.Indices GetIndices()
+    public bool Preprocess { get; }
+
+    public ParseTokenExpression(bool preprocess, ParseToken lhs, ParseToken rhs)
+        : base(TokenType.Expression, lhs, rhs)
     {
-        throw new NotImplementedException();
+        Preprocess = preprocess;
     }
 
-    public override string ToString()
+    public override Indices.Indices GetIndices()
     {
-        throw new NotImplementedException();
+        return Content[0].GetIndices().GetFree();
     }
 
     public override Tensor ToTensor()
     {
-        throw new NotImplementedException();
+        Tensor expression = NRedberry.Tensors.Tensors.Expression(Content[0].ToTensor(), Content[1].ToTensor());
+        if (Preprocess)
+        {
+            foreach (ITransformation tr in Context.Get().ParseManager.DefaultTensorPreprocessors)
+            {
+                expression = tr.Transform(expression);
+            }
+
+            Context.Get().ParseManager.DefaultTensorPreprocessors.Add((ITransformation)expression);
+        }
+
+        return expression;
     }
 }

@@ -1,3 +1,6 @@
+using System.Globalization;
+using System.Numerics;
+
 namespace NRedberry.Numbers.Parser;
 
 /*
@@ -14,6 +17,24 @@ public sealed class ComplexToken : INumberTokenParser<Complex>
 
     public Complex Parse(string expression, NumberParser<Complex> parser)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(expression);
+        ArgumentNullException.ThrowIfNull(parser);
+
+        if (expression == "I")
+        {
+            return Complex.ImaginaryOne;
+        }
+
+        if (BigInteger.TryParse(expression, NumberStyles.Integer, CultureInfo.InvariantCulture, out var bigInteger))
+        {
+            return new Complex(bigInteger);
+        }
+
+        if (double.TryParse(expression, NumberStyles.Float, CultureInfo.InvariantCulture, out var doubleValue))
+        {
+            return new Complex(doubleValue);
+        }
+
+        return null!;
     }
 }

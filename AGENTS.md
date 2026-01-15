@@ -255,22 +255,23 @@ public override int GetHashCode()
 - Build error note: after constraining `INumberTokenParser<T>` to `NRedberry.INumber<T>`, also add the same constraint to `NumberParser<T>`, `BracketToken<T>`, and `OperatorToken<T>` to avoid CS0314.
 - Build error note: Roslynator RCS1085 flagged ExpandUtils.ExpandIndexlessSubproduct backing field; use an auto-implemented get-only property with initializer.
 - Build error note: RCS0063 flagged an extra blank line after an opening brace in ExpandUtils; remove the stray blank line.
-- Build error note: RCS0063 flagged trailing blank lines in Parser.cs; remove extra blank lines at file end to satisfy Roslynator.\r
-- Build error note: ParseToken.GetIndices must return Indices.Indices (not Indices), because Indices is a namespace; this avoids CS0118 and override mismatch CS0508.\r
-- Build error note: Roslynator RCS1111 flags switch cases with multiple statements; wrap the case body in braces.\r
-- Build error note: In ParseToken.cs, Tensors.Sum resolved to the Sum type because Tensors matches a namespace; use NRedberry.Tensors.Tensors.Sum(...) (or a using alias) to call the static method.\r
-- Build error note: AbstractSumBuilder.Build/Put must be marked virtual so SumBuilder overrides compile (CS0506).\r
-- Build error note: CS0542 occurs if a class defines a member with the same name as the class (e.g., ApplyIndexMapping.ApplyIndexMapping); rename such methods (e.g., Apply/ApplyInternal) when porting.\r
-- Build error note: CS1540 occurs when calling protected Tensor.ToString<T> on a base-typed instance; use Tensor.ToStringWith<T>(OutputFormat) to format other tensors with the caller context.\r
-- Build error note: RCS0055 flags binary expression chains; format multi-line bitwise expressions with each operator on its own line and consistent indentation.\r
-- Build error note: StructureOfContractions masks mixed ulong and long, causing CS0019; keep mask types as long (e.g., UpperInfoMask) to match long operands, and expose Contraction as auto-properties to satisfy RCS1085.\r
-- Build error note: Roslynator RCS1085 flagged backing fields for simple storage; use auto-implemented get-only properties (e.g., `private Tensor[] Args { get; }`).\r
-- Build error note: Roslynator RCS1089 flagged `sb.Length -= 1;`; use the decrement operator (`sb.Length--;`) instead.\r
-- Build error note: CS0246 in TensorUtils for `Permutation`; use `NRedberry.Core.Combinatorics.Permutation` (add the correct using or fully qualify).\r
-- Build error note: CS0039 when casting `IIndexMapping` from `MappingsPort` to `Mapping`; use `IndexMappings.CreatePortOfBuffers` and build `Mapping` from `IIndexMappingBuffer` instead.\r
-- Build error note: RCS0054 flagged chained `StringBuilder` calls in `TensorUtils.Info`; start the chain on a new line and align subsequent calls.\r
-- Build error note: RCS1134 flagged a redundant `continue` in `TensorUtils.Count`; remove the dead branch and rely on the inner-loop `break` only.\r
-- Build error note: Roslynator RCS1085 flagged non-auto singleton properties (e.g., TensorWrapperFactory.Instance); use auto-implemented get-only properties with initializers (e.g., `Instance { get; } = new()`).\r
+- Build error note: RCS0063 flagged trailing blank lines in Parser.cs; remove extra blank lines at file end to satisfy Roslynator.
+- Build error note: Roslynator RCS0061 requires blank lines between switch sections; add a blank line between case blocks.
+- Build error note: ParseToken.GetIndices must return Indices.Indices (not Indices), because Indices is a namespace; this avoids CS0118 and override mismatch CS0508.
+- Build error note: Roslynator RCS1111 flags switch cases with multiple statements; wrap the case body in braces.
+- Build error note: In ParseToken.cs, Tensors.Sum resolved to the Sum type because Tensors matches a namespace; use NRedberry.Tensors.Tensors.Sum(...) (or a using alias) to call the static method.
+- Build error note: AbstractSumBuilder.Build/Put must be marked virtual so SumBuilder overrides compile (CS0506).
+- Build error note: CS0542 occurs if a class defines a member with the same name as the class (e.g., ApplyIndexMapping.ApplyIndexMapping); rename such methods (e.g., Apply/ApplyInternal) when porting.
+- Build error note: CS1540 occurs when calling protected Tensor.ToString<T> on a base-typed instance; use Tensor.ToStringWith<T>(OutputFormat) to format other tensors with the caller context.
+- Build error note: RCS0055 flags binary expression chains; format multi-line bitwise expressions with each operator on its own line and consistent indentation.
+- Build error note: StructureOfContractions masks mixed ulong and long, causing CS0019; keep mask types as long (e.g., UpperInfoMask) to match long operands, and expose Contraction as auto-properties to satisfy RCS1085.
+- Build error note: Roslynator RCS1085 flagged backing fields for simple storage; use auto-implemented get-only properties (e.g., `private Tensor[] Args { get; }`).
+- Build error note: Roslynator RCS1089 flagged `sb.Length -= 1;`; use the decrement operator (`sb.Length--;`) instead.
+- Build error note: CS0246 in TensorUtils for `Permutation`; use `NRedberry.Core.Combinatorics.Permutation` (add the correct using or fully qualify).
+- Build error note: CS0039 when casting `IIndexMapping` from `MappingsPort` to `Mapping`; use `IndexMappings.CreatePortOfBuffers` and build `Mapping` from `IIndexMappingBuffer` instead.
+- Build error note: RCS0054 flagged chained `StringBuilder` calls in `TensorUtils.Info`; start the chain on a new line and align subsequent calls.
+- Build error note: RCS1134 flagged a redundant `continue` in `TensorUtils.Count`; remove the dead branch and rely on the inner-loop `break` only.
+- Build error note: Roslynator RCS1085 flagged non-auto singleton properties (e.g., TensorWrapperFactory.Instance); use auto-implemented get-only properties with initializers (e.g., `Instance { get; } = new()`).
 - Build error note: Roslynator RCS0003 requires a blank line between using directives and the namespace declaration
 - Build error note: JasFactor.Engine was missing, causing CS0117; ensure JasFactor exposes the Engine singleton and implements ITransformation before referencing it.
 - Build error note: CS0104 ambiguous BigInteger/Complex when using System.Numerics alongside JAS and tensor types; use aliases like SystemBigInteger or TensorComplex and avoid unqualified type names.
@@ -278,12 +279,22 @@ public override int GetHashCode()
 - Build error note: RCS0013 flags missing blank lines between different declaration kinds; add a blank line between fields and properties.
 - Build error note: RCS1162 flags chained assignments; split variable initialization into separate statements.
 - Build error note: RCS1134 flags redundant continue statements at the end of a loop branch; remove the redundant continue.
+- Build error note: RCS1134 flagged a redundant `continue` in `ParserIndices.ParseSimpleIgnoringVariance`; remove the no-op continue and keep the inner-loop `break`.
+- Build error note: CS0506 occurs if derived operator parsers override `ParseToken` while `ParserOperator.ParseToken` is not virtual; mark the base method as `virtual` or remove the override.
 - Build error note: RCS0015 flags blank lines between using directives; keep using directives contiguous and only leave a blank line before the namespace.
 - Build error note: CS0104 can occur when CC is ambiguous between NRedberry.Contexts and NRedberry.Tensors; use an alias or fully qualify the intended CC.
 - Build error note: CS0246 occurs when referencing ProductBuilder in ports; use ScalarsBackedProductBuilder (or TensorBuilder) instead.
 - Build error note: CS0019 occurs when using SimpleIndices.Size as a property; call Size() to get the count.
 - Build error note: RCS1085 flagged the IIndexMappingProvider EmptyProvider property backing field; use an auto-implemented get-only property with initializer instead.
 - Build error note: RCS1146 flagged a null check before RemoveContracted; prefer conditional access like `buffer?.RemoveContracted()` to satisfy the analyzer.
+- Build error note: CS0117 occurs if referencing `IIndexMappingProvider.EmptyProvider`; use `IndexMappingProviderUtil.EmptyProvider` instead.
+- Build error note: CS0246 can occur when using `IOutputPort<>` without `using NRedberry.Concurrent;` (e.g., ProviderFunctions); add the using to resolve the interface.
+- Build error note: RCS1146 also flags null checks before calling `GetSign()` on nullable mapping buffers; use conditional access like `buffer?.GetSign()` to satisfy the analyzer.
+- Build error note: CS0403 occurs when returning null for generic number token parsers; return `default!` (or `default(T)`) to represent "no match" for `T`.
+- Build error note: RCS1132 flags overrides that only forward to the base implementation; remove the redundant override instead of calling `base`.
+- Build error note: RCS0054 flags multi-line call chains; split construction and method calls into separate statements.
+- Build error note: ParserSimpleTensor.cs used SimpleIndices without `using NRedberry.Indices;`, causing CS0246; add the correct using when referencing index types.
+- Build error note: RCS1155 flags string comparisons without StringComparison; use string.Equals(..., StringComparison.OrdinalIgnoreCase) instead of ToLower/ToUpper comparisons.
 
 ## Roslynator Diagnostics Reference
 

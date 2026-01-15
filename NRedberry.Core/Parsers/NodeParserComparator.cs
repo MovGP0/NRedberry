@@ -14,6 +14,21 @@ internal sealed class NodeParserComparator : IComparer<ITokenParser>
 
     public int Compare(ITokenParser? x, ITokenParser? y)
     {
-        throw new NotImplementedException();
+        if (ReferenceEquals(x, y))
+        {
+            return 0;
+        }
+
+        if (x is null)
+        {
+            return 1;
+        }
+
+        if (y is null)
+        {
+            return -1;
+        }
+
+        return y.Priority.CompareTo(x.Priority);
     }
 }

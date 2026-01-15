@@ -1,3 +1,6 @@
+using NRedberry.Numbers;
+using NRedberry.Numbers.Parser;
+
 namespace NRedberry.Parsers;
 
 /*
@@ -6,6 +9,8 @@ namespace NRedberry.Parsers;
 
 public sealed class ParserNumber : ITokenParser
 {
+    private const int ParserPriority = 9999;
+
     public static ParserNumber Instance { get; } = new();
 
     private ParserNumber()
@@ -14,8 +19,18 @@ public sealed class ParserNumber : ITokenParser
 
     public ParseToken? ParseToken(string expression, Parser parser)
     {
-        throw new NotImplementedException();
+        Complex value;
+        try
+        {
+            value = NumberParser<Complex>.ComplexParser.Parse(expression);
+        }
+        catch (FormatException)
+        {
+            return null;
+        }
+
+        return new ParseTokenNumber(value);
     }
 
-    public int Priority => throw new NotImplementedException();
+    public int Priority => ParserPriority;
 }

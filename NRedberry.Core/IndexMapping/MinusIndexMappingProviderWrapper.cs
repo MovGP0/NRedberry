@@ -6,21 +6,28 @@ namespace NRedberry.IndexMapping;
 
 internal sealed class MinusIndexMappingProviderWrapper : IIndexMappingProvider
 {
-    private readonly IIndexMappingProvider provider;
+    private readonly IIndexMappingProvider _provider;
 
     public MinusIndexMappingProviderWrapper(IIndexMappingProvider provider)
     {
-        this.provider = provider;
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(provider);
+        _provider = provider;
     }
 
     public IIndexMappingBuffer Take()
     {
-        throw new NotImplementedException();
+        IIndexMappingBuffer buffer = _provider.Take();
+        if (buffer is null)
+        {
+            return null!;
+        }
+
+        buffer.AddSign(true);
+        return buffer;
     }
 
     public bool Tick()
     {
-        throw new NotImplementedException();
+        return _provider.Tick();
     }
 }

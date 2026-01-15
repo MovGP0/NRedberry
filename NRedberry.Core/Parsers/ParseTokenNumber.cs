@@ -1,3 +1,6 @@
+using NRedberry;
+using NRedberry.Indices;
+using NRedberry.Numbers;
 using NRedberry.Tensors;
 
 namespace NRedberry.Parsers;
@@ -6,20 +9,51 @@ namespace NRedberry.Parsers;
  * Original: ./core/src/main/java/cc/redberry/core/parser/ParseTokenNumber.java
  */
 
-public class ParseTokenNumber(TokenType tokenType, params ParseToken[] content) : ParseToken(tokenType, content)
+public class ParseTokenNumber : ParseToken
 {
+    public Complex Value { get; }
+
+    public ParseTokenNumber(Complex value)
+        : base(TokenType.Number)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+
+        Value = value;
+    }
+
     public override Indices.Indices GetIndices()
     {
-        throw new NotImplementedException();
+        return IndicesFactory.EmptyIndices;
     }
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        return Value.ToString();
+    }
+
+    public override string ToString(OutputFormat mode)
+    {
+        return "(" + Value.ToString(mode) + ")";
     }
 
     public override Tensor ToTensor()
     {
-        throw new NotImplementedException();
+        return Value;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is null || obj.GetType() != GetType())
+        {
+            return false;
+        }
+
+        var other = (ParseTokenNumber)obj;
+        return Equals(Value, other.Value);
+    }
+
+    public override int GetHashCode()
+    {
+        return Value.GetHashCode();
     }
 }

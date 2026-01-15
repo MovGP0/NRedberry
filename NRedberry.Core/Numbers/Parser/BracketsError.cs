@@ -1,3 +1,5 @@
+using System.Runtime.Serialization;
+
 namespace NRedberry.Numbers.Parser;
 
 /*
@@ -13,6 +15,16 @@ public sealed class BracketsError : Exception
 
     public BracketsError()
         : base("Unbalanced brackets.")
+    {
+    }
+
+    public BracketsError(string message, Exception innerException)
+        : base($"Unbalanced brackets in {message}", innerException)
+    {
+    }
+
+    private BracketsError(SerializationInfo info, StreamingContext context)
+        : base(info, context)
     {
     }
 }
