@@ -11,7 +11,7 @@ public class ArcCot(Tensor argument) : ScalarFunction(argument)
 
     protected override string FunctionName() => "ArcCot";
 
-    public int GetHashCode() => 2311 * Argument.GetHashCode();
+    public override int GetHashCode() => 2311 * Argument.GetHashCode();
 
     public override TensorBuilder GetBuilder() => new ScalarFunctionBuilder(ArcCotFactory.Factory);
 

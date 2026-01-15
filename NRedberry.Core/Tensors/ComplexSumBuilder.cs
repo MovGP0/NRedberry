@@ -2,9 +2,9 @@ using NRedberry.Numbers;
 
 namespace NRedberry.Tensors;
 
-internal class ComplexSumBuilder : TensorBuilder
+internal sealed class ComplexSumBuilder : TensorBuilder
 {
-    private Complex Complex = Complex.Zero;
+    private Complex _complex = Complex.Zero;
 
     public ComplexSumBuilder()
     {
@@ -12,21 +12,21 @@ internal class ComplexSumBuilder : TensorBuilder
 
     public ComplexSumBuilder(Complex complex)
     {
-        Complex = complex;
+        _complex = complex;
     }
 
     public Tensor Build()
     {
-        return Complex;
+        return _complex;
     }
 
     public void Put(Tensor tensor)
     {
-        Complex = Complex.Add((Complex) tensor);
+        _complex = _complex.Add((Complex) tensor);
     }
 
     public TensorBuilder Clone()
     {
-        return new ComplexSumBuilder(Complex);
+        return new ComplexSumBuilder(_complex);
     }
 }

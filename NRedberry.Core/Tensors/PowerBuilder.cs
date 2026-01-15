@@ -2,50 +2,55 @@
 
 public sealed class PowerBuilder : TensorBuilder
 {
-    private Tensor Argument { get; set; }
-    private Tensor Power { get; set; }
+    private Tensor? _argument;
+    private Tensor? _power;
 
     public PowerBuilder()
     {
     }
 
-    public PowerBuilder(Tensor argument, Tensor power)
+    private PowerBuilder(Tensor? argument, Tensor? power)
     {
-        Argument = argument;
-        Power = power;
+        _argument = argument;
+        _power = power;
     }
 
     public Tensor Build()
     {
-        if (Power == null)
+        if (_argument is null || _power is null)
+        {
             throw new InvalidOperationException("Power is not fully constructed.");
-        return PowerFactory.Power(Argument, Power);
+        }
+
+        return PowerFactory.Power(_argument, _power);
     }
 
     public void Put(Tensor tensor)
     {
-        if(tensor == null)
-            throw new ArgumentNullException(nameof(tensor));
+        ArgumentNullException.ThrowIfNull(tensor);
+
         if (!TensorUtils.IsScalar(tensor))
-            throw new ArgumentException("Non-scalar tensor on input of Power builder.");
-
-        if (Argument is null)
         {
-            Argument = tensor;
+            throw new ArgumentException("Non-scalar tensor on input of Power builder: " + tensor);
+        }
+
+        if (_argument is null)
+        {
+            _argument = tensor;
             return;
         }
 
-        if(Power is null)
+        if (_power is null)
         {
-            Power = tensor;
+            _power = tensor;
             return;
         }
 
-        throw new InvalidOperationException("Power buider can not take more than two put() invocations.");
+        throw new InvalidOperationException("Power builder can not take more than two put() invocations.");
     }
 
     public TensorBuilder Clone()
     {
-        return new PowerBuilder(Argument, Power);
+        return new PowerBuilder(_argument, _power);
     }
 }

@@ -3,70 +3,67 @@ using NRedberry.Contexts.Defaults;
 
 namespace NRedberry.Tensors.Functions;
 
-/**
-     * This class implements context management logic.
-     *
-     * <p>It holds current thread-local context of Redberry session (see description for {@link Context} class).
-     * It is possible to set context explicitly using {@link #setCurrentContext(Context)} method.
-     * Each thread is linked to its own context. All child threads created via {@code ExecutorService}
-     * from {@link #getExecutorService()} have same context.</p>
-     */
+/// <summary>
+/// Implements context management logic for the current Redberry session.
+/// </summary>
+/// <remarks>
+/// This class holds the current context of the Redberry session.
+/// </remarks>
 public static class ContextManager
 {
-    /**
-     * Thread-local container for the current context
-     */
-    [ThreadStatic]
-    private static Context ThreadLocalContext = new(new ContextSettings(OutputFormat.Redberry, "d", "g"));
+    private static volatile Context _context = DefaultContextFactory.Instance.CreateContext();
 
-    public static Context CurrentContext { get; set; }
+    /// <summary>
+    /// Gets or sets the current context of the Redberry session.
+    /// </summary>
+    public static Context CurrentContext
+    {
+        get => _context;
+        set
+        {
+            ArgumentNullException.ThrowIfNull(value);
+            _context = value;
+        }
+    }
 
-    /**
-     * Returns the current context of Redberry session.
-     *
-     * @return the current context of Redberry session.
-     */
+    /// <summary>
+    /// Returns the current context of the Redberry session.
+    /// </summary>
     public static Context GetCurrentContext()
     {
-        return ThreadLocalContext;
+        return _context;
     }
 
-    /**
-     * This method initializes and sets current session context by the default
-     * value defined in {@link DefaultContextFactory}. After this step, all
-     * tensors that exist in the thread will be invalidated.
-     *
-     * @return created context
-     */
+    /// <summary>
+    /// Initializes and sets the current session context using the default factory.
+    /// After this step, all tensors created earlier become invalid.
+    /// </summary>
     public static Context InitializeNew()
     {
-        ThreadLocalContext = DefaultContextFactory.Instance.CreateContext();
-        return ThreadLocalContext;
-    }
-
-    /**
-     * This method initializes and sets current session context from
-     * the specified {@code context settings} ({@link ContextSettings}).
-     * After invocation of this method, all the tensors that exist in
-     * the current thread will be invalidated.
-     *
-     * @return created context
-     */
-    public static Context InitializeNew(ContextSettings contextSettings)
-    {
-        var context = new Context(contextSettings);
-        ThreadLocalContext = context;
+        var context = DefaultContextFactory.Instance.CreateContext();
+        _context = context;
         return context;
     }
 
-    /**
-     * Sets current thread-local context to the specified one. After this step, all the
-     * tensors that exist in the thread will be invalidated.
-     *
-     * @param context context
-     */
+    /// <summary>
+    /// Initializes and sets the current session context using the specified settings.
+    /// After this step, all tensors created earlier become invalid.
+    /// </summary>
+    /// <param name="contextSettings">Settings for the new context.</param>
+    public static Context InitializeNew(ContextSettings contextSettings)
+    {
+        ArgumentNullException.ThrowIfNull(contextSettings);
+        var context = new Context(contextSettings);
+        _context = context;
+        return context;
+    }
+
+    /// <summary>
+    /// Sets the current context to the specified one. After this step, all tensors created earlier become invalid.
+    /// </summary>
+    /// <param name="context">The new context.</param>
     public static void SetCurrentContext(Context context)
     {
-        ThreadLocalContext = context;
+        CurrentContext = context;
     }
 }

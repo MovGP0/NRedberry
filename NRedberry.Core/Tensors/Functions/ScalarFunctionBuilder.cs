@@ -1,27 +1,52 @@
 ﻿namespace NRedberry.Tensors.Functions;
 
-public sealed class ScalarFunctionBuilder(ScalarFunctionFactory factory, Tensor? arg = null) : TensorBuilder
+public sealed class ScalarFunctionBuilder : TensorBuilder
 {
-    private Tensor? arg = arg;
+    private readonly ScalarFunctionFactory _factory;
+    private Tensor? _arg;
+
+    public ScalarFunctionBuilder(ScalarFunctionFactory factory)
+    {
+        ArgumentNullException.ThrowIfNull(factory);
+        _factory = factory;
+    }
+
+    public ScalarFunctionBuilder(ScalarFunctionFactory factory, Tensor? arg)
+    {
+        ArgumentNullException.ThrowIfNull(factory);
+        _factory = factory;
+        _arg = arg;
+    }
 
     public Tensor Build()
     {
-        return factory.Create(arg);
+        if (_arg is null)
+        {
+            throw new InvalidOperationException("Argument is not set.");
+        }
+
+        return _factory.Create(_arg);
     }
 
     public void Put(Tensor tensor)
     {
-        if (arg != null)
+        if (_arg is not null)
+        {
             throw new InvalidOperationException("Argument already set.");
-        if (tensor == null)
-            throw new ArgumentNullException(nameof(tensor));
+        }
+
+        ArgumentNullException.ThrowIfNull(tensor);
+
         if (!TensorUtils.IsScalar(tensor))
+        {
             throw new ArgumentException("Tensor must be scalar.");
-        arg = tensor;
+        }
+
+        _arg = tensor;
     }
 
     public TensorBuilder Clone()
     {
-        return new ScalarFunctionBuilder(factory, arg);
+        return new ScalarFunctionBuilder(_factory, _arg);
     }
 }

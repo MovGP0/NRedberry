@@ -36,7 +36,7 @@ public abstract class MultiTensor(Indices.Indices indices) : Tensor
             }
         }
 
-        int[] p = MathUtils.GetSortedDistinct(positions.Clone() as int[]);
+        int[] p = MathUtils.GetSortedDistinct((int[])positions.Clone());
         if (p.Length == size)
         {
             return GetNeutral();
@@ -60,7 +60,7 @@ public abstract class MultiTensor(Indices.Indices indices) : Tensor
             return this[positions[0]];
         }
 
-        int[] p = MathUtils.GetSortedDistinct(positions.Clone() as int[]);
+        int[] p = MathUtils.GetSortedDistinct((int[])positions.Clone());
         if (p.Length == Size)
         {
             return this;

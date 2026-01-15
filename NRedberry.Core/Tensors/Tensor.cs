@@ -63,6 +63,11 @@ public abstract class Tensor : IComparable<Tensor>, IEnumerable<Tensor>
     /// </summary>
     protected virtual string ToString<T>(OutputFormat mode) where T : Tensor => ToString(mode);
 
+    public string ToStringWith<T>(OutputFormat mode) where T : Tensor
+    {
+        return ToString<T>(mode);
+    }
+
     public int CompareTo(Tensor other) => GetHashCode().CompareTo(other.GetHashCode());
 
     public abstract TensorBuilder GetBuilder();

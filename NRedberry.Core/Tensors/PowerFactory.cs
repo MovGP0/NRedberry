@@ -4,7 +4,7 @@ namespace NRedberry.Tensors;
 
 public sealed class PowerFactory : TensorFactory
 {
-    public static PowerFactory Factory = new();
+    public static readonly PowerFactory Factory = new();
 
     private PowerFactory()
     {
@@ -23,15 +23,35 @@ public sealed class PowerFactory : TensorFactory
         {
             var result = Exponentiation.ExponentiateIfPossible(a, p);
             if (result != null)
+            {
                 return result;
+            }
+
+            if (a.IsMinusOne() && p.Equals(Complex.OneHalf))
+            {
+                return Complex.ImaginaryOne;
+            }
+
+            if (a.IsMinusOne() && p.Equals(Complex.MinusOneHalf))
+            {
+                return Complex.ImaginaryOne.Negate();
+            }
         }
 
         if (TensorUtils.IsOne(power))
+        {
             return argument;
+        }
+
         if (TensorUtils.IsZero(power) || TensorUtils.IsOne(argument))
+        {
             return Complex.One;
+        }
+
         if (TensorUtils.IsZero(argument))
+        {
             return Complex.Zero;
+        }
 
         if (argument is Product)
         {
@@ -44,7 +64,10 @@ public sealed class PowerFactory : TensorFactory
                 {
                     TensorBuilder pb = argument.GetBuilder();//creating product builder
                     foreach (Tensor t in scalars)
+                    {
                         pb.Put(t.Pow(power));//TODO refactor for performance
+                    }
+
                     return pb.Build();
                 }
             }
@@ -61,9 +84,14 @@ public sealed class PowerFactory : TensorFactory
     private static void CheckWithException(Tensor[] tensors)
     {
         if (tensors.Length != 2)
+        {
             throw new ArgumentException("Wrong number of arguments.");
+        }
+
         if (!TensorUtils.IsScalar(tensors))
+        {
             throw new ArgumentException("Non scalar power parametres.");
+        }
 
         if (tensors.Any(t => t == null))
         {

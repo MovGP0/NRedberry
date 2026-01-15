@@ -111,7 +111,7 @@ public class Split(Tensor factor, Tensor summand)
 
     public static Split SplitIndexless(Tensor tensor)
     {
-        if (!tensor.Indices.Any()) //case 2*a*b*c
+        if (tensor.Indices.Size() == 0) //case 2*a*b*c
         {
             Complex complex;
             Tensor factor;
@@ -119,12 +119,27 @@ public class Split(Tensor factor, Tensor summand)
             if (tensor is Product product)
             {
                 complex = product.Factor;
-
-                throw new NotImplementedException();
+                if (complex == Complex.One)
+                {
+                    //case a*b
+                    factor = tensor;
+                }
+                else if (product.Size == 2)
+                {
+                    //case 2*a
+                    factor = product[1];
+                }
+                else
+                {
+                    //case 2*a*b => factor = a*b
+                    factor = new Product(Complex.One, product.IndexlessData, product.Data, product.Content, product.Indices);
+                }
             }
-
-            complex = Complex.One;
-            factor = tensor;
+            else
+            {
+                complex = Complex.One;
+                factor = tensor;
+            }
 
             return new SplitNumbers(factor, complex);
         }
@@ -135,11 +150,43 @@ public class Split(Tensor factor, Tensor summand)
 
             if (tensor is Product product)
             {
-                throw new NotImplementedException();
-            }
+                if (product.IndexlessData.Length == 0)
+                {
+                    summand = product.Factor;
+                }
+                else if (product.Factor == Complex.One && product.IndexlessData.Length == 1)
+                {
+                    summand = product.IndexlessData[0];
+                }
+                else if (product.Factor.IsMinusOne() && product.IndexlessData.Length == 1 && product.IndexlessData[0] is Sum s)
+                {
+                    Tensor[] sumData = (Tensor[])s.Data.Clone();
+                    for (int i = sumData.Length - 1; i >= 0; --i)
+                    {
+                        sumData[i] = Tensors.Negate(sumData[i]);
+                    }
 
-            summand = Complex.One;
-            factor = tensor;
+                    summand = new Sum(s.Indices, sumData, s.GetHashCode());
+                }
+                else
+                {
+                    summand = new Product(product.Factor, product.IndexlessData, [], ProductContent.EmptyInstance, IndicesFactory.EmptyIndices);
+                }
+
+                if (product.Data.Length == 1)
+                {
+                    factor = product.Data[0];
+                }
+                else
+                {
+                    factor = new Product(Complex.One, [], product.Data, product.Content, product.Indices);
+                }
+            }
+            else
+            {
+                summand = Complex.One;
+                factor = tensor;
+            }
 
             return new Split(factor, summand);
         }

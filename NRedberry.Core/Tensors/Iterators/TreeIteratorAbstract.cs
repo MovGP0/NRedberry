@@ -2,39 +2,40 @@
 
 public abstract class TreeIteratorAbstract : ITreeIterator
 {
-    private TreeTraverseIterator Iterator { get; }
-    private TraverseState State { get; }
+    private TreeTraverseIterator _iterator { get; }
+    private TraverseState _state { get; }
 
     protected TreeIteratorAbstract(Tensor tensor, TraverseGuide guide, TraverseState state)
     {
-        Iterator = new TreeTraverseIterator(tensor, guide);
-        State = state;
+        _iterator = new TreeTraverseIterator(tensor, guide);
+        _state = state;
     }
 
     protected TreeIteratorAbstract(Tensor tensor, TraverseState state)
     {
-        Iterator = new TreeTraverseIterator(tensor);
-        State = state;
+        _iterator = new TreeTraverseIterator(tensor);
+        _state = state;
     }
 
     public Tensor Next()
     {
-        while (Iterator.Next() != State)
+        TraverseState? nextState;
+        while ((nextState = _iterator.Next()) != _state && nextState != null)
         {
         }
 
-        return Iterator.Current();
+        return nextState == null ? null : _iterator.Current();
     }
 
     public void Set(Tensor tensor)
     {
-        Iterator.Set(tensor);
+        _iterator.Set(tensor);
     }
 
     public Tensor Result()
     {
-        return Iterator.Result();
+        return _iterator.Result();
     }
 
-    public int Depth => Iterator.Depth;
+    public int Depth => _iterator.Depth;
 }

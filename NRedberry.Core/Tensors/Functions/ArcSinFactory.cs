@@ -24,7 +24,7 @@ public sealed class ArcSinFactory : ScalarFunctionFactory
 
         if (TensorUtils.IsNumeric(arg))
         {
-            return ComplexUtils.ArcSin((Complex)arg);
+            return ComplexUtils.ArcSin((Complex) arg);
         }
 
         return new ArcSin(arg);

@@ -4,15 +4,14 @@ public abstract class ScalarFunctionFactory : TensorFactory
 {
     public virtual Tensor Create(params Tensor[] tensor)
     {
+        ArgumentNullException.ThrowIfNull(tensor);
+
         if (tensor.Length != 1)
         {
             throw new ArgumentException(nameof(tensor));
         }
 
-        if (tensor[0] == null)
-        {
-            throw new ArgumentNullException(nameof(tensor));
-        }
+        ArgumentNullException.ThrowIfNull(tensor[0]);
 
         if (!TensorUtils.IsScalar(tensor[0]))
         {

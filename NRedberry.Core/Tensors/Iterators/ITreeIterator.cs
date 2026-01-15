@@ -32,4 +32,17 @@ public interface ITreeIterator
     /// current depth in the tree
     /// </returns>
     int Depth { get; }
+
+    public static class Factory
+    {
+        public static ITreeIterator Create(Tensor tensor, bool fromChildToParent, TraverseGuide guide)
+        {
+            ArgumentNullException.ThrowIfNull(tensor);
+            ArgumentNullException.ThrowIfNull(guide);
+
+            return fromChildToParent
+                ? new FromChildToParentIterator(tensor, guide)
+                : new FromParentToChildIterator(tensor, guide);
+        }
+    }
 }

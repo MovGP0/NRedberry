@@ -3,21 +3,35 @@ using NRedberry.Indices;
 
 namespace NRedberry.Tensors;
 
-public sealed class IndexMapper(int[] from, int[] to) : IIndexMapping
+public sealed class IndexMapper : IIndexMapping
 {
+    private readonly int[] _from;
+    private readonly int[] _to;
+
+    public IndexMapper(int[] from, int[] to)
+    {
+        ArgumentNullException.ThrowIfNull(from);
+        ArgumentNullException.ThrowIfNull(to);
+
+        _from = from;
+        _to = to;
+    }
+
     public int Map(int index)
     {
-         int position = Arrays.BinarySearch(from, IndicesUtils.GetNameWithType(index));
-         if (position < 0)
-         {
-             return index;
-         }
+        int position = Arrays.BinarySearch(_from, IndicesUtils.GetNameWithType(index));
+        if (position < 0)
+        {
+            return index;
+        }
 
-         return IndicesUtils.GetRawStateInt(index) ^ to[position];
+        return IndicesUtils.GetRawStateInt(index) ^ _to[position];
     }
 
     public bool Contract(params int[] freeIndicesNames)
     {
+        ArgumentNullException.ThrowIfNull(freeIndicesNames);
+
         if (freeIndicesNames.Length <= 1)
         {
             return false;

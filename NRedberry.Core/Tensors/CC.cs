@@ -1,105 +1,195 @@
-﻿using NRedberry.Contexts;
+using NRedberry.Concurrent;
+using NRedberry.Contexts;
+using NRedberry.Indices;
 
 namespace NRedberry.Tensors;
 
 /// <summary>
 /// Redberry current context.
-/// This class statically delegates common useful methods from Redberry context of current session.
+/// This class statically delegates common useful methods from the Redberry context of the current session.
 /// </summary>
 // ReSharper disable once InconsistentNaming
 public static class CC
 {
-    private static Context _current;
+    /// <summary>
+    /// Returns the current context of the Redberry session.
+    /// </summary>
+    public static Context Current => Context.Get();
 
-    public static Context Current => _current ??= new Context(new ContextSettings());
-
-    /**
-         * Returns true if metric is defined for specified index type.
-         *
-         * @param type index type
-         * @return true if metric is defined for specified index type
-         */
+    /// <summary>
+    /// Returns true if a metric is defined for the specified index type.
+    /// </summary>
+    /// <param name="type">Index type.</param>
     public static bool IsMetric(byte type)
     {
         return Current.IsMetric(type);
     }
 
-    /**
-         * Returns {@code NameDescriptor} corresponding to the specified {@code int} nameId.
-         *
-         * @param name integer name of tensor
-         * @return corresponding  {@code NameDescriptor}
-         */
+    /// <summary>
+    /// Returns true if a metric is defined for the specified index type.
+    /// </summary>
+    /// <param name="type">Index type.</param>
+    public static bool IsMetric(IndexType type)
+    {
+        return Current.IsMetric(type.GetType_());
+    }
+
+    /// <summary>
+    /// Returns the <see cref="NameDescriptor"/> corresponding to the specified tensor name id.
+    /// </summary>
+    /// <param name="name">Integer name of the tensor.</param>
     public static NameDescriptor GetNameDescriptor(int name)
     {
         return Current.GetNameDescriptor(name);
     }
 
-    /**
-         * Returns the name manager (namespace) of current session.
-         *
-         * @return the name manager (namespace) of current session.
-         */
+    /// <summary>
+    /// Returns the name manager (namespace) of the current session.
+    /// </summary>
     public static NameManager NameManager => Current.NameManager;
 
-    /**
-         * Returns index converter manager of current session.
-         *
-         * @return index converter manager of current session
-         */
-    public static IndexConverterManager GetIndexConverterManager()
+    /// <summary>
+    /// Returns the index converter manager of the current session.
+    /// </summary>
+    public static IndexConverterManager IndexConverterManager => Current.ConverterManager;
+
+    /// <summary>
+    /// Returns the current default output format.
+    /// </summary>
+    public static OutputFormat DefaultOutputFormat
     {
-        return Current.ConverterManager;
+        get => Current.DefaultOutputFormat;
+        set => Current.DefaultOutputFormat = value;
     }
 
-    /**
-         * Returns current default output format.
-         *
-         * @return current default output format
-         */
+    /// <summary>
+    /// Returns all metric index types.
+    /// </summary>
+    public static IReadOnlySet<IndexType> GetMetricTypes()
+    {
+        var result = new HashSet<IndexType>();
+        foreach (var type in IndexTypeMethods.Values)
+        {
+            if (IsMetric(type))
+            {
+                result.Add(type);
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Returns all matrix index types.
+    /// </summary>
+    public static IReadOnlySet<IndexType> GetMatrixTypes()
+    {
+        var result = new HashSet<IndexType>();
+        foreach (var type in IndexTypeMethods.Values)
+        {
+            if (!IsMetric(type))
+            {
+                result.Add(type);
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Returns current default output format.
+    /// </summary>
     public static OutputFormat GetDefaultOutputFormat()
     {
-        return Current.DefaultOutputFormat;
+        return DefaultOutputFormat;
     }
 
-    /**
-         * Sets the default output format.
-         *
-         * <p>After this step, all expressions will be printed according to the specified output format.</p>
-         *
-         * @param defaultOutputFormat output format
-         */
+    /// <summary>
+    /// Sets the default output format.
+    /// </summary>
+    /// <param name="defaultOutputFormat">Output format.</param>
     public static void SetDefaultOutputFormat(OutputFormat defaultOutputFormat)
     {
-        Current.DefaultOutputFormat = defaultOutputFormat;
+        DefaultOutputFormat = defaultOutputFormat;
     }
 
-    /**
-         * This method resets all tensor names in the namespace.
-         *
-         * <p>Any tensor created before this method call becomes invalid, and
-         * must not be used! This method is mainly used in unit tests, so
-         * avoid invocations of this method in general computations.</p>
-         */
+    /// <summary>
+    /// This method resets all tensor names in the namespace.
+    /// Any tensor created before this method call becomes invalid, and must not be used.
+    /// This method is mainly used in unit tests, so avoid invocations of this method in general computations.
+    /// </summary>
     public static void ResetTensorNames()
     {
         Current.ResetTensorNames();
     }
 
-    /**
-         * This method resets all tensor names in the namespace and sets a
-         * specified seed to the {@link NameManager}. If this method is invoked
-         * with constant seed before any interactions with Redberry, further
-         * behaviour of Redberry will be fully deterministic from run to run
-         * (order of summands and multipliers will be fixed, computation time
-         * will be pretty constant, hash codes will be the same).
-         *
-         * <p>Any tensor created before this method call becomes invalid, and
-         * must not be used! This method is mainly used in unit tests, so
-         * avoid invocations of this method in general computations.</p>
-         */
+    /// <summary>
+    /// Resets all definitions.
+    /// </summary>
+    public static void Reset()
+    {
+        Current.ResetTensorNames();
+        Current.ParseManager.Reset();
+    }
+
+    /// <summary>
+    /// Resets all tensor names in the namespace and seeds the <see cref="NameManager"/> deterministically.
+    /// Any tensor created before this method call becomes invalid, and must not be used.
+    /// This method is mainly used in unit tests, so avoid invocations of this method in general computations.
+    /// </summary>
+    /// <param name="seed">Seed applied to <see cref="NameManager"/>.</param>
     public static void ResetTensorNames(int seed)
     {
         Current.ResetTensorNames(seed);
+    }
+
+    /// <summary>
+    /// Generates a new symbol which never used before during current session.
+    /// </summary>
+    public static SimpleTensor GenerateNewSymbol()
+    {
+        var nameDescriptor = Current.NameManager.GenerateNewSymbolDescriptor();
+        return new SimpleTensor(nameDescriptor.Id, IndicesFactory.EmptySimpleIndices);
+    }
+
+    /// <summary>
+    /// Return an output port which generates a new symbol at each <see cref="IOutputPort{T}.Take"/> invocation.
+    /// </summary>
+    public static IOutputPort<SimpleTensor> GetParametersGenerator()
+    {
+        return new GeneratedParameters();
+    }
+
+    /// <summary>
+    /// Returns random generator used by Redberry in current session.
+    /// </summary>
+    public static Random GetRandomGenerator()
+    {
+        return Random.Shared;
+    }
+
+    /// <summary>
+    /// Allows to parse expressions with repeated indices of the same variance.
+    /// </summary>
+    /// <param name="allowSameVariance">Allow or not to parse repeated indices with same variance.</param>
+    public static void SetParserAllowsSameVariance(bool allowSameVariance)
+    {
+        Current.ParseManager.Parser.AllowSameVariance = allowSameVariance;
+    }
+
+    /// <summary>
+    /// Returns whether repeated indices of the same variance are allowed to be parsed.
+    /// </summary>
+    public static bool GetParserAllowsSameVariance()
+    {
+        return Current.ParseManager.Parser.AllowSameVariance;
+    }
+
+    private sealed record class GeneratedParameters : IOutputPort<SimpleTensor>
+    {
+        public SimpleTensor Take()
+        {
+            return GenerateNewSymbol();
+        }
     }
 }

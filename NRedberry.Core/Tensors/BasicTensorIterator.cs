@@ -1,53 +1,55 @@
 namespace NRedberry.Tensors;
 
-public sealed class BasicTensorIterator(Tensor tensor) : IEnumerator<Tensor>
+public sealed class BasicTensorIterator : IEnumerator<Tensor>
 {
-    private Tensor Tensor { get; } = tensor ?? throw new ArgumentNullException(nameof(tensor));
-    private int Position { get; set; } = -1;
-    private int Size => Tensor.Size;
+    private readonly Tensor _tensor;
+    private readonly int _size;
+    private int _position = -1;
 
-    public object Current => Tensor[Position];
+    public BasicTensorIterator(Tensor tensor)
+    {
+        ArgumentNullException.ThrowIfNull(tensor);
+        _tensor = tensor;
+        _size = tensor.Size;
+    }
 
-    Tensor IEnumerator<Tensor>.Current => Tensor[Position];
+    public Tensor Current
+    {
+        get
+        {
+            if (_position < 0 || _position >= _size)
+            {
+                throw new InvalidOperationException("Enumerator is not positioned on a valid element.");
+            }
+
+            return _tensor[_position];
+        }
+    }
+
+    object System.Collections.IEnumerator.Current => Current;
 
     public bool MoveNext()
     {
         if (!HasNext())
+        {
             return false;
-        ++Position;
+        }
+
+        ++_position;
         return true;
     }
 
     private bool HasNext()
     {
-        return Position < Size - 1;
+        return _position < _size - 1;
     }
 
     public void Reset()
     {
-        Position = -1;
+        _position = -1;
     }
-
-    #region IDisposable
-
-    private bool IsDisposed { get; set; }
 
     public void Dispose()
     {
-        if (!IsDisposed)
-            Dispose(true);
     }
-
-    public void Dispose(bool disposing)
-    {
-        IsDisposed = true;
-    }
-
-    ~BasicTensorIterator()
-    {
-        if (!IsDisposed)
-            Dispose(false);
-    }
-
-    #endregion
 }

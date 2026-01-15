@@ -1,6 +1,8 @@
-﻿namespace NRedberry.Tensors;
+﻿using System.Collections;
 
-public sealed class ProductContent
+namespace NRedberry.Tensors;
+
+public sealed class ProductContent : IEnumerable<Tensor>
 {
     public static ProductContent EmptyInstance = new(
         StructureOfContractionsHashed.EmptyInstance,
@@ -71,7 +73,10 @@ public sealed class ProductContent
 
     public Tensor[] GetRange(int from, int to)
     {
-        return Data.Skip(from).Take(to-from).ToArray();
+        int length = to - from;
+        Tensor[] result = new Tensor[length];
+        Array.Copy(Data, from, result, 0, length);
+        return result;
     }
 
     public Tensor[] GetDataCopy()
@@ -79,7 +84,7 @@ public sealed class ProductContent
         return (Tensor[])Data.Clone();
     }
 
-    private int[] StretchHashReflection { get; set; }
+    private int[]? StretchHashReflection { get; set; }
 
     public short GetStretchIndexByHash(int hashCode)
     {
@@ -88,9 +93,27 @@ public sealed class ProductContent
             StretchHashReflection = new int[StretchIndices[StretchIndices.Length - 1] + 1];
             //TODO performance (!!!)
             for (var i = 0; i < StretchIndices.Length; ++i)
+            {
                 StretchHashReflection[StretchIndices[i]] = Data[i].GetHashCode();
+            }
         }
 
-        return (short)Array.IndexOf(StretchHashReflection, hashCode);
+        int index = Array.BinarySearch(StretchHashReflection, hashCode);
+        if (index < 0)
+        {
+            return -1;
+        }
+
+        return (short)index;
+    }
+
+    public IEnumerator<Tensor> GetEnumerator()
+    {
+        return ((IEnumerable<Tensor>)Data).GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }
