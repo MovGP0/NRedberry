@@ -8,14 +8,32 @@ namespace NRedberry.IndexMapping;
 
 internal sealed class PlusMinusIndexMappingProvider : IndexMappingProviderAbstract
 {
+    private bool _state;
+
     public PlusMinusIndexMappingProvider(IOutputPort<IIndexMappingBuffer> outputPort)
         : base(outputPort)
     {
-        throw new NotImplementedException();
     }
 
     public override IIndexMappingBuffer? Take()
     {
-        throw new NotImplementedException();
+        if (currentBuffer is null)
+        {
+            return null;
+        }
+
+        IIndexMappingBuffer buffer = currentBuffer;
+        if (_state)
+        {
+            currentBuffer = null;
+            buffer.AddSign(true);
+        }
+        else
+        {
+            buffer = (IIndexMappingBuffer)buffer.Clone();
+            _state = true;
+        }
+
+        return buffer;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using NRedberry.Tensors;
+using NRedberry.Transformations.Fractions;
 using NRedberry.Transformations.Symmetrization;
 
 namespace NRedberry.Transformations.Expand;
@@ -8,47 +9,53 @@ namespace NRedberry.Transformations.Expand;
 /// </summary>
 public sealed class ExpandNumeratorTransformation : AbstractExpandNumeratorDenominatorTransformation
 {
-    public static ExpandNumeratorTransformation Instance => throw new NotImplementedException();
+    public static ExpandNumeratorTransformation Instance { get; } = new();
 
     private ExpandNumeratorTransformation()
     {
-        throw new NotImplementedException();
     }
 
     public ExpandNumeratorTransformation(ITransformation[] transformations)
         : base(transformations)
     {
-        throw new NotImplementedException();
     }
 
     public ExpandNumeratorTransformation(ExpandOptions options)
         : base(options)
     {
-        throw new NotImplementedException();
     }
 
     public static Tensor Expand(Tensor tensor)
     {
-        throw new NotImplementedException();
+        return Instance.Transform(tensor);
     }
 
     public static Tensor Expand(Tensor tensor, params ITransformation[] transformations)
     {
-        throw new NotImplementedException();
+        return new ExpandNumeratorTransformation(transformations).Transform(tensor);
     }
 
     protected override Tensor ExpandProduct(Tensor tensor)
     {
-        throw new NotImplementedException();
+        NumeratorDenominator numDen = NumeratorDenominator.GetNumeratorAndDenominator(
+            tensor,
+            NumeratorDenominator.IntegerDenominatorIndicator);
+        Tensor numerator = ExpandTransformation.Expand(numDen.Numerator, transformations);
+        if (ReferenceEquals(numDen.Numerator, numerator))
+        {
+            return tensor;
+        }
+
+        return Tensors.Tensors.Multiply(numerator, Tensors.Tensors.Reciprocal(numDen.Denominator));
     }
 
     public override string ToString(OutputFormat outputFormat)
     {
-        throw new NotImplementedException();
+        return "ExpandNumerator";
     }
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        return ToString(CC.GetDefaultOutputFormat());
     }
 }

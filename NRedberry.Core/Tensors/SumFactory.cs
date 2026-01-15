@@ -13,9 +13,14 @@ public sealed class SumFactory : TensorFactory
     public Tensor Create(params Tensor[] tensors)
     {
         if (tensors.Length == 0)
+        {
             return Complex.Zero;
+        }
+
         if (tensors.Length == 1)
+        {
             return tensors[0];
+        }
 
         var builder = new SumBuilder(tensors.Length);
         foreach (var t in tensors)
@@ -24,10 +29,5 @@ public sealed class SumFactory : TensorFactory
         }
 
         return builder.Build();
-    }
-
-    public Tensor Create(Tensor tensor)
-    {
-        throw new System.NotImplementedException();
     }
 }

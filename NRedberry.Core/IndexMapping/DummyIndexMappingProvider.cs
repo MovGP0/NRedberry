@@ -11,11 +11,12 @@ internal sealed class DummyIndexMappingProvider : IndexMappingProviderAbstract
     public DummyIndexMappingProvider(IOutputPort<IIndexMappingBuffer> outputPort)
         : base(outputPort)
     {
-        throw new NotImplementedException();
     }
 
     public override IIndexMappingBuffer? Take()
     {
-        throw new NotImplementedException();
+        IIndexMappingBuffer? buffer = currentBuffer;
+        currentBuffer = null;
+        return buffer;
     }
 }

@@ -10,12 +10,16 @@ namespace NRedberry.IndexMapping;
 public abstract class IndexMappingProviderAbstractFT<T> : IndexMappingProviderAbstract
     where T : Tensor
 {
-    protected readonly T from;
-    protected readonly T to;
+    protected T From { get; }
+    protected T To { get; }
 
     protected IndexMappingProviderAbstractFT(IOutputPort<IIndexMappingBuffer> outputPort, T fromTensor, T toTensor)
         : base(outputPort)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(fromTensor);
+        ArgumentNullException.ThrowIfNull(toTensor);
+
+        From = fromTensor;
+        To = toTensor;
     }
 }

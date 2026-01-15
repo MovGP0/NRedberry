@@ -9,25 +9,24 @@ namespace NRedberry.IndexMapping;
 public abstract class IndexMappingProviderAbstract : IIndexMappingProvider
 {
     protected IIndexMappingBuffer? currentBuffer;
-    private readonly IOutputPort<IIndexMappingBuffer> outputPort;
+    private readonly IOutputPort<IIndexMappingBuffer> _outputPort;
 
     protected IndexMappingProviderAbstract(IOutputPort<IIndexMappingBuffer> outputPort)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(outputPort);
+        _outputPort = outputPort;
     }
 
     public virtual bool Tick()
     {
-        throw new NotImplementedException();
+        BeforeTick();
+        currentBuffer = _outputPort.Take();
+        return currentBuffer is not null;
     }
 
-    public virtual IIndexMappingBuffer? Take()
-    {
-        throw new NotImplementedException();
-    }
+    public abstract IIndexMappingBuffer? Take();
 
     protected virtual void BeforeTick()
     {
-        throw new NotImplementedException();
     }
 }

@@ -8,25 +8,25 @@ namespace NRedberry.Transformations.Fractions;
 /// </summary>
 public sealed class GetNumeratorTransformation : ITransformation, TransformationToStringAble
 {
-    public static GetNumeratorTransformation Instance => throw new NotImplementedException();
+    public static GetNumeratorTransformation Instance { get; } = new();
 
     private GetNumeratorTransformation()
     {
-        throw new NotImplementedException();
     }
 
     public Tensor Transform(Tensor tensor)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(tensor);
+        return NumeratorDenominator.GetNumeratorAndDenominator(tensor).Numerator;
     }
 
     public string ToString(OutputFormat outputFormat)
     {
-        throw new NotImplementedException();
+        return "Numerator";
     }
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        return ToString(CC.GetDefaultOutputFormat());
     }
 }

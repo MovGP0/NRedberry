@@ -8,47 +8,66 @@ namespace NRedberry.Transformations.Symmetrization;
 /// </summary>
 public sealed class ExpandTensorsAndEliminateTransformation : TransformationToStringAble
 {
-    public static ExpandTensorsAndEliminateTransformation Instance => throw new NotImplementedException();
+    public static ExpandTensorsAndEliminateTransformation Instance { get; } = new();
 
     private readonly ITransformation[] transformations = null!;
 
     private ExpandTensorsAndEliminateTransformation()
     {
-        throw new NotImplementedException();
+        transformations = [EliminateMetricsTransformation.Instance];
     }
 
     public ExpandTensorsAndEliminateTransformation(params ITransformation[] transformations)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(transformations);
+        this.transformations = new ITransformation[1 + transformations.Length];
+        this.transformations[0] = EliminateMetricsTransformation.Instance;
+        Array.Copy(transformations, 0, this.transformations, 1, transformations.Length);
     }
 
     public ExpandTensorsAndEliminateTransformation(ExpandOptions options)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(options);
+        transformations = options.Simplifications is null
+            ? [EliminateMetricsTransformation.Instance]
+            : [EliminateMetricsTransformation.Instance, options.Simplifications];
     }
 
     public Tensor Transform(Tensor tensor)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(tensor);
+        Tensor expanded = new ExpandTensorsTransformation(transformations).Transform(tensor);
+        return ApplySequentially(expanded, transformations);
     }
 
     public static Tensor ExpandTensorsAndEliminate(Tensor tensor)
     {
-        throw new NotImplementedException();
+        return Instance.Transform(tensor);
     }
 
     public static Tensor ExpandTensorsAndEliminate(Tensor tensor, params ITransformation[] transformations)
     {
-        throw new NotImplementedException();
+        return new ExpandTensorsAndEliminateTransformation(transformations).Transform(tensor);
     }
 
     public string ToString(OutputFormat outputFormat)
     {
-        throw new NotImplementedException();
+        return "ExpandTensorsAndEliminate";
     }
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        return ToString(CC.GetDefaultOutputFormat());
+    }
+
+    private static Tensor ApplySequentially(Tensor tensor, ITransformation[] transformations)
+    {
+        Tensor current = tensor;
+        foreach (ITransformation transformation in transformations)
+        {
+            current = transformation.Transform(current);
+        }
+
+        return current;
     }
 }

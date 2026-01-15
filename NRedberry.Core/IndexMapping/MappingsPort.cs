@@ -1,5 +1,4 @@
 using NRedberry.Concurrent;
-using NRedberry.Indices;
 
 namespace NRedberry.IndexMapping;
 
@@ -7,18 +6,25 @@ namespace NRedberry.IndexMapping;
  * Original: ./core/src/main/java/cc/redberry/core/indexmapping/MappingsPort.java
  */
 
-public sealed class MappingsPort : IOutputPort<IIndexMapping>
+public sealed class MappingsPort : IOutputPort<Mapping>
 {
-    private readonly IOutputPort<IIndexMappingBuffer> innerPort;
+    private readonly IOutputPort<IIndexMappingBuffer> _innerPort;
 
     public MappingsPort(IOutputPort<IIndexMappingBuffer> innerPort)
     {
-        this.innerPort = innerPort;
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(innerPort);
+
+        _innerPort = innerPort;
     }
 
-    public IIndexMapping Take()
+    public Mapping Take()
     {
-        throw new NotImplementedException();
+        IIndexMappingBuffer? buffer = _innerPort.Take();
+        if (buffer is null)
+        {
+            return null!;
+        }
+
+        return new Mapping(buffer);
     }
 }

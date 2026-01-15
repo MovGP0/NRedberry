@@ -8,16 +8,20 @@ namespace NRedberry.IndexMapping;
 
 internal sealed class MappingsPortRemovingContracted : IOutputPort<IIndexMappingBuffer>
 {
-    private readonly IOutputPort<IIndexMappingBuffer> provider;
+    private readonly IOutputPort<IIndexMappingBuffer> _provider;
 
     public MappingsPortRemovingContracted(IOutputPort<IIndexMappingBuffer> provider)
     {
-        this.provider = provider;
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(provider);
+
+        _provider = provider;
     }
 
     public IIndexMappingBuffer Take()
     {
-        throw new NotImplementedException();
+        IIndexMappingBuffer buffer = _provider.Take();
+        buffer?.RemoveContracted();
+
+        return buffer;
     }
 }

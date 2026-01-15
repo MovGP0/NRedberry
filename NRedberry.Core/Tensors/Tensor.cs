@@ -26,9 +26,11 @@ public abstract class Tensor : IComparable<Tensor>, IEnumerable<Tensor>
     {
         var size = Size;
         if (i >= size || i < 0)
+        {
             throw new IndexOutOfRangeException(nameof(i));
-        if (tensor == null)
-            throw new ArgumentNullException(nameof(tensor));
+        }
+
+        ArgumentNullException.ThrowIfNull(tensor);
 
         var builder = GetBuilder();
         for (var j = 0; j < size; ++j)
@@ -42,11 +44,17 @@ public abstract class Tensor : IComparable<Tensor>, IEnumerable<Tensor>
     public Tensor[] GetRange(int from, int to)
     {
         var size = Size;
-        if (from < 0 || from > to || to >= size)
+        if (from < 0 || from > to || to > size)
+        {
             throw new IndexOutOfRangeException();
-        var range = new Tensor[from - to];
+        }
+
+        var range = new Tensor[to - from];
         for (size = 0; from < to; ++size, ++from)
+        {
             range[size] = this[from];
+        }
+
         return range;
     }
 
@@ -56,19 +64,34 @@ public abstract class Tensor : IComparable<Tensor>, IEnumerable<Tensor>
     }
 
     public abstract string ToString(OutputFormat outputFormat);
-    public override string ToString() => ToString(Context.Get().DefaultOutputFormat);
+
+    public override string ToString()
+    {
+        return ToString(Context.Get().DefaultOutputFormat);
+    }
 
     /// <summary>
     /// For internal use.
     /// </summary>
-    protected virtual string ToString<T>(OutputFormat mode) where T : Tensor => ToString(mode);
+    protected virtual string ToString<T>(OutputFormat mode) where T : Tensor
+    {
+        return ToString(mode);
+    }
 
     public string ToStringWith<T>(OutputFormat mode) where T : Tensor
     {
         return ToString<T>(mode);
     }
 
-    public int CompareTo(Tensor other) => GetHashCode().CompareTo(other.GetHashCode());
+    public int CompareTo(Tensor? other)
+    {
+        if (other is null)
+        {
+            return 1;
+        }
+
+        return GetHashCode().CompareTo(other.GetHashCode());
+    }
 
     public abstract TensorBuilder GetBuilder();
 
@@ -76,26 +99,113 @@ public abstract class Tensor : IComparable<Tensor>, IEnumerable<Tensor>
 
     public static Tensor Sum(Tensor[] contentToTensors)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(contentToTensors);
+        return SumFactory.Factory.Create(contentToTensors);
     }
 
     public static Tensor MultiplyAndRenameConflictingDummies(Tensor[] contentToTensors)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(contentToTensors);
+        return ProductFactory.Factory.Create(ResolveDummy(contentToTensors));
     }
 
     public static Tensor Expression(Tensor toTensor, Tensor tensor)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(toTensor);
+        ArgumentNullException.ThrowIfNull(tensor);
+        return ExpressionFactory.Instance.Create(toTensor, tensor);
     }
 
     public static SimpleTensor SimpleTensor(string name, SimpleIndices indices)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(indices);
+
+        var descriptor = CC.NameManager.MapNameDescriptor(name, indices.StructureOfIndices);
+        if (indices.Size() == 0)
+        {
+            var simpleDescriptor = (NameDescriptorForSimpleTensor)descriptor;
+            if (simpleDescriptor.CachedSymbol is null)
+            {
+                var st = new SimpleTensor(descriptor.Id, indices);
+                simpleDescriptor.CachedSymbol = st;
+                return st;
+            }
+
+            return simpleDescriptor.CachedSymbol;
+        }
+
+        return new SimpleTensor(
+            descriptor.Id,
+            IndicesFactory.CreateSimple(descriptor.GetSymmetries(), indices));
     }
 
     public static SimpleTensor SimpleTensor(int name, SimpleIndices indices)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(indices);
+
+        var descriptor = CC.GetNameDescriptor(name);
+        if (descriptor is null)
+        {
+            throw new ArgumentException("This name is not registered in the system.");
+        }
+
+        if (!descriptor.GetStructureOfIndices().IsStructureOf(indices))
+        {
+            throw new ArgumentException(
+                $"Specified indices ( {indices} )are not indices of specified tensor ( {descriptor} ).");
+        }
+
+        if (indices.Size() == 0)
+        {
+            var simpleDescriptor = (NameDescriptorForSimpleTensor)descriptor;
+            if (simpleDescriptor.CachedSymbol is null)
+            {
+                var st = new SimpleTensor(descriptor.Id, indices);
+                simpleDescriptor.CachedSymbol = st;
+                return st;
+            }
+
+            return simpleDescriptor.CachedSymbol;
+        }
+
+        return new SimpleTensor(
+            name,
+            IndicesFactory.CreateSimple(descriptor.GetSymmetries(), indices));
+    }
+
+    private static Tensor[] ResolveDummy(params Tensor[] factors)
+    {
+        var result = new Tensor[factors.Length];
+        HashSet<int> forbidden = [];
+        List<Tensor> toResolve = [];
+        for (int i = factors.Length - 1; i >= 0; --i)
+        {
+            var factor = factors[i];
+            if (factor is MultiTensor || factor.Indices.GetFree().Size() == 0)
+            {
+                toResolve.Add(factor);
+                forbidden.UnionWith(IndicesUtils.GetIndicesNames(factor.Indices.GetFree()));
+            }
+            else
+            {
+                forbidden.UnionWith(TensorUtils.GetAllIndicesNamesT(factor));
+                result[i] = factor;
+            }
+        }
+
+        int toResolvePosition = toResolve.Count;
+        for (int i = factors.Length - 1; i >= 0; --i)
+        {
+            if (result[i] is null)
+            {
+                var factor = toResolve[--toResolvePosition];
+                var newFactor = ApplyIndexMapping.RenameDummy(factor, forbidden.ToArray());
+                forbidden.UnionWith(TensorUtils.GetAllIndicesNamesT(newFactor));
+                result[i] = newFactor;
+            }
+        }
+
+        return result;
     }
 }

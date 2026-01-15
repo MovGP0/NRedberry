@@ -245,15 +245,58 @@ public override int GetHashCode()
 - Do not try to port multiple files at once; implement one file at a time
 - Always try to execute a build after every file; fix the build errors
 - When a build error is encountered, update `AGENTS.md` with a note describing the root cause and the preventative step(s) needed to avoid the error in the future.
+- Do not use PowerShell to execute Python and do not use Python to execute PowerShell. Use either.
+- Python scripts can mess up line endings in C# files (issues with the difference between \n and \r). Prefer a PowerShell script with a regex for file encoding and line ending fixes.
 - Build error note: `IndicesBuilder.cs` referenced obsolete `IntArray` ([Obsolete(..., true)]), causing CS0619; prevent by avoiding `IntArray`/`IntArrayList` in new ports and using `ImmutableArray<int>`/`List<int>` or `IEnumerable<int>` overloads instead.
 - Build error note: `IndicesUtils.cs` used high-bit hex constants like `0x80000000`/`0x80FFFFFF`/`0xFF000000` without casts, which the compiler treated as `uint` (CS0266); prevent by using `unchecked((int)...)` (or named `int` masks) for signed constants with the high bit set.
 - Build error note: `NRedberry.Core/Indices/IndicesUtils.cs` calls `GetSortedDistinct` as an extension method on `int[]`; keep the `this int[]` signature in `NRedberry.Maths.MathUtils.GetSortedDistinct` (or update call sites) to avoid CS1061.
 - Build error note: Roslynator RCS1058 flagged `result = result * currentBase;` in `NumberUtils.cs`; prefer compound assignments like `result *= currentBase;`.
 - Build error note: `INumberTokenParser<T>` should constrain to `NRedberry.INumber<T>` (not `NRedberry.Numbers.INumber<T>`); the latter broke Complex/Real implementations with CS0311/CS0314.
 - Build error note: after constraining `INumberTokenParser<T>` to `NRedberry.INumber<T>`, also add the same constraint to `NumberParser<T>`, `BracketToken<T>`, and `OperatorToken<T>` to avoid CS0314.
-- Build error note: RCS0063 flagged trailing blank lines in Parser.cs; remove extra blank lines at file end to satisfy Roslynator.\r\n- Build error note (2026-01-14): ParseToken.GetIndices must return Indices.Indices (not Indices), because Indices is a namespace; this avoids CS0118 and override mismatch CS0508.\r\n- Build error note (2026-01-14): Roslynator RCS1111 flags switch cases with multiple statements; wrap the case body in braces.\r\n- Build error note (2026-01-14): In ParseToken.cs, Tensors.Sum resolved to the Sum type because Tensors matches a namespace; use NRedberry.Tensors.Tensors.Sum(...) (or a using alias) to call the static method.\r\n- Build error note (2026-01-14): AbstractSumBuilder.Build/Put must be marked virtual so SumBuilder overrides compile (CS0506).\r\n- Build error note (2026-01-15): CS0542 occurs if a class defines a member with the same name as the class (e.g., ApplyIndexMapping.ApplyIndexMapping); rename such methods (e.g., Apply/ApplyInternal) when porting.\r\n- Build error note (2026-01-15): CS1540 occurs when calling protected Tensor.ToString<T> on a base-typed instance; use Tensor.ToStringWith<T>(OutputFormat) to format other tensors with the caller context.\r\n- Build error note (2026-01-15): RCS0055 flags binary expression chains; format multi-line bitwise expressions with each operator on its own line and consistent indentation.\r\nRoslynator RCS0003 requires a blank line between using directives and the namespace declaration
-- Do not use PowerShell to execute Python and do not use Python to execute PowerShell. Use either.
-- Python scripts can mess up line endings in C# files (issues with the difference between \n and \r). Prefer a PowerShell script with a regex for file encoding and line ending fixes.
+- Build error note: Roslynator RCS1085 flagged ExpandUtils.ExpandIndexlessSubproduct backing field; use an auto-implemented get-only property with initializer.
+- Build error note: RCS0063 flagged an extra blank line after an opening brace in ExpandUtils; remove the stray blank line.
+- Build error note: RCS0063 flagged trailing blank lines in Parser.cs; remove extra blank lines at file end to satisfy Roslynator.\r
+- Build error note: ParseToken.GetIndices must return Indices.Indices (not Indices), because Indices is a namespace; this avoids CS0118 and override mismatch CS0508.\r
+- Build error note: Roslynator RCS1111 flags switch cases with multiple statements; wrap the case body in braces.\r
+- Build error note: In ParseToken.cs, Tensors.Sum resolved to the Sum type because Tensors matches a namespace; use NRedberry.Tensors.Tensors.Sum(...) (or a using alias) to call the static method.\r
+- Build error note: AbstractSumBuilder.Build/Put must be marked virtual so SumBuilder overrides compile (CS0506).\r
+- Build error note: CS0542 occurs if a class defines a member with the same name as the class (e.g., ApplyIndexMapping.ApplyIndexMapping); rename such methods (e.g., Apply/ApplyInternal) when porting.\r
+- Build error note: CS1540 occurs when calling protected Tensor.ToString<T> on a base-typed instance; use Tensor.ToStringWith<T>(OutputFormat) to format other tensors with the caller context.\r
+- Build error note: RCS0055 flags binary expression chains; format multi-line bitwise expressions with each operator on its own line and consistent indentation.\r
+- Build error note: StructureOfContractions masks mixed ulong and long, causing CS0019; keep mask types as long (e.g., UpperInfoMask) to match long operands, and expose Contraction as auto-properties to satisfy RCS1085.\r
+- Build error note: Roslynator RCS1085 flagged backing fields for simple storage; use auto-implemented get-only properties (e.g., `private Tensor[] Args { get; }`).\r
+- Build error note: Roslynator RCS1089 flagged `sb.Length -= 1;`; use the decrement operator (`sb.Length--;`) instead.\r
+- Build error note: CS0246 in TensorUtils for `Permutation`; use `NRedberry.Core.Combinatorics.Permutation` (add the correct using or fully qualify).\r
+- Build error note: CS0039 when casting `IIndexMapping` from `MappingsPort` to `Mapping`; use `IndexMappings.CreatePortOfBuffers` and build `Mapping` from `IIndexMappingBuffer` instead.\r
+- Build error note: RCS0054 flagged chained `StringBuilder` calls in `TensorUtils.Info`; start the chain on a new line and align subsequent calls.\r
+- Build error note: RCS1134 flagged a redundant `continue` in `TensorUtils.Count`; remove the dead branch and rely on the inner-loop `break` only.\r
+- Build error note: Roslynator RCS1085 flagged non-auto singleton properties (e.g., TensorWrapperFactory.Instance); use auto-implemented get-only properties with initializers (e.g., `Instance { get; } = new()`).\r
+- Build error note: Roslynator RCS0003 requires a blank line between using directives and the namespace declaration
+- Build error note: JasFactor.Engine was missing, causing CS0117; ensure JasFactor exposes the Engine singleton and implements ITransformation before referencing it.
+- Build error note: CS0104 ambiguous BigInteger/Complex when using System.Numerics alongside JAS and tensor types; use aliases like SystemBigInteger or TensorComplex and avoid unqualified type names.
+- Build error note: CS0029 occurred by reusing a FromChildToParentIterator variable for a FromParentToChildIterator; type the variable as ITreeIterator or use separate variables.
+- Build error note: RCS0013 flags missing blank lines between different declaration kinds; add a blank line between fields and properties.
+- Build error note: RCS1162 flags chained assignments; split variable initialization into separate statements.
+- Build error note: RCS1134 flags redundant continue statements at the end of a loop branch; remove the redundant continue.
+- Build error note: RCS0015 flags blank lines between using directives; keep using directives contiguous and only leave a blank line before the namespace.
+- Build error note: CS0104 can occur when CC is ambiguous between NRedberry.Contexts and NRedberry.Tensors; use an alias or fully qualify the intended CC.
+- Build error note: CS0246 occurs when referencing ProductBuilder in ports; use ScalarsBackedProductBuilder (or TensorBuilder) instead.
+- Build error note: CS0019 occurs when using SimpleIndices.Size as a property; call Size() to get the count.
+- Build error note: RCS1085 flagged the IIndexMappingProvider EmptyProvider property backing field; use an auto-implemented get-only property with initializer instead.
+- Build error note: RCS1146 flagged a null check before RemoveContracted; prefer conditional access like `buffer?.RemoveContracted()` to satisfy the analyzer.
+
+## Roslynator Diagnostics Reference
+
+- RCS1085: Use auto-implemented property (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1085/).
+- RCS1089: Use --/++ operator instead of assignment (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1089/).
+- RCS1058: Use compound assignment (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1058/).
+- RCS1111: Add braces to switch section with multiple statements (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1111/).
+- RCS0054: Fix formatting of a call chain (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0054/).
+- RCS0055: Fix formatting of a binary expression chain (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0055/).
+- RCS0063: Remove unnecessary blank line (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0063/).
+- RCS0003: Add blank line after using directive list (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0003/).
+- RCS0008: Add blank line between closing brace and next statement (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0008/).
+- RCS1134: Remove redundant statement (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1134/).
 
 ## Global usings
 

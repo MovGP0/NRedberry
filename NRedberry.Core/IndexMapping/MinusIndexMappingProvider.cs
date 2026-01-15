@@ -11,11 +11,18 @@ internal sealed class MinusIndexMappingProvider : IndexMappingProviderAbstract
     public MinusIndexMappingProvider(IOutputPort<IIndexMappingBuffer> outputPort)
         : base(outputPort)
     {
-        throw new NotImplementedException();
     }
 
     public override IIndexMappingBuffer? Take()
     {
-        throw new NotImplementedException();
+        if (currentBuffer is null)
+        {
+            return null;
+        }
+
+        IIndexMappingBuffer buffer = currentBuffer;
+        currentBuffer = null;
+        buffer.AddSign(true);
+        return buffer;
     }
 }

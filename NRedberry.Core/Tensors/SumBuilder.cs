@@ -22,16 +22,6 @@ public sealed class SumBuilder : AbstractSumBuilder
     {
     }
 
-    public override void Put(Tensor tensor)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override Tensor Build()
-    {
-        throw new System.NotImplementedException();
-    }
-
     protected override Split Split(Tensor tensor)
     {
         return NRedberry.Tensors.Split.SplitIndexless(tensor);

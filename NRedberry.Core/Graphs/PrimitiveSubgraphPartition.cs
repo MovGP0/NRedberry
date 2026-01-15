@@ -174,7 +174,7 @@ public sealed class PrimitiveSubgraphPartition
         Debug.Assert(pivot >= 0);
 
         int[] links = [NOT_INITIALIZED, NOT_INITIALIZED];
-        int[] contractions = fcs.contractions[pivot];
+        long[] contractions = fcs.contractions[pivot];
         Indices.Indices indices = pc[pivot].Indices;
         int index;
         int toTensorIndex;
@@ -225,7 +225,7 @@ public sealed class PrimitiveSubgraphPartition
         stack.Push(pivot);
         used.Set(pivot, true);
 
-        int[] contractions;
+        long[] contractions;
         Indices.Indices indices;
 
         int currentPivot;
