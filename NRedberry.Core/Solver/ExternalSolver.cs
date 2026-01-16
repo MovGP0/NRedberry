@@ -6,6 +6,7 @@ using NRedberry.Tensors.Iterators;
 using NRedberry.Transformations.Symmetrization;
 using NRedberry.Transformations.Substitutions;
 using TensorCC = NRedberry.Tensors.CC;
+using TensorOps = NRedberry.Tensors.Tensors;
 
 namespace NRedberry.Solver;
 
@@ -75,7 +76,7 @@ public static class ExternalSolver
         int index = -1;
         foreach (var entry in tensorSubstitutions)
         {
-            scalarSubs[++index] = Tensors.Expression(entry.Key, entry.Value);
+            scalarSubs[++index] = TensorOps.Expression(entry.Key, entry.Value);
         }
 
         var fullSub = new SubstitutionTransformation(scalarSubs, true);
@@ -157,7 +158,7 @@ public static class ExternalSolver
                     {
                         if (coef.IsIdentity() && !keepFreeParameters)
                         {
-                            zeroSubs.Add(Tensors.Expression(coef[0], Complex.Zero));
+                            zeroSubs.Add(TensorOps.Expression(coef[0], Complex.Zero));
                         }
                         else
                         {
@@ -191,7 +192,7 @@ public static class ExternalSolver
                 }
                 else
                 {
-                    coefficientsResults[++i] = Tensors.ParseExpression(strLine);
+                    coefficientsResults[++i] = TensorOps.ParseExpression(strLine);
                 }
             }
         }

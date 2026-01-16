@@ -6,15 +6,30 @@ namespace NRedberry.Tensors.Playground;
 
 public sealed class ContentData
 {
-    public static ContentData EmptyInstance { get; } = new(GraphStructureHashed.EmptyInstance, null, [], [], []);
+    public static ContentData EmptyInstance { get; } = new(
+        GraphStructureHashed.EmptyInstance,
+        GraphStructure.EmptyFullContractionsStructure,
+        [],
+        [],
+        []);
+
+    public GraphStructureHashed StructureOfContractionsHashed { get; }
+    public GraphStructure StructureOfContractions { get; }
+    public Tensor[] Data { get; }
+    public short[] StretchIndices { get; }
+    public int[] HashCodes { get; }
 
     public ContentData(
         GraphStructureHashed structureOfContractionsHashed,
-        GraphStructure? structureOfContractions,
+        GraphStructure structureOfContractions,
         Tensor[] data,
         short[] stretchIndices,
         int[] hashCodes)
     {
-        throw new NotImplementedException();
+        StructureOfContractionsHashed = structureOfContractionsHashed;
+        StructureOfContractions = structureOfContractions;
+        Data = data;
+        StretchIndices = stretchIndices;
+        HashCodes = hashCodes;
     }
 }

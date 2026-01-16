@@ -6,39 +6,58 @@ namespace NRedberry.Transformations.Expand;
 /// <summary>
 /// Skeleton port of cc.redberry.core.transformations.expand.AbstractExpandNumeratorDenominatorTransformation.
 /// </summary>
-public abstract class AbstractExpandNumeratorDenominatorTransformation : ITransformation
+public abstract class AbstractExpandNumeratorDenominatorTransformation : TransformationToStringAble
 {
     protected readonly ITransformation[] transformations = [];
 
     protected AbstractExpandNumeratorDenominatorTransformation()
     {
-        throw new NotImplementedException();
+        transformations = [];
     }
 
     protected AbstractExpandNumeratorDenominatorTransformation(ITransformation[] transformations)
     {
-        throw new NotImplementedException();
+        this.transformations = transformations ?? throw new ArgumentNullException(nameof(transformations));
     }
 
     protected AbstractExpandNumeratorDenominatorTransformation(ExpandOptions options)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(options);
+        transformations = options.Simplifications is null ? [] : [options.Simplifications];
     }
 
     public virtual Tensor Transform(Tensor tensor)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(tensor);
+
+        if (tensor is Product or Power)
+        {
+            return ExpandProduct(tensor);
+        }
+
+        if (tensor is Sum sum)
+        {
+            SumBuilder sb = new(sum.Size);
+            foreach (Tensor summand in sum)
+            {
+                sb.Put(Transform(summand));
+            }
+
+            return sb.Build();
+        }
+
+        return tensor;
     }
 
     protected abstract Tensor ExpandProduct(Tensor tensor);
 
     public virtual string ToString(OutputFormat outputFormat)
     {
-        throw new NotImplementedException();
+        return GetType().Name;
     }
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        return ToString(CC.GetDefaultOutputFormat());
     }
 }

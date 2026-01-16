@@ -290,24 +290,37 @@ public override int GetHashCode()
 - Build error note: CS0117 occurs if referencing `IIndexMappingProvider.EmptyProvider`; use `IndexMappingProviderUtil.EmptyProvider` instead.
 - Build error note: CS0246 can occur when using `IOutputPort<>` without `using NRedberry.Concurrent;` (e.g., ProviderFunctions); add the using to resolve the interface.
 - Build error note: RCS1146 also flags null checks before calling `GetSign()` on nullable mapping buffers; use conditional access like `buffer?.GetSign()` to satisfy the analyzer.
+- Build error note: RCS1146 flagged null checks before calling `EqualsRegardlessOrder`; use conditional access like `_indices?.EqualsRegardlessOrder(...) != true` to satisfy the analyzer.
 - Build error note: CS0403 occurs when returning null for generic number token parsers; return `default!` (or `default(T)`) to represent "no match" for `T`.
 - Build error note: RCS1132 flags overrides that only forward to the base implementation; remove the redundant override instead of calling `base`.
 - Build error note: RCS0054 flags multi-line call chains; split construction and method calls into separate statements.
 - Build error note: ParserSimpleTensor.cs used SimpleIndices without `using NRedberry.Indices;`, causing CS0246; add the correct using when referencing index types.
 - Build error note: RCS1155 flags string comparisons without StringComparison; use string.Equals(..., StringComparison.OrdinalIgnoreCase) instead of ToLower/ToUpper comparisons.
+- Build error note: CS8859 occurs if a record defines a member named `Clone`; rename the method (e.g., `Copy`) or use a non-record type to avoid the restriction.
+- Build error note: RCS1006 flags nested `if` inside `else`; merge into `else if` to satisfy Roslynator.
+- Build error note: ExternalSolver.cs used `Tensors.Expression`/`Tensors.ParseExpression` and `Tensors` resolved to the namespace, causing CS1955/CS0234; use `NRedberry.Tensors.Tensors` (or a using alias) when calling static tensor helpers.
+- Build error note: RCS0055/RCS0027 can flag long string concatenation chains; prefer `StringBuilder` (or keep each `+` on its own line with consistent indentation).
+- Build error note: FrobeniusNumber.cs used Java's `UnsupportedOperationException` (CS0246) and missed a blank line between const and static fields (RCS0013); use `NotSupportedException` and keep a blank line between declaration kinds.
 
 ## Roslynator Diagnostics Reference
 
+- RCS0013: Add blank line between declarations (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0013/).
+- RCS0015: Remove blank line between using directives (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0015/).
 - RCS1085: Use auto-implemented property (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1085/).
 - RCS1089: Use --/++ operator instead of assignment (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1089/).
 - RCS1058: Use compound assignment (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1058/).
 - RCS1111: Add braces to switch section with multiple statements (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1111/).
 - RCS0054: Fix formatting of a call chain (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0054/).
 - RCS0055: Fix formatting of a binary expression chain (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0055/).
+- RCS0061: Add blank lines between switch sections (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0061/).
 - RCS0063: Remove unnecessary blank line (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0063/).
 - RCS0003: Add blank line after using directive list (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0003/).
 - RCS0008: Add blank line between closing brace and next statement (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0008/).
 - RCS1134: Remove redundant statement (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1134/).
+- RCS1132: Remove redundant override (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1132/).
+- RCS1146: Use conditional access (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1146/).
+- RCS1155: Use StringComparison (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1155/).
+- RCS1162: Avoid chained assignments (docs: https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1162/).
 
 ## Global usings
 

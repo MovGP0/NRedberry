@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace NRedberry.Tensors.Playground;
 
 /*
@@ -12,17 +14,22 @@ public abstract class IAlgorithm(string name)
 
     public long TimingMillis()
     {
-        throw new NotImplementedException();
+        return Timing * 1000 / Stopwatch.Frequency;
     }
 
     public ProductData Calc(Tensor tensor)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(tensor);
+
+        long start = Stopwatch.GetTimestamp();
+        ProductData data = CalcCore(tensor);
+        Timing += Stopwatch.GetTimestamp() - start;
+        return data;
     }
 
     public void Restart()
     {
-        throw new NotImplementedException();
+        Timing = 0;
     }
 
     protected abstract ProductData CalcCore(Tensor tensor);

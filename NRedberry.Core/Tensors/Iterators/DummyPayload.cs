@@ -8,6 +8,6 @@ public sealed class DummyPayload<T> : Payload<T> where T : Payload<T>
 {
     public Tensor OnLeaving(StackPosition<T> stackPosition)
     {
-        throw new NotImplementedException();
+        return null!;
     }
 }

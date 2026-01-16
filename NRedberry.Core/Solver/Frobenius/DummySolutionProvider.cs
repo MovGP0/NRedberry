@@ -8,21 +8,36 @@ internal sealed class DummySolutionProvider : SolutionProvider
 {
     public DummySolutionProvider(int[] solution, int[] currentRemainder)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(solution);
+        ArgumentNullException.ThrowIfNull(currentRemainder);
+
+        _solution = solution;
+        _currentRemainder = currentRemainder;
     }
 
     public bool Tick()
     {
-        throw new NotImplementedException();
+        return _solution is not null;
     }
 
     public int[] Take()
     {
-        throw new NotImplementedException();
+        if (_solution is null)
+        {
+            return null!;
+        }
+
+        var ret = _solution;
+        _solution = null;
+        return ret;
     }
 
     public int[] CurrentRemainders()
     {
-        throw new NotImplementedException();
+        return _currentRemainder;
     }
+
+    private int[]? _solution;
+
+    private int[] _currentRemainder;
 }

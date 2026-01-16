@@ -8,8 +8,14 @@ public sealed class GraphStructureHashed
 {
     public static GraphStructureHashed EmptyInstance { get; } = new([], [], []);
 
+    public short[] StretchIndices { get; }
+    public long[] FreeContraction { get; }
+    public long[][] Contractions { get; }
+
     public GraphStructureHashed(short[] stretchIndices, long[] freeContraction, long[][] contractions)
     {
-        throw new NotImplementedException();
+        StretchIndices = stretchIndices;
+        FreeContraction = freeContraction;
+        Contractions = contractions;
     }
 }

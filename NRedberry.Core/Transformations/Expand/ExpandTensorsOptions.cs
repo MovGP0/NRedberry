@@ -9,6 +9,6 @@ public sealed class ExpandTensorsOptions : ExpandOptions
 
     public ExpandTensorsOptions()
     {
-        throw new NotImplementedException();
+        LeaveScalars = false;
     }
 }

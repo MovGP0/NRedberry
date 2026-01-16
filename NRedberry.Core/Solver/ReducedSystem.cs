@@ -10,21 +10,33 @@ public sealed class ReducedSystem
 {
     public ReducedSystem(Expression[] equations, SimpleTensor[] unknownCoefficients, Expression[] generalSolutions)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(equations);
+        ArgumentNullException.ThrowIfNull(unknownCoefficients);
+        ArgumentNullException.ThrowIfNull(generalSolutions);
+
+        Equations = equations;
+        UnknownCoefficients = unknownCoefficients;
+        GeneralSolutions = generalSolutions;
     }
 
     public Expression[] GetEquations()
     {
-        throw new NotImplementedException();
+        return (Expression[])Equations.Clone();
     }
 
     public SimpleTensor[] GetUnknownCoefficients()
     {
-        throw new NotImplementedException();
+        return (SimpleTensor[])UnknownCoefficients.Clone();
     }
 
     public Expression[] GetGeneralSolutions()
     {
-        throw new NotImplementedException();
+        return (Expression[])GeneralSolutions.Clone();
     }
+
+    private Expression[] Equations { get; }
+
+    private SimpleTensor[] UnknownCoefficients { get; }
+
+    private Expression[] GeneralSolutions { get; }
 }

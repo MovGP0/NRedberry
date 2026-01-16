@@ -8,18 +8,45 @@ internal abstract class SolutionProviderAbstract : SolutionProvider
 {
     protected SolutionProviderAbstract(SolutionProvider provider, int position, int[] coefficients)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(provider);
+        ArgumentNullException.ThrowIfNull(coefficients);
+
+        Provider = provider;
+        Position = position;
+        Coefficients = coefficients;
     }
 
     public virtual bool Tick()
     {
-        throw new NotImplementedException();
+        CurrentSolution = Provider.Take();
+        CurrentRemainder = Provider.CurrentRemainders();
+        CurrentCounter = 0;
+        return CurrentSolution is not null;
     }
 
     public virtual int[] CurrentRemainders()
     {
-        throw new NotImplementedException();
+        var remainder = CurrentRemainder!;
+        var remainders = new int[Coefficients.Length];
+        for (int i = 0; i < Coefficients.Length; ++i)
+        {
+            remainders[i] = remainder[i] - Coefficients[i] * (CurrentCounter - 1);
+        }
+
+        return remainders;
     }
 
     public abstract int[] Take();
+
+    protected int Position { get; }
+
+    protected int[] Coefficients { get; }
+
+    protected int[]? CurrentSolution { get; set; }
+
+    protected int CurrentCounter { get; set; }
+
+    protected int[]? CurrentRemainder { get; set; }
+
+    private SolutionProvider Provider { get; }
 }

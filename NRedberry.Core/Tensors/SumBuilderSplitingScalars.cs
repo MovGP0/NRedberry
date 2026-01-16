@@ -1,3 +1,5 @@
+using NRedberry.Numbers;
+
 namespace NRedberry.Tensors;
 
 /*
@@ -6,6 +8,15 @@ namespace NRedberry.Tensors;
 
 public sealed class SumBuilderSplitingScalars : AbstractSumBuilder
 {
+    internal SumBuilderSplitingScalars(
+        Dictionary<int, List<FactorNode>> summands,
+        Complex complex,
+        Indices.Indices? indices,
+        int[]? sortedFreeIndices)
+        : base(summands, complex, indices, sortedFreeIndices)
+    {
+    }
+
     public SumBuilderSplitingScalars()
     {
     }
@@ -15,23 +26,27 @@ public sealed class SumBuilderSplitingScalars : AbstractSumBuilder
     {
     }
 
-    public override Tensor Build()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void Put(Tensor tensor)
-    {
-        throw new NotImplementedException();
-    }
-
     protected override Split Split(Tensor tensor)
     {
-        throw new NotImplementedException();
+        return NRedberry.Tensors.Split.SplitScalars(tensor);
     }
 
     public override TensorBuilder Clone()
     {
-        throw new NotImplementedException();
+        var summands = new Dictionary<int, List<FactorNode>>(Summands.Count);
+        foreach (var pair in Summands)
+        {
+            var vals = pair.Value;
+            var cloned = new List<FactorNode>(vals.Count);
+            for (int i = 0; i < vals.Count; i++)
+            {
+                cloned.Add(vals[i].Clone());
+            }
+
+            summands[pair.Key] = cloned;
+        }
+
+        int[]? sortedNames = SortedNames is null ? null : (int[])SortedNames.Clone();
+        return new SumBuilderSplitingScalars(summands, Complex, Indices, sortedNames);
     }
 }

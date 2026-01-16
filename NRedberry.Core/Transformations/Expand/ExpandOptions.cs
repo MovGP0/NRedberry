@@ -1,4 +1,5 @@
 ﻿using NRedberry.Tensors.Iterators;
+using NRedberry.Transformations;
 using NRedberry.Transformations.Symmetrization;
 
 namespace NRedberry.Transformations.Expand;
@@ -13,6 +14,7 @@ public class ExpandOptions
 
     public ExpandOptions()
     {
-        throw new NotImplementedException();
+        Simplifications = Transformation.Identity;
+        TraverseGuide = new DefaultExpandTraverseGuide();
     }
 }
