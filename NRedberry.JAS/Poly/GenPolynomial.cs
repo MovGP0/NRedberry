@@ -14,7 +14,8 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.poly.GenPolynomial
 /// </remarks>
-public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial<C>> where C : RingElem<C>
+public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial<C>>, ICloneable, IEquatable<GenPolynomial<C>>
+    where C : RingElem<C>
 {
     internal readonly GenPolynomialRing<C> Ring;
     internal readonly SortedDictionary<ExpVector, C> Terms;
@@ -86,6 +87,10 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
     {
         return new GenPolynomial<C>(Ring, Terms);
     }
+
+    public GenPolynomial<C> Copy() => Clone();
+
+    object ICloneable.Clone() => Clone();
 
     /// <summary>
     /// Formats the polynomial with its ring information and listed terms.
@@ -281,14 +286,14 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
     /// <summary>
     /// Compares by polynomial value using <see cref="CompareTo"/>.
     /// </summary>
-    public override bool Equals(object? obj)
+    public bool Equals(GenPolynomial<C>? other)
     {
-        if (ReferenceEquals(this, obj))
+        if (ReferenceEquals(this, other))
         {
             return true;
         }
 
-        if (obj is not GenPolynomial<C> other)
+        if (other is null)
         {
             return false;
         }
@@ -319,6 +324,11 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         return true;
     }
 
+    public override bool Equals(object? obj)
+    {
+        return obj is GenPolynomial<C> other && Equals(other);
+    }
+
     /// <summary>
     /// Combines the hash of the ring and term map for dictionary lookups.
     /// </summary>
@@ -333,6 +343,26 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         }
 
         return hashCode.ToHashCode();
+    }
+
+    public static bool operator ==(GenPolynomial<C>? left, GenPolynomial<C>? right)
+    {
+        if (ReferenceEquals(left, right))
+        {
+            return true;
+        }
+
+        if (left is null || right is null)
+        {
+            return false;
+        }
+
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(GenPolynomial<C>? left, GenPolynomial<C>? right)
+    {
+        return !(left == right);
     }
 
     /// <summary>

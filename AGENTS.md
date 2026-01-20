@@ -301,6 +301,33 @@ public override int GetHashCode()
 - Build error note: ExternalSolver.cs used `Tensors.Expression`/`Tensors.ParseExpression` and `Tensors` resolved to the namespace, causing CS1955/CS0234; use `NRedberry.Tensors.Tensors` (or a using alias) when calling static tensor helpers.
 - Build error note: RCS0055/RCS0027 can flag long string concatenation chains; prefer `StringBuilder` (or keep each `+` on its own line with consistent indentation).
 - Build error note: FrobeniusNumber.cs used Java's `UnsupportedOperationException` (CS0246) and missed a blank line between const and static fields (RCS0013); use `NotSupportedException` and keep a blank line between declaration kinds.
+- Porting note: Combinatoric.cs replaces Java `UnsupportedOperationException` with `NotSupportedException` (no direct C# equivalent).
+- Porting note: ModInteger.cs implements modular inverse via a custom extended-GCD helper because `System.Numerics.BigInteger` lacks `modInverse`.
+- Porting note: ModLongRing.cs adds `BigIntegerExtensions.IsProbablePrime` and `GetBitLength` to replace Java `BigInteger.isProbablePrime`/`bitLength` (no direct .NET equivalents).
+- Porting note: ModularNotInvertibleException.cs stores factor payloads as `object?` because the Java `GcdRingElem` type parameters cannot be expressed on an exception type in C#.
+- Porting note: AlgebraicNotInvertibleException.cs uses `object?` for polynomial factors because the original `GenPolynomial` generic payload cannot be carried by a non-generic exception.
+- Build error note: InverseTensor.cs referenced missing `TensorGenerator` (CS0103); ensure `NRedberry.TensorGenerators.TensorGenerator` is ported (or stubbed) before solver classes call `GenerateStructure`.
+- Build error note: `TensorGenerator.GenerateStructure` requires `SimpleIndices`; pass `SimpleTensor.SimpleIndices` (not `Indices`) to avoid CS1503.
+- Build error note: RCS0053 flagged base type formatting in `AlgebraicNumberRing.cs`; keep base types on a single line (or align per Roslynator) to avoid formatting errors.
+- Porting note: `ComplexRing.algebraicRing` in Java uses `pfac.getONE()`; in C# use `GenPolynomialRing.GetOneCoefficient()` with `Sum(...)` to build `x^2 + 1` since there is no instance `getONE()` for polynomials.
+- Porting note: `AlgebraicNumberRing.Depth/TotalExtensionDegree` use reflection + `dynamic` to detect nested `AlgebraicNumberRing<>` because Java relied on raw `instanceof` checks that don't map cleanly to generic C# types.
+- Build error note: FactorOutNumber.cs failed with CS0246 for `TransformationToStringAble`; add `using NRedberry.Transformations.Symmetrization;` (the interface lives in that namespace).
+- Build error note: BigComplex.cs hit RCS1146 for null checks; use conditional access like `S?.IsZero() != false` instead of `S is null || S.IsZero()`.
+- Build error note: Renaming `ModLongRing.MAX_LONG` to `MaxLong` requires updating all references (e.g., Ufd/HenselUtil* and GreatestCommonDivisorModular) to avoid CS0117.
+- Porting note: FactorOutNumber replaces Java `Product.getFactor()` with the `Product.Factor` property, Java `Complex.IMAGINARY_UNIT` with `Complex.ImaginaryOne`, and Java `BigInteger.gcd(...)` with `BigInteger.GreatestCommonDivisor(...)`.
+- Porting note: SingularFactorizationEngine replaces Java `ProcessBuilder`/`BufferedReader`/`PrintStream` with `ProcessStartInfo` + `Process.StandardOutput`/`StandardInput` and maps `AutoCloseable`/`Closeable` to `IDisposable` plus a `Close()` wrapper.
+- Porting note: SingularFactorizationEngine mirrors Java `toArray(new SimpleTensor[1])` by ensuring a minimum array length and emitting `"null"` for empty variable lists when building the Singular ring.
+- Porting note: BigComplex replaces Java public fields `re/im` with `Re`/`Im` get-only properties, renames `ZERO/ONE/I` to `ZeroValue`/`OneValue`/`ImaginaryUnit` to follow PascalCase and avoid clashes with instance properties, and adds `IEquatable<BigComplex>` plus `==/!=` operators for C# equality semantics.
+- Porting note: BigInteger replaces Java public field `val` with a get-only `Val` property, renames the static random generator to `s_random`, prefixes iterator state with `_` for C# field naming, and adds `IEquatable<BigInteger>` plus `==/!=` operators.
+- Porting note: BigRational replaces Java public fields `num/den` with get-only `Num`/`Den` properties, renames the static random generator to `s_random`, and adds `IEquatable<BigRational>` plus `==/!=` operators.
+- Porting note: Java `Tensors.setIndices(SimpleTensor, SimpleIndices)` has no direct C# equivalent; use `Tensor.SimpleTensor(name, IndicesFactory.CreateSimple(descriptor.GetSymmetries(), indices))` to rebuild with indices.
+- Porting note: Java `TIntHashSet` replaced with `HashSet<int>` in C# when a specialized int set is unavailable.
+- Porting note: Java `Product.getDataSubProduct()` is not exposed in C#; use `product.Data.Length == 1 && product.Data[0] is SimpleTensor` when only the simple-tensor data subproduct check is needed.
+- Porting note: Java `TIntObjectHashMap` is replaced with `Dictionary<int, List<T>>` when porting collect/aggregation logic.
+- Porting note: Java `IntArrayList` uses `List<int>` in C# when only simple append/clear/to-array behavior is needed.
+- Build error note: CollectTransformation had a method named `Split` conflicting with the nested `Split` class (CS0102); rename the method (e.g., `SplitTerm`) to avoid name collisions.
+- Porting note: Java `Product.getIndexlessSubProduct()` is not available in C#; re-create it from `Product.Factor` and `Product.IndexlessData` when needed (e.g., ExpandTensorsTransformation).
+- Build error note: ExpandTensorsTransformation missed `using NRedberry.Numbers` for `Complex` (CS0103); add the correct using when referencing numeric types.
 
 ## Roslynator Diagnostics Reference
 

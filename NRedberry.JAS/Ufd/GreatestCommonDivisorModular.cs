@@ -378,7 +378,7 @@ public class GreatestCommonDivisorModular<MOD>(bool simple) : GreatestCommonDivi
         factory = null;
         if (typeof(MOD) == typeof(ModLong))
         {
-            if (ModLongRing.MAX_LONG.CompareTo(prime.GetVal()) <= 0)
+            if (ModLongRing.MaxLong.CompareTo(prime.GetVal()) <= 0)
             {
                 return false;
             }

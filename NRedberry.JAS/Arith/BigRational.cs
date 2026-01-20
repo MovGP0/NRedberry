@@ -10,19 +10,19 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.arith.BigRational
 /// </remarks>
-public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRational>, ICloneable
+public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRational>, ICloneable, IEquatable<BigRational>
 {
     /// <summary>
     /// Numerator part of the data structure.
     /// </summary>
-    public readonly System.Numerics.BigInteger Num;
+    public System.Numerics.BigInteger Num { get; }
 
     /// <summary>
     /// Denominator part of the data structure.
     /// </summary>
-    public readonly System.Numerics.BigInteger Den;
+    public System.Numerics.BigInteger Den { get; }
 
-    private static readonly Random random = new();
+    private static readonly Random s_random = new();
 
     /// <summary>
     /// The Constant 0.
@@ -279,15 +279,39 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
     /// <summary>
     /// Comparison with any other object.
     /// </summary>
-    public override bool Equals(object? b)
+    public bool Equals(BigRational? other)
     {
-        if (b is not BigRational br)
+        if (other is null)
         {
             return false;
         }
 
-        return Num.Equals(br.Num) && Den.Equals(br.Den);
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return Num.Equals(other.Num) && Den.Equals(other.Den);
     }
+
+    public override bool Equals(object? obj) => obj is BigRational other && Equals(other);
+
+    public static bool operator ==(BigRational? left, BigRational? right)
+    {
+        if (ReferenceEquals(left, right))
+        {
+            return true;
+        }
+
+        if (left is null || right is null)
+        {
+            return false;
+        }
+
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(BigRational? left, BigRational? right) => !(left == right);
 
     /// <summary>
     /// Hash code for this BigRational.
@@ -334,7 +358,7 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
     /// </summary>
     public int CompareTo(BigRational? S)
     {
-        if (S == null)
+        if (S is null)
             return 1;
 
         if (Equals(Zero))
@@ -458,7 +482,7 @@ public sealed class BigRational : GcdRingElem<BigRational>, RingFactory<BigRatio
     /// <summary>
     /// Rational number, random.
     /// </summary>
-    public BigRational Random(int n) => Random(n, random);
+    public BigRational Random(int n) => Random(n, s_random);
 
     /// <summary>
     /// Rational number, random.

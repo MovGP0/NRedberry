@@ -43,7 +43,7 @@ public static partial class HenselUtil
         if (factorCount == 1)
         {
             GenPolynomial<MOD> factor = F[0];
-            ModularRingFactory<MOD> liftedFactory = ModLongRing.MAX_LONG.CompareTo(modulus.Val) > 0
+            ModularRingFactory<MOD> liftedFactory = ModLongRing.MaxLong.CompareTo(modulus.Val) > 0
                 ? (ModularRingFactory<MOD>)(object)new ModLongRing(modulus.Val)
                 : (ModularRingFactory<MOD>)(object)new ModIntegerRing(modulus.Val);
             GenPolynomialRing<MOD> liftedRing = CreatePolynomialRingFromTemplate(liftedFactory, integerRing);
@@ -118,7 +118,7 @@ public static partial class HenselUtil
         }
 
         BigInteger finalModulus = Power<BigInteger>.PositivePower(baseModulus, k);
-        currentFactory = ModLongRing.MAX_LONG.CompareTo(finalModulus.Val) > 0
+        currentFactory = ModLongRing.MaxLong.CompareTo(finalModulus.Val) > 0
             ? (ModularRingFactory<MOD>)(object)new ModLongRing(finalModulus.Val)
             : (ModularRingFactory<MOD>)(object)new ModIntegerRing(finalModulus.Val);
         GenPolynomialRing<MOD> finalRing = CreatePolynomialRingFromTemplate(currentFactory, integerRing);

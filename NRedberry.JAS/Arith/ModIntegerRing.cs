@@ -9,13 +9,13 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.arith.ModIntegerRing
 /// </remarks>
-public sealed class ModIntegerRing : ModularRingFactory<ModInteger>, IEnumerable<ModInteger>, ICloneable
+public sealed class ModIntegerRing : ModularRingFactory<ModInteger>, IEnumerable<ModInteger>, ICloneable, IEquatable<ModIntegerRing>
 {
-    public readonly BigInteger Modul;
+    public BigInteger Modul { get; }
 
-    private static readonly Random random = new();
+    private static readonly Random s_random = new();
 
-    private int isField = -1;
+    private int _isField = -1;
 
     public ModIntegerRing(BigInteger m)
     {
@@ -26,7 +26,7 @@ public sealed class ModIntegerRing : ModularRingFactory<ModInteger>, IEnumerable
     public ModIntegerRing(BigInteger m, bool isFieldArg)
         : this(m)
     {
-        isField = isFieldArg ? 1 : 0;
+        _isField = isFieldArg ? 1 : 0;
     }
 
     public BigInteger GetModul() => Modul;
@@ -47,7 +47,7 @@ public sealed class ModIntegerRing : ModularRingFactory<ModInteger>, IEnumerable
         return new ModInteger(this, c.Val);
     }
 
-    public ModIntegerRing Clone() => isField switch
+    public ModIntegerRing Clone() => _isField switch
     {
         1 => new(Modul, true),
         0 => new(Modul, false),
@@ -56,7 +56,11 @@ public sealed class ModIntegerRing : ModularRingFactory<ModInteger>, IEnumerable
 
     object ICloneable.Clone() => Clone();
 
-    public static ModInteger Clone(ModInteger m) => m.Clone();
+    public static ModInteger Clone(ModInteger m)
+    {
+        ArgumentNullException.ThrowIfNull(m);
+        return m.Clone();
+    }
 
     public ModInteger Zero => new(this, BigInteger.Zero);
 
@@ -72,12 +76,12 @@ public sealed class ModIntegerRing : ModularRingFactory<ModInteger>, IEnumerable
 
     public bool IsField()
     {
-        if (isField > 0)
+        if (_isField > 0)
         {
             return true;
         }
 
-        if (isField == 0)
+        if (_isField == 0)
         {
             return false;
         }
@@ -85,11 +89,11 @@ public sealed class ModIntegerRing : ModularRingFactory<ModInteger>, IEnumerable
         System.Numerics.BigInteger modulus = Modul.Val;
         if (modulus.IsProbablePrime((int)modulus.GetBitLength()))
         {
-            isField = 1;
+            _isField = 1;
             return true;
         }
 
-        isField = 0;
+        _isField = 0;
         return false;
     }
 
@@ -108,7 +112,7 @@ public sealed class ModIntegerRing : ModularRingFactory<ModInteger>, IEnumerable
 
     public ModInteger FromInteger(long a) => new(this, a);
 
-    public ModInteger Random(int n) => Random(n, random);
+    public ModInteger Random(int n) => Random(n, s_random);
 
     public ModInteger Random(int n, Random rnd)
     {
@@ -157,20 +161,26 @@ public sealed class ModIntegerRing : ModularRingFactory<ModInteger>, IEnumerable
 
     public override string ToString() => " bigMod(" + Modul + ")";
 
-    public override bool Equals(object? b)
-    {
-        if (ReferenceEquals(this, b))
-        {
-            return true;
-        }
+    public override bool Equals(object? b) => Equals(b as ModIntegerRing);
 
-        if (b is not ModIntegerRing other)
+    public bool Equals(ModIntegerRing? other)
+    {
+        if (ReferenceEquals(null, other))
         {
             return false;
         }
 
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
         return Modul.CompareTo(other.Modul) == 0;
     }
+
+    public static bool operator ==(ModIntegerRing? left, ModIntegerRing? right) => Equals(left, right);
+
+    public static bool operator !=(ModIntegerRing? left, ModIntegerRing? right) => !Equals(left, right);
 
     public override int GetHashCode() => Modul.GetHashCode();
 
@@ -181,37 +191,37 @@ public sealed class ModIntegerRing : ModularRingFactory<ModInteger>, IEnumerable
 
 internal sealed class ModIntegerEnumerator : IEnumerator<ModInteger>
 {
-    private BigInteger curr;
-    private readonly ModIntegerRing ring;
-    private ModInteger? current;
+    private BigInteger _curr;
+    private readonly ModIntegerRing _ring;
+    private ModInteger? _current;
 
     public ModIntegerEnumerator(ModIntegerRing ring)
     {
         ArgumentNullException.ThrowIfNull(ring);
-        this.ring = ring;
-        curr = BigInteger.Zero;
+        _ring = ring;
+        _curr = BigInteger.Zero;
     }
 
-    public ModInteger Current => current ?? throw new InvalidOperationException("Enumeration has not started.");
+    public ModInteger Current => _current ?? throw new InvalidOperationException("Enumeration has not started.");
 
     object IEnumerator.Current => Current;
 
     public bool MoveNext()
     {
-        if (curr.CompareTo(ring.Modul) >= 0)
+        if (_curr.CompareTo(_ring.Modul) >= 0)
         {
             return false;
         }
 
-        current = new ModInteger(ring, curr);
-        curr += BigInteger.One;
+        _current = new ModInteger(_ring, _curr);
+        _curr += BigInteger.One;
         return true;
     }
 
     public void Reset()
     {
-        curr = BigInteger.Zero;
-        current = null;
+        _curr = BigInteger.Zero;
+        _current = null;
     }
 
     public void Dispose()

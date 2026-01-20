@@ -9,24 +9,24 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.arith.ModLongRing
 /// </remarks>
-public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLong>
+public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLong>, IEquatable<ModLongRing>
 {
     /// <summary>
     /// Module part of the factory data structure.
     /// </summary>
-    public readonly long Modul;
+    public long Modul { get; }
 
-    private static readonly Random random = new();
+    private static readonly Random s_random = new();
 
     /// <summary>
     /// Indicator if this ring is a field.
     /// </summary>
-    private int isField = -1;
+    private int _isField = -1;
 
     /// <summary>
     /// maximal representable integer.
     /// </summary>
-    public static readonly System.Numerics.BigInteger MAX_LONG = new(int.MaxValue);
+    public static readonly System.Numerics.BigInteger MaxLong = new(int.MaxValue);
 
     /// <summary>
     /// The constructor creates a ModLongRing object from a long integer as module part.
@@ -45,7 +45,7 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
     public ModLongRing(long m, bool isFieldArg)
     {
         Modul = m;
-        isField = isFieldArg ? 1 : 0;
+        _isField = isFieldArg ? 1 : 0;
     }
 
     /// <summary>
@@ -55,7 +55,7 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
     public ModLongRing(System.Numerics.BigInteger m)
         : this((long)m)
     {
-        if (MAX_LONG.CompareTo(m) <= 0)
+        if (MaxLong.CompareTo(m) <= 0)
         {
             throw new ArgumentException("modul to large for long " + m);
         }
@@ -69,7 +69,7 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
     public ModLongRing(System.Numerics.BigInteger m, bool isFieldArg)
         : this((long)m, isFieldArg)
     {
-        if (MAX_LONG.CompareTo(m) <= 0)
+        if (MaxLong.CompareTo(m) <= 0)
         {
             throw new ArgumentException("modul to large for long " + m);
         }
@@ -94,9 +94,17 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
     /// <summary>
     /// Copy ModLong element c.
     /// </summary>
-    public ModLong Copy(ModLong c) => new(this, c.Val);
+    public ModLong Copy(ModLong c)
+    {
+        ArgumentNullException.ThrowIfNull(c);
+        return new ModLong(this, c.Val);
+    }
 
-    public static ModLong Clone(ModLong c) => c.Clone();
+    public static ModLong Clone(ModLong c)
+    {
+        ArgumentNullException.ThrowIfNull(c);
+        return c.Clone();
+    }
 
     /// <summary>
     /// Get the zero element.
@@ -139,12 +147,12 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
     /// <returns>true if module is prime, else false.</returns>
     public bool IsField()
     {
-        if (isField > 0)
+        if (_isField > 0)
         {
             return true;
         }
 
-        if (isField == 0)
+        if (_isField == 0)
         {
             return false;
         }
@@ -152,11 +160,11 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
         System.Numerics.BigInteger m = new System.Numerics.BigInteger(Modul);
         if (m.IsProbablePrime((int)m.GetBitLength()))
         {
-            isField = 1;
+            _isField = 1;
             return true;
         }
 
-        isField = 0;
+        _isField = 0;
         return false;
     }
 
@@ -183,13 +191,14 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
     /// <summary>
     /// ModLong random.
     /// </summary>
-    public ModLong Random(int n) => Random(n, random);
+    public ModLong Random(int n) => Random(n, s_random);
 
     /// <summary>
     /// ModLong random.
     /// </summary>
     public ModLong Random(int n, Random rnd)
     {
+        ArgumentNullException.ThrowIfNull(rnd);
         byte[] bytes = new byte[(n + 7) / 8];
         rnd.NextBytes(bytes);
         System.Numerics.BigInteger v = new System.Numerics.BigInteger(bytes);
@@ -201,6 +210,9 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
     /// </summary>
     public ModLong ChineseRemainder(ModLong c, ModLong ci, ModLong a)
     {
+        ArgumentNullException.ThrowIfNull(c);
+        ArgumentNullException.ThrowIfNull(ci);
+        ArgumentNullException.ThrowIfNull(a);
         ModLong b = a.Ring.FromInteger(c.Val);
         ModLong d = a.Subtract(b);
         if (d.IsZero())
@@ -222,20 +234,31 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
     /// <summary>
     /// Comparison with any other object.
     /// </summary>
-    public override bool Equals(object? b)
+    public override bool Equals(object? b) => Equals(b as ModLongRing);
+
+    public bool Equals(ModLongRing? other)
     {
-        if (b is not ModLongRing m)
+        if (ReferenceEquals(null, other))
         {
             return false;
         }
 
-        return Modul == m.Modul;
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return Modul == other.Modul;
     }
+
+    public static bool operator ==(ModLongRing? left, ModLongRing? right) => Equals(left, right);
+
+    public static bool operator !=(ModLongRing? left, ModLongRing? right) => !Equals(left, right);
 
     /// <summary>
     /// Hash code for this ModLongRing.
     /// </summary>
-    public override int GetHashCode() => (int)Modul;
+    public override int GetHashCode() => Modul.GetHashCode();
 
     /// <summary>
     /// Get a ModLong iterator.
@@ -251,39 +274,40 @@ public sealed class ModLongRing : ModularRingFactory<ModLong>, IEnumerable<ModLo
 /// </summary>
 internal class ModLongIterator : IEnumerator<ModLong>
 {
-    private long curr;
-    private readonly ModLongRing ring;
-    private ModLong? current;
+    private long _curr;
+    private readonly ModLongRing _ring;
+    private ModLong? _current;
 
     /// <summary>
     /// ModLong iterator constructor.
     /// </summary>
     public ModLongIterator(ModLongRing fac)
     {
-        curr = 0L;
-        ring = fac;
+        ArgumentNullException.ThrowIfNull(fac);
+        _curr = 0L;
+        _ring = fac;
     }
 
-    public ModLong Current => current!;
+    public ModLong Current => _current!;
 
     object IEnumerator.Current => Current;
 
     public bool MoveNext()
     {
-        if (curr >= ring.Modul)
+        if (_curr >= _ring.Modul)
         {
             return false;
         }
 
-        current = new ModLong(ring, curr);
-        curr++;
+        _current = new ModLong(_ring, _curr);
+        _curr++;
         return true;
     }
 
     public void Reset()
     {
-        curr = 0L;
-        current = null;
+        _curr = 0L;
+        _current = null;
     }
 
     public void Dispose()
@@ -299,11 +323,19 @@ internal static class BigIntegerExtensions
     public static bool IsProbablePrime(this System.Numerics.BigInteger value, int bitLength)
     {
         if (value < 2)
+        {
             return false;
+        }
+
         if (value == 2 || value == 3)
+        {
             return true;
+        }
+
         if (value % 2 == 0)
+        {
             return false;
+        }
 
         // Miller-Rabin primality test
         System.Numerics.BigInteger d = value - 1;
@@ -316,7 +348,7 @@ internal static class BigIntegerExtensions
 
         // Number of rounds based on bit length
         int k = Math.Max(bitLength / 16, 5);
-        Random rnd = new Random();
+        Random rnd = new();
 
         for (int i = 0; i < k; i++)
         {
@@ -331,7 +363,9 @@ internal static class BigIntegerExtensions
 
             System.Numerics.BigInteger x = System.Numerics.BigInteger.ModPow(a, d, value);
             if (x == 1 || x == value - 1)
+            {
                 continue;
+            }
 
             bool composite = true;
             for (int r = 0; r < s - 1; r++)
@@ -345,7 +379,9 @@ internal static class BigIntegerExtensions
             }
 
             if (composite)
+            {
                 return false;
+            }
         }
 
         return true;

@@ -9,17 +9,17 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.arith.ModInteger
 /// </remarks>
-public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
+public sealed class ModInteger : GcdRingElem<ModInteger>, Modular, ICloneable, IEquatable<ModInteger>
 {
     /// <summary>
     /// ModIntegerRing reference.
     /// </summary>
-    public readonly ModIntegerRing Ring;
+    public ModIntegerRing Ring { get; }
 
     /// <summary>
     /// Value part of the element data structure.
     /// </summary>
-    public readonly BigInteger Val;
+    public BigInteger Val { get; }
 
     /// <summary>
     /// The constructor creates a ModInteger object from a ModIntegerRing and a value part.
@@ -92,6 +92,10 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
     /// </summary>
     public ModInteger Clone() => new(Ring, Val);
 
+    public ModInteger Copy() => Clone();
+
+    object ICloneable.Clone() => Clone();
+
     /// <summary>
     /// Is ModInteger number zero.
     /// </summary>
@@ -133,7 +137,10 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
     public int CompareTo(ModInteger? b)
     {
         if (b == null)
+        {
             return 1;
+        }
+
         BigInteger v = b.Val;
         if (Ring != b.Ring)
         {
@@ -146,15 +153,26 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular
     /// <summary>
     /// Comparison with any other object.
     /// </summary>
-    public override bool Equals(object? b)
+    public override bool Equals(object? b) => Equals(b as ModInteger);
+
+    public bool Equals(ModInteger? other)
     {
-        if (b is not ModInteger mi)
+        if (ReferenceEquals(null, other))
         {
             return false;
         }
 
-        return CompareTo(mi) == 0;
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return CompareTo(other) == 0;
     }
+
+    public static bool operator ==(ModInteger? left, ModInteger? right) => Equals(left, right);
+
+    public static bool operator !=(ModInteger? left, ModInteger? right) => !Equals(left, right);
 
     /// <summary>
     /// Hash code for this ModInteger.

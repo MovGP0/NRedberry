@@ -10,15 +10,15 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.arith.BigInteger
 /// </remarks>
-public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger>, IEnumerable<BigInteger>, ICloneable
+public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger>, IEnumerable<BigInteger>, ICloneable, IEquatable<BigInteger>
 {
     /// <summary>
     /// The data structure.
     /// </summary>
-    public readonly System.Numerics.BigInteger Val;
+    public System.Numerics.BigInteger Val { get; }
 
-    private static readonly Random random = new();
-    private bool nonNegative = true;
+    private static readonly Random s_random = new();
+    private bool _nonNegative = true;
 
     /// <summary>
     /// The constant 0.
@@ -229,7 +229,7 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
     /// <returns>0 if this == b, 1 if this > b, -1 if this &lt; b.</returns>
     public int CompareTo(BigInteger? b)
     {
-        if (b == null)
+        if (b is null)
             return 1;
         return Val.CompareTo(b.Val);
     }
@@ -237,15 +237,39 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
     /// <summary>
     /// Comparison with any other object.
     /// </summary>
-    public override bool Equals(object? b)
+    public bool Equals(BigInteger? other)
     {
-        if (b is not BigInteger bi)
+        if (other is null)
         {
             return false;
         }
 
-        return Val.Equals(bi.Val);
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return Val.Equals(other.Val);
     }
+
+    public override bool Equals(object? obj) => obj is BigInteger other && Equals(other);
+
+    public static bool operator ==(BigInteger? left, BigInteger? right)
+    {
+        if (ReferenceEquals(left, right))
+        {
+            return true;
+        }
+
+        if (left is null || right is null)
+        {
+            return false;
+        }
+
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(BigInteger? left, BigInteger? right) => !(left == right);
 
     /// <summary>
     /// Hash code for this BigInteger.
@@ -374,13 +398,13 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
     /// </summary>
     /// <param name="S">BigInteger.</param>
     /// <returns>[ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).</returns>
-    public BigInteger[] Egcd(BigInteger S)
+    public BigInteger[] Egcd(BigInteger? S)
     {
         BigInteger[] ret = new BigInteger[3];
         ret[0] = null!;
         ret[1] = null!;
         ret[2] = null!;
-        if (S.IsZero())
+        if (S?.IsZero() != false)
         {
             ret[0] = this;
             return ret;
@@ -435,7 +459,7 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
     /// <returns>r, a random BigInteger.</returns>
     public BigInteger Random(int n)
     {
-        return Random(n, random);
+        return Random(n, s_random);
     }
 
     /// <summary>
@@ -482,7 +506,7 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
     /// </summary>
     public void SetAllIterator()
     {
-        nonNegative = false;
+        _nonNegative = false;
     }
 
     /// <summary>
@@ -490,7 +514,7 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
     /// </summary>
     public void SetNonNegativeIterator()
     {
-        nonNegative = true;
+        _nonNegative = true;
     }
 
     /// <summary>
@@ -499,7 +523,7 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
     /// <returns>a iterator over all integers.</returns>
     public IEnumerator<BigInteger> GetEnumerator()
     {
-        return new BigIntegerIterator(nonNegative);
+        return new BigIntegerIterator(_nonNegative);
     }
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -512,9 +536,9 @@ public sealed class BigInteger : GcdRingElem<BigInteger>, RingFactory<BigInteger
 /// </summary>
 internal class BigIntegerIterator : IEnumerator<BigInteger>
 {
-    private System.Numerics.BigInteger curr;
-    private readonly bool nonNegative;
-    private BigInteger? current;
+    private System.Numerics.BigInteger _curr;
+    private readonly bool _nonNegative;
+    private BigInteger? _current;
 
     /// <summary>
     /// BigInteger iterator constructor.
@@ -522,28 +546,28 @@ internal class BigIntegerIterator : IEnumerator<BigInteger>
     /// <param name="nn">true for an iterator over non-negative longs, false for all elements iterator.</param>
     public BigIntegerIterator(bool nn)
     {
-        curr = System.Numerics.BigInteger.Zero;
-        nonNegative = nn;
+        _curr = System.Numerics.BigInteger.Zero;
+        _nonNegative = nn;
     }
 
-    public BigInteger Current => current!;
+    public BigInteger Current => _current!;
 
     object IEnumerator.Current => Current;
 
     public bool MoveNext()
     {
-        current = new BigInteger(curr);
-        if (nonNegative)
+        _current = new BigInteger(_curr);
+        if (_nonNegative)
         {
-            curr += System.Numerics.BigInteger.One;
+            _curr += System.Numerics.BigInteger.One;
         }
-        else if (curr.Sign > 0)
+        else if (_curr.Sign > 0)
         {
-            curr = System.Numerics.BigInteger.Negate(curr);
+            _curr = System.Numerics.BigInteger.Negate(_curr);
         }
         else
         {
-            curr = System.Numerics.BigInteger.Negate(curr) + System.Numerics.BigInteger.One;
+            _curr = System.Numerics.BigInteger.Negate(_curr) + System.Numerics.BigInteger.One;
         }
 
         return true;
@@ -551,8 +575,8 @@ internal class BigIntegerIterator : IEnumerator<BigInteger>
 
     public void Reset()
     {
-        curr = System.Numerics.BigInteger.Zero;
-        current = null;
+        _curr = System.Numerics.BigInteger.Zero;
+        _current = null;
     }
 
     public void Dispose()

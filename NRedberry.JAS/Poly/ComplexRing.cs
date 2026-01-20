@@ -10,9 +10,9 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.poly.ComplexRing
 /// </remarks>
-public class ComplexRing<C> : RingFactory<Complex<C>> where C : RingElem<C>
+public class ComplexRing<C> : RingFactory<Complex<C>>, IEquatable<ComplexRing<C>> where C : RingElem<C>
 {
-    private static readonly Random RandomSource = new ();
+    private static readonly Random s_random = new();
 
     /// <summary>
     /// Initializes the complex ring factory with a factory for the real coefficients.
@@ -49,7 +49,15 @@ public class ComplexRing<C> : RingFactory<Complex<C>> where C : RingElem<C>
     /// <returns>Algebraic number ring.</returns>
     public AlgebraicNumberRing<C> AlgebraicRing()
     {
-        throw new NotImplementedException("Algebraic number ring construction requires GenPolynomial support.");
+        GenPolynomialRing<C> polynomialRing = new(
+            Ring,
+            1,
+            new TermOrder(TermOrder.INVLEX),
+            new[] { "I" });
+        GenPolynomial<C> iPolynomial = polynomialRing
+            .Univariate(0, 2L)
+            .Sum(polynomialRing.GetOneCoefficient());
+        return new AlgebraicNumberRing<C>(iPolynomial, Ring.IsField());
     }
 
     /// <inheritdoc />
@@ -67,6 +75,17 @@ public class ComplexRing<C> : RingFactory<Complex<C>> where C : RingElem<C>
     {
         ArgumentNullException.ThrowIfNull(c);
         return c.Clone();
+    }
+
+    /// <summary>
+    /// Copy Complex element <paramref name="c"/>.
+    /// </summary>
+    /// <param name="c">Element to copy.</param>
+    /// <returns>A copy of <paramref name="c"/>.</returns>
+    public Complex<C> Copy(Complex<C> c)
+    {
+        ArgumentNullException.ThrowIfNull(c);
+        return new Complex<C>(this, c.Re, c.Im);
     }
 
     /// <summary>
@@ -137,7 +156,7 @@ public class ComplexRing<C> : RingFactory<Complex<C>> where C : RingElem<C>
     /// <inheritdoc />
     public Complex<C> Random(int k)
     {
-        return Random(k, RandomSource);
+        return Random(k, s_random);
     }
 
     /// <inheritdoc />
@@ -156,14 +175,14 @@ public class ComplexRing<C> : RingFactory<Complex<C>> where C : RingElem<C>
     }
 
     /// <inheritdoc />
-    public override bool Equals(object? obj)
+    public bool Equals(ComplexRing<C>? other)
     {
-        if (ReferenceEquals(this, obj))
+        if (ReferenceEquals(this, other))
         {
             return true;
         }
 
-        if (obj is not ComplexRing<C> other)
+        if (other is null)
         {
             return false;
         }
@@ -171,9 +190,34 @@ public class ComplexRing<C> : RingFactory<Complex<C>> where C : RingElem<C>
         return Ring.Equals(other.Ring);
     }
 
+    public override bool Equals(object? obj)
+    {
+        return obj is ComplexRing<C> other && Equals(other);
+    }
+
     /// <inheritdoc />
     public override int GetHashCode()
     {
         return Ring.GetHashCode();
+    }
+
+    public static bool operator ==(ComplexRing<C>? left, ComplexRing<C>? right)
+    {
+        if (ReferenceEquals(left, right))
+        {
+            return true;
+        }
+
+        if (left is null || right is null)
+        {
+            return false;
+        }
+
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(ComplexRing<C>? left, ComplexRing<C>? right)
+    {
+        return !(left == right);
     }
 }

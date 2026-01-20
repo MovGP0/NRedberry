@@ -158,7 +158,7 @@ public static partial class HenselUtil
 
             accumulatedModulus = currentModulus;
             currentModulus = qFactory.GetIntegerModul().Multiply(qFactory.GetIntegerModul());
-            qFactory = ModLongRing.MAX_LONG.CompareTo(currentModulus.Val) > 0
+            qFactory = ModLongRing.MaxLong.CompareTo(currentModulus.Val) > 0
                 ? (ModularRingFactory<MOD>)(object)new ModLongRing(currentModulus.Val)
                 : (ModularRingFactory<MOD>)(object)new ModIntegerRing(currentModulus);
             qPolynomialRing = new GenPolynomialRing<MOD>(qFactory, polynomialRing);

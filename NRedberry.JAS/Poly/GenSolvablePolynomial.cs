@@ -65,7 +65,7 @@ public class GenSolvablePolynomial<C> : GenPolynomial<C> where C : RingElem<C>
     /// <summary>
     /// Clones this solvable polynomial.
     /// </summary>
-    public GenSolvablePolynomial<C> Copy()
+    public new GenSolvablePolynomial<C> Copy()
     {
         return new GenSolvablePolynomial<C>(Ring, CloneTerms(), copy: false);
     }
@@ -254,14 +254,9 @@ public class GenSolvablePolynomial<C> : GenPolynomial<C> where C : RingElem<C>
     {
         ArgumentNullException.ThrowIfNull(leftExponent);
         ArgumentNullException.ThrowIfNull(rightExponent);
-        if (leftExponent.IsZero())
+        if (leftExponent.IsZero() || rightExponent.IsZero())
         {
-            return Multiply(rightExponent);
-        }
-
-        if (rightExponent.IsZero())
-        {
-            return Multiply(leftExponent);
+            return this;
         }
 
         C unit = Ring.GetOneCoefficient();

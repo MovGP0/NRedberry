@@ -10,7 +10,8 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.poly.AlgebraicNumber
 /// </remarks>
-public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : RingElem<C>
+public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>>, ICloneable, IEquatable<AlgebraicNumber<C>>
+    where C : RingElem<C>
 {
     private int _isUnit = -1;
 
@@ -77,6 +78,10 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
     {
         return new AlgebraicNumber<C>(Ring, Val);
     }
+
+    public AlgebraicNumber<C> Copy() => Clone();
+
+    object ICloneable.Clone() => Clone();
 
     /// <summary>
     /// Determines whether this element represents zero.
@@ -162,14 +167,14 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
     /// <summary>
     /// Determines reference and value equality within the same ring context.
     /// </summary>
-    public override bool Equals(object? obj)
+    public bool Equals(AlgebraicNumber<C>? other)
     {
-        if (ReferenceEquals(this, obj))
+        if (ReferenceEquals(this, other))
         {
             return true;
         }
 
-        if (obj is not AlgebraicNumber<C> other)
+        if (other is null)
         {
             return false;
         }
@@ -180,6 +185,11 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
         }
 
         return CompareTo(other) == 0;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is AlgebraicNumber<C> other && Equals(other);
     }
 
     /// <summary>
@@ -199,6 +209,26 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
     public AlgebraicNumber<C> Abs()
     {
         return new AlgebraicNumber<C>(Ring, Val.Abs());
+    }
+
+    public static bool operator ==(AlgebraicNumber<C>? left, AlgebraicNumber<C>? right)
+    {
+        if (ReferenceEquals(left, right))
+        {
+            return true;
+        }
+
+        if (left is null || right is null)
+        {
+            return false;
+        }
+
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(AlgebraicNumber<C>? left, AlgebraicNumber<C>? right)
+    {
+        return !(left == right);
     }
 
     /// <summary>
@@ -226,6 +256,26 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
     {
         ArgumentNullException.ThrowIfNull(other);
         return new AlgebraicNumber<C>(Ring, Val.Subtract(other.Val));
+    }
+
+    /// <summary>
+    /// Adds a polynomial to this algebraic number.
+    /// </summary>
+    /// <param name="value">Polynomial to add.</param>
+    public AlgebraicNumber<C> Sum(GenPolynomial<C> value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+        return new AlgebraicNumber<C>(Ring, Val.Sum(value));
+    }
+
+    /// <summary>
+    /// Adds a coefficient to this algebraic number.
+    /// </summary>
+    /// <param name="value">Coefficient to add.</param>
+    public AlgebraicNumber<C> Sum(C value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+        return new AlgebraicNumber<C>(Ring, Val.Sum(value));
     }
 
     /// <summary>
@@ -272,6 +322,8 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
     /// <returns>Polynomial remainder.</returns>
     public AlgebraicNumber<C> Remainder(AlgebraicNumber<C> other)
     {
+        ArgumentNullException.ThrowIfNull(other);
+
         if (other.IsZero())
         {
             throw new ArithmeticException("division by zero");
@@ -371,8 +423,8 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
 
         while (!r.IsZero())
         {
-            GenPolynomial<C> quotient = q.Divide(r);
-            GenPolynomial<C> remainder = q.Remainder(r);
+            GenPolynomial<C>[] quotientRemainder = q.QuotientRemainder(r);
+            GenPolynomial<C> quotient = quotientRemainder[0];
 
             GenPolynomial<C> x1 = c1.Subtract(quotient.Multiply(d1));
             GenPolynomial<C> x2 = c2.Subtract(quotient.Multiply(d2));
@@ -382,7 +434,7 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
             d1 = x1;
             d2 = x2;
             q = r;
-            r = remainder;
+            r = quotientRemainder[1];
         }
 
         result[0] = new AlgebraicNumber<C>(Ring, q);
@@ -400,6 +452,36 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>> where C : Ring
         ArgumentNullException.ThrowIfNull(other);
         GenPolynomial<C> product = Val.Multiply(other.Val);
         return new AlgebraicNumber<C>(Ring, product);
+    }
+
+    /// <summary>
+    /// Multiplies this algebraic number by a coefficient.
+    /// </summary>
+    /// <param name="value">Coefficient multiplier.</param>
+    public AlgebraicNumber<C> Multiply(C value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+        GenPolynomial<C> product = Val.Multiply(value);
+        return new AlgebraicNumber<C>(Ring, product);
+    }
+
+    /// <summary>
+    /// Multiplies this algebraic number by a polynomial.
+    /// </summary>
+    /// <param name="value">Polynomial multiplier.</param>
+    public AlgebraicNumber<C> Multiply(GenPolynomial<C> value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+        GenPolynomial<C> product = Val.Multiply(value);
+        return new AlgebraicNumber<C>(Ring, product);
+    }
+
+    /// <summary>
+    /// Returns the monic version of this algebraic number.
+    /// </summary>
+    public AlgebraicNumber<C> Monic()
+    {
+        return new AlgebraicNumber<C>(Ring, Val.Monic());
     }
 
     /// <summary>

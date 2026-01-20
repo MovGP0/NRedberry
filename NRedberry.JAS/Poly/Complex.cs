@@ -9,7 +9,7 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.poly.Complex
 /// </remarks>
-public class Complex<C> : GcdRingElem<Complex<C>> where C : RingElem<C>
+public class Complex<C> : GcdRingElem<Complex<C>>, ICloneable, IEquatable<Complex<C>> where C : RingElem<C>
 {
     /// <summary>
     /// Creates a complex element with the provided real and imaginary parts.
@@ -83,6 +83,10 @@ public class Complex<C> : GcdRingElem<Complex<C>> where C : RingElem<C>
         return new Complex<C>(Ring, Re, Im);
     }
 
+    public Complex<C> Copy() => Clone();
+
+    object ICloneable.Clone() => Clone();
+
     /// <inheritdoc />
     public override string ToString()
     {
@@ -151,14 +155,14 @@ public class Complex<C> : GcdRingElem<Complex<C>> where C : RingElem<C>
     }
 
     /// <inheritdoc />
-    public override bool Equals(object? obj)
+    public bool Equals(Complex<C>? other)
     {
-        if (ReferenceEquals(this, obj))
+        if (ReferenceEquals(this, other))
         {
             return true;
         }
 
-        if (obj is not Complex<C> other)
+        if (other is null)
         {
             return false;
         }
@@ -171,6 +175,11 @@ public class Complex<C> : GcdRingElem<Complex<C>> where C : RingElem<C>
         return Re.Equals(other.Re) && Im.Equals(other.Im);
     }
 
+    public override bool Equals(object? obj)
+    {
+        return obj is Complex<C> other && Equals(other);
+    }
+
     /// <inheritdoc />
     public override int GetHashCode()
     {
@@ -178,6 +187,26 @@ public class Complex<C> : GcdRingElem<Complex<C>> where C : RingElem<C>
         hashCode.Add(Re);
         hashCode.Add(Im);
         return hashCode.ToHashCode();
+    }
+
+    public static bool operator ==(Complex<C>? left, Complex<C>? right)
+    {
+        if (ReferenceEquals(left, right))
+        {
+            return true;
+        }
+
+        if (left is null || right is null)
+        {
+            return false;
+        }
+
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(Complex<C>? left, Complex<C>? right)
+    {
+        return !(left == right);
     }
 
     /// <inheritdoc />

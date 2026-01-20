@@ -89,7 +89,7 @@ public static partial class HenselUtil
             modulus = modulus.Multiply(baseModulus);
         }
 
-        ModularRingFactory<MOD> liftedRing = ModLongRing.MAX_LONG.CompareTo(modulus.Val) > 0
+        ModularRingFactory<MOD> liftedRing = ModLongRing.MaxLong.CompareTo(modulus.Val) > 0
             ? (ModularRingFactory<MOD>)(object)new ModLongRing(modulus.Val)
             : (ModularRingFactory<MOD>)(object)new ModIntegerRing(modulus.Val);
         GenPolynomialRing<MOD> liftedPolynomialRing = new(liftedRing, polynomialRing);

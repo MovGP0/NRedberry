@@ -12,6 +12,8 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 /// </remarks>
 public class AlgebraicNotInvertibleException : NotInvertibleException
 {
+    private const string DefaultMessage = "AlgebraicNotInvertibleException";
+
     /// <summary>
     /// Polynomial factor satisfying <c>F = F1 * F2</c>.
     /// </summary>
@@ -34,16 +36,32 @@ public class AlgebraicNotInvertibleException : NotInvertibleException
     /// <param name="f">Polynomial satisfying <c>F = F1 * F2</c>.</param>
     /// <param name="f1">Left factor of the non-trivial decomposition.</param>
     /// <param name="f2">Right factor of the non-trivial decomposition.</param>
-    public AlgebraicNotInvertibleException(
-        string message,
-        object? f = null,
-        object? f1 = null,
-        object? f2 = null)
+    public AlgebraicNotInvertibleException(string message, object? f, object? f1, object? f2)
         : base(message)
     {
         F = f;
         F1 = f1;
         F2 = f2;
+    }
+
+    public AlgebraicNotInvertibleException()
+        : base(DefaultMessage)
+    {
+    }
+
+    public AlgebraicNotInvertibleException(string message)
+        : base(message)
+    {
+    }
+
+    public AlgebraicNotInvertibleException(Exception innerException)
+        : base(DefaultMessage, innerException)
+    {
+    }
+
+    public AlgebraicNotInvertibleException(string message, Exception innerException)
+        : this(message, innerException, null, null, null)
+    {
     }
 
     /// <summary>
@@ -54,12 +72,7 @@ public class AlgebraicNotInvertibleException : NotInvertibleException
     /// <param name="f">Polynomial satisfying <c>F = F1 * F2</c>.</param>
     /// <param name="f1">Left factor of the non-trivial decomposition.</param>
     /// <param name="f2">Right factor of the non-trivial decomposition.</param>
-    public AlgebraicNotInvertibleException(
-        string message,
-        Exception innerException,
-        object? f = null,
-        object? f1 = null,
-        object? f2 = null)
+    public AlgebraicNotInvertibleException(string message, Exception innerException, object? f, object? f1, object? f2)
         : base(message, innerException)
     {
         F = f;

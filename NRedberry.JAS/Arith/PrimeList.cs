@@ -13,11 +13,11 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 /// </remarks>
 public sealed class PrimeList : IEnumerable<BigInteger>
 {
-    private static readonly object SmallLock = new();
-    private static readonly object LowLock = new();
-    private static readonly object MediumLock = new();
-    private static readonly object LargeLock = new();
-    private static readonly object MersenneLock = new();
+    private static readonly object s_smallLock = new();
+    private static readonly object s_lowLock = new();
+    private static readonly object s_mediumLock = new();
+    private static readonly object s_largeLock = new();
+    private static readonly object s_mersenneLock = new();
 
     public enum Range
     {
@@ -28,11 +28,11 @@ public sealed class PrimeList : IEnumerable<BigInteger>
         Mersenne
     }
 
-    private static volatile List<BigInteger>? _smallList;
-    private static volatile List<BigInteger>? _lowList;
-    private static volatile List<BigInteger>? _mediumList;
-    private static volatile List<BigInteger>? _largeList;
-    private static volatile List<BigInteger>? _mersenneList;
+    private static List<BigInteger>? s_smallList;
+    private static List<BigInteger>? s_lowList;
+    private static List<BigInteger>? s_mediumList;
+    private static List<BigInteger>? s_largeList;
+    private static List<BigInteger>? s_mersenneList;
 
     private readonly List<BigInteger> _val;
     private BigInteger _last = BigInteger.Zero;
@@ -46,12 +46,12 @@ public sealed class PrimeList : IEnumerable<BigInteger>
     {
         _val = r switch
         {
-            Range.Small => EnsureList(ref _smallList, SmallLock, AddSmall),
-            Range.Low => EnsureList(ref _lowList, LowLock, AddLow),
-            Range.Medium => EnsureList(ref _mediumList, MediumLock, AddMedium),
-            Range.Large => EnsureList(ref _largeList, LargeLock, AddLarge),
-            Range.Mersenne => EnsureList(ref _mersenneList, MersenneLock, AddMersenne),
-            _ => EnsureList(ref _mediumList, MediumLock, AddMedium),
+            Range.Small => EnsureList(ref s_smallList, s_smallLock, AddSmall),
+            Range.Low => EnsureList(ref s_lowList, s_lowLock, AddLow),
+            Range.Medium => EnsureList(ref s_mediumList, s_mediumLock, AddMedium),
+            Range.Large => EnsureList(ref s_largeList, s_largeLock, AddLarge),
+            Range.Mersenne => EnsureList(ref s_mersenneList, s_mersenneLock, AddMersenne),
+            _ => EnsureList(ref s_mediumList, s_mediumLock, AddMedium),
         };
 
         if (_val.Count > 0)
@@ -62,7 +62,7 @@ public sealed class PrimeList : IEnumerable<BigInteger>
 
     private static List<BigInteger> EnsureList(ref List<BigInteger>? cache, object syncRoot, Action<List<BigInteger>> builder)
     {
-        var existing = cache;
+        var existing = System.Threading.Volatile.Read(ref cache);
         if (existing != null)
         {
             return existing;
@@ -78,7 +78,7 @@ public sealed class PrimeList : IEnumerable<BigInteger>
 
             var list = new List<BigInteger>(50);
             builder(list);
-            cache = list;
+            System.Threading.Volatile.Write(ref cache, list);
             return list;
         }
     }

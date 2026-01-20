@@ -1,5 +1,7 @@
 ﻿using System.Numerics;
+using System.Collections;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
+using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Util;
 
 namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 
@@ -10,7 +12,7 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.poly.AlgebraicNumberRing
 /// </remarks>
-public class AlgebraicNumberRing<C> : RingFactory<AlgebraicNumber<C>> where C : RingElem<C>
+public class AlgebraicNumberRing<C> : RingFactory<AlgebraicNumber<C>>, IEnumerable<AlgebraicNumber<C>>, IEquatable<AlgebraicNumberRing<C>> where C : RingElem<C>
 {
     private int _isField = -1;
 
@@ -61,6 +63,17 @@ public class AlgebraicNumberRing<C> : RingFactory<AlgebraicNumber<C>> where C : 
     }
 
     /// <summary>
+    /// Copy AlgebraicNumber element <paramref name="value"/>.
+    /// </summary>
+    /// <param name="value">Element to copy.</param>
+    /// <returns>A copy of <paramref name="value"/>.</returns>
+    public AlgebraicNumber<C> Copy(AlgebraicNumber<C> value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+        return new AlgebraicNumber<C>(this, value.Val);
+    }
+
+    /// <summary>
     /// Returns a copy of the algebraic number by invoking its own <see cref="AlgebraicNumber{C}.Clone"/> logic.
     /// </summary>
     /// <param name="value">Element to copy.</param>
@@ -70,15 +83,9 @@ public class AlgebraicNumberRing<C> : RingFactory<AlgebraicNumber<C>> where C : 
         return value.Clone();
     }
 
-    /// <summary>
-    /// Static zero is undefined for algebraic number rings without context.
-    /// </summary>
-    public static AlgebraicNumber<C> Zero => throw new InvalidOperationException("Use a specific AlgebraicNumberRing instance to obtain zero.");
+    public AlgebraicNumber<C> Zero => GetZeroElement();
 
-    /// <summary>
-    /// Static one is undefined for algebraic number rings without context.
-    /// </summary>
-    public static AlgebraicNumber<C> One => throw new InvalidOperationException("Use a specific AlgebraicNumberRing instance to obtain one.");
+    public AlgebraicNumber<C> One => GetOneElement();
 
     /// <summary>
     /// Returns the main algebraic generator (the root of the modulus polynomial).
@@ -200,9 +207,9 @@ public class AlgebraicNumberRing<C> : RingFactory<AlgebraicNumber<C>> where C : 
         }
 
         BigInteger remaining = value;
-        GenPolynomial<C> aggregate = GenPolynomialRing<C>.Zero;
+        GenPolynomial<C> aggregate = new GenPolynomial<C>(Ring);
         GenPolynomial<C> x = Ring.Univariate(0, 1L);
-        GenPolynomial<C> power = GenPolynomialRing<C>.One;
+        GenPolynomial<C> power = new GenPolynomial<C>(Ring, Ring.CoFac.FromInteger(1));
 
         while (remaining != BigInteger.Zero)
         {
@@ -262,7 +269,7 @@ public class AlgebraicNumberRing<C> : RingFactory<AlgebraicNumber<C>> where C : 
     /// <param name="bits">Bit length for the random polynomial.</param>
     public AlgebraicNumber<C> Random(int bits)
     {
-        GenPolynomial<C> polynomial = Ring.Random(bits);
+        GenPolynomial<C> polynomial = Ring.Random(bits).Monic();
         return new AlgebraicNumber<C>(this, polynomial);
     }
 
@@ -274,7 +281,7 @@ public class AlgebraicNumberRing<C> : RingFactory<AlgebraicNumber<C>> where C : 
     public AlgebraicNumber<C> Random(int bits, Random random)
     {
         ArgumentNullException.ThrowIfNull(random);
-        GenPolynomial<C> polynomial = Ring.Random(bits, random);
+        GenPolynomial<C> polynomial = Ring.Random(bits, random).Monic();
         return new AlgebraicNumber<C>(this, polynomial);
     }
 
@@ -283,7 +290,7 @@ public class AlgebraicNumberRing<C> : RingFactory<AlgebraicNumber<C>> where C : 
     /// </summary>
     public AlgebraicNumber<C> GetZeroElement()
     {
-        return new AlgebraicNumber<C>(this, GenPolynomialRing<C>.Zero);
+        return new AlgebraicNumber<C>(this, new GenPolynomial<C>(Ring));
     }
 
     /// <summary>
@@ -291,7 +298,25 @@ public class AlgebraicNumberRing<C> : RingFactory<AlgebraicNumber<C>> where C : 
     /// </summary>
     public AlgebraicNumber<C> GetOneElement()
     {
-        return new AlgebraicNumber<C>(this, GenPolynomialRing<C>.One);
+        return new AlgebraicNumber<C>(this, new GenPolynomial<C>(Ring, Ring.CoFac.FromInteger(1)));
+    }
+
+    /// <summary>
+    /// Depth of extension field tower.
+    /// </summary>
+    /// <returns>Number of nested algebraic extension fields.</returns>
+    public int Depth()
+    {
+        int depth = 1;
+        RingFactory<C> coefficientFactory = Ring.CoFac;
+        Type factoryType = coefficientFactory.GetType();
+        if (factoryType.IsGenericType && factoryType.GetGenericTypeDefinition() == typeof(AlgebraicNumberRing<>))
+        {
+            dynamic nestedRing = coefficientFactory;
+            depth += (int)nestedRing.Depth();
+        }
+
+        return depth;
     }
 
     /// <summary>
@@ -323,19 +348,24 @@ public class AlgebraicNumberRing<C> : RingFactory<AlgebraicNumber<C>> where C : 
     /// <summary>
     /// Compares two algebraic number rings by their modulus.
     /// </summary>
-    public override bool Equals(object? obj)
+    public bool Equals(AlgebraicNumberRing<C>? other)
     {
-        if (ReferenceEquals(this, obj))
+        if (ReferenceEquals(this, other))
         {
             return true;
         }
 
-        if (obj is not AlgebraicNumberRing<C> other)
+        if (other is null)
         {
             return false;
         }
 
         return Modul.Equals(other.Modul);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is AlgebraicNumberRing<C> other && Equals(other);
     }
 
     /// <summary>
@@ -348,5 +378,117 @@ public class AlgebraicNumberRing<C> : RingFactory<AlgebraicNumber<C>> where C : 
         hashCode.Add(Ring);
         hashCode.Add(_isField);
         return hashCode.ToHashCode();
+    }
+
+    public static bool operator ==(AlgebraicNumberRing<C>? left, AlgebraicNumberRing<C>? right)
+    {
+        if (ReferenceEquals(left, right))
+        {
+            return true;
+        }
+
+        if (left is null || right is null)
+        {
+            return false;
+        }
+
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(AlgebraicNumberRing<C>? left, AlgebraicNumberRing<C>? right)
+    {
+        return !(left == right);
+    }
+
+    public IEnumerator<AlgebraicNumber<C>> GetEnumerator()
+    {
+        return new AlgebraicNumberEnumerator<C>(this);
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+}
+
+internal sealed class AlgebraicNumberEnumerator<C> : IEnumerator<AlgebraicNumber<C>> where C : RingElem<C>
+{
+    private readonly IEnumerator<List<C>> _iterator;
+    private readonly List<GenPolynomial<C>> _powers;
+    private readonly AlgebraicNumberRing<C> _ring;
+    private AlgebraicNumber<C>? _current;
+
+    public AlgebraicNumberEnumerator(AlgebraicNumberRing<C> ring)
+    {
+        ArgumentNullException.ThrowIfNull(ring);
+        _ring = ring;
+
+        long degree = ring.Modul.Degree(0);
+        _powers = new List<GenPolynomial<C>>((int)degree);
+        for (long j = degree - 1; j >= 0L; j--)
+        {
+            _powers.Add(ring.Ring.Univariate(0, j));
+        }
+
+        RingFactory<C> coefficientFactory = ring.Ring.CoFac;
+        if (coefficientFactory is not IEnumerable<C> coefficientEnumerable)
+        {
+            throw new ArgumentException("only for iterable coefficients implemented", nameof(ring));
+        }
+
+        List<IEnumerable<C>> components = new((int)degree);
+        for (long j = 0L; j < degree; j++)
+        {
+            components.Add(coefficientEnumerable);
+        }
+
+        if (coefficientFactory.IsFinite())
+        {
+            _iterator = new CartesianProduct<C>(components).GetEnumerator();
+        }
+        else
+        {
+            _iterator = new CartesianProductInfinite<C>(components).GetEnumerator();
+        }
+    }
+
+    public AlgebraicNumber<C> Current => _current ?? throw new InvalidOperationException("Enumeration has not started.");
+
+    object IEnumerator.Current => Current;
+
+    public bool MoveNext()
+    {
+        if (!_iterator.MoveNext())
+        {
+            _current = null;
+            return false;
+        }
+
+        List<C> coefficients = _iterator.Current;
+        GenPolynomial<C> polynomial = new(_ring.Ring);
+        int i = 0;
+        foreach (GenPolynomial<C> power in _powers)
+        {
+            C coefficient = coefficients[i++];
+            if (coefficient.IsZero())
+            {
+                continue;
+            }
+
+            polynomial = polynomial.Sum(power.Multiply(coefficient));
+        }
+
+        _current = new AlgebraicNumber<C>(_ring, polynomial);
+        return true;
+    }
+
+    public void Reset()
+    {
+        throw new NotSupportedException("Reset is not supported for algebraic number enumerators.");
+    }
+
+    public void Dispose()
+    {
+        _iterator.Dispose();
     }
 }

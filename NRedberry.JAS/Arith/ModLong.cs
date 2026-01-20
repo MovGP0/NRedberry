@@ -9,17 +9,17 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.arith.ModLong
 /// </remarks>
-public sealed class ModLong : GcdRingElem<ModLong>, Modular
+public sealed class ModLong : GcdRingElem<ModLong>, Modular, ICloneable, IEquatable<ModLong>
 {
     /// <summary>
     /// ModLongRing reference.
     /// </summary>
-    public readonly ModLongRing Ring;
+    public ModLongRing Ring { get; }
 
     /// <summary>
     /// Value part of the element data structure.
     /// </summary>
-    public readonly long Val;
+    public long Val { get; }
 
     /// <summary>
     /// The constructor creates a ModLong object from a ModLongRing and a value part.
@@ -27,8 +27,12 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     /// <param name="m">ModLongRing.</param>
     /// <param name="a">System.Numerics.BigInteger.</param>
     public ModLong(ModLongRing m, System.Numerics.BigInteger a)
-        : this(m, (long)(a % new System.Numerics.BigInteger(m.Modul)))
     {
+        ArgumentNullException.ThrowIfNull(m);
+        Ring = m;
+        long v = (long)(a % new System.Numerics.BigInteger(m.Modul));
+        v = v >= 0L ? v : v + Ring.Modul;
+        Val = v;
     }
 
     /// <summary>
@@ -38,6 +42,7 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     /// <param name="a">long.</param>
     public ModLong(ModLongRing m, long a)
     {
+        ArgumentNullException.ThrowIfNull(m);
         Ring = m;
         long v = a % Ring.Modul;
         Val = v >= 0L ? v : v + Ring.Modul;
@@ -74,6 +79,10 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     /// Clone this.
     /// </summary>
     public ModLong Clone() => new(Ring, Val);
+
+    public ModLong Copy() => Clone();
+
+    object ICloneable.Clone() => Clone();
 
     /// <summary>
     /// Is ModLong number zero.
@@ -120,7 +129,10 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     public int CompareTo(ModLong? b)
     {
         if (b == null)
+        {
             return 1;
+        }
+
         long v = b.Val;
         if (Ring != b.Ring)
         {
@@ -138,15 +150,26 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     /// <summary>
     /// Comparison with any other object.
     /// </summary>
-    public override bool Equals(object? b)
+    public override bool Equals(object? b) => Equals(b as ModLong);
+
+    public bool Equals(ModLong? other)
     {
-        if (b is not ModLong ml)
+        if (ReferenceEquals(null, other))
         {
             return false;
         }
 
-        return CompareTo(ml) == 0;
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return CompareTo(other) == 0;
     }
+
+    public static bool operator ==(ModLong? left, ModLong? right) => Equals(left, right);
+
+    public static bool operator !=(ModLong? left, ModLong? right) => !Equals(left, right);
 
     /// <summary>
     /// Hash code for this ModLong.
@@ -184,7 +207,11 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     /// </summary>
     /// <param name="S">ModLong.</param>
     /// <returns>this-S.</returns>
-    public ModLong Subtract(ModLong S) => new(Ring, Val - S.Val);
+    public ModLong Subtract(ModLong S)
+    {
+        ArgumentNullException.ThrowIfNull(S);
+        return new ModLong(Ring, Val - S.Val);
+    }
 
     /// <summary>
     /// ModLong divide.
@@ -193,6 +220,7 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     /// <returns>this/S.</returns>
     public ModLong Divide(ModLong S)
     {
+        ArgumentNullException.ThrowIfNull(S);
         try
         {
             return Multiply(S.Inverse());
@@ -206,11 +234,11 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
                     return new ModLong(Ring, Val / S.Val);
                 }
 
-                throw new NotInvertibleException(e.Message, e.InnerException);
+                throw new NotInvertibleException(e);
             }
             catch (ArithmeticException a)
             {
-                throw new NotInvertibleException(a.Message, a.InnerException);
+                throw new NotInvertibleException(a);
             }
         }
     }
@@ -241,6 +269,7 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     /// <returns>remainder(this, S).</returns>
     public ModLong Remainder(ModLong S)
     {
+        ArgumentNullException.ThrowIfNull(S);
         if (S.IsZero())
         {
             throw new ArithmeticException("division by zero");
@@ -264,14 +293,22 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     /// </summary>
     /// <param name="S">ModLong.</param>
     /// <returns>this*S.</returns>
-    public ModLong Multiply(ModLong S) => new(Ring, Val * S.Val);
+    public ModLong Multiply(ModLong S)
+    {
+        ArgumentNullException.ThrowIfNull(S);
+        return new ModLong(Ring, Val * S.Val);
+    }
 
     /// <summary>
     /// ModLong summation.
     /// </summary>
     /// <param name="S">ModLong.</param>
     /// <returns>this+S.</returns>
-    public ModLong Sum(ModLong S) => new(Ring, Val + S.Val);
+    public ModLong Sum(ModLong S)
+    {
+        ArgumentNullException.ThrowIfNull(S);
+        return new ModLong(Ring, Val + S.Val);
+    }
 
     /// <summary>
     /// ModLong greatest common divisor.
@@ -280,6 +317,7 @@ public sealed class ModLong : GcdRingElem<ModLong>, Modular
     /// <returns>gcd(this, S).</returns>
     public ModLong Gcd(ModLong S)
     {
+        ArgumentNullException.ThrowIfNull(S);
         if (S.IsZero())
         {
             return this;
