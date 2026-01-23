@@ -1,6 +1,6 @@
 namespace NRedberry.Core.Tests.Test;
 
-public interface PerformanceTest
+[AttributeUsage(AttributeTargets.Method)]
+public sealed class PerformanceTestAttribute : Attribute
 {
-    // TODO: Port members from cc.redberry.core.test.PerformanceTest.
 }

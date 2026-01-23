@@ -1,6 +1,18 @@
+using Xunit;
+
 namespace NRedberry.Core.Tests.Tensorgenerator;
 
 public sealed class TensorGeneratorUtilsTest
 {
-    // TODO: Port members from cc.redberry.core.tensorgenerator.TensorGeneratorUtilsTest.
+    [Fact]
+    public void ShouldGenerateAllStateCombinationsForMetric()
+    {
+        throw new NotImplementedException();
+    }
+
+    [Fact]
+    public void ShouldGenerateAllStateCombinationsForTensor()
+    {
+        throw new NotImplementedException();
+    }
 }

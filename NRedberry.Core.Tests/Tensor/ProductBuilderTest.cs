@@ -1,6 +1,18 @@
+using Xunit;
+
 namespace NRedberry.Core.Tests.Tensor;
 
 public sealed class ProductBuilderTest
 {
-    // TODO: Port members from cc.redberry.core.tensor.ProductBuilderTest.
+    [Fact]
+    public void ShouldSimplifyRationalPowersInProduct()
+    {
+        throw new NotImplementedException();
+    }
+
+    [Fact]
+    public void ShouldSimplifyPowerSubtraction()
+    {
+        throw new NotImplementedException();
+    }
 }

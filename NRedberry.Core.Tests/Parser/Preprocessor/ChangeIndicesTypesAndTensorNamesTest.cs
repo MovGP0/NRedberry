@@ -1,6 +1,18 @@
+using Xunit;
+
 namespace NRedberry.Core.Tests.Parser.Preprocessor;
 
 public sealed class ChangeIndicesTypesAndTensorNamesTest
 {
-    // TODO: Port members from cc.redberry.core.parser.preprocessor.ChangeIndicesTypesAndTensorNamesTest.
+    [Fact]
+    public void ShouldChangeIndexTypes()
+    {
+        throw new NotImplementedException();
+    }
+
+    [Fact]
+    public void ShouldChangeTypesAndNames()
+    {
+        throw new NotImplementedException();
+    }
 }

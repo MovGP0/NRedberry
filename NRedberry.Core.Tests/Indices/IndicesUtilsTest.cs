@@ -1,6 +1,21 @@
+using Xunit;
+
 namespace NRedberry.Core.Tests.Indices;
 
+/// <summary>
+/// Skeleton port of cc.redberry.core.indices.IndicesUtilsTest.
+/// </summary>
 public sealed class IndicesUtilsTest
 {
-    // TODO: Port members from cc.redberry.core.indices.IndicesUtilsTest.
+    [Fact]
+    public void ShouldParseIndices()
+    {
+        throw new NotImplementedException();
+    }
+
+    [Fact]
+    public void ShouldSetState()
+    {
+        throw new NotImplementedException();
+    }
 }
