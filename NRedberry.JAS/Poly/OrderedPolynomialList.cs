@@ -15,7 +15,7 @@ public class OrderedPolynomialList<C> : PolynomialList<C>, IComparer<GenPolynomi
     /// Constructs the ordered list using the supplied polynomial sequence.
     /// </summary>
     public OrderedPolynomialList(GenPolynomialRing<C> r, List<GenPolynomial<C>> l)
-        : base(r, l)
+        : base(r, SortInternal(r, l))
     {
     }
 
@@ -79,28 +79,30 @@ public class OrderedPolynomialList<C> : PolynomialList<C>, IComparer<GenPolynomi
         }
 
         IComparer<ExpVector> comparer = ring.Tord.GetAscendComparator();
-        return polynomials
-            .OrderBy(
-                p => p.LeadingExpVector(),
-                Comparer<ExpVector>.Create((a, b) =>
+        List<GenPolynomial<C>> sorted = new (polynomials);
+        sorted.Sort(
+            (left, right) =>
+            {
+                ExpVector? leftVector = left.LeadingExpVector();
+                ExpVector? rightVector = right.LeadingExpVector();
+                if (leftVector is null)
                 {
-                    if (a is null)
-                    {
-                        return b is null ? 0 : -1;
-                    }
+                    return -1;
+                }
 
-                    if (b is null)
-                    {
-                        return 1;
-                    }
+                if (rightVector is null)
+                {
+                    return 1;
+                }
 
-                    if (a.Length() != b.Length())
-                    {
-                        return a.Length().CompareTo(b.Length());
-                    }
+                if (leftVector.Length() != rightVector.Length())
+                {
+                    return leftVector.Length().CompareTo(rightVector.Length());
+                }
 
-                    return comparer.Compare(a, b);
-                }))
-            .ToList();
+                return comparer.Compare(leftVector, rightVector);
+            });
+
+        return sorted;
     }
 }

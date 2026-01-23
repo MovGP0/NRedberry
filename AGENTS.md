@@ -251,11 +251,15 @@ public override int GetHashCode()
 - Build error note: `IndicesUtils.cs` used high-bit hex constants like `0x80000000`/`0x80FFFFFF`/`0xFF000000` without casts, which the compiler treated as `uint` (CS0266); prevent by using `unchecked((int)...)` (or named `int` masks) for signed constants with the high bit set.
 - Build error note: `NRedberry.Core/Indices/IndicesUtils.cs` calls `GetSortedDistinct` as an extension method on `int[]`; keep the `this int[]` signature in `NRedberry.Maths.MathUtils.GetSortedDistinct` (or update call sites) to avoid CS1061.
 - Build error note: Roslynator RCS1058 flagged `result = result * currentBase;` in `NumberUtils.cs`; prefer compound assignments like `result *= currentBase;`.
+- Build error note: CS0246 for missing `Fact` in a test file; add `using Xunit;` at the top of new test skeletons.
+- Build error note: RCS1073 flags simple guard `if` patterns; replace with a direct boolean return expression where appropriate.
 - Build error note: `INumberTokenParser<T>` should constrain to `NRedberry.INumber<T>` (not `NRedberry.Numbers.INumber<T>`); the latter broke Complex/Real implementations with CS0311/CS0314.
 - Build error note: after constraining `INumberTokenParser<T>` to `NRedberry.INumber<T>`, also add the same constraint to `NumberParser<T>`, `BracketToken<T>`, and `OperatorToken<T>` to avoid CS0314.
 - Build error note: Roslynator RCS1085 flagged ExpandUtils.ExpandIndexlessSubproduct backing field; use an auto-implemented get-only property with initializer.
 - Build error note: RCS0063 flagged an extra blank line after an opening brace in ExpandUtils; remove the stray blank line.
 - Build error note: RCS0063 flagged trailing blank lines in Parser.cs; remove extra blank lines at file end to satisfy Roslynator.
+- Build error note: RCS0063 flagged an extra blank line before the Multiply comment in GenSolvablePolynomial; avoid double blank lines between members.
+- Build error note: RCS0063 flagged an extra blank line before the closing brace in OptimizedPolynomialList; remove the stray blank line.
 - Build error note: Roslynator RCS0061 requires blank lines between switch sections; add a blank line between case blocks.
 - Build error note: ParseToken.GetIndices must return Indices.Indices (not Indices), because Indices is a namespace; this avoids CS0118 and override mismatch CS0508.
 - Build error note: Roslynator RCS1111 flags switch cases with multiple statements; wrap the case body in braces.
@@ -263,6 +267,7 @@ public override int GetHashCode()
 - Build error note: AbstractSumBuilder.Build/Put must be marked virtual so SumBuilder overrides compile (CS0506).
 - Build error note: CS0542 occurs if a class defines a member with the same name as the class (e.g., ApplyIndexMapping.ApplyIndexMapping); rename such methods (e.g., Apply/ApplyInternal) when porting.
 - Build error note: CS1540 occurs when calling protected Tensor.ToString<T> on a base-typed instance; use Tensor.ToStringWith<T>(OutputFormat) to format other tensors with the caller context.
+- Build error note: CS1540 occurs when accessing a protected member through a base-typed qualifier (e.g., `ring.vars` on `GenPolynomialRing`); use a public accessor like `GetVars()` or keep the qualifier as the derived type.
 - Build error note: RCS0055 flags binary expression chains; format multi-line bitwise expressions with each operator on its own line and consistent indentation.
 - Build error note: StructureOfContractions masks mixed ulong and long, causing CS0019; keep mask types as long (e.g., UpperInfoMask) to match long operands, and expose Contraction as auto-properties to satisfy RCS1085.
 - Build error note: Roslynator RCS1085 flagged backing fields for simple storage; use auto-implemented get-only properties (e.g., `private Tensor[] Args { get; }`).
@@ -293,8 +298,11 @@ public override int GetHashCode()
 - Build error note: RCS1146 flagged null checks before calling `EqualsRegardlessOrder`; use conditional access like `_indices?.EqualsRegardlessOrder(...) != true` to satisfy the analyzer.
 - Build error note: CS0403 occurs when returning null for generic number token parsers; return `default!` (or `default(T)`) to represent "no match" for `T`.
 - Build error note: RCS1132 flags overrides that only forward to the base implementation; remove the redundant override instead of calling `base`.
+- Build error note: RCS1132 flagged a redundant `GetHashCode` override in GenSolvablePolynomial; avoid adding overrides that only return `base.GetHashCode()`.
 - Build error note: RCS0054 flags multi-line call chains; split construction and method calls into separate statements.
 - Build error note: ParserSimpleTensor.cs used SimpleIndices without `using NRedberry.Indices;`, causing CS0246; add the correct using when referencing index types.
+- Build error note: GapGroupsInterface.cs referenced `NRedberry.Core.Groups`; use `NRedberry.Groups` for `PermutationGroup` to avoid CS0234.
+- Build error note: GapGroupsInterface.cs needs `Permutation` from `NRedberry.Core.Combinatorics`; add the correct using to avoid CS0246.
 - Build error note: RCS1155 flags string comparisons without StringComparison; use string.Equals(..., StringComparison.OrdinalIgnoreCase) instead of ToLower/ToUpper comparisons.
 - Build error note: CS8859 occurs if a record defines a member named `Clone`; rename the method (e.g., `Copy`) or use a non-record type to avoid the restriction.
 - Build error note: RCS1006 flags nested `if` inside `else`; merge into `else if` to satisfy Roslynator.

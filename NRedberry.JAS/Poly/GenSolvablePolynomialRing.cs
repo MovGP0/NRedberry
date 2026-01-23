@@ -41,7 +41,7 @@ public class GenSolvablePolynomialRing<C> : GenPolynomialRing<C> where C : RingE
     /// Constructs a solvable polynomial ring with explicit relation table support.
     /// </summary>
     public GenSolvablePolynomialRing(RingFactory<C> coefficientFactory, int variables, TermOrder order, string[]? variableNames, RelationTable<C>? relationTable)
-        : base(coefficientFactory, variables, order, variableNames ?? [])
+        : base(coefficientFactory, variables, order, variableNames)
     {
         Table = relationTable ?? new RelationTable<C>(this);
         ZERO = new GenSolvablePolynomial<C>(this);
@@ -63,17 +63,8 @@ public class GenSolvablePolynomialRing<C> : GenPolynomialRing<C> where C : RingE
     /// </summary>
     public override bool Equals(object? other)
     {
-        if (ReferenceEquals(this, other))
-        {
-            return true;
-        }
-
-        if (other is not GenSolvablePolynomialRing<C> ring || !base.Equals(other))
-        {
-            return false;
-        }
-
-        return Table.Equals(ring.Table);
+        return ReferenceEquals(this, other)
+            || (other is GenSolvablePolynomialRing<C> && base.Equals(other));
     }
 
     /// <summary>
@@ -98,6 +89,15 @@ public class GenSolvablePolynomialRing<C> : GenPolynomialRing<C> where C : RingE
     public new GenSolvablePolynomial<C> FromInteger(BigInteger value)
     {
         return new GenSolvablePolynomial<C>(this, CoFac.FromInteger(value), Evzero);
+    }
+
+    /// <summary>
+    /// Copies a solvable polynomial into this ring.
+    /// </summary>
+    public GenSolvablePolynomial<C> Copy(GenSolvablePolynomial<C> polynomial)
+    {
+        ArgumentNullException.ThrowIfNull(polynomial);
+        return new GenSolvablePolynomial<C>(this, polynomial.CloneTerms(), copy: false);
     }
 
     /// <summary>
@@ -138,6 +138,88 @@ public class GenSolvablePolynomialRing<C> : GenPolynomialRing<C> where C : RingE
     public new List<GenSolvablePolynomial<C>> UnivariateList(int moduleVariables, long exponent)
     {
         return base.UnivariateList(moduleVariables, exponent).Select(FromBase).ToList();
+    }
+
+    /// <summary>
+    /// Query if this ring is commutative.
+    /// </summary>
+    public new bool IsCommutative()
+    {
+        if (Table.Size() == 0)
+        {
+            return base.IsCommutative();
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Query if this ring is associative.
+    /// </summary>
+    public new bool IsAssociative()
+    {
+        for (int i = 0; i < Nvar; i++)
+        {
+            GenSolvablePolynomial<C> xi = Univariate(i);
+            for (int j = i + 1; j < Nvar; j++)
+            {
+                GenSolvablePolynomial<C> xj = Univariate(j);
+                for (int k = j + 1; k < Nvar; k++)
+                {
+                    GenSolvablePolynomial<C> xk = Univariate(k);
+                    GenSolvablePolynomial<C> left = xk.Multiply(xj).Multiply(xi);
+                    GenSolvablePolynomial<C> right = xk.Multiply(xj.Multiply(xi));
+                    if (!left.Equals(right))
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Extends the number of variables by the given count.
+    /// </summary>
+    public new GenSolvablePolynomialRing<C> Extend(int count)
+    {
+        GenPolynomialRing<C> ring = base.Extend(count);
+        GenSolvablePolynomialRing<C> extended = new (ring.CoFac, ring.Nvar, ring.Tord, ring.GetVars());
+        extended.Table.Extend(Table);
+        return extended;
+    }
+
+    /// <summary>
+    /// Contracts the number of variables by the given count.
+    /// </summary>
+    public new GenSolvablePolynomialRing<C> Contract(int count)
+    {
+        GenPolynomialRing<C> ring = base.Contract(count);
+        GenSolvablePolynomialRing<C> contracted = new (ring.CoFac, ring.Nvar, ring.Tord, ring.GetVars());
+        contracted.Table.Contract(Table);
+        return contracted;
+    }
+
+    /// <summary>
+    /// Reverses the variable order.
+    /// </summary>
+    public new GenSolvablePolynomialRing<C> Reverse()
+    {
+        return Reverse(false);
+    }
+
+    /// <summary>
+    /// Reverses the variable order.
+    /// </summary>
+    public new GenSolvablePolynomialRing<C> Reverse(bool partialReverse)
+    {
+        GenPolynomialRing<C> ring = base.Reverse(partialReverse);
+        GenSolvablePolynomialRing<C> reversed = new (ring.CoFac, ring.Nvar, ring.Tord, ring.GetVars());
+        reversed.partial = partialReverse;
+        reversed.Table.Reverse(Table);
+        return reversed;
     }
 
     /// <summary>

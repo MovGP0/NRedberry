@@ -35,22 +35,4 @@ public class OptimizedPolynomialList<C> : PolynomialList<C> where C : RingElem<C
     {
         return "permutation = " + string.Join(", ", Perm) + Environment.NewLine + base.ToString();
     }
-
-    /// <summary>
-    /// Considers both the base list equality and the permutation vector.
-    /// </summary>
-    public override bool Equals(object? B)
-    {
-        if (B is not OptimizedPolynomialList<C> other)
-        {
-            return false;
-        }
-
-        if (!base.Equals(other))
-        {
-            return false;
-        }
-
-        return Perm.SequenceEqual(other.Perm);
-    }
 }

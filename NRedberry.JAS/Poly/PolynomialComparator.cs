@@ -69,7 +69,7 @@ public class PolynomialComparator<C> : IComparer<GenPolynomial<C>> where C : Rin
             return false;
         }
 
-        return Reverse == pc.Reverse && Tord.Equals(pc.Tord);
+        return Tord.Equals(pc.Tord);
     }
 
     /// <summary>
@@ -77,7 +77,7 @@ public class PolynomialComparator<C> : IComparer<GenPolynomial<C>> where C : Rin
     /// </summary>
     public override int GetHashCode()
     {
-        return HashCode.Combine(Tord, Reverse);
+        return Tord.GetHashCode();
     }
 
     /// <summary>
@@ -85,6 +85,6 @@ public class PolynomialComparator<C> : IComparer<GenPolynomial<C>> where C : Rin
     /// </summary>
     public override string ToString()
     {
-        return $"PolynomialComparator({Tord}, reverse: {Reverse})";
+        return $"PolynomialComparator({Tord})";
     }
 }
