@@ -7,15 +7,15 @@ namespace NRedberry.Core.Utils;
 /// </summary>
 public sealed class InfiniteLoopIterable<T> : IEnumerable<T>
 {
-    private readonly IReadOnlyList<T> _items;
+    private readonly T[] _items;
 
-    public InfiniteLoopIterable(params IReadOnlyList<T> items)
+    public InfiniteLoopIterable(params T[] items)
     {
         ArgumentNullException.ThrowIfNull(items);
         _items = items;
     }
 
-    public IEnumerator<T> GetEnumerator() => new InfiniteLoopIterator<T>(_items.ToArray());
+    public IEnumerator<T> GetEnumerator() => new InfiniteLoopIterator<T>(_items);
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

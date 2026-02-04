@@ -14,7 +14,7 @@ public sealed class InfiniteLoopIterator<T> : IEnumerator<T>
     {
         ArgumentNullException.ThrowIfNull(items);
         _items = items;
-        _pointer = 0;
+        _pointer = -1;
     }
 
     public bool MoveNext()
@@ -24,15 +24,19 @@ public sealed class InfiniteLoopIterator<T> : IEnumerator<T>
             return false;
         }
 
-        if (_pointer == _items.Length)
+        if (_pointer >= _items.Length - 1)
         {
             _pointer = 0;
+        }
+        else
+        {
+            _pointer++;
         }
 
         return true;
     }
 
-    public void Reset() => _pointer = 0;
+    public void Reset() => _pointer = -1;
 
     public T Current
     {
@@ -43,7 +47,12 @@ public sealed class InfiniteLoopIterator<T> : IEnumerator<T>
                 throw new InvalidOperationException("Sequence is empty.");
             }
 
-            return _items[_pointer++];
+            if (_pointer < 0 || _pointer >= _items.Length)
+            {
+                throw new InvalidOperationException("Enumerator is positioned before the first element.");
+            }
+
+            return _items[_pointer];
         }
     }
 

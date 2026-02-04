@@ -13,25 +13,40 @@ public sealed class ArrayIterator<T> : System.Collections.Generic.IEnumerator<T>
     {
         ArgumentNullException.ThrowIfNull(array);
         _array = array;
-        throw new NotImplementedException();
     }
 
-    public T Current => throw new NotImplementedException();
+    public T Current
+    {
+        get
+        {
+            if (_index < 0 || _index >= _array.Length)
+            {
+                throw new InvalidOperationException("Enumerator is positioned before the first element or after the last element.");
+            }
 
-    object System.Collections.IEnumerator.Current => throw new NotImplementedException();
+            return _array[_index];
+        }
+    }
+
+    object System.Collections.IEnumerator.Current => Current!;
 
     public bool MoveNext()
     {
-        throw new NotImplementedException();
+        if (_index < _array.Length - 1)
+        {
+            _index++;
+            return true;
+        }
+
+        return false;
     }
 
     public void Reset()
     {
-        throw new NotImplementedException();
+        _index = -1;
     }
 
     public void Dispose()
     {
-        throw new NotImplementedException();
     }
 }

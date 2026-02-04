@@ -1,5 +1,8 @@
+using NRedberry.Numbers;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Symmetrization;
+using NRedberry.Transformations.Substitutions;
+using TensorFactory = NRedberry.Tensors.Tensors;
 
 namespace NRedberry.Physics.Oneloopdiv;
 
@@ -8,15 +11,23 @@ namespace NRedberry.Physics.Oneloopdiv;
 /// </summary>
 internal sealed class SqrSubs : ITransformation
 {
-    private readonly int tensorName;
+    private readonly ITransformation _transformation;
 
     public SqrSubs(SimpleTensor tensor)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(tensor);
+        if (tensor.Indices.Size() != 1)
+        {
+            throw new ArgumentException("Expected a single index.", nameof(tensor));
+        }
+
+        Tensor inverted = ApplyIndexMapping.InvertIndices(tensor);
+        Tensor product = TensorFactory.Multiply(tensor, inverted);
+        _transformation = new SubstitutionTransformation(TensorFactory.Expression(product, Complex.One));
     }
 
     public Tensor Transform(Tensor tensor)
     {
-        throw new NotImplementedException();
+        return _transformation.Transform(tensor);
     }
 }

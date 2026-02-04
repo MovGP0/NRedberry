@@ -10,24 +10,24 @@ namespace NRedberry.Core.Utils;
 /// </summary>
 public sealed class ProgressReporter
 {
-    private readonly string prefix;
-    private readonly long limit;
-    private readonly double percentStep;
-    private readonly int barLength;
-    private readonly NumberFormatInfo formatInfo;
-    private long progress;
+    private readonly string _prefix;
+    private readonly long _limit;
+    private readonly double _percentStep;
+    private readonly int _barLength;
+    private readonly NumberFormatInfo _formatInfo;
+    private long _progress;
 
-    private readonly object lockObj = new();
-    private double previousShown;
+    private readonly object _lock = new();
+    private double _previousShown;
 
     public ProgressReporter(string prefix, long limit, double percentStep)
     {
-        this.prefix = prefix;
-        this.limit = limit;
-        this.percentStep = percentStep / 100.0;
-        barLength = 100;
-        formatInfo = (NumberFormatInfo)CultureInfo.InvariantCulture.NumberFormat.Clone();
-        formatInfo.NumberDecimalDigits = 2;
+        _prefix = prefix;
+        _limit = limit;
+        _percentStep = percentStep / 100.0;
+        _barLength = 100;
+        _formatInfo = (NumberFormatInfo)CultureInfo.InvariantCulture.NumberFormat.Clone();
+        _formatInfo.NumberDecimalDigits = 2;
     }
 
     /// <summary>
@@ -36,21 +36,21 @@ public sealed class ProgressReporter
     /// <returns>true if a new line was printed; false otherwise.</returns>
     public bool Next()
     {
-        long current = Interlocked.Increment(ref progress);
-        if (current > limit)
+        long current = Interlocked.Increment(ref _progress);
+        if (current > _limit)
         {
             return false;
         }
 
-        double pr = Round((double)current / limit);
-        double target = Round(previousShown + percentStep);
+        double pr = Round((double)current / _limit);
+        double target = Round(_previousShown + _percentStep);
         if (pr >= target)
         {
-            lock (lockObj)
+            lock (_lock)
             {
                 if (pr >= target)
                 {
-                    previousShown = pr;
+                    _previousShown = pr;
                     Print();
                     return true;
                 }
@@ -64,25 +64,31 @@ public sealed class ProgressReporter
 
     private void Print()
     {
-        string percentStr = "(" + (100.0 * previousShown).ToString("F2", formatInfo) + "%)";
-        var sb = new StringBuilder();
-        sb.Append(prefix);
+        string percentStr = "(" + (100.0 * _previousShown).ToString("F2", _formatInfo) + "%)";
+        StringBuilder sb = new();
+        sb.Append(_prefix);
         sb.Append(percentStr);
         sb.Append('[');
 
-        int filled = (int)(previousShown * barLength);
+        int filled = (int)(_previousShown * _barLength);
         int i = 0;
         for (; i < filled; ++i)
+        {
             sb.Append('=');
+        }
+
         sb.Append('>');
-        if (percentStr.Length < barLength - filled)
+        if (percentStr.Length < _barLength - filled)
         {
             sb.Append(percentStr);
             i += percentStr.Length;
         }
 
-        for (; i < barLength; ++i)
+        for (; i < _barLength; ++i)
+        {
             sb.Append(' ');
+        }
+
         sb.Append(']');
         sb.Append('\n');
         Console.Write(sb.ToString());

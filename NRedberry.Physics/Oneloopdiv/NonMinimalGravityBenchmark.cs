@@ -7,11 +7,16 @@ public sealed class NonMinimalGravityBenchmark
 {
     private NonMinimalGravityBenchmark()
     {
-        throw new NotImplementedException();
     }
 
     public static void Main(string[] args)
     {
-        throw new NotImplementedException();
+        // Benchmarks.BurnJvm();
+        Benchmarks.Timer timer = new();
+        timer.Start();
+        OneLoopUtils.SetUpRiemannSymmetries();
+        // Benchmarks.TestNonMinimalGaugeGravity();
+        Benchmarks.TestSpin3Ghosts();
+        Console.WriteLine($"Non minimal gravity: {timer.ElapsedTimeInSeconds()} s.");
     }
 }

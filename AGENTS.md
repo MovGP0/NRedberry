@@ -288,12 +288,15 @@ public override int GetHashCode()
 - Build error note: CS0506 occurs if derived operator parsers override `ParseToken` while `ParserOperator.ParseToken` is not virtual; mark the base method as `virtual` or remove the override.
 - Build error note: RCS0015 flags blank lines between using directives; keep using directives contiguous and only leave a blank line before the namespace.
 - Build error note: CS0104 can occur when CC is ambiguous between NRedberry.Contexts and NRedberry.Tensors; use an alias or fully qualify the intended CC.
+- Build error note: CS0104 can occur when MathUtils is ambiguous between NRedberry.Maths and NRedberry.Core.Utils; use an alias (e.g., MathsUtils) or fully qualify.
 - Build error note: CS0246 occurs when referencing ProductBuilder in ports; use ScalarsBackedProductBuilder (or TensorBuilder) instead.
+- Build error note: CS0246 for Averaging in Physics.Tests; add using NRedberry.Physics.Oneloopdiv (or fully qualify Averaging).
 - Build error note: CS0019 occurs when using SimpleIndices.Size as a property; call Size() to get the count.
 - Build error note: RCS1085 flagged the IIndexMappingProvider EmptyProvider property backing field; use an auto-implemented get-only property with initializer instead.
 - Build error note: RCS1146 flagged a null check before RemoveContracted; prefer conditional access like `buffer?.RemoveContracted()` to satisfy the analyzer.
 - Build error note: CS0117 occurs if referencing `IIndexMappingProvider.EmptyProvider`; use `IndexMappingProviderUtil.EmptyProvider` instead.
 - Build error note: CS0246 can occur when using `IOutputPort<>` without `using NRedberry.Concurrent;` (e.g., ProviderFunctions); add the using to resolve the interface.
+- Build error note: In files under NRedberry.Physics, `Tensors` can be resolved as a namespace; use an alias like `using TensorFactory = NRedberry.Tensors.Tensors;` when calling `Multiply`/`Expression` to avoid CS0234/CS1955.
 - Build error note: RCS1146 also flags null checks before calling `GetSign()` on nullable mapping buffers; use conditional access like `buffer?.GetSign()` to satisfy the analyzer.
 - Build error note: RCS1146 flagged null checks before calling `EqualsRegardlessOrder`; use conditional access like `_indices?.EqualsRegardlessOrder(...) != true` to satisfy the analyzer.
 - Build error note: CS0403 occurs when returning null for generic number token parsers; return `default!` (or `default(T)`) to represent "no match" for `T`.
@@ -304,11 +307,15 @@ public override int GetHashCode()
 - Build error note: ParserSimpleTensor.cs used SimpleIndices without `using NRedberry.Indices;`, causing CS0246; add the correct using when referencing index types.
 - Build error note: GapGroupsInterface.cs referenced `NRedberry.Core.Groups`; use `NRedberry.Groups` for `PermutationGroup` to avoid CS0234.
 - Build error note: GapGroupsInterface.cs needs `Permutation` from `NRedberry.Core.Combinatorics`; add the correct using to avoid CS0246.
+- Build error note: RCS1074 flags redundant empty constructors; remove the no-op constructor unless it contains required initialization logic.
 - Build error note: RCS1155 flags string comparisons without StringComparison; use string.Equals(..., StringComparison.OrdinalIgnoreCase) instead of ToLower/ToUpper comparisons.
+- Build error note: CS0619 can occur when an API is marked `[Obsolete(..., true)]` and still used internally; change to non-error obsolete or avoid the deprecated type in code paths.
 - Build error note: CS8859 occurs if a record defines a member named `Clone`; rename the method (e.g., `Copy`) or use a non-record type to avoid the restriction.
 - Build error note: RCS1006 flags nested `if` inside `else`; merge into `else if` to satisfy Roslynator.
 - Build error note: ExternalSolver.cs used `Tensors.Expression`/`Tensors.ParseExpression` and `Tensors` resolved to the namespace, causing CS1955/CS0234; use `NRedberry.Tensors.Tensors` (or a using alias) when calling static tensor helpers.
+- Build error note: CS0246 when using `TransformationCollection` without the correct namespace; add `using NRedberry.Transformations.Symmetrization;` (the class lives there).
 - Build error note: RCS0055/RCS0027 can flag long string concatenation chains; prefer `StringBuilder` (or keep each `+` on its own line with consistent indentation).
+- Build error note: RCS0055 can also flag long string concatenations in expressions; prefer `string.Concat(...)` to avoid binary chain formatting errors.
 - Build error note: FrobeniusNumber.cs used Java's `UnsupportedOperationException` (CS0246) and missed a blank line between const and static fields (RCS0013); use `NotSupportedException` and keep a blank line between declaration kinds.
 - Porting note: Combinatoric.cs replaces Java `UnsupportedOperationException` with `NotSupportedException` (no direct C# equivalent).
 - Porting note: ModInteger.cs implements modular inverse via a custom extended-GCD helper because `System.Numerics.BigInteger` lacks `modInverse`.

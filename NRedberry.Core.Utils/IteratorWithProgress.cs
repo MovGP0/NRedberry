@@ -8,31 +8,33 @@ namespace NRedberry.Core.Utils;
 /// </summary>
 public class IteratorWithProgress<T> : IEnumerator<T>
 {
-    private readonly IEnumerator<T> innerIterator;
-    private readonly long totalCount;
-    private readonly IConsumer consumer;
+    private readonly IEnumerator<T> _innerIterator;
+    private readonly long _totalCount;
+    private readonly IConsumer _consumer;
 
-    private int prevPercent = -1;
-    private long currentPosition;
+    private int _prevPercent = -1;
+    private long _currentPosition;
 
     public IteratorWithProgress(IEnumerator<T> innerIterator, long totalCount, IConsumer consumer)
     {
-        this.innerIterator = innerIterator ?? throw new ArgumentNullException(nameof(innerIterator));
-        this.totalCount = totalCount;
-        this.consumer = consumer ?? throw new ArgumentNullException(nameof(consumer));
+        _innerIterator = innerIterator ?? throw new ArgumentNullException(nameof(innerIterator));
+        _totalCount = totalCount;
+        _consumer = consumer ?? throw new ArgumentNullException(nameof(consumer));
     }
 
     public bool MoveNext()
     {
-        if (!innerIterator.MoveNext())
-            return false;
-
-        ++currentPosition;
-        int percent = (int)(100.0 * currentPosition / totalCount);
-        if (percent != prevPercent)
+        if (!_innerIterator.MoveNext())
         {
-            consumer.Consume(percent);
-            prevPercent = percent;
+            return false;
+        }
+
+        _currentPosition++;
+        int percent = (int)(100.0 * _currentPosition / _totalCount);
+        if (percent != _prevPercent)
+        {
+            _consumer.Consume(percent);
+            _prevPercent = percent;
         }
 
         return true;
@@ -40,16 +42,19 @@ public class IteratorWithProgress<T> : IEnumerator<T>
 
     public void Reset()
     {
-        innerIterator.Reset();
-        currentPosition = 0;
-        prevPercent = -1;
+        _innerIterator.Reset();
+        _currentPosition = 0;
+        _prevPercent = -1;
     }
 
-    public T Current => innerIterator.Current;
+    public T Current => _innerIterator.Current;
 
     object IEnumerator.Current => Current!;
 
-    public void Dispose() => innerIterator.Dispose();
+    public void Dispose()
+    {
+        _innerIterator.Dispose();
+    }
 
     public interface IConsumer
     {

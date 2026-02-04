@@ -6,29 +6,26 @@ namespace NRedberry.Core.Utils;
 [Obsolete("Use Enumerable.Empty<T>() instead", true)]
 public sealed class EmptyIterator<T> : System.Collections.Generic.IEnumerator<T>
 {
-    public static EmptyIterator<T> Instance => throw new NotImplementedException();
+    public static EmptyIterator<T> Instance { get; } = new();
 
     private EmptyIterator()
     {
-        throw new NotImplementedException();
     }
 
-    public T Current => throw new NotImplementedException();
+    public T Current => throw new InvalidOperationException("Empty iterator has no current element.");
 
-    object System.Collections.IEnumerator.Current => throw new NotImplementedException();
+    object System.Collections.IEnumerator.Current => Current!;
 
     public bool MoveNext()
     {
-        throw new NotImplementedException();
+        return false;
     }
 
     public void Reset()
     {
-        throw new NotImplementedException();
     }
 
     public void Dispose()
     {
-        throw new NotImplementedException();
     }
 }
