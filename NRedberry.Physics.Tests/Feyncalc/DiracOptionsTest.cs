@@ -2,5 +2,8 @@ namespace NRedberry.Physics.Tests.Feyncalc;
 
 public sealed class DiracOptionsTest
 {
-    // TODO: Port members from cc.redberry.physics.feyncalc.DiracOptionsTest.
+    public void ShouldCloneOptions()
+    {
+        // TODO: Port test once the test framework is configured.
+    }
 }

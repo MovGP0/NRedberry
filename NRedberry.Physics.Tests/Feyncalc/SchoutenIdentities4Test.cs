@@ -2,5 +2,8 @@ namespace NRedberry.Physics.Tests.Feyncalc;
 
 public sealed class SchoutenIdentities4Test
 {
-    // TODO: Port members from cc.redberry.physics.feyncalc.SchoutenIdentities4Test.
+    public void Placeholder()
+    {
+        // TODO: Port SchoutenIdentities4 tests once test framework is configured.
+    }
 }

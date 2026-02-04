@@ -297,6 +297,7 @@ public override int GetHashCode()
 - Build error note: RCS1146 also flags null checks before calling `GetSign()` on nullable mapping buffers; use conditional access like `buffer?.GetSign()` to satisfy the analyzer.
 - Build error note: RCS1146 flagged null checks before calling `EqualsRegardlessOrder`; use conditional access like `_indices?.EqualsRegardlessOrder(...) != true` to satisfy the analyzer.
 - Build error note: CS0403 occurs when returning null for generic number token parsers; return `default!` (or `default(T)`) to represent "no match" for `T`.
+- Build error note: Xunit SkipException has no public constructors; use `SkipException.ForSkip("message")` when skipping tests.
 - Build error note: RCS1132 flags overrides that only forward to the base implementation; remove the redundant override instead of calling `base`.
 - Build error note: RCS1132 flagged a redundant `GetHashCode` override in GenSolvablePolynomial; avoid adding overrides that only return `base.GetHashCode()`.
 - Build error note: RCS0054 flags multi-line call chains; split construction and method calls into separate statements.
@@ -336,6 +337,14 @@ public override int GetHashCode()
 - Build error note: CollectTransformation had a method named `Split` conflicting with the nested `Split` class (CS0102); rename the method (e.g., `SplitTerm`) to avoid name collisions.
 - Porting note: Java `Product.getIndexlessSubProduct()` is not available in C#; re-create it from `Product.Factor` and `Product.IndexlessData` when needed (e.g., ExpandTensorsTransformation).
 - Build error note: ExpandTensorsTransformation missed `using NRedberry.Numbers` for `Complex` (CS0103); add the correct using when referencing numeric types.
+- Build error note: OptionAttribute exposes `Name`/`Index` properties (no `name`/`index` ctor args); use `[Option(Name = "...", Index = ...)]` to avoid CS1739.
+- Build error note: OptionAttribute is valid only on fields/parameters (CS0592); apply it to backing fields instead of properties.
+- Build error note: RCS0053 flags long argument lists; format method calls with each argument on its own line.
+- Build error note: `Tensor`/`Tensors` can resolve as namespaces (CS0118/CS0234); use aliases like `TensorType = NRedberry.Tensors.Tensor` and `TensorFactory = NRedberry.Tensors.Tensors`.
+- Build error note: RCS1118 flags locals that can be const; use `const` for computed locals like `const int pivot = K / 6;`.
+- Build error note: `IndexType` is in the `NRedberry` namespace (not `NRedberry.Core.Entities`); use `using NRedberry;` to avoid CS0234.
+- Build error note: `IdentityTransformation` has no singleton; instantiate with `new IdentityTransformation()` to avoid CS0117.
+- Build error note: `NRedberry.Physics.Tests` has no xUnit reference; avoid `[Fact]`/`using Xunit` there to prevent CS0246.
 
 ## Roslynator Diagnostics Reference
 

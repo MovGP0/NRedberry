@@ -1,6 +1,6 @@
 namespace NRedberry.Core.Tests.Test;
 
-public interface LongTest
+[AttributeUsage(AttributeTargets.Method, Inherited = false)]
+public sealed class LongTestAttribute : Attribute
 {
-    // TODO: Port members from cc.redberry.core.test.LongTest.
 }

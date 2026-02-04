@@ -2,5 +2,8 @@ namespace NRedberry.Physics.Tests.Feyncalc;
 
 public sealed class DiracSimplifyTransformationTest
 {
-    // TODO: Port members from cc.redberry.physics.feyncalc.DiracSimplifyTransformationTest.
+    public void Placeholder()
+    {
+        // TODO: Port DiracSimplifyTransformation tests once test framework is configured.
+    }
 }
