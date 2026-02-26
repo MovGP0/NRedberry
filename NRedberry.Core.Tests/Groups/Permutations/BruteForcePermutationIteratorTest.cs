@@ -1,21 +1,59 @@
+using NRedberry.Core.Combinatorics;
+using NRedberry.Groups;
 using Xunit;
+using GroupPermutations = NRedberry.Groups.Permutations;
 
 namespace NRedberry.Core.Tests.Groups.Permutations;
 
-/// <summary>
-/// Skeleton port of cc.redberry.core.groups.permutations.BruteForcePermutationIteratorTest.
-/// </summary>
-public sealed class BruteForcePermutationIteratorTest
+public sealed class BruteForcePermutationIteratorTests
 {
-    [Fact]
+    [Fact(DisplayName = "Should not loop indefinitely")]
     public void ShouldNotLoopIndefinitely()
     {
-        throw new NotImplementedException();
+        // Arrange
+        List<Permutation> generators =
+        [
+            GroupPermutations.CreateIdentityPermutation(3)
+        ];
+        BruteForcePermutationIterator iterator = new(generators);
+        int iterations = 0;
+        const int maxIterations = 10;
+        bool finished = false;
+
+        // Act
+        while (iterations < maxIterations)
+        {
+            if (!iterator.MoveNext())
+            {
+                finished = true;
+                break;
+            }
+
+            iterations++;
+        }
+
+        // Assert
+        Assert.True(finished);
+        Assert.Equal(1, iterations);
     }
 
-    [Fact]
-    public void ShouldEnumerateAllPermutations()
+    [Fact(DisplayName = "Should throw for inconsistent generators")]
+    public void ShouldThrowForInconsistentGenerators()
     {
-        throw new NotImplementedException();
+        // Arrange
+        List<Permutation> generators =
+        [
+            GroupPermutations.CreatePermutation(GroupPermutations.CreateTransposition(3, 0, 1)),
+            GroupPermutations.CreatePermutation(GroupPermutations.CreateCycle(3))
+        ];
+        BruteForcePermutationIterator iterator = new(generators);
+
+        // Act + Assert
+        Assert.Throws<InconsistentGeneratorsException>(() =>
+        {
+            while (iterator.MoveNext())
+            {
+            }
+        });
     }
 }

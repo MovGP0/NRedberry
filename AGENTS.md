@@ -289,6 +289,7 @@ public override int GetHashCode()
 - Build error note: RCS0015 flags blank lines between using directives; keep using directives contiguous and only leave a blank line before the namespace.
 - Build error note: CS0104 can occur when CC is ambiguous between NRedberry.Contexts and NRedberry.Tensors; use an alias or fully qualify the intended CC.
 - Build error note: CS0104 can occur when MathUtils is ambiguous between NRedberry.Maths and NRedberry.Core.Utils; use an alias (e.g., MathsUtils) or fully qualify.
+- Build error note: In test files, `Complex` can be ambiguous between `NRedberry.Numbers.Complex` and `System.Numerics.Complex` (CS0104), especially with global/implicit System usings; use an explicit alias such as `using NumberComplex = NRedberry.Numbers.Complex;`.
 - Build error note: CS0246 occurs when referencing ProductBuilder in ports; use ScalarsBackedProductBuilder (or TensorBuilder) instead.
 - Build error note: CS0246 for Averaging in Physics.Tests; add using NRedberry.Physics.Oneloopdiv (or fully qualify Averaging).
 - Build error note: CS0019 occurs when using SimpleIndices.Size as a property; call Size() to get the count.
@@ -304,6 +305,8 @@ public override int GetHashCode()
 - Build error note: RCS1132 flags overrides that only forward to the base implementation; remove the redundant override instead of calling `base`.
 - Build error note: RCS1132 flagged a redundant `GetHashCode` override in GenSolvablePolynomial; avoid adding overrides that only return `base.GetHashCode()`.
 - Build error note: RCS0054 flags multi-line call chains; split construction and method calls into separate statements.
+- Build error note: RCS0054 flagged chaining `.Transform(...)` on multi-line `new` expressions; assign the transformer to a variable before invoking `Transform`.
+- Build error note: CS7036 can occur when calling `array.Fill(...)` without `using NRedberry.Contexts;`; add the using so the extension method is in scope and not confused with `Array.Fill`.
 - Build error note: ParserSimpleTensor.cs used SimpleIndices without `using NRedberry.Indices;`, causing CS0246; add the correct using when referencing index types.
 - Build error note: GapGroupsInterface.cs referenced `NRedberry.Core.Groups`; use `NRedberry.Groups` for `PermutationGroup` to avoid CS0234.
 - Build error note: GapGroupsInterface.cs needs `Permutation` from `NRedberry.Core.Combinatorics`; add the correct using to avoid CS0246.
@@ -316,6 +319,7 @@ public override int GetHashCode()
 - Build error note: CS0246 when using `TransformationCollection` without the correct namespace; add `using NRedberry.Transformations.Symmetrization;` (the class lives there).
 - Build error note: RCS0055/RCS0027 can flag long string concatenation chains; prefer `StringBuilder` (or keep each `+` on its own line with consistent indentation).
 - Build error note: RCS0055 can also flag long string concatenations in expressions; prefer `string.Concat(...)` to avoid binary chain formatting errors.
+- Build error note: RCS0055 can still fire for `const string` concatenations; if the value must remain `const`, collapse into a single literal string to avoid binary chains.
 - Build error note: FrobeniusNumber.cs used Java's `UnsupportedOperationException` (CS0246) and missed a blank line between const and static fields (RCS0013); use `NotSupportedException` and keep a blank line between declaration kinds.
 - Porting note: Combinatoric.cs replaces Java `UnsupportedOperationException` with `NotSupportedException` (no direct C# equivalent).
 - Porting note: ModInteger.cs implements modular inverse via a custom extended-GCD helper because `System.Numerics.BigInteger` lacks `modInverse`.
@@ -348,10 +352,17 @@ public override int GetHashCode()
 - Build error note: OptionAttribute is valid only on fields/parameters (CS0592); apply it to backing fields instead of properties.
 - Build error note: RCS0053 flags long argument lists; format method calls with each argument on its own line.
 - Build error note: `Tensor`/`Tensors` can resolve as namespaces (CS0118/CS0234); use aliases like `TensorType = NRedberry.Tensors.Tensor` and `TensorFactory = NRedberry.Tensors.Tensors`.
+- Build error note: Calls like `Tensors.Multiply(...)` may resolve to the `NRedberry.Tensors` namespace (CS0234); use `NRedberry.Tensors.Tensors.Multiply(...)` or a `using` alias.
+- Build error note: In `NRedberry.Core.Tests.Groups` the `Permutations` identifier can resolve to the `Groups.Permutations` namespace (CS0234); use `NRedberry.Groups.Permutations` or an alias.
 - Build error note: RCS1118 flags locals that can be const; use `const` for computed locals like `const int pivot = K / 6;`.
 - Build error note: `IndexType` is in the `NRedberry` namespace (not `NRedberry.Core.Entities`); use `using NRedberry;` to avoid CS0234.
 - Build error note: `IdentityTransformation` has no singleton; instantiate with `new IdentityTransformation()` to avoid CS0117.
 - Build error note: `NRedberry.Physics.Tests` has no xUnit reference; avoid `[Fact]`/`using Xunit` there to prevent CS0246.
+- Build error note: Shouldly doesn't resolve `ShouldBe` on `byte` (CS1929); cast to `int` (e.g., `((int)converter.Type).ShouldBe(2)`).
+- Build error note: `NRedberry.Core.Tests` doesn't reference Shouldly (CS0246); use `Xunit.Assert` instead of Shouldly in that project.
+- Build error note: In `NRedberry.Core.Tests.Groups.Permutations` test files, `Permutations` can bind to the namespace segment instead of the static helper type (CS0234); use an alias like `using GroupPermutations = NRedberry.Groups.Permutations;`.
+- Build error note: In `NRedberry.Core.Tests.Groups` files, a test class name starting with `Permutations...` can shadow static `Permutations` calls and produce CS0234; prefer an alias (e.g., `using GroupPermutations = NRedberry.Groups.Permutations;`) for method invocations.
+- Build error note: Roslynator RCS0055 can fail test projects (e.g., `PermutationsNextZeroBitTests`) when binary chains in assertions are split inconsistently; keep each operator on its own aligned line or collapse short chains to one line.
 
 ## Roslynator Diagnostics Reference
 
@@ -443,6 +454,7 @@ Some types and methods need to be replaced with .NET types:
 - NEVER say "ready to push when you are" - YOU must push
 - If push fails, resolve and retry until it succeeds
 
+- Build error note: `PermutationOneLineByteTests.cs` can hit CS0234 when resolving `Permutations`; use `global::NRedberry.Groups.Permutations` (or the `NRedberry.Groups` using/alias) instead of `NRedberry.Core.Combinatorics.Permutations` in test code.
 
 
 
@@ -450,3 +462,8 @@ Some types and methods need to be replaced with .NET types:
 
 
 
+
+
+- Build error note: CS9051 occurs when a file-local type is used in a non-file-local member signature (e.g., test helper parameter types); use internal helpers or a non-file-local signature type to avoid this compiler error.
+- Build error note: In `NRedberry.Core.Tests`, `Tensors.*` calls can resolve to the `NRedberry.Tensors` namespace (CS0234/CS1955); use `NRedberry.Tensors.Tensors` or an alias like `using TensorFactory = NRedberry.Tensors.Tensors;`.
+- Build error note: In `NRedberry.Core.Tests.Solver`, unqualified `Context.Get()` can resolve to the `NRedberry.Core.Tests.Context` namespace (CS0234); call `NRedberry.Contexts.Context.Get()` or alias the runtime context type explicitly.

@@ -641,10 +641,10 @@ This document lists each NRedberry class (.cs) alongside the Redberry source (.j
 | ./NRedberry.Physics/Oneloopdiv/OneLoopInput.cs                                                         | ./physics/src/main/java/cc/redberry/physics/oneloopdiv/OneLoopInput.java                                                      | Ported. |
 | ./NRedberry.Physics/Oneloopdiv/OneLoopUtils.cs                                                         | ./physics/src/main/java/cc/redberry/physics/oneloopdiv/OneLoopUtils.java                                                      | Ported. |
 | ./NRedberry.Physics/Oneloopdiv/SqrSubs.cs                                                              | ./physics/src/main/java/cc/redberry/physics/oneloopdiv/SqrSubs.java                                                           | Ported. |
-| ./NRedberry.Physics.Tests/Feyncalc/LeviCivitaSimplifyTransformationTest.cs                             | ./physics/src/test/java/cc/redberry/physics/feyncalc/LeviCivitaSimplifyTransformationTest.java                                | Skeleton pending full port. |
-| ./NRedberry.Physics.Tests/Feyncalc/UnitaryTraceTransformationTest.cs                                   | ./physics/src/test/java/cc/redberry/physics/feyncalc/UnitaryTraceTransformationTest.java                                      | Skeleton pending full port. |
+| ./NRedberry.Physics.Tests/Feyncalc/LeviCivitaSimplifyTransformationTest.cs                             | ./physics/src/test/java/cc/redberry/physics/feyncalc/LeviCivitaSimplifyTransformationTest.java                                | Ported (RandomTensor test pending). |
+| ./NRedberry.Physics.Tests/Feyncalc/UnitaryTraceTransformationTest.cs                                   | ./physics/src/test/java/cc/redberry/physics/feyncalc/UnitaryTraceTransformationTest.java                                      | Ported (GeneralIndicesInsertion pending). |
 | ./NRedberry.Physics.Tests/Oneloopdiv/AveragingTest.cs                                                  | ./physics/src/test/java/cc/redberry/physics/oneloopdiv/AveragingTest.java                                                     | Skeleton pending full port. |
-| ./NRedberry.Physics.Tests/Oneloopdiv/OneLoopCountertermsTest.cs                                        | ./physics/src/test/java/cc/redberry/physics/oneloopdiv/OneLoopCountertermsTest.java                                           | Skeleton pending full port. |
+| ./NRedberry.Physics.Tests/Oneloopdiv/OneLoopCountertermsTest.cs                                        | ./physics/src/test/java/cc/redberry/physics/oneloopdiv/OneLoopCountertermsTest.java                                           | Ported. |
 
 
 

@@ -59,6 +59,11 @@ public sealed class ParserPower : ITokenParser
             }
         }
 
+        if (comma == -1)
+        {
+            throw new ParserException("Power takes exactly two arguments.");
+        }
+
         ParseToken arg = parser.Parse(expression.Substring(PowerLiteral.Length + 1, comma - PowerLiteral.Length - 1));
         ParseToken power = parser.Parse(expression.Substring(comma + 1, expression.Length - comma - 2));
         return new ParseToken(TokenType.Power, arg, power);
