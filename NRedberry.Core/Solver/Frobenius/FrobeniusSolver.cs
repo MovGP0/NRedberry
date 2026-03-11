@@ -23,9 +23,14 @@ public sealed class FrobeniusSolver : IOutputPort<int[]>
             throw new ArgumentException();
         }
 
+        if (!AssertEq(equations[0]))
+        {
+            throw new ArgumentException();
+        }
+
         for (int i = 1; i < equations.Length; ++i)
         {
-            if (equations[i].Length != length && !AssertEq(equations[i]))
+            if (equations[i].Length != length || !AssertEq(equations[i]))
             {
                 throw new ArgumentException();
             }

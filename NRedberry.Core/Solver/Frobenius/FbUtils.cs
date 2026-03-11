@@ -51,6 +51,11 @@ public static class FbUtils
     {
         ArgumentNullException.ThrowIfNull(equations);
 
+        return EnumerateSolutions(equations);
+    }
+
+    private static IEnumerable<int[]> EnumerateSolutions(int[][] equations)
+    {
         FrobeniusSolver fbSolver = new(equations);
         int[]? solution;
         while ((solution = fbSolver.Take()) is not null)
