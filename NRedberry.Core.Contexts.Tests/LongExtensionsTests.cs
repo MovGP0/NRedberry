@@ -11,7 +11,7 @@ public sealed class LongExtensionsTests
     [InlineData(1L, 1)]
     [InlineData(3L, 2)]
     [InlineData(11L, 3)]
-    [InlineData(0xF0F0F0F0F0F0F0F0L, 32)]
+    [InlineData(unchecked((long)0xF0F0F0F0F0F0F0F0UL), 32)]
     [InlineData(long.MaxValue, 63)]
     [InlineData(long.MinValue, 1)]
     [InlineData(-1L, 64)]

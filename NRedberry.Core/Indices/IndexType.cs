@@ -21,10 +21,10 @@ public static class IndexTypeMethods
 
     private static readonly Dictionary<IndexType, IIndexSymbolConverter> ConverterMap = new()
     {
-        { IndexType.LatinLower, new IndexWithStrokeConverter(IndexConverterExtender.LatinLowerEx, 1) },
-        { IndexType.LatinUpper, new IndexWithStrokeConverter(IndexConverterExtender.LatinUpperEx, 1) },
-        { IndexType.GreekLower, new IndexWithStrokeConverter(IndexConverterExtender.GreekLowerEx, 1) },
-        { IndexType.GreekUpper, new IndexWithStrokeConverter(IndexConverterExtender.GreekUpperEx, 1) },
+        { IndexType.LatinLower, IndexConverterExtender.LatinLowerEx },
+        { IndexType.LatinUpper, IndexConverterExtender.LatinUpperEx },
+        { IndexType.GreekLower, IndexConverterExtender.GreekLowerEx },
+        { IndexType.GreekUpper, IndexConverterExtender.GreekUpperEx },
         { IndexType.Matrix1, new IndexWithStrokeConverter(IndexConverterExtender.LatinLowerEx, 1) },
         { IndexType.Matrix2, new IndexWithStrokeConverter(IndexConverterExtender.LatinUpperEx, 1) },
         { IndexType.Matrix3, new IndexWithStrokeConverter(IndexConverterExtender.GreekLowerEx, 1) },

@@ -1,3 +1,4 @@
+using NRedberry.Indices;
 using NRedberry.Parsers;
 using NRedberry.Tensors.Functions;
 
@@ -58,7 +59,7 @@ public sealed class Context
 
         foreach (IndexType type in contextSettings.MetricTypes)
         {
-            metricTypes.Set(type.GetType().GetHashCode());
+            metricTypes.Set(type.GetType_());
         }
     }
 

@@ -147,4 +147,20 @@ public sealed record OutputFormat
             _ => throw new ArgumentException("Not a state int", nameof(rawIntState))
         };
     }
+
+    public override string ToString()
+    {
+        return Id switch
+        {
+            0 => nameof(LaTeX),
+            1 => nameof(UTF8),
+            2 => nameof(Redberry),
+            3 => nameof(Cadabra),
+            4 => nameof(WolframMathematica),
+            5 => nameof(Maple),
+            6 => nameof(SimpleRedberry),
+            7 => nameof(C),
+            _ => base.ToString()
+        };
+    }
 }

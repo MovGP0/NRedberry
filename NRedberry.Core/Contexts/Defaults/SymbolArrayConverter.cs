@@ -47,7 +47,7 @@ public abstract class SymbolArrayConverter : IIndexSymbolConverter
                 return "\\" + Symbols[code];
             return Symbols[code];
         }
-        catch (ArgumentOutOfRangeException e)
+        catch (IndexOutOfRangeException e)
         {
             throw new IndexConverterException(e.Message, e);
         }

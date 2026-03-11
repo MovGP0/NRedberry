@@ -14,7 +14,12 @@ public static class ArrayExtensions
             throw new ArgumentOutOfRangeException(nameof(count));
         }
 
-        if (start + count >= array.Length)
+        if (start < 0 || start > array.Length)
+        {
+            throw new ArgumentOutOfRangeException(nameof(start));
+        }
+
+        if (start + count > array.Length)
         {
             throw new ArgumentOutOfRangeException(nameof(count));
         }

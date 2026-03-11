@@ -117,8 +117,15 @@ public sealed class LongBackedBitArray : IBitArray
 
     public void SetAll()
     {
-        Data.Fill(0, Data.Length, long.MaxValue);
-        Data[Data.Length - 1] &= long.MaxValue >> ((Data.Length << 6) - Size);
+        Data.Fill(0, Data.Length, -1L);
+        var trailingBits = Size & 0x3F;
+        if (trailingBits == 0)
+        {
+            return;
+        }
+
+        ulong mask = (1UL << trailingBits) - 1;
+        Data[Data.Length - 1] &= unchecked((long)mask);
     }
 
     public void Xor(IBitArray bitArray)

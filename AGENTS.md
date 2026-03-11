@@ -290,6 +290,8 @@ public override int GetHashCode()
 - Build error note: CS0104 can occur when CC is ambiguous between NRedberry.Contexts and NRedberry.Tensors; use an alias or fully qualify the intended CC.
 - Build error note: CS0104 can occur when MathUtils is ambiguous between NRedberry.Maths and NRedberry.Core.Utils; use an alias (e.g., MathsUtils) or fully qualify.
 - Build error note: In test files, `Complex` can be ambiguous between `NRedberry.Numbers.Complex` and `System.Numerics.Complex` (CS0104), especially with global/implicit System usings; use an explicit alias such as `using NumberComplex = NRedberry.Numbers.Complex;`.
+- Build error note: running multiple `dotnet test` or build commands concurrently against projects that share `NRedberry.Core` outputs can trigger CS2012 file locks on `obj\Debug\net9.0\NRedberry.Core.dll`; run those validations sequentially.
+- Build error note: when calling `IndexTypeMethods` extension methods such as `GetType_()` from `Contexts` code, add `using NRedberry.Indices;` or fully qualify the helper; otherwise CS1061 occurs because the extension is out of scope.
 - Build error note: CS0246 occurs when referencing ProductBuilder in ports; use ScalarsBackedProductBuilder (or TensorBuilder) instead.
 - Build error note: CS0246 for Averaging in Physics.Tests; add using NRedberry.Physics.Oneloopdiv (or fully qualify Averaging).
 - Build error note: CS0019 occurs when using SimpleIndices.Size as a property; call Size() to get the count.
