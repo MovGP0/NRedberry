@@ -49,49 +49,43 @@ public class IntTimSort
 
     public static void Sort(int[] a, int lo, int hi, int[] b)
     {
+        ArgumentNullException.ThrowIfNull(a);
+        ArgumentNullException.ThrowIfNull(b);
         RangeCheck(a.Length, lo, hi);
+        if (b.Length < hi)
+        {
+            throw new ArgumentException();
+        }
+
         int nRemaining = hi - lo;
         if (nRemaining < 2)
         {
             return; // Arrays of size 0 and 1 are always sorted
         }
 
-        // If array is small, do a "mini-TimSort" with no merges
-        if (nRemaining < MIN_MERGE)
+        (int Key, int Value, int Order)[] entries = new (int Key, int Value, int Order)[nRemaining];
+        for (int i = 0; i < nRemaining; i++)
         {
-            int initRunLen = CountRunAndMakeAscending(a, lo, hi, b);
-            BinarySort(a, lo, hi, lo + initRunLen, b);
-            return;
+            int index = lo + i;
+            entries[i] = (a[index], b[index], i);
         }
 
-        IntTimSort ts = new IntTimSort(a, b);
-        int minRun = MinRunLength(nRemaining);
-        do
-        {
-            // Identify next run
-            int runLen = CountRunAndMakeAscending(a, lo, hi, b);
-
-            // If run is short, extend to min(minRun, nRemaining)
-            if (runLen < minRun)
+        Array.Sort(
+            entries,
+            static (left, right) =>
             {
-                int force = nRemaining <= minRun ? nRemaining : minRun;
-                BinarySort(a, lo, lo + force, lo + runLen, b);
-                runLen = force;
-            }
+                int keyComparison = left.Key.CompareTo(right.Key);
+                return keyComparison != 0
+                    ? keyComparison
+                    : left.Order.CompareTo(right.Order);
+            });
 
-            // Push run onto pending-run stack, and maybe merge
-            ts.PushRun(lo, runLen);
-            ts.MergeCollapse();
-
-            // Advance to find next run
-            lo += runLen;
-            nRemaining -= runLen;
-        } while (nRemaining != 0);
-
-        // Merge all remaining runs to complete sort
-        Debug.Assert(lo == hi);
-        ts.MergeForceCollapse();
-        Debug.Assert(ts.stackSize == 1);
+        for (int i = 0; i < nRemaining; i++)
+        {
+            int index = lo + i;
+            a[index] = entries[i].Key;
+            b[index] = entries[i].Value;
+        }
     }
 
     private static void BinarySort(int[] a, int lo, int hi, int start, int[] b)
@@ -493,29 +487,29 @@ private void MergeLo(int base1, int len1, int base2, int len2)
         do
         {
             // len1 > 1 && len2 > 0
-            if (a[cursor2] < tmp[cursor1])
-            {
-                b[dest] = b[cursor2];
-                a[dest++] = a[cursor2++];
-                count2++;
-                count1 = 0;
-                if (--len2 == 0)
+                if (a[cursor2] < tmp[cursor1])
                 {
-                    break;
+                    b[dest] = b[cursor2];
+                    a[dest++] = a[cursor2++];
+                    count2++;
+                    count1 = 0;
+                    if (--len2 == 0)
+                    {
+                        goto MergeLoExit;
+                    }
                 }
-            }
-            else
-            {
-                b[dest] = tmpB[cursor1];
-                a[dest++] = tmp[cursor1++];
-                count1++;
-                count2 = 0;
-                if (--len1 == 1)
+                else
                 {
-                    break;
+                    b[dest] = tmpB[cursor1];
+                    a[dest++] = tmp[cursor1++];
+                    count1++;
+                    count2 = 0;
+                    if (--len1 == 1)
+                    {
+                        goto MergeLoExit;
+                    }
                 }
-            }
-        } while ((count1 | count2) < minGallop);
+            } while ((count1 | count2) < minGallop);
 
         do
         {
@@ -530,7 +524,7 @@ private void MergeLo(int base1, int len1, int base2, int len2)
                 len1 -= count1;
                 if (len1 <= 1) // len1 == 1 || len1 == 0
                 {
-                    break;
+                    goto MergeLoExit;
                 }
             }
 
@@ -538,7 +532,7 @@ private void MergeLo(int base1, int len1, int base2, int len2)
             a[dest++] = a[cursor2++];
             if (--len2 == 0)
             {
-                break;
+                goto MergeLoExit;
             }
 
             count2 = GallopLeft(tmp[cursor1], a, cursor2, len2, 0);
@@ -551,7 +545,7 @@ private void MergeLo(int base1, int len1, int base2, int len2)
                 len2 -= count2;
                 if (len2 == 0)
                 {
-                    break;
+                    goto MergeLoExit;
                 }
             }
 
@@ -559,7 +553,7 @@ private void MergeLo(int base1, int len1, int base2, int len2)
             a[dest++] = tmp[cursor1++];
             if (--len1 == 1)
             {
-                break;
+                goto MergeLoExit;
             }
 
             minGallop--;
@@ -571,6 +565,10 @@ private void MergeLo(int base1, int len1, int base2, int len2)
         }
 
         minGallop += 2; // Penalize for leaving gallop mode
+
+MergeLoExit:
+
+        this.minGallop = minGallop < 1 ? 1 : minGallop;
 
         if (len1 == 1)
         {
@@ -650,7 +648,7 @@ private void MergeLo(int base1, int len1, int base2, int len2)
                     count2 = 0;
                     if (--len1 == 0)
                     {
-                        break;
+                        goto MergeHiExit;
                     }
                 }
                 else
@@ -661,7 +659,7 @@ private void MergeLo(int base1, int len1, int base2, int len2)
                     count1 = 0;
                     if (--len2 == 1)
                     {
-                        break;
+                        goto MergeHiExit;
                     }
                 }
             } while ((count1 | count2) < minGallop);
@@ -679,7 +677,7 @@ private void MergeLo(int base1, int len1, int base2, int len2)
                     Array.Copy(b, cursor1 + 1, b, dest + 1, count1);
                     if (len1 == 0)
                     {
-                        break;
+                        goto MergeHiExit;
                     }
                 }
 
@@ -687,7 +685,7 @@ private void MergeLo(int base1, int len1, int base2, int len2)
                 a[dest--] = tmp[cursor2--];
                 if (--len2 == 1)
                 {
-                    break;
+                    goto MergeHiExit;
                 }
 
                 count2 = len2 - GallopLeft(a[cursor1], tmp, 0, len2, len2 - 1);
@@ -700,7 +698,7 @@ private void MergeLo(int base1, int len1, int base2, int len2)
                     Array.Copy(tmp, cursor2 + 1, a, dest + 1, count2);
                     if (len2 <= 1)  // len2 == 1 || len2 == 0
                     {
-                        break;
+                        goto MergeHiExit;
                     }
                 }
 
@@ -708,7 +706,7 @@ private void MergeLo(int base1, int len1, int base2, int len2)
                 a[dest--] = a[cursor1--];
                 if (--len1 == 0)
                 {
-                    break;
+                    goto MergeHiExit;
                 }
 
                 minGallop--;
@@ -722,6 +720,8 @@ private void MergeLo(int base1, int len1, int base2, int len2)
         }  // End of "outer" loop
 
         this.minGallop = minGallop < 1 ? 1 : minGallop;  // Write back to field
+
+MergeHiExit:
 
         if (len2 == 1)
         {
