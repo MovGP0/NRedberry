@@ -174,6 +174,6 @@ public sealed class LongBackedBitArray : IBitArray
 
     public bool Get(byte type)
     {
-        throw new NotImplementedException();
+        return this[type];
     }
 }

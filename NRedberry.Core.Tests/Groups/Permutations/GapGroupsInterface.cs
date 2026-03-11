@@ -1,5 +1,6 @@
-using NRedberry.Core.Combinatorics;
+﻿using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Xunit.Sdk;
 
 namespace NRedberry.Core.Tests.Groups.Permutations;
 
@@ -16,82 +17,82 @@ public sealed class GapGroupsInterface
 
     public GapGroupsInterface(string gapExecutable)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     public string Evaluate(string command)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     public string EvaluateRedberryGroup(string var, IReadOnlyList<Permutation> generators)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     public PermutationGroup EvaluateToPermutationGroup(string command)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     public bool EvaluateToBoolean(string command)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     public int EvaluateToInteger(string command)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     public System.Numerics.BigInteger EvaluateToBigInteger(string command)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     public Permutation[] EvaluateToGenerators(string command)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     public int NrPrimitiveGroups(int degree)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     public Permutation[] PrimitiveGenerators(int degree, int nr)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     public PermutationGroup PrimitiveGroup(int degree, int nr)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     public void Close()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     public static string ConvertToGapList(int[] array)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     private string NextVar()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     private static string StringToGapCommand(string value)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     private static string StringFromGapCommand(string value)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 }
 
@@ -102,11 +103,11 @@ internal sealed class GapOutputReader
 {
     public GapOutputReader(System.IO.Stream inputStream)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     public void Run()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 }

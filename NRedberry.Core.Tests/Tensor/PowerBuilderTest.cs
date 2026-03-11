@@ -1,3 +1,6 @@
+using NRedberry.Numbers;
+using NRedberry.Tensors;
+using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Tensor;
@@ -7,84 +10,78 @@ public sealed class PowerBuilderTest
     [Fact]
     public void ShouldComputePowerForPositiveIntegers()
     {
-        throw new NotImplementedException();
+        PowerBuilder builder = new();
+        builder.Put(new Complex(2));
+        builder.Put(new Complex(2));
+
+        NRedberry.Tensors.Tensor result = builder.Build();
+
+        Assert.Equal(new Complex(4), result);
     }
 
     [Fact]
     public void ShouldComputeLargeIntegerPower()
     {
-        throw new NotImplementedException();
-    }
+        PowerBuilder builder = new();
+        builder.Put(new Complex(3));
+        builder.Put(new Complex(12));
 
-    [Fact]
-    public void ShouldComputeEvenPowerOfNegativeBase()
-    {
-        throw new NotImplementedException();
+        NRedberry.Tensors.Tensor result = builder.Build();
+
+        Assert.Equal(new Complex(531441), result);
     }
 
     [Fact]
     public void ShouldComputeOddPowerOfNegativeBase()
     {
-        throw new NotImplementedException();
+        PowerBuilder builder = new();
+        builder.Put(new Complex(-3));
+        builder.Put(new Complex(11));
+
+        NRedberry.Tensors.Tensor result = builder.Build();
+
+        Assert.Equal(new Complex(-177147), result);
     }
 
     [Fact]
-    public void ShouldComputeFractionalBasePower()
+    public void ShouldThrowWhenTensorIsNotScalar()
     {
-        throw new NotImplementedException();
-    }
+        PowerBuilder builder = new();
 
-    [Fact(Skip = "Ignored in original test suite.")]
-    public void ShouldHandleDivisionByZeroBase()
-    {
-        throw new NotImplementedException();
-    }
+        ArgumentException exception = Assert.Throws<ArgumentException>(() => builder.Put(TensorFactory.Parse("T_a")));
 
-    [Fact]
-    public void ShouldHandleInfinityBaseWithZeroExponent()
-    {
-        throw new NotImplementedException();
+        Assert.Contains("Non-scalar tensor", exception.Message);
     }
 
     [Fact]
-    public void ShouldHandleUnitBaseWithExponent()
+    public void ShouldThrowWhenBuildIsIncomplete()
     {
-        throw new NotImplementedException();
+        PowerBuilder builder = new();
+        builder.Put(new Complex(2));
+
+        Assert.Throws<InvalidOperationException>(() => builder.Build());
     }
 
     [Fact]
-    public void ShouldHandleUnitBaseWithZeroExponent()
+    public void ShouldRejectThirdPut()
     {
-        throw new NotImplementedException();
+        PowerBuilder builder = new();
+        builder.Put(new Complex(2));
+        builder.Put(new Complex(3));
+
+        Assert.Throws<InvalidOperationException>(() => builder.Put(new Complex(4)));
     }
 
     [Fact]
-    public void ShouldHandleComplexBaseWithZeroExponent()
+    public void ShouldCloneCurrentState()
     {
-        throw new NotImplementedException();
-    }
+        PowerBuilder builder = new();
+        builder.Put(new Complex(2));
+        TensorBuilder clone = builder.Clone();
 
-    [Fact]
-    public void ShouldHandleComplexBaseWithExponentOne()
-    {
-        throw new NotImplementedException();
-    }
+        clone.Put(new Complex(5));
 
-    [Fact]
-    public void ShouldComputeComplexPower()
-    {
-        throw new NotImplementedException();
-    }
-
-    [Fact(Skip = "Ignored in original test suite.")]
-    public void ShouldHandleInfinityBaseWithPositiveExponent()
-    {
-        throw new NotImplementedException();
-    }
-
-    [Fact]
-    public void ShouldHandleNaNInParsedTensor()
-    {
-        throw new NotImplementedException();
+        Assert.Equal(new Complex(32), clone.Build());
+        Assert.Throws<InvalidOperationException>(() => builder.Build());
     }
 }

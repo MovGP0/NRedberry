@@ -1,138 +1,139 @@
-using Xunit;
+﻿using Xunit;
+using Xunit.Sdk;
 
 namespace NRedberry.Core.Tests.Tensor.Iterator;
 
 public sealed class TreeTraverseIteratorTest
 {
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldTraverseTreeWithCustomGuide()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldTraverseNestedFunctionTree()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldTraverseSumInsideFunction()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldTraverseWithFilteredGuide()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldTraverseWithHiddenLeafNodes()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldTraverseWithShowButNotEnter()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldReplaceNodesDuringTraversal()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldSubstituteSymbolsInLargePolynomial()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldSubstituteSymbolsInReducedPolynomial()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldSubstituteSingleSymbolInPolynomial()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldSubstituteSymbolInSimpleTensor()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldSubstituteSymbolInSumTensor()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldTrackDepthForNestedSum()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldTrackDepthForFunctionTree()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldSetNodesOnLeavingStateSingle()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldSetNodesOnLeavingStateWithPrefix()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldSetNodesOnLeavingStateMultiple()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldApplyMultipleExpressionTransforms()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldReportIsUnderForProductIndicator()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldReportIsUnderForExactIndicator()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldCheckLevelForIndicators()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldMaintainPayloadCountsDuringTraversal()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 }

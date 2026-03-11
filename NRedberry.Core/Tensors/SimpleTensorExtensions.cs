@@ -51,22 +51,18 @@ public static class SimpleTensorExtensions
         if ((type = IndicesUtils.GetType_(index1)) != IndicesUtils.GetType_(index2) || IndicesUtils.GetRawStateInt((int)index1) == IndicesUtils.GetRawStateInt((int)index2))
             throw new ArgumentException("This is not kronecker indices!");
 
-        if (!IsMetric(type) && IndicesUtils.GetState(index2))
+        if (!context.IsMetric(type) && IndicesUtils.GetState(index2))
         {
             (index1, index2) = (index2, index1);
         }
 
         SimpleIndices indices = IndicesFactory.CreateSimple(null, (int)index1, (int)index2);
-        var nd = context.NameManager.MapNameDescriptor(context.NameManager.KroneckerName, new StructureOfIndices(indices));
-        var name = nd.Id;
-        return Tensor.SimpleTensor(name, indices);
+        return Tensor.SimpleTensor(context.NameManager.KroneckerName, indices);
     }
-
-    private static readonly LongBackedBitArray metricTypes = new(128);
 
     public static bool IsMetric(byte type)
     {
-        return metricTypes[type];
+        return Context.Get().IsMetric(type);
     }
 
     /**
@@ -83,15 +79,13 @@ public static class SimpleTensorExtensions
         byte type;
         if ((type = IndicesUtils.GetType_(index1)) != IndicesUtils.GetType_(index2)
             || !IndicesUtils.HaveEqualStates(index1, index2)
-            || !context.metricTypes.Get(type))
+            || !context.IsMetric(type))
         {
             throw new ArgumentException("Not metric indices.");
         }
 
         var indices = IndicesFactory.CreateSimple(null, (int)index1, (int)index2);
-        var nd = context.NameManager.MapNameDescriptor(context.NameManager.MetricName, new StructureOfIndices(indices));
-        var name = nd.Id;
-        return Tensor.SimpleTensor(name, indices);
+        return Tensor.SimpleTensor(context.NameManager.MetricName, indices);
     }
 
     /**
@@ -107,17 +101,17 @@ public static class SimpleTensorExtensions
      */
     public static SimpleTensor CreateMetricOrKronecker(this Context context, int index1, int index2) {
         if (IndicesUtils.GetRawStateInt(index1) == IndicesUtils.GetRawStateInt(index2))
-            return createMetric(context, index1, index2);
-        return createKronecker(context, index1, index2);
+            return context.CreateMetric(index1, index2);
+        return context.CreateKronecker(index1, index2);
     }
 
     public static SimpleTensor createMetric(this Context context, int index1, int index2)
     {
-        throw new NotImplementedException();
+        return context.CreateMetric(index1, index2);
     }
 
     public static SimpleTensor createKronecker(this Context context, int index1, int index2)
     {
-        throw new NotImplementedException();
+        return context.CreateKronecker(index1, index2);
     }
 }

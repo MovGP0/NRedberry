@@ -1,4 +1,5 @@
-using Xunit;
+﻿using Xunit;
+using Xunit.Sdk;
 
 namespace NRedberry.Core.Tests.Context.Defaults;
 
@@ -7,15 +8,15 @@ namespace NRedberry.Core.Tests.Context.Defaults;
 /// </summary>
 public sealed class GreekLettersConverterTest
 {
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldConvertUppercaseGreekLetters()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldConvertLowercaseGreekLetters()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 }

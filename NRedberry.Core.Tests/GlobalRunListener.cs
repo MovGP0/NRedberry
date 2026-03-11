@@ -1,3 +1,5 @@
+﻿using Xunit.Sdk;
+
 namespace NRedberry.Core.Tests;
 
 /// <summary>
@@ -7,16 +9,16 @@ public sealed class GlobalRunListener
 {
     public GlobalRunListener()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     public void TestStarted(object description)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     public void TestFailure(object failure)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 }

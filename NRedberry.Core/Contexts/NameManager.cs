@@ -190,9 +190,6 @@ public sealed class NameManager
                         stringNames.Add(sname);
                         return descriptor;
                     }
-
-                    readWriteLock.EnterReadLock();
-                    rLocked = true;
                 }
                 finally
                 {
@@ -306,8 +303,6 @@ public sealed class NameManager
             try
             {
                 RegisterDescriptor(nd);
-                readWriteLock.EnterReadLock();
-                rLocked = true;
             }
             finally
             {

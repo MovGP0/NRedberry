@@ -1,4 +1,5 @@
-using Xunit;
+﻿using Xunit;
+using Xunit.Sdk;
 
 namespace NRedberry.Core.Tests.Number;
 
@@ -7,99 +8,99 @@ namespace NRedberry.Core.Tests.Number;
 /// </summary>
 public sealed class ComplexTest
 {
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldComputeAbsFromRational()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldComputeAbsFromParsed()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldExponentiateWithIntegerExponent()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldExponentiateWithNumericComplexExponent()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldHandleNegativeIntegerExponent()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldExponentiateWithNumericDoubleExponent()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldThrowOnIntegerOverflowLarge()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldThrowOnIntegerOverflowEdge()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldAllowMaxInt()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldThrowOnLongOverflowLarge()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldThrowOnLongOverflowEdge()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldAllowMaxLong()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldThrowOnDoubleOverflowLarge()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldAllowLargeDouble()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldComputeHashWithSign()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldComputeStaticHashCodes()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 }

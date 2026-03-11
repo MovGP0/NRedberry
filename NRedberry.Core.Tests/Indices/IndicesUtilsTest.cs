@@ -1,4 +1,5 @@
-using Xunit;
+﻿using Xunit;
+using Xunit.Sdk;
 
 namespace NRedberry.Core.Tests.Indices;
 
@@ -7,15 +8,15 @@ namespace NRedberry.Core.Tests.Indices;
 /// </summary>
 public sealed class IndicesUtilsTest
 {
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldParseIndices()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldSetState()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 }

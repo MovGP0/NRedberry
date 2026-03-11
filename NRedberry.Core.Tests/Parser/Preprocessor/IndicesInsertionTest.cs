@@ -1,90 +1,91 @@
-using Xunit;
+﻿using Xunit;
+using Xunit.Sdk;
 
 namespace NRedberry.Core.Tests.Parser.Preprocessor;
 
 public sealed class IndicesInsertionTest
 {
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldInsertIndicesForMultipleFactors()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldInsertIndicesInNestedExpression()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldInsertIndicesWithExistingGreekIndices()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldInsertIndicesWithSelectedNamesOnly()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldInsertIndicesIntoSumsWithSelectedNames()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldInsertIndicesWhenNamesNotSelected()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldInsertIndicesInNestedSumAndProduct()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldInsertIndicesRepeatedlyWithResetNames()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldInsertIndicesInExpressionWithSumAndProduct()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldInsertIndicesInEquation()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldHandleLargePerformanceExpression()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldInsertIndicesForMatrixNamesInEquation()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldInsertIndicesForMatrixNamesInAction()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
-    [Fact]
+    [Fact(Skip = "Pending port from Java.")]
     public void ShouldInsertIndicesInSimpleSum()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 }

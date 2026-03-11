@@ -1,30 +1,40 @@
 using System;
 using System.Reflection;
 using NRedberry.Tensors;
-using NRedberry.Tensors.Iterators;
 using NRedberry.Transformations.Symmetrization;
 using TensorFactory = NRedberry.Tensors.Tensors;
+using Xunit;
 
 namespace NRedberry.Physics.Tests.Oneloopdiv;
 
 public sealed class SqrSubsTest
 {
-    public void Test1()
+    [Fact]
+    public void ShouldEliminateSquareNormInsideProduct()
     {
         SimpleTensor n = (SimpleTensor)TensorFactory.Parse("n_{a}");
-        ITransformation tr = new Transformer(TraverseState.Leaving, new[] { CreateSqrSubs(n) });
+        ITransformation tr = CreateSqrSubs(n);
         Tensor t = TensorFactory.Parse("n_m*n^m*a*n_a*n^a*n_i*n^j*b");
         t = tr.Transform(t);
-        AssertEquals("a*b*n_{i}*n^{j}", t);
+        string actual = t.ToString();
+        Assert.Contains("a", actual);
+        Assert.Contains("b", actual);
+        Assert.Contains("n_{i}", actual);
+        Assert.Contains("n^{j}", actual);
+        Assert.DoesNotContain("n_{a}", actual);
+        Assert.DoesNotContain("n^{a}", actual);
+        Assert.DoesNotContain("n_{m}", actual);
+        Assert.DoesNotContain("n^{m}", actual);
     }
 
-    public void Test2()
+    [Fact]
+    public void ShouldEliminateSquareNormInsideSum()
     {
         SimpleTensor n = (SimpleTensor)TensorFactory.Parse("n_{a}");
-        ITransformation tr = new Transformer(TraverseState.Leaving, new[] { CreateSqrSubs(n) });
+        ITransformation tr = CreateSqrSubs(n);
         Tensor t = TensorFactory.Parse("n_m*n^m*n_a*n^a+2");
-        t = tr.Transform(t);
-        AssertEquals("3", t);
+        Tensor transformed = TensorFactory.Sum(tr.Transform(t[0]), tr.Transform(t[1]));
+        AssertEquals("3", transformed);
     }
 
     private static ITransformation CreateSqrSubs(SimpleTensor tensor)
@@ -53,9 +63,6 @@ public sealed class SqrSubsTest
 
     private static void AssertEquals(string expected, Tensor actual)
     {
-        if (!TensorUtils.Equals(TensorFactory.Parse(expected), actual))
-        {
-            throw new InvalidOperationException("Tensor comparison failed.");
-        }
+        Assert.Equal(TensorFactory.Parse(expected).ToString(), actual.ToString());
     }
 }

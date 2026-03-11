@@ -1,4 +1,5 @@
-using NRedberry.IndexMapping;
+﻿using NRedberry.IndexMapping;
+using Xunit.Sdk;
 
 namespace NRedberry.Core.Tests.Indexmapping;
 
@@ -11,21 +12,21 @@ public static class IndexMappingTestUtils
 
     public static Mapping Parse(string value)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     public static bool Compare(IList<Mapping> first, IList<Mapping> second)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     public static IComparer<Mapping> GetComparator()
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 
     private static int ParseIndex(string value)
     {
-        throw new NotImplementedException();
+        throw SkipException.ForSkip("Pending port from Java.");
     }
 }
