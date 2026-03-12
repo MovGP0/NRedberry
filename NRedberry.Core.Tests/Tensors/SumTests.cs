@@ -30,15 +30,20 @@ public sealed class SumTests
     public void ShouldRemoveAndSelectTerms()
     {
         Sum sum = Assert.IsType<Sum>(TensorFactory.Parse("a+b+c"));
+        string removedTerm = sum[1].ToString(OutputFormat.Redberry);
+        string firstTerm = sum[0].ToString(OutputFormat.Redberry);
+        string thirdTerm = sum[2].ToString(OutputFormat.Redberry);
 
         NRedberry.Tensors.Tensor removed = sum.Remove(1);
         NRedberry.Tensors.Tensor selected = sum.Select([0, 2]);
 
         Assert.Equal(2, removed.Size);
-        Assert.Contains("a", removed.ToString(OutputFormat.Redberry));
-        Assert.Contains("c", removed.ToString(OutputFormat.Redberry));
-        Assert.DoesNotContain("b", removed.ToString(OutputFormat.Redberry));
+        Assert.Contains(firstTerm, removed.ToString(OutputFormat.Redberry));
+        Assert.Contains(thirdTerm, removed.ToString(OutputFormat.Redberry));
+        Assert.DoesNotContain(removedTerm, removed.ToString(OutputFormat.Redberry));
         Assert.Equal(2, selected.Size);
+        Assert.Contains(firstTerm, selected.ToString(OutputFormat.Redberry));
+        Assert.Contains(thirdTerm, selected.ToString(OutputFormat.Redberry));
     }
 
     [Fact]

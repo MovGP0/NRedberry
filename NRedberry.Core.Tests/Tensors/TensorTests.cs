@@ -59,7 +59,7 @@ public sealed class TensorTests
 
     private sealed class TestTensor(string text, int hashCode, params NRedberry.Tensors.Tensor[] children) : NRedberry.Tensors.Tensor
     {
-        public override Indices.Indices Indices => IndicesFactory.EmptyIndices;
+        public override NRedberry.Indices.Indices Indices => IndicesFactory.EmptyIndices;
 
         public override NRedberry.Tensors.Tensor this[int i] => children[i];
 

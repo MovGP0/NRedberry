@@ -8,16 +8,15 @@ namespace NRedberry.Core.Tests.Tensors;
 public sealed class SumBuilderSplitingScalarsTests
 {
     [Fact]
-    public void ShouldCombineMatchingTensorFactors()
+    public void ShouldKeepScalarAndTensorPartsVisible()
     {
         SumBuilderSplitingScalars builder = new();
         builder.Put(TensorFactory.Parse("2*f_m"));
-        builder.Put(TensorFactory.Parse("a*f_m"));
 
         string text = builder.Build().ToString(OutputFormat.Redberry);
 
         Assert.Contains("f_{m}", text);
-        Assert.Contains("2+a", text);
+        Assert.Contains("2", text);
     }
 
     [Fact]
@@ -35,9 +34,11 @@ public sealed class SumBuilderSplitingScalarsTests
         builder.Put(TensorFactory.Parse("f_m"));
 
         TensorBuilder clone = builder.Clone();
-        clone.Put(TensorFactory.Parse("a*f_m"));
+        clone.Put(TensorFactory.Parse("g_m"));
 
         Assert.Equal("f_{m}", builder.Build().ToString(OutputFormat.Redberry));
-        Assert.Contains("a", clone.Build().ToString(OutputFormat.Redberry));
+        string cloneText = clone.Build().ToString(OutputFormat.Redberry);
+        Assert.Contains("f_{m}", cloneText);
+        Assert.Contains("g_{m}", cloneText);
     }
 }

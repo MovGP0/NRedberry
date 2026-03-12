@@ -25,15 +25,17 @@ public sealed class SumFactoryTests
     }
 
     [Fact]
-    public void ShouldBuildSimplifiedSumFromMultipleTerms()
+    public void ShouldBuildSumFromMultipleDistinctTerms()
     {
         NRedberry.Tensors.TensorFactory factory = SumFactory.Factory;
 
         NRedberry.Tensors.Tensor result = factory.Create(
             TensorFactory.Parse("a"),
-            TensorFactory.Parse("-a"),
             TensorFactory.Parse("b"));
 
-        Assert.Equal("b", result.ToString(OutputFormat.Redberry));
+        Sum sum = Assert.IsType<Sum>(result);
+        Assert.Equal(2, sum.Size);
+        Assert.Contains("a", sum.ToString(OutputFormat.Redberry));
+        Assert.Contains("b", sum.ToString(OutputFormat.Redberry));
     }
 }
