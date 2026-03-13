@@ -1,22 +1,31 @@
-﻿using Xunit;
-using Xunit.Sdk;
+using NRedberry.Indices;
+using Xunit;
 
 namespace NRedberry.Core.Tests.Indices;
 
-/// <summary>
-/// Skeleton port of cc.redberry.core.indices.IndicesUtilsTest.
-/// </summary>
 public sealed class IndicesUtilsTest
 {
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldParseIndices()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        int bracketed = IndicesUtils.ParseIndex("_{\\mu}");
+        int latex = IndicesUtils.ParseIndex("_\\mu");
+        int latin = IndicesUtils.ParseIndex("_a");
+
+        Assert.Equal("_\\mu", IndicesUtils.ToString(bracketed, OutputFormat.LaTeX));
+        Assert.Equal("_\\mu", IndicesUtils.ToString(latex, OutputFormat.LaTeX));
+        Assert.Equal("_a", IndicesUtils.ToString(latin, OutputFormat.LaTeX));
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldSetState()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        int lower = IndicesUtils.ParseIndex("_a");
+        int upper = IndicesUtils.ParseIndex("^a");
+
+        Assert.Equal("^a", IndicesUtils.ToString(IndicesUtils.SetState(true, lower)));
+        Assert.Equal("^a", IndicesUtils.ToString(IndicesUtils.SetState(true, upper)));
+        Assert.Equal("_a", IndicesUtils.ToString(IndicesUtils.SetRawState(0, upper)));
+        Assert.Equal("_a", IndicesUtils.ToString(IndicesUtils.SetState(false, upper)));
     }
 }

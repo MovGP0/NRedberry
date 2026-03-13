@@ -242,6 +242,12 @@ public sealed class ModInteger : GcdRingElem<ModInteger>, Modular, ICloneable, I
             BigInteger inv = ModInverse(Val, Ring.Modul);
             return new ModInteger(Ring, inv);
         }
+        catch (NotInvertibleException e)
+        {
+            BigInteger g = BigInteger.GreatestCommonDivisor(Val, Ring.Modul);
+            BigInteger f = Ring.Modul / g;
+            throw new ModularNotInvertibleException(e, new BigInteger(Ring.Modul), g, f);
+        }
         catch (ArithmeticException e)
         {
             BigInteger g = BigInteger.GreatestCommonDivisor(Val, Ring.Modul);

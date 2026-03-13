@@ -52,28 +52,37 @@ public sealed class FromChildToParentIterator : TreeIteratorAbstract
 /// </example>
 public sealed class TreeTraverseIterator(Tensor tensor, TraverseGuide? guide = null)
 {
-    private Tensor tensor = tensor;
-    private TraverseGuide? guide = guide;
+    private TreeTraverseIterator<NoPayload> Iterator { get; } = guide is null
+        ? new TreeTraverseIterator<NoPayload>(tensor)
+        : new TreeTraverseIterator<NoPayload>(tensor, guide);
 
-    public int Depth { get; set; }
+    public int Depth => Iterator.Depth();
 
     public TraverseState? Next()
     {
-        throw new NotImplementedException();
+        return Iterator.Next();
     }
 
     public Tensor Current()
     {
-        throw new NotImplementedException();
+        return Iterator.Current();
     }
 
     public void Set(Tensor tensor1)
     {
-        throw new NotImplementedException();
+        Iterator.Set(tensor1);
     }
 
     public Tensor Result()
     {
-        throw new NotImplementedException();
+        return Iterator.Result();
+    }
+
+    private sealed class NoPayload : Payload<NoPayload>
+    {
+        public Tensor OnLeaving(StackPosition<NoPayload> stackPosition)
+        {
+            return null!;
+        }
     }
 }

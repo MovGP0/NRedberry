@@ -1,7 +1,16 @@
+using NRedberry.Physics.Feyncalc;
+using Xunit;
+
 namespace NRedberry.Physics.Tests.Feyncalc;
 
 public sealed class DiracOrderTransformationTest
 {
+    [Fact]
+    public void ShouldThrowUntilDiracOrderTransformationIsPorted()
+    {
+        Assert.Throws<NotImplementedException>(() => new DiracOrderTransformation(null!));
+    }
+
     public void Test1()
     {
         // TODO: Port test1 once test framework is configured.

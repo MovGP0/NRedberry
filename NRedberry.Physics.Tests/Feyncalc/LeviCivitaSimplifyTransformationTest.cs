@@ -8,11 +8,20 @@ using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Symmetrization;
 using TensorCC = NRedberry.Tensors.CC;
 using TensorFactory = NRedberry.Tensors.Tensors;
+using Xunit;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
 
 public sealed class LeviCivitaSimplifyTransformationTest
 {
+    [Fact]
+    public void ShouldThrowUntilLeviCivitaSimplifyTransformationIsPorted()
+    {
+        Assert.Throws<NotImplementedException>(() => new LeviCivitaSimplifyTransformation(
+            TensorFactory.ParseSimple("e_abcd"),
+            true));
+    }
+
     public void Test1()
     {
         Reset();

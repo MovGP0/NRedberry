@@ -12,8 +12,9 @@ public static class TestUtils
 
     public static bool DoPerformanceTests()
     {
-        return IsPropertyEnabled("performanceTests")
-            || IsPropertyEnabled("longTest");
+        return IsPropertyEnabled("testPerformance")
+            || IsPropertyEnabled("performanceTest")
+            || IsPropertyEnabled("performanceTests");
     }
 
     public static bool SkipGapTests()
@@ -42,15 +43,46 @@ public static class TestUtils
 public sealed class TestUtilsTests
 {
     [Fact]
-    public void ShouldReportLongTestMode()
+    public void ShouldEnableLongTestsFromEnvironment()
     {
-        if (TestUtils.DoLongTests())
-        {
-            Console.WriteLine("Long tests.");
-        }
-        else
-        {
-            Console.WriteLine("Short tests.");
-        }
+        using EnvironmentVariableScope _ = new("longTest", "true");
+
+        Assert.True(TestUtils.DoLongTests());
+        Assert.Equal(2, TestUtils.Its(1, 2));
+        Assert.Equal(4L, TestUtils.Its(3L, 4L));
+    }
+
+    [Fact]
+    public void ShouldEnablePerformanceTestsFromEnvironment()
+    {
+        using EnvironmentVariableScope _ = new("testPerformance", "true");
+
+        Assert.True(TestUtils.DoPerformanceTests());
+    }
+
+    [Fact]
+    public void ShouldEnableGapSkipFromEnvironment()
+    {
+        using EnvironmentVariableScope _ = new("noGap", "true");
+
+        Assert.True(TestUtils.SkipGapTests());
+    }
+}
+
+internal sealed class EnvironmentVariableScope : IDisposable
+{
+    private readonly string _name;
+    private readonly string? _originalValue;
+
+    public EnvironmentVariableScope(string name, string? value)
+    {
+        _name = name;
+        _originalValue = Environment.GetEnvironmentVariable(name);
+        Environment.SetEnvironmentVariable(name, value);
+    }
+
+    public void Dispose()
+    {
+        Environment.SetEnvironmentVariable(_name, _originalValue);
     }
 }

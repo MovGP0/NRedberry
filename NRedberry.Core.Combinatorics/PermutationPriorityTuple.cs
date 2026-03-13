@@ -2,7 +2,7 @@ using System.Collections;
 
 namespace NRedberry.Core.Combinatorics;
 
-internal sealed class PermutationPriorityTuple
+public sealed class PermutationPriorityTuple
 {
     public readonly int[] Permutation;
     public int Priority;

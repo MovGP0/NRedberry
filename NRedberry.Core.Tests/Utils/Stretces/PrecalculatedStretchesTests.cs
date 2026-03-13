@@ -1,0 +1,35 @@
+using NRedberry.Core.Utils.Stretces;
+using Xunit;
+
+namespace NRedberry.Core.Tests.Utils.Stretces;
+
+public sealed class PrecalculatedStretchesTests
+{
+    [Fact]
+    public void ShouldExposeCopiedRawValues()
+    {
+        PrecalculatedStretches stretches = new(1, 1, 2, 3);
+
+        int[] values = stretches.RawValues;
+        values[0] = 99;
+
+        Assert.Equal([1, 1, 2, 3], stretches.RawValues);
+    }
+
+    [Fact]
+    public void ShouldCreateRawValuesFromProviderAndEnumerateStretches()
+    {
+        PrecalculatedStretches stretches = new(["aa", "bbb", "c"], new StringLengthProvider());
+
+        Assert.Equal([2, 3, 1], stretches.RawValues);
+        Assert.Equal([new Stretch(0, 1), new Stretch(1, 1), new Stretch(2, 1)], stretches.ToArray());
+    }
+}
+
+internal sealed class StringLengthProvider : IIntObjectProvider
+{
+    public int Get(object element)
+    {
+        return ((string)element).Length;
+    }
+}

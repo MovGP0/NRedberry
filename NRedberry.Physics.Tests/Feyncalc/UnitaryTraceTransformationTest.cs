@@ -7,11 +7,22 @@ using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Symmetrization;
 using TensorCC = NRedberry.Tensors.CC;
 using TensorFactory = NRedberry.Tensors.Tensors;
+using Xunit;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
 
 public sealed class UnitaryTraceTransformationTest
 {
+    [Fact]
+    public void ShouldThrowUntilUnitaryTraceTransformationIsPorted()
+    {
+        Assert.Throws<NotImplementedException>(() => new UnitaryTraceTransformation(
+            TensorFactory.ParseSimple("T_a"),
+            TensorFactory.ParseSimple("f_abc"),
+            TensorFactory.ParseSimple("d_abc"),
+            TensorFactory.Parse("N")));
+    }
+
     public void Test1()
     {
         Reset();

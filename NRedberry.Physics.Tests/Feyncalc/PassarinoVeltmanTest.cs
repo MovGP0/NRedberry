@@ -4,11 +4,21 @@ using NRedberry.Tensors;
 using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Symmetrization;
 using TensorFactory = NRedberry.Tensors.Tensors;
+using Xunit;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
 
 public sealed class PassarinoVeltmanTest
 {
+    [Fact]
+    public void ShouldThrowUntilPassarinoVeltmanIsPorted()
+    {
+        Assert.Throws<NotImplementedException>(() => PassarinoVeltman.GenerateSubstitution(
+            1,
+            TensorFactory.ParseSimple("q_a"),
+            [TensorFactory.ParseSimple("k1_a")]));
+    }
+
     public void Test1()
     {
         Expression subs = PassarinoVeltman.GenerateSubstitution(

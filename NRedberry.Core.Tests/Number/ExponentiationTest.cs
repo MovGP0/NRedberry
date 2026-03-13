@@ -1,28 +1,52 @@
-﻿using Xunit;
-using Xunit.Sdk;
+using System.Numerics;
+using NRedberry.Numbers;
+using NRedberry.Numbers.Parser;
+using Xunit;
+using NumberComplex = NRedberry.Numbers.Complex;
 
 namespace NRedberry.Core.Tests.Number;
 
-/// <summary>
-/// Skeleton port of cc.redberry.core.number.ExponentiationTest.
-/// </summary>
 public sealed class ExponentiationTest
 {
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldFindIntegerRoots()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Assert.Null(Exponentiation.FindIntegerRoot(new BigInteger(28), new BigInteger(3)));
+        Assert.Null(Exponentiation.FindIntegerRoot(new BigInteger(22), new BigInteger(3)));
+        Assert.Equal(new BigInteger(3), Exponentiation.FindIntegerRoot(new BigInteger(27), new BigInteger(3)));
+        Assert.Equal(new BigInteger(7), Exponentiation.FindIntegerRoot(new BigInteger(49), new BigInteger(2)));
+        Assert.Equal(new BigInteger(3), Exponentiation.FindIntegerRoot(new BigInteger(129140163), new BigInteger(17)));
+        Assert.Null(Exponentiation.FindIntegerRoot(new BigInteger(129140162), new BigInteger(17)));
+        Assert.Null(Exponentiation.FindIntegerRoot(new BigInteger(129140164), new BigInteger(17)));
+        Assert.Equal(new BigInteger(5), Exponentiation.FindIntegerRoot(new BigInteger(19073486328125L), new BigInteger(19)));
+        Assert.Null(Exponentiation.FindIntegerRoot(new BigInteger(19073486328123L), new BigInteger(19)));
+        Assert.Null(Exponentiation.FindIntegerRoot(new BigInteger(19073486328128L), new BigInteger(19)));
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldExponentiateWhenPossible()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Real first = NumberParser<Real>.RealParser.Parse("25/144");
+        Real firstPower = NumberParser<Real>.RealParser.Parse("-1/2");
+        Real second = NumberParser<Real>.RealParser.Parse("27/343");
+        Real secondPower = NumberParser<Real>.RealParser.Parse("2/3");
+        Real thirdPower = NumberParser<Real>.RealParser.Parse("2/4");
+        Real fourthPower = NumberParser<Real>.RealParser.Parse("0.5");
+
+        Assert.Equal(new Rational(12, 5), Exponentiation.ExponentiateIfPossible(first, firstPower));
+        Assert.Equal(new Rational(9, 49), Exponentiation.ExponentiateIfPossible(second, secondPower));
+        Assert.Null(Exponentiation.ExponentiateIfPossible(second, thirdPower));
+
+        Numeric numeric = Assert.IsType<Numeric>(Exponentiation.ExponentiateIfPossible(second, fourthPower));
+        Assert.Equal(0.28056585887484736, numeric.DoubleValue(), 15);
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldFindIntegerRootOfComplex()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        NumberComplex value = NumberParser<NumberComplex>.ComplexParser.Parse("256/129140163+256/129140163*I");
+        NumberComplex expected = NumberParser<NumberComplex>.ComplexParser.Parse("1/3+1/3*I");
+
+        Assert.Equal(expected, Exponentiation.FindIntegerRoot(value, new BigInteger(17)));
     }
 }

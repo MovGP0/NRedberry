@@ -5,25 +5,29 @@ namespace NRedberry.Core.Utils;
 /// </summary>
 public sealed class TensorWrapperWithEquals
 {
+    private object _tensor;
+
     /// <summary>
     /// Initializes a new instance of the wrapper.
     /// </summary>
     /// <param name="tensor">The tensor to wrap.</param>
     public TensorWrapperWithEquals(object tensor)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(tensor);
+        _tensor = tensor;
     }
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
     {
-        throw new NotImplementedException();
+        return obj is TensorWrapperWithEquals other
+            && Equals(_tensor, other._tensor);
     }
 
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        throw new NotImplementedException();
+        return _tensor.GetHashCode();
     }
 
     /// <summary>
@@ -32,6 +36,6 @@ public sealed class TensorWrapperWithEquals
     /// <returns>The wrapped tensor.</returns>
     public object GetTensor()
     {
-        throw new NotImplementedException();
+        return _tensor;
     }
 }

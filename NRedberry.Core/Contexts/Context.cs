@@ -17,6 +17,8 @@ namespace NRedberry.Contexts;
 /// </remarks>
 public sealed class Context
 {
+    private readonly List<IContextListener> _contextListeners = [];
+
     /// <summary>
     /// Gets the index converter manager of the current session.
     /// </summary>
@@ -76,6 +78,8 @@ public sealed class Context
         {
             NameManager.Reset();
         }
+
+        NotifyContextListeners();
     }
 
     /// <summary>
@@ -91,6 +95,21 @@ public sealed class Context
         lock (_resetTensorNamesLock)
         {
             NameManager.Reset(seed);
+        }
+
+        NotifyContextListeners();
+    }
+
+    public void RegisterListener(IContextListener listener)
+    {
+        ArgumentNullException.ThrowIfNull(listener);
+
+        lock (_resetTensorNamesLock)
+        {
+            if (!_contextListeners.Contains(listener))
+            {
+                _contextListeners.Add(listener);
+            }
         }
     }
 
@@ -134,4 +153,19 @@ public sealed class Context
     /// Gets the current context of the Redberry session.
     /// </summary>
     public static Context Get() => ContextManager.GetCurrentContext();
+
+    private void NotifyContextListeners()
+    {
+        IContextListener[] listeners;
+        lock (_resetTensorNamesLock)
+        {
+            listeners = [.. _contextListeners];
+        }
+
+        ContextEvent contextEvent = new();
+        foreach (IContextListener listener in listeners)
+        {
+            listener.OnNext(contextEvent);
+        }
+    }
 }

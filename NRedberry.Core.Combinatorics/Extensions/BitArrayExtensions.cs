@@ -2,7 +2,7 @@
 
 namespace NRedberry.Core.Combinatorics.Extensions;
 
-internal static class BitArrayExtensions
+public static class BitArrayExtensions
 {
     public static int NextTrailingBit(this BitArray bitArray, int fromIndex)
     {

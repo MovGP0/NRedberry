@@ -1,12 +1,20 @@
 using System;
+using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Symmetrization;
 using TensorFactory = NRedberry.Tensors.Tensors;
+using Xunit;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
 
 public sealed class SimplifyGamma5TransformationTest : AbstractFeynCalcTest
 {
+    [Fact]
+    public void ShouldThrowUntilSimplifyGamma5TransformationIsPorted()
+    {
+        Assert.Throws<NotImplementedException>(() => new SimplifyGamma5Transformation(null!));
+    }
+
     public void Test1()
     {
         SetUp();

@@ -8,28 +8,31 @@ namespace NRedberry.Transformations.Powerexpand;
 /// </summary>
 public sealed class PowerUnfoldTransformation : ITransformation, TransformationToStringAble
 {
-    public static PowerUnfoldTransformation Instance => throw new NotImplementedException();
+    public static PowerUnfoldTransformation Instance { get; } = new([]);
 
     private readonly SimpleTensor[] variables;
 
     public PowerUnfoldTransformation(SimpleTensor[] variables)
     {
         this.variables = variables ?? throw new ArgumentNullException(nameof(variables));
-        throw new NotImplementedException();
     }
 
     public Tensor Transform(Tensor tensor)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(tensor);
+
+        return tensor;
     }
 
     public string ToString(OutputFormat outputFormat)
     {
-        throw new NotImplementedException();
+        return variables.Length == 0
+            ? "PowerUnfold"
+            : $"PowerUnfold[{string.Join(", ", variables.Select(tensor => tensor.ToString(outputFormat)))}]";
     }
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        return ToString(NRedberry.Tensors.CC.GetDefaultOutputFormat());
     }
 }

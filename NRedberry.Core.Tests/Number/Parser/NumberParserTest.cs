@@ -1,124 +1,159 @@
-﻿using Xunit;
-using Xunit.Sdk;
+using NRedberry.Numbers;
+using NRedberry.Numbers.Parser;
+using Xunit;
+using NumberComplex = NRedberry.Numbers.Complex;
 
 namespace NRedberry.Core.Tests.Number.Parser;
 
-/// <summary>
-/// Skeleton port of cc.redberry.core.number.parser.NumberParserTest.
-/// </summary>
 public sealed class NumberParserTest
 {
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldHandleZeroDivisionInMultiplication()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Real left = NumberParser<Real>.RealParser.Parse("2/3");
+        Real right = NumberParser<Real>.RealParser.Parse("2/3-2/3");
+
+        Assert.True(right.IsZero());
+        Assert.True(left.Multiply(right).IsZero());
+        Assert.True(left.Divide(right).IsInfinite());
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldRejectInvalidLiteral1()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Assert.Throws<FormatException>(() => NumberParser<Real>.RealParser.Parse("1+a"));
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldRejectInvalidLiteral2()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Assert.Throws<FormatException>(() => NumberParser<Real>.RealParser.Parse("2/5+7/(3-(2+1/(4+o-9))*5/4)"));
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldRejectInvalidLiteral3()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Assert.Throws<FormatException>(() => NumberParser<Real>.RealParser.Parse("2/5+7/(3-(2+1/(4^-9))*5/4)"));
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldParseExpression1()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Real value = NumberParser<Real>.RealParser.Parse("2/5+7/(3-(2+1/(4-9))*5/4)");
+
+        Assert.Equal(new Rational(146, 15), value);
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldParseExpression2()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Real value = NumberParser<Real>.RealParser.Parse("2/5+7/(3-(2+1/(4-9))*5/4)");
+
+        Assert.Equal(new Rational(146, 15), value);
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldHandleInfinity()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Real value = NumberParser<Real>.RealParser.Parse("2/5+7/(3-(2+1/(4-9))*5/4)+1/0");
+
+        Assert.True(value.IsInfinite());
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldHandleZeroFromInfiniteExpression()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Real value = NumberParser<Real>.RealParser.Parse("1/(2/5+7/(3-(2+1/(4-9))*5/4)+1/0)");
+
+        Assert.True(value.IsZero());
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldHandleZeroFromCompositeExpression()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Real value = NumberParser<Real>.RealParser.Parse("(1-3/3*1.0-2.2+22/10)/(2/5+7/(3-(2+1/(4-9))*5/4)+1/0)");
+
+        Assert.True(value.IsZero());
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldHandleZeroFromNumericExpression()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Real value = NumberParser<Real>.RealParser.Parse("1-3/3*1.0-2.2+22/10");
+
+        Assert.True(value.IsZero());
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldHandleNaN()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Real value = NumberParser<Real>.RealParser.Parse("1/(1-3/3*1.0-2.2+22/10)/(2/5+7/(3-(2+1/(4-9))*5/4)+1/0)");
+
+        Assert.True(value.IsNaN());
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldDetectNumeric1()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Real value = NumberParser<Real>.RealParser.Parse("1+0.0");
+
+        Assert.True(value.IsNumeric());
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldDetectNumeric2()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Real value = NumberParser<Real>.RealParser.Parse("2*1.0");
+
+        Assert.True(value.IsNumeric());
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldDetectNumeric3()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Real value = NumberParser<Real>.RealParser.Parse("2/1.0");
+
+        Assert.True(value.IsNumeric());
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldParseComplexRational()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        NumberComplex actual = NumberParser<NumberComplex>.ComplexParser.Parse("4/2+I*3/2");
+        NumberComplex expected = new(new Rational(4, 2), new Rational(3, 2));
+
+        Assert.Equal(expected, actual);
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldParseComplexNaN1()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        NumberComplex actual = NumberParser<NumberComplex>.ComplexParser.Parse("0/0");
+
+        Assert.Equal(NumberComplex.ComplexNaN, actual);
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldParseComplexNaN2()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        NumberComplex actual = NumberParser<NumberComplex>.ComplexParser.Parse("1/0");
+
+        Assert.Equal(NumberComplex.ComplexNaN, actual);
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldParseComplexSimplified()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        NumberComplex actual = NumberParser<NumberComplex>.ComplexParser.Parse("-2+3");
+
+        Assert.Equal(NumberComplex.One, actual);
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldParseExpressionWithNegatives()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Real value = NumberParser<Real>.RealParser.Parse("2/5+7/(-3-(-2+1/(-4-9))*5/4)");
+
+        Assert.Equal(new Rational(-254, 15), value);
     }
 }

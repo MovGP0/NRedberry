@@ -10,7 +10,7 @@ namespace NRedberry.Physics.Oneloopdiv;
 /// <summary>
 /// Removes contracted square factors of a specified simple tensor from products.
 /// </summary>
-internal sealed class SqrSubs : ITransformation
+public sealed class SqrSubs : ITransformation
 {
     private readonly string _name;
 

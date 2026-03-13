@@ -5,7 +5,7 @@ public static partial class PolyUtil
     /// <summary>
     /// Counts the number of set bits in the absolute value of a big integer.
     /// </summary>
-    private static int PopCount(System.Numerics.BigInteger value)
+    public static int PopCount(System.Numerics.BigInteger value)
     {
         value = System.Numerics.BigInteger.Abs(value);
         int count = 0;

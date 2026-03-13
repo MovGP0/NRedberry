@@ -1,12 +1,19 @@
+using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
 
 public sealed class THashSetTest
 {
-    [Fact(Skip = "THashSet is obsolete with error and should not be used in new code.")]
-    public void ShouldAvoidObsoleteHashSet()
+    [Fact]
+    public void ShouldStoreUniqueValues()
     {
-        // TODO: Replace with HashSet-based scenario if needed.
+        THashSet<string> values = new();
+
+        Assert.True(values.Add("a"));
+        Assert.False(values.Add("a"));
+        Assert.True(values.Add("b"));
+        Assert.Contains("a", values);
+        Assert.Equal(2, values.Count);
     }
 }

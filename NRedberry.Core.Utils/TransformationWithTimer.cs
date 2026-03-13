@@ -1,27 +1,43 @@
+using System.Diagnostics;
+using System.Threading;
+
 namespace NRedberry.Core.Utils;
+
+/// <summary>
+/// Adapter interface for timed transformations in the utility layer.
+/// </summary>
+public interface ITimerTransformation
+{
+    object Transform(object input);
+
+    string ToString(object outputFormat);
+}
 
 /// <summary>
 /// Port of cc.redberry.core.utils.TransformationWithTimer.
 /// </summary>
 public sealed class TransformationWithTimer : IComparable<TransformationWithTimer>
 {
+    private long _elapsedNanos;
+    private long _invocations;
+
     /// <summary>
     /// Gets the wrapped transformation.
     /// </summary>
-    public object Transformation { get; } = null!;
+    public object Transformation { get; }
 
     /// <summary>
     /// Gets the optional display name.
     /// </summary>
-    public string? Name { get; } = null;
+    public string? Name { get; }
 
     /// <summary>
     /// Initializes a new instance wrapping the specified transformation.
     /// </summary>
     /// <param name="transformation">The transformation to wrap.</param>
     public TransformationWithTimer(object transformation)
+        : this(transformation, null)
     {
-        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -31,7 +47,10 @@ public sealed class TransformationWithTimer : IComparable<TransformationWithTime
     /// <param name="name">An optional name.</param>
     public TransformationWithTimer(object transformation, string? name)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(transformation);
+
+        Transformation = transformation;
+        Name = name;
     }
 
     /// <summary>
@@ -40,7 +59,7 @@ public sealed class TransformationWithTimer : IComparable<TransformationWithTime
     /// <returns>The number of recorded invocations.</returns>
     public long Invocations()
     {
-        throw new NotImplementedException();
+        return Interlocked.Read(ref _invocations);
     }
 
     /// <summary>
@@ -49,7 +68,7 @@ public sealed class TransformationWithTimer : IComparable<TransformationWithTime
     /// <returns>The elapsed time.</returns>
     public long Elapsed()
     {
-        throw new NotImplementedException();
+        return ElapsedNanos();
     }
 
     /// <summary>
@@ -58,7 +77,7 @@ public sealed class TransformationWithTimer : IComparable<TransformationWithTime
     /// <returns>The elapsed time in nanoseconds.</returns>
     public long ElapsedNanos()
     {
-        throw new NotImplementedException();
+        return Interlocked.Read(ref _elapsedNanos);
     }
 
     /// <summary>
@@ -67,7 +86,7 @@ public sealed class TransformationWithTimer : IComparable<TransformationWithTime
     /// <returns>The elapsed time in microseconds.</returns>
     public long ElapsedMicros()
     {
-        throw new NotImplementedException();
+        return ElapsedNanos() / 1_000L;
     }
 
     /// <summary>
@@ -76,7 +95,7 @@ public sealed class TransformationWithTimer : IComparable<TransformationWithTime
     /// <returns>The elapsed time in milliseconds.</returns>
     public long ElapsedMillis()
     {
-        throw new NotImplementedException();
+        return ElapsedNanos() / 1_000_000L;
     }
 
     /// <summary>
@@ -85,7 +104,7 @@ public sealed class TransformationWithTimer : IComparable<TransformationWithTime
     /// <returns>The elapsed time in seconds.</returns>
     public long ElapsedSeconds()
     {
-        throw new NotImplementedException();
+        return ElapsedNanos() / 1_000_000_000L;
     }
 
     /// <summary>
@@ -94,7 +113,7 @@ public sealed class TransformationWithTimer : IComparable<TransformationWithTime
     /// <returns>The elapsed time in minutes.</returns>
     public long ElapsedMinutes()
     {
-        throw new NotImplementedException();
+        return ElapsedSeconds() / 60L;
     }
 
     /// <summary>
@@ -102,7 +121,7 @@ public sealed class TransformationWithTimer : IComparable<TransformationWithTime
     /// </summary>
     public void ResetTiming()
     {
-        throw new NotImplementedException();
+        Interlocked.Exchange(ref _elapsedNanos, 0);
     }
 
     /// <summary>
@@ -110,7 +129,7 @@ public sealed class TransformationWithTimer : IComparable<TransformationWithTime
     /// </summary>
     public void ResetInvocations()
     {
-        throw new NotImplementedException();
+        Interlocked.Exchange(ref _invocations, 0);
     }
 
     /// <summary>
@@ -118,7 +137,8 @@ public sealed class TransformationWithTimer : IComparable<TransformationWithTime
     /// </summary>
     public void Reset()
     {
-        throw new NotImplementedException();
+        ResetTiming();
+        ResetInvocations();
     }
 
     /// <summary>
@@ -127,29 +147,60 @@ public sealed class TransformationWithTimer : IComparable<TransformationWithTime
     /// <param name="amount">Nanoseconds to add.</param>
     public void IncrementNanos(long amount)
     {
-        throw new NotImplementedException();
+        if (amount < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(amount));
+        }
+
+        Interlocked.Add(ref _elapsedNanos, amount);
     }
 
     /// <summary>
-    /// Transforms the specified tensor and updates timing statistics.
+    /// Transforms the specified payload and updates timing statistics.
     /// </summary>
-    /// <param name="tensor">Tensor to transform.</param>
-    /// <returns>The transformed tensor.</returns>
+    /// <param name="tensor">Input payload.</param>
+    /// <returns>The transformed payload.</returns>
     public object Transform(object tensor)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(tensor);
+
+        object transformed;
+        long start = Stopwatch.GetTimestamp();
+        try
+        {
+            transformed = Transformation switch
+            {
+                ITimerTransformation timedTransformation => timedTransformation.Transform(tensor),
+                Func<object, object> transform => transform(tensor),
+                _ => throw new InvalidOperationException(
+                    "Wrapped object must implement ITimerTransformation or be a Func<object, object>.")
+            };
+        }
+        finally
+        {
+            long elapsedTicks = Stopwatch.GetTimestamp() - start;
+            IncrementNanos(ToNanoseconds(elapsedTicks));
+            Interlocked.Increment(ref _invocations);
+        }
+
+        return transformed;
     }
 
     /// <inheritdoc />
     public int CompareTo(TransformationWithTimer? other)
     {
-        throw new NotImplementedException();
+        if (other is null)
+        {
+            return 1;
+        }
+
+        return string.Compare(ToString(), other.ToString(), StringComparison.Ordinal);
     }
 
     /// <inheritdoc />
     public override string ToString()
     {
-        throw new NotImplementedException();
+        return ToString(string.Empty);
     }
 
     /// <summary>
@@ -159,7 +210,16 @@ public sealed class TransformationWithTimer : IComparable<TransformationWithTime
     /// <returns>String representation.</returns>
     public string ToString(object outputFormat)
     {
-        throw new NotImplementedException();
+        if (Name is not null)
+        {
+            return Name;
+        }
+
+        return Transformation switch
+        {
+            ITimerTransformation timedTransformation => timedTransformation.ToString(outputFormat),
+            _ => Transformation.ToString() ?? string.Empty
+        };
     }
 
     /// <summary>
@@ -168,6 +228,11 @@ public sealed class TransformationWithTimer : IComparable<TransformationWithTime
     /// <returns>The statistics entry.</returns>
     public object Stats()
     {
-        throw new NotImplementedException();
+        return new TimingStatistics.StatEntry(ElapsedNanos(), Invocations());
+    }
+
+    private static long ToNanoseconds(long elapsedTicks)
+    {
+        return elapsedTicks * 1_000_000_000L / Stopwatch.Frequency;
     }
 }

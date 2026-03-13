@@ -8,56 +8,99 @@ namespace NRedberry.Transformations.Substitutions;
 /// </summary>
 public sealed class SubstitutionIterator : ITreeIterator
 {
+    private TreeTraverseIterator Iterator { get; }
+
+    private bool _currentModified;
+
     public SubstitutionIterator(Tensor tensor)
+        : this(tensor, TraverseGuide.All)
     {
-        throw new NotImplementedException();
     }
 
     public SubstitutionIterator(Tensor tensor, TraverseGuide traverseGuide)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(tensor);
+        ArgumentNullException.ThrowIfNull(traverseGuide);
+
+        Iterator = new TreeTraverseIterator(tensor, traverseGuide);
     }
 
     public Tensor Next()
     {
-        throw new NotImplementedException();
+        _currentModified = false;
+
+        TraverseState? nextState;
+        while ((nextState = Iterator.Next()) == TraverseState.Entering)
+        {
+        }
+
+        if (nextState is null)
+        {
+            return null!;
+        }
+
+        return Iterator.Current();
     }
 
     public void UnsafeSet(Tensor tensor)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(tensor);
+
+        _currentModified = true;
+        Iterator.Set(tensor);
     }
 
     public void Set(Tensor tensor)
     {
-        throw new NotImplementedException();
+        Set(tensor, true);
     }
 
     public void Set(Tensor tensor, bool supposeIndicesAreAdded)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(tensor);
+
+        Tensor oldTensor = Iterator.Current();
+        if (ReferenceEquals(oldTensor, tensor))
+        {
+            return;
+        }
+
+        if (!TensorUtils.IsZeroOrIndeterminate(tensor)
+            && !tensor.Indices.GetFree().EqualsRegardlessOrder(oldTensor.Indices.GetFree()))
+        {
+            throw new InvalidOperationException(
+                $"Substituting tensor {oldTensor} with different free indices ({oldTensor.Indices.GetFree()} != {tensor.Indices.GetFree()}).");
+        }
+
+        _currentModified = true;
+        Iterator.Set(tensor);
     }
 
     public void SafeSet(Tensor tensor)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(tensor);
+
+        if (!ReferenceEquals(Iterator.Current(), tensor))
+        {
+            Set(ApplyIndexMapping.RenameDummy(tensor, GetForbidden()));
+        }
     }
 
     public bool IsCurrentModified()
     {
-        throw new NotImplementedException();
+        return _currentModified;
     }
 
     public Tensor Result()
     {
-        throw new NotImplementedException();
+        return Iterator.Result();
     }
 
-    public int Depth => throw new NotImplementedException();
+    public int Depth => Iterator.Depth;
 
     public int[] GetForbidden()
     {
-        throw new NotImplementedException();
+        return Array.Empty<int>();
     }
 
     private interface IForbiddenContainer : Payload<IForbiddenContainer>

@@ -6,7 +6,7 @@ namespace NRedberry.Transformations.Reverse;
 /// <summary>
 /// Skeleton port of cc.redberry.core.transformations.reverse.SingleReverse.
 /// </summary>
-internal sealed class SingleReverse : ITransformation
+public sealed class SingleReverse : ITransformation
 {
     public IndexType Type { get; }
 

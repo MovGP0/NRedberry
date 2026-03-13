@@ -1,9 +1,13 @@
+using NRedberry.Physics.Feyncalc;
+using Xunit;
+
 namespace NRedberry.Physics.Tests.Feyncalc;
 
 public sealed class DiracSimplify0Test
 {
-    public void Placeholder()
+    [Fact]
+    public void ShouldThrowUntilDiracSimplify0IsPorted()
     {
-        // TODO: Port DiracSimplify0 tests once test framework is configured.
+        Assert.Throws<NotImplementedException>(() => new DiracSimplify0(null!));
     }
 }

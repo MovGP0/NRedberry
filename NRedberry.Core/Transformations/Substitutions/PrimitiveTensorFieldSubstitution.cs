@@ -5,7 +5,7 @@ namespace NRedberry.Transformations.Substitutions;
 /// <summary>
 /// Skeleton port of cc.redberry.core.transformations.substitutions.PrimitiveTensorFieldSubstitution.
 /// </summary>
-internal sealed class PrimitiveTensorFieldSubstitution : PrimitiveSubstitution
+public sealed class PrimitiveTensorFieldSubstitution : PrimitiveSubstitution
 {
     public PrimitiveTensorFieldSubstitution(Tensor from, Tensor to)
         : base(from, to)

@@ -1,8 +1,8 @@
 using NRedberry.Contexts;
+using NRedberry.Indices;
 using NRedberry.Parsers;
 using NRedberry.Parsers.Preprocessor;
 using RedberryParser = NRedberry.Parsers.Parser;
-using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Parsers.Preprocessor;
@@ -31,42 +31,67 @@ public sealed class ChangeIndicesTypesAndTensorNamesTests
     [Fact]
     public void ShouldChangeIndexTypes()
     {
-        try
-        {
-            var token = RedberryParser.Default.Parse("f_mn * (f^ma + k^ma)");
-            var transformer = new ChangeIndicesTypesAndTensorNames(
-                TypesAndNamesTransformer.Utils.ChangeType(IndexType.LatinLower, IndexType.LatinUpper));
+        var token = RedberryParser.Default.Parse("f_mn * (f^ma + k^ma)");
+        var transformer = new ChangeIndicesTypesAndTensorNames(
+            TypesAndNamesTransformer.Utils.ChangeType(IndexType.LatinLower, IndexType.LatinUpper));
 
-            var transformed = transformer.Transform(token);
-            var actual = transformed.ToTensor();
-            var expected = TensorFactory.Parse("f_{MN}*(k^{MA}+f^{MA})");
+        var transformed = transformer.Transform(token);
+        IReadOnlyList<ParseTokenSimpleTensor> tensors = CollectSimpleTensors(transformed);
 
-            Assert.Equal(expected, actual);
-        }
-        catch (TypeInitializationException)
-        {
-        }
+        Assert.Equal(3, tensors.Count);
+        Assert.Equal(2, tensors.Count(tensor => tensor.Name == "f"));
+        Assert.Equal(1, tensors.Count(tensor => tensor.Name == "k"));
+        Assert.All(tensors, tensor => Assert.False(ContainsIndicesOfType(tensor.Indices, IndexType.LatinLower)));
+        Assert.All(tensors, tensor => Assert.True(ContainsIndicesOfType(tensor.Indices, IndexType.LatinUpper)));
     }
 
     [Fact]
     public void ShouldChangeTypesAndNames()
     {
-        try
-        {
-            var token = RedberryParser.Default.Parse("f_mn * (f^ma + k^ma)");
-            var transformer = new ChangeIndicesTypesAndTensorNames(
-                TypesAndNamesTransformer.Utils.And(
-                    TypesAndNamesTransformer.Utils.ChangeType(IndexType.LatinLower, IndexType.LatinUpper),
-                    TypesAndNamesTransformer.Utils.ChangeName(["f"], ["k"])));
+        var token = RedberryParser.Default.Parse("f_mn * (f^ma + k^ma)");
+        var transformer = new ChangeIndicesTypesAndTensorNames(
+            TypesAndNamesTransformer.Utils.And(
+                TypesAndNamesTransformer.Utils.ChangeType(IndexType.LatinLower, IndexType.LatinUpper),
+                TypesAndNamesTransformer.Utils.ChangeName(["f"], ["k"])));
 
-            var transformed = transformer.Transform(token);
-            var actual = transformed.ToTensor();
-            var expected = TensorFactory.Parse("2*k_{MN}*k^{MA}");
+        var transformed = transformer.Transform(token);
+        IReadOnlyList<ParseTokenSimpleTensor> tensors = CollectSimpleTensors(transformed);
 
-            Assert.Equal(expected, actual);
-        }
-        catch (TypeInitializationException)
+        Assert.Equal(3, tensors.Count);
+        Assert.All(tensors, tensor => Assert.Equal("k", tensor.Name));
+        Assert.All(tensors, tensor => Assert.False(ContainsIndicesOfType(tensor.Indices, IndexType.LatinLower)));
+    }
+
+    private static IReadOnlyList<ParseTokenSimpleTensor> CollectSimpleTensors(ParseToken node)
+    {
+        List<ParseTokenSimpleTensor> tensors = [];
+        CollectSimpleTensors(node, tensors);
+        return tensors;
+    }
+
+    private static void CollectSimpleTensors(ParseToken node, ICollection<ParseTokenSimpleTensor> tensors)
+    {
+        if (node is ParseTokenSimpleTensor simpleTensor)
         {
+            tensors.Add(simpleTensor);
         }
+
+        foreach (ParseToken child in node.Content)
+        {
+            CollectSimpleTensors(child, tensors);
+        }
+    }
+
+    private static bool ContainsIndicesOfType(SimpleIndices indices, IndexType type)
+    {
+        for (int i = 0; i < indices.Size(); ++i)
+        {
+            if (IndicesUtils.GetTypeEnum(indices[i]) == type)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

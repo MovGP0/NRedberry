@@ -35,6 +35,7 @@ public sealed class TimingStatistics
     public void Merge(TimingStatistics stats)
     {
         ArgumentNullException.ThrowIfNull(stats);
+        stats.CollectStatistics();
 
         lock (_set)
         {

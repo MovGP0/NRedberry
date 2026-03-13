@@ -5,6 +5,22 @@ namespace NRedberry.Core.Utils;
 /// </summary>
 /// <typeparam name="TKey">Key type.</typeparam>
 /// <typeparam name="TValue">Value type.</typeparam>
-[Obsolete("use Dictionary<TKey,TValue>  instead", true)]
-public class THashMap<TKey, TValue>
-    where TKey : class;
+[Obsolete("use Dictionary<TKey,TValue> instead")]
+public class THashMap<TKey, TValue> : Dictionary<TKey, TValue>
+    where TKey : class
+{
+    public THashMap()
+    {
+    }
+
+    public THashMap(int initialCapacity)
+        : base(initialCapacity)
+    {
+    }
+
+    public THashMap(int initialCapacity, float loadFactor)
+        : base(initialCapacity)
+    {
+        _ = loadFactor;
+    }
+}

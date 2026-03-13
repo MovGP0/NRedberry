@@ -8,7 +8,7 @@ namespace NRedberry.Physics.Oneloopdiv;
 /// <summary>
 /// Skeleton port of cc.redberry.physics.oneloopdiv.NaiveSubstitution.
 /// </summary>
-internal sealed class NaiveSubstitution : ITransformation
+public sealed class NaiveSubstitution : ITransformation
 {
     private readonly Tensor from;
     private readonly Tensor to;

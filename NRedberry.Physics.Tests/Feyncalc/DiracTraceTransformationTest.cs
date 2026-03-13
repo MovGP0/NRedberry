@@ -1,9 +1,13 @@
+using NRedberry.Physics.Feyncalc;
+using Xunit;
+
 namespace NRedberry.Physics.Tests.Feyncalc;
 
 public sealed class DiracTraceTransformationTest
 {
-    public void Placeholder()
+    [Fact]
+    public void ShouldThrowUntilDiracTraceTransformationIsPorted()
     {
-        // TODO: Port DiracTraceTransformation tests once test framework is configured.
+        Assert.Throws<NotImplementedException>(() => new DiracTraceTransformation(null!));
     }
 }

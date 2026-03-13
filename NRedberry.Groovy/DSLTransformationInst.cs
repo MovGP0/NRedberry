@@ -1,4 +1,3 @@
-﻿using System.Reflection;
 using NRedberry.Contexts;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Options;
@@ -10,6 +9,7 @@ public sealed class DSLTransformationInst<T> : DSLTransformation<T>, Transformat
     where T : class, ITransformation
 {
     private volatile T? _instance;
+    private readonly Lock _syncRoot = new();
 
     public DSLTransformationInst(T instance)
         : base(instance.GetType())
@@ -17,7 +17,7 @@ public sealed class DSLTransformationInst<T> : DSLTransformation<T>, Transformat
         _instance = instance ?? throw new ArgumentNullException(nameof(instance));
     }
 
-    internal DSLTransformationInst(Type clazz)
+    public DSLTransformationInst(Type clazz)
         : base(clazz)
     {
         TryRegisterAsContextListener();
@@ -59,8 +59,6 @@ public sealed class DSLTransformationInst<T> : DSLTransformation<T>, Transformat
         _instance = null;
     }
 
-    private readonly Lock _syncRoot = new();
-
     private void EnsureInstanceCreated()
     {
         if (_instance is not null)
@@ -76,12 +74,6 @@ public sealed class DSLTransformationInst<T> : DSLTransformation<T>, Transformat
 
     private void TryRegisterAsContextListener()
     {
-        var context = Contexts.CC.Current;
-
-        var registerMethod = context
-            .GetType()
-            .GetMethod("RegisterListener", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-
-        registerMethod?.Invoke(context, [this]);
+        Contexts.CC.Current.RegisterListener(this);
     }
 }

@@ -1,9 +1,13 @@
+using NRedberry.Physics.Feyncalc;
+using Xunit;
+
 namespace NRedberry.Physics.Tests.Feyncalc;
 
 public sealed class DiracOptionsTest
 {
-    public void ShouldCloneOptions()
+    [Fact]
+    public void ShouldThrowUntilDiracOptionsIsPorted()
     {
-        // TODO: Port test once the test framework is configured.
+        Assert.Throws<NotImplementedException>(() => new DiracOptions());
     }
 }

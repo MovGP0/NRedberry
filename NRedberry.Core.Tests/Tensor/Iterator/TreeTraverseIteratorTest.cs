@@ -1,139 +1,83 @@
-﻿using Xunit;
-using Xunit.Sdk;
+using NRedberry.Tensors;
+using NRedberry.Tensors.Iterators;
+using TensorApi = NRedberry.Tensors.Tensors;
+using TensorType = NRedberry.Tensors.Tensor;
+using Xunit;
 
 namespace NRedberry.Core.Tests.Tensor.Iterator;
 
 public sealed class TreeTraverseIteratorTest
 {
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldTraverseTreeWithCustomGuide()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        TensorType tensor = TensorApi.Parse("a+b");
+        TreeTraverseIterator iterator = new(tensor, new HideSecondChildGuide());
+        List<TraverseState> states = [];
+        List<int> depths = [];
+        List<TensorType> visited = [];
+
+        TraverseState? state;
+        while ((state = iterator.Next()) is not null)
+        {
+            states.Add(state.Value);
+            depths.Add(iterator.Depth);
+            visited.Add(iterator.Current());
+        }
+
+        Assert.Equal([TraverseState.Entering, TraverseState.Entering, TraverseState.Leaving, TraverseState.Leaving], states);
+        Assert.Equal([0, 1, 1, 0], depths);
+        Assert.True(TensorUtils.EqualsExactly([tensor, tensor[0], tensor[0], tensor], visited.ToArray()));
     }
 
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldTraverseNestedFunctionTree()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
-
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldTraverseSumInsideFunction()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
-
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldTraverseWithFilteredGuide()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
-
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldTraverseWithHiddenLeafNodes()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
-
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldTraverseWithShowButNotEnter()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
-
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldReplaceNodesDuringTraversal()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        TensorType tensor = TensorApi.Parse("a+b");
+        TreeTraverseIterator iterator = new(tensor);
+
+        while (iterator.Next() is not null)
+        {
+            if (TensorUtils.EqualsExactly(iterator.Current(), tensor[0]))
+            {
+                iterator.Set(NRedberry.Numbers.Complex.Zero);
+                break;
+            }
+        }
+
+        while (iterator.Next() is not null)
+        {
+        }
+
+        SimpleTensor result = Assert.IsType<SimpleTensor>(iterator.Result());
+
+        Assert.Equal(0, result.Indices.GetFree().Size());
     }
 
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldSubstituteSymbolsInLargePolynomial()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
-
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldSubstituteSymbolsInReducedPolynomial()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
-
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldSubstituteSingleSymbolInPolynomial()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
-
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldSubstituteSymbolInSimpleTensor()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
-
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldSubstituteSymbolInSumTensor()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
-
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldTrackDepthForNestedSum()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        TreeTraverseIterator iterator = new(TensorApi.Parse("a+b"));
+        List<int> depths = [];
+
+        while (iterator.Next() is not null)
+        {
+            depths.Add(iterator.Depth);
+        }
+
+        Assert.Equal([0, 1, 1, 1, 1, 0], depths);
     }
 
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldTrackDepthForFunctionTree()
+    private sealed class HideSecondChildGuide : TraverseGuide
     {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
+        public TraversePermission GetPermission(NRedberry.Tensors.Tensor tensor, NRedberry.Tensors.Tensor parent, int indexInParent)
+        {
+            if (indexInParent == 1)
+            {
+                return TraversePermission.DontShow;
+            }
 
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldSetNodesOnLeavingStateSingle()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
-
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldSetNodesOnLeavingStateWithPrefix()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
-
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldSetNodesOnLeavingStateMultiple()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
-
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldApplyMultipleExpressionTransforms()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
-
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldReportIsUnderForProductIndicator()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
-
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldReportIsUnderForExactIndicator()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
-
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldCheckLevelForIndicators()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
-
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldMaintainPayloadCountsDuringTraversal()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
+            return TraversePermission.Enter;
+        }
     }
 }

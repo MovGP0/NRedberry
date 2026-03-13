@@ -1,52 +1,54 @@
-﻿using Xunit;
-using Xunit.Sdk;
+using System.IO;
+using System.Text;
+using Xunit;
 
 namespace NRedberry.Core.Tests.Groups.Permutations;
 
-/// <summary>
-/// Skeleton port of cc.redberry.core.groups.permutations.GapGroupsInterfaceTest.
-/// </summary>
 public sealed class GapGroupsInterfaceTest
 {
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldInitializeGap()
+    [Fact]
+    public void ShouldConvertPermutationToGapList()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Assert.Equal("[1, 3, 2]", GapGroupsInterface.ConvertToGapList([0, 2, 1]));
     }
 
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldEvaluatePrimitiveGroups()
+    [Theory]
+    [InlineData("Group(())", "Group(());")]
+    [InlineData("Group(());", "Group(());")]
+    public void ShouldNormalizeCommandsForGap(string input, string expected)
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Assert.Equal(expected, GapGroupsInterface.NormalizeCommandForGap(input));
     }
 
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldEvaluateArithmetic()
+    [Theory]
+    [InlineData("Group(())", "Group(())")]
+    [InlineData("Group(());", "Group(())")]
+    public void ShouldNormalizeCommandsFromGap(string input, string expected)
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Assert.Equal(expected, GapGroupsInterface.NormalizeCommandFromGap(input));
     }
 
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldCreatePrimitiveGroup()
+    [Fact]
+    public void ShouldReadGapOutputBatchesUntilEof()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
+        byte[] bytes = Encoding.UTF8.GetBytes("gap> abc\\\n gap> def\nEOF\n");
+        using MemoryStream stream = new(bytes);
+        GapOutputReader reader = new(stream);
 
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldEvaluateToBigInteger()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
-    }
+        reader.Run();
 
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldEvaluateSetwiseStabilizer()
-    {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Assert.True(reader.Buffer.TryTake(out string? result));
+        Assert.Equal("abcdef", result);
     }
+}
 
-    [Fact(Skip = "Pending port from Java.")]
-    public void ShouldEvaluateRedberryGroup()
+public sealed class TestWithGAPAttributeTests
+{
+    [Fact]
+    public void ShouldBeUsableAsAttribute()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        TestWithGAPAttribute attribute = new();
+
+        Assert.IsAssignableFrom<Attribute>(attribute);
     }
 }

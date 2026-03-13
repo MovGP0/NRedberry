@@ -16,7 +16,9 @@ public static class Arrays
 
     public static int[] copyOf(int[] original, int newLength)
     {
-        return original.Take(newLength).ToArray();
+        int[] copy = new int[newLength];
+        Array.Copy(original, copy, Math.Min(original.Length, newLength));
+        return copy;
     }
 
     public static void fill(int[] original, int number)

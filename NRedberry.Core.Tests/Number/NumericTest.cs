@@ -1,22 +1,22 @@
-﻿using Xunit;
-using Xunit.Sdk;
+using Xunit;
 
 namespace NRedberry.Core.Tests.Number;
 
-/// <summary>
-/// Skeleton port of cc.redberry.core.number.NumericTest.
-/// </summary>
 public sealed class NumericTest
 {
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldComputeHashCode()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Assert.Equal(new Numeric(2.3).GetHashCode(), -new Numeric(-2.3).GetHashCode());
+        Assert.Equal(new Numeric(23).GetHashCode(), -new Numeric(-23).GetHashCode());
+        Assert.Equal(new Numeric(23.324234e123).GetHashCode(), -new Numeric(-23.324234e123).GetHashCode());
     }
 
-    [Fact(Skip = "Pending port from Java.")]
+    [Fact]
     public void ShouldComputeStaticHashCodes()
     {
-        throw SkipException.ForSkip("Pending port from Java.");
+        Assert.Equal(0, Numeric.Zero.GetHashCode());
+        Assert.Equal(1, Numeric.One.GetHashCode());
+        Assert.Equal(-1, Numeric.MinusOne.GetHashCode());
     }
 }

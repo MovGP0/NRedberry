@@ -69,7 +69,7 @@ public static class TensorGeneratorUtils
                 bool duplicate = false;
                 foreach (Tensor existing in combinationArray)
                 {
-                    if (TensorUtils.Compare1(existing, renamed) != null)
+                    if (AreEquivalentStateCombination(existing, renamed))
                     {
                         duplicate = true;
                         break;
@@ -86,5 +86,22 @@ public static class TensorGeneratorUtils
         }
 
         return samples.ToArray();
+    }
+
+    private static bool AreEquivalentStateCombination(Tensor left, Tensor right)
+    {
+        if (ReferenceEquals(left, right))
+        {
+            return true;
+        }
+
+        if (left is SimpleTensor leftSimpleTensor
+            && right is SimpleTensor rightSimpleTensor
+            && leftSimpleTensor.Name == rightSimpleTensor.Name)
+        {
+            return leftSimpleTensor.SimpleIndices.EqualsWithSymmetries(rightSimpleTensor.SimpleIndices);
+        }
+
+        return TensorUtils.EqualsExactly(left, right);
     }
 }

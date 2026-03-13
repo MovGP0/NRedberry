@@ -1,11 +1,22 @@
 using System;
 using NRedberry.Physics.Feyncalc;
 using TensorFactory = NRedberry.Tensors.Tensors;
+using Xunit;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
 
 public sealed class UnitarySimplifyTransformationTest
 {
+    [Fact]
+    public void ShouldThrowUntilUnitarySimplifyTransformationIsPorted()
+    {
+        Assert.Throws<NotImplementedException>(() => new UnitarySimplifyTransformation(
+            TensorFactory.ParseSimple("T_A"),
+            TensorFactory.ParseSimple("f_ABC"),
+            TensorFactory.ParseSimple("d_ABC"),
+            TensorFactory.Parse("N")));
+    }
+
     public void Test1()
     {
         // TODO: GeneralIndicesInsertion is not yet ported; insertion rules skipped.

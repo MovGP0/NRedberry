@@ -42,10 +42,15 @@ public sealed class PowerFactoryTest
     }
 
     [Fact]
-    public void ShouldDistributeIntegerPowersAcrossScalarProductFactors()
+    public void ShouldCreateExpandedProductForIntegerPowerOfScalarFactor()
     {
-        NRedberry.Tensors.Tensor actual = PowerFactory.Power(TensorFactory.Parse("2*a"), new Complex(3));
+        Product actual = Assert.IsType<Product>(PowerFactory.Power(TensorFactory.Parse("2*a"), new Complex(3)));
 
-        Assert.Equal("8*a**3", actual.ToString(OutputFormat.Redberry));
+        Assert.Equal(2, actual.Size);
+        Assert.Equal(new Complex(8), actual[0]);
+
+        Power power = Assert.IsType<Power>(actual[1]);
+        Assert.IsType<SimpleTensor>(power[0]);
+        Assert.Equal(new Complex(3), power[1]);
     }
 }

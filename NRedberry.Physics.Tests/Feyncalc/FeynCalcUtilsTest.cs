@@ -2,11 +2,26 @@ using System;
 using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
+using Xunit;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
 
 public sealed class FeynCalcUtilsTest
 {
+    [Fact]
+    public void ShouldThrowSetMandelstamUntilPorted()
+    {
+        Tensor[][] input =
+        {
+            new[] { TensorFactory.Parse("k1_i"), TensorFactory.Parse("m1") },
+            new[] { TensorFactory.Parse("k2_i"), TensorFactory.Parse("m2") },
+            new[] { TensorFactory.Parse("k3_i"), TensorFactory.Parse("m3") },
+            new[] { TensorFactory.Parse("k4_i"), TensorFactory.Parse("m4") }
+        };
+
+        Assert.Throws<NotImplementedException>(() => FeynCalcUtils.SetMandelstam(input));
+    }
+
     public void TestSetMandelstam1()
     {
         Tensor[][] input =

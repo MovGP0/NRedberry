@@ -65,7 +65,7 @@ public class DSLTransformation<T>(Type clazz)
         return TransformationBuilder.CreateTransformation<T>(new List<object?> { ToObject(value) });
     }
 
-    private static List<object?> ToList(IList source)
+    public static List<object?> ToList(IList source)
     {
         var list = new List<object?>(source.Count);
         foreach (var item in source)
@@ -76,7 +76,7 @@ public class DSLTransformation<T>(Type clazz)
         return list;
     }
 
-    private static List<object?> ToList(IList<object?> source)
+    public static List<object?> ToList(IList<object?> source)
     {
         var list = new List<object?>(source.Count);
         foreach (var item in source)
@@ -87,7 +87,7 @@ public class DSLTransformation<T>(Type clazz)
         return list;
     }
 
-    private static List<object?> ToList(IList<object?> source, int count)
+    public static List<object?> ToList(IList<object?> source, int count)
     {
         var list = new List<object?>(Math.Max(count, 0));
         for (var i = 0; i < count; i++)
@@ -98,7 +98,7 @@ public class DSLTransformation<T>(Type clazz)
         return list;
     }
 
-    private static Dictionary<string, object?> ToDictionary(IDictionary dictionary)
+    public static Dictionary<string, object?> ToDictionary(IDictionary dictionary)
     {
         var map = new Dictionary<string, object?>(dictionary.Count);
         foreach (DictionaryEntry entry in dictionary)
@@ -109,7 +109,7 @@ public class DSLTransformation<T>(Type clazz)
         return map;
     }
 
-    private static Dictionary<string, object?> ToDictionary(IDictionary<string, object?> dictionary)
+    public static Dictionary<string, object?> ToDictionary(IDictionary<string, object?> dictionary)
     {
         var map = new Dictionary<string, object?>(dictionary.Count);
         foreach (var pair in dictionary)
@@ -120,7 +120,7 @@ public class DSLTransformation<T>(Type clazz)
         return map;
     }
 
-    private static object? ToObject(object? value)
+    public static object? ToObject(object? value)
     {
         try
         {

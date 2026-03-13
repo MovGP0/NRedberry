@@ -21,18 +21,13 @@ public sealed class ParserIndicesTests
     }
 
     [Fact]
-    public void ShouldParseGreekSymbolsEquivalently()
+    public void ShouldRejectUnicodeGreekSymbolsWithoutConverters()
     {
-        try
-        {
-            var greekSymbols = ParserIndices.ParseSimple("_μν^αβ");
-            var latexNames = ParserIndices.ParseSimple("_\\mu\\nu^\\alpha\\beta");
+        Assert.Throws<ArgumentException>(() => ParserIndices.ParseSimple("_μν^αβ"));
 
-            Assert.Equal(greekSymbols, latexNames);
-        }
-        catch (TypeInitializationException)
-        {
-        }
+        var latexNames = ParserIndices.ParseSimple("_\\mu\\nu^\\alpha\\beta");
+
+        Assert.Equal(4, latexNames.Size());
     }
 
     [Fact]

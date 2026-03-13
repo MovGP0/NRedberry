@@ -93,7 +93,10 @@ public sealed class IndicesInsertion : IParseTokenTransformer
 
         int[] fromArray = from.ToArray();
         int[] toArray = to.ToArray();
-        ArraysUtils.QuickSort(fromArray, toArray);
+        if (fromArray.Length > 0)
+        {
+            ArraysUtils.QuickSort(fromArray, toArray);
+        }
 
         IIndicesInsertionTransformer? transformer = CreateTransformer(node, _indicator);
         transformer?.Apply(new IndexMapper(fromArray, toArray), new IGWrapper(generator), upper, lower);

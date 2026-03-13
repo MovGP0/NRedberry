@@ -31,7 +31,7 @@ public sealed class PowerBuilder : TensorBuilder
 
         if (!TensorUtils.IsScalar(tensor))
         {
-            throw new ArgumentException("Non-scalar tensor on input of Power builder: " + tensor);
+            throw new ArgumentException("Non-scalar tensor on input of Power builder.");
         }
 
         if (_argument is null)

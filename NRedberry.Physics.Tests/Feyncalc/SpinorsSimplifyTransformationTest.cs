@@ -2,11 +2,18 @@ using System;
 using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
+using Xunit;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
 
 public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
 {
+    [Fact]
+    public void ShouldThrowUntilSpinorsSimplifyTransformationIsPorted()
+    {
+        Assert.Throws<NotImplementedException>(() => new SpinorsSimplifyTransformation(null!));
+    }
+
     public void Test1()
     {
         SetUp();

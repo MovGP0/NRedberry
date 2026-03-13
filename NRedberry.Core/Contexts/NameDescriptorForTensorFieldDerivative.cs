@@ -6,7 +6,7 @@ using NRedberry.Indices;
 
 namespace NRedberry.Contexts;
 
-internal sealed class NameDescriptorForTensorFieldDerivative : NameDescriptorForTensorField
+public sealed class NameDescriptorForTensorFieldDerivative : NameDescriptorForTensorField
 {
     public NameDescriptorForTensorFieldImpl Parent { get; }
 
@@ -140,13 +140,13 @@ internal sealed class NameDescriptorForTensorFieldDerivative : NameDescriptorFor
         }
     }
 
-    private static Permutation ConvertPermutation(Permutation permutation, int[] mapping, int newDimension)
+    public static Permutation ConvertPermutation(Permutation permutation, int[] mapping, int newDimension)
     {
         ArgumentNullException.ThrowIfNull(permutation);
         return Permutations.CreatePermutation(permutation.IsAntisymmetry, ConvertPermutation(permutation.OneLine(), mapping, newDimension));
     }
 
-    private static int[] ConvertPermutation(int[] permutation, int[] mapping, int newDimension)
+    public static int[] ConvertPermutation(int[] permutation, int[] mapping, int newDimension)
     {
         ArgumentNullException.ThrowIfNull(permutation);
         ArgumentNullException.ThrowIfNull(mapping);
@@ -204,7 +204,7 @@ internal sealed class NameDescriptorForTensorFieldDerivative : NameDescriptorFor
         return structureOfIndices;
     }
 
-    private static int[] ValidateOrders(int[] orders)
+    private static new int[] ValidateOrders(int[] orders)
     {
         ArgumentNullException.ThrowIfNull(orders);
         return orders;

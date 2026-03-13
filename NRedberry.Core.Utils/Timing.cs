@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace NRedberry.Core.Utils;
 
 /// <summary>
@@ -20,12 +22,21 @@ public sealed class Timing
 
     private Timing()
     {
-        throw new NotImplementedException();
     }
 
     private static object[] MeasureInternal<T>(ITimingJob<T> job, bool printMessage, long divisor, string suffix)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(job);
+
+        long start = Stopwatch.GetTimestamp();
+        T result = job.DoJob();
+        long elapsed = ToScaledUnits(Stopwatch.GetTimestamp() - start, divisor);
+        if (printMessage)
+        {
+            Console.WriteLine($"Timing: {elapsed}{suffix}");
+        }
+
+        return new object[] { elapsed, result! };
     }
 
     /// <summary>
@@ -37,7 +48,7 @@ public sealed class Timing
     /// <returns>Elapsed time and result.</returns>
     public static object[] Measure<T>(ITimingJob<T> job, bool printMessage)
     {
-        throw new NotImplementedException();
+        return MeasureInternal(job, printMessage, 1_000_000L, "ms");
     }
 
     /// <summary>
@@ -49,7 +60,7 @@ public sealed class Timing
     /// <returns>Elapsed time and result.</returns>
     public static object[] MeasureMicro<T>(ITimingJob<T> job, bool printMessage)
     {
-        throw new NotImplementedException();
+        return MeasureInternal(job, printMessage, 1_000L, "µs");
     }
 
     /// <summary>
@@ -61,7 +72,7 @@ public sealed class Timing
     /// <returns>Elapsed time and result.</returns>
     public static object[] MeasureNano<T>(ITimingJob<T> job, bool printMessage)
     {
-        throw new NotImplementedException();
+        return MeasureInternal(job, printMessage, 1L, "ns");
     }
 
     /// <summary>
@@ -72,7 +83,7 @@ public sealed class Timing
     /// <returns>Elapsed time and result.</returns>
     public static object[] Measure<T>(ITimingJob<T> job)
     {
-        throw new NotImplementedException();
+        return Measure(job, true);
     }
 
     /// <summary>
@@ -83,7 +94,7 @@ public sealed class Timing
     /// <returns>Elapsed time and result.</returns>
     public static object[] MeasureMicro<T>(ITimingJob<T> job)
     {
-        throw new NotImplementedException();
+        return MeasureMicro(job, true);
     }
 
     /// <summary>
@@ -94,6 +105,12 @@ public sealed class Timing
     /// <returns>Elapsed time and result.</returns>
     public static object[] MeasureNano<T>(ITimingJob<T> job)
     {
-        throw new NotImplementedException();
+        return MeasureNano(job, true);
+    }
+
+    private static long ToScaledUnits(long elapsedTicks, long divisor)
+    {
+        long nanoseconds = elapsedTicks * 1_000_000_000L / Stopwatch.Frequency;
+        return divisor == 1L ? nanoseconds : nanoseconds / divisor;
     }
 }

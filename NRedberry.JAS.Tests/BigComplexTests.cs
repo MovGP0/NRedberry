@@ -1,21 +1,28 @@
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
-using Shouldly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
 
 public sealed class BigComplexTests
 {
-    [Fact(DisplayName = "Should expose BigComplex type")]
-    public void ShouldExposeBigComplexType()
+    [Fact]
+    public void ShouldSupportConjugationNormAndMultiplication()
     {
-        // Arrange
-        Type type = typeof(BigComplex);
+        BigComplex value = new(new BigRational(1, 2), new BigRational(2, 3));
+        BigComplex conjugate = value.Conjugate();
+        BigComplex product = value.Multiply(conjugate);
 
-        // Act
-        object? result = type;
+        Assert.Equal("1/2i-2/3", conjugate.ToString());
+        Assert.Equal("25/36", value.Norm().ToString());
+        Assert.Equal("25/36", product.ToString());
+    }
 
-        // Assert
-        result.ShouldNotBeNull();
+    [Fact]
+    public void ShouldInvertImaginaryUnit()
+    {
+        BigComplex inverse = BigComplex.ImaginaryUnit.Inverse();
+
+        Assert.Equal("-1", inverse.GetIm().ToString());
+        Assert.Equal("0", inverse.GetRe().ToString());
     }
 }

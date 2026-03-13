@@ -141,7 +141,7 @@ public static class Combinatorics
 
     public static bool TestPermutationCorrectness(long[] permutation)
     {
-        var clone = (int[])permutation.Clone();
+        var clone = (long[])permutation.Clone();
         Array.Sort(clone);
 
         for (var i = 0; i < clone.Length; i++)

@@ -2,11 +2,18 @@ using System;
 using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
+using Xunit;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
 
 public sealed class SchoutenIdentities4Test
 {
+    [Fact]
+    public void ShouldThrowUntilSchoutenIdentities4IsPorted()
+    {
+        Assert.Throws<NotImplementedException>(() => new SchoutenIdentities4(TensorFactory.ParseSimple("e_abcd")));
+    }
+
     public void Test1()
     {
         // TODO: setAntiSymmetric is not yet ported.

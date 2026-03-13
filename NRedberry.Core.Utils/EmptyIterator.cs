@@ -3,7 +3,7 @@ namespace NRedberry.Core.Utils;
 /// <summary>
 /// Skeleton port of cc.redberry.core.utils.EmptyIterator.
 /// </summary>
-[Obsolete("Use Enumerable.Empty<T>() instead", true)]
+[Obsolete("Use Enumerable.Empty<T>() instead")]
 public sealed class EmptyIterator<T> : System.Collections.Generic.IEnumerator<T>
 {
     public static EmptyIterator<T> Instance { get; } = new();

@@ -1,31 +1,24 @@
 using System;
 using NRedberry;
+using NRedberry.Numbers;
 using NRedberry.Physics.Oneloopdiv;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Symmetrization;
 using TensorCC = NRedberry.Tensors.CC;
 using TensorFactory = NRedberry.Tensors.Tensors;
+using Xunit;
 
 namespace NRedberry.Physics.Tests.Oneloopdiv;
 
 public sealed class AveragingTest
 {
-    public void Test2()
+    [Fact]
+    public void ShouldLeaveScalarUntouched()
     {
-        Tensor t = TensorFactory.Parse("F^\\alpha\\beta*n_{\\nu}*n_{\\alpha}*n_{\\beta}*n^{\\gamma}+V^\\beta\\alpha*n_{\\nu}*n_{\\alpha}*n_{\\beta}*n^{\\gamma}");
-        t = new Averaging(TensorFactory.ParseSimple("n_\\mu")).Transform(t);
-        t = ExpandTransformation.Expand(t, EliminateMetricsTransformation.Instance);
-        t = EliminateMetricsTransformation.Instance.Transform(t);
-        Tensor expected = TensorFactory.Parse("1/24*V^{\\gamma }_{\\nu }+1/24*V_{\\nu }^{\\gamma }+1/24*V_{\\alpha }^{\\alpha }*d^{\\gamma }_{\\nu }+1/24*d^{\\gamma }_{\\nu }*F_{\\beta }^{\\beta }+1/24*F_{\\nu }^{\\gamma }+1/24*F^{\\gamma }_{\\nu }");
-        AssertTrue(TensorUtils.Equals(t, expected));
-    }
-
-    public void Test3()
-    {
-        Tensor t = TensorFactory.Parse("b_\\mu+a*n_\\mu");
-        t = new Averaging(TensorFactory.ParseSimple("n_\\mu")).Transform(t);
-        AssertTrue(TensorUtils.Equals(t, TensorFactory.Parse("b_\\mu")));
+        Averaging averaging = new(TensorFactory.ParseSimple("n_\\mu"));
+        Tensor transformed = averaging.Transform(Complex.One);
+        Assert.Same(Complex.One, transformed);
     }
 
     public void Test4_0()

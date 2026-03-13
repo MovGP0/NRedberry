@@ -10,7 +10,7 @@ public static partial class PolyUtil
     /// <typeparam name="C">Coefficient type.</typeparam>
     /// <param name="polynomial">Polynomial whose trailing coefficient is required.</param>
     /// <returns>The trailing coefficient or zero when the polynomial has no terms.</returns>
-    private static C GetTrailingCoefficient<C>(GenPolynomial<C> polynomial)
+    public static C GetTrailingCoefficient<C>(GenPolynomial<C> polynomial)
         where C : RingElem<C>
     {
         if (polynomial.Terms.Count == 0)

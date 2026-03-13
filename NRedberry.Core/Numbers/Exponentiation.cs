@@ -46,7 +46,7 @@ public static class Exponentiation
         return ExponentiateIfPossible(new Rational(baseNumeratorRoot.Value, baseDenominatorRoot.Value), new Rational(powerNumerator));
     }
 
-    private static BigInteger? FindIntegerRoot(BigInteger @base, BigInteger power)
+    public static BigInteger? FindIntegerRoot(BigInteger @base, BigInteger power)
     {
         if (power.Sign <= 0)
         {

@@ -10,6 +10,7 @@ using NRedberry.Transformations.Factor;
 using NRedberry.Transformations.Fractions;
 using NRedberry.Transformations.Symmetrization;
 using TensorFactory = NRedberry.Tensors.Tensors;
+using Xunit;
 
 namespace NRedberry.Physics.Tests.Oneloopdiv;
 
@@ -184,6 +185,12 @@ public sealed class OneLoopCountertermsTest
         //this is the exact K.V. result with corrections that 1/12*F_..*F^.. and oth are not under tr operation and that tr of 1 is 4
         Tensor expected = TensorFactory.Parse("1/30*Power[R, 2]+1/12*F_{m b }^{e }_{p_5 }*F^{m b p_5 }_{e }+1/15*R_{d m }*R^{d m }+1/2*W^{a }_{p_5 }*W^{p_5 }_{a }+1/6*R*W^{b }_{b }");
         AssertEquals(a, expected);
+    }
+
+    [Fact]
+    public void ShouldThrowWhileExpressionSubstitutionSupportRemainsUnported()
+    {
+        Assert.Throws<NotImplementedException>(() => TestMinimalSecondOrderOperator());
     }
 
     public void TestMinimalSecondOrderOperatorBarvinskyVilkovisky()

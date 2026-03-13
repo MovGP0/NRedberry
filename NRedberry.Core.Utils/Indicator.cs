@@ -17,6 +17,6 @@ public sealed class FalseIndicator<T> : IIndicator<T>
 {
     public bool Is(T @object)
     {
-        return true;
+        return false;
     }
 }

@@ -35,7 +35,7 @@ public sealed partial class IndicesSymmetries : IEnumerable<Symmetry>
         _permutationGroup = permutationGroup;
         foreach (var gen in generators)
         {
-            _symmetries.AddUnsafe(new Symmetry(gen.Cast<int>().ToArray(), gen.IsAntisymmetry));
+            _symmetries.AddUnsafe(new Symmetry(gen.OneLine(), gen.IsAntisymmetry));
         }
     }
 
@@ -138,7 +138,7 @@ public sealed partial class IndicesSymmetries : IEnumerable<Symmetry>
         if (symmetry.Degree > StructureOfIndices.Size)
             throw new ArgumentException("Permutation degree not equal to indices size.");
         _generators.Add(symmetry);
-        _symmetries.AddUnsafe(new Symmetry(symmetry.Cast<int>().ToArray(), symmetry.IsAntisymmetry));
+        _symmetries.AddUnsafe(new Symmetry(symmetry.OneLine(), symmetry.IsAntisymmetry));
         _diffIds = null;
     }
 
@@ -164,7 +164,7 @@ public sealed partial class IndicesSymmetries : IEnumerable<Symmetry>
             throw new InvalidOperationException();
         _generators.AddRange(symmetries);
         foreach (var s in symmetries)
-            _symmetries.AddUnsafe(new Symmetry(s.Cast<int>().ToArray(), s.IsAntisymmetry));
+            _symmetries.AddUnsafe(new Symmetry(s.OneLine(), s.IsAntisymmetry));
         _diffIds = null;
     }
 
@@ -253,7 +253,7 @@ public sealed partial class IndicesSymmetries : IEnumerable<Symmetry>
         _permutationGroup = sym ?? PermutationGroup.TrivialGroup();
         _generators.Clear();
         _generators.AddRange(_permutationGroup.Generators);
-        _symmetries.AddUnsafe(new Symmetry(_permutationGroup.Generators[0].Cast<int>().ToArray(), _permutationGroup.Generators[0].IsAntisymmetry));
+        _symmetries.AddUnsafe(new Symmetry(_permutationGroup.Generators[0].OneLine(), _permutationGroup.Generators[0].IsAntisymmetry));
         _diffIds = null;
         PositionsInOrbits = null;
     }
@@ -276,7 +276,7 @@ public sealed partial class IndicesSymmetries : IEnumerable<Symmetry>
         _permutationGroup = sym ?? PermutationGroup.TrivialGroup();
         _generators.Clear();
         _generators.AddRange(_permutationGroup.Generators);
-        _symmetries.AddUnsafe(new Symmetry(_permutationGroup.Generators[0].Cast<int>().ToArray(), _permutationGroup.Generators[0].IsAntisymmetry));
+        _symmetries.AddUnsafe(new Symmetry(_permutationGroup.Generators[0].OneLine(), _permutationGroup.Generators[0].IsAntisymmetry));
         _diffIds = null;
         PositionsInOrbits = null;
     }
