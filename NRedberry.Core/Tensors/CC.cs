@@ -163,9 +163,9 @@ public static class CC
     /// <summary>
     /// Returns random generator used by Redberry in current session.
     /// </summary>
-    public static Random GetRandomGenerator()
+    public static System.Random GetRandomGenerator()
     {
-        return Random.Shared;
+        return System.Random.Shared;
     }
 
     /// <summary>

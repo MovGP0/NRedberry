@@ -140,7 +140,7 @@ public class UnivPowerSeries<C> : RingElem<UnivPowerSeries<C>> where C : RingEle
                 int idx = i - k;
                 if (idx < 0)
                 {
-                    return RingFactory<C>.Zero;
+                    return Ring.CoFac.FromInteger(0);
                 }
 
                 return Coefficient(idx);

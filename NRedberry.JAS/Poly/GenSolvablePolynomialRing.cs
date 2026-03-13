@@ -15,19 +15,15 @@ public class GenSolvablePolynomialRing<C> : GenPolynomialRing<C> where C : RingE
 {
     public RelationTable<C> Table { get; }
 
-    private static GenSolvablePolynomial<C> ZERO = default!;
-
-    private static GenSolvablePolynomial<C> ONE = default!;
-
     /// <summary>
     /// Zero solvable polynomial singleton.
     /// </summary>
-    public new static GenSolvablePolynomial<C> Zero => ZERO;
+    public new GenSolvablePolynomial<C> Zero { get; }
 
     /// <summary>
     /// One solvable polynomial singleton.
     /// </summary>
-    public new static GenSolvablePolynomial<C> One => ONE;
+    public new GenSolvablePolynomial<C> One { get; }
 
     /// <summary>
     /// Constructs a solvable polynomial ring with optional relation table.
@@ -44,8 +40,8 @@ public class GenSolvablePolynomialRing<C> : GenPolynomialRing<C> where C : RingE
         : base(coefficientFactory, variables, order, variableNames)
     {
         Table = relationTable ?? new RelationTable<C>(this);
-        ZERO = new GenSolvablePolynomial<C>(this);
-        ONE = new GenSolvablePolynomial<C>(this, CoFac.FromInteger(1), Evzero);
+        Zero = new GenSolvablePolynomial<C>(this);
+        One = new GenSolvablePolynomial<C>(this, CoFac.FromInteger(1), Evzero);
     }
 
     /// <summary>
@@ -65,14 +61,6 @@ public class GenSolvablePolynomialRing<C> : GenPolynomialRing<C> where C : RingE
     {
         return ReferenceEquals(this, other)
             || (other is GenSolvablePolynomialRing<C> && base.Equals(other));
-    }
-
-    /// <summary>
-    /// Hash combines the base ring and relation table.
-    /// </summary>
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(base.GetHashCode(), Table);
     }
 
     /// <summary>

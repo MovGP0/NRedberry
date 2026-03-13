@@ -97,7 +97,7 @@ public class GenSolvablePolynomial<C> : GenPolynomial<C> where C : RingElem<C>
         ArgumentNullException.ThrowIfNull(other);
         if (other.IsZero())
         {
-            return GenSolvablePolynomialRing<C>.Zero.Copy();
+            return Ring.Zero.Copy();
         }
 
         if (IsZero())
@@ -105,7 +105,7 @@ public class GenSolvablePolynomial<C> : GenPolynomial<C> where C : RingElem<C>
             return this;
         }
 
-        GenSolvablePolynomial<C> result = GenSolvablePolynomialRing<C>.Zero.Copy();
+        GenSolvablePolynomial<C> result = Ring.Zero.Copy();
         C unit = Ring.GetOneCoefficient();
         ExpVector zeroVector = Ring.Evzero;
         foreach (KeyValuePair<ExpVector, C> leftTerm in Terms)
@@ -181,7 +181,7 @@ public class GenSolvablePolynomial<C> : GenPolynomial<C> where C : RingElem<C>
         ArgumentNullException.ThrowIfNull(right);
         if (left.IsZero() || right.IsZero() || IsZero())
         {
-            return GenSolvablePolynomialRing<C>.Zero.Copy();
+            return Ring.Zero.Copy();
         }
 
         if (left.IsOne())
@@ -240,7 +240,7 @@ public class GenSolvablePolynomial<C> : GenPolynomial<C> where C : RingElem<C>
         ArgumentNullException.ThrowIfNull(exponent);
         if (coefficient.IsZero())
         {
-            return GenSolvablePolynomialRing<C>.Zero.Copy();
+            return Ring.Zero.Copy();
         }
 
         GenSolvablePolynomial<C> monomial = new (Ring, coefficient, exponent);
@@ -274,7 +274,7 @@ public class GenSolvablePolynomial<C> : GenPolynomial<C> where C : RingElem<C>
         ArgumentNullException.ThrowIfNull(rightExponent);
         if (leftCoefficient.IsZero() || rightCoefficient.IsZero())
         {
-            return GenSolvablePolynomialRing<C>.Zero.Copy();
+            return Ring.Zero.Copy();
         }
 
         GenSolvablePolynomial<C> left = new (Ring, leftCoefficient, leftExponent);

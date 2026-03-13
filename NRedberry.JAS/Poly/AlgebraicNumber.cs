@@ -48,7 +48,7 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>>, ICloneable, I
     /// </summary>
     /// <param name="ring">Ring that owns this algebraic number.</param>
     public AlgebraicNumber(AlgebraicNumberRing<C> ring)
-        : this(ring, GenPolynomialRing<C>.Zero)
+        : this(ring, ring.Ring.Zero)
     {
     }
 
@@ -416,10 +416,10 @@ public class AlgebraicNumber<C> : GcdRingElem<AlgebraicNumber<C>>, ICloneable, I
 
         GenPolynomial<C> q = Val;
         GenPolynomial<C> r = other.Val;
-        GenPolynomial<C> c1 = GenPolynomialRing<C>.One;
-        GenPolynomial<C> d1 = GenPolynomialRing<C>.Zero;
-        GenPolynomial<C> c2 = GenPolynomialRing<C>.Zero;
-        GenPolynomial<C> d2 = GenPolynomialRing<C>.One;
+        GenPolynomial<C> c1 = Ring.Ring.One;
+        GenPolynomial<C> d1 = Ring.Ring.Zero;
+        GenPolynomial<C> c2 = Ring.Ring.Zero;
+        GenPolynomial<C> d2 = Ring.Ring.One;
 
         while (!r.IsZero())
         {

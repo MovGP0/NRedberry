@@ -174,6 +174,131 @@ public sealed class PolyUtilTests
         Assert.Equal("2 x + 1", ((GenPolynomial<BigInteger>)cleared[2]).ToString(["x"]));
         Assert.Equal(algebraicPolynomial.ToString(["x"]), PolyUtil.FromAlgebraicCoefficients(expandedAlgebraicRing, algebraicPolynomial).ToString(["x"]));
     }
+
+    [Fact]
+    public void ShouldInterpolateUnivariateAndRecursivePolynomials()
+    {
+        GenPolynomialRing<BigRational> ring = new(new BigRational(), 1, ["x"]);
+        GenPolynomial<BigRational> source = ring.Univariate(0).Sum(new BigRational(1));
+        GenPolynomial<BigRational> modulus = ring.Univariate(0, 2).Sum(new BigRational(1));
+
+        GenPolynomial<BigRational> interpolated = PolyUtil.Interpolate(
+            ring,
+            source,
+            modulus,
+            new BigRational(1, 5),
+            new BigRational(10),
+            new BigRational(2));
+
+        Assert.Equal("10", PolyUtil.EvaluateMain(ring.CoFac, interpolated, new BigRational(2)).ToString());
+        Assert.True(PolyUtil.BaseSparsePseudoRemainder(interpolated.Subtract(source), modulus).IsZero());
+
+        GenPolynomialRing<BigRational> baseRing = new(new BigRational(), 2, ["x", "y"]);
+        GenPolynomialRing<GenPolynomial<BigRational>> recursiveRing = baseRing.Recursive(1);
+        GenPolynomialRing<BigRational> coefficientRing = (GenPolynomialRing<BigRational>)recursiveRing.CoFac;
+        GenPolynomial<GenPolynomial<BigRational>> recursiveSource = new(recursiveRing);
+        recursiveSource = recursiveSource.Sum(coefficientRing.FromInteger(1), ExpVector.Create([1L]));
+        recursiveSource = recursiveSource.Sum(coefficientRing.Univariate(0));
+
+        GenPolynomial<BigRational> evaluation = new(coefficientRing);
+        evaluation = evaluation.Sum(new BigRational(5), ExpVector.Create([1L]));
+        evaluation = evaluation.Sum(new BigRational(3));
+
+        GenPolynomial<BigRational> linearModulus = coefficientRing.Univariate(0).Sum(new BigRational(1));
+        GenPolynomial<GenPolynomial<BigRational>> recursiveInterpolated = PolyUtil.Interpolate(
+            recursiveRing,
+            recursiveSource,
+            linearModulus,
+            new BigRational(1, 3),
+            evaluation,
+            new BigRational(2));
+
+        GenPolynomial<BigRational> yCoefficient = recursiveInterpolated.Coefficient(ExpVector.Create([1L]));
+        GenPolynomial<BigRational> constantCoefficient = recursiveInterpolated.Coefficient(ExpVector.Create([0L]));
+        GenPolynomial<BigRational> yDifference =
+            PolyUtil.BaseSparsePseudoRemainder(
+                yCoefficient.Subtract(recursiveSource.Coefficient(ExpVector.Create([1L]))),
+                linearModulus);
+        GenPolynomial<BigRational> constantDifference =
+            PolyUtil.BaseSparsePseudoRemainder(
+                constantCoefficient.Subtract(recursiveSource.Coefficient(ExpVector.Create([0L]))),
+                linearModulus);
+
+        Assert.Equal("5", PolyUtil.EvaluateMain(coefficientRing.CoFac, yCoefficient, new BigRational(2)).ToString());
+        Assert.Equal("3", PolyUtil.EvaluateMain(coefficientRing.CoFac, constantCoefficient, new BigRational(2)).ToString());
+        Assert.True(yDifference.IsZero());
+        Assert.True(constantDifference.IsZero());
+    }
+
+    [Fact]
+    public void ShouldHandleRecursiveDerivativeDivisionAndPseudoRemainderHelpers()
+    {
+        GenPolynomialRing<BigRational> baseRing = new(new BigRational(), 2, ["x", "y"]);
+        GenPolynomialRing<GenPolynomial<BigRational>> recursiveRing = baseRing.Recursive(1);
+        GenPolynomialRing<BigRational> coefficientRing = (GenPolynomialRing<BigRational>)recursiveRing.CoFac;
+
+        GenPolynomial<GenPolynomial<BigRational>> recursivePolynomial = new(recursiveRing);
+        recursivePolynomial = recursivePolynomial.Sum(coefficientRing.Univariate(0), ExpVector.Create([2L]));
+        recursivePolynomial = recursivePolynomial.Sum(coefficientRing.FromInteger(3), ExpVector.Create([1L]));
+        recursivePolynomial = recursivePolynomial.Sum(coefficientRing.FromInteger(1));
+
+        GenPolynomial<GenPolynomial<BigRational>> derivative = PolyUtil.RecursiveDeriviative(recursivePolynomial);
+
+        Assert.Equal("2 x", derivative.Coefficient(ExpVector.Create([1L])).ToString(["x"]));
+        Assert.Equal("3", derivative.Coefficient(ExpVector.Create([0L])).ToString(["x"]));
+
+        GenPolynomial<BigRational> coefficientDivisor = coefficientRing.Univariate(0).Sum(new BigRational(1));
+        GenPolynomial<GenPolynomial<BigRational>> divisibleRecursive = new(recursiveRing);
+        divisibleRecursive = divisibleRecursive.Sum(
+            coefficientDivisor.Multiply(coefficientRing.Univariate(0).Sum(new BigRational(2))),
+            ExpVector.Create([1L]));
+        divisibleRecursive = divisibleRecursive.Sum(coefficientDivisor.Multiply(new BigRational(2)));
+
+        GenPolynomial<GenPolynomial<BigRational>> divided = PolyUtil.RecursiveDivide(divisibleRecursive, coefficientDivisor);
+
+        Assert.Equal("x + 2", divided.Coefficient(ExpVector.Create([1L])).ToString(["x"]));
+        Assert.Equal("2", divided.Coefficient(ExpVector.Create([0L])).ToString(["x"]));
+
+        GenPolynomial<GenPolynomial<BigRational>> recursiveDivisor = new(recursiveRing);
+        recursiveDivisor = recursiveDivisor.Sum(coefficientRing.FromInteger(1), ExpVector.Create([1L]));
+        recursiveDivisor = recursiveDivisor.Sum(coefficientRing.FromInteger(1));
+
+        GenPolynomial<GenPolynomial<BigRational>> recursiveQuotient = new(recursiveRing);
+        recursiveQuotient = recursiveQuotient.Sum(coefficientRing.FromInteger(1), ExpVector.Create([1L]));
+        recursiveQuotient = recursiveQuotient.Sum(coefficientRing.FromInteger(2));
+
+        GenPolynomial<GenPolynomial<BigRational>> recursiveDividend = recursiveDivisor.Multiply(recursiveQuotient);
+        GenPolynomial<GenPolynomial<BigRational>> pseudoQuotient =
+            PolyUtil.RecursivePseudoDivide(recursiveDividend, recursiveDivisor);
+
+        Assert.Equal("1", pseudoQuotient.Coefficient(ExpVector.Create([1L])).ToString(["x"]));
+        Assert.Equal("2", pseudoQuotient.Coefficient(ExpVector.Create([0L])).ToString(["x"]));
+        Assert.True(PolyUtil.RecursiveDensePseudoRemainder(recursiveDividend, recursiveDivisor).IsZero());
+        Assert.True(PolyUtil.RecursiveSparsePseudoRemainder(recursiveDividend, recursiveDivisor).IsZero());
+        Assert.True(PolyUtil.RecursivePseudoRemainder(recursiveDividend, recursiveDivisor).IsZero());
+    }
+
+    [Fact]
+    public void ShouldSubstituteAndSwitchRecursiveVariables()
+    {
+        GenPolynomialRing<BigRational> univariateRing = new(new BigRational(), 1, ["x"]);
+        GenPolynomial<BigRational> polynomial = univariateRing.Univariate(0, 2).Sum(new BigRational(1));
+        GenPolynomial<BigRational> substitution = univariateRing.Univariate(0).Sum(new BigRational(1));
+
+        GenPolynomial<BigRational> substituted = PolyUtil.SubstituteMain(polynomial, substitution);
+
+        Assert.Equal("x^2 + 2 x + 2", substituted.ToString(["x"]));
+
+        GenPolynomialRing<BigRational> baseRing = new(new BigRational(), 2, ["x", "y"]);
+        GenPolynomial<BigRational> basePolynomial = baseRing.Univariate(1).Sum(new BigRational(2), ExpVector.Create([1L, 0L]));
+        GenPolynomialRing<GenPolynomial<BigRational>> recursiveRing = baseRing.Recursive(1);
+        GenPolynomial<GenPolynomial<BigRational>> recursive = PolyUtil.Recursive(recursiveRing, basePolynomial);
+
+        GenPolynomial<GenPolynomial<BigRational>> switched = PolyUtil.SwitchVariables(recursive);
+        GenPolynomial<GenPolynomial<BigRational>> roundTrip = PolyUtil.SwitchVariables(switched);
+
+        Assert.Equal(basePolynomial.ToString(["x", "y"]), PolyUtil.Distribute(baseRing, roundTrip).ToString(["x", "y"]));
+    }
 }
 
 file sealed class BigIntegerToRationalFunctor : UnaryFunctor<BigInteger, BigRational>

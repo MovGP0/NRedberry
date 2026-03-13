@@ -135,6 +135,7 @@ public class CartesianProductInfinite<E> : IEnumerable<List<E>>
 
                 if (added)
                 {
+                    level++;
                     break;
                 }
 

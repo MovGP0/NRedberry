@@ -44,8 +44,8 @@ public class UnivPowerSeriesRing<C> : RingFactory<UnivPowerSeries<C>> where C : 
         this.truncate = truncate;
         Var = string.IsNullOrWhiteSpace(name) ? "t" : name;
 
-        ONE = new UnivPowerSeries<C>(this, new LambdaCoefficients((i, _) => i == 0 ? RingFactory<C>.One : RingFactory<C>.Zero));
-        ZERO = new UnivPowerSeries<C>(this, new LambdaCoefficients((_, _) => RingFactory<C>.Zero));
+        ONE = new UnivPowerSeries<C>(this, new LambdaCoefficients((i, _) => i == 0 ? CoFac.FromInteger(1) : CoFac.FromInteger(0)));
+        ZERO = new UnivPowerSeries<C>(this, new LambdaCoefficients((_, _) => CoFac.FromInteger(0)));
     }
 
     public override string ToString()
@@ -90,7 +90,7 @@ public class UnivPowerSeriesRing<C> : RingFactory<UnivPowerSeries<C>> where C : 
         {
             gens.Add(new UnivPowerSeries<C>(
                 this,
-                new LambdaCoefficients((i, _) => i == 0 ? cg : RingFactory<C>.Zero)));
+                new LambdaCoefficients((i, _) => i == 0 ? cg : CoFac.FromInteger(0))));
         }
 
         gens.Add(ONE.Shift(1));
@@ -128,7 +128,7 @@ public class UnivPowerSeriesRing<C> : RingFactory<UnivPowerSeries<C>> where C : 
             new LambdaCoefficients((_, _) =>
             {
                 double f = rnd.NextDouble();
-                return f < d ? CoFac.Random(k, rnd) : RingFactory<C>.Zero;
+                return f < d ? CoFac.Random(k, rnd) : CoFac.FromInteger(0);
             }));
     }
 

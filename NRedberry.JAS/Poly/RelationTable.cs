@@ -515,7 +515,7 @@ public class RelationTable<C>(GenSolvablePolynomialRing<C> ring)
 
             if (!result.TryGetValue(head, out GenSolvablePolynomial<C>? existing))
             {
-                existing = GenSolvablePolynomialRing<C>.Zero;
+                existing = targetRing.Zero;
             }
 
             GenPolynomial<C> basePolynomial = existing;

@@ -20,7 +20,7 @@ public static partial class PolyUtil
         ArgumentNullException.ThrowIfNull(resultRing);
         ArgumentNullException.ThrowIfNull(polynomial);
 
-        GenPolynomial<BigInteger> result = GenPolynomialRing<BigInteger>.Zero.Clone();
+        GenPolynomial<BigInteger> result = resultRing.Zero.Clone();
         SortedDictionary<ExpVector, BigInteger> terms = result.Terms;
         foreach (KeyValuePair<ExpVector, C> term in polynomial.Terms)
         {

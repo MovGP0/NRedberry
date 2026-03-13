@@ -18,14 +18,14 @@ public static partial class PolyUtil
         ArgumentNullException.ThrowIfNull(recursiveRing);
         ArgumentNullException.ThrowIfNull(polynomial);
 
-        GenPolynomial<GenPolynomial<C>> result = GenPolynomialRing<GenPolynomial<C>>.Zero.Clone();
+        GenPolynomial<GenPolynomial<C>> result = recursiveRing.Zero.Clone();
         if (polynomial.IsZero())
         {
             return result;
         }
 
         int split = recursiveRing.Nvar;
-        GenPolynomial<C> zeroCoefficient = GenPolynomialRing<C>.Zero;
+        GenPolynomial<C> zeroCoefficient = ((GenPolynomialRing<C>)recursiveRing.CoFac).Zero;
 
         SortedDictionary<ExpVector, GenPolynomial<C>> resultTerms = result.Terms;
         foreach (KeyValuePair<ExpVector, C> term in polynomial.Terms)

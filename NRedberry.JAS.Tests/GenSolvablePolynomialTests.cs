@@ -27,8 +27,8 @@ public sealed class GenSolvablePolynomialTests
         GenSolvablePolynomialRing<BigRational> ring = CreateRing();
         GenSolvablePolynomial<BigRational> x = ring.Univariate(0);
 
-        Assert.True(GenSolvablePolynomialRing<BigRational>.Zero.IsZero());
-        Assert.True(GenSolvablePolynomialRing<BigRational>.One.IsOne());
+        Assert.True(ring.Zero.IsZero());
+        Assert.True(ring.One.IsOne());
         Assert.Equal(ring, x.Factory());
         Assert.Equal(x.ToString(["x"]), x.Copy().ToString(["x"]));
     }

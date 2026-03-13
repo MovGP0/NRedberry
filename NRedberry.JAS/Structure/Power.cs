@@ -111,7 +111,7 @@ public class Power<C>(RingFactory<C>? fac)
                 throw new ArgumentException("fac may not be null for a^0", nameof(fac));
             }
 
-            return MonoidFactory<TMonoid>.One;
+            return fac.FromInteger(1);
         }
 
         if (a.IsOne())
@@ -137,7 +137,7 @@ public class Power<C>(RingFactory<C>? fac)
             throw new ArgumentNullException(nameof(fac), "fac may not be null");
         }
 
-        TMonoid result = MonoidFactory<TMonoid>.One;
+        TMonoid result = fac.FromInteger(1);
         while (exponent > 0)
         {
             if ((exponent & 1) == 1)
@@ -172,7 +172,7 @@ public class Power<C>(RingFactory<C>? fac)
                 throw new ArgumentException("fac may not be null for a^0", nameof(fac));
             }
 
-            return MonoidFactory<TMonoid>.One;
+            return fac.FromInteger(1);
         }
 
         if (a.IsOne())
@@ -198,7 +198,7 @@ public class Power<C>(RingFactory<C>? fac)
             throw new ArgumentNullException(nameof(fac), "fac may not be null");
         }
 
-        TMonoid result = MonoidFactory<TMonoid>.One;
+        TMonoid result = fac.FromInteger(1);
         while (exponent.Sign > 0)
         {
             if (!exponent.IsEven)
@@ -258,7 +258,7 @@ public class Power<C>(RingFactory<C>? fac)
             throw new ArgumentNullException(nameof(fac), "fac may not be null for empty list");
         }
 
-        TMonoid result = MonoidFactory<TMonoid>.One;
+        TMonoid result = fac.FromInteger(1);
         if (A == null || A.Count == 0)
         {
             return result;
@@ -286,7 +286,7 @@ public class Power<C>(RingFactory<C>? fac)
             throw new ArgumentNullException(nameof(fac), "fac may not be null for empty list");
         }
 
-        TAbelian result = AbelianGroupFactory<TAbelian>.Zero;
+        TAbelian result = fac.FromInteger(0);
         if (A == null || A.Count == 0)
         {
             return result;

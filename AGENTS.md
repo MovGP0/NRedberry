@@ -288,6 +288,7 @@ public override int GetHashCode()
 - Build error note: CS0506 occurs if derived operator parsers override `ParseToken` while `ParserOperator.ParseToken` is not virtual; mark the base method as `virtual` or remove the override.
 - Build error note: RCS0015 flags blank lines between using directives; keep using directives contiguous and only leave a blank line before the namespace.
 - Build error note: CS0104 can occur when CC is ambiguous between NRedberry.Contexts and NRedberry.Tensors; use an alias or fully qualify the intended CC.
+- Build error note: in test files under `NRedberry.Core.Tests.Tensor`, unqualified `Tensor` can bind to the local `Tensor` namespace and cause CS0118; use an alias such as `using TensorType = NRedberry.Tensors.Tensor;`.
 - Build error note: CS0104 can occur when MathUtils is ambiguous between NRedberry.Maths and NRedberry.Core.Utils; use an alias (e.g., MathsUtils) or fully qualify.
 - Build error note: In test files, `Complex` can be ambiguous between `NRedberry.Numbers.Complex` and `System.Numerics.Complex` (CS0104), especially with global/implicit System usings; use an explicit alias such as `using NumberComplex = NRedberry.Numbers.Complex;`.
 - Build error note: running multiple `dotnet test` or build commands concurrently against projects that share `NRedberry.Core` outputs can trigger CS2012 file locks on `obj\Debug\net9.0\NRedberry.Core.dll`; run those validations sequentially.
@@ -299,6 +300,8 @@ public override int GetHashCode()
 - Build error note: when calling `IndexTypeMethods` extension methods such as `GetType_()` from `Contexts` code, add `using NRedberry.Indices;` or fully qualify the helper; otherwise CS1061 occurs because the extension is out of scope.
 - Build error note: CS0246 occurs when referencing ProductBuilder in ports; use ScalarsBackedProductBuilder (or TensorBuilder) instead.
 - Build error note: CS0246 for Averaging in Physics.Tests; add using NRedberry.Physics.Oneloopdiv (or fully qualify Averaging).
+- Build error note: Roslynator RCS1134 flags redundant `continue` statements in loop branches; prefer `if`/`else` structure when one branch would only assign and continue.
+- Build error note: in test files under `NRedberry.Core.Tests.Tensor`, unqualified `SimpleTensor` can bind to the local `Tensor` namespace instead of `NRedberry.Tensors.SimpleTensor`; fully qualify it or add an alias.
 - Build error note: CS0019 occurs when using SimpleIndices.Size as a property; call Size() to get the count.
 - Build error note: RCS1085 flagged the IIndexMappingProvider EmptyProvider property backing field; use an auto-implemented get-only property with initializer instead.
 - Build error note: RCS1146 flagged a null check before RemoveContracted; prefer conditional access like `buffer?.RemoveContracted()` to satisfy the analyzer.
@@ -323,6 +326,7 @@ public override int GetHashCode()
 - Build error note: CS8859 occurs if a record defines a member named `Clone`; rename the method (e.g., `Copy`) or use a non-record type to avoid the restriction.
 - Build error note: RCS1006 flags nested `if` inside `else`; merge into `else if` to satisfy Roslynator.
 - Build error note: ExternalSolver.cs used `Tensors.Expression`/`Tensors.ParseExpression` and `Tensors` resolved to the namespace, causing CS1955/CS0234; use `NRedberry.Tensors.Tensors` (or a using alias) when calling static tensor helpers.
+- Build error note: adding the `NRedberry.Tensors.Random` namespace can make unqualified `Random` resolve to the namespace instead of `System.Random` (CS0118); use `System.Random` explicitly in files under `NRedberry.Tensors` when that namespace is in play.
 - Build error note: CS0246 when using `TransformationCollection` without the correct namespace; add `using NRedberry.Transformations.Symmetrization;` (the class lives there).
 - Build error note: RCS0055/RCS0027 can flag long string concatenation chains; prefer `StringBuilder` (or keep each `+` on its own line with consistent indentation).
 - Build error note: RCS0055 can also flag long string concatenations in expressions; prefer `string.Concat(...)` to avoid binary chain formatting errors.

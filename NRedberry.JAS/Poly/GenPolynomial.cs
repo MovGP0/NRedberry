@@ -507,7 +507,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         ArgumentNullException.ThrowIfNull(other);
         if (IsZero() || other.IsZero())
         {
-            return GenPolynomialRing<C>.Zero;
+            return Ring.Zero;
         }
 
         SortedDictionary<ExpVector, C> result = CreateDictionary();
@@ -552,7 +552,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         ArgumentNullException.ThrowIfNull(coefficient);
         if (coefficient.IsZero() || IsZero())
         {
-            return GenPolynomialRing<C>.Zero;
+            return Ring.Zero;
         }
 
         SortedDictionary<ExpVector, C> result = CreateDictionary();
@@ -575,7 +575,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         ArgumentNullException.ThrowIfNull(exponent);
         if (coefficient.IsZero() || IsZero())
         {
-            return GenPolynomialRing<C>.Zero;
+            return Ring.Zero;
         }
 
         SortedDictionary<ExpVector, C> result = CreateDictionary();
@@ -737,7 +737,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         if (IsUnit())
         {
             C inverse = LeadingBaseCoefficient().Inverse();
-            return GenPolynomialRing<C>.One.Multiply(inverse);
+            return Ring.One.Multiply(inverse);
         }
 
         throw new NotInvertibleException($"element not invertible {this} :: {Ring}");
@@ -796,16 +796,16 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         if (other.IsZero())
         {
             result[0] = this;
-            result[1] = GenPolynomialRing<C>.One;
-            result[2] = GenPolynomialRing<C>.Zero;
+            result[1] = Ring.One;
+            result[2] = Ring.Zero;
             return result;
         }
 
         if (IsZero())
         {
             result[0] = other;
-            result[1] = GenPolynomialRing<C>.Zero;
-            result[2] = GenPolynomialRing<C>.One;
+            result[1] = Ring.Zero;
+            result[2] = Ring.One;
             return result;
         }
 
@@ -819,7 +819,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
             C a = LeadingBaseCoefficient();
             C b = other.LeadingBaseCoefficient();
             C[] gcd = a.Egcd(b);
-            GenPolynomial<C> zero = GenPolynomialRing<C>.Zero;
+            GenPolynomial<C> zero = Ring.Zero;
             result[0] = zero.Sum(gcd[0]);
             result[1] = zero.Sum(gcd[1]);
             result[2] = zero.Sum(gcd[2]);
@@ -828,10 +828,10 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
 
         GenPolynomial<C> q = this;
         GenPolynomial<C> r = other;
-        GenPolynomial<C> c1 = GenPolynomialRing<C>.One.Clone();
-        GenPolynomial<C> d1 = GenPolynomialRing<C>.Zero.Clone();
-        GenPolynomial<C> c2 = GenPolynomialRing<C>.Zero.Clone();
-        GenPolynomial<C> d2 = GenPolynomialRing<C>.One.Clone();
+        GenPolynomial<C> c1 = Ring.One.Clone();
+        GenPolynomial<C> d1 = Ring.Zero.Clone();
+        GenPolynomial<C> c2 = Ring.Zero.Clone();
+        GenPolynomial<C> d2 = Ring.One.Clone();
 
         while (!r.IsZero())
         {
@@ -875,14 +875,14 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         if (other.IsZero())
         {
             result[0] = this;
-            result[1] = GenPolynomialRing<C>.One;
+            result[1] = Ring.One;
             return result;
         }
 
         if (IsZero())
         {
             result[0] = other;
-            result[1] = GenPolynomialRing<C>.Zero;
+            result[1] = Ring.Zero;
             return result;
         }
 
@@ -893,8 +893,8 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
 
         GenPolynomial<C> q = this;
         GenPolynomial<C> r = other;
-        GenPolynomial<C> c1 = GenPolynomialRing<C>.One.Clone();
-        GenPolynomial<C> d1 = GenPolynomialRing<C>.Zero.Clone();
+        GenPolynomial<C> c1 = Ring.One.Clone();
+        GenPolynomial<C> d1 = Ring.Zero.Clone();
 
         while (!r.IsZero())
         {
@@ -1142,7 +1142,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
             return this;
         }
 
-        GenPolynomial<C> result = GenPolynomialRing<C>.Zero.Clone();
+        GenPolynomial<C> result = extendedRing.Zero.Clone();
         if (IsZero())
         {
             return result;
@@ -1169,7 +1169,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
             return this;
         }
 
-        GenPolynomial<C> result = GenPolynomialRing<C>.Zero.Clone();
+        GenPolynomial<C> result = extendedRing.Zero.Clone();
         if (IsZero())
         {
             return result;
@@ -1208,7 +1208,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
 
             if (!contracted.TryGetValue(leading, out GenPolynomial<C>? polynomial))
             {
-                polynomial = GenPolynomialRing<C>.Zero.Clone();
+                polynomial = contractedRing.Zero.Clone();
             }
 
             polynomial = polynomial.Sum(term.Value, remainder);
@@ -1224,7 +1224,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
     public GenPolynomial<C> Reverse(GenPolynomialRing<C> reversedRing)
     {
         ArgumentNullException.ThrowIfNull(reversedRing);
-        GenPolynomial<C> result = GenPolynomialRing<C>.Zero.Clone();
+        GenPolynomial<C> result = reversedRing.Zero.Clone();
         if (IsZero())
         {
             return result;

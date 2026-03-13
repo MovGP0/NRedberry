@@ -19,7 +19,7 @@ public static partial class PolyUtil
 
         if (polynomial.IsZero())
         {
-            return GenPolynomialRing<BigInteger>.Zero.Clone();
+            return resultRing.Zero.Clone();
         }
 
         System.Numerics.BigInteger lcm = System.Numerics.BigInteger.Zero;
@@ -44,10 +44,10 @@ public static partial class PolyUtil
 
         if (lcm.IsZero)
         {
-            return GenPolynomialRing<BigInteger>.Zero.Clone();
+            return resultRing.Zero.Clone();
         }
 
-        GenPolynomial<BigInteger> result = GenPolynomialRing<BigInteger>.Zero.Clone();
+        GenPolynomial<BigInteger> result = resultRing.Zero.Clone();
         SortedDictionary<ExpVector, BigInteger> terms = result.Terms;
         foreach (KeyValuePair<ExpVector, BigRational> term in polynomial.Terms)
         {

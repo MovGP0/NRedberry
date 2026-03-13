@@ -28,7 +28,7 @@ public static partial class PolyUtil
         }
 
         RingFactory<C> coefficientFactory = ring.CoFac;
-        GenPolynomial<C> derivative = GenPolynomialRing<C>.Zero.Clone();
+        GenPolynomial<C> derivative = ring.Zero.Clone();
         SortedDictionary<ExpVector, C> derivativeTerms = derivative.Terms;
 
         foreach (KeyValuePair<ExpVector, C> term in polynomial.Terms)

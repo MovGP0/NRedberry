@@ -26,11 +26,12 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
     public bool IsPartial => partial;
 
     protected string[]? vars;
-    private static GenPolynomial<C> ZERO;
-    private static GenPolynomial<C> ONE;
     public readonly ExpVector Evzero;
     protected static readonly Random random = new();
     protected int isField = -1;
+
+    public GenPolynomial<C> Zero { get; }
+    public GenPolynomial<C> One { get; }
 
     /// <summary>
     /// Creates a polynomial factory with the default term order and <paramref name="n"/> variables.
@@ -104,9 +105,9 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
         }
 
         Evzero = ExpVector.Create(n);
-        ZERO = new GenPolynomial<C>(this);
+        Zero = new GenPolynomial<C>(this);
         C coeffOne = cf.FromInteger(1);
-        ONE = new GenPolynomial<C>(this, coeffOne, Evzero);
+        One = new GenPolynomial<C>(this, coeffOne, Evzero);
     }
 
     /// <summary>
@@ -345,7 +346,7 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
     public GenPolynomial<C> Random(int k, int l, int d, float q, Random rnd)
     {
         ArgumentNullException.ThrowIfNull(rnd);
-        GenPolynomial<C> result = ZERO;
+        GenPolynomial<C> result = Zero;
         for (int i = 0; i < l; i++)
         {
             ExpVector exponent = ExpVector.Random(Nvar, d, q, rnd);
@@ -386,7 +387,7 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
     /// </summary>
     public GenPolynomial<C> Univariate(int moduleVariables, int index, long exponent)
     {
-        GenPolynomial<C> polynomial = ZERO;
+        GenPolynomial<C> polynomial = Zero;
         int ringVariables = Nvar - moduleVariables;
         if (index >= 0 && index < ringVariables)
         {
@@ -413,7 +414,7 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
         List<GenPolynomial<C>> generators = new (coefficientGenerators.Count + univariates.Count);
         foreach (C coefficient in coefficientGenerators)
         {
-            generators.Add(ONE.Multiply(coefficient));
+            generators.Add(One.Multiply(coefficient));
         }
 
         generators.AddRange(univariates);
@@ -443,16 +444,6 @@ public class GenPolynomialRing<C> : RingFactory<GenPolynomial<C>>, IEnumerable<G
     {
         return CoFac.IsAssociative();
     }
-
-    /// <summary>
-    /// Zero polynomial singleton for this ring.
-    /// </summary>
-    public static GenPolynomial<C> Zero => ZERO;
-
-    /// <summary>
-    /// One polynomial singleton for this ring.
-    /// </summary>
-    public static GenPolynomial<C> One => ONE;
 
     /// <summary>
     /// Returns the additive identity from the coefficient factory.

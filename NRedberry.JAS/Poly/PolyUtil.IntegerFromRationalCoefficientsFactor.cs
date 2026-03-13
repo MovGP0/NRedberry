@@ -22,7 +22,7 @@ public static partial class PolyUtil
         {
             result[0] = System.Numerics.BigInteger.One;
             result[1] = System.Numerics.BigInteger.Zero;
-            result[2] = GenPolynomialRing<BigInteger>.Zero.Clone();
+            result[2] = resultRing.Zero.Clone();
             return result;
         }
 
@@ -72,7 +72,7 @@ public static partial class PolyUtil
             gcdValue = System.Numerics.BigInteger.Negate(gcdValue);
         }
 
-        GenPolynomial<BigInteger> converted = GenPolynomialRing<BigInteger>.Zero.Clone();
+        GenPolynomial<BigInteger> converted = resultRing.Zero.Clone();
         SortedDictionary<ExpVector, BigInteger> terms = converted.Terms;
         foreach (KeyValuePair<ExpVector, BigRational> term in polynomial.Terms)
         {

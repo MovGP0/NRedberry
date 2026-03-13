@@ -18,7 +18,7 @@ public static partial class PolyUtil
         ArgumentNullException.ThrowIfNull(distributedRing);
         ArgumentNullException.ThrowIfNull(recursivePolynomial);
 
-        GenPolynomial<C> result = GenPolynomialRing<C>.Zero.Clone();
+        GenPolynomial<C> result = distributedRing.Zero.Clone();
         if (recursivePolynomial.IsZero())
         {
             return result;
