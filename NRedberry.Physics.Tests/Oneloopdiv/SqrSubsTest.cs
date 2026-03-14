@@ -1,6 +1,7 @@
 using NRedberry.Tensors;
 using NRedberry.Physics.Oneloopdiv;
 using NRedberry.Transformations.Symmetrization;
+using Shouldly;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -19,12 +20,12 @@ public sealed class SqrSubsTest
             TensorFactory.ParseSimple("x"));
 
         Tensor transformed = tr.Transform(product);
-        Assert.Equal("x", transformed.ToString());
+        transformed.ToString().ShouldBe("x");
     }
 
     [Fact]
     public void ShouldRejectTensorsWithMultipleIndices()
     {
-        Assert.Throws<ArgumentException>(() => new SqrSubs(TensorFactory.ParseSimple("n_ab")));
+        Should.Throw<ArgumentException>(() => new SqrSubs(TensorFactory.ParseSimple("n_ab")));
     }
 }

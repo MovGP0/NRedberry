@@ -1,4 +1,5 @@
 using NRedberry.Physics.Oneloopdiv;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Physics.Tests.Oneloopdiv;
@@ -12,7 +13,7 @@ public sealed class NonMinimalGravityBenchmarkTests
 
         try
         {
-            Assert.Throws<NotImplementedException>(() => NonMinimalGravityBenchmark.Main([]));
+            Should.Throw<NotImplementedException>(() => NonMinimalGravityBenchmark.Main([]));
         }
         finally
         {

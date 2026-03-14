@@ -4,6 +4,7 @@ using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Symmetrization;
+using Shouldly;
 using TensorCC = NRedberry.Tensors.CC;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using RandomTensorGenerator = NRedberry.Tensors.Random.RandomTensor;
@@ -17,7 +18,7 @@ public sealed class LeviCivitaSimplifyTransformationTest(ITestOutputHelper testO
     [Fact]
     public void ShouldThrowUntilLeviCivitaSimplifyTransformationIsPorted()
     {
-        Assert.Throws<NotImplementedException>(() => new LeviCivitaSimplifyTransformation(
+        Should.Throw<NotImplementedException>(() => new LeviCivitaSimplifyTransformation(
             TensorFactory.ParseSimple("e_abcd"),
             true));
     }
@@ -29,26 +30,26 @@ public sealed class LeviCivitaSimplifyTransformationTest(ITestOutputHelper testO
         SimpleTensor eps = TensorFactory.ParseSimple("e_abcd");
 
         var t = TensorFactory.Parse("e_abcd*k^a*k^b");
-        AssertEquals(Complex.Zero, SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor(Complex.Zero, SimplifyLeviCivita(t, eps));
 
         t = TensorFactory.Parse("e_abcd*k^ac*k^be");
         testOutputHelper.WriteLine(SimplifyLeviCivita(t, eps).ToString());
-        AssertEquals(t, SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor(t, SimplifyLeviCivita(t, eps));
 
         t = TensorFactory.Parse("e_abed*k^ac*k^b_c");
         testOutputHelper.WriteLine(SimplifyLeviCivita(t, eps).ToString());
-        AssertEquals(Complex.Zero, SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor(Complex.Zero, SimplifyLeviCivita(t, eps));
 
         t = TensorFactory.Parse("e_abed*g^ed");
         testOutputHelper.WriteLine(SimplifyLeviCivita(t, eps).ToString());
-        AssertEquals(Complex.Zero, SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor(Complex.Zero, SimplifyLeviCivita(t, eps));
 
         t = TensorFactory.Parse("e_abed*e^abpq*g^ed");
         testOutputHelper.WriteLine(SimplifyLeviCivita(t, eps).ToString());
-        AssertEquals(Complex.Zero, SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor(Complex.Zero, SimplifyLeviCivita(t, eps));
 
         t = TensorFactory.Parse("e_abed*e^abpq*(g^ek*g^dl+g^el*g^dk)");
-        AssertEquals(Complex.Zero, SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor(Complex.Zero, SimplifyLeviCivita(t, eps));
     }
 
     [Fact]
@@ -58,10 +59,10 @@ public sealed class LeviCivitaSimplifyTransformationTest(ITestOutputHelper testO
         SimpleTensor eps = TensorFactory.ParseSimple("e_ab");
 
         var t = TensorFactory.Parse("e_ed*e^pq");
-        AssertEquals("d^{p}_{d}*d^{q}_{e}-d^{q}_{d}*d^{p}_{e}", SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor("d^{p}_{d}*d^{q}_{e}-d^{q}_{d}*d^{p}_{e}", SimplifyLeviCivita(t, eps));
 
         t = TensorFactory.Parse("e_ed*e^eq");
-        AssertEquals("-d_{d}^{q}", SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor("-d_{d}^{q}", SimplifyLeviCivita(t, eps));
     }
 
     [Fact]
@@ -71,9 +72,9 @@ public sealed class LeviCivitaSimplifyTransformationTest(ITestOutputHelper testO
         SimpleTensor eps = TensorFactory.ParseSimple("e_abc");
 
         var t = TensorFactory.Parse("e_abc*e^abd");
-        AssertEquals("2*d^d_c", SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor("2*d^d_c", SimplifyLeviCivita(t, eps));
         t = TensorFactory.Parse("e_abc*e^abc");
-        AssertEquals("6", SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor("6", SimplifyLeviCivita(t, eps));
     }
 
     [Fact]
@@ -84,25 +85,25 @@ public sealed class LeviCivitaSimplifyTransformationTest(ITestOutputHelper testO
         AddAntiSymmetry("e_abcd", 1, 0, 2, 3);
         AddAntiSymmetry("e_abcd", 1, 2, 3, 0);
         var t = TensorFactory.Parse("e_abcx");
-        AssertEquals(t, SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor(t, SimplifyLeviCivita(t, eps));
 
         t = TensorFactory.Parse("e_abcx*e^abcy");
-        AssertEquals("-6*d^y_x", SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor("-6*d^y_x", SimplifyLeviCivita(t, eps));
         t = TensorFactory.Parse("e_abcx*e^acby");
-        AssertEquals("6*d^y_x", SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor("6*d^y_x", SimplifyLeviCivita(t, eps));
         t = TensorFactory.Parse("e_abcx*e^acby");
-        AssertEquals("6*d^y_x", SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor("6*d^y_x", SimplifyLeviCivita(t, eps));
         t = TensorFactory.Parse("e_abcd*e^abcd");
-        AssertEquals("-24", SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor("-24", SimplifyLeviCivita(t, eps));
         t = TensorFactory.Parse("e_abce*e^pqrs*e_rs^ce");
-        AssertEquals("-4*e_{ab}^{pq}", SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor("-4*e_{ab}^{pq}", SimplifyLeviCivita(t, eps));
         t = TensorFactory.Parse("-4*I*e^{dh}_{b}^{f}*e_{g}^{b}_{ah}*e_{cdef}");
-        AssertEquals("16*I*e_aceg", SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor("16*I*e_aceg", SimplifyLeviCivita(t, eps));
         t = TensorFactory.Parse("(4*I)*e^{h}_{d}^{fb}*e_{abch}*e_{e}^{d}_{gf}");
-        AssertEquals("16*I*e_aceg", SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor("16*I*e_aceg", SimplifyLeviCivita(t, eps));
 
         t = TensorFactory.Parse("(4*I)*e^{h}_{d}^{fb}*e_{abch}*e_{e}^{d}_{gf}+g_mn*e^mn_ac*g_eg");
-        AssertEquals("16*I*e_aceg", SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor("16*I*e_aceg", SimplifyLeviCivita(t, eps));
     }
 
     [Fact]
@@ -114,7 +115,7 @@ public sealed class LeviCivitaSimplifyTransformationTest(ITestOutputHelper testO
         AddAntiSymmetry("e_abcd", 1, 2, 3, 0);
 
         var t = TensorFactory.Parse("-4*I*e^{dh}_{b}^{f}*e_{g}^{b}_{ah}*e_{cdef}");
-        AssertEquals("16*I*e_aceg", SimplifyLeviCivita(t, eps));
+        ShouldMatchTensor("16*I*e_aceg", SimplifyLeviCivita(t, eps));
     }
 
     [Fact]
@@ -134,7 +135,7 @@ public sealed class LeviCivitaSimplifyTransformationTest(ITestOutputHelper testO
         t = TensorFactory.ParseExpression("k2_m*k3^m = -u/2").Transform(t);
 
         t = SimplifyLeviCivita(t, eps);
-        AssertEquals(10, t.Size);
+        ShouldHaveValue(10, t.Size);
     }
 
     [Fact]
@@ -145,7 +146,7 @@ public sealed class LeviCivitaSimplifyTransformationTest(ITestOutputHelper testO
         SimpleTensor eps = TensorFactory.ParseSimple("e_abcf");
         Tensor t = TensorFactory.Parse("e_abcd*e^b_n^a_m*e^m_e^n_f");
         t = SimplifyLeviCivita(t, eps);
-        AssertEquals("-4*e_{cdef}", t);
+        ShouldMatchTensor("-4*e_{cdef}", t);
     }
 
     [Fact]
@@ -156,7 +157,7 @@ public sealed class LeviCivitaSimplifyTransformationTest(ITestOutputHelper testO
         SimpleTensor eps = TensorFactory.ParseSimple("e_abcf");
         Tensor t = TensorFactory.Parse("e_abcd*e_k^c_mn*e^dam_s*e^n_x^bk");
         t = SimplifyLeviCivita(t, eps);
-        AssertEquals("12*g_sx", t);
+        ShouldMatchTensor("12*g_sx", t);
     }
 
     [Fact]
@@ -167,7 +168,7 @@ public sealed class LeviCivitaSimplifyTransformationTest(ITestOutputHelper testO
         SimpleTensor eps = TensorFactory.ParseSimple("e_abcf");
         Tensor t = TensorFactory.Parse("e_abcd*e_k^c_mn*e^dam_s*e^n_x^bk");
         t = SimplifyLeviCivita(t, eps);
-        AssertEquals("12*g_sx", t);
+        ShouldMatchTensor("12*g_sx", t);
     }
 
     [Fact(Skip = "LeviCivitaSimplifyTransformation is not yet ported.")]
@@ -228,24 +229,18 @@ public sealed class LeviCivitaSimplifyTransformationTest(ITestOutputHelper testO
         TensorCC.Reset();
     }
 
-    private static void AssertEquals(string expected, Tensor actual)
+    private static void ShouldMatchTensor(string expected, Tensor actual)
     {
-        AssertEquals(TensorFactory.Parse(expected), actual);
+        ShouldMatchTensor(TensorFactory.Parse(expected), actual);
     }
 
-    private static void AssertEquals(Tensor expected, Tensor actual)
+    private static void ShouldMatchTensor(Tensor expected, Tensor actual)
     {
-        if (!TensorUtils.Equals(expected, actual))
-        {
-            throw new InvalidOperationException("Tensor comparison failed.");
-        }
+        TensorUtils.Equals(expected, actual).ShouldBeTrue();
     }
 
-    private static void AssertEquals(int expected, int actual)
+    private static void ShouldHaveValue(int expected, int actual)
     {
-        if (expected != actual)
-        {
-            throw new InvalidOperationException($"Expected {expected} but got {actual}.");
-        }
+        actual.ShouldBe(expected);
     }
 }

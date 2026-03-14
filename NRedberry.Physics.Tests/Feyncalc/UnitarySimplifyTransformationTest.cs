@@ -1,4 +1,5 @@
 using NRedberry.Physics.Feyncalc;
+using Shouldly;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 using Xunit.Abstractions;
@@ -10,7 +11,7 @@ public sealed class UnitarySimplifyTransformationTest(ITestOutputHelper testOutp
     [Fact]
     public void ShouldThrowUntilUnitarySimplifyTransformationIsPorted()
     {
-        Assert.Throws<NotImplementedException>(() => new UnitarySimplifyTransformation(
+        Should.Throw<NotImplementedException>(() => new UnitarySimplifyTransformation(
             TensorFactory.ParseSimple("T_A"),
             TensorFactory.ParseSimple("f_ABC"),
             TensorFactory.ParseSimple("d_ABC"),

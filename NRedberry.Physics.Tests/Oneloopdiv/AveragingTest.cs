@@ -18,7 +18,7 @@ public sealed class AveragingTest(ITestOutputHelper testOutputHelper)
     {
         Averaging averaging = new(TensorFactory.ParseSimple("n_\\mu"));
         Tensor transformed = averaging.Transform(Complex.One);
-        Assert.Same(Complex.One, transformed);
+        transformed.ShouldBeSameAs(Complex.One);
     }
 
     [Fact]

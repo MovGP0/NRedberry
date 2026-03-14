@@ -2,6 +2,7 @@ using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Symmetrization;
+using Shouldly;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 using Xunit.Abstractions;
@@ -13,7 +14,7 @@ public sealed class PassarinoVeltmanTest(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ShouldThrowUntilPassarinoVeltmanIsPorted()
     {
-        Assert.Throws<NotImplementedException>(() => PassarinoVeltman.GenerateSubstitution(
+        Should.Throw<NotImplementedException>(() => PassarinoVeltman.GenerateSubstitution(
             1,
             TensorFactory.ParseSimple("q_a"),
             [TensorFactory.ParseSimple("k1_a")]));
@@ -27,7 +28,7 @@ public sealed class PassarinoVeltmanTest(ITestOutputHelper testOutputHelper)
             TensorFactory.ParseSimple("q_a"),
             [TensorFactory.ParseSimple("k1_a")]);
 
-        AssertEquals("q_a = q_b*k1^b * k1_a/(k1_c*k1^c)", subs);
+        ShouldEqualTensor("q_a = q_b*k1^b * k1_a/(k1_c*k1^c)", subs);
     }
 
     [Fact]
@@ -44,7 +45,7 @@ public sealed class PassarinoVeltmanTest(ITestOutputHelper testOutputHelper)
             [TensorFactory.ParseSimple("k1_a"), TensorFactory.ParseSimple("k2_a")],
             simpl);
 
-        AssertEquals("q_a = k1_a*(q^b*k2_b)/s + k2_a*(q^b*k1_b)/s", subs);
+        ShouldEqualTensor("q_a = k1_a*(q^b*k2_b)/s + k2_a*(q^b*k1_b)/s", subs);
     }
 
     [Fact]
@@ -66,10 +67,8 @@ public sealed class PassarinoVeltmanTest(ITestOutputHelper testOutputHelper)
 
         Tensor expandedExpected = ExpandTransformation.Expand(expected);
         Tensor expandedActual = ExpandTransformation.Expand(subs[1]);
-        if (!TensorUtils.Equals(expandedExpected, expandedActual))
-        {
-            throw new InvalidOperationException("Expanded substitution does not match expected result.");
-        }
+        TensorUtils.Equals(expandedExpected, expandedActual).ShouldBeTrue(
+            "Expanded substitution should match the expected result.");
     }
 
     [Fact]
@@ -94,11 +93,8 @@ public sealed class PassarinoVeltmanTest(ITestOutputHelper testOutputHelper)
         testOutputHelper.WriteLine(ExpandTransformation.Expand(tensor).Size.ToString());
     }
 
-    private static void AssertEquals(string expected, Tensor actual)
+    private static void ShouldEqualTensor(string expected, Tensor actual)
     {
-        if (!TensorUtils.Equals(TensorFactory.Parse(expected), actual))
-        {
-            throw new InvalidOperationException("Tensor comparison failed.");
-        }
+        TensorUtils.Equals(TensorFactory.Parse(expected), actual).ShouldBeTrue("Tensor comparison failed.");
     }
 }

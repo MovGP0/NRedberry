@@ -1,5 +1,6 @@
 using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
+using Shouldly;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 using Xunit.Abstractions;
@@ -18,7 +19,7 @@ public sealed class SchoutenIdentities4Test
     [Fact]
     public void ShouldThrowUntilSchoutenIdentities4IsPorted()
     {
-        Assert.Throws<NotImplementedException>(() => new SchoutenIdentities4(TensorFactory.ParseSimple("e_abcd")));
+        Should.Throw<NotImplementedException>(() => new SchoutenIdentities4(TensorFactory.ParseSimple("e_abcd")));
     }
 
     [Fact]
@@ -28,16 +29,16 @@ public sealed class SchoutenIdentities4Test
         SchoutenIdentities4 tr = new(TensorFactory.ParseSimple("e_abcd"));
 
         var t = TensorFactory.Parse("-2*g_{ad}*e_{bcef}+2*g_{ac}*e_{bdef}-2*g_{ab}*e_{cdef}-2*g_{af}*e_{bcde}+2*g_{ae}*e_{bcdf} + f_aebcdf");
-        AssertEquals("f_aebcdf", tr.Transform(t));
+        ShouldEqualTensor("f_aebcdf", tr.Transform(t));
 
         t = TensorFactory.Parse("-2*g_{ad}*e_{bcef}+2*g_{ac}*e_{bdef}-2*g_{ab}*e_{cdef}-2*g_{af}*e_{bcde}+g_{ae}*e_{bcdf} + f_aebcdf");
-        AssertSameReference(t, tr.Transform(t));
+        ShouldBeSameReference(t, tr.Transform(t));
 
         t = TensorFactory.Parse("2*g_{ad}*e_{bcef}+2*g_{ac}*e_{bdef}-2*g_{ab}*e_{cdef}-2*g_{af}*e_{bcde}+2*g_{ae}*e_{bcdf} + f_aebcdf");
-        AssertSameReference(t, tr.Transform(t));
+        ShouldBeSameReference(t, tr.Transform(t));
 
         t = TensorFactory.Parse("2*g_{ad}*e_{bcef}-2*g_{ac}*e_{bdef}+2*g_{ab}*e_{cdef}+2*g_{af}*e_{bcde}+2*g_{ae}*e_{cbdf} + f_aebcdf");
-        AssertEquals("f_aebcdf", tr.Transform(t));
+        ShouldEqualTensor("f_aebcdf", tr.Transform(t));
     }
 
     [Fact]
@@ -59,19 +60,13 @@ public sealed class SchoutenIdentities4Test
         testOutputHelper.WriteLine(TensorUtils.Equals(a, b).ToString());
     }
 
-    private static void AssertEquals(string expected, Tensor actual)
+    private static void ShouldEqualTensor(string expected, Tensor actual)
     {
-        if (!TensorUtils.Equals(TensorFactory.Parse(expected), actual))
-        {
-            throw new InvalidOperationException("Tensor comparison failed.");
-        }
+        TensorUtils.Equals(TensorFactory.Parse(expected), actual).ShouldBeTrue();
     }
 
-    private static void AssertSameReference(Tensor expected, Tensor actual)
+    private static void ShouldBeSameReference(Tensor expected, Tensor actual)
     {
-        if (!ReferenceEquals(expected, actual))
-        {
-            throw new InvalidOperationException("Expected transformation to return the original instance.");
-        }
+        ReferenceEquals(expected, actual).ShouldBeTrue();
     }
 }

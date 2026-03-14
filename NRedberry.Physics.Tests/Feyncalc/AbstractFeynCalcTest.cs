@@ -82,21 +82,21 @@ public abstract class AbstractFeynCalcTest
         throw new NotSupportedException("FeynCalc resource parsing is not yet ported.");
     }
 
-    protected void AssertEquals(string a, Tensor b)
+    protected void ShouldMatchTensor(string a, Tensor b)
     {
-        AssertEquals(TensorFactory.Parse(a), b);
+        ShouldMatchTensor(TensorFactory.Parse(a), b);
     }
 
-    protected void AssertEquals(Tensor a, Tensor b)
+    protected void ShouldMatchTensor(Tensor a, Tensor b)
     {
-        AssertEquals(a, b, new IdentityTransformation());
+        ShouldMatchTensor(a, b, new IdentityTransformation());
     }
 
-    protected void AssertEquals(Tensor a, Tensor b, ITransformation addon)
+    protected void ShouldMatchTensor(Tensor a, Tensor b, ITransformation addon)
     {
         if (a.Indices.GetFree().Size(IndexType.Matrix1) != 0 && b.Indices.GetFree().Size(IndexType.Matrix1) == 0)
         {
-            AssertEquals(b, a, addon);
+            ShouldMatchTensor(b, a, addon);
             return;
         }
 

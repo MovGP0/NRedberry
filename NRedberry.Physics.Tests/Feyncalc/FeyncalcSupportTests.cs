@@ -2,6 +2,7 @@ using NRedberry;
 using NRedberry.Core.Utils;
 using NRedberry.Graphs;
 using NRedberry.Physics.Feyncalc;
+using Shouldly;
 using NRedberry.Tensors;
 using NRedberry.Transformations;
 using NRedberry.Transformations.Symmetrization;
@@ -17,8 +18,8 @@ public sealed class TraceUtilsTests
     {
         IndexType[] types = TraceUtils.ExtractTypesFromMatrix(TensorFactory.ParseSimple("T^a'_b'a"));
 
-        Assert.Equal(IndexType.LatinLower, types[0]);
-        Assert.Equal(IndexType.Matrix1, types[1]);
+        types[0].ShouldBe(IndexType.LatinLower);
+        types[1].ShouldBe(IndexType.Matrix1);
     }
 
     [Fact]
@@ -34,21 +35,21 @@ public sealed class TraceUtilsTests
     [Fact]
     public void ShouldRejectNonMatrixShapesAndInvalidUnitaryOptions()
     {
-        Assert.Throws<ArgumentException>(() => TraceUtils.ExtractTypesFromMatrix(TensorFactory.ParseSimple("T^a'_b'")));
+        Should.Throw<ArgumentException>(() => TraceUtils.ExtractTypesFromMatrix(TensorFactory.ParseSimple("T^a'_b'")));
 
-        Assert.Throws<ArgumentException>(() => TraceUtils.CheckUnitaryInput(
+        Should.Throw<ArgumentException>(() => TraceUtils.CheckUnitaryInput(
             TensorFactory.ParseSimple("T^a'_b'a"),
             TensorFactory.ParseSimple("f_abc"),
             TensorFactory.ParseSimple("f_abc"),
             TensorFactory.Parse("N")));
 
-        Assert.Throws<ArgumentException>(() => TraceUtils.CheckUnitaryInput(
+        Should.Throw<ArgumentException>(() => TraceUtils.CheckUnitaryInput(
             TensorFactory.ParseSimple("T^a'_b'a"),
             TensorFactory.ParseSimple("f_abc"),
             TensorFactory.ParseSimple("d_abc"),
             TensorFactory.Parse("1/2")));
 
-        Assert.Throws<ArgumentException>(() => TraceUtils.CheckUnitaryInput(
+        Should.Throw<ArgumentException>(() => TraceUtils.CheckUnitaryInput(
             TensorFactory.ParseSimple("T^a'_b'a"),
             TensorFactory.ParseSimple("f_abc"),
             TensorFactory.ParseSimple("d_abc"),
@@ -63,10 +64,10 @@ public sealed class UnitarySimplifyOptionsTests
     {
         UnitarySimplifyOptions options = new();
 
-        Assert.Equal("T_{A}", options.UnitaryMatrix.ToString(OutputFormat.Redberry));
-        Assert.Equal("f_{ABC}", options.StructureConstant.ToString(OutputFormat.Redberry));
-        Assert.Equal("d_{ABC}", options.SymmetricConstant.ToString(OutputFormat.Redberry));
-        Assert.Equal("N", options.Dimension.ToString(OutputFormat.Redberry));
+        options.UnitaryMatrix.ToString(OutputFormat.Redberry).ShouldBe("T_{A}");
+        options.StructureConstant.ToString(OutputFormat.Redberry).ShouldBe("f_{ABC}");
+        options.SymmetricConstant.ToString(OutputFormat.Redberry).ShouldBe("d_{ABC}");
+        options.Dimension.ToString(OutputFormat.Redberry).ShouldBe("N");
     }
 }
 
@@ -77,17 +78,17 @@ public sealed class DiracOptionsSupportTests
     {
         DiracOptions options = new();
 
-        Assert.Equal("G_{a}", options.GammaMatrix.ToString(OutputFormat.Redberry));
-        Assert.Equal("G5", options.Gamma5?.ToString(OutputFormat.Redberry));
-        Assert.Equal("e_{abcd}", options.LeviCivita.ToString(OutputFormat.Redberry));
-        Assert.Equal("4", options.Dimension.ToString(OutputFormat.Redberry));
-        Assert.Equal("2**(4/2)", options.TraceOfOne.ToString(OutputFormat.Redberry));
-        Assert.Same(Transformation.Identity, options.Simplifications);
-        Assert.True(options.MinkowskiSpace);
-        Assert.True(options.Cache);
-        Assert.False(options.Created);
-        Assert.Null(options.SimplifyLeviCivita);
-        Assert.IsType<ExpandAndEliminateTransformation>(options.ExpandAndEliminate);
+        options.GammaMatrix.ToString(OutputFormat.Redberry).ShouldBe("G_{a}");
+        options.Gamma5?.ToString(OutputFormat.Redberry).ShouldBe("G5");
+        options.LeviCivita.ToString(OutputFormat.Redberry).ShouldBe("e_{abcd}");
+        options.Dimension.ToString(OutputFormat.Redberry).ShouldBe("4");
+        options.TraceOfOne.ToString(OutputFormat.Redberry).ShouldBe("2**(4/2)");
+        options.Simplifications.ShouldBeSameAs(Transformation.Identity);
+        options.MinkowskiSpace.ShouldBeTrue();
+        options.Cache.ShouldBeTrue();
+        options.Created.ShouldBeFalse();
+        options.SimplifyLeviCivita.ShouldBeNull();
+        options.ExpandAndEliminate.ShouldBeOfType<ExpandAndEliminateTransformation>();
     }
 
     [Fact]
@@ -102,12 +103,12 @@ public sealed class DiracOptionsSupportTests
         DiracOptions clone = options.Clone();
         options.TriggerCreate();
 
-        Assert.NotSame(options, clone);
-        Assert.Equal(options.Dimension, clone.Dimension);
-        Assert.True(options.Created);
-        Assert.Equal("2**(6/2)", options.TraceOfOne.ToString(OutputFormat.Redberry));
-        Assert.IsType<ExpandAndEliminateTransformation>(options.ExpandAndEliminate);
-        Assert.Same(Transformation.Identity, options.SimplifyLeviCivita);
+        clone.ShouldNotBeSameAs(options);
+        clone.Dimension.ShouldBe(options.Dimension);
+        options.Created.ShouldBeTrue();
+        options.TraceOfOne.ToString(OutputFormat.Redberry).ShouldBe("2**(6/2)");
+        options.ExpandAndEliminate.ShouldBeOfType<ExpandAndEliminateTransformation>();
+        options.SimplifyLeviCivita.ShouldBeSameAs(Transformation.Identity);
     }
 }
 
@@ -118,14 +119,14 @@ public sealed class SpinorsSimplifyOptionsTests
     {
         SpinorsSimplifyOptions options = new();
 
-        Assert.Null(options.U);
-        Assert.Null(options.V);
-        Assert.Null(options.UBar);
-        Assert.Null(options.VBar);
-        Assert.Null(options.Momentum);
-        Assert.Null(options.Mass);
-        Assert.False(options.DoDiracSimplify);
-        Assert.Equal("G_{a}", options.GammaMatrix.ToString(OutputFormat.Redberry));
+        options.U.ShouldBeNull();
+        options.V.ShouldBeNull();
+        options.UBar.ShouldBeNull();
+        options.VBar.ShouldBeNull();
+        options.Momentum.ShouldBeNull();
+        options.Mass.ShouldBeNull();
+        options.DoDiracSimplify.ShouldBeFalse();
+        options.GammaMatrix.ToString(OutputFormat.Redberry).ShouldBe("G_{a}");
     }
 
     [Fact]
@@ -133,13 +134,13 @@ public sealed class SpinorsSimplifyOptionsTests
     {
         SpinorsSimplifyOptions options = new("u", null, "cu", "cv", "p_a", "0");
 
-        Assert.Equal("u", options.U?.ToString(OutputFormat.Redberry));
-        Assert.Null(options.V);
-        Assert.Equal("cu", options.UBar?.ToString(OutputFormat.Redberry));
-        Assert.Equal("cv", options.VBar?.ToString(OutputFormat.Redberry));
-        Assert.Equal("p_{a}", options.Momentum.ToString(OutputFormat.Redberry));
-        Assert.Equal("0", options.Mass.ToString(OutputFormat.Redberry));
-        Assert.False(options.DoDiracSimplify);
+        options.U?.ToString(OutputFormat.Redberry).ShouldBe("u");
+        options.V.ShouldBeNull();
+        options.UBar?.ToString(OutputFormat.Redberry).ShouldBe("cu");
+        options.VBar?.ToString(OutputFormat.Redberry).ShouldBe("cv");
+        options.Momentum.ToString(OutputFormat.Redberry).ShouldBe("p_{a}");
+        options.Mass.ToString(OutputFormat.Redberry).ShouldBe("0");
+        options.DoDiracSimplify.ShouldBeFalse();
     }
 }
 
@@ -151,12 +152,12 @@ public sealed class LeviCivitaSimplifyOptionsTests
         LeviCivitaSimplifyOptions options = new();
         LeviCivitaSimplifyOptions euclidean = new(false);
 
-        Assert.Equal("e_{abcd}", options.LeviCivita.ToString(OutputFormat.Redberry));
-        Assert.True(options.MinkowskiSpace);
-        Assert.Same(Transformation.Identity, options.Simplifications);
-        Assert.Same(Transformation.Identity, options.OverallSimplifications);
-        Assert.Equal("N", options.Dimension.ToString(OutputFormat.Redberry));
-        Assert.False(euclidean.MinkowskiSpace);
+        options.LeviCivita.ToString(OutputFormat.Redberry).ShouldBe("e_{abcd}");
+        options.MinkowskiSpace.ShouldBeTrue();
+        options.Simplifications.ShouldBeSameAs(Transformation.Identity);
+        options.OverallSimplifications.ShouldBeSameAs(Transformation.Identity);
+        options.Dimension.ToString(OutputFormat.Redberry).ShouldBe("N");
+        euclidean.MinkowskiSpace.ShouldBeFalse();
     }
 }
 
@@ -165,7 +166,7 @@ public sealed class ProductOfGammasTests
     [Fact]
     public void ShouldReadGammaLineFromIterator()
     {
-        Product product = Assert.IsType<Product>(TensorFactory.Parse("2*x*G_a^a'_b'*G5^b'_c'*G_b^c'_d'"));
+        Product product = TensorFactory.Parse("2*x*G_a^a'_b'*G5^b'_c'*G_b^c'_d'").ShouldBeOfType<Product>();
         ProductOfGammas.It iterator = new(
             GetGammaName(),
             GetGamma5Name(),
@@ -174,24 +175,24 @@ public sealed class ProductOfGammasTests
             null);
 
         ProductOfGammas? line = iterator.Take();
-        Assert.NotNull(line);
+        line.ShouldNotBeNull();
         Tensor[] factors = line!.ToArray();
 
-        Assert.Equal(2, line.Offset);
-        Assert.Equal(3, line.Length);
-        Assert.Equal(GraphType.Line, line.GraphType);
-        Assert.Single(line.G5Positions);
-        Assert.Equal(1, line.G5Positions[0]);
-        Assert.Equal(GetGamma5Name(), Assert.IsType<SimpleTensor>(factors[line.G5Positions[0]]).Name);
-        Assert.Equal(line.Length, line.ToList().Count);
-        Assert.True(line.GetIndices().EqualsRegardlessOrder(line.ToProduct().Indices));
-        Assert.Null(iterator.Take());
+        line.Offset.ShouldBe(2);
+        line.Length.ShouldBe(3);
+        line.GraphType.ShouldBe(GraphType.Line);
+        line.G5Positions.ShouldHaveSingleItem();
+        line.G5Positions[0].ShouldBe(1);
+        factors[line.G5Positions[0]].ShouldBeOfType<SimpleTensor>().Name.ShouldBe(GetGamma5Name());
+        line.ToList().Count.ShouldBe(line.Length);
+        line.GetIndices().EqualsRegardlessOrder(line.ToProduct().Indices).ShouldBeTrue();
+        iterator.Take().ShouldBeNull();
     }
 
     [Fact]
     public void ShouldMoveSingleGamma5ToEndOfCycle()
     {
-        Product product = Assert.IsType<Product>(TensorFactory.Parse("G5^a'_b'*G_a^b'_c'*G_b^c'_a'"));
+        Product product = TensorFactory.Parse("G5^a'_b'*G_a^b'_c'*G_b^c'_a'").ShouldBeOfType<Product>();
         ProductOfGammas.It iterator = new(
             GetGammaName(),
             GetGamma5Name(),
@@ -200,20 +201,20 @@ public sealed class ProductOfGammasTests
             null);
 
         ProductOfGammas? cycle = iterator.Take();
-        Assert.NotNull(cycle);
+        cycle.ShouldNotBeNull();
         Tensor[] factors = cycle!.ToArray();
 
-        Assert.Equal(GraphType.Cycle, cycle.GraphType);
-        Assert.Single(cycle.G5Positions);
-        Assert.Equal(cycle.Length - 1, cycle.G5Positions[0]);
-        Assert.Equal(GetGamma5Name(), Assert.IsType<SimpleTensor>(factors[^1]).Name);
-        Assert.Null(iterator.Take());
+        cycle.GraphType.ShouldBe(GraphType.Cycle);
+        cycle.G5Positions.ShouldHaveSingleItem();
+        cycle.G5Positions[0].ShouldBe(cycle.Length - 1);
+        factors[^1].ShouldBeOfType<SimpleTensor>().Name.ShouldBe(GetGamma5Name());
+        iterator.Take().ShouldBeNull();
     }
 
     [Fact]
     public void ShouldRespectGraphFilter()
     {
-        Product product = Assert.IsType<Product>(TensorFactory.Parse("G_a^a'_b'*G_b^b'_c'"));
+        Product product = TensorFactory.Parse("G_a^a'_b'*G_b^b'_c'").ShouldBeOfType<Product>();
         ProductOfGammas.It iterator = new(
             GetGammaName(),
             GetGamma5Name(),
@@ -221,7 +222,7 @@ public sealed class ProductOfGammasTests
             IndexType.Matrix1,
             new GraphTypeEqualsIndicator(GraphType.Cycle));
 
-        Assert.Null(iterator.Take());
+        iterator.Take().ShouldBeNull();
     }
 
     private static int GetGammaName()
@@ -240,7 +241,7 @@ public sealed class AbstractTransformationWithGammasTests
     [Fact]
     public void ShouldThrowConstructorUntilAbstractTransformationWithGammasIsPorted()
     {
-        Assert.Throws<NotImplementedException>(() => new AbstractTransformationWithGammasProbe(null!));
+        Should.Throw<NotImplementedException>(() => new AbstractTransformationWithGammasProbe(null!));
     }
 }
 
@@ -249,7 +250,7 @@ public sealed class AbstractFeynCalcTransformationTests
     [Fact]
     public void ShouldThrowConstructorUntilAbstractFeynCalcTransformationIsPorted()
     {
-        Assert.Throws<NotImplementedException>(() => new AbstractFeynCalcTransformationProbe(null!, null));
+        Should.Throw<NotImplementedException>(() => new AbstractFeynCalcTransformationProbe(null!, null));
     }
 }
 

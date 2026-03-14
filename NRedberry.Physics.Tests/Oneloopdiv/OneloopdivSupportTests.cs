@@ -1,6 +1,7 @@
 using NRedberry.Physics.Oneloopdiv;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
+using Shouldly;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -11,7 +12,7 @@ public sealed class OneLoopUtilsTests
     [Fact]
     public void ShouldThrowWhileAntiDeSitterBackgroundUsesUnportedExpressionSubstitutions()
     {
-        Assert.Throws<TypeInitializationException>(OneLoopUtils.AntiDeSitterBackground);
+        Should.Throw<TypeInitializationException>(OneLoopUtils.AntiDeSitterBackground);
     }
 
     [Fact]
@@ -19,7 +20,7 @@ public sealed class OneLoopUtilsTests
     {
         OneLoopUtils.SetUpRiemannSymmetries();
         SimpleTensor riemann = TensorFactory.ParseSimple("R_lmab");
-        Assert.NotNull(riemann.SimpleIndices.Symmetries);
+        riemann.SimpleIndices.Symmetries.ShouldNotBeNull();
     }
 }
 
@@ -28,7 +29,7 @@ public sealed class OneLoopInputTests
     [Fact]
     public void ShouldRejectUnsupportedOperatorOrder()
     {
-        Assert.Throws<ArgumentException>(() => new OneLoopInput(3, null!, null!, null!, null!, null!, null!, null!));
+        Should.Throw<ArgumentException>(() => new OneLoopInput(3, null!, null!, null!, null!, null!, null!, null!));
     }
 }
 
@@ -41,7 +42,7 @@ public sealed class NaiveSubstitutionTests
             TensorFactory.Parse("a"),
             TensorFactory.Parse("b"));
 
-        Assert.Throws<NotImplementedException>(() => substitution.Transform(Complex.One));
+        Should.Throw<NotImplementedException>(() => substitution.Transform(Complex.One));
     }
 }
 
@@ -53,8 +54,8 @@ public sealed class BenchmarksTests
         Benchmarks.Timer timer = new();
         timer.Start();
 
-        Assert.True(timer.ElapsedTime() >= 0);
-        Assert.True(timer.ElapsedTimeInSeconds() >= 0);
+        timer.ElapsedTime().ShouldBeGreaterThanOrEqualTo(0L);
+        timer.ElapsedTimeInSeconds().ShouldBeGreaterThanOrEqualTo(0L);
     }
 }
 
@@ -63,7 +64,7 @@ public sealed class OneLoopCountertermsTests
     [Fact]
     public void ShouldSurfaceCurrentCalculationGap()
     {
-        Assert.Throws<NotImplementedException>(() =>
+        Should.Throw<NotImplementedException>(() =>
         {
             Expression iK = TensorFactory.ParseExpression("iK_a^b=d_a^b");
             Expression k = TensorFactory.ParseExpression("K^lm_a^b=d_a^b*g^{lm}");

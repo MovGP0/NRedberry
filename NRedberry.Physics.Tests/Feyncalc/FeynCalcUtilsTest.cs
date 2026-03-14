@@ -1,5 +1,6 @@
 using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
+using Shouldly;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 using Xunit.Abstractions;
@@ -19,7 +20,7 @@ public sealed class FeynCalcUtilsTest(ITestOutputHelper testOutputHelper)
             [TensorFactory.Parse("k4_i"), TensorFactory.Parse("m4")]
         ];
 
-        Assert.Throws<NotImplementedException>(() => FeynCalcUtils.SetMandelstam(input));
+        Should.Throw<NotImplementedException>(() => FeynCalcUtils.SetMandelstam(input));
     }
 
     [Fact]

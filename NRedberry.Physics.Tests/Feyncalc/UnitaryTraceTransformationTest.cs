@@ -2,6 +2,7 @@ using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Symmetrization;
+using Shouldly;
 using TensorCC = NRedberry.Tensors.CC;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -14,7 +15,7 @@ public sealed class UnitaryTraceTransformationTest(ITestOutputHelper testOutputH
     [Fact]
     public void ShouldThrowUntilUnitaryTraceTransformationIsPorted()
     {
-        Assert.Throws<NotImplementedException>(() => new UnitaryTraceTransformation(
+        Should.Throw<NotImplementedException>(() => new UnitaryTraceTransformation(
             TensorFactory.ParseSimple("T_a"),
             TensorFactory.ParseSimple("f_abc"),
             TensorFactory.ParseSimple("d_abc"),
@@ -30,7 +31,7 @@ public sealed class UnitaryTraceTransformationTest(ITestOutputHelper testOutputH
         Tensor t = TensorFactory.Parse("Tr[T_a*T_b]");
         t = UnitaryTrace(t);
         testOutputHelper.WriteLine(t.ToString());
-        AssertEquals("g_ab/2", t);
+        ShouldEqualTensor("g_ab/2", t);
     }
 
     [Fact]
@@ -45,7 +46,7 @@ public sealed class UnitaryTraceTransformationTest(ITestOutputHelper testOutputH
         t = UnitaryTrace(t);
         t = EliminateDueSymmetriesTransformation.Instance.Transform(t);
         Tensor expected = TensorFactory.Parse("d_abc/4+I/4*f_abc");
-        AssertEquals(expected, t);
+        ShouldEqualTensor(expected, t);
     }
 
     [Fact]
@@ -68,7 +69,7 @@ public sealed class UnitaryTraceTransformationTest(ITestOutputHelper testOutputH
         Tensor expected = TensorFactory.Parse("-(I/8)*f_adx*d_bc^x + (I/8)*d_adx*f_bc^x+1/8*d_ade*d_bc^e - 1/8*d_bde*d_ac^e+1/8*d_cde*d_ab^e + 1/(4*N)*g_ad*g_bc - 1/(4*N)*g_ac*g_bd + 1/(4*N)*g_ab*g_cd");
         testOutputHelper.WriteLine(t.ToString());
         testOutputHelper.WriteLine(expected.ToString());
-        // AssertEquals(expected, t);
+        // ShouldEqualTensor(expected, t);
     }
 
     [Fact]
@@ -91,7 +92,7 @@ public sealed class UnitaryTraceTransformationTest(ITestOutputHelper testOutputH
         t = EliminateDueSymmetriesTransformation.Instance.Transform(t);
 
         Tensor expected = TensorFactory.Parse("r_\\alpha\\beta\\gamma/4+I/4*e_\\alpha\\beta\\gamma");
-        AssertEquals(expected, t);
+        ShouldEqualTensor(expected, t);
     }
 
     [Fact]
@@ -113,7 +114,7 @@ public sealed class UnitaryTraceTransformationTest(ITestOutputHelper testOutputH
         t = trace.Transform(t);
         t = ExpandTransformation.Expand(t, EliminateMetricsTransformation.Instance);
         t = EliminateDueSymmetriesTransformation.Instance.Transform(t);
-        AssertEquals("0", t);
+        ShouldEqualTensor("0", t);
     }
 
     [Fact]
@@ -133,21 +134,21 @@ public sealed class UnitaryTraceTransformationTest(ITestOutputHelper testOutputH
             TensorFactory.Parse("N"));
 
         Tensor t = TensorFactory.Parse("Tr[T_a*T_b*T_c*T^a]");
-        AssertEquals("(N/4-1/4/N)*g_bc", trace.Transform(t));
+        ShouldEqualTensor("(N/4-1/4/N)*g_bc", trace.Transform(t));
         t = TensorFactory.Parse("Tr[T_a*T_b*T^a*T_c]");
-        AssertEquals("-1/4/N*g_bc", trace.Transform(t));
+        ShouldEqualTensor("-1/4/N*g_bc", trace.Transform(t));
         t = TensorFactory.Parse("Tr[T_a*T_b*T^a*T_c]");
-        AssertEquals("-1/4/N*g_bc", trace.Transform(t));
+        ShouldEqualTensor("-1/4/N*g_bc", trace.Transform(t));
         t = TensorFactory.Parse("Tr[T_a*T_b*T_c*T^a*T^b]");
-        AssertEquals("0", trace.Transform(t));
+        ShouldEqualTensor("0", trace.Transform(t));
         t = TensorFactory.Parse("Tr[T_a*T_b*T_c*T_d*T^a*T^c]");
-        AssertEquals("g_bd/8/N**2", trace.Transform(t));
+        ShouldEqualTensor("g_bd/8/N**2", trace.Transform(t));
         t = TensorFactory.Parse("Tr[T_a*T_b*T_c*T_d*T^c*T^a]");
-        AssertEquals("g_bd/8/N**2-g_bd/8", trace.Transform(t));
+        ShouldEqualTensor("g_bd/8/N**2-g_bd/8", trace.Transform(t));
         t = TensorFactory.Parse("Tr[T_a*T_b*T_c*T_d*T^a*T^b*T^c]");
         t = EliminateDueSymmetriesTransformation.Instance.Transform(trace.Transform(t));
         testOutputHelper.WriteLine(t.ToString());
-        AssertEquals("0", trace.Transform(t));
+        ShouldEqualTensor("0", trace.Transform(t));
     }
 
     [Fact]
@@ -179,7 +180,7 @@ public sealed class UnitaryTraceTransformationTest(ITestOutputHelper testOutputH
             TensorFactory.Parse("N"));
         t = simplifyUnitary.Transform(t);
         testOutputHelper.WriteLine(t.ToString());
-        AssertEquals("0", trace.Transform(t));
+        ShouldEqualTensor("0", trace.Transform(t));
     }
 
     [Fact]
@@ -198,7 +199,7 @@ public sealed class UnitaryTraceTransformationTest(ITestOutputHelper testOutputH
             TensorFactory.ParseSimple("n"));
         Tensor t = TensorFactory.Parse("Tr[m^a*m_b*m^c*(p^b*m_a + p_a*m^b)]");
         Tensor expanded = ExpandTransformation.Expand(t);
-        AssertEquals("((1/4)*n-(1/2)*n**(-1))*p^{c}", tr.Transform(expanded));
+        ShouldEqualTensor("((1/4)*n-(1/2)*n**(-1))*p^{c}", tr.Transform(expanded));
     }
 
     [Fact]
@@ -217,7 +218,7 @@ public sealed class UnitaryTraceTransformationTest(ITestOutputHelper testOutputH
             TensorFactory.ParseSimple("d_abc"),
             TensorFactory.Parse("N"));
         Tensor t = TensorFactory.Parse("T^aa'_b'*T^bb'_c'*d^c'_a'");
-        AssertEquals("(1/2)*g^{ba}", trace.Transform(t));
+        ShouldEqualTensor("(1/2)*g^{ba}", trace.Transform(t));
     }
 
     private static Tensor UnitaryTrace(Tensor tensor)
@@ -273,16 +274,14 @@ public sealed class UnitaryTraceTransformationTest(ITestOutputHelper testOutputH
         TensorCC.Reset();
     }
 
-    private static void AssertEquals(string expected, Tensor actual)
+    private static void ShouldEqualTensor(string expected, Tensor actual)
     {
-        AssertEquals(TensorFactory.Parse(expected), actual);
+        ShouldEqualTensor(TensorFactory.Parse(expected), actual);
     }
 
-    private static void AssertEquals(Tensor expected, Tensor actual)
+    private static void ShouldEqualTensor(Tensor expected, Tensor actual)
     {
-        if (!TensorUtils.Equals(expected, actual))
-        {
-            throw new InvalidOperationException("Tensor comparison failed.");
-        }
+        TensorUtils.Equals(expected, actual).ShouldBeTrue(
+            $"Tensor comparison failed.{Environment.NewLine}Expected: {expected}{Environment.NewLine}Actual: {actual}");
     }
 }

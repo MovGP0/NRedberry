@@ -1,4 +1,5 @@
 using NRedberry.Physics.Feyncalc;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
@@ -8,6 +9,6 @@ public sealed class DiracTraceTransformationTest
     [Fact]
     public void ShouldThrowUntilDiracTraceTransformationIsPorted()
     {
-        Assert.Throws<NotImplementedException>(() => new DiracTraceTransformation(null!));
+        Should.Throw<NotImplementedException>(() => new DiracTraceTransformation(null!));
     }
 }

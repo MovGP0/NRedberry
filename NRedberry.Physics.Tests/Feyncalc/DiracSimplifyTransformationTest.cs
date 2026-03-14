@@ -1,4 +1,5 @@
 using NRedberry.Physics.Feyncalc;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
@@ -8,6 +9,6 @@ public sealed class DiracSimplifyTransformationTest
     [Fact]
     public void ShouldThrowUntilDiracSimplifyTransformationIsPorted()
     {
-        Assert.Throws<NotImplementedException>(() => new DiracSimplifyTransformation(null!));
+        Should.Throw<NotImplementedException>(() => new DiracSimplifyTransformation(null!));
     }
 }

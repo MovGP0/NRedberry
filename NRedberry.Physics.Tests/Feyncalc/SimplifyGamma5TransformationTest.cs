@@ -1,6 +1,7 @@
 using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Symmetrization;
+using Shouldly;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -11,7 +12,7 @@ public sealed class SimplifyGamma5TransformationTest : AbstractFeynCalcTest
     [Fact]
     public void ShouldThrowUntilSimplifyGamma5TransformationIsPorted()
     {
-        Assert.Throws<NotImplementedException>(() => new SimplifyGamma5Transformation(null!));
+        Should.Throw<NotImplementedException>(() => new SimplifyGamma5Transformation(null!));
     }
 
     [Fact]
@@ -21,28 +22,28 @@ public sealed class SimplifyGamma5TransformationTest : AbstractFeynCalcTest
         ITransformation simplify = RequireSimplifyG5();
 
         var t = TensorFactory.Parse("G_a*G5");
-        AssertSameReference(t, simplify.Transform(t));
+        ShouldKeepSameReference(t, simplify.Transform(t));
 
         t = TensorFactory.Parse("G5*G_a");
-        AssertEquals("-G_a*G5", simplify.Transform(t));
+        ShouldMatchTensor("-G_a*G5", simplify.Transform(t));
 
         t = TensorFactory.Parse("G5*G_a*G5");
-        AssertEquals("-G_a", simplify.Transform(t));
+        ShouldMatchTensor("-G_a", simplify.Transform(t));
 
         t = TensorFactory.Parse("G5*G5*G5");
-        AssertEquals("G5", simplify.Transform(t));
+        ShouldMatchTensor("G5", simplify.Transform(t));
 
         t = TensorFactory.Parse("G5*G_a*G_b*G5");
-        AssertEquals("G_a*G_b", simplify.Transform(t));
+        ShouldMatchTensor("G_a*G_b", simplify.Transform(t));
 
         t = TensorFactory.Parse("G5*G_a*G5*G_b*G5");
-        AssertEquals("-G_a*G_b*G5", simplify.Transform(t));
+        ShouldMatchTensor("-G_a*G_b*G5", simplify.Transform(t));
 
         t = TensorFactory.Parse("G5*G5*G_a*G5*G_b*G5");
-        AssertEquals("-G_a*G_b", simplify.Transform(t));
+        ShouldMatchTensor("-G_a*G_b", simplify.Transform(t));
 
         t = TensorFactory.Parse("G_a*G5*G_b*G5*G5*G5");
-        AssertEquals("-G_a*G_b", simplify.Transform(t));
+        ShouldMatchTensor("-G_a*G_b", simplify.Transform(t));
     }
 
     [Fact]
@@ -52,19 +53,19 @@ public sealed class SimplifyGamma5TransformationTest : AbstractFeynCalcTest
         ITransformation simplify = RequireSimplifyG5();
 
         var t = TensorFactory.Parse("G5*AMATRIX*G_a");
-        AssertEquals("G5*AMATRIX*G_a", simplify.Transform(t));
+        ShouldMatchTensor("G5*AMATRIX*G_a", simplify.Transform(t));
 
         t = TensorFactory.Parse("G5*G_a*G5*AMATRIX*G5");
-        AssertEquals("-G_a*AMATRIX*G5", simplify.Transform(t));
+        ShouldMatchTensor("-G_a*AMATRIX*G5", simplify.Transform(t));
 
         t = TensorFactory.Parse("G5*G5*G5*AMATRIX*G5*G_d*G_c");
-        AssertEquals("G5*AMATRIX*G_d*G_c*G5", simplify.Transform(t));
+        ShouldMatchTensor("G5*AMATRIX*G_d*G_c*G5", simplify.Transform(t));
 
         t = TensorFactory.Parse("Tr[G5*G_a*G_b*G5]");
-        AssertEquals("Tr[G_a*G_b]", simplify.Transform(t));
+        ShouldMatchTensor("Tr[G_a*G_b]", simplify.Transform(t));
 
         t = TensorFactory.Parse("2*k^a*p^c*q^d*G5*G_a*G5*AMATRIX*G5*G_d*G_c");
-        AssertEquals("-2*k^a*p^c*q^d*G_a*AMATRIX*G_d*G_c*G5", simplify.Transform(t));
+        ShouldMatchTensor("-2*k^a*p^c*q^d*G_a*AMATRIX*G_d*G_c*G5", simplify.Transform(t));
     }
 
     [Fact]
@@ -76,23 +77,23 @@ public sealed class SimplifyGamma5TransformationTest : AbstractFeynCalcTest
 
         var t = TensorFactory.Parse("G5*G_a");
         t = ApplyUntilUnchanged(t, 1000, simplify);
-        AssertSameReference(t, simplify.Transform(t));
+        ShouldKeepSameReference(t, simplify.Transform(t));
 
         t = TensorFactory.Parse("Tr[G5*G_a*G_b]");
         t = ApplyUntilUnchanged(t, 1000, simplify);
-        AssertSameReference(t, simplify.Transform(t));
+        ShouldKeepSameReference(t, simplify.Transform(t));
 
         t = TensorFactory.Parse("Tr[G5*G_a*G_b] + Tr[G_a*G_b]");
         t = ApplyUntilUnchanged(t, 1000, simplify);
-        AssertSameReference(t, simplify.Transform(t));
+        ShouldKeepSameReference(t, simplify.Transform(t));
 
         t = TensorFactory.Parse("Tr[G5*G_a*G5*G_b*G5] + Tr[G_a*G_b]");
         t = ApplyUntilUnchanged(t, 1000, simplify);
-        AssertSameReference(t, simplify.Transform(t));
+        ShouldKeepSameReference(t, simplify.Transform(t));
 
         t = TensorFactory.Parse("cu[p1_{m}[charm]]*G^{d}*G5*v[p2_{m}[charm]]");
         t = ApplyUntilUnchanged(t, 1000, simplify);
-        AssertSameReference(t, simplify.Transform(t));
+        ShouldKeepSameReference(t, simplify.Transform(t));
     }
 
     [Fact]
@@ -102,10 +103,7 @@ public sealed class SimplifyGamma5TransformationTest : AbstractFeynCalcTest
         ITransformation simplify = RequireSimplifyG5();
 
         Tensor t = TensorFactory.Parse("Tr[G5*G5*G5*G5*G5]");
-        if (!TensorUtils.Equals(TensorFactory.Parse("0"), simplify.Transform(t)))
-        {
-            throw new InvalidOperationException("Tensor comparison failed.");
-        }
+        TensorUtils.Equals(TensorFactory.Parse("0"), simplify.Transform(t)).ShouldBeTrue();
     }
 
     [Fact]
@@ -149,11 +147,8 @@ public sealed class SimplifyGamma5TransformationTest : AbstractFeynCalcTest
         return simplifyG5;
     }
 
-    private static void AssertSameReference(Tensor expected, Tensor actual)
+    private static void ShouldKeepSameReference(Tensor expected, Tensor actual)
     {
-        if (!ReferenceEquals(expected, actual))
-        {
-            throw new InvalidOperationException("Expected transformation to return the original instance.");
-        }
+        ReferenceEquals(expected, actual).ShouldBeTrue();
     }
 }
