@@ -1,5 +1,3 @@
 ﻿namespace NRedberry.Contexts;
 
-public interface IContextListener : IObserver<ContextEvent>
-{
-}
+public interface IContextListener : IObserver<ContextEvent>;

@@ -59,9 +59,7 @@ public sealed class SumBijectionPort : IOutputPort<BijectionContainer>
         }
     }
 
-    private interface IMapperSource : IMapper, IOutputPort<Mapping>
-    {
-    }
+    private interface IMapperSource : IMapper, IOutputPort<Mapping>;
 
     private sealed class SinglePairSource : AbstractMapper, IMapperSource
     {

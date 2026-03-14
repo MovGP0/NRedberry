@@ -1,7 +1,5 @@
-using System;
 using NRedberry.Tensors;
 using NRedberry.Physics.Oneloopdiv;
-using NRedberry.Numbers;
 using NRedberry.Transformations.Symmetrization;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;

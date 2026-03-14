@@ -7,9 +7,11 @@ namespace NRedberry.Core.Tests.Transformations.Symmetrization;
 public sealed class ToNumericITransformationTests
 {
     [Fact]
-    public void ShouldThrowForSingletonAccessAndHelpers()
+    public void ShouldDelegateToToNumericTransformation()
     {
-        Assert.Throws<NotImplementedException>(() => _ = ToNumericITransformation.Instance);
-        Assert.Throws<NotImplementedException>(() => ToNumericITransformation.ToNumeric(TensorApi.Parse("a")));
+        var tensor = TensorApi.Parse("a");
+
+        Assert.Same(ToNumericTransformation.Instance.Transform(tensor), ToNumericITransformation.Instance.Transform(tensor));
+        Assert.Same(ToNumericTransformation.ToNumeric(tensor), ToNumericITransformation.ToNumeric(tensor));
     }
 }

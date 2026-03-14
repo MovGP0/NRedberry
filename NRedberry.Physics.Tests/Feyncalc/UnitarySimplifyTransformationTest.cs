@@ -1,10 +1,11 @@
 using NRedberry.Physics.Feyncalc;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
 
-public sealed class UnitarySimplifyTransformationTest
+public sealed class UnitarySimplifyTransformationTest(ITestOutputHelper testOutputHelper)
 {
     [Fact]
     public void ShouldThrowUntilUnitarySimplifyTransformationIsPorted()
@@ -16,6 +17,7 @@ public sealed class UnitarySimplifyTransformationTest
             TensorFactory.Parse("N")));
     }
 
+    [Fact]
     public void Test1()
     {
         // TODO: GeneralIndicesInsertion is not yet ported; insertion rules skipped.
@@ -27,6 +29,6 @@ public sealed class UnitarySimplifyTransformationTest
             TensorFactory.ParseSimple("d_ABC"),
             TensorFactory.ParseSimple("n"));
 
-        Console.WriteLine(tr.Transform(TensorFactory.Parse("T_A*T^A")));
+        testOutputHelper.WriteLine(tr.Transform(TensorFactory.Parse("T_A*T^A")).ToString());
     }
 }

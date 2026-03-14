@@ -2,17 +2,26 @@ using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
 
 public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
 {
+    private readonly ITestOutputHelper testOutputHelper;
+
+    public SpinorsSimplifyTransformationTest(ITestOutputHelper testOutputHelper)
+    {
+        this.testOutputHelper = testOutputHelper;
+    }
+
     [Fact]
     public void ShouldThrowUntilSpinorsSimplifyTransformationIsPorted()
     {
         Assert.Throws<NotImplementedException>(() => new SpinorsSimplifyTransformation(null!));
     }
 
+    [Fact]
     public void Test1()
     {
         SetUp();
@@ -21,8 +30,7 @@ public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
         SpinorsSimplifyTransformation sp = new(
             new SpinorsSimplifyOptions("u", "v", "cu", "cv", "p_a", "m"));
 
-        Tensor t;
-        t = TensorFactory.Parse("cu*G_a*p^a");
+        var t = TensorFactory.Parse("cu*G_a*p^a");
         AssertEquals("m*cu", sp.Transform(t));
 
         t = TensorFactory.Parse("cu*G_b*G_a*p^a");
@@ -56,6 +64,7 @@ public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
         AssertEquals("m*cu*G_b*G_c*v", sp.Transform(t));
     }
 
+    [Fact]
     public void Test1A()
     {
         SetUp();
@@ -68,6 +77,7 @@ public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
         AssertEquals("2*cu*v*p_{b}+m*cu*G_{b}*v", sp.Transform(t));
     }
 
+    [Fact]
     public void Test2()
     {
         SetUp();
@@ -79,8 +89,7 @@ public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
         };
         SpinorsSimplifyTransformation sp = new(options);
 
-        Tensor t;
-        t = TensorFactory.Parse("cu[p_a]*G_a*p^a");
+        var t = TensorFactory.Parse("cu[p_a]*G_a*p^a");
         AssertEquals("m*cu[p_a]", sp.Transform(t));
 
         t = TensorFactory.Parse("cu[k_a]*G_a*p^a");
@@ -99,6 +108,7 @@ public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
         AssertEquals("2*m**2*4*4*m**2*cu[p_{a}]*u[p_{a}]", sp.Transform(t));
     }
 
+    [Fact]
     public void Test3()
     {
         SetUp();
@@ -111,6 +121,7 @@ public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
         sp2.Transform(t);
     }
 
+    [Fact]
     public void Test4()
     {
         SetUp();
@@ -119,8 +130,7 @@ public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
         SpinorsSimplifyTransformation sp = new(
             new SpinorsSimplifyOptions("u", "v", "cu", "cv", "p_a", "m"));
 
-        Tensor t;
-        t = TensorFactory.Parse("cu*v");
+        var t = TensorFactory.Parse("cu*v");
         AssertEquals("0", sp.Transform(t));
 
         t = TensorFactory.Parse("cu*G_a*p^a*v");
@@ -130,6 +140,7 @@ public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
         AssertEquals("0", sp.Transform(t));
     }
 
+    [Fact]
     public void Test5()
     {
         SetUp();
@@ -138,8 +149,7 @@ public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
         SpinorsSimplifyTransformation sp = new(
             new SpinorsSimplifyOptions("u", "v", "cu", "cv", "p_a", "m"));
 
-        Tensor t;
-        t = TensorFactory.Parse("G_a*p^a*G5*u");
+        var t = TensorFactory.Parse("G_a*p^a*G5*u");
         AssertEquals("-G5*m*u", sp.Transform(t));
 
         t = TensorFactory.Parse("G_a*p^a*G5*G5*u");
@@ -152,11 +162,11 @@ public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
         AssertEquals("-m*cu", sp.Transform(t));
 
         t = TensorFactory.Parse("G_{c}^{a'}_{d'}*G_{k}^{d'}_{g'}*G_{l}^{g'}_{e'}*v^{f'}*G5^{e'}_{f'}*cu_{a'}*eps^{c}_{a}[h[bottom]]*k2^{k}*k2^{a}*k1^{l}");
-        Console.WriteLine(t);
-
-        Console.WriteLine(TensorFactory.Parse("G_{a}^{f'}_{b'}*G^{me'}_{f'}*G^{da'}_{e'}*cu_{a'}*v^{b'}*k2^{a}*k2^{k}*p1^{e}*e^{b}_{nke}*k1_{m}*k1^{n}*eps_{bd}"));
+        testOutputHelper.WriteLine(t.ToString());
+        testOutputHelper.WriteLine(TensorFactory.Parse("G_{a}^{f'}_{b'}*G^{me'}_{f'}*G^{da'}_{e'}*cu_{a'}*v^{b'}*k2^{a}*k2^{k}*p1^{e}*e^{b}_{nke}*k1_{m}*k1^{n}*eps_{bd}").ToString());
     }
 
+    [Fact]
     public void Test6()
     {
         SetUp();
@@ -166,7 +176,7 @@ public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
             new SpinorsSimplifyOptions(null, null, null, "cv[x_a]", "p_a", "0"));
 
         Tensor t = TensorFactory.Parse("cv[x_a]*G_{a}*u*p^{a}");
-        Console.WriteLine(sp.Transform(t));
+        testOutputHelper.WriteLine(sp.Transform(t).ToString());
     }
 
     private static void AssertSameReference(Tensor expected, Tensor actual)

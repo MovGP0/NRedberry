@@ -4,9 +4,7 @@ using Xunit;
 namespace NRedberry.Core.Tests.Test;
 
 [AttributeUsage(AttributeTargets.Method, Inherited = false)]
-public sealed class PerformanceTestAttribute : Attribute
-{
-}
+public sealed class PerformanceTestAttribute : Attribute;
 
 public sealed class PerformanceTestAttributeTests
 {

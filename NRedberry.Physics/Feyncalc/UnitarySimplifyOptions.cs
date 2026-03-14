@@ -1,4 +1,5 @@
 using NRedberry.Tensors;
+using TensorFactory = NRedberry.Tensors.Tensors;
 
 namespace NRedberry.Physics.Feyncalc;
 
@@ -9,30 +10,33 @@ public sealed class UnitarySimplifyOptions
 {
     public SimpleTensor UnitaryMatrix
     {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
+        get;
+        set;
     }
 
     public SimpleTensor StructureConstant
     {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
+        get;
+        set;
     }
 
     public SimpleTensor SymmetricConstant
     {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
+        get;
+        set;
     }
 
     public Tensor Dimension
     {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
+        get;
+        set;
     }
 
     public UnitarySimplifyOptions()
     {
-        throw new NotImplementedException();
+        UnitaryMatrix = TensorFactory.ParseSimple("T_A");
+        StructureConstant = TensorFactory.ParseSimple("f_ABC");
+        SymmetricConstant = TensorFactory.ParseSimple("d_ABC");
+        Dimension = TensorFactory.Parse("N");
     }
 }

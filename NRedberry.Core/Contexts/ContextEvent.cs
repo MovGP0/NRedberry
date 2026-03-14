@@ -1,5 +1,3 @@
 ﻿namespace NRedberry.Contexts;
 
-public record ContextEvent
-{
-}
+public record ContextEvent;

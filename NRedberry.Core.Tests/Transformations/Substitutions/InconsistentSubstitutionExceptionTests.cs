@@ -7,12 +7,13 @@ namespace NRedberry.Core.Tests.Transformations.Substitutions;
 public sealed class InconsistentSubstitutionExceptionTests
 {
     [Fact]
-    public void ShouldThrowWhileExceptionPayloadIsUnimplemented()
+    public void ShouldCaptureOriginalSubstitutionMessage()
     {
-        Assert.Throws<NotImplementedException>(() =>
-            new InconsistentSubstitutionException(
-                TensorApi.Parse("a"),
-                TensorApi.Parse("b"),
-                TensorApi.Parse("c")));
+        InconsistentSubstitutionException exception = new(
+            TensorApi.Parse("a"),
+            TensorApi.Parse("b"),
+            TensorApi.Parse("c"));
+
+        Assert.Equal("Substitution: a = b.  Detected tensor c", exception.Message);
     }
 }

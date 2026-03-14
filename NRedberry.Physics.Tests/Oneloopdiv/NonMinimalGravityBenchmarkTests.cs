@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using NRedberry.Physics.Oneloopdiv;
 using Xunit;
 

@@ -1,6 +1,7 @@
 using NRedberry.Graphs;
 using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
+using NRedberry.Transformations;
 using NRedberry.Transformations.Symmetrization;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -29,9 +30,14 @@ public sealed class TraceUtilsTests
 public sealed class UnitarySimplifyOptionsTests
 {
     [Fact]
-    public void ShouldThrowConstructorUntilUnitarySimplifyOptionsIsPorted()
+    public void ShouldInitializeUnitaryDefaultsWhenConstructed()
     {
-        Assert.Throws<NotImplementedException>(() => new UnitarySimplifyOptions());
+        UnitarySimplifyOptions options = new();
+
+        Assert.True(TensorUtils.EqualsExactly(options.UnitaryMatrix, TensorFactory.ParseSimple("T_A")));
+        Assert.True(TensorUtils.EqualsExactly(options.StructureConstant, TensorFactory.ParseSimple("f_ABC")));
+        Assert.True(TensorUtils.EqualsExactly(options.SymmetricConstant, TensorFactory.ParseSimple("d_ABC")));
+        Assert.True(TensorUtils.EqualsExactly(options.Dimension, TensorFactory.Parse("N")));
     }
 }
 
@@ -48,10 +54,17 @@ public sealed class SpinorsSimplifyOptionsTests
 public sealed class LeviCivitaSimplifyOptionsTests
 {
     [Fact]
-    public void ShouldThrowConstructorsUntilLeviCivitaSimplifyOptionsIsPorted()
+    public void ShouldInitializeLeviCivitaDefaultsWhenConstructed()
     {
-        Assert.Throws<NotImplementedException>(() => new LeviCivitaSimplifyOptions());
-        Assert.Throws<NotImplementedException>(() => new LeviCivitaSimplifyOptions(true));
+        LeviCivitaSimplifyOptions options = new();
+        LeviCivitaSimplifyOptions euclidean = new(false);
+
+        Assert.True(TensorUtils.EqualsExactly(options.LeviCivita, TensorFactory.ParseSimple("e_abcd")));
+        Assert.True(options.MinkowskiSpace);
+        Assert.Same(Transformation.Identity, options.Simplifications);
+        Assert.Same(Transformation.Identity, options.OverallSimplifications);
+        Assert.True(TensorUtils.EqualsExactly(options.Dimension, TensorFactory.Parse("N")));
+        Assert.False(euclidean.MinkowskiSpace);
     }
 }
 

@@ -8,6 +8,4 @@ namespace NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 /// <remarks>
 /// Original Java file: cc.redberry.core.transformations.factor.jasfactor.edu.jas.structure.GcdRingElem
 /// </remarks>
-public interface GcdRingElem<C> : RingElem<C> where C : GcdRingElem<C>
-{
-}
+public interface GcdRingElem<C> : RingElem<C> where C : GcdRingElem<C>;

@@ -7,20 +7,19 @@ namespace NRedberry.Transformations.Symmetrization;
 /// </summary>
 public sealed class ToNumericITransformation : ITransformation
 {
-    public static ToNumericITransformation Instance => throw new NotImplementedException();
+    public static ToNumericITransformation Instance { get; } = new();
 
     private ToNumericITransformation()
     {
-        throw new NotImplementedException();
     }
 
     public Tensor Transform(Tensor tensor)
     {
-        throw new NotImplementedException();
+        return ToNumericTransformation.Instance.Transform(tensor);
     }
 
     public static Tensor ToNumeric(Tensor tensor)
     {
-        throw new NotImplementedException();
+        return ToNumericTransformation.ToNumeric(tensor);
     }
 }

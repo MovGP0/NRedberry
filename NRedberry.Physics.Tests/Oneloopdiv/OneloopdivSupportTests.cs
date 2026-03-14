@@ -11,7 +11,7 @@ public sealed class OneLoopUtilsTests
     [Fact]
     public void ShouldThrowWhileAntiDeSitterBackgroundUsesUnportedExpressionSubstitutions()
     {
-        Assert.Throws<TypeInitializationException>(() => OneLoopUtils.AntiDeSitterBackground());
+        Assert.Throws<TypeInitializationException>(OneLoopUtils.AntiDeSitterBackground);
     }
 
     [Fact]

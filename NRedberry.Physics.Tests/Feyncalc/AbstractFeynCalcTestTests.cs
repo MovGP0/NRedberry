@@ -12,6 +12,4 @@ public sealed class AbstractFeynCalcTestTests
     }
 }
 
-public sealed class AbstractFeynCalcTestProbe : AbstractFeynCalcTest
-{
-}
+public sealed class AbstractFeynCalcTestProbe : AbstractFeynCalcTest;

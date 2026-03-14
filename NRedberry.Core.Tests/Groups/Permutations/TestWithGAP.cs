@@ -4,6 +4,4 @@ namespace NRedberry.Core.Tests.Groups.Permutations;
 /// Skeleton port of cc.redberry.core.groups.permutations.TestWithGAP.
 /// </summary>
 [System.AttributeUsage(System.AttributeTargets.Method)]
-public sealed class TestWithGAPAttribute : System.Attribute
-{
-}
+public sealed class TestWithGAPAttribute : System.Attribute;

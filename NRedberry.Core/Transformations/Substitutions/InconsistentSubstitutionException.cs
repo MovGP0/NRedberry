@@ -9,7 +9,7 @@ namespace NRedberry.Transformations.Substitutions;
 public class InconsistentSubstitutionException : TransformationException
 {
     public InconsistentSubstitutionException(Tensor from, Tensor to, Tensor current)
+        : base($"Substitution: {from} = {to}.  Detected tensor {current}")
     {
-        throw new NotImplementedException();
     }
 }

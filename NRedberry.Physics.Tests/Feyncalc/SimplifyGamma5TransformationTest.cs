@@ -14,13 +14,13 @@ public sealed class SimplifyGamma5TransformationTest : AbstractFeynCalcTest
         Assert.Throws<NotImplementedException>(() => new SimplifyGamma5Transformation(null!));
     }
 
+    [Fact]
     public void Test1()
     {
         SetUp();
         ITransformation simplify = RequireSimplifyG5();
-        Tensor t;
 
-        t = TensorFactory.Parse("G_a*G5");
+        var t = TensorFactory.Parse("G_a*G5");
         AssertSameReference(t, simplify.Transform(t));
 
         t = TensorFactory.Parse("G5*G_a");
@@ -45,13 +45,13 @@ public sealed class SimplifyGamma5TransformationTest : AbstractFeynCalcTest
         AssertEquals("-G_a*G_b", simplify.Transform(t));
     }
 
+    [Fact]
     public void Test2()
     {
         SetUp();
         ITransformation simplify = RequireSimplifyG5();
-        Tensor t;
 
-        t = TensorFactory.Parse("G5*AMATRIX*G_a");
+        var t = TensorFactory.Parse("G5*AMATRIX*G_a");
         AssertEquals("G5*AMATRIX*G_a", simplify.Transform(t));
 
         t = TensorFactory.Parse("G5*G_a*G5*AMATRIX*G5");
@@ -67,14 +67,14 @@ public sealed class SimplifyGamma5TransformationTest : AbstractFeynCalcTest
         AssertEquals("-2*k^a*p^c*q^d*G_a*AMATRIX*G_d*G_c*G5", simplify.Transform(t));
     }
 
+    [Fact]
     public void Test3()
     {
         SetUp(12332);
         ITransformation simplify = RequireSimplifyG5();
         // TODO: GeneralIndicesInsertion is not yet ported; insertion rules skipped.
 
-        Tensor t;
-        t = TensorFactory.Parse("G5*G_a");
+        var t = TensorFactory.Parse("G5*G_a");
         t = ApplyUntilUnchanged(t, 1000, simplify);
         AssertSameReference(t, simplify.Transform(t));
 
@@ -95,6 +95,7 @@ public sealed class SimplifyGamma5TransformationTest : AbstractFeynCalcTest
         AssertSameReference(t, simplify.Transform(t));
     }
 
+    [Fact]
     public void Test4()
     {
         SetUp();
@@ -107,6 +108,7 @@ public sealed class SimplifyGamma5TransformationTest : AbstractFeynCalcTest
         }
     }
 
+    [Fact]
     public void Test3A()
     {
         for (int i = 0; i < 10; ++i)

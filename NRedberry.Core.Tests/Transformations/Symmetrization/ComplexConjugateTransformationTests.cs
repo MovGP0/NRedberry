@@ -1,4 +1,5 @@
 using NRedberry.Transformations.Symmetrization;
+using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Symmetrization;
@@ -6,8 +7,11 @@ namespace NRedberry.Core.Tests.Transformations.Symmetrization;
 public sealed class ComplexConjugateTransformationTests
 {
     [Fact]
-    public void ShouldThrowForSingletonAccess()
+    public void ShouldConjugateComplexNumbers()
     {
-        Assert.Throws<NotImplementedException>(() => _ = ComplexConjugateTransformation.Instance);
+        var actual = ComplexConjugateTransformation.Instance.Transform(TensorApi.Parse("1+I"));
+
+        Assert.True(NRedberry.Tensors.TensorUtils.EqualsExactly(actual, TensorApi.Parse("1-I")));
+        Assert.Equal("Conjugate", ComplexConjugateTransformation.Instance.ToString());
     }
 }

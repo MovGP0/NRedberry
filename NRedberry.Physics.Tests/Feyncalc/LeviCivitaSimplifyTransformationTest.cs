@@ -8,10 +8,11 @@ using TensorCC = NRedberry.Tensors.CC;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using RandomTensorGenerator = NRedberry.Tensors.Random.RandomTensor;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
 
-public sealed class LeviCivitaSimplifyTransformationTest
+public sealed class LeviCivitaSimplifyTransformationTest(ITestOutputHelper testOutputHelper)
 {
     [Fact]
     public void ShouldThrowUntilLeviCivitaSimplifyTransformationIsPorted()
@@ -26,25 +27,24 @@ public sealed class LeviCivitaSimplifyTransformationTest
     {
         Reset();
         SimpleTensor eps = TensorFactory.ParseSimple("e_abcd");
-        Tensor t;
 
-        t = TensorFactory.Parse("e_abcd*k^a*k^b");
+        var t = TensorFactory.Parse("e_abcd*k^a*k^b");
         AssertEquals(Complex.Zero, SimplifyLeviCivita(t, eps));
 
         t = TensorFactory.Parse("e_abcd*k^ac*k^be");
-        Console.WriteLine(SimplifyLeviCivita(t, eps));
+        testOutputHelper.WriteLine(SimplifyLeviCivita(t, eps).ToString());
         AssertEquals(t, SimplifyLeviCivita(t, eps));
 
         t = TensorFactory.Parse("e_abed*k^ac*k^b_c");
-        Console.WriteLine(SimplifyLeviCivita(t, eps));
+        testOutputHelper.WriteLine(SimplifyLeviCivita(t, eps).ToString());
         AssertEquals(Complex.Zero, SimplifyLeviCivita(t, eps));
 
         t = TensorFactory.Parse("e_abed*g^ed");
-        Console.WriteLine(SimplifyLeviCivita(t, eps));
+        testOutputHelper.WriteLine(SimplifyLeviCivita(t, eps).ToString());
         AssertEquals(Complex.Zero, SimplifyLeviCivita(t, eps));
 
         t = TensorFactory.Parse("e_abed*e^abpq*g^ed");
-        Console.WriteLine(SimplifyLeviCivita(t, eps));
+        testOutputHelper.WriteLine(SimplifyLeviCivita(t, eps).ToString());
         AssertEquals(Complex.Zero, SimplifyLeviCivita(t, eps));
 
         t = TensorFactory.Parse("e_abed*e^abpq*(g^ek*g^dl+g^el*g^dk)");
@@ -56,9 +56,8 @@ public sealed class LeviCivitaSimplifyTransformationTest
     {
         Reset();
         SimpleTensor eps = TensorFactory.ParseSimple("e_ab");
-        Tensor t;
 
-        t = TensorFactory.Parse("e_ed*e^pq");
+        var t = TensorFactory.Parse("e_ed*e^pq");
         AssertEquals("d^{p}_{d}*d^{q}_{e}-d^{q}_{d}*d^{p}_{e}", SimplifyLeviCivita(t, eps));
 
         t = TensorFactory.Parse("e_ed*e^eq");
@@ -70,9 +69,8 @@ public sealed class LeviCivitaSimplifyTransformationTest
     {
         Reset();
         SimpleTensor eps = TensorFactory.ParseSimple("e_abc");
-        Tensor t;
 
-        t = TensorFactory.Parse("e_abc*e^abd");
+        var t = TensorFactory.Parse("e_abc*e^abd");
         AssertEquals("2*d^d_c", SimplifyLeviCivita(t, eps));
         t = TensorFactory.Parse("e_abc*e^abc");
         AssertEquals("6", SimplifyLeviCivita(t, eps));
@@ -85,8 +83,7 @@ public sealed class LeviCivitaSimplifyTransformationTest
         SimpleTensor eps = TensorFactory.ParseSimple("e_abcf");
         AddAntiSymmetry("e_abcd", 1, 0, 2, 3);
         AddAntiSymmetry("e_abcd", 1, 2, 3, 0);
-        Tensor t;
-        t = TensorFactory.Parse("e_abcx");
+        var t = TensorFactory.Parse("e_abcx");
         AssertEquals(t, SimplifyLeviCivita(t, eps));
 
         t = TensorFactory.Parse("e_abcx*e^abcy");
@@ -115,9 +112,8 @@ public sealed class LeviCivitaSimplifyTransformationTest
         SimpleTensor eps = TensorFactory.ParseSimple("e_abcf");
         AddAntiSymmetry("e_abcd", 1, 0, 2, 3);
         AddAntiSymmetry("e_abcd", 1, 2, 3, 0);
-        Tensor t;
 
-        t = TensorFactory.Parse("-4*I*e^{dh}_{b}^{f}*e_{g}^{b}_{ah}*e_{cdef}");
+        var t = TensorFactory.Parse("-4*I*e^{dh}_{b}^{f}*e_{g}^{b}_{ah}*e_{cdef}");
         AssertEquals("16*I*e_aceg", SimplifyLeviCivita(t, eps));
     }
 

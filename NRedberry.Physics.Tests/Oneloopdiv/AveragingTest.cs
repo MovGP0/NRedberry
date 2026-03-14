@@ -1,5 +1,3 @@
-using System;
-using NRedberry;
 using NRedberry.Numbers;
 using NRedberry.Physics.Oneloopdiv;
 using NRedberry.Tensors;
@@ -8,10 +6,11 @@ using NRedberry.Transformations.Symmetrization;
 using TensorCC = NRedberry.Tensors.CC;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace NRedberry.Physics.Tests.Oneloopdiv;
 
-public sealed class AveragingTest
+public sealed class AveragingTest(ITestOutputHelper testOutputHelper)
 {
     [Fact]
     public void ShouldLeaveScalarUntouched()
@@ -21,6 +20,7 @@ public sealed class AveragingTest
         Assert.Same(Complex.One, transformed);
     }
 
+    [Fact]
     public void Test4_0()
     {
         for (int i = 0; i < 100; ++i)
@@ -34,13 +34,14 @@ public sealed class AveragingTest
             t = d.Transform(t);
             if (!TensorUtils.IsOne(t))
             {
-                Console.WriteLine(t);
+                testOutputHelper.WriteLine(t.ToString());
             }
 
             AssertTrue(TensorUtils.IsOne(t));
         }
     }
 
+    [Fact]
     public void Test4()
     {
         Tensor t = TensorFactory.Parse("n^\\mu*n_\\mu*n_\\alpha*n^\\alpha*n_\\nu*n^\\nu*n_\\lambda*n^\\lambda*n_\\rho*n^\\rho");
@@ -52,6 +53,7 @@ public sealed class AveragingTest
         AssertTrue(TensorUtils.IsOne(t));
     }
 
+    [Fact]
     public void Test5()
     {
         AddSymmetry("F_{\\mu\\nu\\alpha\\beta}", IndexType.GreekLower, true, 1, 0, 2, 3);
@@ -61,9 +63,10 @@ public sealed class AveragingTest
         ff = EliminateMetricsTransformation.Instance.Transform(ff);
         ff = ((Expression)TensorFactory.Parse("F_{\\mu}^\\mu_\\alpha\\beta=0")).Transform(ff);
 
-        Console.WriteLine(ff);
+        testOutputHelper.WriteLine(ff.ToString());
     }
 
+    [Fact]
     public void Test6()
     {
         Tensor t = TensorFactory.Parse("a*n_\\mu*n_\\nu");
@@ -72,6 +75,7 @@ public sealed class AveragingTest
         AssertTrue(TensorUtils.Equals(t, expected));
     }
 
+    [Fact]
     public void Test7()
     {
         Tensor t = TensorFactory.Parse("a*n_\\mu*n_\\nu+g_{\\mu\\nu}*n_\\alpha*n^\\alpha+n_\\mu*n_\\nu*n_\\alpha*g^\\alpha");
@@ -84,6 +88,7 @@ public sealed class AveragingTest
         AssertTrue(TensorUtils.Equals(t, expected));
     }
 
+    [Fact]
     public void Test8()
     {
         Tensor t = TensorFactory.Parse("1");
@@ -92,6 +97,7 @@ public sealed class AveragingTest
         AssertTrue(TensorUtils.Equals(t, expected));
     }
 
+    [Fact]
     public void Test9()
     {
         Tensor t = TensorFactory.Parse("n_\\mu*n_\\nu*n^\\alpha*n^\\beta");
@@ -99,35 +105,41 @@ public sealed class AveragingTest
         AssertTrue(TensorUtils.Equals(t, TensorFactory.Parse("1/24*(d^{\\alpha }_{\\nu }*d^{\\beta }_{\\mu }+d^{\\alpha }_{\\mu }*d^{\\beta }_{\\nu }+g^{\\alpha \\beta }*g_{\\mu \\nu })")));
     }
 
+    [Fact]
     public void Test10()
     {
         Tensor t = TensorFactory.Parse("n_\\mu*n_\\nu*n^\\alpha*n^\\beta*n^\\gamma*n^\\lambda*n^\\sigma*n^\\rho*n^\\theta*n^\\zeta");
         _ = new Averaging(TensorFactory.ParseSimple("n_\\mu")).Transform(t);
     }
 
+    [Fact]
     public void Test11()
     {
-        // Ignored in Java.
+        // TODO: Ignored in Java.
     }
 
+    [Fact]
     public void Test12()
     {
-        // Ignored in Java.
+        // TODO: Ignored in Java.
     }
 
+    [Fact]
     public void Test13()
     {
-        // Ignored in Java.
+        // TODO: Ignored in Java.
     }
 
+    [Fact]
     public void Test14()
     {
-        // Ignored in Java.
+        // TODO: Ignored in Java.
     }
 
+    [Fact]
     public void Test15()
     {
-        // Ignored in Java.
+        // TODO: Ignored in Java.
     }
 
     private static void AddSymmetry(string tensor, IndexType type, bool sign, params int[] permutation)

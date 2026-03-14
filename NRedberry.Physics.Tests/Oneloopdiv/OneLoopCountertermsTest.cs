@@ -1,8 +1,5 @@
-using System;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using NRedberry;
 using NRedberry.Physics.Oneloopdiv;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Expand;
@@ -724,7 +721,6 @@ public sealed class OneLoopCountertermsTest
             sb.Append(expression, lastIndex, match.Index - lastIndex);
             string tensorName = match.Groups[1].Value;
             string indices = match.Groups[2].Value;
-            string group;
             if (tensorName == "R")
             {
                 string[] indicesArray = indices.Split(',');
@@ -757,7 +753,7 @@ public sealed class OneLoopCountertermsTest
                 indices = "^{" + indices.Replace(',', ' ') + "}";
             }
 
-            group = tensorName + indices;
+            var group = tensorName + indices;
             group = group.Replace("al", "\\a");
             group = group.Replace("be", "\\b");
             group = group.Replace("gm", "\\c");

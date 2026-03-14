@@ -2,10 +2,11 @@ using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
 
-public sealed class FeynCalcUtilsTest
+public sealed class FeynCalcUtilsTest(ITestOutputHelper testOutputHelper)
 {
     [Fact]
     public void ShouldThrowSetMandelstamUntilPorted()
@@ -21,6 +22,7 @@ public sealed class FeynCalcUtilsTest
         Assert.Throws<NotImplementedException>(() => FeynCalcUtils.SetMandelstam(input));
     }
 
+    [Fact]
     public void TestSetMandelstam1()
     {
         Tensor[][] input =
@@ -35,10 +37,11 @@ public sealed class FeynCalcUtilsTest
 
         foreach (Expression expression in ma)
         {
-            Console.WriteLine(expression);
+            testOutputHelper.WriteLine(expression.ToString());
         }
     }
 
+    [Fact]
     public void TestSetMandelstam5()
     {
         Tensor[][] input =
@@ -54,7 +57,7 @@ public sealed class FeynCalcUtilsTest
 
         foreach (Expression expression in ma)
         {
-            Console.WriteLine(expression);
+            testOutputHelper.WriteLine(expression.ToString());
         }
     }
 }

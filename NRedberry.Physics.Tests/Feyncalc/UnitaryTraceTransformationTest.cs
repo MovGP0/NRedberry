@@ -5,10 +5,11 @@ using NRedberry.Transformations.Symmetrization;
 using TensorCC = NRedberry.Tensors.CC;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
 
-public sealed class UnitaryTraceTransformationTest
+public sealed class UnitaryTraceTransformationTest(ITestOutputHelper testOutputHelper)
 {
     [Fact]
     public void ShouldThrowUntilUnitaryTraceTransformationIsPorted()
@@ -20,6 +21,7 @@ public sealed class UnitaryTraceTransformationTest
             TensorFactory.Parse("N")));
     }
 
+    [Fact]
     public void Test1()
     {
         Reset();
@@ -27,10 +29,11 @@ public sealed class UnitaryTraceTransformationTest
 
         Tensor t = TensorFactory.Parse("Tr[T_a*T_b]");
         t = UnitaryTrace(t);
-        Console.WriteLine(t);
+        testOutputHelper.WriteLine(t.ToString());
         AssertEquals("g_ab/2", t);
     }
 
+    [Fact]
     public void Test2()
     {
         Reset();
@@ -45,6 +48,7 @@ public sealed class UnitaryTraceTransformationTest
         AssertEquals(expected, t);
     }
 
+    [Fact]
     public void Test3()
     {
         Reset();
@@ -58,15 +62,16 @@ public sealed class UnitaryTraceTransformationTest
 
         t = UnitaryTrace(t);
         t1 = UnitaryTrace(t1);
-        Console.WriteLine(TensorFactory.Subtract(t, t1));
+        testOutputHelper.WriteLine(TensorFactory.Subtract(t, t1).ToString());
 
         t = EliminateDueSymmetriesTransformation.Instance.Transform(t);
         Tensor expected = TensorFactory.Parse("-(I/8)*f_adx*d_bc^x + (I/8)*d_adx*f_bc^x+1/8*d_ade*d_bc^e - 1/8*d_bde*d_ac^e+1/8*d_cde*d_ab^e + 1/(4*N)*g_ad*g_bc - 1/(4*N)*g_ac*g_bd + 1/(4*N)*g_ab*g_cd");
-        Console.WriteLine(t);
-        Console.WriteLine(expected);
+        testOutputHelper.WriteLine(t.ToString());
+        testOutputHelper.WriteLine(expected.ToString());
         // AssertEquals(expected, t);
     }
 
+    [Fact]
     public void Test4()
     {
         Reset();
@@ -89,6 +94,7 @@ public sealed class UnitaryTraceTransformationTest
         AssertEquals(expected, t);
     }
 
+    [Fact]
     public void Test5()
     {
         Reset();
@@ -110,6 +116,7 @@ public sealed class UnitaryTraceTransformationTest
         AssertEquals("0", t);
     }
 
+    [Fact]
     public void Test6()
     {
         Reset();
@@ -139,10 +146,11 @@ public sealed class UnitaryTraceTransformationTest
         AssertEquals("g_bd/8/N**2-g_bd/8", trace.Transform(t));
         t = TensorFactory.Parse("Tr[T_a*T_b*T_c*T_d*T^a*T^b*T^c]");
         t = EliminateDueSymmetriesTransformation.Instance.Transform(trace.Transform(t));
-        Console.WriteLine(t);
+        testOutputHelper.WriteLine(t.ToString());
         AssertEquals("0", trace.Transform(t));
     }
 
+    [Fact]
     public void Test6A()
     {
         Reset();
@@ -158,9 +166,8 @@ public sealed class UnitaryTraceTransformationTest
             TensorFactory.ParseSimple("f_abc"),
             TensorFactory.ParseSimple("d_abc"),
             TensorFactory.Parse("N"));
-        Tensor t;
 
-        t = TensorFactory.Parse("Tr[T_a*T_b*T_c*T_d*T^a*T^b*T^c]");
+        var t = TensorFactory.Parse("Tr[T_a*T_b*T_c*T_d*T^a*T^b*T^c]");
         t = EliminateDueSymmetriesTransformation.Instance.Transform(trace.Transform(t));
         t = TensorFactory.ParseExpression("f_abc = I*e_abc").Transform(t);
         LeviCivitaSimplifyTransformation simplifyLeviCivita = new(TensorFactory.ParseSimple("e_abc"), false);
@@ -171,10 +178,11 @@ public sealed class UnitaryTraceTransformationTest
             TensorFactory.ParseSimple("d_abc"),
             TensorFactory.Parse("N"));
         t = simplifyUnitary.Transform(t);
-        Console.WriteLine(t);
+        testOutputHelper.WriteLine(t.ToString());
         AssertEquals("0", trace.Transform(t));
     }
 
+    [Fact]
     public void Test7()
     {
         Reset();
@@ -193,6 +201,7 @@ public sealed class UnitaryTraceTransformationTest
         AssertEquals("((1/4)*n-(1/2)*n**(-1))*p^{c}", tr.Transform(expanded));
     }
 
+    [Fact]
     public void Test8()
     {
         Reset();
