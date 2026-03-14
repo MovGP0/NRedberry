@@ -12,37 +12,37 @@ public class TensorException : Exception
     public TensorException(string message, params Tensor[] tensors)
         : base(BuildMessage(message, CC.NameManager.Seed, tensors))
     {
-        Tensors = tensors ?? Array.Empty<Tensor>();
+        Tensors = tensors ?? [];
     }
 
     public TensorException(string message, long nmseed, params Tensor[] tensors)
         : base(BuildMessage(message, nmseed, tensors))
     {
-        Tensors = tensors ?? Array.Empty<Tensor>();
+        Tensors = tensors ?? [];
     }
 
     public TensorException(string message)
         : base(BuildMessage(message, CC.NameManager.Seed))
     {
-        Tensors = Array.Empty<Tensor>();
+        Tensors = [];
     }
 
     public TensorException(string message, long nmseed)
         : base(BuildMessage(message, nmseed))
     {
-        Tensors = Array.Empty<Tensor>();
+        Tensors = [];
     }
 
     public TensorException(string message, Exception innerException)
         : base(BuildMessage(message, CC.NameManager.Seed), innerException)
     {
-        Tensors = Array.Empty<Tensor>();
+        Tensors = [];
     }
 
     protected TensorException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
-        Tensors = Array.Empty<Tensor>();
+        Tensors = [];
     }
 
     public TensorException(params Tensor[] tensor)

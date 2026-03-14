@@ -8,7 +8,7 @@ public sealed partial class PermutationGroup
     {
         if (point >= _internalDegree)
         {
-            return Array.Empty<int>();
+            return [];
         }
 
         return _orbits[_positionsInOrbits[point]].ToArray();

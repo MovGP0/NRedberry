@@ -10,11 +10,11 @@ public sealed class FrobeniusNumberTests
         =>
         new()
         {
-            { new[] { 112, 432, 123, 7 }, 731L },
-            { new[] { 112, 432, 123, 7, 3 }, 11L },
-            { new[] { 112, 432, 122, 8, 31 }, 147L },
-            { new[] { 46, 4967, 50, 9208, 6921 }, 6021L },
-            { new[] { 5956, 388, 8234, 6312, 5379 }, 71845L }
+            { [112, 432, 123, 7], 731L },
+            { [112, 432, 123, 7, 3], 11L },
+            { [112, 432, 122, 8, 31], 147L },
+            { [46, 4967, 50, 9208, 6921], 6021L },
+            { [5956, 388, 8234, 6312, 5379], 71845L }
         };
 
     [Theory]
@@ -29,7 +29,7 @@ public sealed class FrobeniusNumberTests
     [Fact]
     public void ShouldReturnMinusOneWhenNoFiniteResult()
     {
-        BigInteger result = FrobeniusNumber.Calculate(new[] { 112, 432, 122, 8, 32 });
+        BigInteger result = FrobeniusNumber.Calculate([112, 432, 122, 8, 32]);
 
         Assert.Equal(new BigInteger(-1), result);
     }
@@ -37,7 +37,7 @@ public sealed class FrobeniusNumberTests
     [Fact]
     public void ShouldComputeValueForLongInput()
     {
-        BigInteger result = FrobeniusNumber.Calculate(new long[] { 112L, 432L, 123L, 7L });
+        BigInteger result = FrobeniusNumber.Calculate([112L, 432L, 123L, 7L]);
 
         Assert.Equal(new BigInteger(731), result);
     }
@@ -45,7 +45,8 @@ public sealed class FrobeniusNumberTests
     [Fact]
     public void ShouldComputeValueForBigIntegerInput()
     {
-        BigInteger result = FrobeniusNumber.Calculate(new[] { new BigInteger(112), new BigInteger(432), new BigInteger(123), new BigInteger(7) });
+        BigInteger result = FrobeniusNumber.Calculate([new BigInteger(112), new BigInteger(432), new BigInteger(123), new BigInteger(7)
+        ]);
 
         Assert.Equal(new BigInteger(731), result);
     }
@@ -53,7 +54,8 @@ public sealed class FrobeniusNumberTests
     [Fact]
     public void ShouldComputeValueUsingBigIntegerSpecificAlgorithm()
     {
-        BigInteger result = FrobeniusNumber.CalculateFromBigIntegerArray(new[] { new BigInteger(112), new BigInteger(432), new BigInteger(123), new BigInteger(7) });
+        BigInteger result = FrobeniusNumber.CalculateFromBigIntegerArray([new BigInteger(112), new BigInteger(432), new BigInteger(123), new BigInteger(7)
+        ]);
 
         Assert.Equal(new BigInteger(731), result);
     }

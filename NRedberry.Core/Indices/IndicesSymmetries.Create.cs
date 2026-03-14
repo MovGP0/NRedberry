@@ -51,6 +51,6 @@ public sealed partial class IndicesSymmetries
             return EmptySymmetries;
         }
 
-        return new IndicesSymmetries(structureOfIndices, new List<Permutation>(generators), null);
+        return new IndicesSymmetries(structureOfIndices, [..generators], null);
     }
 }

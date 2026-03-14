@@ -100,7 +100,7 @@ public sealed class SubstitutionIterator : ITreeIterator
 
     public int[] GetForbidden()
     {
-        return Array.Empty<int>();
+        return [];
     }
 
     private interface IForbiddenContainer : Payload<IForbiddenContainer>

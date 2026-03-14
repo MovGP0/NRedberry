@@ -28,7 +28,7 @@ public sealed class ExpandAndEliminateTransformation : TransformationToStringAbl
     public ExpandAndEliminateTransformation(ExpandOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        transformations = options.Simplifications is null ? Array.Empty<ITransformation>() : [options.Simplifications];
+        transformations = options.Simplifications is null ? [] : [options.Simplifications];
     }
 
     public Tensor Transform(Tensor tensor)

@@ -19,11 +19,11 @@ public abstract class AbstractExpandTransformation : TransformationToStringAble
 
     protected AbstractExpandTransformation()
     {
-        transformations = Array.Empty<ITransformation>();
+        transformations = [];
         traverseGuide = DefaultExpandTraverseGuide;
     }
 
-    protected AbstractExpandTransformation(ITransformation[] transformations)
+    protected AbstractExpandTransformation(params ITransformation[] transformations)
     {
         this.transformations = transformations ?? throw new ArgumentNullException(nameof(transformations));
         traverseGuide = DefaultExpandTraverseGuide;
@@ -38,7 +38,7 @@ public abstract class AbstractExpandTransformation : TransformationToStringAble
     protected AbstractExpandTransformation(ExpandOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        transformations = options.Simplifications is null ? Array.Empty<ITransformation>() : [options.Simplifications];
+        transformations = options.Simplifications is null ? [] : [options.Simplifications];
         traverseGuide = options.TraverseGuide ?? DefaultExpandTraverseGuide;
     }
 
@@ -92,7 +92,7 @@ public abstract class AbstractExpandTransformation : TransformationToStringAble
         return iterator.Result();
     }
 
-    protected abstract Tensor ExpandProduct(Product product, ITransformation[] transformations);
+    protected abstract Tensor ExpandProduct(Product product, params ITransformation[] transformations);
 
     public abstract string ToString(OutputFormat outputFormat);
 

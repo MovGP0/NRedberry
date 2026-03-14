@@ -24,7 +24,7 @@ public sealed class PassarinoVeltmanTest
         Expression subs = PassarinoVeltman.GenerateSubstitution(
             1,
             TensorFactory.ParseSimple("q_a"),
-            new[] { TensorFactory.ParseSimple("k1_a") });
+            [TensorFactory.ParseSimple("k1_a")]);
 
         AssertEquals("q_a = q_b*k1^b * k1_a/(k1_c*k1^c)", subs);
     }
@@ -40,7 +40,7 @@ public sealed class PassarinoVeltmanTest
         Expression subs = PassarinoVeltman.GenerateSubstitution(
             1,
             TensorFactory.ParseSimple("q_a"),
-            new[] { TensorFactory.ParseSimple("k1_a"), TensorFactory.ParseSimple("k2_a") },
+            [TensorFactory.ParseSimple("k1_a"), TensorFactory.ParseSimple("k2_a")],
             simpl);
 
         AssertEquals("q_a = k1_a*(q^b*k2_b)/s + k2_a*(q^b*k1_b)/s", subs);
@@ -57,7 +57,7 @@ public sealed class PassarinoVeltmanTest
         Expression subs = PassarinoVeltman.GenerateSubstitution(
             1,
             TensorFactory.ParseSimple("q_a"),
-            new[] { TensorFactory.ParseSimple("k1_a"), TensorFactory.ParseSimple("k2_a") },
+            [TensorFactory.ParseSimple("k1_a"), TensorFactory.ParseSimple("k2_a")],
             simpl);
 
         Tensor expected = TensorFactory.Parse(
@@ -75,18 +75,18 @@ public sealed class PassarinoVeltmanTest
     public void Test4()
     {
         Tensor[][] input =
-        {
-            new[] { TensorFactory.Parse("k1_i"), TensorFactory.Parse("0") },
-            new[] { TensorFactory.Parse("k2_i"), TensorFactory.Parse("0") },
-            new[] { TensorFactory.Parse("k3_i"), TensorFactory.Parse("m") },
-            new[] { TensorFactory.Parse("k4_i"), TensorFactory.Parse("m") }
-        };
+        [
+            [TensorFactory.Parse("k1_i"), TensorFactory.Parse("0")],
+            [TensorFactory.Parse("k2_i"), TensorFactory.Parse("0")],
+            [TensorFactory.Parse("k3_i"), TensorFactory.Parse("m")],
+            [TensorFactory.Parse("k4_i"), TensorFactory.Parse("m")]
+        ];
         TransformationCollection simpl = new(FeynCalcUtils.SetMandelstam(input));
 
         Expression subs = PassarinoVeltman.GenerateSubstitution(
             4,
             TensorFactory.ParseSimple("q_a"),
-            Array.Empty<SimpleTensor>(),
+            [],
             simpl);
 
         Tensor tensor = subs[1];

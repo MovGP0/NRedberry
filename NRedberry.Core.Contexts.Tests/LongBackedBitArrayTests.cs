@@ -78,7 +78,7 @@ public sealed class LongBackedBitArrayTests
         int[] bits = array.GetBits();
 
         // Assert
-        bits.ShouldBe(new[] { 0, 7, 9 });
+        bits.ShouldBe([0, 7, 9]);
     }
 
     [Fact(DisplayName = "Should compute and, or, xor operations")]
@@ -103,9 +103,9 @@ public sealed class LongBackedBitArrayTests
         xorResult.Xor(right);
 
         // Assert
-        andResult.GetBits().ShouldBe(new[] { 64 });
-        orResult.GetBits().ShouldBe(new[] { 0, 1, 64 });
-        xorResult.GetBits().ShouldBe(new[] { 0, 1 });
+        andResult.GetBits().ShouldBe([64]);
+        orResult.GetBits().ShouldBe([0, 1, 64]);
+        xorResult.GetBits().ShouldBe([0, 1]);
     }
 
     [Fact(DisplayName = "Should clone and load values from another array")]
@@ -255,7 +255,7 @@ public sealed class LongBackedBitArrayTests
 
         public int[] GetBits()
         {
-            return Array.Empty<int>();
+            return [];
         }
 
         public bool Intersects(IBitArray bitArray)

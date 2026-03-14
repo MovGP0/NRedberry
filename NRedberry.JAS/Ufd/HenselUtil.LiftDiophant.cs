@@ -37,11 +37,11 @@ public static partial class HenselUtil
             throw new ArgumentException("polynomial ring must be univariate");
         }
 
-        List<GenPolynomial<MOD>> solution = new(2)
-        {
+        List<GenPolynomial<MOD>> solution =
+        [
             new GenPolynomial<MOD>(polynomialRing),
             new GenPolynomial<MOD>(polynomialRing)
-        };
+        ];
 
         GenPolynomialRing<BigInteger> integerRing = CreateIntegerPolynomialRing(polynomialRing);
         foreach (Monomial<MOD> term in C)
@@ -168,7 +168,7 @@ public static partial class HenselUtil
         GenPolynomial<MOD> s2 = extended[1];
         if (exponent == 0)
         {
-            return new List<GenPolynomial<MOD>> { s1, s2 };
+            return [s1, s2];
         }
 
         GenPolynomialRing<MOD> liftedRing = s1.Ring;
@@ -190,7 +190,7 @@ public static partial class HenselUtil
             throw new InvalidOperationException("Diophant lift verification failed.");
         }
 
-        return new List<GenPolynomial<MOD>> { r1, r2 };
+        return [r1, r2];
     }
 
     /// <summary>

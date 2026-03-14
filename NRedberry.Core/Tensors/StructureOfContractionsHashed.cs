@@ -5,7 +5,7 @@ namespace NRedberry.Tensors;
 public sealed class StructureOfContractionsHashed : IEquatable<StructureOfContractionsHashed>
 {
     public static readonly StructureOfContractionsHashed EmptyInstance =
-        new(new TensorContraction((short)-1, Array.Empty<long>()));
+        new(new TensorContraction((short)-1, []));
 
     public StructureOfContractionsHashed(TensorContraction freeContraction, params TensorContraction[] contractions)
     {

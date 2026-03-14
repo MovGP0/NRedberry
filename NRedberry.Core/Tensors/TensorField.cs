@@ -94,7 +94,7 @@ public sealed class TensorField : SimpleTensor
         if (!fieldDescriptor.IsDerivative())
         {
             var ret = new SimpleIndices[Args.Length + 1][];
-            Array.Fill(ret, Array.Empty<SimpleIndices>(), 1, ret.Length - 1);
+            Array.Fill(ret, [], 1, ret.Length - 1);
             ret[0] = [SimpleIndices];
             return ret;
         }

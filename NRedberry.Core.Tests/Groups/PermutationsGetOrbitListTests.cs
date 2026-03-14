@@ -12,7 +12,7 @@ public sealed class PermutationsGetOrbitListTests
     public void ShouldReturnSingletonOrbitForEmptyGenerators()
     {
         // Act
-        List<int> orbit = GroupPermutations.GetOrbitList(Array.Empty<Permutation>(), point: 2, degree: 5);
+        List<int> orbit = GroupPermutations.GetOrbitList([], point: 2, degree: 5);
 
         // Assert
         Assert.Equal([2], orbit);
@@ -61,7 +61,7 @@ public sealed class PermutationsGetOrbitListTests
     {
         // Act + Assert
         Assert.Throws<ArgumentOutOfRangeException>(() =>
-            GroupPermutations.GetOrbitList(Array.Empty<Permutation>(), point: 3, degree: 3));
+            GroupPermutations.GetOrbitList([], point: 3, degree: 3));
     }
 
     [Fact(DisplayName = "Should throw when generator maps outside degree")]

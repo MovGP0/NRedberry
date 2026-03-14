@@ -66,7 +66,7 @@ public class FactorModular<MOD>(RingFactory<MOD> cfac) : FactorAbsolute<MOD>(cfa
     {
         ArgumentNullException.ThrowIfNull(P);
 
-        List<GenPolynomial<MOD>> factors = new ();
+        List<GenPolynomial<MOD>> factors = [];
         if (P.IsZero())
         {
             return factors;
@@ -143,7 +143,7 @@ public class FactorModular<MOD>(RingFactory<MOD> cfac) : FactorAbsolute<MOD>(cfa
     {
         ArgumentNullException.ThrowIfNull(P);
 
-        List<GenPolynomial<MOD>> factors = new ();
+        List<GenPolynomial<MOD>> factors = [];
         if (P.IsZero())
         {
             return factors;

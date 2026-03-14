@@ -287,7 +287,7 @@ public sealed partial class IndicesSymmetries : IEnumerable<Symmetry>
     {
         if (StructureOfIndices.Size == 0)
             return EmptySymmetries;
-        return new IndicesSymmetries(StructureOfIndices, new List<Permutation>(_generators), _permutationGroup);
+        return new IndicesSymmetries(StructureOfIndices, [.._generators], _permutationGroup);
     }
 
     public short[] DiffIds
@@ -361,7 +361,7 @@ public sealed partial class IndicesSymmetries : IEnumerable<Symmetry>
 
     public static readonly IndicesSymmetries EmptySymmetries = new(
         new StructureOfIndices(EmptySimpleIndices.emptySimpleIndicesInstance),
-        new List<Permutation>(),
+        [],
         null);
 
     public override int GetHashCode()

@@ -513,7 +513,7 @@ public static class TensorUtils
 
     public static void AssertIndicesConsistency(Tensor t)
     {
-        AssertIndicesConsistency(t, new HashSet<int>());
+        AssertIndicesConsistency(t, []);
     }
 
     private static void AssertIndicesConsistency(Tensor t, HashSet<int> indices)
@@ -557,7 +557,7 @@ public static class TensorUtils
         {
             foreach (Tensor c in t)
             {
-                AssertIndicesConsistency(c, new HashSet<int>(indices));
+                AssertIndicesConsistency(c, [..indices]);
             }
         }
     }
@@ -917,7 +917,7 @@ public static class TensorUtils
     {
         if (matrix.Length == 1)
         {
-            return Array.Empty<Tensor[]>();
+            return [];
         }
 
         Tensor[][] newMatrix = new Tensor[matrix.Length - 1][];
@@ -972,7 +972,7 @@ public static class TensorUtils
 
     public static HashSet<int> GetSimpleTensorsNames(Tensor t)
     {
-        return AddSimpleTensorsNames(t, new HashSet<int>());
+        return AddSimpleTensorsNames(t, []);
     }
 
     private static HashSet<int> AddSimpleTensorsNames(Tensor t, HashSet<int> names)

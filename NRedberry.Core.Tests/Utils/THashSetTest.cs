@@ -8,7 +8,7 @@ public sealed class THashSetTest
     [Fact]
     public void ShouldStoreUniqueValues()
     {
-        THashSet<string> values = new();
+        THashSet<string> values = [];
 
         Assert.True(values.Add("a"));
         Assert.False(values.Add("a"));

@@ -29,13 +29,13 @@ public sealed class TransformationBuilderTests
     {
         Assert.Throws<NotImplementedException>(() =>
             TransformationBuilder.CreateTransformation<GetNumeratorTransformation>(
-                Array.Empty<object?>(),
+                [],
                 new Dictionary<string, object?>()));
         Assert.Throws<NotImplementedException>(() =>
-            TransformationBuilder.CreateTransformation<GetNumeratorTransformation>(Array.Empty<object?>()));
+            TransformationBuilder.CreateTransformation<GetNumeratorTransformation>([]));
         Assert.Throws<NotImplementedException>(() =>
             TransformationBuilder.CreateTransformation<GetNumeratorTransformation>(
-                Array.Empty<object?>(),
+                [],
                 new List<object?>()));
     }
 }

@@ -70,7 +70,7 @@ public sealed class EliminateMetricsTransformation : TransformationToStringAble
         if (tensor is Product)
         {
             MetricsChainImpl tempContainer = new(chain);
-            List<Tensor> nonMetrics = new();
+            List<Tensor> nonMetrics = [];
             bool applied = false;
 
             for (int i = tensor.Size - 1; i >= 0; --i)
@@ -190,7 +190,7 @@ internal sealed class MetricsChainImpl : IMetricsChain
     public MetricsChainImpl(IMetricsChain parent)
     {
         _parent = parent ?? throw new ArgumentNullException(nameof(parent));
-        _container = new List<MetricWrapper>();
+        _container = [];
     }
 
     private MetricsChainImpl(List<MetricWrapper> container, IMetricsChain parent)

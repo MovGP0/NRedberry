@@ -113,7 +113,7 @@ public sealed class TypesAndNamesTransformerTests
 
     private static NameAndStructureOfIndices CreateDescriptor(string name)
     {
-        return new NameAndStructureOfIndices(name, Array.Empty<StructureOfIndices>());
+        return new NameAndStructureOfIndices(name, []);
     }
 
     private sealed class DelegateTransformer(

@@ -42,7 +42,7 @@ public class FactorAlgebraic<C> : FactorAbsolute<AlgebraicNumber<C>> where C : G
     {
         ArgumentNullException.ThrowIfNull(polynomial);
 
-        List<GenPolynomial<AlgebraicNumber<C>>> factors = new();
+        List<GenPolynomial<AlgebraicNumber<C>>> factors = [];
         if (polynomial.IsZero())
         {
             return factors;

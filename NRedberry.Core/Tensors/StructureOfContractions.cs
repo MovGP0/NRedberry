@@ -8,7 +8,7 @@ namespace NRedberry.Tensors;
 
 public sealed class StructureOfContractions
 {
-    public static readonly StructureOfContractions EmptyFullContractionsStructure = new(Array.Empty<long[]>());
+    public static readonly StructureOfContractions EmptyFullContractionsStructure = new([]);
 
     public readonly long[] freeContractions;
     public readonly long[][] contractions;
@@ -18,7 +18,7 @@ public sealed class StructureOfContractions
     public StructureOfContractions(long[][] contractions)
     {
         this.contractions = contractions;
-        freeContractions = Array.Empty<long>();
+        freeContractions = [];
         components = new int[contractions.Length];
         Array.Fill(components, -1);
         int componentCounter = -1;
@@ -39,7 +39,7 @@ public sealed class StructureOfContractions
         this.contractions = contractions;
         this.components = components;
         this.componentCount = componentCount;
-        freeContractions = Array.Empty<long>();
+        freeContractions = [];
     }
 
     private StructureOfContractions(long[] freeContractions, long[][] contractions, int[] components, int componentCount)
@@ -233,7 +233,7 @@ public sealed class StructureOfContractions
 
         public override string ToString()
         {
-            return $"tensor: {Tensor}, indices from: [{string.Join(", ", IndicesFrom)}], indices to: [{string.Join(", ", IndicesTo ?? Array.Empty<int>())}]";
+            return $"tensor: {Tensor}, indices from: [{string.Join(", ", IndicesFrom)}], indices to: [{string.Join(", ", IndicesTo ?? [])}]";
         }
     }
 

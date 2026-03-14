@@ -255,7 +255,7 @@ public abstract class GreatestCommonDivisorAbstract<C> : GreatestCommonDivisor<C
         string[]? variables = ring.GetVars();
         if (variables?.Length > 0)
         {
-            recursiveRing = new GenPolynomialRing<GenPolynomial<C>>(coefficientRing, 1, new[] { variables[ring.Nvar - 1] });
+            recursiveRing = new GenPolynomialRing<GenPolynomial<C>>(coefficientRing, 1, [variables[ring.Nvar - 1]]);
         }
         else
         {

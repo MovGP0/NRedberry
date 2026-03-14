@@ -42,7 +42,7 @@ public sealed class OneLoopInput
         Expression n,
         Expression m,
         Expression f)
-        : this(operatorOrder, iK, k, s, w, n, m, f, Array.Empty<ITransformation>())
+        : this(operatorOrder, iK, k, s, w, n, m, f, [])
     {
     }
 
@@ -63,7 +63,7 @@ public sealed class OneLoopInput
             throw new ArgumentException("Operator order must be 2 or 4.", nameof(operatorOrder));
         }
 
-        _riemannBackground = riemannBackground ?? Array.Empty<ITransformation>();
+        _riemannBackground = riemannBackground ?? [];
         _actualInput = operatorOrder + 2;
         _actualHatQuantities = operatorOrder + 1;
 
@@ -113,7 +113,7 @@ public sealed class OneLoopInput
         string matrixIndicesString = IndicesUtils.ToString(ArraysUtils.AddAll(upper, lower), OutputFormat.Redberry);
 
         ITransformation n2 = new SqrSubs(TensorFactory.ParseSimple("n_l"));
-        ITransformation n2Transformer = new Transformer(TraverseState.Leaving, new[] { n2 });
+        ITransformation n2Transformer = new Transformer(TraverseState.Leaving, [n2]);
         ITransformation[] transformations = new ITransformation[_riemannBackground.Length + 2];
         transformations[0] = EliminateMetricsTransformation.Instance;
         transformations[1] = n2Transformer;
@@ -271,7 +271,7 @@ public sealed class OneLoopInput
     {
         if (_operatorOrder < 1)
         {
-            return Array.Empty<Expression>();
+            return [];
         }
 
         Expression[] nablaS = new Expression[GetHatQuantities(1).Length];

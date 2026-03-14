@@ -41,7 +41,7 @@ public class EmptySimpleIndicesTests
         Assert.Same(singleton, GetPropertyValue(singleton, "Upper"));
         Assert.Same(singleton, GetPropertyValue(singleton, "Lower"));
         Assert.Same(singleton, InvokeMethod(singleton, "OfType", IndexType.LatinLower));
-        Assert.Same(singleton, InvokeMethod(singleton, "ApplyIndexMapping", new object?[] { null! }));
+        Assert.Same(singleton, InvokeMethod(singleton, "ApplyIndexMapping", [null!]));
     }
 
     [Fact]

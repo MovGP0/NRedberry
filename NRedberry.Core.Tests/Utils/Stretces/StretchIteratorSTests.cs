@@ -8,7 +8,7 @@ public sealed class StretchIteratorSTests
     [Fact]
     public void ShouldEnumerateGroupedShortStretches()
     {
-        StretchIteratorS iterator = new(new short[] { 1, 2, 2, 2, 3, 3 });
+        StretchIteratorS iterator = new([1, 2, 2, 2, 3, 3]);
 
         Assert.True(iterator.MoveNext());
         Assert.Equal(new Stretch(0, 1), iterator.Current);
@@ -22,7 +22,7 @@ public sealed class StretchIteratorSTests
     [Fact]
     public void ShouldResetShortIterator()
     {
-        StretchIteratorS iterator = new(new short[] { 5, 5, 5 });
+        StretchIteratorS iterator = new([5, 5, 5]);
 
         Assert.True(iterator.MoveNext());
         iterator.Reset();

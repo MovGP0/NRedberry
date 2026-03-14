@@ -34,7 +34,7 @@ public sealed class ApplyIndexMappingTests
     {
         SimpleTensor tensor = CreateSimpleTensor(1, Lower(3), Upper(3));
 
-        TensorType result = ApplyIndexMapping.RenameDummy(tensor, new int[] { NameWithType(3) }, new int[] { NameWithType(0) });
+        TensorType result = ApplyIndexMapping.RenameDummy(tensor, [NameWithType(3)], new int[] { NameWithType(0) });
 
         Assert.Equal([Lower(0), Upper(0)], result.Indices.AllIndices.ToArray());
     }
@@ -46,7 +46,7 @@ public sealed class ApplyIndexMappingTests
         int allowedUpperCaseName = IndicesUtils.GetNameWithType(IndicesUtils.CreateIndex(0, 1, false));
 
         Assert.Throws<IndexOutOfRangeException>(
-            () => ApplyIndexMapping.RenameDummy(tensor, new int[] { NameWithType(3) }, new int[] { allowedUpperCaseName }));
+            () => ApplyIndexMapping.RenameDummy(tensor, [NameWithType(3)], new int[] { allowedUpperCaseName }));
     }
 
     [Fact]
@@ -55,7 +55,7 @@ public sealed class ApplyIndexMappingTests
         SimpleTensor tensor = CreateSimpleTensor(1, Lower(3), Upper(3));
         HashSet<int> added = [];
 
-        TensorType result = ApplyIndexMapping.RenameDummy(tensor, new int[] { NameWithType(3) }, added);
+        TensorType result = ApplyIndexMapping.RenameDummy(tensor, [NameWithType(3)], added);
 
         Assert.Single(added);
         Assert.True(added.SetEquals(TensorUtils.GetAllDummyIndicesT(result)));

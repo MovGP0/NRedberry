@@ -13,7 +13,7 @@ public sealed class ExpandAllTransformation : AbstractExpandTransformation
     public static ExpandAllTransformation Instance { get; } = new();
 
     private ExpandAllTransformation()
-        : base(Array.Empty<ITransformation>(), TraverseGuide.All)
+        : base([], TraverseGuide.All)
     {
     }
 

@@ -21,7 +21,7 @@ public sealed class TransformationCollection : TransformationToStringAble, IEnum
     {
         ArgumentNullException.ThrowIfNull(transformations);
         _transformations = transformations.Length == 0
-            ? Array.Empty<ITransformation>()
+            ? []
             : (ITransformation[])transformations.Clone();
     }
 

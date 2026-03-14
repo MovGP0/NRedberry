@@ -61,13 +61,13 @@ public sealed partial class PermutationGroup
 
     private PermutationGroup()
     {
-        _bsgs = new List<BSGSElement>();
-        _base = Array.Empty<int>();
+        _bsgs = [];
+        _base = [];
         _internalDegree = 1;
         _order = BigInteger.One;
-        _positionsInOrbits = Array.Empty<int>();
+        _positionsInOrbits = [];
         _generators = new List<Permutation> { Permutations.GetIdentityPermutation() }.AsReadOnly();
-        _orbits = Array.Empty<int[]>();
+        _orbits = [];
         _ordering = new InducedOrdering(_base);
     }
 

@@ -10,7 +10,7 @@ public sealed class PortEnumeratorTests
     [Fact]
     public void ShouldEnumerateUntilNull()
     {
-        IOutputPortUnsafe<string> port = new TestOutputPortUnsafe(new[] { "a", "b" });
+        IOutputPortUnsafe<string> port = new TestOutputPortUnsafe(["a", "b"]);
         using PortEnumerator<string> enumerator = new(port);
 
         Assert.True(enumerator.MoveNext());
@@ -23,7 +23,7 @@ public sealed class PortEnumeratorTests
     [Fact]
     public void ShouldThrowOnReset()
     {
-        IOutputPortUnsafe<string> port = new TestOutputPortUnsafe(Array.Empty<string>());
+        IOutputPortUnsafe<string> port = new TestOutputPortUnsafe([]);
         using PortEnumerator<string> enumerator = new(port);
 
         Assert.Throws<NotSupportedException>(() => enumerator.Reset());

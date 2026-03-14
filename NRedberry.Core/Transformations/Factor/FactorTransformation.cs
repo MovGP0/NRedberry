@@ -694,7 +694,7 @@ internal sealed class FactorTerm
             int hash = t.Tensor.GetHashCode();
             if (!Map.TryGetValue(hash, out List<FactorTermNode>? list))
             {
-                list = new List<FactorTermNode>();
+                list = [];
                 Map.Add(hash, list);
             }
 

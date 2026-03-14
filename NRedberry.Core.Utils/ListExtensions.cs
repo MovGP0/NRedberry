@@ -2,7 +2,7 @@ namespace NRedberry.Core.Utils;
 
 public static class ListExtensions
 {
-    public static List<int> Clone(this List<int> list) => new(list);
+    public static List<int> Clone(this List<int> list) => [..list];
 
     public static void RemoveAfter(this List<int> list, int point)
     {

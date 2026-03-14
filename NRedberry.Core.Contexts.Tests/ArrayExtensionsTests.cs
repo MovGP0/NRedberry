@@ -8,7 +8,7 @@ public sealed class ArrayExtensionsTests
     [Fact]
     public void ShouldFillRange()
     {
-        int[] values = { 1, 2, 3, 4 };
+        int[] values = [1, 2, 3, 4];
 
         values.Fill(1, 2, 9);
 
@@ -26,7 +26,7 @@ public sealed class ArrayExtensionsTests
     [Fact]
     public void ShouldThrowWhenCountIsNegative()
     {
-        int[] values = { 1, 2, 3 };
+        int[] values = [1, 2, 3];
 
         Assert.Throws<ArgumentOutOfRangeException>(() => values.Fill(0, -1, 0));
     }
@@ -34,7 +34,7 @@ public sealed class ArrayExtensionsTests
     [Fact]
     public void ShouldThrowWhenRangeTouchesArrayEnd()
     {
-        int[] values = { 1, 2, 3, 4 };
+        int[] values = [1, 2, 3, 4];
 
         Assert.Throws<ArgumentOutOfRangeException>(() => values.Fill(2, 2, 0));
     }

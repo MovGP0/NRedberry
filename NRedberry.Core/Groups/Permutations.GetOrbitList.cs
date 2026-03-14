@@ -9,7 +9,7 @@ public static partial class Permutations
     {
         var orbitList = new List<int>();
         orbitList.Add(point);
-        var generators = stabilizerGenerators ?? Enumerable.Empty<Permutation>();
+        var generators = stabilizerGenerators ?? [];
 
         var seen = new BitArray(degree);
         seen.Set(point, true);

@@ -36,7 +36,7 @@ public sealed class Timing
             Console.WriteLine($"Timing: {elapsed}{suffix}");
         }
 
-        return new object[] { elapsed, result! };
+        return [elapsed, result!];
     }
 
     /// <summary>

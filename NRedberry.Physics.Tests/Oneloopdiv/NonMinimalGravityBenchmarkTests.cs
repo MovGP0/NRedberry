@@ -14,7 +14,7 @@ public sealed class NonMinimalGravityBenchmarkTests
 
         try
         {
-            Assert.Throws<NotImplementedException>(() => NonMinimalGravityBenchmark.Main(Array.Empty<string>()));
+            Assert.Throws<NotImplementedException>(() => NonMinimalGravityBenchmark.Main([]));
         }
         finally
         {

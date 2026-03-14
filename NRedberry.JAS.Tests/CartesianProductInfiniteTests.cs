@@ -10,8 +10,8 @@ public sealed class CartesianProductInfiniteTests
     public void ShouldEnumerateByIncreasingIndexLevel()
     {
         CartesianProductInfinite<int> product = new([
-            new[] { 0, 1, 2 },
-            new[] { 10, 11, 12 }
+            [0, 1, 2],
+            [10, 11, 12]
         ]);
 
         List<string> tuples = product.Take(6).Select(tuple => string.Join(",", tuple)).ToList();

@@ -69,8 +69,8 @@ public sealed class PermutationsTests
     [Fact(DisplayName = "Should validate identity for all overloads")]
     public void ShouldValidateIdentityForAllOverloads()
     {
-        Assert.True(GroupPermutations.IsIdentity(new[] { 0, 1, 2 }));
-        Assert.False(GroupPermutations.IsIdentity(new[] { 1, 0, 2 }));
+        Assert.True(GroupPermutations.IsIdentity([0, 1, 2]));
+        Assert.False(GroupPermutations.IsIdentity([1, 0, 2]));
         Assert.True(GroupPermutations.IsIdentity(new short[] { 0, 1, 2 }));
         Assert.False(GroupPermutations.IsIdentity(new short[] { 0, 2, 1 }));
         Assert.True(GroupPermutations.IsIdentity(new sbyte[] { 0, 1, 2 }));
@@ -90,7 +90,7 @@ public sealed class PermutationsTests
     [Fact(DisplayName = "Should compute internal degree for array overloads")]
     public void ShouldComputeInternalDegreeForArrayOverloads()
     {
-        int intDegree = GroupPermutations.InternalDegree(new[] { 0, 4, 1 });
+        int intDegree = GroupPermutations.InternalDegree([0, 4, 1]);
         short shortDegree = GroupPermutations.InternalDegree(new short[] { 0, 2, 1 });
         sbyte sbyteDegree = GroupPermutations.InternalDegree(new sbyte[] { 1, 0 });
 
@@ -118,12 +118,12 @@ public sealed class PermutationsTests
     [Fact(DisplayName = "Should validate permutation correctness and sign constraints")]
     public void ShouldValidatePermutationCorrectnessAndSignConstraints()
     {
-        Assert.True(GroupPermutations.TestPermutationCorrectness(new[] { 2, 0, 1 }));
-        Assert.False(GroupPermutations.TestPermutationCorrectness(new[] { 1, 1, 0 }));
-        Assert.False(GroupPermutations.TestPermutationCorrectness(new[] { 0, 3, 1 }));
+        Assert.True(GroupPermutations.TestPermutationCorrectness([2, 0, 1]));
+        Assert.False(GroupPermutations.TestPermutationCorrectness([1, 1, 0]));
+        Assert.False(GroupPermutations.TestPermutationCorrectness([0, 3, 1]));
 
-        Assert.False(GroupPermutations.TestPermutationCorrectness(new[] { 2, 0, 1 }, true));
-        Assert.True(GroupPermutations.TestPermutationCorrectness(new[] { 1, 0, 2 }, true));
+        Assert.False(GroupPermutations.TestPermutationCorrectness([2, 0, 1], true));
+        Assert.True(GroupPermutations.TestPermutationCorrectness([1, 0, 2], true));
     }
 
     [Fact(DisplayName = "Should generate deterministic random permutation with seeded random")]
@@ -185,7 +185,7 @@ public sealed class PermutationsTests
         List<int> permuted = GroupPermutations.Permute(list, [1, 2, 0]);
 
         Assert.Equal(new[] { 20, 30, 10 }, permuted);
-        Assert.Throws<ArgumentException>(() => GroupPermutations.Permute(new[] { 1, 2 }, new[] { 0 }));
-        Assert.Throws<ArgumentException>(() => GroupPermutations.Permute(new[] { 1, 2, 3 }, new[] { 0, 1, 1 }));
+        Assert.Throws<ArgumentException>(() => GroupPermutations.Permute(new[] { 1, 2 }, [0]));
+        Assert.Throws<ArgumentException>(() => GroupPermutations.Permute(new[] { 1, 2, 3 }, [0, 1, 1]));
     }
 }

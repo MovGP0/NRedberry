@@ -19,7 +19,7 @@ public sealed class ExpandTensorsTransformation : TransformationToStringAble
     private readonly TraverseGuide traverseGuide = null!;
 
     private ExpandTensorsTransformation()
-        : this(Array.Empty<ITransformation>())
+        : this([])
     {
     }
 

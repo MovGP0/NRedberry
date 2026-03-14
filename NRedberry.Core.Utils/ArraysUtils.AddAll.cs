@@ -14,7 +14,7 @@ public static partial class ArraysUtils
     {
         if (arrays.Length == 0)
         {
-            return Array.Empty<int>();
+            return [];
         }
 
         int length = 0;
@@ -25,7 +25,7 @@ public static partial class ArraysUtils
 
         if (length == 0)
         {
-            return Array.Empty<int>();
+            return [];
         }
 
         int[] r = new int[length];

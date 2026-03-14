@@ -356,10 +356,10 @@ public static class HenselMultUtil
             liftedLeading.Add(converted);
         }
 
-        List<GenPolynomialRing<MOD>> ringStack = new();
-        List<GenPolynomial<MOD>> polynomialStack = new();
-        List<List<GenPolynomial<MOD>>> leadingStack = new();
-        List<MOD> remainingValues = new();
+        List<GenPolynomialRing<MOD>> ringStack = [];
+        List<GenPolynomial<MOD>> polynomialStack = [];
+        List<List<GenPolynomial<MOD>>> leadingStack = [];
+        List<MOD> remainingValues = [];
 
         ringStack.Add(pkfac);
         polynomialStack.Add(Cp);
@@ -403,7 +403,7 @@ public static class HenselMultUtil
 
         List<GenPolynomial<MOD>> resultFactors = new(F);
         GenPolynomial<BigInteger> error = new(C.Ring);
-        List<MOD> evaluatedValues = new();
+        List<MOD> evaluatedValues = [];
         List<GenPolynomial<BigInteger>>? Si = null;
 
         while (ringStack.Count > 0)

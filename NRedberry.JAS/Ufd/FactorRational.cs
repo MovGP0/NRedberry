@@ -18,7 +18,7 @@ public class FactorRational() : FactorAbsolute<BigRational>(BigRational.One)
     {
         ArgumentNullException.ThrowIfNull(P);
 
-        List<GenPolynomial<BigRational>> factors = new ();
+        List<GenPolynomial<BigRational>> factors = [];
         if (P.IsZero())
         {
             return factors;
@@ -73,7 +73,7 @@ public class FactorRational() : FactorAbsolute<BigRational>(BigRational.One)
     {
         ArgumentNullException.ThrowIfNull(P);
 
-        List<GenPolynomial<BigRational>> factors = new ();
+        List<GenPolynomial<BigRational>> factors = [];
         if (P.IsZero())
         {
             return factors;

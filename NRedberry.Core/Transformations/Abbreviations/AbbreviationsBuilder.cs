@@ -146,7 +146,7 @@ public sealed class AbbreviationsBuilder : ITransformation
         int hashCode = tensor.GetHashCode();
         if (!_abbreviations.TryGetValue(hashCode, out List<Abbreviation>? list))
         {
-            list = new List<Abbreviation>();
+            list = [];
             _abbreviations.Add(hashCode, list);
         }
 
@@ -186,7 +186,7 @@ public sealed class AbbreviationsBuilder : ITransformation
         int hashCode = other.Definition.GetHashCode();
         if (!_abbreviations.TryGetValue(hashCode, out List<Abbreviation>? list))
         {
-            list = new List<Abbreviation>();
+            list = [];
             _abbreviations.Add(hashCode, list);
         }
 
@@ -225,7 +225,7 @@ public sealed class AbbreviationsBuilder : ITransformation
 
     public List<Abbreviation> GetAbbreviations()
     {
-        List<Abbreviation> result = new();
+        List<Abbreviation> result = [];
         foreach (List<Abbreviation> abbreviations in _abbreviations.Values)
         {
             result.AddRange(abbreviations);
@@ -374,7 +374,7 @@ public sealed class AbbreviationsBuilder : ITransformation
         int hashCode = abbreviation.Definition.GetHashCode();
         if (!_abbreviations.TryGetValue(hashCode, out List<Abbreviation>? list))
         {
-            list = new List<Abbreviation>();
+            list = [];
             _abbreviations.Add(hashCode, list);
         }
 
@@ -396,7 +396,7 @@ public sealed class AbbreviationsBuilder : ITransformation
         return new Product(
             product.Factor,
             product.IndexlessData,
-            Array.Empty<Tensor>(),
+            [],
             ProductContent.EmptyInstance,
             IndicesFactory.EmptyIndices);
     }

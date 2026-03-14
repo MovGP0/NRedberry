@@ -11,7 +11,7 @@ public sealed class SymbolArrayConverterTests
     public void ShouldMapSymbolsAndCodes()
     {
         // Arrange
-        var converter = new TestSymbolArrayConverter(new[] { "a", "b" }, new[] { "α", "β" });
+        var converter = new TestSymbolArrayConverter(["a", "b"], ["α", "β"]);
 
         // Assert
         converter.ApplicableToSymbol("a").ShouldBeTrue();
@@ -27,7 +27,7 @@ public sealed class SymbolArrayConverterTests
     public void ShouldThrowForInvalidSymbolCodes()
     {
         // Arrange
-        var converter = new TestSymbolArrayConverter(new[] { "a" }, new[] { "α" });
+        var converter = new TestSymbolArrayConverter(["a"], ["α"]);
 
         // Act + Assert
         Should.Throw<IndexConverterException>(() => converter.GetSymbol(2, OutputFormat.Redberry));
@@ -37,7 +37,7 @@ public sealed class SymbolArrayConverterTests
     public void ShouldThrowWhenSymbolsAndUtfArraysMismatch()
     {
         // Act + Assert
-        Should.Throw<ApplicationException>(() => _ = new TestSymbolArrayConverter(new[] { "a" }, new[] { "α", "β" }));
+        Should.Throw<ApplicationException>(() => _ = new TestSymbolArrayConverter(["a"], ["α", "β"]));
     }
 
     private sealed class TestSymbolArrayConverter : SymbolArrayConverter

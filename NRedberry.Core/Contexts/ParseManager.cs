@@ -49,7 +49,7 @@ public sealed class ParseManager(Parser parser)
 
     public Tensor Parse(string expression, params IParseTokenTransformer[] nodesPreprocessors)
     {
-        return Parse(expression, Array.Empty<ITransformation>(), nodesPreprocessors);
+        return Parse(expression, [], nodesPreprocessors);
     }
 
     public Tensor Parse(string expression)

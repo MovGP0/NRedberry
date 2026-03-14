@@ -43,7 +43,7 @@ public sealed class PermutationsInternalDegreeTests
     [Fact(DisplayName = "Should return zero for empty sbyte array")]
     public void ShouldReturnZeroForEmptySbyteArray()
     {
-        sbyte degree = GroupPermutations.InternalDegree(Array.Empty<sbyte>());
+        sbyte degree = GroupPermutations.InternalDegree([]);
 
         Assert.Equal((sbyte)0, degree);
     }

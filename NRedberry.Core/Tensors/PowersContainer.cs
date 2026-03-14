@@ -51,7 +51,7 @@ public sealed class PowersContainer : IEnumerable<Tensor>
         int hash = baseTensor.GetHashCode();
         if (!_powers.TryGetValue(hash, out var nodes))
         {
-            nodes = new System.Collections.Generic.List<PowerNode>();
+            nodes = [];
             _powers[hash] = nodes;
         }
 

@@ -19,7 +19,7 @@ public sealed class PlusMinusIndexMappingProviderTests
                 providerType,
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                 binder: null,
-                args: new object?[] { null },
+                args: [null],
                 culture: null));
 
         ArgumentNullException innerException = Assert.IsType<ArgumentNullException>(exception.InnerException);
@@ -72,7 +72,7 @@ public sealed class PlusMinusIndexMappingProviderTests
             providerType,
             BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
             binder: null,
-            args: new object?[] { outputPort },
+            args: [outputPort],
             culture: null);
 
         return Assert.IsAssignableFrom<IndexMappingProviderAbstract>(instance);

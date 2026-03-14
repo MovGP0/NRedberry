@@ -27,7 +27,7 @@ public sealed class TensorHashCalculatorTests
     {
         NRedberry.Tensors.Tensor tensor = NRedberry.Tensors.Tensors.Parse("a+b");
 
-        Assert.Equal(tensor.GetHashCode(), TensorHashCalculator.HashWithIndices(tensor, Array.Empty<int>()));
+        Assert.Equal(tensor.GetHashCode(), TensorHashCalculator.HashWithIndices(tensor, []));
     }
 
     [Fact]

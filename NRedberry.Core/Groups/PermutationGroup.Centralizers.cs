@@ -41,7 +41,7 @@ public sealed partial class PermutationGroup
         var centralizerSearch = new CentralizerSearchTest(groupBsgs, subgroup, @base, mappings);
         List<BSGSCandidateElement> centralizer = subgroup.Generators.Count == 1
             ? AlgorithmsBase.Clone(subgroupBsgs)
-            : new List<BSGSCandidateElement>();
+            : [];
 
         AlgorithmsBacktrack.SubgroupSearch(groupBsgs.OfType<BSGSElement>().ToList(), centralizer, centralizerSearch, centralizerSearch);
         return CreatePermutationGroupFromBSGS(AlgorithmsBase.AsBSGSList(centralizer));

@@ -98,11 +98,11 @@ public sealed class PermutationOneLineAbstractTests
     public void ShouldPermuteArraysAndList()
     {
         PermutationOneLineAbstract permutation = CreateTestDouble(GroupPermutations.CreatePermutation(2, 0, 1));
-        int[] intValues = new[] { 10, 20, 30 };
-        char[] charValues = new[] { 'a', 'b', 'c' };
-        string[] genericValues = new[] { "alpha", "beta", "gamma" };
-        List<string> listValues = new List<string> { "alpha", "beta", "gamma" };
-        int[] imageInput = new[] { 0, 2, 1 };
+        int[] intValues = [10, 20, 30];
+        char[] charValues = ['a', 'b', 'c'];
+        string[] genericValues = ["alpha", "beta", "gamma"];
+        List<string> listValues = ["alpha", "beta", "gamma"];
+        int[] imageInput = [0, 2, 1];
 
         int[] intResult = permutation.Permute(intValues);
         char[] charResult = permutation.Permute(charValues);

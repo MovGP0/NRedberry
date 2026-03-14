@@ -157,7 +157,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C> : SquarefreeFieldCharP<Alg
         long characteristicValue = (long)characteristic;
         GenPolynomial<AlgebraicNumber<C>> powered = Power<GenPolynomial<AlgebraicNumber<C>>>.PositivePower(cp, characteristicValue);
         GenPolynomialRing<C> equationRing = new(baseRing.CoFac, polynomialRing);
-        List<GenPolynomial<C>> equations = new();
+        List<GenPolynomial<C>> equations = [];
 
         if (degree == characteristicValue && algebraicRing.Modul.Length() == 2)
         {

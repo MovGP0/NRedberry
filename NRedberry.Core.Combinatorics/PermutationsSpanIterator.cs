@@ -26,7 +26,7 @@ public sealed class PermutationsSpanIterator<T> : IEnumerator<T>
             throw new ArgumentException("Permutations list must contain at least one element.", nameof(permutations));
         }
 
-        _set = new SortedSet<T>();
+        _set = [];
         _upperLayer = [permutations[0]];
         _lowerLayer = permutations;
         _nextLayer = [];

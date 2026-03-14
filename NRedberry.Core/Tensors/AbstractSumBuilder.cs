@@ -44,7 +44,7 @@ public abstract class AbstractSumBuilder : TensorBuilder
             return Complex;
         }
 
-        List<Tensor> sum = new();
+        List<Tensor> sum = [];
         var isNumeric = Complex.IsNumeric();
 
         foreach (var nodes in Summands.Values)
@@ -165,7 +165,7 @@ public abstract class AbstractSumBuilder : TensorBuilder
         int hash = TensorHashCalculator.HashWithIndices(split.Factor, SortedNames!);
         if (!Summands.TryGetValue(hash, out var factorNodes))
         {
-            List<FactorNode> fns = new() { new FactorNode(split.Factor, split.GetBuilder()) };
+            List<FactorNode> fns = [new FactorNode(split.Factor, split.GetBuilder())];
             Summands[hash] = fns;
         }
         else

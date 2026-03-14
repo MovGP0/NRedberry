@@ -64,8 +64,8 @@ public sealed class ProductOfGammasTests
         Assert.Throws<NotImplementedException>(() => new ProductOfGammas(
             0,
             product.Content,
-            new List<int>(),
-            new List<int>(),
+            [],
+            [],
             GraphType.Cycle));
         Assert.Throws<NotImplementedException>(() => new ProductOfGammas.It(
             1,

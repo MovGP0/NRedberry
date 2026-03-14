@@ -18,7 +18,7 @@ public sealed class ScalarsBackedProductBuilder : TensorBuilder
     {
         _powers = new PowersContainer();
         _indexToComponent = new Dictionary<int, Component>();
-        _components = new HashSet<Component>();
+        _components = [];
     }
 
     public ScalarsBackedProductBuilder(int capacity)
@@ -314,7 +314,7 @@ public sealed class ScalarsBackedProductBuilder : TensorBuilder
 
         public Component Copy()
         {
-            return new Component(new List<Tensor>(Elements), new HashSet<int>(FreeIndices));
+            return new Component([..Elements], [..FreeIndices]);
         }
     }
 }

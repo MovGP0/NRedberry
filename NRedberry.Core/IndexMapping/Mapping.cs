@@ -107,12 +107,12 @@ public sealed class Mapping : ITransformation
 
     public ImmutableArray<int> GetFromNames()
     {
-        return ImmutableArray.Create(_fromNames);
+        return [.._fromNames];
     }
 
     public ImmutableArray<int> GetToData()
     {
-        return ImmutableArray.Create(_toData);
+        return [.._toData];
     }
 
     public override bool Equals(object? obj)

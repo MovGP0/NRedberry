@@ -72,7 +72,7 @@ public static class ExpandPort
         {
             sum1 = first;
             sum2 = second;
-            factors = Array.Empty<Tensor>();
+            factors = [];
         }
 
         public ExpandPairPort(Sum first, Sum second, Tensor[] factors)
@@ -217,7 +217,7 @@ public static class ExpandPort
             this.tensor = tensor;
             this.expandSymbolic = expandSymbolic;
             baseBuilder = new ScalarsBackedProductBuilder();
-            List<IResettablePort> sumOrPowerPorts = new();
+            List<IResettablePort> sumOrPowerPorts = [];
             int theLargestSumPosition = 0;
             int theLargestSumSize = 0;
             int productSize = tensor.Size;
@@ -263,7 +263,7 @@ public static class ExpandPort
             sumsAndPowers = sumOrPowerPorts.ToArray();
             if (sumsAndPowers.Length <= 1)
             {
-                currentMultipliers = Array.Empty<Tensor>();
+                currentMultipliers = [];
                 currentBuilder = baseBuilder;
             }
             else

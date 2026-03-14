@@ -53,7 +53,7 @@ public class ComplexRing<C> : RingFactory<Complex<C>>, IEquatable<ComplexRing<C>
             Ring,
             1,
             new TermOrder(TermOrder.INVLEX),
-            new[] { "I" });
+            ["I"]);
         GenPolynomial<C> iPolynomial = polynomialRing
             .Univariate(0, 2L)
             .Sum(polynomialRing.GetOneCoefficient());

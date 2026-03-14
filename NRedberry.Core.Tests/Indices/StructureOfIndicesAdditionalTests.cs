@@ -209,7 +209,7 @@ public sealed class StructureOfIndicesAdditionalTests
 
             byte metricType = metricTypes[0];
             StructureOfIndices left = StructureOfIndices.Create(metricType, 3);
-            StructureOfIndices right = StructureOfIndices.Create(new[] { metricType }, new[] { 3 });
+            StructureOfIndices right = StructureOfIndices.Create([metricType], [3]);
 
             Assert.Equal(left, right);
             Assert.Equal(left.GetHashCode(), right.GetHashCode());

@@ -39,7 +39,7 @@ public class FactorQuotient<C> : FactorAbstract<Quotient<C>> where C : GcdRingEl
     {
         ArgumentNullException.ThrowIfNull(P);
 
-        List<GenPolynomial<Quotient<C>>> factors = new ();
+        List<GenPolynomial<Quotient<C>>> factors = [];
         if (P.IsZero())
         {
             return factors;

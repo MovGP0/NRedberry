@@ -306,10 +306,10 @@ public sealed class Benchmarks
         K = (Expression)P.Transform(K);
 
         Expression[] constants =
-        {
+        [
             TensorFactory.ParseExpression("c=(1+2*beta)/(5+6*beta)"),
             TensorFactory.ParseExpression("b=-(1+2*beta)/(1+beta)")
-        };
+        ];
         foreach (Expression constant in constants)
         {
             iK = (Expression)constant.Transform(iK);

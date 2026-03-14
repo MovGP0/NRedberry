@@ -13,7 +13,7 @@ public sealed class NameAndStructureOfIndicesTests
     {
         // Arrange
         byte type = IndexType.LatinLower.GetType_();
-        StructureOfIndices[] structure = { StructureOfIndices.Create(type, 1, true) };
+        StructureOfIndices[] structure = [StructureOfIndices.Create(type, 1, true)];
 
         // Act + Assert
         Should.Throw<ArgumentNullException>(() => _ = new NameAndStructureOfIndices(null!, structure));
@@ -29,10 +29,10 @@ public sealed class NameAndStructureOfIndicesTests
         StructureOfIndices rightStructure = StructureOfIndices.Create(type, 2, true, false);
         StructureOfIndices differentStructure = StructureOfIndices.Create(type, 1, true);
 
-        var left = new NameAndStructureOfIndices("T", new[] { leftStructure });
-        var right = new NameAndStructureOfIndices("T", new[] { rightStructure });
-        var differentName = new NameAndStructureOfIndices("S", new[] { rightStructure });
-        var differentStructureValue = new NameAndStructureOfIndices("T", new[] { differentStructure });
+        var left = new NameAndStructureOfIndices("T", [leftStructure]);
+        var right = new NameAndStructureOfIndices("T", [rightStructure]);
+        var differentName = new NameAndStructureOfIndices("S", [rightStructure]);
+        var differentStructureValue = new NameAndStructureOfIndices("T", [differentStructure]);
 
         // Assert
         left.Equals(right).ShouldBeTrue();
@@ -53,7 +53,7 @@ public sealed class NameAndStructureOfIndicesTests
         // Arrange
         byte type = IndexType.LatinLower.GetType_();
         StructureOfIndices structure = StructureOfIndices.Create(type, 1, true);
-        var value = new NameAndStructureOfIndices("T", new[] { structure });
+        var value = new NameAndStructureOfIndices("T", [structure]);
 
         // Act + Assert
         value.Equals(value).ShouldBeTrue();

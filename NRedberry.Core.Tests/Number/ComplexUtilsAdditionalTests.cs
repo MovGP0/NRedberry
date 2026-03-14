@@ -11,8 +11,8 @@ public sealed class ComplexUtilsAdditionalTests
     {
         get
         {
-            return new TheoryData<Action>
-            {
+            return
+            [
                 () => ComplexUtils.Sin(null!),
                 () => ComplexUtils.Cos(null!),
                 () => ComplexUtils.Tan(null!),
@@ -23,7 +23,7 @@ public sealed class ComplexUtilsAdditionalTests
                 () => ComplexUtils.ArcCot(null!),
                 () => ComplexUtils.Log(null!),
                 () => ComplexUtils.Exp(null!)
-            };
+            ];
         }
     }
 
@@ -51,8 +51,8 @@ public sealed class ComplexUtilsAdditionalTests
     {
         get
         {
-            return new TheoryData<Func<Complex, Complex>>
-            {
+            return
+            [
                 ComplexUtils.Sin,
                 ComplexUtils.Cos,
                 ComplexUtils.Tan,
@@ -63,7 +63,7 @@ public sealed class ComplexUtilsAdditionalTests
                 ComplexUtils.ArcCot,
                 ComplexUtils.Log,
                 ComplexUtils.Exp
-            };
+            ];
         }
     }
 

@@ -107,7 +107,7 @@ public sealed class ApplyDiracDeltasTransformation : TransformationToStringAble
         to = ApplyIndexMapping.Apply(
             to,
             new Mapping(delta.GetArgIndices(1).AllIndices.ToArray(), delta.GetArgIndices(0).AllIndices.ToArray()),
-            Array.Empty<int>());
+            []);
         return new SubstitutionTransformation(from, to);
     }
 

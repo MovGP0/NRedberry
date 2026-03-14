@@ -10,9 +10,9 @@ public sealed class CartesianProductTests
     public void ShouldEnumerateLexicographicProduct()
     {
         CartesianProduct<int> product = new([
-            new[] { 1, 2 },
-            new[] { 10, 20 },
-            new[] { 100 }
+            [1, 2],
+            [10, 20],
+            [100]
         ]);
 
         List<string> tuples = product.Select(tuple => string.Join(",", tuple)).ToList();
@@ -26,8 +26,8 @@ public sealed class CartesianProductTests
     public void ShouldYieldEmptyWhenAnyComponentIsEmpty()
     {
         CartesianProduct<int> product = new([
-            new[] { 1, 2 },
-            Array.Empty<int>()
+            [1, 2],
+            []
         ]);
 
         Assert.Empty(product);

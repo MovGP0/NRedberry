@@ -97,7 +97,7 @@ public static partial class HenselUtil
             ?? throw new InvalidOperationException("Failed to map lifted S.");
         T = PolyUtil.FromIntegerCoefficients(liftedPolynomialRing, Ti)
             ?? throw new InvalidOperationException("Failed to map lifted T.");
-        return new[] { S, T };
+        return [S, T];
     }
 
     /// <summary>

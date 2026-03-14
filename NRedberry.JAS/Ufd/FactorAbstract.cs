@@ -83,7 +83,7 @@ public abstract class FactorAbstract<C> : Factorization<C> where C : GcdRingElem
             return BaseFactorsSquarefree(polynomial);
         }
 
-        List<GenPolynomial<C>> factors = new ();
+        List<GenPolynomial<C>> factors = [];
         if (polynomial.IsZero())
         {
             return factors;
@@ -100,7 +100,7 @@ public abstract class FactorAbstract<C> : Factorization<C> where C : GcdRingElem
         GenPolynomialRing<C> univariateRing = substituted.Ring;
         univariateRing.SetVars(univariateRing.NewVars("zz"));
 
-        List<GenPolynomial<C>> univariateFactors = new ();
+        List<GenPolynomial<C>> univariateFactors = [];
         foreach (KeyValuePair<GenPolynomial<C>, long> entry in BaseFactors(substituted))
         {
             for (int i = 0; i < entry.Value; i++)
@@ -409,7 +409,7 @@ public abstract class FactorAbstract<C> : Factorization<C> where C : GcdRingElem
     {
         ArgumentNullException.ThrowIfNull(polynomial);
 
-        List<GenPolynomial<GenPolynomial<C>>> factors = new ();
+        List<GenPolynomial<GenPolynomial<C>>> factors = [];
         if (polynomial.IsZero())
         {
             return factors;

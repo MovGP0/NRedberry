@@ -19,7 +19,7 @@ public sealed class ParseTokenTransformerTests
         var transformer = new RecordingParseTokenTransformer(transformedNode);
         var parseManager = new ParseManager(parser);
 
-        var tensor = parseManager.Parse("x", Array.Empty<ITransformation>(), [transformer]);
+        var tensor = parseManager.Parse("x", [], [transformer]);
 
         var number = Assert.IsType<Complex>(tensor);
         Assert.Same(initialNode, transformer.LastInput);

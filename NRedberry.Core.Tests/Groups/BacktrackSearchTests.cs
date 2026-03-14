@@ -9,7 +9,7 @@ public sealed class BacktrackSearchTests
     public void ShouldThrowForEmptyBsgs()
     {
         // Act + Assert
-        Assert.Throws<ArgumentException>(() => _ = new BacktrackSearch(new List<BSGSElement>()));
+        Assert.Throws<ArgumentException>(() => _ = new BacktrackSearch([]));
     }
 
     [Fact(DisplayName = "Should enumerate group elements")]

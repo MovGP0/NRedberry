@@ -11,12 +11,12 @@ public sealed class FeynCalcUtilsTest
     public void ShouldThrowSetMandelstamUntilPorted()
     {
         Tensor[][] input =
-        {
-            new[] { TensorFactory.Parse("k1_i"), TensorFactory.Parse("m1") },
-            new[] { TensorFactory.Parse("k2_i"), TensorFactory.Parse("m2") },
-            new[] { TensorFactory.Parse("k3_i"), TensorFactory.Parse("m3") },
-            new[] { TensorFactory.Parse("k4_i"), TensorFactory.Parse("m4") }
-        };
+        [
+            [TensorFactory.Parse("k1_i"), TensorFactory.Parse("m1")],
+            [TensorFactory.Parse("k2_i"), TensorFactory.Parse("m2")],
+            [TensorFactory.Parse("k3_i"), TensorFactory.Parse("m3")],
+            [TensorFactory.Parse("k4_i"), TensorFactory.Parse("m4")]
+        ];
 
         Assert.Throws<NotImplementedException>(() => FeynCalcUtils.SetMandelstam(input));
     }
@@ -24,12 +24,12 @@ public sealed class FeynCalcUtilsTest
     public void TestSetMandelstam1()
     {
         Tensor[][] input =
-        {
-            new[] { TensorFactory.Parse("k1_i"), TensorFactory.Parse("m1") },
-            new[] { TensorFactory.Parse("k2_i"), TensorFactory.Parse("m2") },
-            new[] { TensorFactory.Parse("k3_i"), TensorFactory.Parse("m3") },
-            new[] { TensorFactory.Parse("k4_i"), TensorFactory.Parse("m4") }
-        };
+        [
+            [TensorFactory.Parse("k1_i"), TensorFactory.Parse("m1")],
+            [TensorFactory.Parse("k2_i"), TensorFactory.Parse("m2")],
+            [TensorFactory.Parse("k3_i"), TensorFactory.Parse("m3")],
+            [TensorFactory.Parse("k4_i"), TensorFactory.Parse("m4")]
+        ];
 
         Expression[] ma = FeynCalcUtils.SetMandelstam(input);
 
@@ -42,13 +42,13 @@ public sealed class FeynCalcUtilsTest
     public void TestSetMandelstam5()
     {
         Tensor[][] input =
-        {
-            new[] { TensorFactory.Parse("k1_i"), TensorFactory.Parse("m1") },
-            new[] { TensorFactory.Parse("k2_i"), TensorFactory.Parse("m2") },
-            new[] { TensorFactory.Parse("k3_i"), TensorFactory.Parse("m3") },
-            new[] { TensorFactory.Parse("k4_i"), TensorFactory.Parse("m4") },
-            new[] { TensorFactory.Parse("k5_i"), TensorFactory.Parse("m5") }
-        };
+        [
+            [TensorFactory.Parse("k1_i"), TensorFactory.Parse("m1")],
+            [TensorFactory.Parse("k2_i"), TensorFactory.Parse("m2")],
+            [TensorFactory.Parse("k3_i"), TensorFactory.Parse("m3")],
+            [TensorFactory.Parse("k4_i"), TensorFactory.Parse("m4")],
+            [TensorFactory.Parse("k5_i"), TensorFactory.Parse("m5")]
+        ];
 
         Expression[] ma = FeynCalcUtils.SetMandelstam5(input);
 

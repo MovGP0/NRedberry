@@ -351,7 +351,7 @@ public sealed class OneLoopCounterterms
 
         Expression kronecker = (Expression)TensorFactory.Parse("d_{l}^{l}=4");
         ITransformation n2 = new SqrSubs(TensorFactory.ParseSimple("n_l"));
-        ITransformation n2Transformer = new Transformer(TraverseState.Leaving, new[] { n2 });
+        ITransformation n2Transformer = new Transformer(TraverseState.Leaving, [n2]);
         ITransformation[] common = [EliminateMetricsTransformation.Instance, n2Transformer, kronecker];
         ITransformation[] all = new ITransformation[common.Length + riemansSubstitutions.Length];
         Array.Copy(common, 0, all, 0, common.Length);

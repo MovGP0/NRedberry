@@ -8,9 +8,11 @@ public sealed class IntArrayListTests
     [Fact]
     public void ShouldAddInsertRemoveAndClone()
     {
-        IntArrayList list = new();
-        list.Add(1);
-        list.Add(3);
+        IntArrayList list =
+        [
+            1,
+            3
+        ];
         list.Insert(1, 2);
 
         Assert.Equal(new[] { 1, 2, 3 }, list.ToArray());

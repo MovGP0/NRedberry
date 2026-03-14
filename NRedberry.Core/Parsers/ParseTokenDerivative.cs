@@ -41,7 +41,7 @@ public class ParseTokenDerivative(TokenType tokenType, params ParseToken[] conte
         allowedDummies.ExceptWith(IndicesUtils.GetIndicesNames(free.Indices.GetFree()));
         var differentiate = new DifferentiateTransformation(
             vars,
-            new ITransformation[] { ExpandAndEliminateTransformation.Instance }
+            [ExpandAndEliminateTransformation.Instance]
         );
         Tensor result = differentiate.Transform(Content[0].ToTensor());
         result = ApplyIndexMapping.OptimizeDummies(result);

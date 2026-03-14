@@ -135,7 +135,7 @@ public sealed class ProductFactory : TensorFactory
         Tensor[] indexless;
         if (indexlessContainer.Count == 0)
         {
-            indexless = Array.Empty<Tensor>();
+            indexless = [];
         }
         else if (indexlessContainer.Count == 1)
         {

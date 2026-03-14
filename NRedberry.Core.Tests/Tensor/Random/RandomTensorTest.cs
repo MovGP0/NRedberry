@@ -19,8 +19,8 @@ public sealed class RandomTensorTest
         RandomTensorGenerator random = new(
             4,
             10,
-            new[] { 4, 0, 0, 0 },
-            new[] { 10, 0, 0, 0 },
+            [4, 0, 0, 0],
+            [10, 0, 0, 0],
             false,
             true,
             12345L);
@@ -37,8 +37,8 @@ public sealed class RandomTensorTest
         RandomTensorGenerator random = new(
             4,
             10,
-            new[] { 4, 0, 0, 0 },
-            new[] { 10, 0, 0, 0 },
+            [4, 0, 0, 0],
+            [10, 0, 0, 0],
             false,
             true,
             12345L);
@@ -58,8 +58,8 @@ public sealed class RandomTensorTest
             RandomTensorGenerator random = new(
                 5,
                 20,
-                new[] { 2, 0, 0, 0 },
-                new[] { 10, 0, 0, 0 },
+                [2, 0, 0, 0],
+                [10, 0, 0, 0],
                 true,
                 true,
                 1000L + j);
@@ -81,8 +81,8 @@ public sealed class RandomTensorTest
         RandomTensorGenerator random = new(
             5,
             6,
-            new[] { 2, 0, 0, 0 },
-            new[] { 3, 0, 0, 0 },
+            [2, 0, 0, 0],
+            [3, 0, 0, 0],
             true,
             true,
             7643543L);
@@ -94,7 +94,7 @@ public sealed class RandomTensorTest
     [Fact]
     public void ShouldGenerateMetricTensors()
     {
-        RandomTensorGenerator random = new(0, 0, new[] { 2, 0, 0, 0 }, new[] { 3, 0, 0, 0 }, true, true, 77L);
+        RandomTensorGenerator random = new(0, 0, [2, 0, 0, 0], [3, 0, 0, 0], true, true, 77L);
         random.AddToNamespace(CreateMetric("_mn"));
 
         Assert.True(RedberryContext.Get().IsKroneckerOrMetric(random.NextSimpleTensor()));
@@ -112,7 +112,7 @@ public sealed class RandomTensorTest
     [Fact]
     public void ShouldGenerateTensorTreesWithConsistentIndices()
     {
-        RandomTensorGenerator random = new(0, 0, new[] { 1, 0, 0, 0 }, new[] { 3, 0, 0, 0 }, true, true, 88L);
+        RandomTensorGenerator random = new(0, 0, [1, 0, 0, 0], [3, 0, 0, 0], true, true, 88L);
         random.AddToNamespace(CreateSimpleTensor("f", "_n"), CreateMetric("_mn"));
 
         for (int i = 0; i < 25; i++)
@@ -135,7 +135,7 @@ public sealed class RandomTensorTest
         for (int i = 0; i < 25; i++)
         {
             ContextCC.ResetTensorNames();
-            RandomTensorGenerator random = new(0, 0, new[] { 1, 0, 0, 0 }, new[] { 3, 0, 0, 0 }, true, true, 500L + i);
+            RandomTensorGenerator random = new(0, 0, [1, 0, 0, 0], [3, 0, 0, 0], true, true, 500L + i);
             random.AddToNamespace(CreateSimpleTensor("f", "_n"), CreateMetric("_mn"));
 
             TensorType tensor = random.NextTensorTree(

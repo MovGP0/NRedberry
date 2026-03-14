@@ -163,7 +163,7 @@ public abstract class SimpleIndicesAbstract : AbstractIndices, SimpleIndices
 
     public override Indices GetFree()
     {
-        List<int> free = new();
+        List<int> free = [];
         for (int i = 0; i < Data.Length; i++)
         {
             bool isFree = true;

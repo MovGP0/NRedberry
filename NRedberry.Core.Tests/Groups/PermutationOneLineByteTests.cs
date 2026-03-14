@@ -39,7 +39,7 @@ public sealed class PermutationOneLineByteTests
         Assert.Equal(new[] { 'b', 'a', 'c' }, permutation.Permute(new[] { 'a', 'b', 'c' }));
         Assert.Equal(new[] { "b", "a", "c" }, permutation.Permute(new[] { "a", "b", "c" }));
         Assert.Equal(new[] { 6, 5, 7 }, permutation.Permute(new List<int> { 5, 6, 7 }));
-        Assert.Equal(new[] { 1, 0, 2, 5 }, permutation.ImageOf(new[] { 0, 1, 2, 5 }));
+        Assert.Equal(new[] { 1, 0, 2, 5 }, permutation.ImageOf([0, 1, 2, 5]));
     }
 
     [Fact]

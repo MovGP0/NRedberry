@@ -74,7 +74,7 @@ public class EmptyIndices : Indices
 
     public IEnumerator<int> GetEnumerator()
     {
-        return ((IEnumerable<int>)Array.Empty<int>()).GetEnumerator();
+        return ((IEnumerable<int>)[]).GetEnumerator();
     }
 
     public override bool Equals(object? obj)

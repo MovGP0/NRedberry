@@ -29,7 +29,7 @@ public sealed class CollectTransformation : ITransformation
         ArgumentNullException.ThrowIfNull(patterns);
         ArgumentNullException.ThrowIfNull(transformations);
 
-        _patternsNames = new HashSet<int>();
+        _patternsNames = [];
         _powerExpand = new PowerUnfoldTransformation(patterns);
         foreach (SimpleTensor t in patterns)
         {
@@ -90,7 +90,7 @@ public sealed class CollectTransformation : ITransformation
 
             if (!map.TryGetValue(toAdd.HashCode, out List<Split>? nodes))
             {
-                nodes = new List<Split> { toAdd };
+                nodes = [toAdd];
                 map[toAdd.HashCode] = nodes;
                 continue;
             }
@@ -161,12 +161,12 @@ public sealed class CollectTransformation : ITransformation
         {
             if (Match(tensor))
             {
-                factors = new[] { tensor };
+                factors = [tensor];
                 summand = Complex.One;
             }
             else
             {
-                return new Split(Array.Empty<Tensor>(), tensor);
+                return new Split([], tensor);
             }
         }
         else if (tensor is Product || TensorUtils.IsPositiveIntegerPowerOfProduct(tensor))
@@ -176,7 +176,7 @@ public sealed class CollectTransformation : ITransformation
             bool containsMatch = false;
             if (tensor is not Product productElements)
             {
-                return new Split(Array.Empty<Tensor>(), tensor);
+                return new Split([], tensor);
             }
 
             foreach (Tensor t in productElements)
@@ -190,7 +190,7 @@ public sealed class CollectTransformation : ITransformation
 
             if (!containsMatch)
             {
-                return new Split(Array.Empty<Tensor>(), tensor);
+                return new Split([], tensor);
             }
 
             Product product = productElements;
@@ -219,7 +219,7 @@ public sealed class CollectTransformation : ITransformation
         }
         else
         {
-            return new Split(Array.Empty<Tensor>(), tensor);
+            return new Split([], tensor);
         }
 
         HashSet<int> freeIndices = new(IndicesUtils.GetIndicesNames(tensor.Indices.GetFree()));
@@ -379,7 +379,7 @@ public sealed class CollectTransformation : ITransformation
         public Split(Tensor[] factors, Tensor summand)
         {
             Factors = factors;
-            Summands = new List<Tensor> { summand };
+            Summands = [summand];
             Array.Sort(Factors);
             HashCode = GetArrayHashCode(Factors);
             Forbidden = IndicesUtils.GetIndicesNames(new IndicesBuilder().Append(Factors).Indices);

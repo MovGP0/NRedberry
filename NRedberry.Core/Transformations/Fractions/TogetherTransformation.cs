@@ -104,7 +104,7 @@ public sealed class TogetherTransformation : ITransformation, TransformationToSt
 
         TogetherSplitStruct baseStruct = SplitFraction(t[0]);
         var numeratorTerms = new List<Tensor>[t.Size];
-        numeratorTerms[0] = new List<Tensor> { baseStruct.Numerator };
+        numeratorTerms[0] = [baseStruct.Numerator];
         Tensor sTerm;
         Tensor power;
         Complex exponent;

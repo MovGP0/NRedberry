@@ -16,7 +16,7 @@ public sealed class MinusIndexMappingProviderWrapperTests
                 wrapperType,
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                 binder: null,
-                args: new object?[] { null },
+                args: [null],
                 culture: null));
 
         ArgumentNullException innerException = Assert.IsType<ArgumentNullException>(exception.InnerException);
@@ -80,7 +80,7 @@ public sealed class MinusIndexMappingProviderWrapperTests
             wrapperType,
             BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
             binder: null,
-            args: new object[] { provider },
+            args: [provider],
             culture: null);
 
         Assert.NotNull(instance);

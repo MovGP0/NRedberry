@@ -26,7 +26,7 @@ public sealed class NameDescriptorForTensorFieldDerivativeTests
         derivative.IsDerivative().ShouldBeTrue();
         derivative.GetParent().ShouldBeSameAs(parent);
         derivative.GetKeys().ShouldBeEmpty();
-        derivative.GetDerivativeOrders().ShouldBe(new[] { 1, 0 });
+        derivative.GetDerivativeOrders().ShouldBe([1, 0]);
         derivative.GetName(null, OutputFormat.Redberry).ShouldBe("F~(1,0)");
         derivative.GetName(null, OutputFormat.WolframMathematica).ShouldBe("Derivative[1,0][F]");
         derivative.GetName(null, OutputFormat.Maple).ShouldBe("D[1](F)");
@@ -47,6 +47,6 @@ public sealed class NameDescriptorForTensorFieldDerivativeTests
         NameDescriptorForTensorField combined = derivative.GetDerivative(1);
 
         // Assert
-        combined.GetDerivativeOrders().ShouldBe(new[] { 2 });
+        combined.GetDerivativeOrders().ShouldBe([2]);
     }
 }

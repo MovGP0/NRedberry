@@ -16,12 +16,12 @@ public static class FastTensors
     {
         Tensor[] pair = Tensors.ResolveDummy(sum, factor);
         int i = pair[0] is Sum ? 0 : 1;
-        return MultiplySumElementsOnFactor((Sum)pair[i], pair[1 - i], Array.Empty<ITransformation>());
+        return MultiplySumElementsOnFactor((Sum)pair[i], pair[1 - i], []);
     }
 
     public static Tensor MultiplySumElementsOnFactor(Sum sum, Tensor factor)
     {
-        return MultiplySumElementsOnFactor(sum, factor, Array.Empty<ITransformation>());
+        return MultiplySumElementsOnFactor(sum, factor, []);
     }
 
     public static Tensor MultiplySumElementsOnFactorAndExpand(Sum sum, Tensor factor)

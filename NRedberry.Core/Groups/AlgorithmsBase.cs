@@ -18,7 +18,7 @@ public static class AlgorithmsBase
     static AlgorithmsBase()
     {
         var gens = new List<Permutation> { Permutations.GetIdentityPermutation() };
-        TrivialBsgs = new List<BSGSElement> { new BSGSCandidateElement(0, gens, 1).AsBSGSElement() };
+        TrivialBsgs = [new BSGSCandidateElement(0, gens, 1).AsBSGSElement()];
     }
 
     /// <summary>
@@ -87,7 +87,7 @@ public static class AlgorithmsBase
 
         List<BSGSCandidateElement> bsgs =
         [
-            new BSGSCandidateElement(firstBasePoint, new List<Permutation>(generators), degree)
+            new BSGSCandidateElement(firstBasePoint, [..generators], degree)
         ];
 
         MakeUseOfAllGenerators(bsgs);
@@ -133,7 +133,7 @@ public static class AlgorithmsBase
 
         List<BSGSCandidateElement> bsgs = new(basePoints.Count)
         {
-            new BSGSCandidateElement(basePoints[0], new List<Permutation>(generators), degree)
+            new BSGSCandidateElement(basePoints[0], [..generators], degree)
         };
 
         for (int i = 1; i < basePoints.Count; ++i)
@@ -284,7 +284,7 @@ public static class AlgorithmsBase
                             {
                                 if (strip.Remainder.NewIndexOf(i) != i)
                                 {
-                                    bsgsCandidate.Add(new BSGSCandidateElement(i, new List<Permutation>(), degree));
+                                    bsgsCandidate.Add(new BSGSCandidateElement(i, [], degree));
                                     break;
                                 }
                             }
@@ -357,7 +357,7 @@ public static class AlgorithmsBase
                 {
                     if (strip.Remainder.NewIndexOf(i) != i)
                     {
-                        bsgsCandidate.Add(new BSGSCandidateElement(i, new List<Permutation>(), degree));
+                        bsgsCandidate.Add(new BSGSCandidateElement(i, [], degree));
                         break;
                     }
                 }
@@ -419,7 +419,7 @@ public static class AlgorithmsBase
                 {
                     if (strip.Remainder.NewIndexOf(i) != i)
                     {
-                        bsgsCandidate.Add(new BSGSCandidateElement(i, new List<Permutation>(), degree));
+                        bsgsCandidate.Add(new BSGSCandidateElement(i, [], degree));
                         break;
                     }
                 }
@@ -665,7 +665,7 @@ public static class AlgorithmsBase
 
         List<Permutation> newStabilizers = i == bsgs.Count - 2
             ? []
-            : new List<Permutation>(bsgs[i + 2].StabilizerGeneratorsReference);
+            : [..bsgs[i + 2].StabilizerGeneratorsReference];
 
         BitArray allowedPoints = new BitArray(effectiveDegree);
         SetAll(allowedPoints, bsgs[i].OrbitListReference, true);
@@ -710,7 +710,7 @@ public static class AlgorithmsBase
 
         BSGSCandidateElement ith = new(
             bsgs[i + 1].BasePoint,
-            new List<Permutation>(bsgs[i].StabilizerGeneratorsReference),
+            [..bsgs[i].StabilizerGeneratorsReference],
             effectiveDegree);
         BSGSCandidateElement jth = new(
             bsgs[i].BasePoint,
@@ -762,7 +762,7 @@ public static class AlgorithmsBase
         int degree = bsgs[0].InternalDegree;
         if (insertionPosition == bsgs.Count)
         {
-            bsgs.Add(new BSGSCandidateElement(newBasePoint, new List<Permutation>(), degree));
+            bsgs.Add(new BSGSCandidateElement(newBasePoint, [], degree));
         }
         else if (bsgs[insertionPosition].BasePoint != newBasePoint)
         {
@@ -770,7 +770,7 @@ public static class AlgorithmsBase
                 insertionPosition,
                 new BSGSCandidateElement(
                     newBasePoint,
-                    new List<Permutation>(bsgs[insertionPosition].StabilizerGeneratorsReference),
+                    [..bsgs[insertionPosition].StabilizerGeneratorsReference],
                     degree));
         }
 
@@ -1096,7 +1096,7 @@ public static class AlgorithmsBase
                 stabilizers.Add(@base.Composition(Permutations.CreatePermutation(perm)));
             }
 
-            bsgs.Add(new BSGSCandidateElement(i, new List<Permutation>(stabilizers), degree).AsBSGSElement());
+            bsgs.Add(new BSGSCandidateElement(i, [..stabilizers], degree).AsBSGSElement());
             stabilizers.Clear();
         }
 

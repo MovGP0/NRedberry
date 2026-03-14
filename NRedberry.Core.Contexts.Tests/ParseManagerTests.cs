@@ -27,8 +27,8 @@ public sealed class ParseManagerTests
         // Act
         Tensor result = manager.Parse(
             "a",
-            new[] { tensorTransformer },
-            new[] { nodeTransformer });
+            [tensorTransformer],
+            [nodeTransformer]);
 
         // Assert
         result.ShouldNotBeNull();

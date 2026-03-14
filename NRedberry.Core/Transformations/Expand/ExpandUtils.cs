@@ -22,7 +22,7 @@ public sealed class ExpandPairPort : IOutputPort<Tensor>
 
         sum1 = first;
         sum2 = second;
-        factors = Array.Empty<Tensor>();
+        factors = [];
     }
 
     public ExpandPairPort(Sum first, Sum second, Tensor[] factors)
@@ -79,7 +79,7 @@ public static class ExpandUtils
 
     public static Tensor ExpandPairOfSums(Sum first, Sum second, ITransformation[] transformations)
     {
-        return ExpandPairOfSums(first, second, Array.Empty<Tensor>(), transformations);
+        return ExpandPairOfSums(first, second, [], transformations);
     }
 
     public static Tensor ExpandProductOfSums(Product product, ITransformation[] transformations)
@@ -172,7 +172,7 @@ public static class ExpandUtils
             }
             else
             {
-                dataList = new List<Tensor> { data };
+                dataList = [data];
             }
 
             if (indexless is Sum)

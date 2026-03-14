@@ -135,7 +135,7 @@ public static class ExternalSolver
         var coefficientsResults = new Expression[reducedSystem.GetUnknownCoefficients().Length];
         if (!File.Exists(outputFilePath))
         {
-            return Array.Empty<Expression[]>();
+            return [];
         }
 
         if (new FileInfo(outputFilePath).Length == 0)
@@ -290,7 +290,7 @@ public static class ExternalSolver
 
         public string[] GetParameters()
         {
-            return new[] { "-script" };
+            return ["-script"];
         }
     }
 
@@ -372,7 +372,7 @@ public static class ExternalSolver
 
         public string[] GetParameters()
         {
-            return Array.Empty<string>();
+            return [];
         }
     }
 }

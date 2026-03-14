@@ -25,7 +25,7 @@ public sealed class InverseTensor
         ArgumentNullException.ThrowIfNull(equation);
         ArgumentNullException.ThrowIfNull(samples);
 
-        (_equations, _unknownCoefficients, _generalInverse) = Build(toInverse, equation, samples, false, Array.Empty<ITransformation>());
+        (_equations, _unknownCoefficients, _generalInverse) = Build(toInverse, equation, samples, false, []);
     }
 
     public InverseTensor(Expression toInverse, Expression equation, Tensor[] samples, bool symmetricForm, ITransformation[] transformations)
@@ -55,7 +55,7 @@ public sealed class InverseTensor
 
     public ReducedSystem ToReducedSystem()
     {
-        return new ReducedSystem(_equations, _unknownCoefficients, new[] { _generalInverse });
+        return new ReducedSystem(_equations, _unknownCoefficients, [_generalInverse]);
     }
 
     public static Expression FindInverseWithMaple(Expression toInverse, Expression equation, Tensor[] samples, bool symmetricForm, ITransformation[] transformations, string mapleBinDir, string path)

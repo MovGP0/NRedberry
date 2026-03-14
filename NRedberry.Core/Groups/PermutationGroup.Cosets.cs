@@ -8,7 +8,7 @@ public sealed partial class PermutationGroup
     {
         if (IsTrivial())
         {
-            return new[] { Permutations.GetIdentityPermutation() };
+            return [Permutations.GetIdentityPermutation()];
         }
 
         return AlgorithmsBacktrack.LeftCosetRepresentatives(GetBSGS(), subgroup.GetBSGS(), BaseArray(), Ordering());

@@ -87,7 +87,7 @@ public static class AlgorithmsBacktrack
 
         if (subgroup.Count == 0)
         {
-            subgroup.Add(new BSGSCandidateElement(baseArray[0], new List<Permutation>(), degree));
+            subgroup.Add(new BSGSCandidateElement(baseArray[0], [], degree));
         }
 
         int level = size - 1;
@@ -431,7 +431,7 @@ public static class AlgorithmsBacktrack
         {
             for (int i = group.Count; i < baseArray.Length; ++i)
             {
-                group.Add(new BSGSCandidateElement(baseArray[i], new List<Permutation>(), degree));
+                group.Add(new BSGSCandidateElement(baseArray[i], [], degree));
             }
         }
     }

@@ -42,7 +42,7 @@ public sealed class NameDescriptorForTensorFieldTests
 
         // Assert
         mapping.Length.ShouldBe(3);
-        mapping[0].ShouldBe(new[] { 0, 1 });
+        mapping[0].ShouldBe([0, 1]);
         mapping[1].ShouldBeEmpty();
         mapping[2].ShouldBeEmpty();
     }
@@ -64,12 +64,12 @@ public sealed class NameDescriptorForTensorFieldTests
 
         // Assert
         mapping.Length.ShouldBe(2);
-        mapping[0].ShouldBe(new[] { 99 });
-        mapping[1].ShouldBe(new[] { 1 });
+        mapping[0].ShouldBe([99]);
+        mapping[1].ShouldBe([1]);
 
         int[][] fresh = derivative.GetIndicesPartitionMapping();
-        fresh[0].ShouldBe(new[] { 0 });
-        fresh[1].ShouldBe(new[] { 1 });
+        fresh[0].ShouldBe([0]);
+        fresh[1].ShouldBe([1]);
     }
 
     private sealed class TestTensorFieldDescriptor : NameDescriptorForTensorField

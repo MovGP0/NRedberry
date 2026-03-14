@@ -12,7 +12,7 @@ public sealed class IndexConverterManagerTests
     public void ShouldGetSymbolFromMatchingConverter()
     {
         var converter = new TestConverter(2, "x");
-        IndexConverterManager manager = new(new IIndexSymbolConverter[] { converter });
+        IndexConverterManager manager = new([converter]);
         long code = ((long)converter.Type << 24) | 12;
 
         string symbol = manager.GetSymbol(code, OutputFormat.Redberry);
@@ -24,7 +24,7 @@ public sealed class IndexConverterManagerTests
     public void ShouldGetCodeFromMatchingConverter()
     {
         var converter = new TestConverter(3, "y");
-        IndexConverterManager manager = new(new IIndexSymbolConverter[] { converter });
+        IndexConverterManager manager = new([converter]);
 
         int code = manager.GetCode("y7");
 
@@ -37,14 +37,14 @@ public sealed class IndexConverterManagerTests
         var first = new TestConverter(1, "a");
         var second = new TestConverter(1, "b");
 
-        Should.Throw<ArgumentException>(() => new IndexConverterManager(new IIndexSymbolConverter[] { first, second }));
+        Should.Throw<ArgumentException>(() => new IndexConverterManager([first, second]));
     }
 
     [Fact(DisplayName = "Should throw when no converter applies")]
     public void ShouldThrowWhenNoConverterApplies()
     {
         var converter = new TestConverter(5, "z");
-        IndexConverterManager manager = new(new IIndexSymbolConverter[] { converter });
+        IndexConverterManager manager = new([converter]);
 
         Should.Throw<ArgumentException>(() => manager.GetCode("other1"));
     }
@@ -53,7 +53,7 @@ public sealed class IndexConverterManagerTests
     public void ShouldWrapIndexConverterExceptionInGetSymbol()
     {
         var converter = new ThrowingConverter(6);
-        IndexConverterManager manager = new(new IIndexSymbolConverter[] { converter });
+        IndexConverterManager manager = new([converter]);
         long code = ((long)converter.Type << 24) | 1;
 
         Should.Throw<ArgumentException>(() => manager.GetSymbol(code, OutputFormat.Redberry));

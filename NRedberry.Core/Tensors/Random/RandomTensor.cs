@@ -32,8 +32,8 @@ public sealed class RandomTensor
         : this(
             2,
             5,
-            new[] { 0, 0, 0, 0 },
-            new[] { 4, 4, 4, 4 },
+            [0, 0, 0, 0],
+            [4, 4, 4, 4],
             true,
             generateNewDescriptors)
     {

@@ -410,7 +410,7 @@ public class GreatestCommonDivisorModular<MOD>(bool simple) : GreatestCommonDivi
         SortedDictionary<ExpVector, BigInteger> accumulatedTerms = accumulated.Terms;
         SortedDictionary<ExpVector, BigInteger> liftedTerms = lifted.Terms;
 
-        HashSet<ExpVector> processed = new ();
+        HashSet<ExpVector> processed = [];
         foreach (KeyValuePair<ExpVector, BigInteger> term in liftedTerms)
         {
             ExpVector exponent = term.Key;

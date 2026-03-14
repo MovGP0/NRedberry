@@ -13,7 +13,7 @@ public sealed class ComplexBuilderTests
     {
         Type builderType = typeof(Complex).Assembly.GetType("NRedberry.Numbers.ComplexBuilder", throwOnError: true)!;
 
-        var exception = Assert.Throws<TargetInvocationException>(() => Activator.CreateInstance(builderType, new object?[] { null }));
+        var exception = Assert.Throws<TargetInvocationException>(() => Activator.CreateInstance(builderType, [null]));
         ArgumentNullException argumentNullException = Assert.IsType<ArgumentNullException>(exception.InnerException);
         Assert.Equal("complex", argumentNullException.ParamName);
     }

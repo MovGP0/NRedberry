@@ -40,7 +40,7 @@ public class FactorInteger<MOD> : FactorAbstract<BigInteger> where MOD : GcdRing
     {
         ArgumentNullException.ThrowIfNull(P);
 
-        List<GenPolynomial<BigInteger>> factors = new();
+        List<GenPolynomial<BigInteger>> factors = [];
         if (P.IsZero())
         {
             return factors;

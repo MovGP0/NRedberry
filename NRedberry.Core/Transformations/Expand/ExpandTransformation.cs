@@ -15,7 +15,7 @@ public sealed class ExpandTransformation : AbstractExpandTransformation
     {
     }
 
-    public ExpandTransformation(ITransformation[] transformations)
+    public ExpandTransformation(params ITransformation[] transformations)
         : base(transformations)
     {
     }
@@ -40,7 +40,7 @@ public sealed class ExpandTransformation : AbstractExpandTransformation
         return new ExpandTransformation(transformations).Transform(tensor);
     }
 
-    protected override Tensor ExpandProduct(Product product, ITransformation[] transformations)
+    protected override Tensor ExpandProduct(Product product, params ITransformation[] transformations)
     {
         return ExpandUtils.ExpandProductOfSums(product, transformations);
     }
