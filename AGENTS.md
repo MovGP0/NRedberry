@@ -380,6 +380,7 @@ public override int GetHashCode()
 - Build error note: `IdentityTransformation` has no singleton; instantiate with `new IdentityTransformation()` to avoid CS0117.
 - Build error note: `NRedberry.Physics.Tests` has no xUnit reference; avoid `[Fact]`/`using Xunit` there to prevent CS0246.
 - Build error note: Shouldly doesn't resolve `ShouldBe` on `byte` (CS1929); cast to `int` (e.g., `((int)converter.Type).ShouldBe(2)`).
+- Build error note: `SHU001` in `NRedberry.Physics.Tests` also flags custom helper names that start with `Assert` (for example, `AssertEquals` or `AssertTensorEquals`), not only direct `Assert.*` calls; rename test helpers to `Should...` or another neutral name when migrating to Shouldly.
 - Build error note: `NRedberry.Core.Tests` doesn't reference Shouldly (CS0246); use `Xunit.Assert` instead of Shouldly in that project.
 - Build error note: In `NRedberry.Core.Tests.Groups.Permutations` test files, `Permutations` can bind to the namespace segment instead of the static helper type (CS0234); use an alias like `using GroupPermutations = NRedberry.Groups.Permutations;`.
 - Build error note: In `NRedberry.Core.Tests.Groups` files, a test class name starting with `Permutations...` can shadow static `Permutations` calls and produce CS0234; prefer an alias (e.g., `using GroupPermutations = NRedberry.Groups.Permutations;`) for method invocations.

@@ -15,3 +15,10 @@ roslynator_blank_line_after_file_scoped_namespace_declaration = true
 roslynator_blank_line_between_switch_sections = include
 roslynator_blank_line_between_closing_brace_and_switch_section = true
 roslynator_empty_string_style = field
+
+[*.csproj]
+trim_trailing_whitespace = true
+insert_final_newline = true
+end_of_line = crlf
+indent_style = space
+indent_size = 2
