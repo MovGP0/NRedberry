@@ -8,7 +8,7 @@ namespace NRedberry.Solver.Frobenius;
 
 public static class FrobeniusNumber
 {
-    public static BigInteger Calculate(int[] array)
+    public static BigInteger Calculate(params int[] array)
     {
         ArgumentNullException.ThrowIfNull(array);
 
@@ -21,7 +21,7 @@ public static class FrobeniusNumber
         return Calculate(bigArray);
     }
 
-    public static BigInteger Calculate(long[] array)
+    public static BigInteger Calculate(params long[] array)
     {
         ArgumentNullException.ThrowIfNull(array);
 
@@ -34,7 +34,7 @@ public static class FrobeniusNumber
         return Calculate(bigArray);
     }
 
-    public static BigInteger Calculate(BigInteger[] array)
+    public static BigInteger Calculate(params BigInteger[] array)
     {
         ArgumentNullException.ThrowIfNull(array);
 
@@ -43,7 +43,7 @@ public static class FrobeniusNumber
             : CalculateFromIntegerArray(array);
     }
 
-    public static BigInteger CalculateFromBigIntegerArray(BigInteger[] array)
+    public static BigInteger CalculateFromBigIntegerArray(params BigInteger[] array)
     {
         ArgumentNullException.ThrowIfNull(array);
 
@@ -103,7 +103,7 @@ public static class FrobeniusNumber
         return max - array[0];
     }
 
-    private static BigInteger CalculateFromIntegerArray(BigInteger[] array)
+    private static BigInteger CalculateFromIntegerArray(params BigInteger[] array)
     {
         int array0 = IntValue(array[0]);
         var ns = new BigInteger[array0];

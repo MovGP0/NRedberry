@@ -122,6 +122,7 @@ public sealed class OneLoopCountertermsTest
         }
     }
 
+    [Fact]
     public void TestMin_1()
     {
         if (!NeedToTest(nameof(TestMin_1)))
@@ -158,6 +159,7 @@ public sealed class OneLoopCountertermsTest
         Console.WriteLine(fr);
     }
 
+    [Fact]
     public void TestMinimalSecondOrderOperator()
     {
         if (!NeedToTest(nameof(TestMinimalSecondOrderOperator)))
@@ -190,6 +192,7 @@ public sealed class OneLoopCountertermsTest
         Assert.Throws<NotImplementedException>(() => TestMinimalSecondOrderOperator());
     }
 
+    [Fact]
     public void TestMinimalSecondOrderOperatorBarvinskyVilkovisky()
     {
         if (!NeedToTest(nameof(TestMinimalSecondOrderOperatorBarvinskyVilkovisky)))
@@ -217,6 +220,7 @@ public sealed class OneLoopCountertermsTest
         AssertEquals(a, expected);
     }
 
+    [Fact]
     public void TestMinimalFourthOrderOperator()
     {
         if (!NeedToTest(nameof(TestMinimalFourthOrderOperator)))
@@ -246,6 +250,7 @@ public sealed class OneLoopCountertermsTest
         AssertEquals(a, expected);
     }
 
+    [Fact]
     public void TestVectorField0()
     {
         if (!NeedToTest(nameof(TestVectorField0)))
@@ -278,6 +283,7 @@ public sealed class OneLoopCountertermsTest
         AssertEquals(a, expected);
     }
 
+    [Fact]
     public void TestGravityGhosts0()
     {
         if (!NeedToTest(nameof(TestGravityGhosts0)))
@@ -310,6 +316,7 @@ public sealed class OneLoopCountertermsTest
         AssertEquals(ExpandTransformation.Expand(a), expected);
     }
 
+    [Fact]
     public void TestVectorField()
     {
         if (!NeedToTest(nameof(TestVectorField)))
@@ -356,6 +363,7 @@ public sealed class OneLoopCountertermsTest
         AssertEquals(expected, actual);
     }
 
+    [Fact]
     public void TestGravityGhosts()
     {
         if (!NeedToTest(nameof(TestGravityGhosts)))
@@ -392,6 +400,7 @@ public sealed class OneLoopCountertermsTest
         AssertEquals(FactorTransformation.Factor(a, false), expected);
     }
 
+    [Fact]
     public void TestSquaredVectorField()
     {
         if (!NeedToTest(nameof(TestSquaredVectorField)))
@@ -476,6 +485,7 @@ public sealed class OneLoopCountertermsTest
         AssertEquals(actual, expected);
     }
 
+    [Fact]
     public void TestLambdaGaugeGravity()
     {
         if (!NeedToTest(nameof(TestLambdaGaugeGravity)))
@@ -542,6 +552,7 @@ public sealed class OneLoopCountertermsTest
         //Tensor expected = TensorFactory.Parse("1/6*(4*la**2+4*la+7)*R_lm*R^lm+1/12*(4*la**2+7)*R**2");
     }
 
+    [Fact]
     public void TestSpin3Ghosts()
     {
         if (!NeedToTest(nameof(TestSpin3Ghosts)))
@@ -589,6 +600,7 @@ public sealed class OneLoopCountertermsTest
         AssertTrue(TensorUtils.Equals(a, expected));
     }
 
+    [Fact]
     public void TestNonMinimalGaugeGravity()
     {
         if (!NeedToTest(nameof(TestNonMinimalGaugeGravity)))
@@ -675,6 +687,7 @@ public sealed class OneLoopCountertermsTest
         //expected = c4.Transform(expected);
     }
 
+    [Fact]
     public void Reduce2redberryRR()
     {
         // Ignored in Java.
@@ -682,6 +695,7 @@ public sealed class OneLoopCountertermsTest
         Console.WriteLine(Reduce2Redberry(expression));
     }
 
+    [Fact]
     public void Reduce2redberryFF()
     {
         // Ignored in Java.

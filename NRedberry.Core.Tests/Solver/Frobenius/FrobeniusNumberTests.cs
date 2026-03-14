@@ -7,8 +7,7 @@ namespace NRedberry.Core.Tests.Solver.Frobenius;
 public sealed class FrobeniusNumberTests
 {
     public static TheoryData<int[], long> IntCases
-        =>
-        new()
+        => new()
         {
             { [112, 432, 123, 7], 731L },
             { [112, 432, 123, 7, 3], 11L },
@@ -22,41 +21,34 @@ public sealed class FrobeniusNumberTests
     public void ShouldComputeKnownValuesForIntInput(int[] values, long expected)
     {
         BigInteger result = FrobeniusNumber.Calculate(values);
-
         Assert.Equal(new BigInteger(expected), result);
     }
 
     [Fact]
     public void ShouldReturnMinusOneWhenNoFiniteResult()
     {
-        BigInteger result = FrobeniusNumber.Calculate([112, 432, 122, 8, 32]);
-
+        BigInteger result = FrobeniusNumber.Calculate(112, 432, 122, 8, 32);
         Assert.Equal(new BigInteger(-1), result);
     }
 
     [Fact]
     public void ShouldComputeValueForLongInput()
     {
-        BigInteger result = FrobeniusNumber.Calculate([112L, 432L, 123L, 7L]);
-
+        BigInteger result = FrobeniusNumber.Calculate(112L, 432L, 123L, 7L);
         Assert.Equal(new BigInteger(731), result);
     }
 
     [Fact]
     public void ShouldComputeValueForBigIntegerInput()
     {
-        BigInteger result = FrobeniusNumber.Calculate([new BigInteger(112), new BigInteger(432), new BigInteger(123), new BigInteger(7)
-        ]);
-
+        BigInteger result = FrobeniusNumber.Calculate(new BigInteger(112), new BigInteger(432), new BigInteger(123), new BigInteger(7));
         Assert.Equal(new BigInteger(731), result);
     }
 
     [Fact]
     public void ShouldComputeValueUsingBigIntegerSpecificAlgorithm()
     {
-        BigInteger result = FrobeniusNumber.CalculateFromBigIntegerArray([new BigInteger(112), new BigInteger(432), new BigInteger(123), new BigInteger(7)
-        ]);
-
+        BigInteger result = FrobeniusNumber.CalculateFromBigIntegerArray(new BigInteger(112), new BigInteger(432), new BigInteger(123), new BigInteger(7));
         Assert.Equal(new BigInteger(731), result);
     }
 

@@ -4,7 +4,7 @@ namespace NRedberry.Groups;
 
 public static partial class Permutations
 {
-    public static int InternalDegree(int[] permutation)
+    public static int InternalDegree(params int[] permutation)
     {
         int result = -1;
         foreach (int i in permutation)
@@ -15,7 +15,7 @@ public static partial class Permutations
         return result + 1;
     }
 
-    public static short InternalDegree(short[] permutation)
+    public static short InternalDegree(params short[] permutation)
     {
         short result = -1;
         foreach (short i in permutation)
@@ -27,7 +27,7 @@ public static partial class Permutations
         return (short)(result + 1);
     }
 
-    public static sbyte InternalDegree(sbyte[] permutation)
+    public static sbyte InternalDegree(params sbyte[] permutation)
     {
         sbyte result = -1;
         foreach (sbyte i in permutation)
