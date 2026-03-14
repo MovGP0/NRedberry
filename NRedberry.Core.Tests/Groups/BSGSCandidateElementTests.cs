@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -20,10 +21,10 @@ public sealed class BSGSCandidateElementTests
         BSGSCandidateElement element = new(0, stabilizers);
 
         // Assert
-        Assert.Equal(2, element.OrbitSize);
-        Assert.True(element.BelongsToOrbit(0));
-        Assert.True(element.BelongsToOrbit(1));
-        Assert.False(element.BelongsToOrbit(2));
+        element.OrbitSize.ShouldBe(2);
+        element.BelongsToOrbit(0).ShouldBeTrue();
+        element.BelongsToOrbit(1).ShouldBeTrue();
+        element.BelongsToOrbit(2).ShouldBeFalse();
     }
 
     [Fact(DisplayName = "Should expand orbit when adding stabilizer")]
@@ -41,8 +42,8 @@ public sealed class BSGSCandidateElementTests
         element.AddStabilizer(cycle);
 
         // Assert
-        Assert.Equal(4, element.OrbitSize);
-        Assert.True(element.BelongsToOrbit(2));
+        element.OrbitSize.ShouldBe(4);
+        element.BelongsToOrbit(2).ShouldBeTrue();
     }
 
     [Fact(DisplayName = "Should return stabilizers fixing base point")]
@@ -62,8 +63,8 @@ public sealed class BSGSCandidateElementTests
         List<Permutation> basePointStabilizers = element.GetStabilizersOfThisBasePoint();
 
         // Assert
-        Assert.Single(basePointStabilizers);
-        Assert.Same(identity, basePointStabilizers[0]);
+        basePointStabilizers.Count.ShouldBe(1);
+        basePointStabilizers[0].ShouldBeSameAs(identity);
     }
 
     [Fact(DisplayName = "Should clone independently from source element")]
@@ -82,9 +83,9 @@ public sealed class BSGSCandidateElementTests
         clone.AddStabilizer(cycle);
 
         // Assert
-        Assert.Equal(2, original.OrbitSize);
-        Assert.Equal(4, clone.OrbitSize);
-        Assert.False(original.BelongsToOrbit(2));
-        Assert.True(clone.BelongsToOrbit(2));
+        original.OrbitSize.ShouldBe(2);
+        clone.OrbitSize.ShouldBe(4);
+        original.BelongsToOrbit(2).ShouldBeFalse();
+        clone.BelongsToOrbit(2).ShouldBeTrue();
     }
 }

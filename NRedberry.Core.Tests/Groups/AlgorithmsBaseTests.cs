@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Groups;
@@ -10,9 +11,9 @@ public sealed class AlgorithmsBaseTests
     public void ShouldCreateTrivialStructuresAndValidateDegree()
     {
         // Act + Assert
-        Assert.Throws<ArgumentException>(() => AlgorithmsBase.CreateSymmetricGroupBSGS(0));
-        Assert.NotNull(AlgorithmsBase.TrivialBsgs);
-        Assert.Single(AlgorithmsBase.TrivialBsgs);
+        Should.Throw<ArgumentException>(() => AlgorithmsBase.CreateSymmetricGroupBSGS(0));
+        AlgorithmsBase.TrivialBsgs.ShouldNotBeNull();
+        AlgorithmsBase.TrivialBsgs.ShouldHaveSingleItem();
     }
 
     [Fact(DisplayName = "Should create raw BSGS candidate for identity generators")]
@@ -25,7 +26,7 @@ public sealed class AlgorithmsBaseTests
         var candidates = AlgorithmsBase.CreateRawBSGSCandidate(identity);
 
         // Assert
-        Assert.Empty(candidates);
+        candidates.ShouldBeEmpty();
     }
 
     [Fact(DisplayName = "Should validate membership for trivial group")]
@@ -38,7 +39,7 @@ public sealed class AlgorithmsBaseTests
         bool isMember = AlgorithmsBase.MembershipTest(AlgorithmsBase.TrivialBsgs, identity);
 
         // Assert
-        Assert.True(isMember);
+        isMember.ShouldBeTrue();
     }
 
     [Fact(DisplayName = "Should return base points as array")]
@@ -51,7 +52,7 @@ public sealed class AlgorithmsBaseTests
         int[] baseArray = AlgorithmsBase.GetBaseAsArray(bsgs);
 
         // Assert
-        Assert.Single(baseArray);
-        Assert.Equal(0, baseArray[0]);
+        baseArray.ShouldHaveSingleItem();
+        baseArray[0].ShouldBe(0);
     }
 }

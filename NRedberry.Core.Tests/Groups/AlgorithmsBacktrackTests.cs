@@ -1,6 +1,7 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Groups;
@@ -15,7 +16,7 @@ public sealed class AlgorithmsBacktrackTests
         var subgroup = new List<BSGSCandidateElement>();
 
         // Act + Assert
-        Assert.Throws<ArgumentException>(() => AlgorithmsBacktrack.SubgroupSearch(
+        Should.Throw<ArgumentException>(() => AlgorithmsBacktrack.SubgroupSearch(
             group,
             subgroup,
             IBacktrackSearchTestFunction.True,

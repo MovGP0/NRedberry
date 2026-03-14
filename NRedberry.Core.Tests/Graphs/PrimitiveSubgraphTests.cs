@@ -1,4 +1,5 @@
 using NRedberry.Graphs;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Graphs;
@@ -9,7 +10,7 @@ public sealed class PrimitiveSubgraphTests
     public void ShouldValidateConstructorArguments()
     {
         // Act + Assert
-        Assert.Throws<ArgumentNullException>(() => _ = new PrimitiveSubgraph(GraphType.Graph, null!));
+        Should.Throw<ArgumentNullException>(() => _ = new PrimitiveSubgraph(GraphType.Graph, null!));
     }
 
     [Fact(DisplayName = "Should expose partition and metadata")]
@@ -24,10 +25,10 @@ public sealed class PrimitiveSubgraphTests
         clone[0] = 99;
 
         // Assert
-        Assert.Equal(GraphType.Cycle, subgraph.GraphType);
-        Assert.Equal(3, subgraph.Size);
-        Assert.Equal(0, subgraph.GetPosition(1));
-        Assert.Equal(new[] { 2, 0, 1 }, subgraph.Partition);
-        Assert.Equal("Cycle: [2, 0, 1]", subgraph.ToString());
+        subgraph.GraphType.ShouldBe(GraphType.Cycle);
+        subgraph.Size.ShouldBe(3);
+        subgraph.GetPosition(1).ShouldBe(0);
+        subgraph.Partition.ShouldBe([2, 0, 1]);
+        subgraph.ToString().ShouldBe("Cycle: [2, 0, 1]");
     }
 }

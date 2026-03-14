@@ -1,4 +1,5 @@
 using NRedberry.Concurrent;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Concurrent;
@@ -14,8 +15,8 @@ public sealed class SingletonTests
         string? first = singleton.Take();
         string? second = singleton.Take();
 
-        Assert.Equal("value", first);
-        Assert.Null(second);
+        first.ShouldBe("value");
+        second.ShouldBeNull();
     }
 }
 #pragma warning restore CS0618

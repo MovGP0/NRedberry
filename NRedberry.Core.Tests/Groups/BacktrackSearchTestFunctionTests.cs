@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Groups;
@@ -14,8 +15,8 @@ public sealed class BacktrackSearchTestFunctionTests
         var second = IBacktrackSearchTestFunction.True;
 
         // Assert
-        Assert.Same(first, second);
-        Assert.IsType<TrueBacktrackSearchTestFunction>(first);
+        second.ShouldBeSameAs(first);
+        first.ShouldBeOfType<TrueBacktrackSearchTestFunction>();
     }
 
     [Theory(DisplayName = "Should always return true for default test function")]
@@ -33,6 +34,6 @@ public sealed class BacktrackSearchTestFunctionTests
         bool result = testFunction.Test(permutation, level);
 
         // Assert
-        Assert.True(result);
+        result.ShouldBeTrue();
     }
 }

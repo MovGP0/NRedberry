@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Numerics;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Entities.Tests;
@@ -11,14 +12,14 @@ public sealed class RationalTests
     {
         Rational value = new(1, 2);
 
-        Assert.Equal("5/6", value.Add(new Rational(1, 3)).ToString());
-        Assert.Equal("1/6", value.Subtract(new Rational(1, 3)).ToString());
-        Assert.Equal("1/6", value.Multiply(new Rational(1, 3)).ToString());
-        Assert.Equal("3/2", value.Divide(new Rational(1, 3)).ToString());
-        Assert.False(value.IsInteger());
-        Assert.False(value.IsNumeric());
-        Assert.True(Rational.One.IsOne());
-        Assert.True(Rational.MinusOne.IsMinusOne());
+        value.Add(new Rational(1, 3)).ToString().ShouldBe("5/6");
+        value.Subtract(new Rational(1, 3)).ToString().ShouldBe("1/6");
+        value.Multiply(new Rational(1, 3)).ToString().ShouldBe("1/6");
+        value.Divide(new Rational(1, 3)).ToString().ShouldBe("3/2");
+        value.IsInteger().ShouldBeFalse();
+        value.IsNumeric().ShouldBeFalse();
+        Rational.One.IsOne().ShouldBeTrue();
+        Rational.MinusOne.IsMinusOne().ShouldBeTrue();
     }
 
     [Fact]
@@ -26,12 +27,12 @@ public sealed class RationalTests
     {
         Rational value = new(2, 3);
 
-        Assert.Equal("4/9", value.Pow(2).ToString());
-        Assert.Equal("3/2", value.Pow(-1).ToString());
-        Assert.Equal("3/2", value.Reciprocal().ToString());
-        Assert.Equal(new BigInteger(0), value.BigIntValue());
-        Assert.Equal(0, value.IntValue());
-        Assert.Equal(0L, value.LongValue());
+        value.Pow(2).ToString().ShouldBe("4/9");
+        value.Pow(-1).ToString().ShouldBe("3/2");
+        value.Reciprocal().ToString().ShouldBe("3/2");
+        value.BigIntValue().ShouldBe(new BigInteger(0));
+        value.IntValue().ShouldBe(0);
+        value.LongValue().ShouldBe(0L);
     }
 }
 
@@ -43,9 +44,9 @@ public sealed class RationalExtensionsTests
         Rationals.Rational value = new(-2, 3);
         Rationals.Rational zero = new(0);
 
-        Assert.Equal(new Rationals.Rational(2, 3), value.Abs());
-        Assert.Equal(Rationals.Rational.Zero, zero.Abs());
-        Assert.True(Rationals.Rational.NaN.Abs().IsNaN);
+        value.Abs().ShouldBe(new Rationals.Rational(2, 3));
+        zero.Abs().ShouldBe(Rationals.Rational.Zero);
+        Rationals.Rational.NaN.Abs().IsNaN.ShouldBeTrue();
     }
 
     [Fact]
@@ -53,9 +54,9 @@ public sealed class RationalExtensionsTests
     {
         Rational value = new(-5, 7);
 
-        Assert.Equal(new Rational(5, 7), RationalExtensions.Abs(value));
-        Assert.Equal(Rational.Zero, RationalExtensions.Abs(Rational.Zero));
-        Assert.True(RationalExtensions.Abs(Rational.NaN).IsNaN());
+        RationalExtensions.Abs(value).ShouldBe(new Rational(5, 7));
+        RationalExtensions.Abs(Rational.Zero).ShouldBe(Rational.Zero);
+        RationalExtensions.Abs(Rational.NaN).IsNaN().ShouldBeTrue();
     }
 }
 
@@ -67,10 +68,10 @@ public sealed class RealTests
         Real numeric = new Numeric(3.5);
         Real rational = new Rational(7, 2);
 
-        Assert.Equal(3.5, numeric.ToDouble());
-        Assert.Equal(3.5, rational.ToDouble());
-        Assert.Same(RealField.Instance, numeric.Field);
-        Assert.Same(RealField.Instance, rational.Field);
+        numeric.ToDouble().ShouldBe(3.5);
+        rational.ToDouble().ShouldBe(3.5);
+        numeric.Field.ShouldBeSameAs(RealField.Instance);
+        rational.Field.ShouldBeSameAs(RealField.Instance);
     }
 }
 
@@ -81,10 +82,10 @@ public sealed class RealFieldTests
     {
         RealField field = RealField.Instance;
 
-        Assert.Same(field, RealField.Instance);
-        Assert.Equal(typeof(Real), field.GetRuntimeClass());
-        Assert.Same(Rational.Zero, field.Zero);
-        Assert.Same(Rational.One, field.One);
+        RealField.Instance.ShouldBeSameAs(field);
+        field.GetRuntimeClass().ShouldBe(typeof(Real));
+        field.Zero.ShouldBeSameAs(Rational.Zero);
+        field.One.ShouldBeSameAs(Rational.One);
     }
 }
 
@@ -98,10 +99,10 @@ public sealed class TypeDataTests
 
         states[0] = false;
 
-        Assert.Equal(2, data.From);
-        Assert.Equal(3, data.Length);
-        Assert.NotNull(data.States);
-        Assert.True(data.States![0]);
+        data.From.ShouldBe(2);
+        data.Length.ShouldBe(3);
+        data.States.ShouldNotBeNull();
+        data.States![0].ShouldBeTrue();
     }
 
     [Fact]
@@ -109,9 +110,9 @@ public sealed class TypeDataTests
     {
         TypeData data = new(4, 0, null);
 
-        Assert.Equal(4, data.From);
-        Assert.Equal(0, data.Length);
-        Assert.Null(data.States);
+        data.From.ShouldBe(4);
+        data.Length.ShouldBe(0);
+        data.States.ShouldBeNull();
     }
 }
 
@@ -124,10 +125,10 @@ public sealed class UpperLowerIndicesTests
         int[] lower = [3, 4];
         UpperLowerIndices indices = new(upper, lower);
 
-        Assert.Same(upper, indices.Upper);
-        Assert.Same(lower, indices.Lower);
-        Assert.Equal([1, 2], indices.Upper);
-        Assert.Equal([3, 4], indices.Lower);
+        indices.Upper.ShouldBeSameAs(upper);
+        indices.Lower.ShouldBeSameAs(lower);
+        indices.Upper.ShouldBe([1, 2]);
+        indices.Lower.ShouldBe([3, 4]);
     }
 }
 
@@ -141,10 +142,10 @@ public sealed class BitArrayEqualityComparerTests
         BitArray equal = new([true, false, true]);
         BitArray different = new([true, true, false]);
 
-        Assert.True(comparer.Equals(left, equal));
-        Assert.False(comparer.Equals(left, different));
-        Assert.False(comparer.Equals(left, null));
-        Assert.Equal(comparer.GetHashCode(left), comparer.GetHashCode(equal));
+        comparer.Equals(left, equal).ShouldBeTrue();
+        comparer.Equals(left, different).ShouldBeFalse();
+        comparer.Equals(left, null).ShouldBeFalse();
+        comparer.GetHashCode(left).ShouldBe(comparer.GetHashCode(equal));
     }
 }
 
@@ -155,10 +156,10 @@ public sealed class BitArrayExtensionsTests
     {
         BitArray bitArray = new([false, true, false, true]);
 
-        Assert.Equal(1, bitArray.NextTrailingBit(0));
-        Assert.Equal(3, bitArray.NextTrailingBit(2));
-        Assert.Equal(-1, bitArray.NextTrailingBit(4));
-        Assert.Empty(BitArrayExtensions.Empty);
+        bitArray.NextTrailingBit(0).ShouldBe(1);
+        bitArray.NextTrailingBit(2).ShouldBe(3);
+        bitArray.NextTrailingBit(4).ShouldBe(-1);
+        BitArrayExtensions.Empty.Count.ShouldBe(0);
     }
 }
 
@@ -169,11 +170,11 @@ public sealed class IIndexSymbolConverterTests
     {
         IIndexSymbolConverter converter = new StubIndexSymbolConverter();
 
-        Assert.True(converter.ApplicableToSymbol("a"));
-        Assert.Equal("s5:Redberry", converter.GetSymbol(5, OutputFormat.Redberry));
-        Assert.Equal(3, converter.GetCode("abc"));
-        Assert.Equal(32, converter.MaxNumberOfSymbols);
-        Assert.Equal((byte)7, converter.Type);
+        converter.ApplicableToSymbol("a").ShouldBeTrue();
+        converter.GetSymbol(5, OutputFormat.Redberry).ShouldBe("s5:Redberry");
+        converter.GetCode("abc").ShouldBe(3);
+        converter.MaxNumberOfSymbols.ShouldBe(32);
+        converter.Type.ShouldBe((byte)7);
     }
 
     private sealed class StubIndexSymbolConverter : IIndexSymbolConverter
@@ -195,18 +196,19 @@ public sealed class IndexTypeTests
     [Fact]
     public void ShouldExposeExpectedEnumMembersInDeclarationOrder()
     {
-        Assert.Equal(
-            [
-                IndexType.LatinLower,
-                IndexType.LatinUpper,
-                IndexType.GreekLower,
-                IndexType.GreekUpper,
-                IndexType.Matrix1,
-                IndexType.Matrix2,
-                IndexType.Matrix3,
-                IndexType.Matrix4,
-            ],
-            Enum.GetValues<IndexType>());
+        IndexType[] expected =
+        [
+            IndexType.LatinLower,
+            IndexType.LatinUpper,
+            IndexType.GreekLower,
+            IndexType.GreekUpper,
+            IndexType.Matrix1,
+            IndexType.Matrix2,
+            IndexType.Matrix3,
+            IndexType.Matrix4,
+        ];
+
+        Enum.GetValues<IndexType>().ShouldBe(expected);
     }
 }
 
@@ -217,13 +219,13 @@ public sealed class INumberTests
     {
         INumber number = new Numeric(3.5);
 
-        Assert.Equal(3, number.IntValue());
-        Assert.Equal(3L, number.LongValue());
-        Assert.Equal(3.5, number.DoubleValue());
-        Assert.Equal(3.5f, number.FloatValue());
-        Assert.False(number.IsInteger());
-        Assert.True(number.IsNumeric());
-        Assert.Equal(new BigInteger(3), number.BigIntValue());
+        number.IntValue().ShouldBe(3);
+        number.LongValue().ShouldBe(3L);
+        number.DoubleValue().ShouldBe(3.5);
+        number.FloatValue().ShouldBe(3.5f);
+        number.IsInteger().ShouldBeFalse();
+        number.IsNumeric().ShouldBeTrue();
+        number.BigIntValue().ShouldBe(new BigInteger(3));
     }
 
     [Fact]
@@ -231,11 +233,11 @@ public sealed class INumberTests
     {
         INumber<Real> number = new Numeric(2.0);
 
-        Assert.Equal("3", number.Add(1).ToString());
-        Assert.Equal("4", number.Multiply(2).ToString());
-        Assert.Equal("8", number.Pow(3).ToString());
-        Assert.Equal("2", number.GetNumericValue().ToString());
-        Assert.Same(RealField.Instance, number.Field);
+        number.Add(1).ToString().ShouldBe("3");
+        number.Multiply(2).ToString().ShouldBe("4");
+        number.Pow(3).ToString().ShouldBe("8");
+        number.GetNumericValue().ToString().ShouldBe("2");
+        number.Field.ShouldBeSameAs(RealField.Instance);
     }
 }
 
@@ -248,9 +250,9 @@ public sealed class NumericTests
         Numeric one = Numeric.FromNumber(new Rational(1));
         Numeric nan = (Numeric)Numeric.Zero.Divide(0.0);
 
-        Assert.Same(Numeric.Zero, zero);
-        Assert.Same(Numeric.One, one);
-        Assert.Same(Numeric.NaN, nan);
+        zero.ShouldBeSameAs(Numeric.Zero);
+        one.ShouldBeSameAs(Numeric.One);
+        nan.ShouldBeSameAs(Numeric.NaN);
     }
 
     [Fact]
@@ -258,13 +260,13 @@ public sealed class NumericTests
     {
         Numeric value = new(2.5);
 
-        Assert.Equal("3.5", value.Add(1).ToString());
-        Assert.Equal("5", value.Multiply(2).ToString());
-        Assert.Equal("1.25", value.Divide(2).ToString());
-        Assert.Equal("6.25", value.Pow(2).ToString());
-        Assert.True(new Numeric(2.5).Equals(value));
-        Assert.True(Numeric.One.IsOne());
-        Assert.True(Numeric.MinusOne.IsMinusOne());
-        Assert.True(Numeric.PositiveInfinity.IsInfinite());
+        value.Add(1).ToString().ShouldBe("3.5");
+        value.Multiply(2).ToString().ShouldBe("5");
+        value.Divide(2).ToString().ShouldBe("1.25");
+        value.Pow(2).ToString().ShouldBe("6.25");
+        new Numeric(2.5).Equals(value).ShouldBeTrue();
+        Numeric.One.IsOne().ShouldBeTrue();
+        Numeric.MinusOne.IsMinusOne().ShouldBeTrue();
+        Numeric.PositiveInfinity.IsInfinite().ShouldBeTrue();
     }
 }

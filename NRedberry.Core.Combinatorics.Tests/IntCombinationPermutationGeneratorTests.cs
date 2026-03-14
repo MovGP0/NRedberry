@@ -1,3 +1,4 @@
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Combinatorics.Tests;
@@ -16,16 +17,21 @@ public sealed class IntCombinationPermutationGeneratorTests
             visited.Add((int[])current.Clone());
         }
 
-        Assert.Equal(
-            [
-                [0, 1],
-                [1, 0],
-                [0, 2],
-                [2, 0],
-                [1, 2],
-                [2, 1],
-            ],
-            visited);
+        int[][] expected =
+        [
+            [0, 1],
+            [1, 0],
+            [0, 2],
+            [2, 0],
+            [1, 2],
+            [2, 1],
+        ];
+
+        visited.Count.ShouldBe(expected.Length);
+        for (int i = 0; i < expected.Length; i++)
+        {
+            visited[i].ShouldBe(expected[i]);
+        }
     }
 
     [Fact]
@@ -40,10 +46,9 @@ public sealed class IntCombinationPermutationGeneratorTests
         generator.Reset();
         int[]? resetFirst = generator.Take();
 
-        Assert.NotNull(resetFirst);
-
-        Assert.Same(reference, generator.GetReference());
-        Assert.Same(reference, first);
-        Assert.Equal([0, 1], resetFirst);
+        resetFirst.ShouldNotBeNull();
+        generator.GetReference().ShouldBeSameAs(reference);
+        first.ShouldBeSameAs(reference);
+        resetFirst.ShouldBe([0, 1]);
     }
 }

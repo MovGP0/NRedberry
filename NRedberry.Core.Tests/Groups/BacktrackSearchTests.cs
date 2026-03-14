@@ -1,4 +1,5 @@
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Groups;
@@ -9,7 +10,7 @@ public sealed class BacktrackSearchTests
     public void ShouldThrowForEmptyBsgs()
     {
         // Act + Assert
-        Assert.Throws<ArgumentException>(() => _ = new BacktrackSearch([]));
+        Should.Throw<ArgumentException>(() => _ = new BacktrackSearch([]));
     }
 
     [Fact(DisplayName = "Should enumerate group elements")]
@@ -27,6 +28,6 @@ public sealed class BacktrackSearchTests
         }
 
         // Assert
-        Assert.Equal(2, count);
+        count.ShouldBe(2);
     }
 }

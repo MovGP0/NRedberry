@@ -19,6 +19,11 @@ public class Symmetry : Permutation
     private int? _parity;
 
     public Symmetry(int[] permutation, bool sign)
+        : this(sign, permutation)
+    {
+    }
+
+    public Symmetry(bool sign, params int[] permutation)
     {
         if (!Combinatorics.TestPermutationCorrectness(permutation))
         {

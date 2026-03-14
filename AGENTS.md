@@ -142,6 +142,8 @@ and their ports `NRedberry.Core/Tensors/Tensor.cs`, `NRedberry.Core.Entities/Ind
   yield iterators (`yield return`) to match idiomatic enumeration (see `SimpleTensor.GetEnumerator()`).
 - Java array cloning (`array.clone()`) becomes `Array.Copy`, `Span`, or new array allocations with loops, depending on
   performance needs.
+- Prefer using `params` keyword for enumerable parameters (`IEnumerable<T>`, `Array<T>`, `List<T>`, etc.) in C# code,
+  when there is only one enumerable parameter.
 
 ## Formatting and Bracing Conventions
 
@@ -381,10 +383,25 @@ public override int GetHashCode()
 - Build error note: `NRedberry.Physics.Tests` has no xUnit reference; avoid `[Fact]`/`using Xunit` there to prevent CS0246.
 - Build error note: Shouldly doesn't resolve `ShouldBe` on `byte` (CS1929); cast to `int` (e.g., `((int)converter.Type).ShouldBe(2)`).
 - Build error note: `SHU001` in `NRedberry.Physics.Tests` also flags custom helper names that start with `Assert` (for example, `AssertEquals` or `AssertTensorEquals`), not only direct `Assert.*` calls; rename test helpers to `Should...` or another neutral name when migrating to Shouldly.
+- Build error note: Shouldly `string.ShouldContain(...)` does not accept the `StringComparison` overload used by some xUnit-to-Shouldly rewrites; for message checks, use the simple substring overload or a separate comparison/assertion instead of passing `StringComparison`.
+- Build error note: Roslynator RCS0053 can trigger after Shouldly rewrites that leave long argument lists on one line; reformat multi-argument assertions so each argument sits on its own properly indented line when the analyzer flags argument formatting.
 - Build error note: `NRedberry.Core.Tests` doesn't reference Shouldly (CS0246); use `Xunit.Assert` instead of Shouldly in that project.
 - Build error note: In `NRedberry.Core.Tests.Groups.Permutations` test files, `Permutations` can bind to the namespace segment instead of the static helper type (CS0234); use an alias like `using GroupPermutations = NRedberry.Groups.Permutations;`.
 - Build error note: In `NRedberry.Core.Tests.Groups` files, a test class name starting with `Permutations...` can shadow static `Permutations` calls and produce CS0234; prefer an alias (e.g., `using GroupPermutations = NRedberry.Groups.Permutations;`) for method invocations.
 - Build error note: Roslynator RCS0055 can fail test projects (e.g., `PermutationsNextZeroBitTests`) when binary chains in assertions are split inconsistently; keep each operator on its own aligned line or collapse short chains to one line.
+- Build error note: `PermutationOneLineByteTests.cs` can hit CS0234 when resolving `Permutations`; use `global::NRedberry.Groups.Permutations` (or the `NRedberry.Groups` using/alias) instead of `NRedberry.Core.Combinatorics.Permutations` in test code.
+- Build error note: CS9051 occurs when a file-local type is used in a non-file-local member signature (e.g., test helper parameter types); use internal helpers or a non-file-local signature type to avoid this compiler error.
+- Build error note: In `NRedberry.Core.Tests`, `Tensors.*` calls can resolve to the `NRedberry.Tensors` namespace (CS0234/CS1955); use `NRedberry.Tensors.Tensors` or an alias like `using TensorFactory = NRedberry.Tensors.Tensors;`.
+- Build error note: In `NRedberry.Core.Tests.Solver`, unqualified `Context.Get()` can resolve to the `NRedberry.Core.Tests.Context` namespace (CS0234); call `NRedberry.Contexts.Context.Get()` or alias the runtime context type explicitly.
+- Build error note: Roslynator RCS1049 flags boolean comparisons like `Assert.True(x is false)`; use direct assertions such as `Assert.False(x)` (or `Assert.True(x)`) to satisfy the analyzer.
+- Build error note: In test files, `Tensor` can resolve to the `NRedberry.Core.Tests.Tensor` namespace (CS0118); use an explicit alias such as `using TensorType = NRedberry.Tensors.Tensor;` for tensor type declarations.
+- Build error note: In nested test helpers under `NRedberry.Core.Tests.Tensors.Iterators`, unqualified `Tensor` in interface method signatures can also bind as a namespace (CS0118/CS0738); fully qualify `NRedberry.Tensors.Tensor` in `Payload<T>` and `IIndicator<Tensor>` implementations.
+- Build error note: In test files, `ITransformation` can resolve only from `NRedberry.Transformations.Symmetrization`; add that using when overriding transformation signatures to avoid CS0246/CS0534.
+- Build error note: `NRedberry.Tensors.Tensors.SimpleTensor` does not have a single-string overload; create simple tensor patterns by parsing (`Assert.IsType<SimpleTensor>(TensorFactory.Parse("x"))`) or by supplying explicit indices.
+- Build error note: Collection expressions can trigger CS0121 against overloads like `RenameDummy(Tensor, int[], int[])` vs `RenameDummy(Tensor, int[], HashSet<int>)`; use explicit `new int[] { ... }` arrays when selecting the `int[]` overload.
+- Build error note: Shouldly predicate helpers such as `ShouldContain(...)` can build expression trees; avoid collection expressions like `[0, 1]` inside those predicates because they trigger CS8640/CS9175. Use `Any(...)` with a regular lambda or move the expected value to a normal array variable first.
+- Build error note: Concurrent `dotnet build`/`dotnet test` runs against the same `NRedberry.Core.Tests` output path can hit CS2012/MSB3026 file-lock failures on `obj\Debug\net9.0\NRedberry.Core.Tests.dll`; serialize test/build commands for the same project instead of running them in parallel.
+- Build error note: comparer-aware Shouldly string helpers should use `System.StringComparison` directly; this avoids coupling to Shouldly-specific enums and keeps call sites aligned with standard .NET string APIs.
 
 ## Roslynator Diagnostics Reference
 
@@ -475,24 +492,3 @@ Some types and methods need to be replaced with .NET types:
 - NEVER stop before pushing - that leaves work stranded locally
 - NEVER say "ready to push when you are" - YOU must push
 - If push fails, resolve and retry until it succeeds
-
-- Build error note: `PermutationOneLineByteTests.cs` can hit CS0234 when resolving `Permutations`; use `global::NRedberry.Groups.Permutations` (or the `NRedberry.Groups` using/alias) instead of `NRedberry.Core.Combinatorics.Permutations` in test code.
-
-
-
-
-
-
-
-
-
-- Build error note: CS9051 occurs when a file-local type is used in a non-file-local member signature (e.g., test helper parameter types); use internal helpers or a non-file-local signature type to avoid this compiler error.
-- Build error note: In `NRedberry.Core.Tests`, `Tensors.*` calls can resolve to the `NRedberry.Tensors` namespace (CS0234/CS1955); use `NRedberry.Tensors.Tensors` or an alias like `using TensorFactory = NRedberry.Tensors.Tensors;`.
-- Build error note: In `NRedberry.Core.Tests.Solver`, unqualified `Context.Get()` can resolve to the `NRedberry.Core.Tests.Context` namespace (CS0234); call `NRedberry.Contexts.Context.Get()` or alias the runtime context type explicitly.
-- Build error note: Roslynator RCS1049 flags boolean comparisons like `Assert.True(x is false)`; use direct assertions such as `Assert.False(x)` (or `Assert.True(x)`) to satisfy the analyzer.
-- Build error note: In test files, `Tensor` can resolve to the `NRedberry.Core.Tests.Tensor` namespace (CS0118); use an explicit alias such as `using TensorType = NRedberry.Tensors.Tensor;` for tensor type declarations.
-- Build error note: In nested test helpers under `NRedberry.Core.Tests.Tensors.Iterators`, unqualified `Tensor` in interface method signatures can also bind as a namespace (CS0118/CS0738); fully qualify `NRedberry.Tensors.Tensor` in `Payload<T>` and `IIndicator<Tensor>` implementations.
-- Build error note: In test files, `ITransformation` can resolve only from `NRedberry.Transformations.Symmetrization`; add that using when overriding transformation signatures to avoid CS0246/CS0534.
-- Build error note: `NRedberry.Tensors.Tensors.SimpleTensor` does not have a single-string overload; create simple tensor patterns by parsing (`Assert.IsType<SimpleTensor>(TensorFactory.Parse("x"))`) or by supplying explicit indices.
-- Build error note: Collection expressions can trigger CS0121 against overloads like `RenameDummy(Tensor, int[], int[])` vs `RenameDummy(Tensor, int[], HashSet<int>)`; use explicit `new int[] { ... }` arrays when selecting the `int[]` overload.
-- Build error note: Concurrent `dotnet build`/`dotnet test` runs against the same `NRedberry.Core.Tests` output path can hit CS2012/MSB3026 file-lock failures on `obj\Debug\net9.0\NRedberry.Core.Tests.dll`; serialize test/build commands for the same project instead of running them in parallel.

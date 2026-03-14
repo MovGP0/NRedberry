@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NRedberry.Concurrent;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Concurrent;
@@ -13,11 +14,11 @@ public sealed class PortEnumeratorTests
         IOutputPortUnsafe<string> port = new TestOutputPortUnsafe(["a", "b"]);
         using PortEnumerator<string> enumerator = new(port);
 
-        Assert.True(enumerator.MoveNext());
-        Assert.Equal("a", enumerator.Current);
-        Assert.True(enumerator.MoveNext());
-        Assert.Equal("b", enumerator.Current);
-        Assert.False(enumerator.MoveNext());
+        enumerator.MoveNext().ShouldBeTrue();
+        enumerator.Current.ShouldBe("a");
+        enumerator.MoveNext().ShouldBeTrue();
+        enumerator.Current.ShouldBe("b");
+        enumerator.MoveNext().ShouldBeFalse();
     }
 
     [Fact]
@@ -26,7 +27,7 @@ public sealed class PortEnumeratorTests
         IOutputPortUnsafe<string> port = new TestOutputPortUnsafe([]);
         using PortEnumerator<string> enumerator = new(port);
 
-        Assert.Throws<NotSupportedException>(() => enumerator.Reset());
+        Should.Throw<NotSupportedException>(() => enumerator.Reset());
     }
 
     private sealed class TestOutputPortUnsafe(IEnumerable<string> values) : IOutputPortUnsafe<string>

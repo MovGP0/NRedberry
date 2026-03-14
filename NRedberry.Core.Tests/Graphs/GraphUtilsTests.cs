@@ -1,4 +1,5 @@
 using NRedberry.Graphs;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Graphs;
@@ -15,7 +16,7 @@ public sealed class GraphUtilsTests
         int[] components = GraphUtils.CalculateConnectedComponents([], [], vertices);
 
         // Assert
-        Assert.Equal(new[] { 0, 1, 2, 3 }, components);
+        components.ShouldBe([0, 1, 2, 3]);
     }
 
     [Fact(DisplayName = "Should compute connected components for simple graph")]
@@ -30,10 +31,10 @@ public sealed class GraphUtilsTests
         int[] components = GraphUtils.CalculateConnectedComponents(from, to, vertices);
 
         // Assert
-        Assert.Equal(0, components[0]);
-        Assert.Equal(0, components[1]);
-        Assert.Equal(1, components[2]);
-        Assert.Equal(2, components[3]);
+        components[0].ShouldBe(0);
+        components[1].ShouldBe(0);
+        components[2].ShouldBe(1);
+        components[3].ShouldBe(2);
     }
 
     [Fact(DisplayName = "Should calculate component sizes")]
@@ -43,15 +44,15 @@ public sealed class GraphUtilsTests
         int[] components = [0, 0, 1, 2];
 
         // Act + Assert
-        Assert.Equal(2, GraphUtils.ComponentSize(0, components));
-        Assert.Equal(1, GraphUtils.ComponentSize(2, components));
+        GraphUtils.ComponentSize(0, components).ShouldBe(2);
+        GraphUtils.ComponentSize(2, components).ShouldBe(1);
     }
 
     [Fact(DisplayName = "Should throw for inconsistent arrays and vertices")]
     public void ShouldThrowForInconsistentArraysAndVertices()
     {
         // Act + Assert
-        Assert.Throws<ArgumentException>(() => GraphUtils.CalculateConnectedComponents([0], [1, 2], 3));
-        Assert.Throws<IndexOutOfRangeException>(() => GraphUtils.ComponentSize(5, [0, 1, 2]));
+        Should.Throw<ArgumentException>(() => GraphUtils.CalculateConnectedComponents([0], [1, 2], 3));
+        Should.Throw<IndexOutOfRangeException>(() => GraphUtils.ComponentSize(5, [0, 1, 2]));
     }
 }

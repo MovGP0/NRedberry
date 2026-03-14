@@ -1,4 +1,5 @@
 using System;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Exceptions.Tests;
@@ -13,10 +14,10 @@ public sealed class IndexConverterExceptionTests
         IndexConverterException withMessage = new("broken");
         IndexConverterException withInner = new("outer", inner);
 
-        Assert.Contains(nameof(IndexConverterException), withoutMessage.Message, StringComparison.Ordinal);
-        Assert.Equal("broken", withMessage.Message);
-        Assert.Equal("outer", withInner.Message);
-        Assert.Same(inner, withInner.InnerException);
+        withoutMessage.Message.ShouldContain(nameof(IndexConverterException));
+        withMessage.Message.ShouldBe("broken");
+        withInner.Message.ShouldBe("outer");
+        withInner.InnerException.ShouldBeSameAs(inner);
     }
 }
 
@@ -30,9 +31,9 @@ public sealed class InconsistentGeneratorsExceptionTests
         InconsistentGeneratorsException withMessage = new("broken");
         InconsistentGeneratorsException withInner = new("outer", inner);
 
-        Assert.Contains(nameof(InconsistentGeneratorsException), withoutMessage.Message, StringComparison.Ordinal);
-        Assert.Equal("broken", withMessage.Message);
-        Assert.Equal("outer", withInner.Message);
-        Assert.Same(inner, withInner.InnerException);
+        withoutMessage.Message.ShouldContain(nameof(InconsistentGeneratorsException));
+        withMessage.Message.ShouldBe("broken");
+        withInner.Message.ShouldBe("outer");
+        withInner.InnerException.ShouldBeSameAs(inner);
     }
 }

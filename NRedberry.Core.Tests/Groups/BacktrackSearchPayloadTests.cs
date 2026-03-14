@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Groups;
@@ -17,7 +18,7 @@ public sealed class BacktrackSearchPayloadTests
         payload.SetWordReference(word);
 
         // Assert
-        Assert.Equal(1, payload.WordLength);
+        payload.WordLength.ShouldBe(1);
     }
 
     [Fact(DisplayName = "Should delegate test function in default payload")]
@@ -31,8 +32,8 @@ public sealed class BacktrackSearchPayloadTests
         bool result = payload.Test(NRedberry.Groups.Permutations.GetIdentityPermutation(), 0);
 
         // Assert
-        Assert.True(result);
-        Assert.Equal(1, tester.Count);
+        result.ShouldBeTrue();
+        tester.Count.ShouldBe(1);
     }
 
     private sealed class CountingPayload : BacktrackSearchPayload

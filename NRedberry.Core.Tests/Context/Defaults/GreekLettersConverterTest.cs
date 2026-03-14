@@ -1,4 +1,5 @@
 using NRedberry.Contexts.Defaults;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Context.Defaults;
@@ -41,10 +42,10 @@ public sealed class GreekLettersConverterTest
 
         for (int i = 0; i < symbols.Length; ++i)
         {
-            Assert.True(converter.ApplicableToSymbol(symbols[i]));
-            Assert.Equal(i, converter.GetCode(symbols[i]));
-            Assert.Equal(symbols[i], converter.GetSymbol(i, OutputFormat.LaTeX));
-            Assert.Equal(utf[i], converter.GetSymbol(i, OutputFormat.UTF8));
+            converter.ApplicableToSymbol(symbols[i]).ShouldBeTrue();
+            converter.GetCode(symbols[i]).ShouldBe(i);
+            converter.GetSymbol(i, OutputFormat.LaTeX).ShouldBe(symbols[i]);
+            converter.GetSymbol(i, OutputFormat.UTF8).ShouldBe(utf[i]);
         }
     }
 
@@ -108,10 +109,10 @@ public sealed class GreekLettersConverterTest
 
         for (int i = 0; i < symbols.Length; ++i)
         {
-            Assert.True(converter.ApplicableToSymbol(symbols[i]));
-            Assert.Equal(i, converter.GetCode(symbols[i]));
-            Assert.Equal(symbols[i], converter.GetSymbol(i, OutputFormat.LaTeX));
-            Assert.Equal(utf[i], converter.GetSymbol(i, OutputFormat.UTF8));
+            converter.ApplicableToSymbol(symbols[i]).ShouldBeTrue();
+            converter.GetCode(symbols[i]).ShouldBe(i);
+            converter.GetSymbol(i, OutputFormat.LaTeX).ShouldBe(symbols[i]);
+            converter.GetSymbol(i, OutputFormat.UTF8).ShouldBe(utf[i]);
         }
     }
 }

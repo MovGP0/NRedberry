@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -20,9 +21,9 @@ public sealed class BSGSElementTests
         BSGSElement element = new(0, [identity], vector, orbit);
 
         // Assert
-        Assert.Equal(0, element.BasePoint);
-        Assert.Equal(1, element.OrbitSize);
-        Assert.Equal(3, element.InternalDegree);
+        element.BasePoint.ShouldBe(0);
+        element.OrbitSize.ShouldBe(1);
+        element.InternalDegree.ShouldBe(3);
     }
 
     [Fact(DisplayName = "Should throw for point outside orbit")]
@@ -35,7 +36,7 @@ public sealed class BSGSElementTests
         BSGSElement element = candidate.AsBSGSElement();
 
         // Act + Assert
-        Assert.Throws<ArgumentException>(() => element.GetInverseTransversalOf(10));
+        Should.Throw<ArgumentException>(() => element.GetInverseTransversalOf(10));
     }
 
     [Fact(DisplayName = "Should return self in AsBSGSElement")]
@@ -51,6 +52,6 @@ public sealed class BSGSElementTests
         BSGSElement converted = element.AsBSGSElement();
 
         // Assert
-        Assert.Same(element, converted);
+        converted.ShouldBeSameAs(element);
     }
 }

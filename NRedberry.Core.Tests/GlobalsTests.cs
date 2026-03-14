@@ -1,4 +1,5 @@
 using System.Diagnostics.Contracts;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests;
@@ -9,6 +10,6 @@ public sealed class GlobalsTests
     public void ShouldExposeContractType()
     {
         Contract.EndContractBlock();
-        Assert.NotNull(typeof(Contract));
+        typeof(Contract).ShouldNotBeNull();
     }
 }

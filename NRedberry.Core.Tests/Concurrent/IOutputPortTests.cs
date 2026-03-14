@@ -1,4 +1,5 @@
 using NRedberry.Concurrent;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Concurrent;
@@ -13,7 +14,7 @@ public sealed class IOutputPortTests
 
         string value = port.Take();
 
-        Assert.Equal("payload", value);
+        value.ShouldBe("payload");
     }
 
     private sealed class TestOutputPort(string value) : IOutputPort<string>

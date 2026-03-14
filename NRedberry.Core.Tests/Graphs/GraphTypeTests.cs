@@ -1,4 +1,5 @@
 using NRedberry.Graphs;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Graphs;
@@ -12,9 +13,9 @@ public sealed class GraphTypeTests
         GraphType[] values = Enum.GetValues<GraphType>();
 
         // Assert
-        Assert.Equal(3, values.Length);
-        Assert.Contains(GraphType.Cycle, values);
-        Assert.Contains(GraphType.Line, values);
-        Assert.Contains(GraphType.Graph, values);
+        values.Length.ShouldBe(3);
+        values.ShouldContain(GraphType.Cycle);
+        values.ShouldContain(GraphType.Line);
+        values.ShouldContain(GraphType.Graph);
     }
 }

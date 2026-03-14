@@ -1,3 +1,4 @@
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Combinatorics.Tests;
@@ -9,9 +10,9 @@ public sealed class CombinatorialContractsTests
     {
         IIntCombinatorialGenerator generator = new IntCombinationPermutationGenerator(3, 2);
 
-        Assert.Same(generator, generator.GetEnumerator());
-        Assert.True(generator.MoveNext());
-        Assert.Equal([0, 1], generator.Current);
+        generator.GetEnumerator().ShouldBeSameAs(generator);
+        generator.MoveNext().ShouldBeTrue();
+        generator.Current.ShouldBe([0, 1]);
     }
 
     [Fact]
@@ -24,16 +25,16 @@ public sealed class CombinatorialContractsTests
         port.Reset();
         int[]? resetFirst = port.Take();
 
-        Assert.NotNull(firstReference);
-        Assert.NotNull(secondReference);
+        firstReference.ShouldNotBeNull();
+        secondReference.ShouldNotBeNull();
 
         int[] first = (int[])firstReference.Clone();
-        Assert.NotNull(resetFirst);
+        resetFirst.ShouldNotBeNull();
 
-        Assert.Equal([0, 1], first);
-        Assert.Equal([0, 1], resetFirst);
-        Assert.Same(secondReference, port.GetReference());
-        Assert.Same(resetFirst, port.GetReference());
+        first.ShouldBe([0, 1]);
+        resetFirst.ShouldBe([0, 1]);
+        port.GetReference().ShouldBeSameAs(secondReference);
+        port.GetReference().ShouldBeSameAs(resetFirst);
     }
 }
 
@@ -47,9 +48,9 @@ public sealed class InconsistentGeneratorsExceptionTests
         InconsistentGeneratorsException withMessage = new("broken");
         InconsistentGeneratorsException withInner = new("outer", inner);
 
-        Assert.Contains(nameof(InconsistentGeneratorsException), withoutMessage.Message, StringComparison.Ordinal);
-        Assert.Equal("broken", withMessage.Message);
-        Assert.Same(inner, withInner.InnerException);
-        Assert.Equal("outer", withInner.Message);
+        withoutMessage.Message.ShouldContain(nameof(InconsistentGeneratorsException));
+        withMessage.Message.ShouldBe("broken");
+        withInner.InnerException.ShouldBeSameAs(inner);
+        withInner.Message.ShouldBe("outer");
     }
 }

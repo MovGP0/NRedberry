@@ -1,4 +1,5 @@
 using NRedberry.Indices;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Context;
@@ -16,6 +17,6 @@ public sealed class IndexConverterManagerTest
             IndexType.LatinUpper.GetSymbolConverter(),
         ];
 
-        Assert.Throws<ArgumentException>(() => new NRedberry.Contexts.IndexConverterManager(converters));
+        Should.Throw<ArgumentException>(() => new NRedberry.Contexts.IndexConverterManager(converters));
     }
 }

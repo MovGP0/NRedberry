@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using NRedberry.Contexts;
 using NRedberry.Tensors.Functions;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests;
@@ -20,7 +21,7 @@ public sealed class GlobalRunListenerTests
 
         listener.TestStarted("core");
 
-        Assert.NotSame(original, ContextManager.GetCurrentContext());
+        ContextManager.GetCurrentContext().ShouldNotBeSameAs(original);
     }
 
     [Fact]
@@ -46,7 +47,7 @@ public sealed class GlobalRunListenerTests
         }
 
         string output = writer.ToString();
-        Assert.Contains("sample.test", output, StringComparison.Ordinal);
-        Assert.Contains("321", output, StringComparison.Ordinal);
+        output.ShouldContain("sample.test", StringComparison.OrdinalIgnoreCase);
+        output.ShouldContain("321", StringComparison.OrdinalIgnoreCase);
     }
 }

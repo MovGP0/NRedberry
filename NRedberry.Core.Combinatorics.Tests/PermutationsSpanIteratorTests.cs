@@ -1,3 +1,4 @@
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Combinatorics.Tests;
@@ -9,9 +10,9 @@ public sealed class PermutationsSpanIteratorTests
     {
         PermutationsSpanIterator<Symmetry> iterator = new([new Symmetry([1, 0], false)]);
 
-        Assert.True(iterator.MoveNext());
-        Assert.Equal([0, 1], iterator.Current.OneLine());
-        Assert.False(iterator.MoveNext());
+        iterator.MoveNext().ShouldBeTrue();
+        iterator.Current.OneLine().ShouldBe([0, 1]);
+        iterator.MoveNext().ShouldBeFalse();
     }
 
     [Fact]
@@ -19,6 +20,6 @@ public sealed class PermutationsSpanIteratorTests
     {
         PermutationsSpanIterator<Symmetry> iterator = new([new Symmetry([1, 0], false)]);
 
-        Assert.Throws<NotSupportedException>(() => iterator.Reset());
+        Should.Throw<NotSupportedException>(() => iterator.Reset());
     }
 }

@@ -1,6 +1,7 @@
 using NRedberry.Graphs;
 using NRedberry.Indices;
 using NRedberry.Tensors;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Graphs;
@@ -23,10 +24,10 @@ public sealed class PrimitiveSubgraphPartitionTests
         PrimitiveSubgraph[] partition = PrimitiveSubgraphPartition.CalculatePartition(product, IndexType.LatinLower);
 
         // Assert
-        Assert.Single(partition);
-        Assert.Equal(GraphType.Line, partition[0].GraphType);
-        Assert.Contains(0, partition[0].Partition);
-        Assert.Contains(1, partition[0].Partition);
-        Assert.Equal(2, partition[0].Partition.Length);
+        partition.ShouldHaveSingleItem();
+        partition[0].GraphType.ShouldBe(GraphType.Line);
+        partition[0].Partition.ShouldContain(0);
+        partition[0].Partition.ShouldContain(1);
+        partition[0].Partition.Length.ShouldBe(2);
     }
 }

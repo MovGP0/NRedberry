@@ -1,4 +1,5 @@
 using NRedberry.Core.Combinatorics.Symmetries;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Combinatorics.Tests;
@@ -11,28 +12,28 @@ public sealed class IntPriorityPermutationsGeneratorTests
         IntPriorityPermutationsGenerator generator = new(2);
 
         int[]? firstReference = generator.Take();
-        Assert.NotNull(firstReference);
+        firstReference.ShouldNotBeNull();
         int[] first = (int[])firstReference.Clone();
         generator.Nice();
         int[]? secondReference = generator.Take();
-        Assert.NotNull(secondReference);
+        secondReference.ShouldNotBeNull();
         int[] second = (int[])secondReference.Clone();
         generator.Nice();
 
         generator.Reset();
         int[]? replayFirstReference = generator.Take();
-        Assert.NotNull(replayFirstReference);
+        replayFirstReference.ShouldNotBeNull();
         int[] replayFirst = (int[])replayFirstReference.Clone();
         int[]? replaySecondReference = generator.Take();
-        Assert.NotNull(replaySecondReference);
+        replaySecondReference.ShouldNotBeNull();
         int[] replaySecond = (int[])replaySecondReference.Clone();
         int[]? exhausted = generator.Take();
 
-        Assert.Equal([0, 1], first);
-        Assert.Equal([1, 0], second);
-        Assert.Equal([0, 1], replayFirst);
-        Assert.Equal([1, 0], replaySecond);
-        Assert.Null(exhausted);
-        Assert.Equal([1, 0], generator.GetReference());
+        first.ShouldBe([0, 1]);
+        second.ShouldBe([1, 0]);
+        replayFirst.ShouldBe([0, 1]);
+        replaySecond.ShouldBe([1, 0]);
+        exhausted.ShouldBeNull();
+        generator.GetReference().ShouldBe([1, 0]);
     }
 }
