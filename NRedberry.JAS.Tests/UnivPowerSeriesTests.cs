@@ -50,20 +50,13 @@ public sealed class UnivPowerSeriesTests
     }
 }
 
-file sealed class ArrayCoefficients : Coefficients<BigRational>
+file sealed class ArrayCoefficients(BigRational[] values) : Coefficients<BigRational>
 {
-    private readonly BigRational[] _values;
-
-    public ArrayCoefficients(BigRational[] values)
-    {
-        _values = values;
-    }
-
     protected override BigRational Generate(int index)
     {
-        if (index < _values.Length)
+        if (index < values.Length)
         {
-            return _values[index];
+            return values[index];
         }
 
         return BigRational.Zero;

@@ -188,14 +188,9 @@ public class SimpleIndicesAbstractTests
         }
     }
 
-    private sealed class DelegateIndexMapping : IIndexMapping
+    private sealed class DelegateIndexMapping(Func<int, int> map) : IIndexMapping
     {
-        private readonly Func<int, int> _map;
-
-        public DelegateIndexMapping(Func<int, int> map)
-        {
-            _map = map ?? throw new ArgumentNullException(nameof(map));
-        }
+        private readonly Func<int, int> _map = map ?? throw new ArgumentNullException(nameof(map));
 
         public int Map(int from)
         {

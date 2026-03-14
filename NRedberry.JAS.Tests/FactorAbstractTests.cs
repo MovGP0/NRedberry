@@ -54,13 +54,9 @@ public sealed class FactorAbstractTests
     }
 }
 
-file sealed class StubFactorAbstract : FactorAbstract<BigRational>
+file sealed class StubFactorAbstract(RingFactory<BigRational> coefficientFactory)
+    : FactorAbstract<BigRational>(coefficientFactory)
 {
-    public StubFactorAbstract(RingFactory<BigRational> coefficientFactory)
-        : base(coefficientFactory)
-    {
-    }
-
     public override List<GenPolynomial<BigRational>> BaseFactorsSquarefree(GenPolynomial<BigRational> polynomial)
     {
         ArgumentNullException.ThrowIfNull(polynomial);

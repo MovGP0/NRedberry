@@ -181,41 +181,25 @@ internal interface IIndicesInsertionTransformer
     void Apply(IndexMapper indexMapper, IGWrapper generator, int[] upper, int[] lower);
 }
 
-internal sealed class IndexMapper : IIndexMapping
+internal sealed class IndexMapper(int[] from, int[] to) : IIndexMapping
 {
-    private readonly int[] _from;
-    private readonly int[] _to;
-
-    public IndexMapper(int[] from, int[] to)
+    public int Map(int from1)
     {
-        _from = from;
-        _to = to;
-    }
-
-    public int Map(int from)
-    {
-        int position = Array.BinarySearch(_from, IndicesUtils.GetNameWithType(from));
+        int position = Array.BinarySearch(from, IndicesUtils.GetNameWithType(from1));
         if (position < 0)
         {
-            return from;
+            return from1;
         }
 
-        return IndicesUtils.GetRawStateInt(from) ^ _to[position];
+        return IndicesUtils.GetRawStateInt(from1) ^ to[position];
     }
 }
 
-internal sealed class SimpleTransformer : IIndicesInsertionTransformer
+internal sealed class SimpleTransformer(ParseTokenSimpleTensor node) : IIndicesInsertionTransformer
 {
-    private readonly ParseTokenSimpleTensor _node;
-
-    public SimpleTransformer(ParseTokenSimpleTensor node)
-    {
-        _node = node;
-    }
-
     public void Apply(IndexMapper indexMapper, IGWrapper generator, int[] upper, int[] lower)
     {
-        SimpleIndices oldIndices = _node.Indices;
+        SimpleIndices oldIndices = node.Indices;
         int[] newIndices = new int[oldIndices.Size() + 2 * upper.Length];
         int i;
         for (i = 0; i < oldIndices.Size(); ++i)
@@ -230,29 +214,19 @@ internal sealed class SimpleTransformer : IIndicesInsertionTransformer
             newIndices[i + oldIndices.Size()] |= IndicesUtils.UpperRawStateInt;
         }
 
-        _node.Indices = IndicesFactory.CreateSimple(null, newIndices);
+        node.Indices = IndicesFactory.CreateSimple(null, newIndices);
     }
 }
 
-internal abstract class MultiTransformer : IIndicesInsertionTransformer
+internal abstract class MultiTransformer(IIndicesInsertionTransformer[] transformers) : IIndicesInsertionTransformer
 {
-    protected readonly IIndicesInsertionTransformer[] Transformers;
-
-    protected MultiTransformer(IIndicesInsertionTransformer[] transformers)
-    {
-        Transformers = transformers;
-    }
+    protected readonly IIndicesInsertionTransformer[] Transformers = transformers;
 
     public abstract void Apply(IndexMapper indexMapper, IGWrapper generator, int[] upper, int[] lower);
 }
 
-internal sealed class SumTransformer : MultiTransformer
+internal sealed class SumTransformer(IIndicesInsertionTransformer[] transformers) : MultiTransformer(transformers)
 {
-    public SumTransformer(IIndicesInsertionTransformer[] transformers)
-        : base(transformers)
-    {
-    }
-
     public override void Apply(IndexMapper indexMapper, IGWrapper generator, int[] upper, int[] lower)
     {
         IGWrapper? generatorTemp = null;
@@ -278,13 +252,8 @@ internal sealed class SumTransformer : MultiTransformer
     }
 }
 
-internal sealed class ProductTransformer : MultiTransformer
+internal sealed class ProductTransformer(IIndicesInsertionTransformer[] transformers) : MultiTransformer(transformers)
 {
-    public ProductTransformer(IIndicesInsertionTransformer[] transformers)
-        : base(transformers)
-    {
-    }
-
     public override void Apply(IndexMapper indexMapper, IGWrapper generator, int[] upper, int[] lower)
     {
         int[] tempUpper = (int[])upper.Clone();

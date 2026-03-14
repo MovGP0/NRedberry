@@ -1024,16 +1024,10 @@ public sealed class ApplyIndexMapping
         return i < 0 ? ~i : i;
     }
 
-    private sealed record class MaxType
+    private sealed record class MaxType(int Count, int Pointer)
     {
-        public MaxType(int count, int pointer)
-        {
-            Count = count;
-            Pointer = pointer;
-        }
-
-        public int Count { get; set; }
-        public int Pointer { get; set; }
+        public int Count { get; set; } = Count;
+        public int Pointer { get; set; } = Pointer;
     }
 
     private sealed record class MasterDummiesContainer

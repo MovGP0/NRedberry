@@ -29,14 +29,9 @@ public sealed class PortEnumeratorTests
         Assert.Throws<NotSupportedException>(() => enumerator.Reset());
     }
 
-    private sealed class TestOutputPortUnsafe : IOutputPortUnsafe<string>
+    private sealed class TestOutputPortUnsafe(IEnumerable<string> values) : IOutputPortUnsafe<string>
     {
-        private readonly Queue<string> values;
-
-        public TestOutputPortUnsafe(IEnumerable<string> values)
-        {
-            this.values = new Queue<string>(values);
-        }
+        private readonly Queue<string> values = new(values);
 
         public string? Take()
         {

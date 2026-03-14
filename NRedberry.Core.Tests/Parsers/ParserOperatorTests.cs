@@ -105,15 +105,13 @@ public sealed class ParserOperatorTests
     }
 }
 
-internal sealed class TestParserOperator : ParserOperator
+internal sealed class TestParserOperator(
+    char operatorSymbol,
+    char operatorInverseSymbol,
+    Func<char[], int, bool>? testOperator = null)
+    : ParserOperator(operatorSymbol, operatorInverseSymbol)
 {
-    private readonly Func<char[], int, bool> _testOperator;
-
-    public TestParserOperator(char operatorSymbol, char operatorInverseSymbol, Func<char[], int, bool>? testOperator = null)
-        : base(operatorSymbol, operatorInverseSymbol)
-    {
-        _testOperator = testOperator ?? ((_, _) => true);
-    }
+    private readonly Func<char[], int, bool> _testOperator = testOperator ?? ((_, _) => true);
 
     public override int Priority => 100;
 
@@ -142,20 +140,13 @@ internal sealed class TestParserOperator : ParserOperator
     }
 }
 
-internal sealed class LeafTokenParser : ITokenParser
+internal sealed class LeafTokenParser(List<string> parsedExpressions) : ITokenParser
 {
-    private readonly List<string> _parsedExpressions;
-
-    public LeafTokenParser(List<string> parsedExpressions)
-    {
-        _parsedExpressions = parsedExpressions;
-    }
-
     public int Priority => 0;
 
     public ParseToken ParseToken(string expression, RedberryParser parser)
     {
-        _parsedExpressions.Add(expression);
+        parsedExpressions.Add(expression);
         return new ParseToken(TokenType.Number);
     }
 }

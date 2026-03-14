@@ -32,15 +32,9 @@ public sealed class SquarefreeFieldCharPTests
     }
 }
 
-file sealed class TestSquarefreeFieldCharP : SquarefreeFieldCharP<ModLong>
+file sealed class TestSquarefreeFieldCharP(ModLongRing fac) : SquarefreeFieldCharP<ModLong>(fac)
 {
-    private readonly SquarefreeFiniteFieldCharP<ModLong> _delegate;
-
-    public TestSquarefreeFieldCharP(ModLongRing fac)
-        : base(fac)
-    {
-        _delegate = new SquarefreeFiniteFieldCharP<ModLong>(fac);
-    }
+    private readonly SquarefreeFiniteFieldCharP<ModLong> _delegate = new(fac);
 
     public override GenPolynomial<ModLong>? BaseSquarefreePRoot(GenPolynomial<ModLong> polynomial)
     {

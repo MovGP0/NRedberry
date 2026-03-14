@@ -6,16 +6,11 @@ namespace NRedberry.Transformations.Powerexpand;
 /// <summary>
 /// Skeleton port of cc.redberry.core.transformations.powerexpand.PowerUnfoldTransformation.
 /// </summary>
-public sealed class PowerUnfoldTransformation : ITransformation, TransformationToStringAble
+public sealed class PowerUnfoldTransformation(SimpleTensor[] variables) : ITransformation, TransformationToStringAble
 {
     public static PowerUnfoldTransformation Instance { get; } = new([]);
 
-    private readonly SimpleTensor[] variables;
-
-    public PowerUnfoldTransformation(SimpleTensor[] variables)
-    {
-        this.variables = variables ?? throw new ArgumentNullException(nameof(variables));
-    }
+    private readonly SimpleTensor[] variables = variables ?? throw new ArgumentNullException(nameof(variables));
 
     public Tensor Transform(Tensor tensor)
     {

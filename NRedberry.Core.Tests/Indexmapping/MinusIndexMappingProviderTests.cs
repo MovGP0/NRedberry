@@ -82,14 +82,10 @@ public sealed class MinusIndexMappingProviderTests
 }
 #pragma warning restore CS0618
 
-file sealed class MinusIndexMappingProviderTestsOutputPort : IOutputPort<IIndexMappingBuffer>
+file sealed class MinusIndexMappingProviderTestsOutputPort(IEnumerable<IIndexMappingBuffer?> values)
+    : IOutputPort<IIndexMappingBuffer>
 {
-    private readonly Queue<IIndexMappingBuffer?> _values;
-
-    public MinusIndexMappingProviderTestsOutputPort(IEnumerable<IIndexMappingBuffer?> values)
-    {
-        _values = new Queue<IIndexMappingBuffer?>(values);
-    }
+    private readonly Queue<IIndexMappingBuffer?> _values = new(values);
 
     public IIndexMappingBuffer Take()
     {

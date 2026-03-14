@@ -433,13 +433,8 @@ public sealed class CollectTransformation : ITransformation
         public abstract int Map(int from);
     }
 
-    private sealed class StateSensitiveMapping : DirectIndexMapping
+    private sealed class StateSensitiveMapping(int[] from, int[] to) : DirectIndexMapping(from, to)
     {
-        public StateSensitiveMapping(int[] from, int[] to)
-            : base(from, to)
-        {
-        }
-
         public override int Map(int from)
         {
             int index = Array.BinarySearch(From, from);

@@ -226,14 +226,8 @@ public sealed class TogetherTransformation : ITransformation, TransformationToSt
     }
 }
 
-internal sealed class TogetherSplitStruct
+internal sealed class TogetherSplitStruct(Dictionary<Tensor, Complex> denominators, Tensor numerator)
 {
-    public Dictionary<Tensor, Complex> Denominators { get; }
-    public Tensor Numerator { get; }
-
-    public TogetherSplitStruct(Dictionary<Tensor, Complex> denominators, Tensor numerator)
-    {
-        Denominators = denominators;
-        Numerator = numerator;
-    }
+    public Dictionary<Tensor, Complex> Denominators { get; } = denominators;
+    public Tensor Numerator { get; } = numerator;
 }

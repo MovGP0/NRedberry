@@ -46,11 +46,6 @@ public sealed class TreeIteratorAbstractTests
         return visited;
     }
 
-    private sealed class TestTreeIterator : TreeIteratorAbstract
-    {
-        public TestTreeIterator(NRedberry.Tensors.Tensor tensor, TraverseState state)
-            : base(tensor, state)
-        {
-        }
-    }
+    private sealed class TestTreeIterator(NRedberry.Tensors.Tensor tensor, TraverseState state)
+        : TreeIteratorAbstract(tensor, state);
 }

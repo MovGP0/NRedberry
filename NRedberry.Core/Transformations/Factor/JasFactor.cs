@@ -323,19 +323,13 @@ public sealed class JasFactor : ITransformation
     }
 }
 
-internal sealed class JasVar : IComparable<JasVar>
+internal sealed class JasVar(SimpleTensor simpleTensor) : IComparable<JasVar>
 {
-    public int Name { get; }
+    public int Name { get; } = simpleTensor.Name;
     public string PolyName { get; set; } = string.Empty;
     public int Position { get; set; }
     public long MaxPower { get; set; }
-    public SimpleTensor SimpleTensor { get; }
-
-    public JasVar(SimpleTensor simpleTensor)
-    {
-        SimpleTensor = simpleTensor;
-        Name = simpleTensor.Name;
-    }
+    public SimpleTensor SimpleTensor { get; } = simpleTensor;
 
     public int CompareTo(JasVar? other)
     {

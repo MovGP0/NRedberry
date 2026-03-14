@@ -55,13 +55,8 @@ public sealed class NumberParser<T>
     }
 }
 
-internal sealed class ComplexAddSubtractOperatorToken : OperatorToken<Complex>
+internal sealed class ComplexAddSubtractOperatorToken() : OperatorToken<Complex>('+', '-')
 {
-    public ComplexAddSubtractOperatorToken()
-        : base('+', '-')
-    {
-    }
-
     protected override Complex Neutral()
     {
         return Complex.Zero;
@@ -78,13 +73,8 @@ internal sealed class ComplexAddSubtractOperatorToken : OperatorToken<Complex>
     }
 }
 
-internal sealed class ComplexMultiplyDivideOperatorToken : OperatorToken<Complex>
+internal sealed class ComplexMultiplyDivideOperatorToken() : OperatorToken<Complex>('*', '/')
 {
-    public ComplexMultiplyDivideOperatorToken()
-        : base('*', '/')
-    {
-    }
-
     protected override Complex Neutral()
     {
         return Complex.One;
@@ -101,13 +91,8 @@ internal sealed class ComplexMultiplyDivideOperatorToken : OperatorToken<Complex
     }
 }
 
-internal sealed class RealAddSubtractOperatorToken : OperatorToken<Real>
+internal sealed class RealAddSubtractOperatorToken() : OperatorToken<Real>('+', '-')
 {
-    public RealAddSubtractOperatorToken()
-        : base('+', '-')
-    {
-    }
-
     protected override Real Neutral()
     {
         return Rational.Zero;
@@ -124,13 +109,8 @@ internal sealed class RealAddSubtractOperatorToken : OperatorToken<Real>
     }
 }
 
-internal sealed class RealMultiplyDivideOperatorToken : OperatorToken<Real>
+internal sealed class RealMultiplyDivideOperatorToken() : OperatorToken<Real>('*', '/')
 {
-    public RealMultiplyDivideOperatorToken()
-        : base('*', '/')
-    {
-    }
-
     protected override Real Neutral()
     {
         return Rational.One;

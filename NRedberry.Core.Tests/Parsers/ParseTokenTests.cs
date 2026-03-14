@@ -141,19 +141,13 @@ public sealed class ParseTokenTests
     }
 }
 
-internal sealed class ParseTokenLeaf : ParseToken
+internal sealed class ParseTokenLeaf(
+    string toStringValue,
+    string formattedValue,
+    NRedberry.Indices.Indices? indices = null)
+    : ParseToken(TokenType.Dummy)
 {
-    private readonly string _toStringValue;
-    private readonly string _formattedValue;
-    private readonly NRedberry.Indices.Indices _indices;
-
-    public ParseTokenLeaf(string toStringValue, string formattedValue, NRedberry.Indices.Indices? indices = null)
-        : base(TokenType.Dummy)
-    {
-        _toStringValue = toStringValue;
-        _formattedValue = formattedValue;
-        _indices = indices ?? IndicesFactory.EmptyIndices;
-    }
+    private readonly NRedberry.Indices.Indices _indices = indices ?? IndicesFactory.EmptyIndices;
 
     public override NRedberry.Indices.Indices GetIndices()
     {
@@ -162,11 +156,11 @@ internal sealed class ParseTokenLeaf : ParseToken
 
     public override string ToString()
     {
-        return _toStringValue;
+        return toStringValue;
     }
 
     public override string ToString(OutputFormat mode)
     {
-        return _formattedValue;
+        return formattedValue;
     }
 }

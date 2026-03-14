@@ -718,18 +718,12 @@ internal sealed class FactorTerm
     }
 }
 
-internal sealed class FactorTermNode
+internal sealed class FactorTermNode(Tensor tensor, BigInteger exponent)
 {
-    public Tensor Tensor { get; }
-    public BigInteger Exponent { get; set; }
+    public Tensor Tensor { get; } = tensor;
+    public BigInteger Exponent { get; set; } = exponent;
     public FactorBigInt? MinExponent { get; set; }
     public bool DiffSigns { get; set; }
-
-    public FactorTermNode(Tensor tensor, BigInteger exponent)
-    {
-        Tensor = tensor;
-        Exponent = exponent;
-    }
 
     public Tensor ToTensor()
     {

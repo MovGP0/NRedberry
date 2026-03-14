@@ -80,14 +80,9 @@ public sealed class NodeParserComparatorTests
     }
 }
 
-file sealed class StubTokenParser : ITokenParser
+file sealed class StubTokenParser(int priority) : ITokenParser
 {
-    public StubTokenParser(int priority)
-    {
-        Priority = priority;
-    }
-
-    public int Priority { get; }
+    public int Priority { get; } = priority;
 
     public ParseToken? ParseToken(string expression, RedberryParser parser)
     {

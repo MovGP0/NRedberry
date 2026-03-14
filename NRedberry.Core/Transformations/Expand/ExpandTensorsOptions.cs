@@ -5,10 +5,5 @@
 /// </summary>
 public sealed class ExpandTensorsOptions : ExpandOptions
 {
-    public bool LeaveScalars { get; set; }
-
-    public ExpandTensorsOptions()
-    {
-        LeaveScalars = false;
-    }
+    public bool LeaveScalars { get; set; } = false;
 }

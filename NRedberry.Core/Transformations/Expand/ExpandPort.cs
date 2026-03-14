@@ -108,15 +108,10 @@ public static class ExpandPort
         void Reset();
     }
 
-    private sealed class SingletonPort : IOutputPort<Tensor>
+    private sealed class SingletonPort(Tensor tensor) : IOutputPort<Tensor>
     {
-        private readonly Tensor tensor;
+        private readonly Tensor tensor = tensor ?? throw new ArgumentNullException(nameof(tensor));
         private bool taken;
-
-        public SingletonPort(Tensor tensor)
-        {
-            this.tensor = tensor ?? throw new ArgumentNullException(nameof(tensor));
-        }
 
         public Tensor Take()
         {

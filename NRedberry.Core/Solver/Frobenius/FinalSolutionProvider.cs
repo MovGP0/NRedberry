@@ -4,13 +4,9 @@ namespace NRedberry.Solver.Frobenius;
  * Original: ./core/src/main/java/cc/redberry/core/solver/frobenius/FinalSolutionProvider.java
  */
 
-internal sealed class FinalSolutionProvider : SolutionProviderAbstract
+internal sealed class FinalSolutionProvider(SolutionProvider provider, int position, int[] coefficients)
+    : SolutionProviderAbstract(provider, position, coefficients)
 {
-    public FinalSolutionProvider(SolutionProvider provider, int position, int[] coefficients)
-        : base(provider, position, coefficients)
-    {
-    }
-
     public override int[] Take()
     {
         if (CurrentSolution is null)

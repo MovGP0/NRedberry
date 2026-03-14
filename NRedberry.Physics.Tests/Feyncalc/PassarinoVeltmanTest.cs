@@ -4,10 +4,11 @@ using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Symmetrization;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
 
-public sealed class PassarinoVeltmanTest
+public sealed class PassarinoVeltmanTest(ITestOutputHelper testOutputHelper)
 {
     [Fact]
     public void ShouldThrowUntilPassarinoVeltmanIsPorted()
@@ -90,7 +91,7 @@ public sealed class PassarinoVeltmanTest
             simpl);
 
         Tensor tensor = subs[1];
-        Console.WriteLine(ExpandTransformation.Expand(tensor).Size);
+        testOutputHelper.WriteLine(ExpandTransformation.Expand(tensor).Size.ToString());
     }
 
     private static void AssertEquals(string expected, Tensor actual)

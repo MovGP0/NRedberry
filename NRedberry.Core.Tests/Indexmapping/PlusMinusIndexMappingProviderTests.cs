@@ -87,14 +87,9 @@ public sealed class PlusMinusIndexMappingProviderTests
         return providerType;
     }
 
-    private sealed class SequenceOutputPort : IOutputPort<IIndexMappingBuffer>
+    private sealed class SequenceOutputPort(params IIndexMappingBuffer?[] buffers) : IOutputPort<IIndexMappingBuffer>
     {
-        private readonly Queue<IIndexMappingBuffer?> _buffers;
-
-        public SequenceOutputPort(params IIndexMappingBuffer?[] buffers)
-        {
-            _buffers = new Queue<IIndexMappingBuffer?>(buffers);
-        }
+        private readonly Queue<IIndexMappingBuffer?> _buffers = new(buffers);
 
         public IIndexMappingBuffer Take()
         {

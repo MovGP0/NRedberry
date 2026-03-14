@@ -52,17 +52,9 @@ public sealed class ITokenParserTests
     }
 }
 
-file sealed class RecordingTokenParser : ITokenParser
+file sealed class RecordingTokenParser(int priority, ParseToken? result) : ITokenParser
 {
-    private readonly ParseToken? _result;
-
-    public RecordingTokenParser(int priority, ParseToken? result)
-    {
-        Priority = priority;
-        _result = result;
-    }
-
-    public int Priority { get; }
+    public int Priority { get; } = priority;
 
     public int CallCount { get; private set; }
 
@@ -75,6 +67,6 @@ file sealed class RecordingTokenParser : ITokenParser
         CallCount++;
         LastExpression = expression;
         LastParser = parser;
-        return _result;
+        return result;
     }
 }

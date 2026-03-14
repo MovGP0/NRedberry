@@ -172,17 +172,11 @@ public sealed class TimingStatistics
 
     private static readonly StatEntry Empty = new(0, 0);
 
-    public sealed class StatEntry
+    public sealed class StatEntry(long elapsed, long invocations)
     {
-        public StatEntry(long elapsed, long invocations)
-        {
-            Elapsed = elapsed;
-            Invocations = invocations;
-        }
+        public long Elapsed { get; } = elapsed;
 
-        public long Elapsed { get; }
-
-        public long Invocations { get; }
+        public long Invocations { get; } = invocations;
 
         public StatEntry Add(StatEntry other)
         {

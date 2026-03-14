@@ -26,14 +26,9 @@ public sealed class ICloneableTests
         Assert.Equal(7, clone.Value);
     }
 
-    private sealed class Sample : ICloneable<Sample>
+    private sealed class Sample(int value) : ICloneable<Sample>
     {
-        public int Value { get; }
-
-        public Sample(int value)
-        {
-            Value = value;
-        }
+        public int Value { get; } = value;
 
         public Sample Clone()
         {

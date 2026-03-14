@@ -57,15 +57,8 @@ public sealed class INumberTokenParserTests
     }
 }
 
-internal sealed class ObservingToken : INumberTokenParser<Real>
+internal sealed class ObservingToken(Real? result) : INumberTokenParser<Real>
 {
-    private readonly Real? _result;
-
-    public ObservingToken(Real? result)
-    {
-        _result = result;
-    }
-
     public int CallCount { get; private set; }
 
     public string? LastExpression { get; private set; }
@@ -80,6 +73,6 @@ internal sealed class ObservingToken : INumberTokenParser<Real>
         CallCount++;
         LastExpression = expression;
         LastParser = parser;
-        return _result!;
+        return result!;
     }
 }

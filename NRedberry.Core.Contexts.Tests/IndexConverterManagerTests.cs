@@ -59,16 +59,8 @@ public sealed class IndexConverterManagerTests
         Should.Throw<ArgumentException>(() => manager.GetSymbol(code, OutputFormat.Redberry));
     }
 
-    private sealed class TestConverter : IIndexSymbolConverter
+    private sealed class TestConverter(byte type, string prefix) : IIndexSymbolConverter
     {
-        private readonly string prefix;
-
-        public TestConverter(byte type, string prefix)
-        {
-            Type = type;
-            this.prefix = prefix;
-        }
-
         public bool ApplicableToSymbol(string symbol)
         {
             return symbol.StartsWith(prefix, StringComparison.Ordinal);
@@ -87,16 +79,11 @@ public sealed class IndexConverterManagerTests
 
         public int MaxNumberOfSymbols => 1000;
 
-        public byte Type { get; }
+        public byte Type { get; } = type;
     }
 
-    private sealed class ThrowingConverter : IIndexSymbolConverter
+    private sealed class ThrowingConverter(byte type) : IIndexSymbolConverter
     {
-        public ThrowingConverter(byte type)
-        {
-            Type = type;
-        }
-
         public bool ApplicableToSymbol(string symbol)
         {
             return true;
@@ -114,6 +101,6 @@ public sealed class IndexConverterManagerTests
 
         public int MaxNumberOfSymbols => 0;
 
-        public byte Type { get; }
+        public byte Type { get; } = type;
     }
 }

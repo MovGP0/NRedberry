@@ -26,15 +26,8 @@ public sealed class IOutputPortUnsafeTests
         Assert.Null(value);
     }
 
-    private sealed class TestOutputPortUnsafe : IOutputPortUnsafe<string>
+    private sealed class TestOutputPortUnsafe(string? value) : IOutputPortUnsafe<string>
     {
-        private readonly string? value;
-
-        public TestOutputPortUnsafe(string? value)
-        {
-            this.value = value;
-        }
-
         public string? Take()
         {
             return value;

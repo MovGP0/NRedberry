@@ -216,20 +216,13 @@ public sealed class StructureOfContractions
         return result;
     }
 
-    public sealed class Contraction
+    public sealed class Contraction(int tensor, int[] indicesFrom, int[]? indicesTo)
     {
-        public Contraction(int tensor, int[] indicesFrom, int[]? indicesTo)
-        {
-            Tensor = tensor;
-            IndicesFrom = indicesFrom;
-            IndicesTo = indicesTo;
-        }
+        public int Tensor { get; } = tensor;
 
-        public int Tensor { get; }
+        public int[] IndicesFrom { get; } = indicesFrom;
 
-        public int[] IndicesFrom { get; }
-
-        public int[]? IndicesTo { get; }
+        public int[]? IndicesTo { get; } = indicesTo;
 
         public override string ToString()
         {

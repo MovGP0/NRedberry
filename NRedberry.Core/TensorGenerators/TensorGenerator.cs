@@ -284,17 +284,11 @@ public sealed class TensorGenerator
         return new Product(product.Indices, Complex.One, [], product.Data);
     }
 
-    private sealed class Wrapper : IEquatable<Wrapper>
+    private sealed class Wrapper(Tensor tensor) : IEquatable<Wrapper>
     {
-        public Wrapper(Tensor tensor)
-        {
-            Tensor = tensor ?? throw new ArgumentNullException(nameof(tensor));
-            FreeIndices = StructureOfIndices.Create(IndicesFactory.CreateSimple(null, tensor.Indices.GetFree()));
-        }
+        public Tensor Tensor { get; } = tensor ?? throw new ArgumentNullException(nameof(tensor));
 
-        public Tensor Tensor { get; }
-
-        private StructureOfIndices FreeIndices { get; }
+        private StructureOfIndices FreeIndices { get; } = StructureOfIndices.Create(IndicesFactory.CreateSimple(null, tensor.Indices.GetFree()));
 
         public bool Equals(Wrapper? other)
         {

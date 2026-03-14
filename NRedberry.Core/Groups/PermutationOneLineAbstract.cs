@@ -9,17 +9,12 @@ namespace NRedberry.Groups;
 /// <summary>
 /// Port of cc.redberry.core.groups.permutations.PermutationOneLineAbstract.
 /// </summary>
-public abstract class PermutationOneLineAbstract : Permutation, IEnumerable<int>, IEquatable<Permutation>
+public abstract class PermutationOneLineAbstract(bool isIdentity, bool antisymmetry)
+    : Permutation, IEnumerable<int>, IEquatable<Permutation>
 {
-    protected PermutationOneLineAbstract(bool isIdentity, bool antisymmetry)
-    {
-        IsIdentity = isIdentity;
-        IsAntisymmetry = antisymmetry;
-    }
+    public bool IsAntisymmetry { get; } = antisymmetry;
 
-    public bool IsAntisymmetry { get; }
-
-    public bool IsIdentity { get; }
+    public bool IsIdentity { get; } = isIdentity;
 
     public virtual Permutation Pow(int exponent)
     {

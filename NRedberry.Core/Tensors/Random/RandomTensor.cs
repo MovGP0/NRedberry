@@ -104,20 +104,12 @@ public sealed class RandomTensor
         Sum
     }
 
-    public sealed class Parameters
+    public sealed class Parameters(int minSumSize, int maxSumSize, int minProductSize, int maxProductSize)
     {
-        public Parameters(int minSumSize, int maxSumSize, int minProductSize, int maxProductSize)
-        {
-            MinSumSize = minSumSize;
-            MaxSumSize = maxSumSize;
-            MinProductSize = minProductSize;
-            MaxProductSize = maxProductSize;
-        }
-
-        public int MinSumSize { get; }
-        public int MaxSumSize { get; }
-        public int MinProductSize { get; }
-        public int MaxProductSize { get; }
+        public int MinSumSize { get; } = minSumSize;
+        public int MaxSumSize { get; } = maxSumSize;
+        public int MinProductSize { get; } = minProductSize;
+        public int MaxProductSize { get; } = maxProductSize;
     }
 
     public System.Random GetRandom()

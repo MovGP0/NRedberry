@@ -40,13 +40,8 @@ public sealed class SymbolArrayConverterTests
         Should.Throw<ApplicationException>(() => _ = new TestSymbolArrayConverter(["a"], ["α", "β"]));
     }
 
-    private sealed class TestSymbolArrayConverter : SymbolArrayConverter
+    private sealed class TestSymbolArrayConverter(string[] symbols, string[] utf) : SymbolArrayConverter(symbols, utf)
     {
-        public TestSymbolArrayConverter(string[] symbols, string[] utf)
-            : base(symbols, utf)
-        {
-        }
-
         public override byte Type => 0;
     }
 }

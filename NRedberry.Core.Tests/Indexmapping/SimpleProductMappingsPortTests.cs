@@ -138,16 +138,11 @@ public sealed class SimpleProductMappingsPortTests
         return Assert.IsType<TException>(exception.InnerException);
     }
 
-    private sealed class SequenceIndexMappingProvider : IIndexMappingProvider
+    private sealed class SequenceIndexMappingProvider(IEnumerable<bool> ticks, IEnumerable<IIndexMappingBuffer?> takes)
+        : IIndexMappingProvider
     {
-        private readonly Queue<bool> _ticks;
-        private readonly Queue<IIndexMappingBuffer?> _takes;
-
-        public SequenceIndexMappingProvider(IEnumerable<bool> ticks, IEnumerable<IIndexMappingBuffer?> takes)
-        {
-            _ticks = new Queue<bool>(ticks);
-            _takes = new Queue<IIndexMappingBuffer?>(takes);
-        }
+        private readonly Queue<bool> _ticks = new(ticks);
+        private readonly Queue<IIndexMappingBuffer?> _takes = new(takes);
 
         public int TickCallCount { get; private set; }
 

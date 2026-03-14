@@ -6,14 +6,10 @@ namespace NRedberry.IndexMapping;
  * Original: ./core/src/main/java/cc/redberry/core/indexmapping/PlusMinusIndexMappingProvider.java
  */
 
-internal sealed class PlusMinusIndexMappingProvider : IndexMappingProviderAbstract
+internal sealed class PlusMinusIndexMappingProvider(IOutputPort<IIndexMappingBuffer> outputPort)
+    : IndexMappingProviderAbstract(outputPort)
 {
     private bool _state;
-
-    public PlusMinusIndexMappingProvider(IOutputPort<IIndexMappingBuffer> outputPort)
-        : base(outputPort)
-    {
-    }
 
     public override IIndexMappingBuffer? Take()
     {

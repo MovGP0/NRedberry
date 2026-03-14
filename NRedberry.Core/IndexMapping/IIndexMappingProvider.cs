@@ -35,14 +35,9 @@ internal sealed class EmptyIndexMappingProvider : IIndexMappingProvider
     }
 }
 
-internal sealed class SingletonIndexMappingProvider : IIndexMappingProvider
+internal sealed class SingletonIndexMappingProvider(IIndexMappingBuffer buffer) : IIndexMappingProvider
 {
-    private IIndexMappingBuffer? _buffer;
-
-    public SingletonIndexMappingProvider(IIndexMappingBuffer buffer)
-    {
-        _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
-    }
+    private IIndexMappingBuffer? _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
 
     public bool Tick()
     {

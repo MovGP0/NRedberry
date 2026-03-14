@@ -39,13 +39,9 @@ public sealed class SquarefreeAbstractTests
     }
 }
 
-file sealed class StubSquarefreeAbstract : SquarefreeAbstract<BigRational>
+file sealed class StubSquarefreeAbstract()
+    : SquarefreeAbstract<BigRational>(new GreatestCommonDivisorSimple<BigRational>())
 {
-    public StubSquarefreeAbstract()
-        : base(new GreatestCommonDivisorSimple<BigRational>())
-    {
-    }
-
     public override GenPolynomial<BigRational> BaseSquarefreePart(GenPolynomial<BigRational> polynomial)
     {
         return polynomial.Monic();

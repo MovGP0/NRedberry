@@ -543,16 +543,10 @@ public sealed class OneLoopCounterterms
     }
 }
 
-internal sealed class MatricesIndicator : IIndicator<ParseTokenSimpleTensor>
+internal sealed class MatricesIndicator(IEnumerable<string> matrices, StructureOfIndices fTypeStructure)
+    : IIndicator<ParseTokenSimpleTensor>
 {
-    private readonly HashSet<string> _matrices;
-    private readonly StructureOfIndices _fTypeStructure;
-
-    public MatricesIndicator(IEnumerable<string> matrices, StructureOfIndices fTypeStructure)
-    {
-        _matrices = new HashSet<string>(matrices);
-        _fTypeStructure = fTypeStructure;
-    }
+    private readonly HashSet<string> _matrices = new(matrices);
 
     public bool Is(ParseTokenSimpleTensor @object)
     {
@@ -562,7 +556,7 @@ internal sealed class MatricesIndicator : IIndicator<ParseTokenSimpleTensor>
         }
 
         if (string.Equals(@object.Name, "F", StringComparison.Ordinal)
-            && @object.Indices.StructureOfIndices.Equals(_fTypeStructure))
+            && @object.Indices.StructureOfIndices.Equals(fTypeStructure))
         {
             return true;
         }

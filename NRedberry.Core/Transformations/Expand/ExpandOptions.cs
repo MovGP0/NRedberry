@@ -9,12 +9,6 @@ namespace NRedberry.Transformations.Expand;
 /// </summary>
 public class ExpandOptions
 {
-    public ITransformation? Simplifications { get; set; }
-    public TraverseGuide? TraverseGuide { get; set; }
-
-    public ExpandOptions()
-    {
-        Simplifications = Transformation.Identity;
-        TraverseGuide = new DefaultExpandTraverseGuide();
-    }
+    public ITransformation? Simplifications { get; set; } = Transformation.Identity;
+    public TraverseGuide? TraverseGuide { get; set; } = new DefaultExpandTraverseGuide();
 }

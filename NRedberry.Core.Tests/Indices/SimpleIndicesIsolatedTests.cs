@@ -149,25 +149,16 @@ public sealed class SimpleIndicesIsolatedTests
         return data;
     }
 
-    private sealed class ReplaceIndexMapping : IIndexMapping
+    private sealed class ReplaceIndexMapping(int from, int to) : IIndexMapping
     {
-        private readonly int _from;
-        private readonly int _to;
-
-        public ReplaceIndexMapping(int from, int to)
+        public int Map(int from1)
         {
-            _from = from;
-            _to = to;
-        }
-
-        public int Map(int from)
-        {
-            if (from == _from)
+            if (from1 == from)
             {
-                return _to;
+                return to;
             }
 
-            return from;
+            return from1;
         }
     }
 }

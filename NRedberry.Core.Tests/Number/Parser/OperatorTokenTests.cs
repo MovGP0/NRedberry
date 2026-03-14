@@ -98,13 +98,8 @@ public sealed class OperatorTokenTests
         return new NumberParser<Real>([BracketToken<Real>.Instance, token, RealToken.Instance]);
     }
 
-    private sealed class AddSubtractToken : OperatorToken<Real>
+    private sealed class AddSubtractToken() : OperatorToken<Real>('+', '-')
     {
-        public AddSubtractToken()
-            : base('+', '-')
-        {
-        }
-
         protected override Real Neutral()
         {
             return Rational.Zero;

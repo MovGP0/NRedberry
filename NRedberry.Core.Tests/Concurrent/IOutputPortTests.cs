@@ -16,15 +16,8 @@ public sealed class IOutputPortTests
         Assert.Equal("payload", value);
     }
 
-    private sealed class TestOutputPort : IOutputPort<string>
+    private sealed class TestOutputPort(string value) : IOutputPort<string>
     {
-        private readonly string value;
-
-        public TestOutputPort(string value)
-        {
-            this.value = value;
-        }
-
         public string Take()
         {
             return value;

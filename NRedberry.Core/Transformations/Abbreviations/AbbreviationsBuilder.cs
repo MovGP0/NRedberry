@@ -24,33 +24,21 @@ public sealed class AbbreviationsBuilder : ITransformation
     private readonly Dictionary<int, List<Abbreviation>> _abbreviations = new();
     private int _abbrCounter;
 
-    public AbbreviationsBuilder()
-    {
-        Filter = new TrueIndicator<Tensor>();
-        AbbreviationFilter = new TrueIndicator<FromChildToParentIterator>();
-        MaxSumSize = DefaultAbbrSize;
-        AbbrPrefix = DefaultAbbrPrefix;
-        AbbreviateScalars = true;
-        AbbreviateScalarsSeparately = false;
-        AbbreviateTopLevel = false;
-        Locked = false;
-    }
+    public int MaxSumSize { get; set; } = DefaultAbbrSize;
 
-    public int MaxSumSize { get; set; }
+    public string AbbrPrefix { get; set; } = DefaultAbbrPrefix;
 
-    public string AbbrPrefix { get; set; }
+    public bool AbbreviateScalars { get; set; } = true;
 
-    public bool AbbreviateScalars { get; set; }
+    public bool AbbreviateScalarsSeparately { get; set; } = false;
 
-    public bool AbbreviateScalarsSeparately { get; set; }
+    public bool AbbreviateTopLevel { get; set; } = false;
 
-    public bool AbbreviateTopLevel { get; set; }
+    public bool Locked { get; set; } = false;
 
-    public bool Locked { get; set; }
+    public IIndicator<Tensor> Filter { get; set; } = new TrueIndicator<Tensor>();
 
-    public IIndicator<Tensor> Filter { get; set; }
-
-    public IIndicator<FromChildToParentIterator> AbbreviationFilter { get; set; }
+    public IIndicator<FromChildToParentIterator> AbbreviationFilter { get; set; } = new TrueIndicator<FromChildToParentIterator>();
 
     public AbbreviationsBuilder Add(SimpleTensor pattern, Tensor replacement)
     {
@@ -404,31 +392,28 @@ public sealed class AbbreviationsBuilder : ITransformation
     private sealed record class AbbreviationRecord(int Index, long Count, string Definition, string Abbreviation);
 }
 
-public sealed class Abbreviation : IEquatable<Abbreviation>
+public sealed class Abbreviation(
+    long count,
+    int index,
+    Tensor definition,
+    Tensor abbreviation,
+    Tensor negatedAbbreviation)
+    : IEquatable<Abbreviation>
 {
     public Abbreviation(int index, Tensor definition, Tensor abbreviation)
         : this(1, index, definition, abbreviation, TensorFunctions.Negate(abbreviation))
     {
     }
 
-    public Abbreviation(long count, int index, Tensor definition, Tensor abbreviation, Tensor negatedAbbreviation)
-    {
-        Count = count;
-        Index = index;
-        Definition = definition;
-        AbbreviationTensor = abbreviation;
-        NegatedAbbreviation = negatedAbbreviation;
-    }
+    public long Count { get; set; } = count;
 
-    public long Count { get; set; }
+    public int Index { get; } = index;
 
-    public int Index { get; }
+    public Tensor Definition { get; } = definition;
 
-    public Tensor Definition { get; }
+    public Tensor AbbreviationTensor { get; } = abbreviation;
 
-    public Tensor AbbreviationTensor { get; }
-
-    public Tensor NegatedAbbreviation { get; }
+    public Tensor NegatedAbbreviation { get; } = negatedAbbreviation;
 
     public Expression AsSubstitution()
     {

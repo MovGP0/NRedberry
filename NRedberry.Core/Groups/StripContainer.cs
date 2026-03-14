@@ -5,15 +5,9 @@ namespace NRedberry.Groups;
 /// <summary>
 /// Holder returned by <see cref="AlgorithmsBase.Strip(IReadOnlyList{BSGSElement}, Permutation)"/>.
 /// </summary>
-public sealed class StripContainer
+public sealed class StripContainer(int terminationLevel, Permutation remainder)
 {
-    public StripContainer(int terminationLevel, Permutation remainder)
-    {
-        TerminationLevel = terminationLevel;
-        Remainder = remainder;
-    }
+    public int TerminationLevel { get; } = terminationLevel;
 
-    public int TerminationLevel { get; }
-
-    public Permutation Remainder { get; }
+    public Permutation Remainder { get; } = remainder;
 }

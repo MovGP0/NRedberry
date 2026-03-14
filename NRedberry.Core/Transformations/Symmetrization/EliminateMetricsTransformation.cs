@@ -483,19 +483,10 @@ internal sealed class MetricWrapper : IComparable<MetricWrapper>, IEquatable<Met
     }
 }
 
-internal sealed class MetricIndexMapping : IIndexMapping
+internal sealed class MetricIndexMapping(int from, int to) : IIndexMapping
 {
-    private readonly int _from;
-    private readonly int _to;
-
-    public MetricIndexMapping(int from, int to)
+    public int Map(int from1)
     {
-        _from = from;
-        _to = to;
-    }
-
-    public int Map(int from)
-    {
-        return from == _from ? _to : from;
+        return from1 == from ? to : from1;
     }
 }

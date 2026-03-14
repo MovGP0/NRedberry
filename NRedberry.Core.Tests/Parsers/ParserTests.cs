@@ -78,21 +78,16 @@ public sealed class ParserTests
     }
 }
 
-internal sealed class ParserRecordingTokenParser : ITokenParser
+internal sealed class ParserRecordingTokenParser(int priority, Func<string, RedberryParser, ParseToken?>? parse = null)
+    : ITokenParser
 {
-    private readonly Func<string, RedberryParser, ParseToken?> _parse;
+    private readonly Func<string, RedberryParser, ParseToken?> _parse = parse ?? ((_, _) => null);
 
-    public int Priority { get; }
+    public int Priority { get; } = priority;
 
     public int CallCount { get; private set; }
 
     public string? LastExpression { get; private set; }
-
-    public ParserRecordingTokenParser(int priority, Func<string, RedberryParser, ParseToken?>? parse = null)
-    {
-        Priority = priority;
-        _parse = parse ?? ((_, _) => null);
-    }
 
     public ParseToken? ParseToken(string expression, RedberryParser parser)
     {

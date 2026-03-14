@@ -6,18 +6,9 @@ namespace NRedberry.Numbers.Parser;
  * Original: ./core/src/main/java/cc/redberry/core/number/parser/OperatorToken.java
  */
 
-public abstract class OperatorToken<T> : INumberTokenParser<T>
+public abstract class OperatorToken<T>(char operationSymbol, char operationInverseSymbol) : INumberTokenParser<T>
     where T : NRedberry.INumber<T>
 {
-    private readonly char _operationSymbol;
-    private readonly char _operationInverseSymbol;
-
-    protected OperatorToken(char operationSymbol, char operationInverseSymbol)
-    {
-        _operationSymbol = operationSymbol;
-        _operationInverseSymbol = operationInverseSymbol;
-    }
-
     public T Parse(string expression, NumberParser<T> parser)
     {
         ArgumentNullException.ThrowIfNull(expression);
@@ -49,7 +40,7 @@ public abstract class OperatorToken<T> : INumberTokenParser<T>
                 throw new BracketsError();
             }
 
-            if (c == _operationSymbol && level == 0)
+            if (c == operationSymbol && level == 0)
             {
                 if (buffer.Length != 0)
                 {
@@ -59,7 +50,7 @@ public abstract class OperatorToken<T> : INumberTokenParser<T>
                 buffer.Clear();
                 mode = false;
             }
-            else if (c == _operationInverseSymbol && level == 0)
+            else if (c == operationInverseSymbol && level == 0)
             {
                 if (buffer.Length != 0)
                 {
@@ -109,7 +100,7 @@ public abstract class OperatorToken<T> : INumberTokenParser<T>
                 throw new BracketsError(expression);
             }
 
-            if ((c == _operationSymbol || c == _operationInverseSymbol) && level == 0)
+            if ((c == operationSymbol || c == operationInverseSymbol) && level == 0)
             {
                 return true;
             }

@@ -6,17 +6,8 @@ namespace NRedberry.Parsers;
  * Original: ./core/src/main/java/cc/redberry/core/parser/ParserOperator.java
  */
 
-public abstract class ParserOperator : ITokenParser
+public abstract class ParserOperator(char operatorSymbol, char operatorInverseSymbol) : ITokenParser
 {
-    private readonly char _operatorSymbol;
-    private readonly char _operatorInverseSymbol;
-
-    protected ParserOperator(char operatorSymbol, char operatorInverseSymbol)
-    {
-        _operatorSymbol = operatorSymbol;
-        _operatorInverseSymbol = operatorInverseSymbol;
-    }
-
     public abstract int Priority { get; }
 
     protected bool CanParse(string expression)
@@ -43,12 +34,12 @@ public abstract class ParserOperator : ITokenParser
                 throw new BracketsError();
             }
 
-            if (c == _operatorSymbol && level == 0 && TestOperator(expressionChars, i))
+            if (c == operatorSymbol && level == 0 && TestOperator(expressionChars, i))
             {
                 return true;
             }
 
-            if (c == _operatorInverseSymbol && level == 0)
+            if (c == operatorInverseSymbol && level == 0)
             {
                 return true;
             }
@@ -125,7 +116,7 @@ public abstract class ParserOperator : ITokenParser
                 continue;
             }
 
-            if (c == _operatorSymbol && level == 0 && TestOperator(expressionChars, i))
+            if (c == operatorSymbol && level == 0 && TestOperator(expressionChars, i))
             {
                 var toParse = buffer.ToString();
                 if (!string.IsNullOrEmpty(toParse))
@@ -136,7 +127,7 @@ public abstract class ParserOperator : ITokenParser
                 buffer = new StringBuilder();
                 mode = Mode.Direct;
             }
-            else if (c == _operatorInverseSymbol && level == 0)
+            else if (c == operatorInverseSymbol && level == 0)
             {
                 var toParse = buffer.ToString();
                 if (!string.IsNullOrEmpty(toParse))

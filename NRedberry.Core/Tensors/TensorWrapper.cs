@@ -5,16 +5,10 @@ namespace NRedberry.Tensors;
 /// <summary>
 /// Technical class.
 /// </summary>
-public sealed class TensorWrapper : Tensor, IComparable<TensorWrapper>
+public sealed class TensorWrapper(Tensor tensor) : Tensor, IComparable<TensorWrapper>
 {
-    private readonly Tensor _innerTensor;
-    private readonly int _hashWithIndices;
-
-    public TensorWrapper(Tensor tensor)
-    {
-        _innerTensor = tensor ?? throw new ArgumentNullException(nameof(tensor));
-        _hashWithIndices = TensorHashCalculator.HashWithIndices(tensor);
-    }
+    private readonly Tensor _innerTensor = tensor ?? throw new ArgumentNullException(nameof(tensor));
+    private readonly int _hashWithIndices = TensorHashCalculator.HashWithIndices(tensor);
 
     public static TensorWrapper Wrap(Tensor tensor)
     {

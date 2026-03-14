@@ -14,13 +14,9 @@ public sealed class PrimitiveSubstitutionTests
     }
 }
 
-public sealed class PrimitiveSubstitutionProbe : PrimitiveSubstitution
+public sealed class PrimitiveSubstitutionProbe(NRedberry.Tensors.Tensor from, NRedberry.Tensors.Tensor to)
+    : PrimitiveSubstitution(from, to)
 {
-    public PrimitiveSubstitutionProbe(NRedberry.Tensors.Tensor from, NRedberry.Tensors.Tensor to)
-        : base(from, to)
-    {
-    }
-
     protected override NRedberry.Tensors.Tensor NewToCore(
         NRedberry.Tensors.Tensor currentNode,
         SubstitutionIterator iterator)

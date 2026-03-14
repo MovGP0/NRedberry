@@ -6,13 +6,9 @@ namespace NRedberry.IndexMapping;
  * Original: ./core/src/main/java/cc/redberry/core/indexmapping/DummyIndexMappingProvider.java
  */
 
-internal sealed class DummyIndexMappingProvider : IndexMappingProviderAbstract
+internal sealed class DummyIndexMappingProvider(IOutputPort<IIndexMappingBuffer> outputPort)
+    : IndexMappingProviderAbstract(outputPort)
 {
-    public DummyIndexMappingProvider(IOutputPort<IIndexMappingBuffer> outputPort)
-        : base(outputPort)
-    {
-    }
-
     public override IIndexMappingBuffer? Take()
     {
         IIndexMappingBuffer? buffer = currentBuffer;

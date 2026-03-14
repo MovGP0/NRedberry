@@ -104,13 +104,8 @@ public class AbstractIndicesTests
         Assert.Throws<IndexOutOfRangeException>(() => indices.Get(3));
     }
 
-    private sealed class TestIndices : AbstractIndices
+    private sealed class TestIndices(int[] data) : AbstractIndices(data)
     {
-        public TestIndices(int[] data)
-            : base(data)
-        {
-        }
-
         public int CalculateUpperLowerCallCount { get; private set; }
         public int GetByTypePositionCallCount { get; private set; }
 

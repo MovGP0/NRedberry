@@ -66,22 +66,16 @@ public sealed class MappingsPortRemovingContractedTests
     }
 }
 
-internal sealed class MappingsPortRemovingContractedTestsProviderDouble : IOutputPort<IIndexMappingBuffer>
+internal sealed class MappingsPortRemovingContractedTestsProviderDouble(IIndexMappingBuffer? bufferToReturn)
+    : IOutputPort<IIndexMappingBuffer>
 {
-    private readonly IIndexMappingBuffer? _bufferToReturn;
-
-    public MappingsPortRemovingContractedTestsProviderDouble(IIndexMappingBuffer? bufferToReturn)
-    {
-        _bufferToReturn = bufferToReturn;
-    }
-
     public int TakeCallCount { get; private set; }
 
     public IIndexMappingBuffer Take()
     {
         TakeCallCount++;
 
-        return _bufferToReturn!;
+        return bufferToReturn!;
     }
 }
 

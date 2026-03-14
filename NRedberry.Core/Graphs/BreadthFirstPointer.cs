@@ -1,13 +1,7 @@
 namespace NRedberry.Graphs;
 
-internal sealed class BreadthFirstPointer
+internal sealed class BreadthFirstPointer(int node, int edgePointer)
 {
-    public BreadthFirstPointer(int node, int edgePointer)
-    {
-        Vertex = node;
-        EdgePointer = edgePointer;
-    }
-
-    public int Vertex { get; }
-    public int EdgePointer { get; set; }
+    public int Vertex { get; } = node;
+    public int EdgePointer { get; set; } = edgePointer;
 }

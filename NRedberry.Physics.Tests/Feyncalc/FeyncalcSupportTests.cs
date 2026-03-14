@@ -94,18 +94,8 @@ public sealed class AbstractFeynCalcTransformationTests
     }
 }
 
-public sealed class AbstractTransformationWithGammasProbe : AbstractTransformationWithGammas
-{
-    public AbstractTransformationWithGammasProbe(DiracOptions options)
-        : base(options)
-    {
-    }
-}
+public sealed class AbstractTransformationWithGammasProbe(DiracOptions options)
+    : AbstractTransformationWithGammas(options);
 
-public sealed class AbstractFeynCalcTransformationProbe : AbstractFeynCalcTransformation
-{
-    public AbstractFeynCalcTransformationProbe(DiracOptions options, ITransformation? preprocessor)
-        : base(options, preprocessor)
-    {
-    }
-}
+public sealed class AbstractFeynCalcTransformationProbe(DiracOptions options, ITransformation? preprocessor)
+    : AbstractFeynCalcTransformation(options, preprocessor);

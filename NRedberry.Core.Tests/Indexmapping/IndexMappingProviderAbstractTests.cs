@@ -72,16 +72,11 @@ public sealed class IndexMappingProviderAbstractTests
     }
 }
 
-internal sealed class IndexMappingProviderAbstractTestDouble : IndexMappingProviderAbstract
+internal sealed class IndexMappingProviderAbstractTestDouble(
+    IOutputPort<IIndexMappingBuffer> outputPort,
+    List<string>? events = null)
+    : IndexMappingProviderAbstract(outputPort)
 {
-    private readonly List<string>? _events;
-
-    public IndexMappingProviderAbstractTestDouble(IOutputPort<IIndexMappingBuffer> outputPort, List<string>? events = null)
-        : base(outputPort)
-    {
-        _events = events;
-    }
-
     public int BeforeTickCallCount { get; private set; }
 
     public override IIndexMappingBuffer? Take()
@@ -94,27 +89,23 @@ internal sealed class IndexMappingProviderAbstractTestDouble : IndexMappingProvi
     protected override void BeforeTick()
     {
         BeforeTickCallCount++;
-        _events?.Add("BeforeTick");
+        events?.Add("BeforeTick");
     }
 }
 
-internal sealed class QueueOutputPortForIndexMappingProviderAbstractTests : IOutputPort<IIndexMappingBuffer>
+internal sealed class QueueOutputPortForIndexMappingProviderAbstractTests(
+    IEnumerable<IIndexMappingBuffer?> values,
+    List<string>? events = null)
+    : IOutputPort<IIndexMappingBuffer>
 {
-    private readonly Queue<IIndexMappingBuffer?> _values;
-    private readonly List<string>? _events;
-
-    public QueueOutputPortForIndexMappingProviderAbstractTests(IEnumerable<IIndexMappingBuffer?> values, List<string>? events = null)
-    {
-        _values = new Queue<IIndexMappingBuffer?>(values);
-        _events = events;
-    }
+    private readonly Queue<IIndexMappingBuffer?> _values = new(values);
 
     public int TakeCallCount { get; private set; }
 
     public IIndexMappingBuffer Take()
     {
         TakeCallCount++;
-        _events?.Add("Take");
+        events?.Add("Take");
 
         if (_values.Count == 0)
         {

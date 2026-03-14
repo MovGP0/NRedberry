@@ -91,16 +91,10 @@ public sealed class ExternalSolverTests
             [TensorFactory.ParseExpression("A=x+1")]);
     }
 
-    private sealed class TestScriptCreator : ExternalSolver.ExternalScriptCreator
+    private sealed class TestScriptCreator(string[]? outputLines = null, bool createEmptyOutput = false)
+        : ExternalSolver.ExternalScriptCreator
     {
-        private readonly bool _createEmptyOutput;
-        private readonly string[] _outputLines;
-
-        public TestScriptCreator(string[]? outputLines = null, bool createEmptyOutput = false)
-        {
-            _outputLines = outputLines ?? [];
-            _createEmptyOutput = createEmptyOutput;
-        }
+        private readonly string[] _outputLines = outputLines ?? [];
 
         public void CreateScript(Expression[] equations, ReducedSystem reducedSystem, string path, bool keepFreeParams)
         {
@@ -109,7 +103,7 @@ public sealed class ExternalSolverTests
             string escapedOutputPath = outputPath.Replace("'", "''", StringComparison.Ordinal);
 
             using var writer = new StreamWriter(scriptPath, false);
-            if (_createEmptyOutput)
+            if (createEmptyOutput)
             {
                 writer.WriteLine($"Set-Content -Path '{escapedOutputPath}' -Value '' -NoNewline");
                 return;

@@ -97,17 +97,10 @@ public sealed class NameDescriptorTests
         Should.Throw<ArgumentNullException>(() => descriptor.RegisterInNameManager(null!));
     }
 
-    private sealed class TestNameDescriptor : NameDescriptor
+    private sealed class TestNameDescriptor(string name, StructureOfIndices[] indexTypeStructures, int id)
+        : NameDescriptor(indexTypeStructures, id)
     {
-        private readonly string name;
-        private readonly NameAndStructureOfIndices[] keys;
-
-        public TestNameDescriptor(string name, StructureOfIndices[] indexTypeStructures, int id)
-            : base(indexTypeStructures, id)
-        {
-            this.name = name;
-            keys = [new NameAndStructureOfIndices(name, indexTypeStructures)];
-        }
+        private readonly NameAndStructureOfIndices[] keys = [new NameAndStructureOfIndices(name, indexTypeStructures)];
 
         public override NameAndStructureOfIndices[] GetKeys()
         {
