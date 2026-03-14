@@ -1,10 +1,7 @@
 using NRedberry.Contexts;
-using NRedberry;
-using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
-using NRedberry.Transformations;
 using NRedberry.Transformations.Symmetrization;
 using TensorCC = NRedberry.Tensors.CC;
 using TensorFactory = NRedberry.Tensors.Tensors;

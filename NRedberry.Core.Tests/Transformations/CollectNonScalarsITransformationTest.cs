@@ -1,6 +1,11 @@
+using Xunit;
+
 namespace NRedberry.Core.Tests.Transformations;
 
 public sealed class CollectNonScalarsITransformationTest
 {
-    // TODO: Port members from cc.redberry.core.transformations.CollectNonScalarsTransformationTest.
+    [Fact(Skip = "CollectNonScalarsITransformation is not yet implemented.")]
+    public void ShouldCollectNonScalarSummands()
+    {
+    }
 }

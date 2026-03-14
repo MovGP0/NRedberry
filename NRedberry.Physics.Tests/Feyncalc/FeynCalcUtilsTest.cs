@@ -1,4 +1,3 @@
-using System;
 using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;

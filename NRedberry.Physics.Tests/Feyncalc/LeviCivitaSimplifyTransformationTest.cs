@@ -1,13 +1,12 @@
-using System;
 using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
-using NRedberry.Transformations;
 using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Symmetrization;
 using TensorCC = NRedberry.Tensors.CC;
 using TensorFactory = NRedberry.Tensors.Tensors;
+using RandomTensorGenerator = NRedberry.Tensors.Random.RandomTensor;
 using Xunit;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
@@ -22,6 +21,7 @@ public sealed class LeviCivitaSimplifyTransformationTest
             true));
     }
 
+    [Fact]
     public void Test1()
     {
         Reset();
@@ -51,6 +51,7 @@ public sealed class LeviCivitaSimplifyTransformationTest
         AssertEquals(Complex.Zero, SimplifyLeviCivita(t, eps));
     }
 
+    [Fact]
     public void Test2()
     {
         Reset();
@@ -64,6 +65,7 @@ public sealed class LeviCivitaSimplifyTransformationTest
         AssertEquals("-d_{d}^{q}", SimplifyLeviCivita(t, eps));
     }
 
+    [Fact]
     public void Test3()
     {
         Reset();
@@ -76,6 +78,7 @@ public sealed class LeviCivitaSimplifyTransformationTest
         AssertEquals("6", SimplifyLeviCivita(t, eps));
     }
 
+    [Fact]
     public void Test4()
     {
         Reset();
@@ -105,6 +108,7 @@ public sealed class LeviCivitaSimplifyTransformationTest
         AssertEquals("16*I*e_aceg", SimplifyLeviCivita(t, eps));
     }
 
+    [Fact]
     public void Test4A()
     {
         Reset();
@@ -117,6 +121,7 @@ public sealed class LeviCivitaSimplifyTransformationTest
         AssertEquals("16*I*e_aceg", SimplifyLeviCivita(t, eps));
     }
 
+    [Fact]
     public void Test5()
     {
         Reset();
@@ -136,6 +141,7 @@ public sealed class LeviCivitaSimplifyTransformationTest
         AssertEquals(10, t.Size);
     }
 
+    [Fact]
     public void Test6()
     {
         Reset();
@@ -146,6 +152,7 @@ public sealed class LeviCivitaSimplifyTransformationTest
         AssertEquals("-4*e_{cdef}", t);
     }
 
+    [Fact]
     public void Test7()
     {
         Reset();
@@ -156,6 +163,7 @@ public sealed class LeviCivitaSimplifyTransformationTest
         AssertEquals("12*g_sx", t);
     }
 
+    [Fact]
     public void Test8()
     {
         Reset();
@@ -166,10 +174,40 @@ public sealed class LeviCivitaSimplifyTransformationTest
         AssertEquals("12*g_sx", t);
     }
 
+    [Fact(Skip = "LeviCivitaSimplifyTransformation is not yet ported.")]
     public void Test9()
     {
         Reset();
-        // TODO: RandomTensor is not yet ported; re-enable once available.
+        SetAntiSymmetric("e_abcd");
+        SetAntiSymmetric("D_ac");
+        SetAntiSymmetric("B_abc");
+        SetAntiSymmetric("A_abc");
+
+        RandomTensorGenerator random = new(false);
+        random.AddToNamespace(
+            TensorFactory.Parse("F_a"),
+            TensorFactory.Parse("A_ab"),
+            TensorFactory.Parse("B_abc"),
+            TensorFactory.Parse("D_ac"),
+            TensorFactory.Parse("g_ac"),
+            TensorFactory.Parse("e_abcd"));
+
+        Tensor t1 = random.NextSum(20, 8, IndicesFactory.EmptyIndices);
+        Tensor t2 = random.NextSum(20, 8, IndicesFactory.EmptyIndices);
+        ITransformation transformation = new TransformationCollection(
+            EliminateMetricsTransformation.Instance,
+            TensorFactory.ParseExpression("A_ab*B^bac = T^c"),
+            TensorFactory.ParseExpression("A_ab*A^ba = xx"),
+            TensorFactory.ParseExpression("D_ab*D^ba = yy"),
+            EliminateDueSymmetriesTransformation.Instance,
+            new LeviCivitaSimplifyTransformation(TensorFactory.ParseSimple("e_abcd"), true),
+            ExpandAndEliminateTransformation.Instance,
+            TensorFactory.ParseExpression("A_ab*B^bac = T^c"),
+            TensorFactory.ParseExpression("A_ab*A^ba = xx"),
+            TensorFactory.ParseExpression("D_ab*D^ba = yy"));
+
+        _ = new ExpandTransformation(transformation)
+            .Transform(Tensor.MultiplyAndRenameConflictingDummies([t1, t2]));
     }
 
     private static Tensor SimplifyLeviCivita(Tensor tensor, SimpleTensor eps)

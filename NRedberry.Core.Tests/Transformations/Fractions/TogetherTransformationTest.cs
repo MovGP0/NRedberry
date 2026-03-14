@@ -64,7 +64,6 @@ public sealed class TogetherTransformationTest
     [Fact(Skip = "Large expression port pending; original Java test is very heavy.")]
     public void ShouldTogetherLargeExpression()
     {
-        // TODO: Port test3 from Java once the large expression is validated in C#.
     }
 
     [Fact]
@@ -80,13 +79,11 @@ public sealed class TogetherTransformationTest
     [Fact(Skip = "Large expression port pending; original Java test is very heavy.")]
     public void ShouldTogetherVeryLargeExpression()
     {
-        // TODO: Port test5 from Java once the large expression is validated in C#.
     }
 
     [Fact(Skip = "Large expression port pending; original Java test is very heavy.")]
     public void ShouldTogetherEvenLargerExpression()
     {
-        // TODO: Port test6 from Java once the large expression is validated in C#.
     }
 
     [Fact]
@@ -191,6 +188,5 @@ public sealed class TogetherTransformationTest
     [Fact(Skip = "Large expression port pending; original Java test is very heavy.")]
     public void ShouldKeepIndicesConsistentForHugeExpression()
     {
-        // TODO: Port test17 from Java once the large expression is validated in C#.
     }
 }

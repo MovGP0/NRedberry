@@ -1,4 +1,3 @@
-using System;
 using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Expand;
@@ -19,6 +18,7 @@ public sealed class PassarinoVeltmanTest
             [TensorFactory.ParseSimple("k1_a")]));
     }
 
+    [Fact]
     public void Test1()
     {
         Expression subs = PassarinoVeltman.GenerateSubstitution(
@@ -29,6 +29,7 @@ public sealed class PassarinoVeltmanTest
         AssertEquals("q_a = q_b*k1^b * k1_a/(k1_c*k1^c)", subs);
     }
 
+    [Fact]
     public void Test2()
     {
         TransformationCollection simpl = new(
@@ -45,6 +46,7 @@ public sealed class PassarinoVeltmanTest
         AssertEquals("q_a = k1_a*(q^b*k2_b)/s + k2_a*(q^b*k1_b)/s", subs);
     }
 
+    [Fact]
     public void Test3()
     {
         TransformationCollection simpl = new(
@@ -69,6 +71,7 @@ public sealed class PassarinoVeltmanTest
         }
     }
 
+    [Fact]
     public void Test4()
     {
         Tensor[][] input =

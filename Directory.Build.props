@@ -114,6 +114,7 @@
         RCS1159;
         RCS1160;
         RCS1162;
+        xUnit1013;
     </WarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>

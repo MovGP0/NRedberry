@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using NRedberry.Graphs;
 using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;

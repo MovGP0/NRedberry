@@ -1,8 +1,5 @@
-using System;
-using NRedberry.Indices;
 using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
-using NRedberry.Transformations;
 using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Symmetrization;
 using TensorCC = NRedberry.Tensors.CC;
