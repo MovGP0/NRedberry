@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -13,7 +14,7 @@ public sealed class PermutationsInternalDegreeTests
     {
         int degree = GroupPermutations.InternalDegree(Array.Empty<int>());
 
-        Assert.Equal(0, degree);
+        degree.ShouldBe(0);
     }
 
     [Fact(DisplayName = "Should return max value plus one for int array")]
@@ -21,7 +22,7 @@ public sealed class PermutationsInternalDegreeTests
     {
         int degree = GroupPermutations.InternalDegree([2, 0, 5, 1]);
 
-        Assert.Equal(6, degree);
+        degree.ShouldBe(6);
     }
 
     [Fact(DisplayName = "Should return zero for empty short array")]
@@ -29,7 +30,7 @@ public sealed class PermutationsInternalDegreeTests
     {
         short degree = GroupPermutations.InternalDegree(Array.Empty<short>());
 
-        Assert.Equal((short)0, degree);
+        degree.ShouldBe((short)0);
     }
 
     [Fact(DisplayName = "Should return max value plus one for short array")]
@@ -37,7 +38,7 @@ public sealed class PermutationsInternalDegreeTests
     {
         short degree = GroupPermutations.InternalDegree([(short)3, (short)1, (short)4]);
 
-        Assert.Equal((short)5, degree);
+        degree.ShouldBe((short)5);
     }
 
     [Fact(DisplayName = "Should return zero for empty sbyte array")]
@@ -45,7 +46,7 @@ public sealed class PermutationsInternalDegreeTests
     {
         sbyte degree = GroupPermutations.InternalDegree(Array.Empty<sbyte>());
 
-        Assert.Equal((sbyte)0, degree);
+        degree.ShouldBe((sbyte)0);
     }
 
     [Fact(DisplayName = "Should return max value plus one for sbyte array")]
@@ -53,7 +54,7 @@ public sealed class PermutationsInternalDegreeTests
     {
         sbyte degree = GroupPermutations.InternalDegree([(sbyte)6, (sbyte)2, (sbyte)1]);
 
-        Assert.Equal((sbyte)7, degree);
+        degree.ShouldBe((sbyte)7);
     }
 
     [Fact(DisplayName = "Should return zero for empty permutation list")]
@@ -63,7 +64,7 @@ public sealed class PermutationsInternalDegreeTests
 
         int degree = GroupPermutations.InternalDegree(permutations);
 
-        Assert.Equal(0, degree);
+        degree.ShouldBe(0);
     }
 
     [Fact(DisplayName = "Should return max degree for permutation list")]
@@ -78,7 +79,7 @@ public sealed class PermutationsInternalDegreeTests
 
         int degree = GroupPermutations.InternalDegree(permutations);
 
-        Assert.Equal(4, degree);
+        degree.ShouldBe(4);
     }
 
     [Fact(DisplayName = "Should return max degree for read-only collection")]
@@ -93,6 +94,6 @@ public sealed class PermutationsInternalDegreeTests
 
         int degree = GroupPermutations.InternalDegree(permutations);
 
-        Assert.Equal(4, degree);
+        degree.ShouldBe(4);
     }
 }

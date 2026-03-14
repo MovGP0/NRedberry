@@ -1,5 +1,6 @@
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
@@ -12,7 +13,7 @@ public sealed class AlgebraicNumberTests
         AlgebraicNumberRing<BigRational> ring = CreateRing();
         AlgebraicNumber<BigRational> generator = ring.GetGenerator();
 
-        Assert.True(generator.Multiply(generator).Sum(ring.One).IsZero());
+        generator.Multiply(generator).Sum(ring.One).IsZero().ShouldBeTrue();
     }
 
     [Fact]
@@ -21,9 +22,9 @@ public sealed class AlgebraicNumberTests
         AlgebraicNumberRing<BigRational> ring = CreateRing();
         AlgebraicNumber<BigRational> value = ring.FromInteger(3);
 
-        Assert.True(value.IsUnit());
-        Assert.Equal("5", value.Sum(ring.FromInteger(2)).ToString());
-        Assert.Equal("9", value.Multiply(value).ToString());
+        value.IsUnit().ShouldBeTrue();
+        value.Sum(ring.FromInteger(2)).ToString().ShouldBe("5");
+        value.Multiply(value).ToString().ShouldBe("9");
     }
 
     private static AlgebraicNumberRing<BigRational> CreateRing()

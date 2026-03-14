@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Groups;
@@ -13,7 +14,7 @@ public sealed class PermutationGroupEnumerableTests
         PermutationGroup group = PermutationGroup.SymmetricGroup(3);
 
         // Act + Assert
-        Assert.Throws<NullReferenceException>(() => _ = group.ToList());
+        Should.Throw<NullReferenceException>(() => _ = group.ToList());
     }
 
     [Fact(DisplayName = "Should support non generic enumeration for trivial group")]
@@ -23,6 +24,6 @@ public sealed class PermutationGroupEnumerableTests
         IEnumerable<Permutation> group = PermutationGroup.SymmetricGroup(3);
 
         // Act + Assert
-        Assert.Throws<NullReferenceException>(() => _ = group.Count());
+        Should.Throw<NullReferenceException>(() => _ = group.Count());
     }
 }

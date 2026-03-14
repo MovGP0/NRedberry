@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Numerics;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -17,7 +18,7 @@ public sealed class PermutationOneLineAbstractTests
 
         Permutation identity = permutation.Identity;
 
-        Assert.Same(permutation, identity);
+        identity.ShouldBeSameAs(permutation);
     }
 
     [Fact]
@@ -27,10 +28,10 @@ public sealed class PermutationOneLineAbstractTests
 
         Permutation identity = permutation.Identity;
 
-        Assert.NotSame(permutation, identity);
-        Assert.True(identity.IsIdentity);
-        Assert.Equal(permutation.Length, identity.Length);
-        Assert.Equal(new[] { 0, 1, 2 }, identity.OneLine());
+        identity.ShouldNotBeSameAs(permutation);
+        identity.IsIdentity.ShouldBeTrue();
+        identity.Length.ShouldBe(permutation.Length);
+        identity.OneLine().ShouldBe([0, 1, 2]);
     }
 
     [Fact]
@@ -41,8 +42,8 @@ public sealed class PermutationOneLineAbstractTests
         Permutation actual = permutation.Pow(-1);
         Permutation expected = permutation.Inverse();
 
-        Assert.Equal(expected, actual);
-        Assert.Equal(expected.OneLine(), actual.OneLine());
+        actual.ShouldBe(expected);
+        actual.OneLine().ShouldBe(expected.OneLine());
     }
 
     [Fact]
@@ -52,7 +53,7 @@ public sealed class PermutationOneLineAbstractTests
 
         Permutation power = permutation.Pow(-7);
 
-        Assert.Same(permutation, power);
+        power.ShouldBeSameAs(permutation);
     }
 
     [Fact]
@@ -66,8 +67,8 @@ public sealed class PermutationOneLineAbstractTests
         Permutation firstExpected = other.Inverse();
         Permutation secondActual = nonIdentity.CompositionWithInverse(GroupPermutations.CreateIdentityPermutation(3));
 
-        Assert.Equal(firstExpected, firstActual);
-        Assert.Same(nonIdentity, secondActual);
+        firstActual.ShouldBe(firstExpected);
+        secondActual.ShouldBeSameAs(nonIdentity);
     }
 
     [Fact]
@@ -79,7 +80,7 @@ public sealed class PermutationOneLineAbstractTests
         Permutation actual = permutation.Conjugate(element);
         Permutation expected = permutation.Inverse().Composition(element, permutation);
 
-        Assert.Equal(expected, actual);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -91,7 +92,7 @@ public sealed class PermutationOneLineAbstractTests
         Permutation actual = permutation.Commutator(element);
         Permutation expected = permutation.Inverse().Composition(element.Inverse(), permutation, element);
 
-        Assert.Equal(expected, actual);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -110,11 +111,11 @@ public sealed class PermutationOneLineAbstractTests
         List<string> listResult = permutation.Permute(listValues);
         int[] image = permutation.ImageOf(imageInput);
 
-        Assert.Equal(new[] { 30, 10, 20 }, intResult);
-        Assert.Equal(new[] { 'c', 'a', 'b' }, charResult);
-        Assert.Equal(new[] { "gamma", "alpha", "beta" }, genericResult);
-        Assert.Equal(new[] { "gamma", "alpha", "beta" }, listResult);
-        Assert.Equal(new[] { 2, 1, 0 }, image);
+        intResult.ShouldBe([30, 10, 20]);
+        charResult.ShouldBe(['c', 'a', 'b']);
+        genericResult.ShouldBe(["gamma", "alpha", "beta"]);
+        listResult.ShouldBe(["gamma", "alpha", "beta"]);
+        image.ShouldBe([2, 1, 0]);
     }
 
     [Fact]
@@ -127,10 +128,10 @@ public sealed class PermutationOneLineAbstractTests
         int[] clonedArray = identity.Permute(source);
         List<string> clonedList = identity.Permute(listSource);
 
-        Assert.Equal(source, clonedArray);
-        Assert.NotSame(source, clonedArray);
-        Assert.Equal(listSource, clonedList);
-        Assert.NotSame(listSource, clonedList);
+        clonedArray.ShouldBe(source);
+        clonedArray.ShouldNotBeSameAs(source);
+        clonedList.ShouldBe(listSource);
+        clonedList.ShouldNotBeSameAs(listSource);
     }
 
     [Fact]
@@ -140,9 +141,9 @@ public sealed class PermutationOneLineAbstractTests
 
         int[][] cycles = permutation.Cycles();
 
-        Assert.Equal(2, cycles.Length);
-        Assert.Equal(new[] { 0, 1 }, cycles[0]);
-        Assert.Equal(new[] { 3, 4 }, cycles[1]);
+        cycles.Length.ShouldBe(2);
+        cycles[0].ShouldBe([0, 1]);
+        cycles[1].ShouldBe([3, 4]);
     }
 
     [Fact]
@@ -153,10 +154,10 @@ public sealed class PermutationOneLineAbstractTests
         PermutationOneLineAbstract left = CreateTestDouble(GroupPermutations.CreatePermutation(1, 0, 2));
         PermutationOneLineAbstract right = CreateTestDouble(GroupPermutations.CreatePermutation(2, 0, 1));
 
-        Assert.Equal(1, left.CompareTo(null));
-        Assert.True(antisymmetry.CompareTo(symmetry) < 0);
-        Assert.True(left.CompareTo(right) < 0);
-        Assert.True(right.CompareTo(left) > 0);
+        left.CompareTo(null).ShouldBe(1);
+        antisymmetry.CompareTo(symmetry).ShouldBeLessThan(0);
+        left.CompareTo(right).ShouldBeLessThan(0);
+        right.CompareTo(left).ShouldBeGreaterThan(0);
     }
 
     [Fact]
@@ -166,11 +167,11 @@ public sealed class PermutationOneLineAbstractTests
         PermutationOneLineAbstract equal = CreateTestDouble(GroupPermutations.CreatePermutation(1, 0, 2));
         PermutationOneLineAbstract differentSign = CreateTestDouble(GroupPermutations.CreatePermutation(true, 1, 0, 2));
 
-        Assert.True(left.Equals(equal));
-        Assert.True(left == equal);
-        Assert.False(left != equal);
-        Assert.Equal(left.GetHashCode(), equal.GetHashCode());
-        Assert.False(left.Equals(differentSign));
+        left.Equals(equal).ShouldBeTrue();
+        (left == equal).ShouldBeTrue();
+        (left != equal).ShouldBeFalse();
+        left.GetHashCode().ShouldBe(equal.GetHashCode());
+        left.Equals(differentSign).ShouldBeFalse();
     }
 
     [Fact]
@@ -183,10 +184,10 @@ public sealed class PermutationOneLineAbstractTests
         string text = permutation.ToString();
         List<int> values = [..permutation];
 
-        Assert.Equal("+1, 0, 2, 4, 3", oneLine);
-        Assert.Equal("+{0, 1}, {3, 4}", cycles);
-        Assert.Equal(cycles, text);
-        Assert.Equal(new[] { 1, 0, 2, 4, 3 }, values);
+        oneLine.ShouldBe("+1, 0, 2, 4, 3");
+        cycles.ShouldBe("+{0, 1}, {3, 4}");
+        text.ShouldBe(cycles);
+        values.ShouldBe([1, 0, 2, 4, 3]);
     }
 
     private static PermutationOneLineAbstract CreateTestDouble(Permutation permutation)

@@ -1,4 +1,5 @@
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -18,8 +19,8 @@ public sealed class PermutationGroupOrbitsTests
         int orbitSize = group.OrbitSize(2);
 
         // Assert
-        Assert.Equal([0, 1, 2, 3], orbit);
-        Assert.Equal(4, orbitSize);
+        orbit.ShouldBe([0, 1, 2, 3]);
+        orbitSize.ShouldBe(4);
     }
 
     [Fact(DisplayName = "Should return empty orbit and zero size for point outside degree")]
@@ -33,8 +34,8 @@ public sealed class PermutationGroupOrbitsTests
         int orbitSize = group.OrbitSize(10);
 
         // Assert
-        Assert.Empty(orbit);
-        Assert.Equal(0, orbitSize);
+        orbit.ShouldBeEmpty();
+        orbitSize.ShouldBe(0);
     }
 
     [Fact(DisplayName = "Should return deduplicated orbit for multiple points and skip out-of-range points")]
@@ -49,7 +50,7 @@ public sealed class PermutationGroupOrbitsTests
         Array.Sort(orbit);
 
         // Assert
-        Assert.Equal([0, 2], orbit);
+        orbit.ShouldBe([0, 2]);
     }
 
     [Fact(DisplayName = "Should return positions in orbits as copy")]
@@ -65,7 +66,7 @@ public sealed class PermutationGroupOrbitsTests
         int[] freshPositions = group.PositionsInOrbits;
 
         // Assert
-        Assert.Equal([0, 1, 2], freshPositions);
+        freshPositions.ShouldBe([0, 1, 2]);
     }
 
     [Fact(DisplayName = "Should return all orbits as deep copy")]
@@ -81,7 +82,7 @@ public sealed class PermutationGroupOrbitsTests
         int[] orbitZero = group.Orbit(0);
 
         // Assert
-        Assert.Equal([0], orbitZero);
+        orbitZero.ShouldBe([0]);
     }
 
     [Fact(DisplayName = "Should return orbit index for point and minus one outside degree")]
@@ -96,7 +97,7 @@ public sealed class PermutationGroupOrbitsTests
         int indexOutside = group.IndexOfOrbit(10);
 
         // Assert
-        Assert.Equal(2, indexInside);
-        Assert.Equal(-1, indexOutside);
+        indexInside.ShouldBe(2);
+        indexOutside.ShouldBe(-1);
     }
 }

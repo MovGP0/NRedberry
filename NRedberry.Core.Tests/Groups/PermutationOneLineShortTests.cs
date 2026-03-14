@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Groups;
@@ -21,20 +22,20 @@ public sealed class PermutationOneLineShortTests
         ImmutableArray<int> oneLineImmutable = permutation.OneLineImmutable();
 
         // Assert
-        Assert.Equal([1, 0, 2], permutation.OneLine());
-        Assert.Equal([1, 0, 2], oneLineImmutable.ToArray());
-        Assert.False(permutation.IsIdentity);
-        Assert.False(permutation.IsAntisymmetry);
-        Assert.Equal(3, permutation.Degree);
-        Assert.Equal(3, permutation.Length);
+        permutation.OneLine().ShouldBe([1, 0, 2]);
+        oneLineImmutable.ToArray().ShouldBe([1, 0, 2]);
+        permutation.IsIdentity.ShouldBeFalse();
+        permutation.IsAntisymmetry.ShouldBeFalse();
+        permutation.Degree.ShouldBe(3);
+        permutation.Length.ShouldBe(3);
     }
 
     [Fact(DisplayName = "Should reject inconsistent antisymmetric permutation")]
     public void ShouldRejectInconsistentAntisymmetricPermutation()
     {
         // Act + Assert
-        Assert.Throws<ArgumentException>(() => new PermutationOneLineShort(true, 0, 1, 2));
-        Assert.Throws<InconsistentGeneratorsException>(() => new PermutationOneLineShort(false, true, 3, [0, 1, 2]));
+        Should.Throw<ArgumentException>(() => new PermutationOneLineShort(true, 0, 1, 2));
+        Should.Throw<InconsistentGeneratorsException>(() => new PermutationOneLineShort(false, true, 3, [0, 1, 2]));
     }
 
     [Fact(DisplayName = "Should convert to int representation preserving action")]
@@ -47,10 +48,10 @@ public sealed class PermutationOneLineShortTests
         PermutationOneLineInt intPermutation = shortPermutation.ToIntRepresentation();
 
         // Assert
-        Assert.Equal(shortPermutation.OneLine(), intPermutation.OneLine());
-        Assert.Equal(shortPermutation.Degree, intPermutation.Degree);
-        Assert.Equal(shortPermutation.IsAntisymmetry, intPermutation.IsAntisymmetry);
-        Assert.Equal(shortPermutation.NewIndexOf(0), intPermutation.NewIndexOf(0));
+        intPermutation.OneLine().ShouldBe(shortPermutation.OneLine());
+        intPermutation.Degree.ShouldBe(shortPermutation.Degree);
+        intPermutation.IsAntisymmetry.ShouldBe(shortPermutation.IsAntisymmetry);
+        intPermutation.NewIndexOf(0).ShouldBe(shortPermutation.NewIndexOf(0));
     }
 
     [Fact(DisplayName = "Should apply index lookup and permutation methods")]
@@ -65,15 +66,15 @@ public sealed class PermutationOneLineShortTests
         List<string> list = ["A", "B", "C"];
 
         // Act + Assert
-        Assert.Equal(1, permutation.NewIndexOf(0));
-        Assert.Equal(0, permutation.ImageOf(1));
-        Assert.Equal(4, permutation.NewIndexOf(4));
-        Assert.Equal(4, permutation.NewIndexOfUnderInverse(4));
-        Assert.Equal([1, 0, 3], permutation.ImageOf(set));
-        Assert.Equal([20, 10, 30], permutation.Permute(values));
-        Assert.Equal(['b', 'a', 'c'], permutation.Permute(chars));
-        Assert.Equal(["B", "A", "C"], permutation.Permute(strings));
-        Assert.Equal(["B", "A", "C"], permutation.Permute(list));
+        permutation.NewIndexOf(0).ShouldBe(1);
+        permutation.ImageOf(1).ShouldBe(0);
+        permutation.NewIndexOf(4).ShouldBe(4);
+        permutation.NewIndexOfUnderInverse(4).ShouldBe(4);
+        permutation.ImageOf(set).ShouldBe([1, 0, 3]);
+        permutation.Permute(values).ShouldBe([20, 10, 30]);
+        permutation.Permute(chars).ShouldBe(['b', 'a', 'c']);
+        permutation.Permute(strings).ShouldBe(["B", "A", "C"]);
+        permutation.Permute(list).ShouldBe(["B", "A", "C"]);
     }
 
     [Fact(DisplayName = "Should compute composition inverse and powers")]
@@ -91,11 +92,11 @@ public sealed class PermutationOneLineShortTests
         Permutation powMinus1 = right.Pow(-1);
 
         // Assert
-        Assert.Equal([2, 0, 1], composition.OneLine());
-        Assert.Equal([1, 0, 2], inverse.OneLine());
-        Assert.Equal(left.Composition(right.Inverse()).OneLine(), withInverse.OneLine());
-        Assert.True(pow2.IsIdentity);
-        Assert.Equal(right.Inverse().OneLine(), powMinus1.OneLine());
+        composition.OneLine().ShouldBe([2, 0, 1]);
+        inverse.OneLine().ShouldBe([1, 0, 2]);
+        withInverse.OneLine().ShouldBe(left.Composition(right.Inverse()).OneLine());
+        pow2.IsIdentity.ShouldBeTrue();
+        powMinus1.OneLine().ShouldBe(right.Inverse().OneLine());
     }
 
     [Fact(DisplayName = "Should return symmetry views and identity correctly")]
@@ -112,12 +113,12 @@ public sealed class PermutationOneLineShortTests
         Permutation identity = symmetry.Identity;
 
         // Assert
-        Assert.Same(symmetry, symFromSym);
-        Assert.False(symFromAntisym.IsAntisymmetry);
-        Assert.True(negated.IsAntisymmetry);
-        Assert.False(negated.IsIdentity);
-        Assert.True(identity.IsIdentity);
-        Assert.Equal([0, 1, 2], identity.OneLine());
+        symFromSym.ShouldBeSameAs(symmetry);
+        symFromAntisym.IsAntisymmetry.ShouldBeFalse();
+        negated.IsAntisymmetry.ShouldBeTrue();
+        negated.IsIdentity.ShouldBeFalse();
+        identity.IsIdentity.ShouldBeTrue();
+        identity.OneLine().ShouldBe([0, 1, 2]);
     }
 
     [Fact(DisplayName = "Should move right and preserve shifted mapping")]
@@ -131,9 +132,9 @@ public sealed class PermutationOneLineShortTests
         Permutation moved = permutation.MoveRight(2);
 
         // Assert
-        Assert.Equal(5, moved.Degree);
-        Assert.Equal([0, 1, 3, 2, 4], moved.OneLine());
-        Assert.Equal([10, 11, 13, 12, 14], moved.Permute(values));
+        moved.Degree.ShouldBe(5);
+        moved.OneLine().ShouldBe([0, 1, 3, 2, 4]);
+        moved.Permute(values).ShouldBe([10, 11, 13, 12, 14]);
     }
 
     [Fact(DisplayName = "Should implement equality hashcode comparison and formatting")]
@@ -146,13 +147,13 @@ public sealed class PermutationOneLineShortTests
         PermutationOneLineShort antisymmetry = new(false, true, 2, [1, 0, 2], true);
 
         // Act + Assert
-        Assert.Equal(first, equal);
-        Assert.Equal(first.GetHashCode(), equal.GetHashCode());
-        Assert.True(first.CompareTo(bigger) < 0);
-        Assert.True(antisymmetry.CompareTo(first) < 0);
-        Assert.Equal("+1, 0, 2", first.ToStringOneLine());
-        Assert.Equal(first.ToStringCycles(), first.ToString());
-        Assert.Equal([2], first.LengthsOfCycles);
-        Assert.Equal([1, 0, 2], first.Select(value => (int)value).ToArray());
+        first.ShouldBe(equal);
+        first.GetHashCode().ShouldBe(equal.GetHashCode());
+        first.CompareTo(bigger).ShouldBeLessThan(0);
+        antisymmetry.CompareTo(first).ShouldBeLessThan(0);
+        first.ToStringOneLine().ShouldBe("+1, 0, 2");
+        first.ToString().ShouldBe(first.ToStringCycles());
+        first.LengthsOfCycles.ShouldBe([2]);
+        first.Select(value => (int)value).ToArray().ShouldBe([1, 0, 2]);
     }
 }

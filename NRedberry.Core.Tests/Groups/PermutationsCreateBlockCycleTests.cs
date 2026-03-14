@@ -1,4 +1,5 @@
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -11,7 +12,7 @@ public sealed class PermutationsCreateBlockCycleTests
     {
         int[] cycle = GroupPermutations.CreateBlockCycle(3, 4);
 
-        Assert.Equal(new[] { 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2 }, cycle);
+        cycle.ShouldBe([3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2]);
     }
 
     [Fact(DisplayName = "Should rotate each position by block size")]
@@ -24,7 +25,7 @@ public sealed class PermutationsCreateBlockCycleTests
 
         for (int i = 0; i < degree; i++)
         {
-            Assert.Equal((i + blockSize) % degree, cycle[i]);
+            cycle[i].ShouldBe((i + blockSize) % degree);
         }
     }
 
@@ -33,28 +34,28 @@ public sealed class PermutationsCreateBlockCycleTests
     {
         int[] cycle = GroupPermutations.CreateBlockCycle(5, 1);
 
-        Assert.Equal(new[] { 0, 1, 2, 3, 4 }, cycle);
+        cycle.ShouldBe([0, 1, 2, 3, 4]);
     }
 
     [Fact(DisplayName = "Should return empty mapping when block size is zero")]
     public void ShouldReturnEmptyMappingWhenBlockSizeIsZero()
     {
-        Assert.Empty(GroupPermutations.CreateBlockCycle(0, 4));
-        Assert.Empty(GroupPermutations.CreateBlockCycle(0, 0));
+        GroupPermutations.CreateBlockCycle(0, 4).ShouldBeEmpty();
+        GroupPermutations.CreateBlockCycle(0, 0).ShouldBeEmpty();
     }
 
     [Fact(DisplayName = "Should throw when number of blocks is zero and block size is positive")]
     public void ShouldThrowWhenNumberOfBlocksIsZeroAndBlockSizeIsPositive()
     {
-        Assert.Throws<IndexOutOfRangeException>(() => _ = GroupPermutations.CreateBlockCycle(3, 0));
+        Should.Throw<IndexOutOfRangeException>(() => _ = GroupPermutations.CreateBlockCycle(3, 0));
     }
 
     [Fact(DisplayName = "Should throw for negative block size or count")]
     public void ShouldThrowForNegativeBlockSizeOrCount()
     {
-        Assert.Throws<ArgumentException>(() => _ = GroupPermutations.CreateBlockCycle(-1, 3));
-        Assert.Throws<ArgumentException>(() => _ = GroupPermutations.CreateBlockCycle(3, -1));
-        Assert.Throws<ArgumentException>(() => _ = GroupPermutations.CreateBlockCycle(-1, -1));
+        Should.Throw<ArgumentException>(() => _ = GroupPermutations.CreateBlockCycle(-1, 3));
+        Should.Throw<ArgumentException>(() => _ = GroupPermutations.CreateBlockCycle(3, -1));
+        Should.Throw<ArgumentException>(() => _ = GroupPermutations.CreateBlockCycle(-1, -1));
     }
 
     [Fact(DisplayName = "Should produce a valid one-line permutation for upstream 3x4 scenario")]
@@ -62,6 +63,6 @@ public sealed class PermutationsCreateBlockCycleTests
     {
         int[] cycle = GroupPermutations.CreateBlockCycle(3, 4);
 
-        Assert.True(GroupPermutations.TestPermutationCorrectness(cycle));
+        GroupPermutations.TestPermutationCorrectness(cycle).ShouldBeTrue();
     }
 }

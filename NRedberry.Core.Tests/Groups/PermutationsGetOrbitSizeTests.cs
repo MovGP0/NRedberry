@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 
 using GroupPermutations = NRedberry.Groups.Permutations;
@@ -18,7 +19,7 @@ public sealed class PermutationsGetOrbitSizeTests
 
         int orbitSize = GroupPermutations.GetOrbitSize(generators, 0, 5);
 
-        Assert.Equal(2, orbitSize);
+        orbitSize.ShouldBe(2);
     }
 
     [Fact(DisplayName = "Should infer degree and return orbit size")]
@@ -31,7 +32,7 @@ public sealed class PermutationsGetOrbitSizeTests
 
         int orbitSize = GroupPermutations.GetOrbitSize(generators, 2);
 
-        Assert.Equal(4, orbitSize);
+        orbitSize.ShouldBe(4);
     }
 
     [Fact(DisplayName = "Should return singleton orbit size when generators are null and degree is provided")]
@@ -39,14 +40,14 @@ public sealed class PermutationsGetOrbitSizeTests
     {
         int orbitSize = GroupPermutations.GetOrbitSize(null!, 3, 10);
 
-        Assert.Equal(1, orbitSize);
+        orbitSize.ShouldBe(1);
     }
 
     [Fact(DisplayName = "Should throw when generators are null and degree is inferred")]
     public void ShouldThrowWhenGeneratorsAreNullAndDegreeIsInferred()
     {
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => _ = GroupPermutations.GetOrbitSize(null!, 0));
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() => _ = GroupPermutations.GetOrbitSize(null!, 0));
 
-        Assert.Equal("source", exception.ParamName);
+        exception.ParamName.ShouldBe("source");
     }
 }

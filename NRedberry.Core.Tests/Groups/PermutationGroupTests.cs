@@ -1,4 +1,5 @@
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -17,7 +18,7 @@ public sealed class PermutationGroupTests
         string value = group.ToString();
 
         // Assert
-        Assert.Contains("Group(", value, StringComparison.Ordinal);
+        value.ShouldContain("Group(");
     }
 
     [Fact(DisplayName = "Should provide java string for trivial group")]
@@ -31,6 +32,6 @@ public sealed class PermutationGroupTests
         string value = group.ToStringJava();
 
         // Assert
-        Assert.Contains("PermutationGroup.createPermutationGroup", value, StringComparison.Ordinal);
+        value.ShouldContain("PermutationGroup.createPermutationGroup");
     }
 }

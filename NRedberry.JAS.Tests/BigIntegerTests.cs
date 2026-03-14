@@ -1,4 +1,5 @@
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
@@ -11,10 +12,10 @@ public sealed class BigIntegerTests
         BigInteger left = BigInteger.Parse("42");
         BigInteger right = new(-12);
 
-        Assert.Equal("30", left.Sum(right).ToString());
-        Assert.Equal("54", left.Subtract(right).ToString());
-        Assert.Equal("84", right.Negate().Multiply(new BigInteger(7)).ToString());
-        Assert.Equal("12", right.Abs().ToString());
+        left.Sum(right).ToString().ShouldBe("30");
+        left.Subtract(right).ToString().ShouldBe("54");
+        right.Negate().Multiply(new BigInteger(7)).ToString().ShouldBe("84");
+        right.Abs().ToString().ShouldBe("12");
     }
 
     [Fact]
@@ -22,6 +23,6 @@ public sealed class BigIntegerTests
     {
         BigInteger gcd = new BigInteger(84).Gcd(new BigInteger(30));
 
-        Assert.Equal("6", gcd.ToString());
+        gcd.ToString().ShouldBe("6");
     }
 }

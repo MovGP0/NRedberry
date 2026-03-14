@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 
 using GroupPermutations = NRedberry.Groups.Permutations;
@@ -11,9 +12,9 @@ public sealed class PermutationsCreateIdentityPermutationTests
     [Fact(DisplayName = "Should throw for negative degree")]
     public void ShouldThrowForNegativeDegree()
     {
-        var exception = Assert.Throws<ArgumentException>(() => _ = GroupPermutations.CreateIdentityPermutation(-1));
+        var exception = Should.Throw<ArgumentException>(() => _ = GroupPermutations.CreateIdentityPermutation(-1));
 
-        Assert.Equal("degree", exception.ParamName);
+        exception.ParamName.ShouldBe("degree");
     }
 
     [Fact(DisplayName = "Should create identity permutation with requested degree")]
@@ -23,11 +24,11 @@ public sealed class PermutationsCreateIdentityPermutationTests
 
         Permutation permutation = GroupPermutations.CreateIdentityPermutation(degree);
 
-        Assert.True(permutation.IsIdentity);
-        Assert.False(permutation.IsAntisymmetry);
-        Assert.Equal(degree, permutation.Degree);
-        Assert.Equal(degree, permutation.Length);
-        Assert.Equal([0, 1, 2, 3, 4, 5], permutation.OneLine());
+        permutation.IsIdentity.ShouldBeTrue();
+        permutation.IsAntisymmetry.ShouldBeFalse();
+        permutation.Degree.ShouldBe(degree);
+        permutation.Length.ShouldBe(degree);
+        permutation.OneLine().ShouldBe([0, 1, 2, 3, 4, 5]);
     }
 
     [Fact(DisplayName = "Should cache identities for degrees below cache limit")]
@@ -36,7 +37,7 @@ public sealed class PermutationsCreateIdentityPermutationTests
         Permutation first = GroupPermutations.CreateIdentityPermutation(127);
         Permutation second = GroupPermutations.CreateIdentityPermutation(127);
 
-        Assert.Same(first, second);
+        second.ShouldBeSameAs(first);
     }
 
     [Fact(DisplayName = "Should not cache identities for degrees at or above cache limit")]
@@ -45,8 +46,8 @@ public sealed class PermutationsCreateIdentityPermutationTests
         Permutation first = GroupPermutations.CreateIdentityPermutation(128);
         Permutation second = GroupPermutations.CreateIdentityPermutation(128);
 
-        Assert.NotSame(first, second);
-        Assert.Equal(first, second);
+        second.ShouldNotBeSameAs(first);
+        second.ShouldBe(first);
     }
 
     [Fact(DisplayName = "Should return default identity permutation")]
@@ -55,8 +56,8 @@ public sealed class PermutationsCreateIdentityPermutationTests
         Permutation fromGetter = GroupPermutations.GetIdentityPermutation();
         Permutation fromFactory = GroupPermutations.CreateIdentityPermutation(GroupPermutations.DefaultIdentityLength);
 
-        Assert.Same(fromFactory, fromGetter);
-        Assert.True(fromGetter.IsIdentity);
-        Assert.Equal(GroupPermutations.DefaultIdentityLength, fromGetter.Degree);
+        fromGetter.ShouldBeSameAs(fromFactory);
+        fromGetter.IsIdentity.ShouldBeTrue();
+        fromGetter.Degree.ShouldBe(GroupPermutations.DefaultIdentityLength);
     }
 }

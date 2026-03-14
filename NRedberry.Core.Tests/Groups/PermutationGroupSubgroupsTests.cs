@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -17,7 +18,7 @@ public sealed class PermutationGroupSubgroupsTests
         PermutationGroup union = group.Union(group);
 
         // Assert
-        Assert.Same(group, union);
+        union.ShouldBeSameAs(group);
     }
 
     [Fact(DisplayName = "Should return false when subgroup degree is larger")]
@@ -28,7 +29,7 @@ public sealed class PermutationGroupSubgroupsTests
         PermutationGroup larger = PermutationGroup.SymmetricGroup(5);
 
         // Act + Assert
-        Assert.False(smaller.ContainsSubgroup(larger));
+        smaller.ContainsSubgroup(larger).ShouldBeFalse();
     }
 
     [Fact(DisplayName = "Should throw for symmetric contains subgroup path")]
@@ -39,7 +40,7 @@ public sealed class PermutationGroupSubgroupsTests
         PermutationGroup alternating = PermutationGroup.AlternatingGroup(5);
 
         // Act + Assert
-        Assert.Throws<NullReferenceException>(() => _ = symmetric.ContainsSubgroup(alternating));
+        Should.Throw<NullReferenceException>(() => _ = symmetric.ContainsSubgroup(alternating));
     }
 
     [Fact(DisplayName = "Should throw for intersection when this is symmetric group")]
@@ -50,7 +51,7 @@ public sealed class PermutationGroupSubgroupsTests
         PermutationGroup smallerSymmetric = PermutationGroup.SymmetricGroup(3);
 
         // Act + Assert
-        Assert.Throws<NullReferenceException>(() => _ = largerSymmetric.Intersection(smallerSymmetric));
+        Should.Throw<NullReferenceException>(() => _ = largerSymmetric.Intersection(smallerSymmetric));
     }
 
     [Fact(DisplayName = "Should return subgroup when normal closure input is trivial subgroup")]
@@ -65,7 +66,7 @@ public sealed class PermutationGroupSubgroupsTests
         PermutationGroup closure = symmetric.NormalClosureOf(trivialSubgroup);
 
         // Assert
-        Assert.Same(trivialSubgroup, closure);
+        closure.ShouldBeSameAs(trivialSubgroup);
     }
 
     [Fact(DisplayName = "Should throw for normal closure on symmetric path")]
@@ -78,7 +79,7 @@ public sealed class PermutationGroupSubgroupsTests
         PermutationGroup oddGeneratedGroup = PermutationGroup.CreatePermutationGroup(oddPermutation);
 
         // Act + Assert
-        Assert.Throws<NullReferenceException>(() => _ = symmetric.NormalClosureOf(oddGeneratedGroup));
+        Should.Throw<NullReferenceException>(() => _ = symmetric.NormalClosureOf(oddGeneratedGroup));
     }
 
     [Fact(DisplayName = "Should throw for derived subgroup of symmetric group")]
@@ -88,7 +89,7 @@ public sealed class PermutationGroupSubgroupsTests
         PermutationGroup symmetric = PermutationGroup.SymmetricGroup(5);
 
         // Act + Assert
-        Assert.Throws<NullReferenceException>(() => _ = symmetric.DerivedSubgroup());
+        Should.Throw<NullReferenceException>(() => _ = symmetric.DerivedSubgroup());
     }
 
     [Fact(DisplayName = "Should create union when both groups are generator-backed")]
@@ -102,8 +103,8 @@ public sealed class PermutationGroupSubgroupsTests
         PermutationGroup union = symmetric.Union(alternating);
 
         // Assert
-        Assert.NotNull(union);
-        Assert.Equal(5, union.Degree);
+        union.ShouldNotBeNull();
+        union.Degree.ShouldBe(5);
     }
 
     [Fact(DisplayName = "Should throw for commutator of symmetric group with itself")]
@@ -113,6 +114,6 @@ public sealed class PermutationGroupSubgroupsTests
         PermutationGroup symmetric = PermutationGroup.SymmetricGroup(5);
 
         // Act + Assert
-        Assert.Throws<NullReferenceException>(() => _ = symmetric.Commutator(symmetric));
+        Should.Throw<NullReferenceException>(() => _ = symmetric.Commutator(symmetric));
     }
 }

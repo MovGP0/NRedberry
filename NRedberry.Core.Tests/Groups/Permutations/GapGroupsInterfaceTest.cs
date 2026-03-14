@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Groups.Permutations;
@@ -9,7 +10,7 @@ public sealed class GapGroupsInterfaceTest
     [Fact]
     public void ShouldConvertPermutationToGapList()
     {
-        Assert.Equal("[1, 3, 2]", GapGroupsInterface.ConvertToGapList([0, 2, 1]));
+        GapGroupsInterface.ConvertToGapList([0, 2, 1]).ShouldBe("[1, 3, 2]");
     }
 
     [Theory]
@@ -17,7 +18,7 @@ public sealed class GapGroupsInterfaceTest
     [InlineData("Group(());", "Group(());")]
     public void ShouldNormalizeCommandsForGap(string input, string expected)
     {
-        Assert.Equal(expected, GapGroupsInterface.NormalizeCommandForGap(input));
+        GapGroupsInterface.NormalizeCommandForGap(input).ShouldBe(expected);
     }
 
     [Theory]
@@ -25,7 +26,7 @@ public sealed class GapGroupsInterfaceTest
     [InlineData("Group(());", "Group(())")]
     public void ShouldNormalizeCommandsFromGap(string input, string expected)
     {
-        Assert.Equal(expected, GapGroupsInterface.NormalizeCommandFromGap(input));
+        GapGroupsInterface.NormalizeCommandFromGap(input).ShouldBe(expected);
     }
 
     [Fact]
@@ -37,8 +38,8 @@ public sealed class GapGroupsInterfaceTest
 
         reader.Run();
 
-        Assert.True(reader.Buffer.TryTake(out string? result));
-        Assert.Equal("abcdef", result);
+        reader.Buffer.TryTake(out string? result).ShouldBeTrue();
+        result.ShouldBe("abcdef");
     }
 }
 
@@ -49,6 +50,6 @@ public sealed class TestWithGAPAttributeTests
     {
         TestWithGAPAttribute attribute = new();
 
-        Assert.IsAssignableFrom<Attribute>(attribute);
+        attribute.ShouldBeAssignableTo<Attribute>();
     }
 }

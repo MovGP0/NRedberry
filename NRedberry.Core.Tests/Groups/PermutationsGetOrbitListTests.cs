@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 
 using GroupPermutations = NRedberry.Groups.Permutations;
@@ -15,7 +16,7 @@ public sealed class PermutationsGetOrbitListTests
         List<int> orbit = GroupPermutations.GetOrbitList([], point: 2, degree: 5);
 
         // Assert
-        Assert.Equal([2], orbit);
+        orbit.ShouldBe([2]);
     }
 
     [Fact(DisplayName = "Should treat null generators as empty and return singleton orbit")]
@@ -25,7 +26,7 @@ public sealed class PermutationsGetOrbitListTests
         List<int> orbit = GroupPermutations.GetOrbitList(null!, point: 1, degree: 4);
 
         // Assert
-        Assert.Equal([1], orbit);
+        orbit.ShouldBe([1]);
     }
 
     [Fact(DisplayName = "Should expand orbit transitively with multiple generators")]
@@ -39,7 +40,7 @@ public sealed class PermutationsGetOrbitListTests
         List<int> orbit = GroupPermutations.GetOrbitList([cycle012, transposition23], point: 0, degree: 4);
 
         // Assert
-        Assert.Equal([0, 1, 2, 3], orbit);
+        orbit.ShouldBe([0, 1, 2, 3]);
     }
 
     [Fact(DisplayName = "Should avoid duplicates when generators overlap")]
@@ -53,14 +54,14 @@ public sealed class PermutationsGetOrbitListTests
         List<int> orbit = GroupPermutations.GetOrbitList([swap01, swap01, identity], point: 0, degree: 3);
 
         // Assert
-        Assert.Equal([0, 1], orbit);
+        orbit.ShouldBe([0, 1]);
     }
 
     [Fact(DisplayName = "Should throw for point outside degree")]
     public void ShouldThrowForPointOutsideDegree()
     {
         // Act + Assert
-        Assert.Throws<ArgumentOutOfRangeException>(() =>
+        Should.Throw<ArgumentOutOfRangeException>(() =>
             GroupPermutations.GetOrbitList([], point: 3, degree: 3));
     }
 
@@ -71,7 +72,7 @@ public sealed class PermutationsGetOrbitListTests
         Permutation moveZeroToThree = GroupPermutations.CreatePermutation(3, 1, 2, 0);
 
         // Act + Assert
-        Assert.Throws<ArgumentOutOfRangeException>(() =>
+        Should.Throw<ArgumentOutOfRangeException>(() =>
             GroupPermutations.GetOrbitList([moveZeroToThree], point: 0, degree: 3));
     }
 }

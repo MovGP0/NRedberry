@@ -1,4 +1,5 @@
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 
 using GroupPermutations = NRedberry.Groups.Permutations;
@@ -10,9 +11,9 @@ public sealed class PermutationsCreateCycleTests
     [Fact(DisplayName = "Should throw for negative dimension")]
     public void ShouldThrowForNegativeDimension()
     {
-        var exception = Assert.Throws<ArgumentException>(() => _ = GroupPermutations.CreateCycle(-1));
+        var exception = Should.Throw<ArgumentException>(() => _ = GroupPermutations.CreateCycle(-1));
 
-        Assert.Equal("dimension", exception.ParamName);
+        exception.ParamName.ShouldBe("dimension");
     }
 
     [Fact(DisplayName = "Should return empty cycle for zero dimension")]
@@ -20,7 +21,7 @@ public sealed class PermutationsCreateCycleTests
     {
         int[] cycle = GroupPermutations.CreateCycle(0);
 
-        Assert.Empty(cycle);
+        cycle.ShouldBeEmpty();
     }
 
     [Fact(DisplayName = "Should return identity mapping for one dimension")]
@@ -28,7 +29,7 @@ public sealed class PermutationsCreateCycleTests
     {
         int[] cycle = GroupPermutations.CreateCycle(1);
 
-        Assert.Equal([0], cycle);
+        cycle.ShouldBe([0]);
     }
 
     [Fact(DisplayName = "Should create expected one-line mapping for positive dimension")]
@@ -36,7 +37,7 @@ public sealed class PermutationsCreateCycleTests
     {
         int[] cycle = GroupPermutations.CreateCycle(5);
 
-        Assert.Equal([4, 0, 1, 2, 3], cycle);
+        cycle.ShouldBe([4, 0, 1, 2, 3]);
     }
 
     [Fact(DisplayName = "Should map each position to previous element in cycle")]
@@ -47,9 +48,9 @@ public sealed class PermutationsCreateCycleTests
 
         for (int i = 1; i < dimension; i++)
         {
-            Assert.Equal(i - 1, cycle[i]);
+            cycle[i].ShouldBe(i - 1);
         }
 
-        Assert.Equal(dimension - 1, cycle[0]);
+        cycle[0].ShouldBe(dimension - 1);
     }
 }

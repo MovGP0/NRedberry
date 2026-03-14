@@ -1,5 +1,6 @@
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Vector;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
@@ -15,7 +16,7 @@ public sealed class BasicLinAlgTests
 
         List<BigRational>? sum = linAlg.VectorAdd(left, right);
 
-        Assert.Equal([new BigRational(11), new BigRational(22)], sum);
+        sum.ShouldBe([new BigRational(11), new BigRational(22)]);
     }
 
     [Fact]
@@ -23,7 +24,7 @@ public sealed class BasicLinAlgTests
     {
         BasicLinAlg<BigRational> linAlg = new();
 
-        Assert.True(linAlg.IsZero([new BigRational(0), null]));
-        Assert.False(linAlg.IsZero([new BigRational(0), new BigRational(1)]));
+        linAlg.IsZero([new BigRational(0), null]).ShouldBeTrue();
+        linAlg.IsZero([new BigRational(0), new BigRational(1)]).ShouldBeFalse();
     }
 }

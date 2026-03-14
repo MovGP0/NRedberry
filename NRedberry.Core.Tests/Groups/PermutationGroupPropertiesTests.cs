@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -15,7 +16,7 @@ public sealed class PermutationGroupPropertiesTests
             GroupPermutations.CreateIdentityPermutation(3));
 
         // Act + Assert
-        Assert.True(group.IsTrivial());
+        group.IsTrivial().ShouldBeTrue();
     }
 
     [Fact(DisplayName = "Should report non trivial for transposition generated group")]
@@ -26,7 +27,7 @@ public sealed class PermutationGroupPropertiesTests
             GroupPermutations.CreatePermutation(GroupPermutations.CreateTransposition(3, 0, 1)));
 
         // Act + Assert
-        Assert.False(group.IsTrivial());
+        group.IsTrivial().ShouldBeFalse();
     }
 
     [Fact(DisplayName = "Should report transitive for cycle generated group")]
@@ -37,7 +38,7 @@ public sealed class PermutationGroupPropertiesTests
             GroupPermutations.CreatePermutation(GroupPermutations.CreateCycle(3)));
 
         // Act + Assert
-        Assert.True(group.IsTransitive());
+        group.IsTransitive().ShouldBeTrue();
     }
 
     [Fact(DisplayName = "Should report non transitive for disconnected orbit group")]
@@ -48,7 +49,7 @@ public sealed class PermutationGroupPropertiesTests
             GroupPermutations.CreatePermutation(GroupPermutations.CreateTransposition(3, 0, 1)));
 
         // Act + Assert
-        Assert.False(group.IsTransitive());
+        group.IsTransitive().ShouldBeFalse();
     }
 
     [Fact(DisplayName = "Should validate interval transitivity and bounds")]
@@ -59,8 +60,8 @@ public sealed class PermutationGroupPropertiesTests
             GroupPermutations.CreatePermutation(GroupPermutations.CreateTransposition(3, 0, 1)));
 
         // Act + Assert
-        Assert.True(group.IsTransitive(0, 2));
-        Assert.False(group.IsTransitive(0, 3));
+        group.IsTransitive(0, 2).ShouldBeTrue();
+        group.IsTransitive(0, 3).ShouldBeFalse();
     }
 
     [Fact(DisplayName = "Should throw when transitivity interval is invalid")]
@@ -71,7 +72,7 @@ public sealed class PermutationGroupPropertiesTests
             GroupPermutations.CreatePermutation(GroupPermutations.CreateCycle(3)));
 
         // Act + Assert
-        Assert.Throws<ArgumentException>(() => group.IsTransitive(2, 1));
+        Should.Throw<ArgumentException>(() => group.IsTransitive(2, 1));
     }
 
     [Fact(DisplayName = "Should report abelian for cyclic and non abelian for symmetric")]
@@ -83,8 +84,8 @@ public sealed class PermutationGroupPropertiesTests
         PermutationGroup symmetric = PermutationGroup.SymmetricGroup(3);
 
         // Act + Assert
-        Assert.True(cyclic.IsAbelian());
-        Assert.False(symmetric.IsAbelian());
+        cyclic.IsAbelian().ShouldBeTrue();
+        symmetric.IsAbelian().ShouldBeFalse();
     }
 
     [Fact(DisplayName = "Should report expected properties for trivial group")]
@@ -95,9 +96,9 @@ public sealed class PermutationGroupPropertiesTests
             GroupPermutations.CreateIdentityPermutation(3));
 
         // Act + Assert
-        Assert.False(group.IsSymmetric());
-        Assert.False(group.IsAlternating());
-        Assert.False(group.IsRegular());
+        group.IsSymmetric().ShouldBeFalse();
+        group.IsAlternating().ShouldBeFalse();
+        group.IsRegular().ShouldBeFalse();
     }
 
     [Fact(DisplayName = "Should report non regular for non transitive group")]
@@ -108,6 +109,6 @@ public sealed class PermutationGroupPropertiesTests
             GroupPermutations.CreatePermutation(GroupPermutations.CreateTransposition(3, 0, 1)));
 
         // Act + Assert
-        Assert.False(group.IsRegular());
+        group.IsRegular().ShouldBeFalse();
     }
 }

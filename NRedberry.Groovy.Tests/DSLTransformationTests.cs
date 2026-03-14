@@ -1,4 +1,3 @@
-using NRedberry.Groovy;
 using NRedberry.Numbers;
 using Xunit;
 using TensorApi = NRedberry.Tensors.Tensors;

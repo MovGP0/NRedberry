@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -12,8 +13,8 @@ public sealed class PermutationsCreatePermutationTests
     {
         Permutation permutation = GroupPermutations.CreatePermutation(1, 0, 2);
 
-        Assert.False(permutation.IsAntisymmetry);
-        Assert.Equal(new[] { 1, 0, 2 }, permutation.OneLine());
+        permutation.IsAntisymmetry.ShouldBeFalse();
+        permutation.OneLine().ShouldBe([1, 0, 2]);
     }
 
     [Fact(DisplayName = "Should preserve antisymmetry flag for bool params overload")]
@@ -21,8 +22,8 @@ public sealed class PermutationsCreatePermutationTests
     {
         Permutation permutation = GroupPermutations.CreatePermutation(true, 1, 0, 2);
 
-        Assert.True(permutation.IsAntisymmetry);
-        Assert.Equal(new[] { 1, 0, 2 }, permutation.OneLine());
+        permutation.IsAntisymmetry.ShouldBeTrue();
+        permutation.OneLine().ShouldBe([1, 0, 2]);
     }
 
     [Fact(DisplayName = "Should create permutation from cycles overloads")]
@@ -33,10 +34,10 @@ public sealed class PermutationsCreatePermutationTests
         Permutation symmetric = GroupPermutations.CreatePermutation(cycles);
         Permutation antisymmetric = GroupPermutations.CreatePermutation(true, cycles);
 
-        Assert.Equal(new[] { 2, 0, 1, 4, 3 }, symmetric.OneLine());
-        Assert.False(symmetric.IsAntisymmetry);
-        Assert.Equal(symmetric.OneLine(), antisymmetric.OneLine());
-        Assert.True(antisymmetric.IsAntisymmetry);
+        symmetric.OneLine().ShouldBe([2, 0, 1, 4, 3]);
+        symmetric.IsAntisymmetry.ShouldBeFalse();
+        antisymmetric.OneLine().ShouldBe(symmetric.OneLine());
+        antisymmetric.IsAntisymmetry.ShouldBeTrue();
     }
 
     [Fact(DisplayName = "Should use byte representation within signed-byte range")]
@@ -46,7 +47,7 @@ public sealed class PermutationsCreatePermutationTests
 
         Permutation permutation = GroupPermutations.CreatePermutation(oneLine);
 
-        Assert.IsType<PermutationOneLineByte>(permutation);
+        permutation.ShouldBeOfType<PermutationOneLineByte>();
     }
 
     [Fact(DisplayName = "Should throw when byte-path conversion overflows signed-byte range")]
@@ -54,7 +55,7 @@ public sealed class PermutationsCreatePermutationTests
     {
         int[] oneLine = CreateTranspositionOneLine(255);
 
-        Assert.Throws<ArgumentException>(() => GroupPermutations.CreatePermutation(oneLine));
+        Should.Throw<ArgumentException>(() => GroupPermutations.CreatePermutation(oneLine));
     }
 
     [Fact(DisplayName = "Should use short representation at byte threshold")]
@@ -64,7 +65,7 @@ public sealed class PermutationsCreatePermutationTests
 
         Permutation permutation = GroupPermutations.CreatePermutation(oneLine);
 
-        Assert.IsType<PermutationOneLineShort>(permutation);
+        permutation.ShouldBeOfType<PermutationOneLineShort>();
     }
 
     [Fact(DisplayName = "Should use int representation at short threshold")]
@@ -74,7 +75,7 @@ public sealed class PermutationsCreatePermutationTests
 
         Permutation permutation = GroupPermutations.CreatePermutation(oneLine);
 
-        Assert.IsType<PermutationOneLineInt>(permutation);
+        permutation.ShouldBeOfType<PermutationOneLineInt>();
     }
 
     private static int[] CreateTranspositionOneLine(int degree)

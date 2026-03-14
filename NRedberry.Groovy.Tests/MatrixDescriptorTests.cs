@@ -1,4 +1,3 @@
-using NRedberry.Groovy;
 using NRedberry.Transformations.Symmetrization;
 using NRedberry.Tensors;
 using Xunit;

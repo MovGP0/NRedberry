@@ -1,5 +1,6 @@
 using NRedberry.Contexts;
 using NRedberry.Core.Utils;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -25,7 +26,7 @@ public sealed class IBitArrayTests
         right.Set(3);
         right.Set(5);
 
-        Assert.True(left.Intersects(right));
+        left.Intersects(right).ShouldBeTrue();
 
         IBitArray and = left.Clone();
         and.And(right);

@@ -402,6 +402,8 @@ public override int GetHashCode()
 - Build error note: Shouldly predicate helpers such as `ShouldContain(...)` can build expression trees; avoid collection expressions like `[0, 1]` inside those predicates because they trigger CS8640/CS9175. Use `Any(...)` with a regular lambda or move the expected value to a normal array variable first.
 - Build error note: Concurrent `dotnet build`/`dotnet test` runs against the same `NRedberry.Core.Tests` output path can hit CS2012/MSB3026 file-lock failures on `obj\Debug\net9.0\NRedberry.Core.Tests.dll`; serialize test/build commands for the same project instead of running them in parallel.
 - Build error note: comparer-aware Shouldly string helpers should use `System.StringComparison` directly; this avoids coupling to Shouldly-specific enums and keeps call sites aligned with standard .NET string APIs.
+- Build error note: `ShouldBeTrue` takes only the optional custom-message string; after converting from `Assert.True(condition, message)`, keep the condition as the receiver and pass only the message to avoid CS1501.
+- Build error note: collection expressions can make `Permute(...)` calls ambiguous when both array and `List<T>` overloads exist; use explicit `new T[] { ... }` arrays in tests to force the intended overload and avoid CS0121.
 
 ## Roslynator Diagnostics Reference
 

@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -33,8 +34,8 @@ public sealed class BruteForcePermutationIteratorTests
         }
 
         // Assert
-        Assert.True(finished);
-        Assert.Equal(1, iterations);
+        finished.ShouldBeTrue();
+        iterations.ShouldBe(1);
     }
 
     [Fact(DisplayName = "Should throw for inconsistent generators")]
@@ -49,7 +50,7 @@ public sealed class BruteForcePermutationIteratorTests
         BruteForcePermutationIterator iterator = new(generators);
 
         // Act + Assert
-        Assert.Throws<InconsistentGeneratorsException>(() =>
+        Should.Throw<InconsistentGeneratorsException>(() =>
         {
             while (iterator.MoveNext())
             {

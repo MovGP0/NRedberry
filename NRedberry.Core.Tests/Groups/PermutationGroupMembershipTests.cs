@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -28,11 +29,11 @@ public sealed class PermutationGroupMembershipTests
         // Assert
         if (exception is null)
         {
-            Assert.Equal(group.Contains(identity), group.MembershipTest(identity));
+            group.Contains(identity).ShouldBe(group.MembershipTest(identity));
         }
         else
         {
-            Assert.IsType<NullReferenceException>(exception);
+            exception.ShouldBeOfType<NullReferenceException>();
         }
     }
 
@@ -45,7 +46,7 @@ public sealed class PermutationGroupMembershipTests
         Permutation identity = GroupPermutations.GetIdentityPermutation();
 
         // Act + Assert
-        Assert.True(group.MembershipTest(identity));
+        group.MembershipTest(identity).ShouldBeTrue();
     }
 
     [Fact(DisplayName = "Should reject moved permutation in trivial group")]
@@ -57,6 +58,6 @@ public sealed class PermutationGroupMembershipTests
         Permutation transposition = GroupPermutations.CreatePermutation(GroupPermutations.CreateTransposition(2, 0, 1));
 
         // Act + Assert
-        Assert.False(group.MembershipTest(transposition));
+        group.MembershipTest(transposition).ShouldBeFalse();
     }
 }

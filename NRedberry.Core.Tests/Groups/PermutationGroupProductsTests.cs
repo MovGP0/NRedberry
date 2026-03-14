@@ -1,4 +1,5 @@
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -16,7 +17,7 @@ public sealed class PermutationGroupProductsTests
             GroupPermutations.CreateIdentityPermutation(3));
 
         // Act + Assert
-        Assert.Throws<NullReferenceException>(() => _ = left.DirectProduct(right));
+        Should.Throw<NullReferenceException>(() => _ = left.DirectProduct(right));
     }
 
     [Fact(DisplayName = "Should throw for direct product of symmetric groups")]
@@ -27,7 +28,7 @@ public sealed class PermutationGroupProductsTests
         PermutationGroup right = PermutationGroup.SymmetricGroup(3);
 
         // Act + Assert
-        Assert.Throws<NullReferenceException>(() => _ = left.DirectProduct(right));
+        Should.Throw<NullReferenceException>(() => _ = left.DirectProduct(right));
     }
 
     [Fact(DisplayName = "Should throw for direct product of identity generated and symmetric groups")]
@@ -39,6 +40,6 @@ public sealed class PermutationGroupProductsTests
         PermutationGroup symmetric = PermutationGroup.SymmetricGroup(3);
 
         // Act + Assert
-        Assert.Throws<NullReferenceException>(() => _ = identityGenerated.DirectProduct(symmetric));
+        Should.Throw<NullReferenceException>(() => _ = identityGenerated.DirectProduct(symmetric));
     }
 }

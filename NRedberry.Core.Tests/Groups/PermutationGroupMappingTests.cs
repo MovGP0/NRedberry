@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -14,7 +15,7 @@ public sealed class PermutationGroupMappingTests
         PermutationGroup group = PermutationGroup.SymmetricGroup(3);
 
         // Act + Assert
-        Assert.Throws<NullReferenceException>(() => _ = group.Mapping(0, 1));
+        Should.Throw<NullReferenceException>(() => _ = group.Mapping(0, 1));
     }
 
     [Fact(DisplayName = "Should throw for mismatched mapping arrays")]
@@ -24,7 +25,7 @@ public sealed class PermutationGroupMappingTests
         PermutationGroup group = PermutationGroup.SymmetricGroup(3);
 
         // Act + Assert
-        Assert.Throws<ArgumentException>(() => group.Mapping([0], [0, 1]));
+        Should.Throw<ArgumentException>(() => group.Mapping([0], [0, 1]));
     }
 
     [Fact(DisplayName = "Should return mapping search for arrays")]
@@ -34,6 +35,6 @@ public sealed class PermutationGroupMappingTests
         PermutationGroup group = PermutationGroup.SymmetricGroup(3);
 
         // Act + Assert
-        Assert.Throws<NullReferenceException>(() => _ = group.Mapping([0], [1]));
+        Should.Throw<NullReferenceException>(() => _ = group.Mapping([0], [1]));
     }
 }

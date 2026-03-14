@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -17,7 +18,7 @@ public sealed class PermutationGroupStabilizersTests
         PermutationGroup stabilizer = group.PointwiseStabilizer();
 
         // Assert
-        Assert.Same(group, stabilizer);
+        stabilizer.ShouldBeSameAs(group);
     }
 
     [Fact(DisplayName = "Setwise stabilizer should return same instance for empty set")]
@@ -30,7 +31,7 @@ public sealed class PermutationGroupStabilizersTests
         PermutationGroup stabilizer = group.SetwiseStabilizer();
 
         // Assert
-        Assert.Same(group, stabilizer);
+        stabilizer.ShouldBeSameAs(group);
     }
 
     [Fact(DisplayName = "Pointwise stabilizer should throw for non-empty set in symmetric group")]
@@ -40,7 +41,7 @@ public sealed class PermutationGroupStabilizersTests
         PermutationGroup group = PermutationGroup.SymmetricGroup(4);
 
         // Act + Assert
-        Assert.Throws<NullReferenceException>(() => _ = group.PointwiseStabilizer(0));
+        Should.Throw<NullReferenceException>(() => _ = group.PointwiseStabilizer(0));
     }
 
     [Fact(DisplayName = "Pointwise restricted stabilizer should throw for non-empty set")]
@@ -52,7 +53,7 @@ public sealed class PermutationGroupStabilizersTests
         PermutationGroup group = PermutationGroup.CreatePermutationGroup(permutation1, permutation2);
 
         // Act + Assert
-        Assert.Throws<NullReferenceException>(() => _ = group.PointwiseStabilizerRestricted(1, 2, 3));
+        Should.Throw<NullReferenceException>(() => _ = group.PointwiseStabilizerRestricted(1, 2, 3));
     }
 
     [Fact(DisplayName = "Setwise stabilizer should throw for non-empty set in symmetric group")]
@@ -62,6 +63,6 @@ public sealed class PermutationGroupStabilizersTests
         PermutationGroup group = PermutationGroup.SymmetricGroup(4);
 
         // Act + Assert
-        Assert.Throws<NullReferenceException>(() => _ = group.SetwiseStabilizer(0, 1));
+        Should.Throw<NullReferenceException>(() => _ = group.SetwiseStabilizer(0, 1));
     }
 }

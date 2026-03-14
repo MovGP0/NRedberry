@@ -1,3 +1,4 @@
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -10,7 +11,7 @@ public sealed class PermutationsCreateBlockTranspositionTests
     {
         int[] actual = GroupPermutations.CreateBlockTransposition(2, 3);
 
-        Assert.Equal(new[] { 2, 3, 4, 0, 1 }, actual);
+        actual.ShouldBe([2, 3, 4, 0, 1]);
     }
 
     [Fact(DisplayName = "ShouldCreateExpectedPermutationWhenLength1IsZeroAndLength2IsThree")]
@@ -18,7 +19,7 @@ public sealed class PermutationsCreateBlockTranspositionTests
     {
         int[] actual = GroupPermutations.CreateBlockTransposition(0, 3);
 
-        Assert.Equal(new[] { 0, 1, 2 }, actual);
+        actual.ShouldBe([0, 1, 2]);
     }
 
     [Fact(DisplayName = "ShouldCreateExpectedPermutationWhenLength1IsThreeAndLength2IsZero")]
@@ -26,7 +27,7 @@ public sealed class PermutationsCreateBlockTranspositionTests
     {
         int[] actual = GroupPermutations.CreateBlockTransposition(3, 0);
 
-        Assert.Equal(new[] { 0, 1, 2 }, actual);
+        actual.ShouldBe([0, 1, 2]);
     }
 
     [Fact(DisplayName = "ShouldCreateExpectedPermutationWhenBlockLengthsAreEqual")]
@@ -34,7 +35,7 @@ public sealed class PermutationsCreateBlockTranspositionTests
     {
         int[] actual = GroupPermutations.CreateBlockTransposition(3, 3);
 
-        Assert.Equal(new[] { 3, 4, 5, 0, 1, 2 }, actual);
+        actual.ShouldBe([3, 4, 5, 0, 1, 2]);
     }
 
     [Theory(DisplayName = "ShouldThrowArgumentExceptionWhenAnyBlockLengthIsNegative")]
@@ -43,6 +44,6 @@ public sealed class PermutationsCreateBlockTranspositionTests
     [InlineData(-1, -1)]
     public void ShouldThrowArgumentExceptionWhenAnyBlockLengthIsNegative(int length1, int length2)
     {
-        Assert.Throws<ArgumentException>(() => _ = GroupPermutations.CreateBlockTransposition(length1, length2));
+        Should.Throw<ArgumentException>(() => _ = GroupPermutations.CreateBlockTransposition(length1, length2));
     }
 }

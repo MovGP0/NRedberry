@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Groups;
@@ -17,7 +18,7 @@ public sealed class PermutationGroupRandomTests
         List<Permutation> second = group.RandomSource();
 
         // Assert
-        Assert.Same(first, second);
+        second.ShouldBeSameAs(first);
     }
 
     [Fact(DisplayName = "Should expand random source to at least default random size plus accumulator")]
@@ -30,8 +31,7 @@ public sealed class PermutationGroupRandomTests
         List<Permutation> randomSource = group.RandomSource();
 
         // Assert
-        Assert.True(
-            randomSource.Count >= RandomPermutation.DefaultRandomnessExtendToSize + 1,
+        (randomSource.Count >= RandomPermutation.DefaultRandomnessExtendToSize + 1).ShouldBeTrue(
             $"Expected random source size >= {RandomPermutation.DefaultRandomnessExtendToSize + 1}, got {randomSource.Count}.");
     }
 
@@ -57,12 +57,12 @@ public sealed class PermutationGroupRandomTests
         // Assert
         if (exception is null)
         {
-            Assert.NotNull(randomElement);
-            Assert.True(group.MembershipTest(randomElement));
+            randomElement.ShouldNotBeNull();
+            group.MembershipTest(randomElement).ShouldBeTrue();
         }
         else
         {
-            Assert.IsType<NullReferenceException>(exception);
+            exception.ShouldBeOfType<NullReferenceException>();
         }
     }
 
@@ -91,13 +91,13 @@ public sealed class PermutationGroupRandomTests
         // Assert
         if (exception is null)
         {
-            Assert.NotNull(first);
-            Assert.NotNull(second);
-            Assert.Equal(first, second);
+            first.ShouldNotBeNull();
+            second.ShouldNotBeNull();
+            first.ShouldBe(second);
         }
         else
         {
-            Assert.IsType<NullReferenceException>(exception);
+            exception.ShouldBeOfType<NullReferenceException>();
         }
     }
 }

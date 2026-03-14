@@ -1,4 +1,5 @@
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -14,14 +15,14 @@ public sealed class PermutationGroupCoreTests
             GroupPermutations.CreateIdentityPermutation(2));
 
         // Act + Assert
-        Assert.True(group.IsTrivial());
+        group.IsTrivial().ShouldBeTrue();
     }
 
     [Fact(DisplayName = "Should throw for negative symmetric group degree")]
     public void ShouldThrowForNegativeSymmetricGroupDegree()
     {
         // Act + Assert
-        Assert.Throws<ArgumentException>(() => _ = PermutationGroup.SymmetricGroup(-1));
+        Should.Throw<ArgumentException>(() => _ = PermutationGroup.SymmetricGroup(-1));
     }
 
     [Fact(DisplayName = "Should expose order and degree for symmetric group")]
@@ -31,7 +32,7 @@ public sealed class PermutationGroupCoreTests
         PermutationGroup group = PermutationGroup.SymmetricGroup(3);
 
         // Assert
-        Assert.Equal(3, group.Degree);
-        Assert.Throws<NullReferenceException>(() => _ = group.Order);
+        group.Degree.ShouldBe(3);
+        Should.Throw<NullReferenceException>(() => _ = group.Order);
     }
 }

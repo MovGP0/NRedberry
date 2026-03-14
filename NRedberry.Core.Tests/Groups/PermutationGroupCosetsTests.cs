@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -18,8 +19,8 @@ public sealed class PermutationGroupCosetsTests
         Permutation[] reps = trivial.LeftCosetRepresentatives(trivial);
 
         // Assert
-        Assert.Single(reps);
-        Assert.True(reps[0].IsIdentity);
+        reps.Length.ShouldBe(1);
+        reps[0].IsIdentity.ShouldBeTrue();
     }
 
     [Fact(DisplayName = "Should return inverse right coset representatives")]
@@ -34,8 +35,8 @@ public sealed class PermutationGroupCosetsTests
         Permutation[] right = trivial.RightCosetRepresentatives(trivial);
 
         // Assert
-        Assert.Equal(left.Length, right.Length);
-        Assert.True(right[0].Equals(left[0].Inverse()));
+        right.Length.ShouldBe(left.Length);
+        right[0].Equals(left[0].Inverse()).ShouldBeTrue();
     }
 
     [Fact(DisplayName = "Should compute left transversal for trivial group")]
@@ -50,6 +51,6 @@ public sealed class PermutationGroupCosetsTests
         Permutation transversal = trivial.LeftTransversalOf(trivial, identity);
 
         // Assert
-        Assert.True(transversal.IsIdentity);
+        transversal.IsIdentity.ShouldBeTrue();
     }
 }

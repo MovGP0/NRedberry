@@ -1,4 +1,5 @@
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -13,7 +14,7 @@ public sealed class PermutationsIsIdentityTests
 
         bool isIdentity = GroupPermutations.IsIdentity(permutation);
 
-        Assert.True(isIdentity);
+        isIdentity.ShouldBeTrue();
     }
 
     [Fact(DisplayName = "IsIdentity int should return true for identity permutation")]
@@ -23,7 +24,7 @@ public sealed class PermutationsIsIdentityTests
 
         bool isIdentity = GroupPermutations.IsIdentity(permutation);
 
-        Assert.True(isIdentity);
+        isIdentity.ShouldBeTrue();
     }
 
     [Theory(DisplayName = "IsIdentity int should return false for non identity permutation")]
@@ -34,7 +35,7 @@ public sealed class PermutationsIsIdentityTests
     {
         bool isIdentity = GroupPermutations.IsIdentity(permutation);
 
-        Assert.False(isIdentity);
+        isIdentity.ShouldBeFalse();
     }
 
     [Fact(DisplayName = "IsIdentity short should return true for empty permutation")]
@@ -44,7 +45,7 @@ public sealed class PermutationsIsIdentityTests
 
         bool isIdentity = GroupPermutations.IsIdentity(permutation);
 
-        Assert.True(isIdentity);
+        isIdentity.ShouldBeTrue();
     }
 
     [Fact(DisplayName = "IsIdentity short should return true for identity permutation")]
@@ -54,7 +55,7 @@ public sealed class PermutationsIsIdentityTests
 
         bool isIdentity = GroupPermutations.IsIdentity(permutation);
 
-        Assert.True(isIdentity);
+        isIdentity.ShouldBeTrue();
     }
 
     [Theory(DisplayName = "IsIdentity short should return false for non identity permutation")]
@@ -65,7 +66,7 @@ public sealed class PermutationsIsIdentityTests
     {
         bool isIdentity = GroupPermutations.IsIdentity(permutation);
 
-        Assert.False(isIdentity);
+        isIdentity.ShouldBeFalse();
     }
 
     [Fact(DisplayName = "IsIdentity sbyte should return true for empty permutation")]
@@ -75,7 +76,7 @@ public sealed class PermutationsIsIdentityTests
 
         bool isIdentity = GroupPermutations.IsIdentity(permutation);
 
-        Assert.True(isIdentity);
+        isIdentity.ShouldBeTrue();
     }
 
     [Fact(DisplayName = "IsIdentity sbyte should return true for identity permutation")]
@@ -85,7 +86,7 @@ public sealed class PermutationsIsIdentityTests
 
         bool isIdentity = GroupPermutations.IsIdentity(permutation);
 
-        Assert.True(isIdentity);
+        isIdentity.ShouldBeTrue();
     }
 
     [Theory(DisplayName = "IsIdentity sbyte should return false for non identity permutation")]
@@ -96,6 +97,6 @@ public sealed class PermutationsIsIdentityTests
     {
         bool isIdentity = GroupPermutations.IsIdentity(permutation);
 
-        Assert.False(isIdentity);
+        isIdentity.ShouldBeFalse();
     }
 }

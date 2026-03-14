@@ -1,6 +1,7 @@
 using System.Linq;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Groups;
@@ -14,20 +15,20 @@ public sealed class PermutationOneLineByteTests
         var permutation = new PermutationOneLineByte(false, source);
         source[0] = 0;
 
-        Assert.Equal(new[] { 1, 0, 2 }, permutation.OneLine());
-        Assert.Equal(new[] { 1, 0, 2 }, permutation.OneLineImmutable().ToArray());
-        Assert.Equal(new sbyte[] { 1, 0, 2 }, permutation.ToArray());
-        Assert.Equal(3, permutation.Length);
-        Assert.Equal(3, permutation.Degree);
-        Assert.False(permutation.IsIdentity);
-        Assert.False(permutation.IsAntisymmetry);
+        permutation.OneLine().ShouldBe([1, 0, 2]);
+        permutation.OneLineImmutable().ToArray().ShouldBe([1, 0, 2]);
+        permutation.ToArray().ShouldBe([(sbyte)1, (sbyte)0, (sbyte)2]);
+        permutation.Length.ShouldBe(3);
+        permutation.Degree.ShouldBe(3);
+        permutation.IsIdentity.ShouldBeFalse();
+        permutation.IsAntisymmetry.ShouldBeFalse();
     }
 
     [Fact]
     public void ShouldThrowForIncorrectOrInconsistentConstruction()
     {
-        Assert.Throws<ArgumentException>(() => _ = new PermutationOneLineByte(false, (sbyte)1, (sbyte)1));
-        Assert.Throws<ArgumentException>(() => _ = new PermutationOneLineByte(true, (sbyte)1, (sbyte)2, (sbyte)0));
+        Should.Throw<ArgumentException>(() => _ = new PermutationOneLineByte(false, (sbyte)1, (sbyte)1));
+        Should.Throw<ArgumentException>(() => _ = new PermutationOneLineByte(true, (sbyte)1, (sbyte)2, (sbyte)0));
     }
 
     [Fact]
@@ -35,11 +36,11 @@ public sealed class PermutationOneLineByteTests
     {
         var permutation = new PermutationOneLineByte(false, (sbyte)1, (sbyte)0, (sbyte)2);
 
-        Assert.Equal(new[] { 20, 10, 30 }, permutation.Permute(new[] { 10, 20, 30 }));
-        Assert.Equal(new[] { 'b', 'a', 'c' }, permutation.Permute(new[] { 'a', 'b', 'c' }));
-        Assert.Equal(new[] { "b", "a", "c" }, permutation.Permute(new[] { "a", "b", "c" }));
-        Assert.Equal(new[] { 6, 5, 7 }, permutation.Permute(new List<int> { 5, 6, 7 }));
-        Assert.Equal(new[] { 1, 0, 2, 5 }, permutation.ImageOf([0, 1, 2, 5]));
+        permutation.Permute(new int[] { 10, 20, 30 }).ShouldBe([20, 10, 30]);
+        permutation.Permute(new char[] { 'a', 'b', 'c' }).ShouldBe(['b', 'a', 'c']);
+        permutation.Permute(new string[] { "a", "b", "c" }).ShouldBe(["b", "a", "c"]);
+        permutation.Permute(new List<int> { 5, 6, 7 }).ShouldBe([6, 5, 7]);
+        permutation.ImageOf([0, 1, 2, 5]).ShouldBe([1, 0, 2, 5]);
     }
 
     [Fact]
@@ -49,13 +50,13 @@ public sealed class PermutationOneLineByteTests
 
         Permutation inverse = permutation.Inverse();
 
-        Assert.Equal(new[] { 1, 2, 0 }, inverse.OneLine());
-        Assert.True(permutation.Composition(inverse).IsIdentity);
-        Assert.True(permutation.CompositionWithInverse(permutation).IsIdentity);
-        Assert.Equal(1, permutation.NewIndexOfUnderInverse(0));
-        Assert.Equal(2, permutation.NewIndexOfUnderInverse(1));
-        Assert.Equal(0, permutation.NewIndexOfUnderInverse(2));
-        Assert.Equal(7, permutation.NewIndexOfUnderInverse(7));
+        inverse.OneLine().ShouldBe([1, 2, 0]);
+        permutation.Composition(inverse).IsIdentity.ShouldBeTrue();
+        permutation.CompositionWithInverse(permutation).IsIdentity.ShouldBeTrue();
+        permutation.NewIndexOfUnderInverse(0).ShouldBe(1);
+        permutation.NewIndexOfUnderInverse(1).ShouldBe(2);
+        permutation.NewIndexOfUnderInverse(2).ShouldBe(0);
+        permutation.NewIndexOfUnderInverse(7).ShouldBe(7);
     }
 
     [Fact]
@@ -63,10 +64,10 @@ public sealed class PermutationOneLineByteTests
     {
         var permutation = new PermutationOneLineByte(false, (sbyte)1, (sbyte)2, (sbyte)0);
 
-        Assert.True(permutation.Pow(0).IsIdentity);
-        Assert.Equal(new[] { 2, 0, 1 }, permutation.Pow(2).OneLine());
-        Assert.Equal(permutation.Inverse().OneLine(), permutation.Pow(-1).OneLine());
-        Assert.True(permutation.Pow(3).IsIdentity);
+        permutation.Pow(0).IsIdentity.ShouldBeTrue();
+        permutation.Pow(2).OneLine().ShouldBe([2, 0, 1]);
+        permutation.Pow(-1).OneLine().ShouldBe(permutation.Inverse().OneLine());
+        permutation.Pow(3).IsIdentity.ShouldBeTrue();
     }
 
     [Fact]
@@ -77,13 +78,13 @@ public sealed class PermutationOneLineByteTests
         Permutation negated = permutation.Negate();
         Permutation symmetry = negated.ToSymmetry();
 
-        Assert.True(negated.IsAntisymmetry);
-        Assert.Equal(permutation.OneLine(), negated.OneLine());
-        Assert.False(symmetry.IsAntisymmetry);
-        Assert.True(permutation.Equals(symmetry));
+        negated.IsAntisymmetry.ShouldBeTrue();
+        negated.OneLine().ShouldBe(permutation.OneLine());
+        symmetry.IsAntisymmetry.ShouldBeFalse();
+        permutation.Equals(symmetry).ShouldBeTrue();
 
         var oddOrderPermutation = new PermutationOneLineByte(false, (sbyte)1, (sbyte)2, (sbyte)0);
-        Assert.Throws<InconsistentGeneratorsException>(() => _ = oddOrderPermutation.Negate());
+        Should.Throw<InconsistentGeneratorsException>(() => _ = oddOrderPermutation.Negate());
     }
 
     [Fact]
@@ -91,10 +92,10 @@ public sealed class PermutationOneLineByteTests
     {
         var permutation = new PermutationOneLineByte(false, (sbyte)1, (sbyte)0);
 
-        Assert.IsType<PermutationOneLineShort>(permutation.ToLargerRepresentation(short.MaxValue));
-        Assert.IsType<PermutationOneLineInt>(permutation.ToLargerRepresentation(short.MaxValue + 1));
-        Assert.IsType<PermutationOneLineShort>(permutation.ToShortRepresentation());
-        Assert.IsType<PermutationOneLineInt>(permutation.ToIntRepresentation());
+        permutation.ToLargerRepresentation(short.MaxValue).ShouldBeOfType<PermutationOneLineShort>();
+        permutation.ToLargerRepresentation(short.MaxValue + 1).ShouldBeOfType<PermutationOneLineInt>();
+        permutation.ToShortRepresentation().ShouldBeOfType<PermutationOneLineShort>();
+        permutation.ToIntRepresentation().ShouldBeOfType<PermutationOneLineInt>();
     }
 
     [Fact]
@@ -104,9 +105,9 @@ public sealed class PermutationOneLineByteTests
 
         Permutation moved = permutation.MoveRight(2);
 
-        Assert.Same(permutation, permutation.MoveRight(0));
-        Assert.Equal(new[] { 0, 1, 3, 2, 4 }, moved.OneLine());
-        Assert.Equal(5, moved.Degree);
+        permutation.MoveRight(0).ShouldBeSameAs(permutation);
+        moved.OneLine().ShouldBe([0, 1, 3, 2, 4]);
+        moved.Degree.ShouldBe(5);
     }
 
     [Fact]
@@ -117,10 +118,10 @@ public sealed class PermutationOneLineByteTests
         var identity = new PermutationOneLineByte(false, (sbyte)0, (sbyte)1, (sbyte)2);
         var antisymmetry = new PermutationOneLineByte(true, (sbyte)1, (sbyte)0, (sbyte)2);
 
-        Assert.True(first.Equals(second));
-        Assert.Equal(first.GetHashCode(), second.GetHashCode());
-        Assert.False(first.Equals(identity));
-        Assert.Equal(1, first.CompareTo(antisymmetry));
-        Assert.Equal(-1, antisymmetry.CompareTo(first));
+        first.Equals(second).ShouldBeTrue();
+        first.GetHashCode().ShouldBe(second.GetHashCode());
+        first.Equals(identity).ShouldBeFalse();
+        first.CompareTo(antisymmetry).ShouldBe(1);
+        antisymmetry.CompareTo(first).ShouldBe(-1);
     }
 }

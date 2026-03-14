@@ -1,3 +1,4 @@
+using Shouldly;
 using GroupPermutations = NRedberry.Groups.Permutations;
 using Xunit;
 
@@ -12,7 +13,7 @@ public sealed class PermutationsConvertCyclesToOneLineTests
 
         int[] result = GroupPermutations.ConvertCyclesToOneLine(cycles);
 
-        Assert.Empty(result);
+        result.ShouldBeEmpty();
     }
 
     [Fact]
@@ -25,7 +26,7 @@ public sealed class PermutationsConvertCyclesToOneLineTests
 
         int[] result = GroupPermutations.ConvertCyclesToOneLine(cycles);
 
-        Assert.Equal(new[] { 2, 0, 1 }, result);
+        result.ShouldBe([2, 0, 1]);
     }
 
     [Fact]
@@ -39,7 +40,7 @@ public sealed class PermutationsConvertCyclesToOneLineTests
 
         int[] result = GroupPermutations.ConvertCyclesToOneLine(cycles);
 
-        Assert.Equal(new[] { 2, 1, 0, 4, 5, 3 }, result);
+        result.ShouldBe([2, 1, 0, 4, 5, 3]);
     }
 
     [Fact]
@@ -50,9 +51,9 @@ public sealed class PermutationsConvertCyclesToOneLineTests
             [1]
         ];
 
-        ArgumentException exception = Assert.Throws<ArgumentException>(() => GroupPermutations.ConvertCyclesToOneLine(cycles));
+        ArgumentException exception = Should.Throw<ArgumentException>(() => GroupPermutations.ConvertCyclesToOneLine(cycles));
 
-        Assert.Contains("Illegal use of cycle notation", exception.Message);
+        exception.Message.ShouldContain("Illegal use of cycle notation");
     }
 
     [Fact]
@@ -63,6 +64,6 @@ public sealed class PermutationsConvertCyclesToOneLineTests
 
         int[] reconstructed = GroupPermutations.ConvertCyclesToOneLine(cycles);
 
-        Assert.Equal(oneLine, reconstructed);
+        reconstructed.ShouldBe(oneLine);
     }
 }

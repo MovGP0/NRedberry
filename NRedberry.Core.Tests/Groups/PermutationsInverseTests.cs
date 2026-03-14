@@ -1,4 +1,5 @@
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -13,7 +14,7 @@ public sealed class PermutationsInverseTests
 
         int[] inverse = GroupPermutations.Inverse(permutation);
 
-        Assert.Empty(inverse);
+        inverse.ShouldBeEmpty();
     }
 
     [Fact(DisplayName = "Inverse should return identity for identity permutation")]
@@ -23,7 +24,7 @@ public sealed class PermutationsInverseTests
 
         int[] inverse = GroupPermutations.Inverse(permutation);
 
-        Assert.Equal(new[] { 0, 1, 2, 3 }, inverse);
+        inverse.ShouldBe([0, 1, 2, 3]);
     }
 
     [Fact(DisplayName = "Inverse should compute nontrivial inverse mapping")]
@@ -33,7 +34,7 @@ public sealed class PermutationsInverseTests
 
         int[] inverse = GroupPermutations.Inverse(permutation);
 
-        Assert.Equal(new[] { 2, 3, 0, 4, 1 }, inverse);
+        inverse.ShouldBe([2, 3, 0, 4, 1]);
     }
 
     [Fact(DisplayName = "Inverse should be involutive for valid permutations")]
@@ -44,7 +45,7 @@ public sealed class PermutationsInverseTests
         int[] inverse = GroupPermutations.Inverse(permutation);
         int[] roundTrip = GroupPermutations.Inverse(inverse);
 
-        Assert.Equal(permutation, roundTrip);
+        roundTrip.ShouldBe(permutation);
     }
 
     [Fact(DisplayName = "Inverse should not mutate input permutation")]
@@ -55,6 +56,6 @@ public sealed class PermutationsInverseTests
 
         _ = GroupPermutations.Inverse(permutation);
 
-        Assert.Equal(snapshot, permutation);
+        permutation.ShouldBe(snapshot);
     }
 }

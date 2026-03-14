@@ -1,5 +1,6 @@
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
@@ -13,7 +14,7 @@ public sealed class BinaryFunctorTests
 
         BigRational result = functor.Eval(new BigRational(2), new BigRational(3, 2));
 
-        Assert.Equal("7/2", result.ToString());
+        result.ToString().ShouldBe("7/2");
     }
 }
 

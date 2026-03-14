@@ -1,3 +1,4 @@
+using Shouldly;
 using GroupPermutations = NRedberry.Groups.Permutations;
 using Xunit;
 
@@ -12,9 +13,9 @@ public sealed class PermutationsLengthsOfCyclesTests
         int[] shortLengths = GroupPermutations.LengthsOfCycles(new short[] { 0, 1, 2, 3 });
         int[] sbyteLengths = GroupPermutations.LengthsOfCycles(new sbyte[] { 0, 1, 2, 3 });
 
-        Assert.Empty(intLengths);
-        Assert.Empty(shortLengths);
-        Assert.Empty(sbyteLengths);
+        intLengths.ShouldBeEmpty();
+        shortLengths.ShouldBeEmpty();
+        sbyteLengths.ShouldBeEmpty();
     }
 
     [Fact]
@@ -32,9 +33,9 @@ public sealed class PermutationsLengthsOfCyclesTests
         Array.Sort(shortLengths);
         Array.Sort(sbyteLengths);
 
-        Assert.Equal(new[] { 2, 2, 3 }, intLengths);
-        Assert.Equal(new[] { 2, 2, 3 }, shortLengths);
-        Assert.Equal(new[] { 2, 2, 3 }, sbyteLengths);
+        intLengths.ShouldBe([2, 2, 3]);
+        shortLengths.ShouldBe([2, 2, 3]);
+        sbyteLengths.ShouldBe([2, 2, 3]);
     }
 
     [Fact]
@@ -66,9 +67,9 @@ public sealed class PermutationsLengthsOfCyclesTests
             Array.Sort(shortLengths);
             Array.Sort(sbyteLengths);
 
-            Assert.Equal(expectedLengths, intLengths);
-            Assert.Equal(expectedLengths, shortLengths);
-            Assert.Equal(expectedLengths, sbyteLengths);
+            intLengths.ShouldBe(expectedLengths);
+            shortLengths.ShouldBe(expectedLengths);
+            sbyteLengths.ShouldBe(expectedLengths);
         }
     }
 }

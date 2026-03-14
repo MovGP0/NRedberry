@@ -1,5 +1,6 @@
 using System.Linq;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Util;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
@@ -16,14 +17,12 @@ public sealed class CartesianProductInfiniteTests
 
         List<string> tuples = product.Take(6).Select(tuple => string.Join(",", tuple)).ToList();
 
-        Assert.Equal(
-            ["0,10", "0,11", "1,10", "0,12", "1,11", "2,10"],
-            tuples);
+        tuples.ShouldBe(["0,10", "0,11", "1,10", "0,12", "1,11", "2,10"]);
     }
 
     [Fact]
     public void ShouldRejectEmptyComponentList()
     {
-        Assert.Throws<ArgumentException>(() => new CartesianProductInfinite<int>([]));
+        Should.Throw<ArgumentException>(() => new CartesianProductInfinite<int>([]));
     }
 }
