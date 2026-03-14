@@ -1,6 +1,7 @@
-using NRedberry.Tensors;
 using NRedberry.Transformations.Symmetrization;
+using SumBuilderType = NRedberry.Tensors.SumBuilderSplitingScalars;
 using TensorApi = NRedberry.Tensors.Tensors;
+using TensorUtilsApi = NRedberry.Tensors.TensorUtils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations;
@@ -11,13 +12,13 @@ public sealed class CollectNonScalarsITransformationTest
     public void ShouldCollectNonScalarSummands()
     {
         var tensor = TensorApi.Parse("-c1*a**(-1)*k_{i}*k^{i}*d_{b}^{c}+(c0-c0*a**(-1))*k_{i}*k^{i}*k_{b}*k^{c}+c1*k_{b}*k^{c}");
-        SumBuilderSplitingScalars builder = new();
+        SumBuilderType builder = new();
         foreach (var item in tensor)
         {
             builder.Put(item);
         }
 
         var collected = CollectNonScalarsITransformation.CollectNonScalars(tensor);
-        Assert.True(TensorUtils.Equals(builder.Build(), collected));
+        Assert.True(TensorUtilsApi.Equals(builder.Build(), collected));
     }
 }

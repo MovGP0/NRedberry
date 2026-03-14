@@ -37,6 +37,16 @@
   index types). Maintain parity with the corresponding Java tests whenever possible.
 - Keep the suite green locally (`dotnet test`) before pushing; enable code coverage locally via
   `dotnet test --collect:"XPlat Code Coverage"` when evaluating larger refactors.
+- Do not use `Console.WriteLine` for debugging in tests. Use xUnits `ITestOutputHelper` to capture test output instead.
+- Use Shouldly assertions (e.g., `result.ShouldBe(expected)`) for clarity and better failure messages
+- Use `SatisfyAllConditions` when multiple assertions are needed to validate a single test case:
+```csharp
+result.ShouldSatisfyAllConditions(
+    () => result.PropertyA.ShouldBe(expectedA),
+    () => result.PropertyB.ShouldBe(expectedB),
+    () => result.PropertyC.ShouldBe(expectedC)
+);
+```
 
 ## Commit & Pull Request Guidelines
 

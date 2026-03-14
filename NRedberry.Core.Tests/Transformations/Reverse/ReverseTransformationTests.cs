@@ -7,8 +7,8 @@ namespace NRedberry.Core.Tests.Transformations.Reverse;
 public sealed class ReverseTransformationTests
 {
     [Fact]
-    public void ShouldThrowWhileReversePortIsUnimplemented()
+    public void ShouldRejectMetricIndexTypes()
     {
-        Assert.Throws<NotImplementedException>(() => new ReverseTransformation(IndexType.LatinLower));
+        Assert.Throws<ArgumentException>(() => new ReverseTransformation(IndexType.LatinLower));
     }
 }
