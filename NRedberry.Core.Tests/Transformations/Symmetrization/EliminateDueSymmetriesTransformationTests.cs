@@ -6,8 +6,8 @@ namespace NRedberry.Core.Tests.Transformations.Symmetrization;
 public sealed class EliminateDueSymmetriesTransformationTests
 {
     [Fact]
-    public void ShouldThrowForSingletonAccess()
+    public void ShouldExposeSingletonInstance()
     {
-        Assert.Throws<NotImplementedException>(() => _ = EliminateDueSymmetriesTransformation.Instance);
+        Assert.NotNull(EliminateDueSymmetriesTransformation.Instance);
     }
 }

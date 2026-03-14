@@ -25,6 +25,14 @@ public sealed class ProductFactoryTests
     }
 
     [Fact]
+    public void ShouldReturnSingleTensorForConcreteOverload()
+    {
+        NRedberry.Tensors.Tensor tensor = TensorFactory.Parse("T_i");
+
+        Assert.Same(tensor, ProductFactory.Factory.Create(tensor));
+    }
+
+    [Fact]
     public void ShouldFlattenNestedProductsAndCombineNumericFactors()
     {
         NRedberry.Tensors.TensorFactory factory = ProductFactory.Factory;

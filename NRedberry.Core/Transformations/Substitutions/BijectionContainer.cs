@@ -7,17 +7,18 @@ namespace NRedberry.Transformations.Substitutions;
 /// </summary>
 public sealed class BijectionContainer
 {
-    public Mapping Mapping => throw new NotImplementedException();
+    public Mapping Mapping { get; }
 
-    public int[] Bijection => throw new NotImplementedException();
+    public int[] Bijection { get; }
 
     public BijectionContainer(Mapping mapping, int[] bijection)
     {
-        throw new NotImplementedException();
+        Mapping = mapping ?? throw new ArgumentNullException(nameof(mapping));
+        Bijection = bijection ?? throw new ArgumentNullException(nameof(bijection));
     }
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        return $"[{string.Join(", ", Bijection)}]\n{Mapping}";
     }
 }

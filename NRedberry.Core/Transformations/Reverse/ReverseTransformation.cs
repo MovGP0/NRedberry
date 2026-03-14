@@ -1,32 +1,51 @@
+using System.Text;
 using NRedberry.Tensors;
+using NRedberry.Transformations;
 using NRedberry.Transformations.Symmetrization;
 
 namespace NRedberry.Transformations.Reverse;
 
-/// <summary>
-/// Skeleton port of cc.redberry.core.transformations.reverse.ReverseTransformation.
-/// </summary>
 public sealed class ReverseTransformation : TransformationToStringAble
 {
-    private readonly SingleReverse[] reversers = [];
+    private readonly SingleReverse[] _reversers;
 
     public ReverseTransformation(params IndexType[] types)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(types);
+
+        _reversers = new SingleReverse[types.Length];
+        for (int i = 0; i < types.Length; ++i)
+        {
+            _reversers[i] = new SingleReverse(types[i]);
+        }
     }
 
     public Tensor Transform(Tensor tensor)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(tensor);
+        return Transformation.ApplySequentially(tensor, _reversers);
     }
 
     public string ToString(OutputFormat outputFormat)
     {
-        throw new NotImplementedException();
+        StringBuilder stringBuilder = new();
+        stringBuilder.Append("Reverse[");
+        for (int i = 0; i < _reversers.Length; ++i)
+        {
+            if (i > 0)
+            {
+                stringBuilder.Append(',');
+            }
+
+            stringBuilder.Append(_reversers[i].Type);
+        }
+
+        stringBuilder.Append(']');
+        return stringBuilder.ToString();
     }
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        return ToString(CC.GetDefaultOutputFormat());
     }
 }

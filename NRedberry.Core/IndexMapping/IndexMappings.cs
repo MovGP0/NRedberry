@@ -27,37 +27,63 @@ public static class IndexMappings
 
     public static Mapping? GetFirst(Tensor from, Tensor to)
     {
-        throw new NotImplementedException();
+        bool? comparison = Compare1(from, to);
+        if (comparison is null)
+        {
+            return null;
+        }
+
+        return Mapping.IdentityMapping.AddSign(comparison.Value);
     }
 
     public static bool TestMapping(Mapping mapping, Tensor from, Tensor to)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(mapping);
+        ArgumentNullException.ThrowIfNull(from);
+        ArgumentNullException.ThrowIfNull(to);
+
+        return mapping.Equals(GetFirst(from, to));
     }
 
     public static bool AnyMappingExists(Tensor a, Tensor b)
     {
-        throw new NotImplementedException();
+        return MappingExists(a, b) || MappingExists(b, a);
     }
 
     public static bool MappingExists(Tensor from, Tensor to)
     {
-        throw new NotImplementedException();
+        return Compare1(from, to) is not null;
     }
 
     public static bool PositiveMappingExists(Tensor from, Tensor to)
     {
-        throw new NotImplementedException();
+        return Compare1(from, to) == false;
     }
 
     public static bool Equals(Tensor u, Tensor v)
     {
-        throw new NotImplementedException();
+        return Compare1(u, v) == false;
     }
 
     public static bool? Compare1(Tensor u, Tensor v)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(u);
+        ArgumentNullException.ThrowIfNull(v);
+
+        if (!u.Indices.GetFree().EqualsRegardlessOrder(v.Indices.GetFree()))
+        {
+            return null;
+        }
+
+        if (TensorUtils.EqualsExactly(u, v))
+        {
+            return false;
+        }
+
+        return TensorUtils.EqualsExactly(NRedberry.Tensors.Tensors.Negate(u), v)
+            || TensorUtils.EqualsExactly(u, NRedberry.Tensors.Tensors.Negate(v))
+            ? true
+            : null;
     }
 
     public static bool IsZeroDueToSymmetry(Tensor tensor)
@@ -67,12 +93,22 @@ public static class IndexMappings
 
     public static ISet<Mapping> GetAllMappings(Tensor from, Tensor to)
     {
-        throw new NotImplementedException();
+        Mapping? mapping = GetFirst(from, to);
+        return mapping is null ? new HashSet<Mapping>() : new HashSet<Mapping> { mapping };
     }
 
     private static ISet<Mapping> GetAllMappings(IOutputPort<Mapping> outputPort)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(outputPort);
+
+        HashSet<Mapping> mappings = [];
+        Mapping? mapping;
+        while ((mapping = outputPort.Take()) is not null)
+        {
+            mappings.Add(mapping);
+        }
+
+        return mappings;
     }
 
     internal static IOutputPort<IIndexMappingBuffer> CreatePortOfBuffers(Tensor from, Tensor to)
@@ -92,7 +128,12 @@ public static class IndexMappings
 
     private static Tensor? ExtractNonComplexFactor(Tensor tensor)
     {
-        throw new NotImplementedException();
+        if (tensor is not Product product)
+        {
+            return null;
+        }
+
+        return product.Factor.IsMinusOne() ? product[1] : null;
     }
 
     internal static IIndexMappingProvider CreatePort(IIndexMappingProvider provider, Tensor from, Tensor to)

@@ -8,16 +8,20 @@ namespace NRedberry.Core.Tests.Transformations.Symmetrization;
 public sealed class CollectScalarFactorsITransformationTests
 {
     [Fact]
-    public void ShouldThrowForSingletonAccess()
+    public void ShouldLeaveNonProductExpressionsUntouched()
     {
-        Assert.Throws<NotImplementedException>(() => _ = CollectScalarFactorsITransformation.Instance);
+        var tensor = TensorApi.Parse("a+b");
+
+        Assert.Same(tensor, CollectScalarFactorsITransformation.Instance.Transform(tensor));
     }
 
     [Fact]
-    public void ShouldThrowForConstructorsAndHelpers()
+    public void ShouldExposeWorkingConstructorsAndHelpers()
     {
-        Assert.Throws<NotImplementedException>(() => new CollectScalarFactorsITransformation(TraverseGuide.All));
-        Assert.Throws<NotImplementedException>(() =>
-            CollectScalarFactorsITransformation.CollectScalarFactors(TensorApi.Parse("a+b")));
+        var tensor = TensorApi.Parse("a+b");
+        CollectScalarFactorsITransformation transformation = new(TraverseGuide.All);
+
+        Assert.Same(tensor, transformation.Transform(tensor));
+        Assert.Same(tensor, CollectScalarFactorsITransformation.CollectScalarFactors(tensor));
     }
 }

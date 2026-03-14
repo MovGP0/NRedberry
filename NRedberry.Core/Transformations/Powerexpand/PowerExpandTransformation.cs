@@ -1,46 +1,57 @@
 using NRedberry.Core.Utils;
 using NRedberry.Tensors;
+using NRedberry.Tensors.Iterators;
 using NRedberry.Transformations.Symmetrization;
+using TensorFactory = NRedberry.Tensors.Tensors;
 
 namespace NRedberry.Transformations.Powerexpand;
 
-/// <summary>
-/// Skeleton port of cc.redberry.core.transformations.powerexpand.PowerExpandTransformation.
-/// </summary>
 public sealed class PowerExpandTransformation : TransformationToStringAble
 {
-    public static PowerExpandTransformation Instance => throw new NotImplementedException();
+    public static PowerExpandTransformation Instance { get; } = new();
 
-    private readonly IIndicator<Tensor> indicator;
+    private readonly IIndicator<Tensor> _indicator;
 
     private PowerExpandTransformation()
+        : this(new TrueIndicator<Tensor>())
     {
-        throw new NotImplementedException();
     }
 
     public PowerExpandTransformation(IIndicator<Tensor> indicator)
     {
-        this.indicator = indicator ?? throw new ArgumentNullException(nameof(indicator));
-        throw new NotImplementedException();
+        _indicator = indicator ?? throw new ArgumentNullException(nameof(indicator));
     }
 
     public PowerExpandTransformation(params SimpleTensor[] variables)
+        : this(PowerExpandUtils.VarsToIndicator(variables))
     {
-        throw new NotImplementedException();
     }
 
     public Tensor Transform(Tensor tensor)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(tensor);
+
+        FromChildToParentIterator iterator = new(tensor);
+        Tensor? current;
+
+        while ((current = iterator.Next()) is not null)
+        {
+            if (PowerExpandUtils.PowerExpandApplicable(current, _indicator))
+            {
+                iterator.Set(TensorFactory.Multiply(PowerExpandUtils.PowerExpandToArray1(current, _indicator)));
+            }
+        }
+
+        return iterator.Result();
     }
 
     public string ToString(OutputFormat outputFormat)
     {
-        throw new NotImplementedException();
+        return "PowerExpand";
     }
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        return ToString(CC.GetDefaultOutputFormat());
     }
 }

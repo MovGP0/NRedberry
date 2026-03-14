@@ -1,5 +1,4 @@
 using NRedberry.Transformations.Symmetrization;
-using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Symmetrization;
@@ -7,10 +6,8 @@ namespace NRedberry.Core.Tests.Transformations.Symmetrization;
 public sealed class EliminateFromSymmetriesITransformationTests
 {
     [Fact]
-    public void ShouldThrowWhileTransformationIsUnimplemented()
+    public void ShouldCreateCompatibilityWrapper()
     {
-        EliminateFromSymmetriesITransformation transformation = new();
-
-        Assert.Throws<NotImplementedException>(() => transformation.Transform(TensorApi.Parse("a+b")));
+        Assert.IsAssignableFrom<ITransformation>(new EliminateFromSymmetriesITransformation());
     }
 }

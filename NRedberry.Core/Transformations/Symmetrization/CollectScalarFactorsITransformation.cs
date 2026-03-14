@@ -8,37 +8,59 @@ namespace NRedberry.Transformations.Symmetrization;
 /// </summary>
 public sealed class CollectScalarFactorsITransformation : ITransformation
 {
-    public static CollectScalarFactorsITransformation Instance => throw new NotImplementedException();
+    public static CollectScalarFactorsITransformation Instance { get; } = new();
 
     private readonly TraverseGuide traverseGuide;
 
     private CollectScalarFactorsITransformation()
     {
-        throw new NotImplementedException();
+        traverseGuide = TraverseGuide.All;
     }
 
     public CollectScalarFactorsITransformation(TraverseGuide traverseGuide)
     {
-        throw new NotImplementedException();
+        this.traverseGuide = traverseGuide ?? throw new ArgumentNullException(nameof(traverseGuide));
     }
 
     public Tensor Transform(Tensor tensor)
     {
-        throw new NotImplementedException();
+        return CollectScalarFactors(tensor, traverseGuide);
     }
 
     public static Tensor CollectScalarFactors(Tensor tensor)
     {
-        throw new NotImplementedException();
+        return CollectScalarFactors(tensor, TraverseGuide.All);
     }
 
     public static Tensor CollectScalarFactors(Tensor tensor, TraverseGuide traverseGuide)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(tensor);
+        ArgumentNullException.ThrowIfNull(traverseGuide);
+
+        FromChildToParentIterator iterator = new(tensor, traverseGuide);
+        Tensor current;
+        while ((current = iterator.Next()) is not null)
+        {
+            if (current is Product product)
+            {
+                iterator.Set(CollectScalarFactorsInProduct(product));
+            }
+        }
+
+        return iterator.Result();
     }
 
     public static Tensor CollectScalarFactorsInProduct(Product product)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(product);
+
+        if (TensorUtils.IsSymbolic(product))
+        {
+            return product;
+        }
+
+        ScalarsBackedProductBuilder builder = new(product.Size, 1, product.Indices.GetFree().Size());
+        builder.Put(product);
+        return builder.Build();
     }
 }

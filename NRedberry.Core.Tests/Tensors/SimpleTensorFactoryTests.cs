@@ -23,4 +23,13 @@ public sealed class SimpleTensorFactoryTests
 
         Assert.Throws<NotSupportedException>(() => factory.Create(TensorFactory.Parse("a")));
     }
+
+    [Fact]
+    public void ShouldRejectUnexpectedArgumentsForConcreteOverload()
+    {
+        SimpleTensor tensor = Assert.IsType<SimpleTensor>(TensorFactory.Parse("T_a"));
+        SimpleTensorFactory factory = Assert.IsType<SimpleTensorFactory>(tensor.GetFactory());
+
+        Assert.Throws<NotSupportedException>(() => factory.Create(TensorFactory.Parse("a")));
+    }
 }

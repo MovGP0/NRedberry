@@ -13,6 +13,6 @@ public sealed class SimpleTensorFactory(SimpleTensor simpleTensor) : TensorFacto
 
     public Tensor Create(Tensor tensor)
     {
-        throw new NotImplementedException();
+        return Create([tensor]);
     }
 }

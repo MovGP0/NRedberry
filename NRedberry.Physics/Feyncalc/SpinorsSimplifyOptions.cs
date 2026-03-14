@@ -1,61 +1,47 @@
 using NRedberry.Tensors;
+using TensorFactory = NRedberry.Tensors.Tensors;
 
 namespace NRedberry.Physics.Feyncalc;
 
 /// <summary>
-/// Skeleton port of cc.redberry.physics.feyncalc.SpinorsSimplifyOptions.
+/// Port of cc.redberry.physics.feyncalc.SpinorsSimplifyOptions.
 /// </summary>
 public sealed class SpinorsSimplifyOptions : DiracOptions
 {
-    public SimpleTensor? U
-    {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
-    }
-
-    public SimpleTensor? V
-    {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
-    }
-
-    public SimpleTensor? UBar
-    {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
-    }
-
-    public SimpleTensor? VBar
-    {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
-    }
-
-    public SimpleTensor Momentum
-    {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
-    }
-
-    public Tensor Mass
-    {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
-    }
-
-    public bool DoDiracSimplify
-    {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
-    }
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SpinorsSimplifyOptions"/> class.
+    /// </summary>
     public SpinorsSimplifyOptions()
     {
-        throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SpinorsSimplifyOptions"/> class from string representations.
+    /// </summary>
     public SpinorsSimplifyOptions(string? u, string? v, string? uBar, string? vBar, string momentum, string mass)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(momentum);
+        ArgumentNullException.ThrowIfNull(mass);
+
+        U = u is null ? null : TensorFactory.ParseSimple(u);
+        V = v is null ? null : TensorFactory.ParseSimple(v);
+        UBar = uBar is null ? null : TensorFactory.ParseSimple(uBar);
+        VBar = vBar is null ? null : TensorFactory.ParseSimple(vBar);
+        Momentum = TensorFactory.ParseSimple(momentum);
+        Mass = TensorFactory.Parse(mass);
     }
+
+    public SimpleTensor? U { get; set; }
+
+    public SimpleTensor? V { get; set; }
+
+    public SimpleTensor? UBar { get; set; }
+
+    public SimpleTensor? VBar { get; set; }
+
+    public SimpleTensor? Momentum { get; set; }
+
+    public Tensor? Mass { get; set; }
+
+    public bool DoDiracSimplify { get; set; }
 }

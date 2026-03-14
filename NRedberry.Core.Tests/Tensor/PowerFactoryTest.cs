@@ -53,4 +53,10 @@ public sealed class PowerFactoryTest
         Assert.IsType<SimpleTensor>(power[0]);
         Assert.Equal(new Complex(3), power[1]);
     }
+
+    [Fact]
+    public void ShouldRejectConcreteCreateOverloadWithSingleArgument()
+    {
+        Assert.Throws<ArgumentException>(() => PowerFactory.Factory.Create(TensorFactory.Parse("a")));
+    }
 }

@@ -1,14 +1,15 @@
-﻿using NRedberry.Tensors;
+using NRedberry.Tensors;
 
 namespace NRedberry.Transformations.Symmetrization;
 
 /// <summary>
-/// Placeholder transformation without matching Java source.
+/// Compatibility wrapper around <see cref="EliminateDueSymmetriesTransformation"/>.
 /// </summary>
 public sealed class EliminateFromSymmetriesITransformation : ITransformation
 {
     public Tensor Transform(Tensor tensor)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(tensor);
+        return EliminateDueSymmetriesTransformation.Instance.Transform(tensor);
     }
 }

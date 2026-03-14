@@ -8,11 +8,16 @@ namespace NRedberry.Physics.Feyncalc;
 /// </summary>
 public sealed class UnitarySimplifyOptions
 {
-    public SimpleTensor UnitaryMatrix { get; set; } = TensorFactory.ParseSimple("T_A");
+    private static readonly SimpleTensor DefaultUnitaryMatrix = TensorFactory.ParseSimple("T_A");
+    private static readonly SimpleTensor DefaultStructureConstant = TensorFactory.ParseSimple("f_ABC");
+    private static readonly SimpleTensor DefaultSymmetricConstant = TensorFactory.ParseSimple("d_ABC");
+    private static readonly Tensor DefaultDimension = TensorFactory.Parse("N");
 
-    public SimpleTensor StructureConstant { get; set; } = TensorFactory.ParseSimple("f_ABC");
+    public SimpleTensor UnitaryMatrix { get; set; } = DefaultUnitaryMatrix;
 
-    public SimpleTensor SymmetricConstant { get; set; } = TensorFactory.ParseSimple("d_ABC");
+    public SimpleTensor StructureConstant { get; set; } = DefaultStructureConstant;
 
-    public Tensor Dimension { get; set; } = TensorFactory.Parse("N");
+    public SimpleTensor SymmetricConstant { get; set; } = DefaultSymmetricConstant;
+
+    public Tensor Dimension { get; set; } = DefaultDimension;
 }

@@ -19,7 +19,7 @@ public sealed class PrimitiveSubgraphPartition
     {
         ArgumentNullException.ThrowIfNull(productContent);
         pc = productContent;
-        fcs = pc.StructureOfContractions;
+        fcs = GetStructureOfContractions(productContent);
         size = pc.Size;
         this.type = type;
         used = new BitArray(size);
@@ -44,6 +44,25 @@ public sealed class PrimitiveSubgraphPartition
         }
 
         return subgraphs.ToArray();
+    }
+
+    private static StructureOfContractions GetStructureOfContractions(ProductContent productContent)
+    {
+        ArgumentNullException.ThrowIfNull(productContent);
+
+        StructureOfContractions structure = productContent.StructureOfContractions;
+        if (structure.contractions.Length == productContent.Size)
+        {
+            return structure;
+        }
+
+        Tensor[] data = productContent.GetDataCopy();
+        IndicesBuilder indicesBuilder = new();
+        indicesBuilder.Append(data);
+        Indices.Indices indices = indicesBuilder.Indices;
+        Indices.Indices freeIndices = indices.GetFree();
+        int differentIndicesCount = (indices.Size() + freeIndices.Size()) / 2;
+        return new StructureOfContractions(data, differentIndicesCount, freeIndices);
     }
 
     private PrimitiveSubgraph CalculateComponent(int pivot)

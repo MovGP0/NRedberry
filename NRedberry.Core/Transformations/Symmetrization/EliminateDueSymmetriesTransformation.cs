@@ -1,21 +1,40 @@
-﻿using NRedberry.Tensors;
+using NRedberry.Numbers;
+using NRedberry.Tensors;
+using NRedberry.Tensors.Iterators;
 
 namespace NRedberry.Transformations.Symmetrization;
 
 /// <summary>
-/// Skeleton port of cc.redberry.core.transformations.EliminateDueSymmetriesTransformation.
+/// Port of cc.redberry.core.transformations.EliminateDueSymmetriesTransformation.
 /// </summary>
 public sealed class EliminateDueSymmetriesTransformation : ITransformation
 {
-    public static EliminateDueSymmetriesTransformation Instance => throw new NotImplementedException();
+    public static EliminateDueSymmetriesTransformation Instance { get; } = new();
 
     private EliminateDueSymmetriesTransformation()
     {
-        throw new NotImplementedException();
     }
 
     public Tensor Transform(Tensor tensor)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(tensor);
+
+        TreeTraverseIterator iterator = new(tensor);
+        TraverseState? state;
+        while ((state = iterator.Next()) is not null)
+        {
+            if (state != TraverseState.Leaving)
+            {
+                continue;
+            }
+
+            Tensor current = iterator.Current();
+            if (TensorUtils.IsZeroDueToSymmetry(current))
+            {
+                iterator.Set(Complex.Zero);
+            }
+        }
+
+        return iterator.Result();
     }
 }

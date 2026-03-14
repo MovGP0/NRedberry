@@ -101,6 +101,6 @@ public sealed class PowerFactory : TensorFactory
 
     public Tensor Create(Tensor tensor)
     {
-        throw new NotImplementedException();
+        return Create([tensor]);
     }
 }

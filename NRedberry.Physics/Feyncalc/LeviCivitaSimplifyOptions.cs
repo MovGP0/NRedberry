@@ -10,13 +10,16 @@ namespace NRedberry.Physics.Feyncalc;
 /// </summary>
 public sealed class LeviCivitaSimplifyOptions()
 {
+    private static readonly SimpleTensor DefaultLeviCivita = TensorFactory.ParseSimple("e_abcd");
+    private static readonly Tensor DefaultDimension = TensorFactory.Parse("N");
+
     public LeviCivitaSimplifyOptions(bool minkowskiSpace)
         : this()
     {
         MinkowskiSpace = minkowskiSpace;
     }
 
-    public SimpleTensor LeviCivita { get; set; } = TensorFactory.ParseSimple("e_abcd");
+    public SimpleTensor LeviCivita { get; set; } = DefaultLeviCivita;
 
     public bool MinkowskiSpace { get; set; } = true;
 
@@ -24,5 +27,5 @@ public sealed class LeviCivitaSimplifyOptions()
 
     public ITransformation OverallSimplifications { get; set; } = Transformation.Identity;
 
-    public Tensor Dimension { get; set; } = TensorFactory.Parse("N");
+    public Tensor Dimension { get; set; } = DefaultDimension;
 }

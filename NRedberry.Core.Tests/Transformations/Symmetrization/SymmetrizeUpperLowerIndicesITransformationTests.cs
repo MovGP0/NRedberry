@@ -1,5 +1,4 @@
 using NRedberry.Transformations.Symmetrization;
-using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Symmetrization;
@@ -7,10 +6,8 @@ namespace NRedberry.Core.Tests.Transformations.Symmetrization;
 public sealed class SymmetrizeUpperLowerIndicesITransformationTests
 {
     [Fact]
-    public void ShouldThrowForSingletonAccessAndHelpers()
+    public void ShouldExposeSingleton()
     {
-        Assert.Throws<NotImplementedException>(() => _ = SymmetrizeUpperLowerIndicesITransformation.Instance);
-        Assert.Throws<NotImplementedException>(() =>
-            SymmetrizeUpperLowerIndicesITransformation.SymmetrizeUpperLowerIndices(TensorApi.Parse("A_ab")));
+        Assert.NotNull(SymmetrizeUpperLowerIndicesITransformation.Instance);
     }
 }

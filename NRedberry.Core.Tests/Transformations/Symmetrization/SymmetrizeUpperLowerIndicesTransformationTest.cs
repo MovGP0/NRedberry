@@ -4,17 +4,17 @@ namespace NRedberry.Core.Tests.Transformations.Symmetrization;
 
 public sealed class SymmetrizeUpperLowerIndicesTransformationTest
 {
-    [Fact(Skip = "SymmetrizeUpperLowerIndicesTransformation is not yet implemented.")]
+    [Fact(Skip = "Blocked by the remaining IndexMappings port.")]
     public void ShouldSymmetrizeLowerIndices()
     {
     }
 
-    [Fact(Skip = "SymmetrizeUpperLowerIndicesTransformation is not yet implemented.")]
+    [Fact(Skip = "Blocked by the remaining IndexMappings port.")]
     public void ShouldLeaveUpperIndicesUntouched()
     {
     }
 
-    [Fact(Skip = "SymmetrizeUpperLowerIndicesTransformation is not yet implemented.")]
+    [Fact(Skip = "Blocked by the remaining IndexMappings port.")]
     public void ShouldSymmetrizeMixedTensor()
     {
     }
