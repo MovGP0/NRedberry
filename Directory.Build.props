@@ -137,8 +137,4 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('Tests'))">
-    <Compile Include="$(MSBuildThisFileDirectory)TestInfrastructure\Shouldly\GlobalUsings.cs"
-             Link="TestInfrastructure\Shouldly\GlobalUsings.cs" />
-  </ItemGroup>
 </Project>
