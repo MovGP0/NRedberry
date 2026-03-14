@@ -21,9 +21,12 @@ public sealed class SingleReverseTests
         TensorType tensor = TensorApi.Parse("A^a'_b'*B^b'_c'*C^c'_d'");
 
         TensorType actual = SingleReverse.InverseOrderOfMatrices(tensor, IndexType.Matrix1);
-        TensorType expected = TensorApi.Parse("C^a'_b'*B^b'_c'*A^c'_d'");
-
-        Assert.True(TensorUtils.Equals(expected, actual));
+        AssertIndexedFactors(
+            actual,
+            "A^{c'}_{d'}",
+            "B^{b'}_{c'}",
+            "C^{a'}_{b'}");
+        Assert.Equal(tensor.Indices.ToString(), actual.Indices.ToString());
     }
 
     [Fact]
@@ -32,9 +35,13 @@ public sealed class SingleReverseTests
         TensorType tensor = TensorApi.Parse("cv_b'*A^b'_c'*B^c'_d'*v^d'");
 
         TensorType actual = SingleReverse.InverseOrderOfMatrices(tensor, IndexType.Matrix1);
-        TensorType expected = TensorApi.Parse("cv_b'*B^b'_c'*A^c'_d'*v^d'");
-
-        Assert.True(TensorUtils.Equals(expected, actual));
+        AssertIndexedFactors(
+            actual,
+            "A^{c'}_{d'}",
+            "B^{b'}_{c'}",
+            "cv_{b'}",
+            "v^{d'}");
+        Assert.Equal(tensor.Indices.ToString(), actual.Indices.ToString());
     }
 
     [Fact]
@@ -55,5 +62,22 @@ public sealed class SingleReverseTests
         Action action = () => SingleReverse.InverseOrderOfMatrices(tensor, IndexType.Matrix1);
 
         Assert.Throws<ArgumentException>(action);
+    }
+
+    private static void AssertIndexedFactors(TensorType tensor, params string[] expected)
+    {
+        string[] actual = GetIndexedFactorTexts(tensor);
+        string[] sortedExpected = expected.OrderBy(text => text, StringComparer.Ordinal).ToArray();
+
+        Assert.Equal(sortedExpected, actual);
+    }
+
+    private static string[] GetIndexedFactorTexts(TensorType tensor)
+    {
+        TensorType[] factors = tensor is Product product ? product.Data : [tensor];
+        return factors
+            .Select(static factor => factor.ToString())
+            .OrderBy(static text => text, StringComparer.Ordinal)
+            .ToArray();
     }
 }

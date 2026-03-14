@@ -1,10 +1,8 @@
-using System;
-using System.Reflection;
-using NRedberry.Concurrent;
 using NRedberry.IndexMapping;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
 using Xunit;
+using TensorApi = NRedberry.Tensors.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
 
 namespace NRedberry.Core.Tests.Indexmapping;
@@ -12,131 +10,83 @@ namespace NRedberry.Core.Tests.Indexmapping;
 public sealed class IndexMappingsTests
 {
     [Fact]
-    public void CreatePortShouldThrowNotImplementedException()
+    public void CreatePortShouldReturnIdentityMappingForEqualScalars()
     {
-        Assert.Throws<NotImplementedException>(() => IndexMappings.CreatePort(Complex.One, Complex.Zero));
+        MappingsPort port = IndexMappings.CreatePort(Complex.One, Complex.One);
+
+        Mapping? first = port.Take();
+        Assert.NotNull(first);
+        Assert.False(first.GetSign());
+        Assert.True(first.IsEmpty());
+        Assert.Null(port.Take());
     }
 
     [Fact]
-    public void SimpleTensorsPortShouldThrowNotImplementedException()
+    public void SimpleTensorsPortShouldMapMatchingSimpleTensors()
     {
-        SimpleTensor from = null!;
-        SimpleTensor to = null!;
+        SimpleTensor from = TensorApi.ParseSimple("A");
+        SimpleTensor to = TensorApi.ParseSimple("A");
 
-        Assert.Throws<NotImplementedException>(() => IndexMappings.SimpleTensorsPort(from, to));
+        Mapping? mapping = IndexMappings.SimpleTensorsPort(from, to).Take();
+        Assert.NotNull(mapping);
+        Assert.False(mapping.GetSign());
     }
 
     [Fact]
-    public void CreateBijectiveProductPortShouldThrowNotImplementedException()
+    public void CreateBijectiveProductPortShouldReturnMappingsForMatchingFactors()
     {
-        TensorType[] from = [Complex.One];
-        TensorType[] to = [Complex.Zero];
+        TensorType[] from = [Complex.One, Complex.One];
+        TensorType[] to = [Complex.One, Complex.One];
 
-        Assert.Throws<NotImplementedException>(() => IndexMappings.CreateBijectiveProductPort(from, to));
+        Mapping? mapping = IndexMappings.CreateBijectiveProductPort(from, to).Take();
+        Assert.NotNull(mapping);
     }
 
     [Fact]
-    public void GetFirstShouldThrowNotImplementedException()
+    public void GetFirstShouldReturnNullWhenNoMappingExists()
     {
-        Assert.Throws<NotImplementedException>(() => IndexMappings.GetFirst(Complex.One, Complex.Zero));
+        Assert.Null(IndexMappings.GetFirst(Complex.One, Complex.Zero));
     }
 
     [Fact]
-    public void MappingExistsShouldThrowNotImplementedException()
+    public void MappingQueriesShouldReflectEqualAndUnequalCases()
     {
-        Assert.Throws<NotImplementedException>(() => IndexMappings.MappingExists(Complex.One, Complex.Zero));
+        Assert.True(IndexMappings.MappingExists(Complex.One, Complex.One));
+        Assert.True(IndexMappings.PositiveMappingExists(Complex.One, Complex.One));
+        Assert.False(IndexMappings.AnyMappingExists(Complex.One, Complex.Zero));
+        Assert.False(IndexMappings.MappingExists(Complex.One, Complex.Zero));
     }
 
     [Fact]
-    public void PositiveMappingExistsShouldThrowNotImplementedException()
+    public void EqualityQueriesShouldReflectEqualAndUnequalCases()
     {
-        Assert.Throws<NotImplementedException>(() => IndexMappings.PositiveMappingExists(Complex.One, Complex.Zero));
+        Assert.True(IndexMappings.Equals(Complex.One, Complex.One));
+        Assert.False(IndexMappings.Equals(Complex.One, Complex.Zero));
+        Assert.False(IndexMappings.Compare1(Complex.One, Complex.One));
+        Assert.Null(IndexMappings.Compare1(Complex.One, Complex.Zero));
     }
 
     [Fact]
-    public void EqualsShouldThrowNotImplementedException()
+    public void IsZeroDueToSymmetryShouldBeFalseForSimpleScalar()
     {
-        Assert.Throws<NotImplementedException>(() => IndexMappings.Equals(Complex.One, Complex.Zero));
+        Assert.False(IndexMappings.IsZeroDueToSymmetry(Complex.One));
     }
 
     [Fact]
-    public void Compare1ShouldThrowNotImplementedException()
+    public void GetAllMappingsShouldReturnSingleIdentityMappingForEqualScalars()
     {
-        Assert.Throws<NotImplementedException>(() => IndexMappings.Compare1(Complex.One, Complex.Zero));
+        ISet<Mapping> mappings = IndexMappings.GetAllMappings(Complex.One, Complex.One);
+
+        Assert.Single(mappings);
+        Mapping mapping = Assert.Single(mappings);
+        Assert.False(mapping.GetSign());
+        Assert.True(mapping.IsEmpty());
     }
 
     [Fact]
-    public void IsZeroDueToSymmetryShouldThrowNotImplementedException()
+    public void TestMappingShouldValidateReturnedMapping()
     {
-        Assert.Throws<NotImplementedException>(() => IndexMappings.IsZeroDueToSymmetry(Complex.Zero));
-    }
-
-    [Fact]
-    public void GetAllMappingsShouldThrowNotImplementedException()
-    {
-        Assert.Throws<NotImplementedException>(() => IndexMappings.GetAllMappings(Complex.One, Complex.Zero));
-    }
-
-    [Fact]
-    public void InternalCreatePortOfBuffersWithTensorArgumentsShouldThrowNotImplementedException()
-    {
-        MethodInfo method = GetMethod(
-            "CreatePortOfBuffers",
-            BindingFlags.NonPublic | BindingFlags.Static,
-            typeof(TensorType),
-            typeof(TensorType));
-
-        AssertThrowsNotImplemented(method, Complex.One, Complex.Zero);
-    }
-
-    [Fact]
-    public void InternalCreatePortWithProviderArgumentShouldThrowNotImplementedException()
-    {
-        MethodInfo method = GetMethod(
-            "CreatePort",
-            BindingFlags.NonPublic | BindingFlags.Static,
-            typeof(IIndexMappingProvider),
-            typeof(TensorType),
-            typeof(TensorType));
-
-        AssertThrowsNotImplemented(method, IndexMappingProviderUtil.EmptyProvider, Complex.One, Complex.Zero);
-    }
-
-    [Fact]
-    public void InternalGetFirstBufferShouldThrowNotImplementedException()
-    {
-        MethodInfo method = GetMethod(
-            "GetFirstBuffer",
-            BindingFlags.NonPublic | BindingFlags.Static,
-            typeof(TensorType),
-            typeof(TensorType));
-
-        AssertThrowsNotImplemented(method, Complex.One, Complex.Zero);
-    }
-
-    [Fact]
-    public void PrivateGetAllMappingsOutputPortOverloadShouldThrowNotImplementedException()
-    {
-        MethodInfo method = GetMethod(
-            "GetAllMappings",
-            BindingFlags.NonPublic | BindingFlags.Static,
-            typeof(IOutputPort<Mapping>));
-
-        AssertThrowsNotImplemented(method, [null]);
-    }
-
-    private static MethodInfo GetMethod(string name, BindingFlags bindingFlags, params Type[] parameterTypes)
-    {
-        MethodInfo? method = typeof(IndexMappings).GetMethod(name, bindingFlags, null, parameterTypes, null);
-
-        Assert.NotNull(method);
-        return method!;
-    }
-
-    private static void AssertThrowsNotImplemented(MethodInfo method, params object?[]? arguments)
-    {
-        TargetInvocationException exception = Assert.Throws<TargetInvocationException>(() => method.Invoke(null, arguments));
-
-        Assert.IsType<NotImplementedException>(exception.InnerException);
+        Mapping mapping = Assert.IsType<Mapping>(IndexMappings.GetFirst(Complex.One, Complex.One));
+        Assert.True(IndexMappings.TestMapping(mapping, Complex.One, Complex.One));
     }
 }

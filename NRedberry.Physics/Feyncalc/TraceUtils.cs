@@ -8,7 +8,7 @@ using ContextCC = NRedberry.Contexts.CC;
 namespace NRedberry.Physics.Feyncalc;
 
 /// <summary>
-/// Skeleton port of cc.redberry.physics.feyncalc.TraceUtils.
+/// Port of cc.redberry.physics.feyncalc.TraceUtils.
 /// </summary>
 public static class TraceUtils
 {
@@ -19,6 +19,8 @@ public static class TraceUtils
 
     public static IndexType[] ExtractTypesFromMatrix(SimpleTensor matrix)
     {
+        ArgumentNullException.ThrowIfNull(matrix);
+
         if (matrix.Indices.Size() != 3)
         {
             throw new ArgumentException($"Not a matrix: {matrix}.");
@@ -76,6 +78,11 @@ public static class TraceUtils
         SimpleTensor symmetricConstant,
         Tensor dimension)
     {
+        ArgumentNullException.ThrowIfNull(unitaryMatrix);
+        ArgumentNullException.ThrowIfNull(structureConstant);
+        ArgumentNullException.ThrowIfNull(symmetricConstant);
+        ArgumentNullException.ThrowIfNull(dimension);
+
         if (dimension is Complex && !TensorUtils.IsNaturalNumber(dimension))
         {
             throw new ArgumentException("Non natural degree.");

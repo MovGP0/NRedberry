@@ -34,6 +34,14 @@ public static class PowerExpandUtils
         return PowerExpandToArray(power, new TrueIndicator<Tensor>());
     }
 
+    public static Tensor[] PowerExpandToArray(Power power, params SimpleTensor[] variables)
+    {
+        ArgumentNullException.ThrowIfNull(power);
+        ArgumentNullException.ThrowIfNull(variables);
+
+        return PowerExpandToArray(power, VarsToIndicator(variables));
+    }
+
     public static Tensor[] PowerExpandToArray(Power power, IIndicator<Tensor> indicator)
     {
         ArgumentNullException.ThrowIfNull(power);

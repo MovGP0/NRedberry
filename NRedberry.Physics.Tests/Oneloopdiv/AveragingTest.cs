@@ -7,6 +7,7 @@ using TensorCC = NRedberry.Tensors.CC;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 using Xunit.Abstractions;
+using Shouldly;
 
 namespace NRedberry.Physics.Tests.Oneloopdiv;
 
@@ -37,7 +38,7 @@ public sealed class AveragingTest(ITestOutputHelper testOutputHelper)
                 testOutputHelper.WriteLine(t.ToString());
             }
 
-            AssertTrue(TensorUtils.IsOne(t));
+            TensorUtils.IsOne(t).ShouldBeTrue();
         }
     }
 
@@ -50,7 +51,7 @@ public sealed class AveragingTest(ITestOutputHelper testOutputHelper)
         t = ExpandTransformation.Expand(t, EliminateMetricsTransformation.Instance);
         t = EliminateMetricsTransformation.Eliminate(t);
         t = d.Transform(t);
-        AssertTrue(TensorUtils.IsOne(t));
+        TensorUtils.IsOne(t).ShouldBeTrue();
     }
 
     [Fact]
@@ -72,7 +73,7 @@ public sealed class AveragingTest(ITestOutputHelper testOutputHelper)
         Tensor t = TensorFactory.Parse("a*n_\\mu*n_\\nu");
         t = new Averaging(TensorFactory.ParseSimple("n_\\mu")).Transform(t);
         Tensor expected = TensorFactory.Parse("1/4*a*g_\\mu\\nu");
-        AssertTrue(TensorUtils.Equals(t, expected));
+        TensorUtils.Equals(t, expected).ShouldBeTrue();
     }
 
     [Fact]
@@ -85,7 +86,7 @@ public sealed class AveragingTest(ITestOutputHelper testOutputHelper)
         t = EliminateMetricsTransformation.Eliminate(t);
         t = d.Transform(t);
         Tensor expected = TensorFactory.Parse("(1/4*a+1)*g_\\mu\\nu");
-        AssertTrue(TensorUtils.Equals(t, expected));
+        TensorUtils.Equals(t, expected).ShouldBeTrue();
     }
 
     [Fact]
@@ -94,7 +95,7 @@ public sealed class AveragingTest(ITestOutputHelper testOutputHelper)
         Tensor t = TensorFactory.Parse("1");
         t = new Averaging(TensorFactory.ParseSimple("n_\\mu")).Transform(t);
         Tensor expected = TensorFactory.Parse("1");
-        AssertTrue(TensorUtils.Equals(t, expected));
+        TensorUtils.Equals(t, expected).ShouldBeTrue();
     }
 
     [Fact]
@@ -102,7 +103,7 @@ public sealed class AveragingTest(ITestOutputHelper testOutputHelper)
     {
         Tensor t = TensorFactory.Parse("n_\\mu*n_\\nu*n^\\alpha*n^\\beta");
         t = new Averaging(TensorFactory.ParseSimple("n_\\mu")).Transform(t);
-        AssertTrue(TensorUtils.Equals(t, TensorFactory.Parse("1/24*(d^{\\alpha }_{\\nu }*d^{\\beta }_{\\mu }+d^{\\alpha }_{\\mu }*d^{\\beta }_{\\nu }+g^{\\alpha \\beta }*g_{\\mu \\nu })")));
+        TensorUtils.Equals(t, TensorFactory.Parse("1/24*(d^{\\alpha }_{\\nu }*d^{\\beta }_{\\mu }+d^{\\alpha }_{\\mu }*d^{\\beta }_{\\nu }+g^{\\alpha \\beta }*g_{\\mu \\nu })")).ShouldBeTrue();
     }
 
     [Fact]
@@ -146,13 +147,5 @@ public sealed class AveragingTest(ITestOutputHelper testOutputHelper)
     {
         var simple = TensorFactory.ParseSimple(tensor);
         simple.SimpleIndices.Symmetries.Add(type, sign, permutation);
-    }
-
-    private static void AssertTrue(bool condition)
-    {
-        if (!condition)
-        {
-            throw new InvalidOperationException("Assertion failed.");
-        }
     }
 }
