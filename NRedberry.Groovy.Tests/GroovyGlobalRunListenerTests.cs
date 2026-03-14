@@ -30,7 +30,8 @@ public sealed class GroovyGlobalRunListenerTests
         }
 
         string output = writer.ToString();
-        Assert.Contains("groovy.failure", output, StringComparison.Ordinal);
-        Assert.Contains("name manager seed", output, StringComparison.OrdinalIgnoreCase);
+        output.ShouldSatisfyAllConditions(
+            () => output.ShouldContain("groovy.failure", StringComparison.Ordinal),
+            () => output.ShouldContain("name manager seed", StringComparison.OrdinalIgnoreCase));
     }
 }

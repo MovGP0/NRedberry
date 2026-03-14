@@ -15,7 +15,7 @@ public sealed class DSLTransformationInstTests
 
         Tensor transformed = instance.Transform(tensor);
 
-        Assert.Same(tensor, transformed);
-        Assert.Equal("test-transformation", instance.ToString());
+        tensor.ShouldBe(transformed);
+        instance.ToString().ShouldBe("test-transformation");
     }
 }
