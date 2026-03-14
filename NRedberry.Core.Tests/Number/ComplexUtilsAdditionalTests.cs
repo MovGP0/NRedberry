@@ -86,7 +86,7 @@ public sealed class ComplexUtilsAdditionalTests
 
         result.ShouldNotBeNull();
         result.IsReal().ShouldBeTrue();
-        Assert.Equal(expected, result.Real.ToDouble(), Delta);
+        result.Real.ToDouble().ShouldBe(expected, Delta);
     }
 
     [Theory]

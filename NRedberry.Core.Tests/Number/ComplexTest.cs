@@ -20,7 +20,7 @@ public sealed class ComplexTest
     {
         NumberComplex value = NumberParser<NumberComplex>.ComplexParser.Parse("2+I*3/2");
 
-        Assert.Equal(2.5, value.Abs().DoubleValue(), 12);
+        value.Abs().DoubleValue().ShouldBe(2.5, 1e-12);
     }
 
     [Fact]
@@ -41,7 +41,7 @@ public sealed class ComplexTest
         NumberComplex expected = NumberParser<NumberComplex>.ComplexParser.Parse(
             "-2447.6068984138622390537015124004469474415099289143+1419.5557138599609517808549217505859917260231093976*I");
 
-        actual.Subtract(expected).AbsNumeric() <= 1E-10.ShouldBeTrue();
+        (actual.Subtract(expected).AbsNumeric() <= 1E-10).ShouldBeTrue();
     }
 
     [Fact]
@@ -59,7 +59,7 @@ public sealed class ComplexTest
         NumberComplex value = NumberParser<NumberComplex>.ComplexParser.Parse("1+I");
         NumberComplex expected = NumberParser<NumberComplex>.ComplexParser.Parse("0.581657+1.61562*I");
 
-        value.Pow(1.56).Subtract(expected).AbsNumeric() <= 1E-5.ShouldBeTrue();
+        (value.Pow(1.56).Subtract(expected).AbsNumeric() <= 1E-5).ShouldBeTrue();
     }
 
     [Fact]
@@ -125,7 +125,7 @@ public sealed class ComplexTest
         const string value = "1e100";
         Real parsed = NumberParser<Real>.RealParser.Parse(value);
 
-        parsed.DoubleValue() > 0.0.ShouldBeTrue();
+        (parsed.DoubleValue() > 0.0).ShouldBeTrue();
     }
 
     [Fact]

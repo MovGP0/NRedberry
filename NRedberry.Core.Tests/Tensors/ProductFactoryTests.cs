@@ -53,6 +53,6 @@ public sealed class ProductFactoryTests
 
         string text = result.ToString(OutputFormat.Redberry);
 
-        text is "-a-b" or "-b-a".ShouldBeTrue();
+        (text is "-a-b" or "-b-a").ShouldBeTrue();
     }
 }

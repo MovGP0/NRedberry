@@ -10,8 +10,8 @@ public sealed class TimingTests
     {
         object[] result = Timing.Measure(new ConstantTimingJob<int>(42), false);
 
-        (long)result[0] >= 0.ShouldBeTrue();
-        Assert.IsType<int>(result[1]).ShouldBe(42);
+        (((long)result[0]) >= 0).ShouldBeTrue();
+        result[1].ShouldBeOfType<int>().ShouldBe(42);
     }
 
     [Fact]
@@ -20,10 +20,10 @@ public sealed class TimingTests
         object[] micro = Timing.MeasureMicro(new ConstantTimingJob<string>("ok"), false);
         object[] nano = Timing.MeasureNano(new ConstantTimingJob<string>("ok"), false);
 
-        (long)micro[0] >= 0.ShouldBeTrue();
-        (long)nano[0] >= 0.ShouldBeTrue();
-        Assert.IsType<string>(micro[1]).ShouldBe("ok");
-        Assert.IsType<string>(nano[1]).ShouldBe("ok");
+        (((long)micro[0]) >= 0).ShouldBeTrue();
+        (((long)nano[0]) >= 0).ShouldBeTrue();
+        micro[1].ShouldBeOfType<string>().ShouldBe("ok");
+        nano[1].ShouldBeOfType<string>().ShouldBe("ok");
     }
 }
 

@@ -29,6 +29,6 @@ public sealed class TensorWrapperTests
         TensorWrapper right = TensorWrapper.Wrap(TensorApi.Parse("a"));
 
         left.CompareTo(right).ShouldBe(0);
-        left.CompareTo(null) < 0.ShouldBeTrue();
+        (left.CompareTo(null) < 0).ShouldBeTrue();
     }
 }

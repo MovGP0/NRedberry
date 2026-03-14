@@ -83,7 +83,7 @@ public sealed class PlusMinusIndexMappingProviderTests
         Type? providerType = typeof(IndexMappingProviderAbstract).Assembly
             .GetType("NRedberry.IndexMapping.PlusMinusIndexMappingProvider", throwOnError: false);
 
-        providerType is not null.ShouldBeTrue();
+        (providerType is not null).ShouldBeTrue();
         return providerType;
     }
 

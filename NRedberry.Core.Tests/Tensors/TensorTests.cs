@@ -44,8 +44,8 @@ public sealed class TensorTests
         TestTensor left = new("left", 1);
         TestTensor right = new("right", 5);
 
-        left.CompareTo(right) < 0.ShouldBeTrue();
-        right.CompareTo(left) > 0.ShouldBeTrue();
+        (left.CompareTo(right) < 0).ShouldBeTrue();
+        (right.CompareTo(left) > 0).ShouldBeTrue();
         right.CompareTo(null).ShouldBe(1);
     }
 

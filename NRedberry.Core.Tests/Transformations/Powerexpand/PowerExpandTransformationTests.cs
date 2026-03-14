@@ -17,7 +17,7 @@ public sealed class PowerExpandTransformationTests
 
         NRedberry.Tensors.Tensor actual = PowerExpandTransformation.Instance.Transform(tensor);
 
-        AssertTensorEquals(
+        ShouldEqualTensor(
             TensorApi.Multiply(Pow("a", "d"), Pow("b", "d"), Pow("c", "d")),
             actual);
     }
@@ -30,7 +30,7 @@ public sealed class PowerExpandTransformationTests
 
         NRedberry.Tensors.Tensor actual = transformation.Transform(tensor);
 
-        AssertTensorEquals(
+        ShouldEqualTensor(
             TensorApi.Multiply(Pow("a", "d"), Pow("b*c", "d")),
             actual);
     }
@@ -44,7 +44,7 @@ public sealed class PowerExpandTransformationTests
         NRedberry.Tensors.Tensor actual = TensorApi.Multiply(
             PowerExpandUtils.PowerExpandIntoChainToArray(power, Array.Empty<int>(), indicator));
 
-        AssertTensorEquals(
+        ShouldEqualTensor(
             TensorApi.Multiply(Pow("a", "d"), Pow("b*c", "d")),
             actual);
     }
@@ -78,7 +78,7 @@ public sealed class PowerExpandTransformationTests
         NRedberry.Tensors.Tensor actual = TensorApi.Multiply(
             PowerExpandUtils.PowerExpandToArray(power, TensorApi.ParseSimple("a")));
 
-        AssertTensorEquals(
+        ShouldEqualTensor(
             TensorApi.Multiply(Pow("a", "d"), Pow("b*c", "d")),
             actual);
     }
@@ -93,7 +93,7 @@ public sealed class PowerExpandTransformationTests
 
         NRedberry.Tensors.Tensor actual = transformation.Transform(tensor);
 
-        AssertTensorEquals(
+        ShouldEqualTensor(
             TensorApi.Multiply(Pow("a", "e*d"), Pow("b*c", "d")),
             actual);
     }
@@ -111,7 +111,7 @@ public sealed class PowerExpandTransformationTests
 
         NRedberry.Tensors.Tensor actual = transformation.Transform(tensor);
 
-        AssertTensorEquals(
+        ShouldEqualTensor(
             TensorApi.Multiply(
                 Pow("a", "r*e*d"),
                 Pow(TensorApi.Multiply(Pow("g", "e"), Parse("b"), Parse("c")), Parse("d"))),
@@ -133,7 +133,7 @@ public sealed class PowerExpandTransformationTests
 
         NRedberry.Tensors.Tensor actual = transformation.Transform(tensor);
 
-        AssertTensorEquals(
+        ShouldEqualTensor(
             TensorApi.Multiply(Pow("a", "r*e*d"), Pow("g", "e*d"), Pow("b*c", "d")),
             actual);
     }
@@ -157,7 +157,7 @@ public sealed class PowerExpandTransformationTests
 
         NRedberry.Tensors.Tensor actual = transformation.Transform(tensor);
 
-        AssertTensorEquals(
+        ShouldEqualTensor(
             TensorApi.Sum(
                 TensorApi.Multiply(
                     Pow("a", "r*e*d"),
@@ -182,7 +182,7 @@ public sealed class PowerExpandTransformationTests
 
         NRedberry.Tensors.Tensor actual = collection.Transform(tensor);
 
-        AssertTensorEquals(TensorApi.Multiply(Pow("a", "x"), Pow("b", "x")), actual);
+        ShouldEqualTensor(TensorApi.Multiply(Pow("a", "x"), Pow("b", "x")), actual);
     }
 
     private static NRedberry.Tensors.Tensor Parse(string expression)
@@ -200,7 +200,7 @@ public sealed class PowerExpandTransformationTests
         return new NRedberry.Tensors.Power(argument, exponent);
     }
 
-    private static void AssertTensorEquals(NRedberry.Tensors.Tensor expected, NRedberry.Tensors.Tensor actual)
+    private static void ShouldEqualTensor(NRedberry.Tensors.Tensor expected, NRedberry.Tensors.Tensor actual)
     {
         NRedberry.Tensors.TensorUtils.EqualsExactly(actual, expected).ShouldBeTrue($"Expected: {expected.ToString(OutputFormat.Redberry)}; Actual: {actual.ToString(OutputFormat.Redberry)}");
     }

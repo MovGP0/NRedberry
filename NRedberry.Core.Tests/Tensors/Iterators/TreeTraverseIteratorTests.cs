@@ -20,13 +20,13 @@ public sealed class TreeTraverseIteratorTests
         }
 
         visited.ShouldBe([
-                (TraverseState.Entering, "a+b", 0),
-                (TraverseState.Entering, "a", 1),
-                (TraverseState.Leaving, "a", 1),
-                (TraverseState.Entering, "b", 1),
-                (TraverseState.Leaving, "b", 1),
-                (TraverseState.Leaving, "a+b", 0),
-            ]);
+            (TraverseState.Entering, "a+b", 0),
+            (TraverseState.Entering, "a", 1),
+            (TraverseState.Leaving, "a", 1),
+            (TraverseState.Entering, "b", 1),
+            (TraverseState.Leaving, "b", 1),
+            (TraverseState.Leaving, "a+b", 0),
+        ]);
     }
 
     [Fact]

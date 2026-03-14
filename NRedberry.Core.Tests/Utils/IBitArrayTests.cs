@@ -10,16 +10,16 @@ public sealed class IBitArrayTests
     [Fact]
     public void ShouldSupportBitArrayContractWithByteBackedImplementation()
     {
-        AssertBitArrayContract(new ByteBackedBitArray(8), new ByteBackedBitArray(8));
+        ShouldHaveBitArrayContract(new ByteBackedBitArray(8), new ByteBackedBitArray(8));
     }
 
     [Fact]
     public void ShouldSupportBitArrayContractWithLongBackedImplementation()
     {
-        AssertBitArrayContract(new LongBackedBitArray(8), new LongBackedBitArray(8));
+        ShouldHaveBitArrayContract(new LongBackedBitArray(8), new LongBackedBitArray(8));
     }
 
-    private static void AssertBitArrayContract(IBitArray left, IBitArray right)
+    private static void ShouldHaveBitArrayContract(IBitArray left, IBitArray right)
     {
         left.Set(1);
         left.Set(3);

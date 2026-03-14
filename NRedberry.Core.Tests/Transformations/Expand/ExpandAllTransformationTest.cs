@@ -38,7 +38,7 @@ public sealed class ExpandAllTransformationTest
     {
         TensorType actual = ExpandAllTransformation.Expand(
             TensorFactory.Parse("((a+b)*(c+a)-a)*f_mn*(f^mn+r^mn)-((a-b)*(c-a)+a)*r_ab*(f^ab+r^ab)"));
-        ExpandTest.AssertAllBracketsExpanded(actual);
+        ExpandTest.ShouldHaveAllBracketsExpanded(actual);
         TensorType expected = TensorFactory.Parse("(2*c*b+2*Power[a, 2]+-2*a)*r_{ab}*f^{ab}+(-1*b*a+c*b+-1*c*a+Power[a, 2]+-1*a)*r^{ab}*r_{ab}+(b*a+c*b+c*a+Power[a, 2]+-1*a)*f^{mn}*f_{mn}");
         TensorUtils.Equals(actual, expected).ShouldBeTrue();
     }

@@ -56,15 +56,8 @@ public sealed class ParseTokenDerivativeTests
                 RedberryParser.Default.Parse("x"),
                 RedberryParser.Default.Parse("x+y"));
 
-            try
-            {
-                _ = derivative.ToTensor();
-                Assert.Fail("Expected ArgumentException for non-simple derivative argument.");
-            }
-            catch (ArgumentException exception)
-            {
-                exception.Message.ShouldContain("Derivative with respect to non simple argument");
-            }
+            ArgumentException exception = Should.Throw<ArgumentException>(() => derivative.ToTensor());
+            exception.Message.ShouldContain("Derivative with respect to non simple argument");
         }
         catch (TypeInitializationException)
         {

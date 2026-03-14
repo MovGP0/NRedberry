@@ -7,9 +7,9 @@ public sealed class NumericTest
     [Fact]
     public void ShouldComputeHashCode()
     {
-        -new Numeric(-2.3).GetHashCode().ShouldBe(new Numeric(2.3).GetHashCode());
-        -new Numeric(-23).GetHashCode().ShouldBe(new Numeric(23).GetHashCode());
-        -new Numeric(-23.324234e123).GetHashCode().ShouldBe(new Numeric(23.324234e123).GetHashCode());
+        (-new Numeric(-2.3).GetHashCode()).ShouldBe(new Numeric(2.3).GetHashCode());
+        (-new Numeric(-23).GetHashCode()).ShouldBe(new Numeric(23).GetHashCode());
+        (-new Numeric(-23.324234e123).GetHashCode()).ShouldBe(new Numeric(23.324234e123).GetHashCode());
     }
 
     [Fact]

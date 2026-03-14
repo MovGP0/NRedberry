@@ -1,5 +1,6 @@
 using NRedberry.Transformations.Symmetrization;
 using NRedberry.Tensors;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Groovy.Tests;
@@ -11,10 +12,10 @@ public sealed class MatrixDescriptorTests
     {
         MatrixDescriptor descriptor = new(IndexType.Matrix1, 2, 3);
 
-        Assert.Equal(IndexType.Matrix1, descriptor.Type);
-        Assert.Equal(2, descriptor.Upper);
-        Assert.Equal(3, descriptor.Lower);
-        Assert.Equal(descriptor, new MatrixDescriptor(IndexType.Matrix1, 2, 3));
+        descriptor.Type.ShouldBe(IndexType.Matrix1);
+        descriptor.Upper.ShouldBe(2);
+        descriptor.Lower.ShouldBe(3);
+        descriptor.ShouldBe(new MatrixDescriptor(IndexType.Matrix1, 2, 3));
     }
 }
 

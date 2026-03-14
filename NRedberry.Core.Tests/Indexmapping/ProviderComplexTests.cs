@@ -55,11 +55,11 @@ public sealed class ProviderComplexTests
         IIndexMappingProvider provider = new FakeIndexMappingProvider();
         IIndexMappingProviderFactory factory = GetFactoryFromProviderComplexProperty();
 
-        factory.GetType().FullName == "NRedberry.IndexMapping.ProviderComplexFactory".ShouldBeTrue();
+        (factory.GetType().FullName == "NRedberry.IndexMapping.ProviderComplexFactory").ShouldBeTrue();
 
-        AssertEquivalentCreate(provider, Complex.Zero, Complex.Zero, factory, "NRedberry.IndexMapping.PlusMinusIndexMappingProvider");
-        AssertEquivalentCreate(provider, Complex.One, Complex.One, factory, "NRedberry.IndexMapping.DummyIndexMappingProvider");
-        AssertEquivalentCreate(provider, Complex.One, Complex.MinusOne, factory, "NRedberry.IndexMapping.MinusIndexMappingProvider");
+        ShouldCreateEquivalentProvider(provider, Complex.Zero, Complex.Zero, factory, "NRedberry.IndexMapping.PlusMinusIndexMappingProvider");
+        ShouldCreateEquivalentProvider(provider, Complex.One, Complex.One, factory, "NRedberry.IndexMapping.DummyIndexMappingProvider");
+        ShouldCreateEquivalentProvider(provider, Complex.One, Complex.MinusOne, factory, "NRedberry.IndexMapping.MinusIndexMappingProvider");
 
         IIndexMappingProvider direct = InvokeProviderComplexCreate(provider, Complex.One, Complex.Two);
         IIndexMappingProvider fromFactory = factory.Create(provider, Complex.One, Complex.Two);
@@ -68,7 +68,7 @@ public sealed class ProviderComplexTests
         fromFactory.ShouldBeSameAs(direct);
     }
 
-    private static void AssertEquivalentCreate(
+    private static void ShouldCreateEquivalentProvider(
         IIndexMappingProvider provider,
         TensorType from,
         TensorType to,
@@ -115,7 +115,7 @@ public sealed class ProviderComplexTests
         Type? providerComplexType = typeof(IndexMappingProviderAbstract).Assembly
             .GetType("NRedberry.IndexMapping.ProviderComplex", throwOnError: false);
 
-        providerComplexType is not null.ShouldBeTrue();
+        (providerComplexType is not null).ShouldBeTrue();
         return providerComplexType;
     }
 }

@@ -8,8 +8,8 @@ public sealed class TraverseStateTests
     [Fact]
     public void ShouldExposeExpectedTraversalStates()
     {
-        (int)TraverseState.Entering.ShouldBe(0);
-        (int)TraverseState.Leaving.ShouldBe(1);
+        ((int)TraverseState.Entering).ShouldBe(0);
+        ((int)TraverseState.Leaving).ShouldBe(1);
         Enum.GetNames<TraverseState>().ShouldBe(["Entering", "Leaving"]);
     }
 }

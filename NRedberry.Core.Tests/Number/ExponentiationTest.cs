@@ -38,7 +38,7 @@ public sealed class ExponentiationTest
         Exponentiation.ExponentiateIfPossible(second, thirdPower).ShouldBeNull();
 
         Numeric numeric = Exponentiation.ExponentiateIfPossible(second, fourthPower).ShouldBeOfType<Numeric>();
-        Assert.Equal(0.28056585887484736, numeric.DoubleValue(), 15);
+        numeric.DoubleValue().ShouldBe(0.28056585887484736, 1e-15);
     }
 
     [Fact]

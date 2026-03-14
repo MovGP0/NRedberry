@@ -93,7 +93,7 @@ public sealed class MinusIndexMappingProviderWrapperTests
         Type? wrapperType = typeof(IIndexMappingProvider).Assembly
             .GetType("NRedberry.IndexMapping.MinusIndexMappingProviderWrapper", throwOnError: false);
 
-        wrapperType is not null.ShouldBeTrue();
+        (wrapperType is not null).ShouldBeTrue();
         return wrapperType;
     }
 

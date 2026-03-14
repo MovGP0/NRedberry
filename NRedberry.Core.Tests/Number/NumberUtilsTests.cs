@@ -24,7 +24,7 @@ public sealed class NumberUtilsTests
     {
         Numeric numeric = NumberUtils.CreateNumeric(2.5);
 
-        Assert.Equal(2.5, numeric.DoubleValue(), 12);
+        numeric.DoubleValue().ShouldBe(2.5, 1e-12);
     }
 
     [Fact]

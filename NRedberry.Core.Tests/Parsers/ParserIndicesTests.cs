@@ -70,11 +70,7 @@ public sealed class ParserIndicesTests
     {
         try
         {
-            _ = ParserIndices.Parse("_a$");
-            Assert.Fail("Expected ParserException.");
-        }
-        catch (ParserException)
-        {
+            Should.Throw<ParserException>(() => ParserIndices.Parse("_a$"));
         }
         catch (TypeInitializationException)
         {

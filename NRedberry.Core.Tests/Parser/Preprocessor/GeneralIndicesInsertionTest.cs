@@ -16,7 +16,7 @@ public sealed class GeneralIndicesInsertionTest
     {
         TensorType tensor = Parse("M*N", "^i", "_j", "M", "N");
 
-        AssertFreeIndices(tensor, "^i_j");
+        ShouldHaveFreeIndices(tensor, "^i_j");
     }
 
     [Fact]
@@ -25,7 +25,7 @@ public sealed class GeneralIndicesInsertionTest
         TensorType tensor = Parse("A*(B+C)", "^a", "_b", "A", "B", "C");
         string actual = tensor.ToString(OutputFormat.Redberry);
 
-        AssertFreeIndices(tensor, "^a_b");
+        ShouldHaveFreeIndices(tensor, "^a_b");
         actual.ShouldContain("A");
         actual.ShouldContain("B");
         actual.ShouldContain("C");
@@ -45,8 +45,8 @@ public sealed class GeneralIndicesInsertionTest
         TensorType leftToRight = Parse("A*B*C", "^i", "_j", "A", "B", "C");
         TensorType grouped = Parse("A*(B*C)", "^i", "_j", "A", "B", "C");
 
-        AssertFreeIndices(leftToRight, "^i_j");
-        AssertFreeIndices(grouped, "^i_j");
+        ShouldHaveFreeIndices(leftToRight, "^i_j");
+        ShouldHaveFreeIndices(grouped, "^i_j");
     }
 
     [Fact]
@@ -69,7 +69,7 @@ public sealed class GeneralIndicesInsertionTest
                 indicatorValue));
     }
 
-    private static void AssertFreeIndices(TensorType tensor, string expected)
+    private static void ShouldHaveFreeIndices(TensorType tensor, string expected)
     {
         SimpleIndices expectedIndices = ParserIndices.ParseSimple(expected);
 

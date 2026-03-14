@@ -17,7 +17,7 @@ public sealed class AbbreviationsBuilderTest
     {
         AbbreviationsBuilder abbrs = new();
         TensorType tensor = TensorFactory.Parse("(c*(a+b) + f)*k_a*k^a*f_q + 2*(c*(-a-b) - f)*k_a*k^a*t_q");
-        AssertCorrectAbbreviations(abbrs, tensor);
+        ShouldHaveCorrectAbbreviations(abbrs, tensor);
 
         _ = abbrs.Transform(tensor);
     }
@@ -31,7 +31,7 @@ public sealed class AbbreviationsBuilderTest
         };
 
         TensorType tensor = TensorFactory.Parse("a*(c+d) + b*(c+d)");
-        AssertCorrectAbbreviations(abbrs, tensor);
+        ShouldHaveCorrectAbbreviations(abbrs, tensor);
 
         _ = abbrs.Transform(tensor);
     }
@@ -45,7 +45,7 @@ public sealed class AbbreviationsBuilderTest
         };
 
         TensorType tensor = TensorFactory.Parse("(a+b)*k_a*p^a + (a+b)*f_a*t^a");
-        AssertCorrectAbbreviations(abbrs, tensor);
+        ShouldHaveCorrectAbbreviations(abbrs, tensor);
 
         _ = abbrs.Transform(tensor);
         _ = abbrs.GetAbbreviations();
@@ -89,7 +89,7 @@ public sealed class AbbreviationsBuilderTest
         }
     }
 
-    private static void AssertCorrectAbbreviations(AbbreviationsBuilder abbrs, TensorType tensor)
+    private static void ShouldHaveCorrectAbbreviations(AbbreviationsBuilder abbrs, TensorType tensor)
     {
         TensorType transformed = abbrs.Transform(tensor);
         SubstitutionTransformation substitutions = abbrs.AbbreviationReplacements();

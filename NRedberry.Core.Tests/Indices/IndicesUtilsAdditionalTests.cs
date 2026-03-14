@@ -19,9 +19,7 @@ public sealed class IndicesUtilsAdditionalTests
         IndicesUtils.GetNameWithoutType(index).ShouldBe(0x2345);
         IndicesUtils.GetType(index).ShouldBe(type.GetType_());
         IndicesUtils.GetTypeEnum(index).ShouldBe(IndexTypeMethods.GetType(type.GetType_()));
-        Assert.Equal(
-            (type.GetType_() << 24) | 0x2345,
-            IndicesUtils.GetNameWithType(index));
+        IndicesUtils.GetNameWithType(index).ShouldBe((type.GetType_() << 24) | 0x2345);
     }
 
     [Fact]
@@ -187,9 +185,9 @@ public sealed class IndicesUtilsAdditionalTests
             [upperLatinA, lowerGreekB]);
 
         intersections.ShouldBe([
-                IndicesUtils.GetNameWithType(upperLatinA),
-                IndicesUtils.GetNameWithType(lowerGreekB)
-            ]);
+            IndicesUtils.GetNameWithType(upperLatinA),
+            IndicesUtils.GetNameWithType(lowerGreekB)
+        ]);
         IndicesUtils.GetIntersections([], [upperLatinA]).ShouldBeEmpty();
     }
 }

@@ -65,7 +65,7 @@ public sealed class ExpressionBuilderTests
         Exception? exception = Record.Exception(() => builder.Put(right));
 
         exception.ShouldNotBeNull();
-        exception is TensorException or TypeInitializationException.ShouldBeTrue();
+        (exception is TensorException or TypeInitializationException).ShouldBeTrue();
     }
 
     [Fact]
@@ -80,7 +80,7 @@ public sealed class ExpressionBuilderTests
         Exception? exception = Record.Exception(() => builder.Put(operand));
 
         exception.ShouldNotBeNull();
-        exception is TensorException or TypeInitializationException.ShouldBeTrue();
+        (exception is TensorException or TypeInitializationException).ShouldBeTrue();
     }
 
     [Fact]

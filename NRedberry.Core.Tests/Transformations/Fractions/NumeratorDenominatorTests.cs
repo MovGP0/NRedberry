@@ -32,8 +32,9 @@ public sealed class NumeratorDenominatorTests
         IList<NRedberry.Tensors.Tensor> actual = NumeratorDenominator.ExpandPower(TensorApi.Parse("Power[a,x+y]"));
 
         actual
-                .Select(tensor => tensor.ToString(OutputFormat.Redberry))
-                .OrderBy(term => term, StringComparer.Ordinal)
-                .ToArray().ShouldBe(["a**x", "a**y"]);
+            .Select(tensor => tensor.ToString(OutputFormat.Redberry))
+            .OrderBy(term => term, StringComparer.Ordinal)
+            .ToArray()
+            .ShouldBe(["a**x", "a**y"]);
     }
 }

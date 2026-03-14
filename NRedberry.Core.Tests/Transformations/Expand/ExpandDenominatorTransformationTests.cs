@@ -23,7 +23,7 @@ public sealed class ExpandDenominatorTransformationTests
     private static string NormalizeReciprocalSumOfProducts(string expression)
     {
         const string suffix = "**(-1)";
-        Assert.EndsWith(suffix, expression, StringComparison.Ordinal);
+        expression.EndsWith(suffix, StringComparison.Ordinal).ShouldBeTrue();
 
         string body = expression[..^suffix.Length];
         body = body.Trim('(', ')');

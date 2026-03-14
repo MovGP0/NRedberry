@@ -37,8 +37,9 @@ public sealed class ExpandUtilsTests
         IList<NRedberry.Tensors.Tensor> expanded = NumeratorDenominator.ExpandPower(TensorApi.Parse("Power[a,x+y]"));
 
         expanded
-                .Select(tensor => tensor.ToString(OutputFormat.Redberry))
-                .OrderBy(term => term, StringComparer.Ordinal)
-                .ToArray().ShouldBe(["a**x", "a**y"]);
+            .Select(tensor => tensor.ToString(OutputFormat.Redberry))
+            .OrderBy(term => term, StringComparer.Ordinal)
+            .ToArray()
+            .ShouldBe(["a**x", "a**y"]);
     }
 }

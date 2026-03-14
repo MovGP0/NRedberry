@@ -126,8 +126,8 @@ public sealed class ParseTokenTests
         var right = new ParseToken(TokenType.Product, new ParseToken(TokenType.Dummy), new ParseToken(TokenType.Dummy));
 
         left.Equals(right).ShouldBeTrue();
-        left == right.ShouldBeTrue();
-        left != right.ShouldBeFalse();
+        (left == right).ShouldBeTrue();
+        (left != right).ShouldBeFalse();
         right.GetHashCode().ShouldBe(left.GetHashCode());
     }
 

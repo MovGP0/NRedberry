@@ -41,7 +41,7 @@ public sealed class StructureOfContractionsTests
 
         structure.ShouldNotBeNull();
         product.Content.StructureOfContractionsHashed.ShouldNotBeNull();
-        structure.componentCount >= 0.ShouldBeTrue();
+        (structure.componentCount >= 0).ShouldBeTrue();
         structure.contractions.ShouldNotBeNull();
         structure.components.ShouldNotBeNull();
     }

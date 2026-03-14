@@ -16,7 +16,7 @@ public sealed class IndicesInsertionTest
     {
         TensorType tensor = Parse("A*B*C", "^i", "_j", "A", "B", "C");
 
-        AssertIndicesParity(tensor, "^i_j");
+        ShouldHaveIndicesParity(tensor, "^i_j");
     }
 
     [Fact]
@@ -24,7 +24,7 @@ public sealed class IndicesInsertionTest
     {
         TensorType tensor = Parse("A*(B*A+C*K)*F", "^i", "_j");
 
-        AssertIndicesParity(tensor, "^i_j");
+        ShouldHaveIndicesParity(tensor, "^i_j");
         tensor.ToString(OutputFormat.Redberry).ShouldContain("A");
         tensor.ToString(OutputFormat.Redberry).ShouldContain("F");
     }
@@ -34,7 +34,7 @@ public sealed class IndicesInsertionTest
     {
         TensorType tensor = Parse("A^{\\alpha n}*B*C", "^ij", "_pq");
 
-        AssertIndicesParity(tensor, "^{\\alpha n i j}_pq");
+        ShouldHaveIndicesParity(tensor, "^{\\alpha n i j}_pq");
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public sealed class IndicesInsertionTest
     {
         TensorType tensor = Parse("a*b*A*c*B*C", "^ij", "_pq", "a", "b", "c", "d");
 
-        AssertIndicesParity(tensor, "^ij_pq");
+        ShouldHaveIndicesParity(tensor, "^ij_pq");
     }
 
     [Fact]
@@ -60,7 +60,7 @@ public sealed class IndicesInsertionTest
     {
         TensorType tensor = Parse("a*(b+a)*A*(c+d)*B*C", "^ij", "_pq", "A", "B", "C", "F");
 
-        AssertIndicesParity(tensor, "^ij_pq");
+        ShouldHaveIndicesParity(tensor, "^ij_pq");
     }
 
     [Fact]
@@ -68,7 +68,7 @@ public sealed class IndicesInsertionTest
     {
         TensorType tensor = Parse("A*(B+E*(R+K*U))", "^i", "_j");
 
-        AssertIndicesParity(tensor, "^i_j");
+        ShouldHaveIndicesParity(tensor, "^i_j");
         tensor.ToString(OutputFormat.Redberry).ShouldContain("A^{i}");
     }
 
@@ -80,7 +80,7 @@ public sealed class IndicesInsertionTest
             CC.ResetTensorNames();
             TensorType tensor = Parse("A+B", "^i", "_i", "A");
 
-            AssertIndicesParity(tensor, "^i_i");
+            ShouldHaveIndicesParity(tensor, "^i_i");
         }
     }
 
@@ -89,7 +89,7 @@ public sealed class IndicesInsertionTest
     {
         TensorType tensor = Parse("a*A*B+((1/2)*a+b)*A*(A+B*(A+X*A))*c", "^a", "_b", "A", "B");
 
-        AssertIndicesParity(tensor, "^a_b");
+        ShouldHaveIndicesParity(tensor, "^a_b");
     }
 
     [Fact]
@@ -97,7 +97,7 @@ public sealed class IndicesInsertionTest
     {
         TensorType tensor = Parse("A=2*B+A*B", "^i", "_j");
 
-        AssertIndicesParity(tensor, "^i_j");
+        ShouldHaveIndicesParity(tensor, "^i_j");
     }
 
     [Fact]
@@ -146,7 +146,7 @@ public sealed class IndicesInsertionTest
                 indicatorValue));
     }
 
-    private static void AssertIndicesParity(NRedberry.Tensors.Tensor tensor, string expectedIndices)
+    private static void ShouldHaveIndicesParity(NRedberry.Tensors.Tensor tensor, string expectedIndices)
     {
         SimpleIndices expected = ParserIndices.ParseSimple(expectedIndices);
 

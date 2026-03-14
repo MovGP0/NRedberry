@@ -34,7 +34,7 @@ public sealed class IntTimSortTest
             {
                 if (i < K - 1)
                 {
-                    main[i] <= main[i + 1].ShouldBeTrue();
+                    (main[i] <= main[i + 1]).ShouldBeTrue();
                 }
 
                 if (main[i] != pivot)

@@ -45,17 +45,20 @@ public sealed class FactorOutNumberTest
         tensor = TensorFactory.Parse("12*31*I*a - 12*37*b + 12*39*v");
         TensorUtils.Equals(
             TensorFactory.Parse("12*(31*I*a - 37*b + 39*v)"),
-            FactorOutNumber.Instance.Transform(tensor)).ShouldBeTrue();
+            FactorOutNumber.Instance.Transform(tensor))
+            .ShouldBeTrue();
 
         tensor = TensorFactory.Parse("12*31*I*a - 12*I*37*b + 12*I*39*v");
         TensorUtils.Equals(
             TensorFactory.Parse("12*I*(31*a - 37*b + 39*v)"),
-            FactorOutNumber.Instance.Transform(tensor)).ShouldBeTrue();
+            FactorOutNumber.Instance.Transform(tensor))
+            .ShouldBeTrue();
 
         tensor = TensorFactory.Parse("2*(12*a+12*b) + 24*c");
         TensorUtils.Equals(
             TensorFactory.Parse("24*(a+b+c)"),
-            FactorOutNumber.Instance.Transform(tensor)).ShouldBeTrue();
+            FactorOutNumber.Instance.Transform(tensor))
+            .ShouldBeTrue();
     }
 
     [Fact]
@@ -94,17 +97,20 @@ public sealed class FactorOutNumberTest
         tensor = TensorFactory.Parse("12*31*I/13*a - 12*37/13*b + 12*40/13*v");
         TensorUtils.Equals(
             TensorFactory.Parse("12/13*(31*I*a - 37*b + 40*v)"),
-            FactorOutNumber.Instance.Transform(tensor)).ShouldBeTrue();
+            FactorOutNumber.Instance.Transform(tensor))
+            .ShouldBeTrue();
 
         tensor = TensorFactory.Parse("12*31/13*I*a/13 - 12*I*37*b/13 + 12*I*41*v/13");
         TensorUtils.Equals(
             TensorFactory.Parse("12*I*(31/13*a - 37*b + 41*v)/13"),
-            FactorOutNumber.Instance.Transform(tensor)).ShouldBeTrue();
+            FactorOutNumber.Instance.Transform(tensor))
+            .ShouldBeTrue();
 
         tensor = TensorFactory.Parse("2*(12*a+12*b/13) + 24*c");
         TensorUtils.Equals(
             TensorFactory.Parse("24*(a+b/13+c)"),
-            FactorOutNumber.Instance.Transform(tensor)).ShouldBeTrue();
+            FactorOutNumber.Instance.Transform(tensor))
+            .ShouldBeTrue();
     }
 
     [Fact]
@@ -113,6 +119,7 @@ public sealed class FactorOutNumberTest
         TensorType tensor = TensorFactory.Parse("-I*a - I*b");
         TensorUtils.Equals(
             TensorFactory.Parse("-I*(a+b)"),
-            FactorOutNumber.Instance.Transform(tensor)).ShouldBeTrue();
+            FactorOutNumber.Instance.Transform(tensor))
+            .ShouldBeTrue();
     }
 }

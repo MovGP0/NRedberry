@@ -39,8 +39,8 @@ public sealed class ComplexAdditionalTests
     {
         var value = new NumberComplex(2.5);
 
-        Assert.Equal(2.5, value.Real.ToDouble(), 12);
-        Assert.Equal(0.0, value.Imaginary.ToDouble(), 12);
+        value.Real.ToDouble().ShouldBe(2.5, 1e-12);
+        value.Imaginary.ToDouble().ShouldBe(0.0, 1e-12);
         value.IsReal().ShouldBeTrue();
         value.IsNumeric().ShouldBeTrue();
     }
@@ -51,8 +51,8 @@ public sealed class ComplexAdditionalTests
         var source = new Complex32(1.25f, -3.5f);
         var value = new NumberComplex(source);
 
-        Assert.Equal(source.Real, value.Real.ToDouble(), 6);
-        Assert.Equal(source.Imaginary, value.Imaginary.ToDouble(), 6);
+        value.Real.ToDouble().ShouldBe(source.Real, 1e-6);
+        value.Imaginary.ToDouble().ShouldBe(source.Imaginary, 1e-6);
         value.IsNumeric().ShouldBeTrue();
     }
 
@@ -108,16 +108,16 @@ public sealed class ComplexAdditionalTests
         left.Multiply(right).ShouldBe(new NumberComplex(-5, 10));
 
         var quotient = left.Divide(right);
-        Assert.Equal(11.0 / 25.0, quotient.Real.ToDouble(), 12);
-        Assert.Equal(2.0 / 25.0, quotient.Imaginary.ToDouble(), 12);
+        quotient.Real.ToDouble().ShouldBe(11.0 / 25.0, 1e-12);
+        quotient.Imaginary.ToDouble().ShouldBe(2.0 / 25.0, 1e-12);
     }
 
     [Fact]
     public void ShouldComputeAbsNumericForKnownValues()
     {
-        Assert.Equal(5.0, new NumberComplex(3, 4).AbsNumeric(), 12);
-        Assert.Equal(7.0, new NumberComplex(0, -7).AbsNumeric(), 12);
-        Assert.Equal(13.0, NumberComplex.AbsNumeric(5.0, 12.0), 12);
+        new NumberComplex(3, 4).AbsNumeric().ShouldBe(5.0, 1e-12);
+        new NumberComplex(0, -7).AbsNumeric().ShouldBe(7.0, 1e-12);
+        NumberComplex.AbsNumeric(5.0, 12.0).ShouldBe(13.0, 1e-12);
     }
 
     [Fact]
@@ -130,8 +130,8 @@ public sealed class ComplexAdditionalTests
         value.Pow(3).ShouldBe(new NumberComplex(-2, 2));
 
         var inverse = value.Pow(-1);
-        Assert.Equal(0.5, inverse.Real.ToDouble(), 12);
-        Assert.Equal(-0.5, inverse.Imaginary.ToDouble(), 12);
+        inverse.Real.ToDouble().ShouldBe(0.5, 1e-12);
+        inverse.Imaginary.ToDouble().ShouldBe(-0.5, 1e-12);
     }
 
     [Fact]

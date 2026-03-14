@@ -24,8 +24,11 @@ public sealed class ChangeIndicesTypesAndTensorNamesTest
         tensors.Count.ShouldBe(3);
         tensors.Count(tensor => tensor.Name == "f").ShouldBe(2);
         tensors.Count(tensor => tensor.Name == "k").ShouldBe(1);
-        Assert.All(tensors, tensor => ContainsIndicesOfType(tensor.Indices, IndexType.LatinLower).ShouldBeFalse());
-        Assert.All(tensors, tensor => ContainsIndicesOfType(tensor.Indices, IndexType.LatinUpper).ShouldBeTrue());
+        foreach (ParseTokenSimpleTensor tensor in tensors)
+        {
+            ContainsIndicesOfType(tensor.Indices, IndexType.LatinLower).ShouldBeFalse();
+            ContainsIndicesOfType(tensor.Indices, IndexType.LatinUpper).ShouldBeTrue();
+        }
     }
 
     [Fact]
@@ -41,8 +44,11 @@ public sealed class ChangeIndicesTypesAndTensorNamesTest
         IReadOnlyList<ParseTokenSimpleTensor> tensors = CollectSimpleTensors(transformed);
 
         tensors.Count.ShouldBe(3);
-        Assert.All(tensors, tensor => tensor.Name.ShouldBe("k"));
-        Assert.All(tensors, tensor => ContainsIndicesOfType(tensor.Indices, IndexType.LatinLower).ShouldBeFalse());
+        foreach (ParseTokenSimpleTensor tensor in tensors)
+        {
+            tensor.Name.ShouldBe("k");
+            ContainsIndicesOfType(tensor.Indices, IndexType.LatinLower).ShouldBeFalse();
+        }
     }
 
     private static IReadOnlyList<ParseTokenSimpleTensor> CollectSimpleTensors(ParseToken node)

@@ -25,8 +25,8 @@ public sealed class IntArrayTests
         IntArray different = new([4, 5]);
 
         left.Equals(right).ShouldBeTrue();
-        left == right.ShouldBeTrue();
-        left != right.ShouldBeFalse();
+        (left == right).ShouldBeTrue();
+        (left != right).ShouldBeFalse();
         left.Equals(different).ShouldBeFalse();
         left.ToString().ShouldBe("[4, 5, 6]");
     }

@@ -15,8 +15,8 @@ public sealed class IAlgorithmTests
 
         algorithm.Name.ShouldBe("Test algorithm");
         result.Data.ShouldHaveSingleItem();
-        algorithm.Timing >= 0.ShouldBeTrue();
-        algorithm.TimingMillis() >= 0.ShouldBeTrue();
+        (algorithm.Timing >= 0).ShouldBeTrue();
+        (algorithm.TimingMillis() >= 0).ShouldBeTrue();
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public sealed class IAlgorithmTests
         Should.Throw<ArgumentNullException>(() => algorithm.Calc(null!));
 
         _ = algorithm.Calc(TensorApi.Parse("a"));
-        algorithm.Timing >= 0.ShouldBeTrue();
+        (algorithm.Timing >= 0).ShouldBeTrue();
 
         algorithm.Restart();
 

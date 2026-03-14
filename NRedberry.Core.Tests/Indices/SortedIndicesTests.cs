@@ -119,10 +119,10 @@ public sealed class SortedIndicesTests
         mapped.ShouldBeOfType<SortedIndices>();
         mapped.ShouldNotBeSameAs(indices);
         mapped.AllIndices.ToArray().ShouldBe([
-                IndicesUtils.CreateIndex(9, IndexType.LatinLower, true),
-                IndicesUtils.CreateIndex(9, IndexType.LatinLower, false),
-                lowerGreek2,
-            ]);
+            IndicesUtils.CreateIndex(9, IndexType.LatinLower, true),
+            IndicesUtils.CreateIndex(9, IndexType.LatinLower, false),
+            lowerGreek2,
+        ]);
     }
 
     [Fact]
@@ -146,6 +146,7 @@ public sealed class SortedIndicesTests
         Exception? exception = Record.Exception(() => _ = new SortedIndices([duplicate, duplicate]));
 
         exception.ShouldNotBeNull();
-        exception is InconsistentIndicesException || exception is TypeInitializationException.ShouldBeTrue("Unexpected exception type.");
+        (exception is InconsistentIndicesException || exception is TypeInitializationException)
+            .ShouldBeTrue("Unexpected exception type.");
     }
 }

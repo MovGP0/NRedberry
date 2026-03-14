@@ -15,8 +15,9 @@ public sealed class ExpandOptionsTests
         options.Simplifications.ShouldBeSameAs(Transformation.Identity);
         options.TraverseGuide.ShouldNotBeNull();
         options.TraverseGuide!.GetPermission(
-                NRedberry.Tensors.Tensors.Parse("Sin[a]"),
-                NRedberry.Tensors.Tensors.Parse("x"),
-                0).ShouldBe(TraversePermission.DontShow);
+            NRedberry.Tensors.Tensors.Parse("Sin[a]"),
+            NRedberry.Tensors.Tensors.Parse("x"),
+            0)
+            .ShouldBe(TraversePermission.DontShow);
     }
 }

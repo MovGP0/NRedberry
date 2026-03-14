@@ -68,7 +68,7 @@ public sealed class ExpressionFactoryTests
         Exception? exception = Record.Exception(() => ExpressionFactory.Instance.Create(left, right));
 
         exception.ShouldNotBeNull();
-        exception is TensorException or TypeInitializationException.ShouldBeTrue();
+        (exception is TensorException or TypeInitializationException).ShouldBeTrue();
     }
 
     private static int Lower(int name)

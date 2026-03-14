@@ -27,7 +27,7 @@ public sealed class InconsistentIndicesExceptionTests
             return;
         }
 
-        AssertTypeInitializationFailure(creationError);
+        ShouldBeTypeInitializationFailure(creationError);
     }
 
     [Fact]
@@ -52,7 +52,7 @@ public sealed class InconsistentIndicesExceptionTests
             return;
         }
 
-        AssertTypeInitializationFailure(creationError);
+        ShouldBeTypeInitializationFailure(creationError);
     }
 
     [Fact]
@@ -76,7 +76,7 @@ public sealed class InconsistentIndicesExceptionTests
             return;
         }
 
-        AssertTypeInitializationFailure(creationError);
+        ShouldBeTypeInitializationFailure(creationError);
     }
 
     [Fact]
@@ -88,7 +88,7 @@ public sealed class InconsistentIndicesExceptionTests
             return;
         }
 
-        AssertTypeInitializationFailure(creationError);
+        ShouldBeTypeInitializationFailure(creationError);
     }
 
     [Fact]
@@ -112,7 +112,7 @@ public sealed class InconsistentIndicesExceptionTests
             return;
         }
 
-        AssertTypeInitializationFailure(creationError);
+        ShouldBeTypeInitializationFailure(creationError);
     }
 
     [Fact]
@@ -132,7 +132,7 @@ public sealed class InconsistentIndicesExceptionTests
 
         if (causeError is not null)
         {
-            AssertTypeInitializationFailure(causeError);
+            ShouldBeTypeInitializationFailure(causeError);
             return;
         }
 
@@ -153,7 +153,7 @@ public sealed class InconsistentIndicesExceptionTests
             return;
         }
 
-        AssertTypeInitializationFailure(creationError);
+        ShouldBeTypeInitializationFailure(creationError);
     }
 
     [Fact]
@@ -178,7 +178,7 @@ public sealed class InconsistentIndicesExceptionTests
 
         if (causeError is not null)
         {
-            AssertTypeInitializationFailure(causeError);
+            ShouldBeTypeInitializationFailure(causeError);
             return;
         }
 
@@ -188,7 +188,7 @@ public sealed class InconsistentIndicesExceptionTests
             return;
         }
 
-        AssertTypeInitializationFailure(exception);
+        ShouldBeTypeInitializationFailure(exception);
     }
 
     [Fact]
@@ -200,7 +200,7 @@ public sealed class InconsistentIndicesExceptionTests
             return;
         }
 
-        AssertTypeInitializationFailure(exception);
+        ShouldBeTypeInitializationFailure(exception);
     }
 
     [Fact]
@@ -212,10 +212,10 @@ public sealed class InconsistentIndicesExceptionTests
             return;
         }
 
-        AssertTypeInitializationFailure(exception);
+        ShouldBeTypeInitializationFailure(exception);
     }
 
-    private static void AssertTypeInitializationFailure(Exception exception)
+    private static void ShouldBeTypeInitializationFailure(Exception exception)
     {
         TypeInitializationException tie = exception.ShouldBeOfType<TypeInitializationException>();
         tie.InnerException.ShouldNotBeNull();

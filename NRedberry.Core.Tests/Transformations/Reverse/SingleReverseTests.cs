@@ -21,7 +21,7 @@ public sealed class SingleReverseTests
         TensorType tensor = TensorApi.Parse("A^a'_b'*B^b'_c'*C^c'_d'");
 
         TensorType actual = SingleReverse.InverseOrderOfMatrices(tensor, IndexType.Matrix1);
-        AssertIndexedFactors(
+        ShouldHaveIndexedFactors(
             actual,
             "A^{c'}_{d'}",
             "B^{b'}_{c'}",
@@ -35,7 +35,7 @@ public sealed class SingleReverseTests
         TensorType tensor = TensorApi.Parse("cv_b'*A^b'_c'*B^c'_d'*v^d'");
 
         TensorType actual = SingleReverse.InverseOrderOfMatrices(tensor, IndexType.Matrix1);
-        AssertIndexedFactors(
+        ShouldHaveIndexedFactors(
             actual,
             "A^{c'}_{d'}",
             "B^{b'}_{c'}",
@@ -64,7 +64,7 @@ public sealed class SingleReverseTests
         Should.Throw<ArgumentException>(action);
     }
 
-    private static void AssertIndexedFactors(TensorType tensor, params string[] expected)
+    private static void ShouldHaveIndexedFactors(TensorType tensor, params string[] expected)
     {
         string[] actual = GetIndexedFactorTexts(tensor);
         string[] sortedExpected = expected.OrderBy(text => text, StringComparer.Ordinal).ToArray();

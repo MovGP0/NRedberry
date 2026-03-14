@@ -34,10 +34,10 @@ public sealed class StructureOfContractionsHashedTests
             new TensorContraction(0, [Pack(2, 0, 0)]));
 
         right.ShouldBe(left);
-        left == right.ShouldBeTrue();
+        (left == right).ShouldBeTrue();
         right.GetHashCode().ShouldBe(left.GetHashCode());
         other.ShouldNotBe(left);
-        left != other.ShouldBeTrue();
+        (left != other).ShouldBeTrue();
     }
 
     [Fact]

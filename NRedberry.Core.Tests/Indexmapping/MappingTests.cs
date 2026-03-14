@@ -19,13 +19,13 @@ public sealed class MappingTests
 
         mapping.Size().ShouldBe(2);
         mapping.GetFromNames().ToArray().ShouldBe([
-                IndicesUtils.GetNameWithType(IndicesUtils.ParseIndex("_a")),
-                IndicesUtils.GetNameWithType(IndicesUtils.ParseIndex("^b"))
-            ]);
+            IndicesUtils.GetNameWithType(IndicesUtils.ParseIndex("_a")),
+            IndicesUtils.GetNameWithType(IndicesUtils.ParseIndex("^b"))
+        ]);
         mapping.GetToData().ToArray().ShouldBe([
-                IndicesUtils.ParseIndex("^c"),
-                IndicesUtils.ParseIndex("^d")
-            ]);
+            IndicesUtils.ParseIndex("^c"),
+            IndicesUtils.ParseIndex("^d")
+        ]);
     }
 
     [Fact]
@@ -116,13 +116,13 @@ public sealed class MappingTests
 
         mapping.GetSign().ShouldBeTrue();
         mapping.GetFromNames().ToArray().ShouldBe([
-                IndicesUtils.GetNameWithType(IndicesUtils.ParseIndex("_a")),
-                IndicesUtils.GetNameWithType(IndicesUtils.ParseIndex("^b"))
-            ]);
+            IndicesUtils.GetNameWithType(IndicesUtils.ParseIndex("_a")),
+            IndicesUtils.GetNameWithType(IndicesUtils.ParseIndex("^b"))
+        ]);
         mapping.GetToData().ToArray().ShouldBe([
-                IndicesUtils.ParseIndex("^c"),
-                IndicesUtils.ParseIndex("^d")
-            ]);
+            IndicesUtils.ParseIndex("^c"),
+            IndicesUtils.ParseIndex("^d")
+        ]);
     }
 
     [Fact]

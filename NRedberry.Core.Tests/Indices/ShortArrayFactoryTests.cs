@@ -21,10 +21,25 @@ public sealed class ShortArrayFactoryTests
 
         secondBoundary.ShouldNotBeSameAs(firstBoundary);
         secondLarge.ShouldNotBeSameAs(firstLarge);
-        Assert.All(firstBoundary, value => value.ShouldBe((short)0));
-        Assert.All(secondBoundary, value => value.ShouldBe((short)0));
-        Assert.All(firstLarge, value => value.ShouldBe((short)0));
-        Assert.All(secondLarge, value => value.ShouldBe((short)0));
+        foreach (short value in firstBoundary)
+        {
+            value.ShouldBe((short)0);
+        }
+
+        foreach (short value in secondBoundary)
+        {
+            value.ShouldBe((short)0);
+        }
+
+        foreach (short value in firstLarge)
+        {
+            value.ShouldBe((short)0);
+        }
+
+        foreach (short value in secondLarge)
+        {
+            value.ShouldBe((short)0);
+        }
     }
 
     [Fact]
@@ -34,7 +49,10 @@ public sealed class ShortArrayFactoryTests
         short[] second = InvokeGetZeroFilledShortArray(5);
 
         second.ShouldBeSameAs(first);
-        Assert.All(first, value => value.ShouldBe((short)0));
+        foreach (short value in first)
+        {
+            value.ShouldBe((short)0);
+        }
     }
 
     [Fact]
@@ -53,7 +71,8 @@ public sealed class ShortArrayFactoryTests
         TargetInvocationException exception = Should.Throw<TargetInvocationException>(() => InvokeGetZeroFilledShortArray(-1));
 
         exception.InnerException.ShouldNotBeNull();
-        exception.InnerException is IndexOutOfRangeException or OverflowException.ShouldBeTrue($"Unexpected runtime exception type: {exception.InnerException.GetType().FullName}");
+        (exception.InnerException is IndexOutOfRangeException or OverflowException)
+            .ShouldBeTrue($"Unexpected runtime exception type: {exception.InnerException.GetType().FullName}");
     }
 
     private static short[] InvokeGetZeroFilledShortArray(int length)

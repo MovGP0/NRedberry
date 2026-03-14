@@ -62,7 +62,8 @@ public sealed class ExpandTensorsTransformationTest
         TensorType expanded = ExpandTensorsTransformation.Expand(tensor);
         TensorUtils.Equals(
             ExpandTransformation.Expand(tensor),
-            ExpandTransformation.Expand(expanded)).ShouldBeTrue();
+            ExpandTransformation.Expand(expanded))
+            .ShouldBeTrue();
         TensorType expected = TensorFactory.Parse("(c+r)*(c+d)*(a+b)**2*f_a*f^a + (c+r)*((a+b)*(c+d)*(k+i) + (a + c))*t_a*(a+b)*f^a + (c+r)*(a+b)*(c+d)*f_a*(c+d)*t^a + (c+r)*((a+b)*(c+d)*(k+i) + (a + c))*t_a*(c+d)*t^a");
         TensorUtils.Equals(expanded, expected).ShouldBeTrue();
     }
@@ -81,7 +82,8 @@ public sealed class ExpandTensorsTransformationTest
         TensorType expanded = ExpandTensorsTransformation.Expand(tensor, subs);
         TensorUtils.Equals(
             ExpandTransformation.Expand(tensor, subs),
-            ExpandTransformation.Expand(expanded)).ShouldBeTrue();
+            ExpandTransformation.Expand(expanded))
+            .ShouldBeTrue();
         TensorType expected = TensorFactory.Parse("(c+r)*(c+d)*(a+b)**2 + (c+r)*((a+b)*(c+d)*(k+i) + (a + c))*(a+b)*2 + (c+r)*(a+b)*(c+d)*(c+d)*2 + (c+r)*((a+b)*(c+d)*(k+i) + (a + c))*(c+d)*3");
         TensorUtils.Equals(expanded, expected).ShouldBeTrue();
     }
@@ -109,7 +111,8 @@ public sealed class ExpandTensorsTransformationTest
         TensorType expanded = ExpandTensorsTransformation.Expand(tensor, subs);
         TensorUtils.Equals(
             ExpandTransformation.Expand(tensor, subs),
-            ExpandTransformation.Expand(expanded)).ShouldBeTrue();
+            ExpandTransformation.Expand(expanded))
+            .ShouldBeTrue();
     }
 
     [Fact]

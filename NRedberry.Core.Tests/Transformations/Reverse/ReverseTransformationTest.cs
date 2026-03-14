@@ -16,7 +16,7 @@ public sealed class ReverseTransformationTest
         TensorType tensor = TensorApi.Parse("G^a'_b'*H^b'_c'*U^A'_B'*V^B'_C'");
 
         TensorType actual = transformation.Transform(tensor);
-        AssertIndexedFactors(
+        ShouldHaveIndexedFactors(
             actual,
             "G^{b'}_{c'}",
             "H^{a'}_{b'}",
@@ -34,7 +34,7 @@ public sealed class ReverseTransformationTest
         transformation.ToString(OutputFormat.Redberry).ShouldBe("Reverse[Matrix1,Matrix2]");
     }
 
-    private static void AssertIndexedFactors(TensorType tensor, params string[] expected)
+    private static void ShouldHaveIndexedFactors(TensorType tensor, params string[] expected)
     {
         string[] actual = GetIndexedFactorTexts(tensor);
         string[] sortedExpected = expected.OrderBy(text => text, StringComparer.Ordinal).ToArray();

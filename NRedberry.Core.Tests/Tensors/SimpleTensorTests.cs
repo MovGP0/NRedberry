@@ -22,7 +22,7 @@ public sealed class SimpleTensorTests
         SimpleTensor tensor = TensorFactory.Parse("T_a").ShouldBeOfType<SimpleTensor>();
 
         tensor.Indices.ShouldBeSameAs(tensor.SimpleIndices);
-        tensor.Name > 0.ShouldBeTrue();
+        (tensor.Name > 0).ShouldBeTrue();
         tensor.Size.ShouldBe(0);
         Should.Throw<IndexOutOfRangeException>(() => _ = tensor[0]);
     }

@@ -23,9 +23,9 @@ public sealed class TensorContractionTests
         TensorContraction contraction = new(1, [free]);
 
         contraction.ContainsFreeIndex().ShouldBeTrue();
-        TensorContraction.GetFromIndexId(free).ShouldBe(7);
-        TensorContraction.GetToTensorId(free).ShouldBe(-1);
-        TensorContraction.GetToIndexId(free).ShouldBe(5);
+        TensorContraction.GetFromIndexId(free).ShouldBe((short)7);
+        TensorContraction.GetToTensorId(free).ShouldBe((short)-1);
+        TensorContraction.GetToIndexId(free).ShouldBe((short)5);
     }
 
     [Fact]
@@ -36,10 +36,10 @@ public sealed class TensorContractionTests
         TensorContraction other = new(2, [Pack(1, 1, 3)]);
 
         right.ShouldBe(left);
-        left == right.ShouldBeTrue();
+        (left == right).ShouldBeTrue();
         right.GetHashCode().ShouldBe(left.GetHashCode());
         other.ShouldNotBe(left);
-        left != other.ShouldBeTrue();
+        (left != other).ShouldBeTrue();
     }
 
     private static long Pack(int toTensorId, int toIndexId, int fromIndexId)

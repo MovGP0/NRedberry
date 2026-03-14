@@ -13,9 +13,9 @@ public sealed class FbUtilsTests
     {
         int result = FbUtils.SolutionComparator.Compare([1, 2, 3], [1, 2, 4]);
 
-        result < 0.ShouldBeTrue();
+        (result < 0).ShouldBeTrue();
         FbUtils.SolutionComparator.Compare([1, 2, 3], [1, 2, 3]).ShouldBe(0);
-        FbUtils.SolutionComparator.Compare([1, 3, 0], [1, 2, 9]) > 0.ShouldBeTrue();
+        (FbUtils.SolutionComparator.Compare([1, 3, 0], [1, 2, 9]) > 0).ShouldBeTrue();
     }
 
     [Fact]
@@ -56,7 +56,7 @@ public sealed class FbUtilsTests
 
         IList<int[]> solutions = FbUtils.GetAllSolutions(equations);
 
-        AssertSolutionsEqual(expected, solutions);
+        ShouldHaveSolutions(expected, solutions);
     }
 
     [Fact]
@@ -78,8 +78,8 @@ public sealed class FbUtilsTests
         int[][] firstPass = iterable.Select(solution => solution.ToArray()).ToArray();
         int[][] secondPass = iterable.Select(solution => solution.ToArray()).ToArray();
 
-        AssertSolutionsEqual(expected, firstPass);
-        AssertSolutionsEqual(expected, secondPass);
+        ShouldHaveSolutions(expected, firstPass);
+        ShouldHaveSolutions(expected, secondPass);
 
         IEnumerator<int[]> iterator = FbUtils.Iterator(equations);
 
@@ -88,7 +88,7 @@ public sealed class FbUtilsTests
         iterator.MoveNext().ShouldBeFalse();
     }
 
-    private static void AssertSolutionsEqual(IReadOnlyCollection<int[]> expected, IEnumerable<int[]> actual)
+    private static void ShouldHaveSolutions(IReadOnlyCollection<int[]> expected, IEnumerable<int[]> actual)
     {
         List<int[]> expectedSorted = expected.Select(solution => solution.ToArray()).ToList();
         List<int[]> actualSorted = actual.Select(solution => solution.ToArray()).ToList();

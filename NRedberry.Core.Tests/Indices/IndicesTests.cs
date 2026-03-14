@@ -26,9 +26,9 @@ public sealed class IndicesTests
     [Fact]
     public void ShouldExposeExpectedImmutableArrayProperties()
     {
-        AssertImmutableArrayProperty(nameof(IndicesContract.UpperIndices));
-        AssertImmutableArrayProperty(nameof(IndicesContract.LowerIndices));
-        AssertImmutableArrayProperty(nameof(IndicesContract.AllIndices));
+        ShouldHaveImmutableArrayProperty(nameof(IndicesContract.UpperIndices));
+        ShouldHaveImmutableArrayProperty(nameof(IndicesContract.LowerIndices));
+        ShouldHaveImmutableArrayProperty(nameof(IndicesContract.AllIndices));
     }
 
     [Fact]
@@ -36,8 +36,8 @@ public sealed class IndicesTests
     {
         Type indicesType = typeof(IndicesContract);
 
-        AssertMethod(indicesType, nameof(IndicesContract.Size), typeof(int));
-        AssertMethod(indicesType, nameof(IndicesContract.Size), typeof(int), typeof(IndexType));
+        ShouldHaveMethod(indicesType, nameof(IndicesContract.Size), typeof(int));
+        ShouldHaveMethod(indicesType, nameof(IndicesContract.Size), typeof(int), typeof(IndexType));
 
         PropertyInfo[] indexers = indicesType.GetProperties()
             .Where(static property => property.GetIndexParameters().Length > 0)
@@ -53,17 +53,17 @@ public sealed class IndicesTests
     {
         Type indicesType = typeof(IndicesContract);
 
-        AssertMethod(indicesType, nameof(IndicesContract.GetOfType), indicesType, typeof(IndexType));
-        AssertMethod(indicesType, nameof(IndicesContract.GetFree), indicesType);
-        AssertMethod(indicesType, nameof(IndicesContract.GetInverted), indicesType);
-        AssertMethod(indicesType, nameof(IndicesContract.EqualsRegardlessOrder), typeof(bool), indicesType);
-        AssertMethod(indicesType, nameof(IndicesContract.TestConsistentWithException), typeof(void));
-        AssertMethod(indicesType, nameof(IndicesContract.ApplyIndexMapping), indicesType, typeof(IIndexMapping));
-        AssertMethod(indicesType, nameof(IndicesContract.ToString), typeof(string), typeof(OutputFormat));
-        AssertMethod(indicesType, nameof(IndicesContract.GetDiffIds), typeof(short[]));
+        ShouldHaveMethod(indicesType, nameof(IndicesContract.GetOfType), indicesType, typeof(IndexType));
+        ShouldHaveMethod(indicesType, nameof(IndicesContract.GetFree), indicesType);
+        ShouldHaveMethod(indicesType, nameof(IndicesContract.GetInverted), indicesType);
+        ShouldHaveMethod(indicesType, nameof(IndicesContract.EqualsRegardlessOrder), typeof(bool), indicesType);
+        ShouldHaveMethod(indicesType, nameof(IndicesContract.TestConsistentWithException), typeof(void));
+        ShouldHaveMethod(indicesType, nameof(IndicesContract.ApplyIndexMapping), indicesType, typeof(IIndexMapping));
+        ShouldHaveMethod(indicesType, nameof(IndicesContract.ToString), typeof(string), typeof(OutputFormat));
+        ShouldHaveMethod(indicesType, nameof(IndicesContract.GetDiffIds), typeof(short[]));
     }
 
-    private static void AssertImmutableArrayProperty(string propertyName)
+    private static void ShouldHaveImmutableArrayProperty(string propertyName)
     {
         PropertyInfo property = GetRequiredProperty(typeof(IndicesContract), propertyName);
 
@@ -72,7 +72,7 @@ public sealed class IndicesTests
         property.SetMethod.ShouldBeNull();
     }
 
-    private static void AssertMethod(Type declaringType, string name, Type returnType, params Type[] parameterTypes)
+    private static void ShouldHaveMethod(Type declaringType, string name, Type returnType, params Type[] parameterTypes)
     {
         MethodInfo method = GetRequiredMethod(declaringType, name, parameterTypes);
 

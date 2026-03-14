@@ -1,4 +1,5 @@
 using NRedberry.Numbers;
+using Shouldly;
 using Xunit;
 using TensorApi = NRedberry.Tensors.Tensors;
 
@@ -13,9 +14,9 @@ public sealed class DSLTransformationTests
         object? number = DSLTransformation<TestTransformation>.ToObject(7);
         TestTransformation transformation = new();
 
-        Assert.Equal(TensorApi.Parse("a+b").ToString(), tensor?.ToString());
-        Assert.IsType<Complex>(number);
-        Assert.Same(transformation, DSLTransformation<TestTransformation>.ToObject(transformation));
+        tensor?.ToString().ShouldBe(TensorApi.Parse("a+b").ToString());
+        number.ShouldBeOfType<Complex>();
+        DSLTransformation<TestTransformation>.ToObject(transformation).ShouldBeSameAs(transformation);
     }
 
     [Fact]
@@ -25,8 +26,8 @@ public sealed class DSLTransformationTests
         IDictionary<string, object?> source = new Dictionary<string, object?> { ["key"] = "y" };
         Dictionary<string, object?> map = DSLTransformation<TestTransformation>.ToDictionary(source);
 
-        Assert.Equal(TensorApi.Parse("x").ToString(), values[0]?.ToString());
-        Assert.IsType<Complex>(values[1]);
-        Assert.Equal(TensorApi.Parse("y").ToString(), map["key"]?.ToString());
+        values[0]?.ToString().ShouldBe(TensorApi.Parse("x").ToString());
+        values[1].ShouldBeOfType<Complex>();
+        map["key"]?.ToString().ShouldBe(TensorApi.Parse("y").ToString());
     }
 }

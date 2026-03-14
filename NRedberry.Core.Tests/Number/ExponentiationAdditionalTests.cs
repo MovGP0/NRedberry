@@ -114,7 +114,7 @@ public sealed class ExponentiationAdditionalTests
 
         result.ShouldNotBeNull();
         result.Real.IsNumeric().ShouldBeTrue();
-        Assert.Equal(2.0, result.Real.DoubleValue(), 10);
-        Assert.Equal(0.0, result.Imaginary.DoubleValue(), 10);
+        result.Real.DoubleValue().ShouldBe(2.0, 1e-10);
+        result.Imaginary.DoubleValue().ShouldBe(0.0, 1e-10);
     }
 }

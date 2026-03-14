@@ -50,7 +50,7 @@ public sealed class NodeParserComparatorTests
 
         var result = comparator.Compare(higherPriority, lowerPriority);
 
-        result < 0.ShouldBeTrue();
+        (result < 0).ShouldBeTrue();
     }
 
     [Fact]

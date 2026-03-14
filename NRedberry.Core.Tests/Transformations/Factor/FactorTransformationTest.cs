@@ -49,7 +49,7 @@ public sealed class FactorTransformationTest
         TensorType normalized = TensorFactory.Parse("362033331456891249*((1/57)*z+(1/57)*y+(1/57)*i+x)**10");
         TensorType expanded = ExpandTransformation.Expand(tensor);
         TensorType factored = FactorTransformation.Factor(expanded);
-        TensorUtils.Equals(factored, tensor) || TensorUtils.Equals(factored, normalized).ShouldBeTrue();
+        (TensorUtils.Equals(factored, tensor) || TensorUtils.Equals(factored, normalized)).ShouldBeTrue();
     }
 
     [Fact]
@@ -178,12 +178,14 @@ public sealed class FactorTransformationTest
         TensorType tensor = TensorFactory.Parse("a+b*a+(a**2+2*a*b+b**2)/(a+b)*F^i_i+(a**2+2*a*b+b**2)*(a+b)**(-1)*H^i_i");
         TensorUtils.Equals(
             FactorTransformation.Factor(tensor, false),
-            TensorFactory.Parse("(a+b)*H^{i}_{i}+(a+b)*F^{i}_{i}+a*(1+b)")).ShouldBeTrue();
+            TensorFactory.Parse("(a+b)*H^{i}_{i}+(a+b)*F^{i}_{i}+a*(1+b)"))
+            .ShouldBeTrue();
 
         tensor = TensorFactory.Parse("(a**2+2*a*b+b**2)/(a+b)*F^i_i+(a**2+2*a*b+b**2)*(a+b)**(-1)*H^i_i");
         TensorUtils.Equals(
             FactorTransformation.Factor(tensor, false),
-            TensorFactory.Parse("(a+b)*H^{i}_{i}+(a+b)*F^{i}_{i}")).ShouldBeTrue();
+            TensorFactory.Parse("(a+b)*H^{i}_{i}+(a+b)*F^{i}_{i}"))
+            .ShouldBeTrue();
     }
 
     [Fact(Skip = "Ignored in original test suite (broken JAS).")]
@@ -206,19 +208,23 @@ public sealed class FactorTransformationTest
     {
         TensorUtils.Equals(
             FactorTransformation.Factor(TensorFactory.Parse("2*I*a + 4*I*b")),
-            TensorFactory.Parse("2*I*(a + 2*b)")).ShouldBeTrue();
+            TensorFactory.Parse("2*I*(a + 2*b)"))
+            .ShouldBeTrue();
 
         TensorUtils.Equals(
             FactorTransformation.Factor(TensorFactory.Parse("2*I*a + 4*(I*b + I*c)")),
-            TensorFactory.Parse("2*I*(a + 2*b + 2*c)")).ShouldBeTrue();
+            TensorFactory.Parse("2*I*(a + 2*b + 2*c)"))
+            .ShouldBeTrue();
 
         TensorUtils.Equals(
             FactorTransformation.Factor(TensorFactory.Parse("2*I*a + 4*(-I*b + I*c)")),
-            TensorFactory.Parse("2*I*(a - 2*b + 2*c)")).ShouldBeTrue();
+            TensorFactory.Parse("2*I*(a - 2*b + 2*c)"))
+            .ShouldBeTrue();
 
         TensorUtils.Equals(
             FactorTransformation.Factor(TensorFactory.Parse("2*I*(I*a + I*d) + 4*I*(-I*b + I*c)")),
-            TensorFactory.Parse("2*(-a -d + 2*b - 2*c)")).ShouldBeTrue();
+            TensorFactory.Parse("2*(-a -d + 2*b - 2*c)"))
+            .ShouldBeTrue();
     }
 
     [Fact]
