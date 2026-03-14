@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
@@ -15,9 +15,9 @@ public sealed class SquarefreeTests
         GenPolynomialRing<BigRational> ring = CreateRing();
         GenPolynomial<BigRational> polynomial = ring.Univariate(0).Sum(ring.FromInteger(1));
 
-        Assert.True(squarefree.IsSquarefree(polynomial));
-        Assert.Equal(polynomial.Monic(), squarefree.SquarefreePart(polynomial));
-        Assert.Single(squarefree.SquarefreeFactors(polynomial));
+        squarefree.IsSquarefree(polynomial).ShouldBeTrue();
+        squarefree.SquarefreePart(polynomial).ShouldBe(polynomial.Monic());
+        squarefree.SquarefreeFactors(polynomial).ShouldHaveSingleItem();
     }
 
     private static GenPolynomialRing<BigRational> CreateRing()

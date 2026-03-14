@@ -1,4 +1,4 @@
-using NRedberry.Contexts;
+﻿using NRedberry.Contexts;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Fractions;
@@ -18,7 +18,7 @@ public sealed class TogetherTransformationTest
         actual = TogetherTransformation.Together(actual);
         TensorType expected = TensorFactory.Parse("(a+b)**2");
 
-        Assert.True(TensorUtils.EqualsExactly(actual, expected));
+        TensorUtils.EqualsExactly(actual, expected).ShouldBeTrue();
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public sealed class TogetherTransformationTest
         actual = TogetherTransformation.Together(actual);
         TensorType expected = TensorFactory.Parse("(a_i^i+b_i^i)**2");
 
-        Assert.True(TensorUtils.Equals(actual, expected));
+        TensorUtils.Equals(actual, expected).ShouldBeTrue();
     }
 
     [Fact]
@@ -38,7 +38,7 @@ public sealed class TogetherTransformationTest
         actual = TogetherTransformation.Together(actual);
         TensorType expected = TensorFactory.Parse("(k_i*k^i)**2");
 
-        Assert.True(TensorUtils.Equals(actual, expected));
+        TensorUtils.Equals(actual, expected).ShouldBeTrue();
     }
 
     [Fact]
@@ -48,7 +48,7 @@ public sealed class TogetherTransformationTest
         actual = TogetherTransformation.Together(actual);
         TensorType expected = TensorFactory.Parse("(a+b)/(a*b)");
 
-        Assert.True(TensorUtils.Equals(actual, expected));
+        TensorUtils.Equals(actual, expected).ShouldBeTrue();
     }
 
     [Fact]
@@ -58,7 +58,7 @@ public sealed class TogetherTransformationTest
         actual = TogetherTransformation.Together(actual);
         TensorType expected = TensorFactory.Parse("(a+1)/(a**2)");
 
-        Assert.True(TensorUtils.Equals(actual, expected));
+        TensorUtils.Equals(actual, expected).ShouldBeTrue();
     }
 
     [Fact(Skip = "Large expression port pending; original Java test is very heavy.")]
@@ -73,7 +73,7 @@ public sealed class TogetherTransformationTest
         actual = TogetherTransformation.Together(actual);
         TensorType expected = TensorFactory.Parse("a*b*c");
 
-        Assert.True(TensorUtils.Equals(actual, expected));
+        TensorUtils.Equals(actual, expected).ShouldBeTrue();
     }
 
     [Fact(Skip = "Large expression port pending; original Java test is very heavy.")]
@@ -92,7 +92,7 @@ public sealed class TogetherTransformationTest
         TensorType tensor = TensorFactory.Parse("k_i/(k_i*k^i-m**2)+p_i/(k_i*k^i-m**2)");
         TensorType expected = TensorFactory.Parse("(p_i+k_i)/(k_i*k^i-m**2)");
 
-        Assert.True(TensorUtils.Equals(expected, TogetherTransformation.Together(tensor)));
+        TensorUtils.Equals(expected, TogetherTransformation.Together(tensor)).ShouldBeTrue();
     }
 
     [Fact]
@@ -101,7 +101,7 @@ public sealed class TogetherTransformationTest
         TensorType tensor = TensorFactory.Parse("k_i*k_j/(k_i*k^i-m**2)+p_i*k_j/(k_i*k^i-m**2)");
         TensorType expected = TensorFactory.Parse("(p_i*k_j+k_i*k_j)/(k_i*k^i-m**2)");
 
-        Assert.True(TensorUtils.Equals(expected, TogetherTransformation.Together(tensor)));
+        TensorUtils.Equals(expected, TogetherTransformation.Together(tensor)).ShouldBeTrue();
     }
 
     [Fact]
@@ -122,7 +122,7 @@ public sealed class TogetherTransformationTest
         TensorType tensor = TensorFactory.Parse("1/(a*b)+1/c");
         tensor = TogetherTransformation.Together(tensor);
 
-        Assert.True(TensorUtils.Equals(tensor, TensorFactory.Parse("(a*b+c)/(a*b*c)")));
+        TensorUtils.Equals(tensor, TensorFactory.Parse("(a*b+c)/(a*b*c)")).ShouldBeTrue();
     }
 
     [Fact]
@@ -131,7 +131,7 @@ public sealed class TogetherTransformationTest
         TensorType tensor = TensorFactory.Parse("1/a**(1/2)+1/c**(1/2)");
         tensor = TogetherTransformation.Together(tensor);
 
-        Assert.True(TensorUtils.Equals(tensor, TensorFactory.Parse("c**(-1/2)*(c**(1/2)+a**(1/2))*a**(-1/2)")));
+        TensorUtils.Equals(tensor, TensorFactory.Parse("c**(-1/2)*(c**(1/2)+a**(1/2))*a**(-1/2)")).ShouldBeTrue();
     }
 
     [Fact]
@@ -140,7 +140,7 @@ public sealed class TogetherTransformationTest
         TensorType tensor = TensorFactory.Parse("(1/a**(1/2)+1/c**(1/2))*f_mn");
         tensor = TogetherTransformation.Together(tensor);
 
-        Assert.True(TensorUtils.Equals(tensor, TensorFactory.Parse("c**(-1/2)*(c**(1/2)+a**(1/2))*a**(-1/2)*f_mn")));
+        TensorUtils.Equals(tensor, TensorFactory.Parse("c**(-1/2)*(c**(1/2)+a**(1/2))*a**(-1/2)*f_mn")).ShouldBeTrue();
     }
 
     [Fact]
@@ -149,7 +149,7 @@ public sealed class TogetherTransformationTest
         TensorType tensor = TensorFactory.Parse("(1/a**(1/2)+1/c**(1/2))*f_mn + f_mn");
         tensor = TogetherTransformation.Together(tensor);
 
-        Assert.True(TensorUtils.Equals(tensor, TensorFactory.Parse("c**(-1/2)*(c**(1/2)+a**(1/2)+a**(1/2)*c**(1/2))*a**(-1/2)*f_mn")));
+        TensorUtils.Equals(tensor, TensorFactory.Parse("c**(-1/2)*(c**(1/2)+a**(1/2)+a**(1/2)*c**(1/2))*a**(-1/2)*f_mn")).ShouldBeTrue();
     }
 
     [Fact]

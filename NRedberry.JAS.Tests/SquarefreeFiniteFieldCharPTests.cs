@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 using Xunit;
@@ -21,8 +21,8 @@ public sealed class SquarefreeFiniteFieldCharPTests
 
         GenPolynomial<ModLong>? root = squarefree.BaseSquarefreePRoot(polynomial);
 
-        Assert.Equal(coefficientRing.FromInteger(1), squarefree.CoeffRootCharacteristic(coefficientRing.FromInteger(1)));
-        Assert.NotNull(squarefree.RootCharacteristic(polynomial));
-        Assert.Equal(ring.Univariate(0).Sum(ring.FromInteger(1)), root);
+        squarefree.CoeffRootCharacteristic(coefficientRing.FromInteger(1)).ShouldBe(coefficientRing.FromInteger(1));
+        squarefree.RootCharacteristic(polynomial).ShouldNotBeNull();
+        root.ShouldBe(ring.Univariate(0).Sum(ring.FromInteger(1)));
     }
 }

@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using NRedberry.Transformations.Options;
 using Xunit;
 
@@ -11,7 +11,7 @@ public sealed class IOptionsTests
     {
         MethodInfo method = typeof(IOptions).GetMethod(nameof(IOptions.TriggerCreate))!;
 
-        Assert.Equal(typeof(void), method.ReturnType);
-        Assert.Empty(method.GetParameters());
+        method.ReturnType.ShouldBe(typeof(void));
+        method.GetParameters().ShouldBeEmpty();
     }
 }

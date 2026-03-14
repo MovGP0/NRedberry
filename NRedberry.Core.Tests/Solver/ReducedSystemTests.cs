@@ -1,4 +1,4 @@
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using NRedberry.Solver;
 using NRedberry.Tensors;
 using Xunit;
@@ -13,7 +13,7 @@ public sealed class ReducedSystemTests
         SimpleTensor[] unknownCoefficients = [];
         Expression[] generalSolutions = [];
 
-        Assert.Throws<ArgumentNullException>(() => new ReducedSystem(null!, unknownCoefficients, generalSolutions));
+        Should.Throw<ArgumentNullException>(() => new ReducedSystem(null!, unknownCoefficients, generalSolutions));
     }
 
     [Fact]
@@ -22,7 +22,7 @@ public sealed class ReducedSystemTests
         Expression[] equations = [];
         Expression[] generalSolutions = [];
 
-        Assert.Throws<ArgumentNullException>(() => new ReducedSystem(equations, null!, generalSolutions));
+        Should.Throw<ArgumentNullException>(() => new ReducedSystem(equations, null!, generalSolutions));
     }
 
     [Fact]
@@ -31,7 +31,7 @@ public sealed class ReducedSystemTests
         Expression[] equations = [];
         SimpleTensor[] unknownCoefficients = [];
 
-        Assert.Throws<ArgumentNullException>(() => new ReducedSystem(equations, unknownCoefficients, null!));
+        Should.Throw<ArgumentNullException>(() => new ReducedSystem(equations, unknownCoefficients, null!));
     }
 
     [Fact]
@@ -50,19 +50,19 @@ public sealed class ReducedSystemTests
         SimpleTensor[] unknownCoefficientsSnapshot = reducedSystem.GetUnknownCoefficients();
         Expression[] generalSolutionsSnapshot = reducedSystem.GetGeneralSolutions();
 
-        Assert.NotSame(equations, equationsSnapshot);
-        Assert.NotSame(unknownCoefficients, unknownCoefficientsSnapshot);
-        Assert.NotSame(generalSolutions, generalSolutionsSnapshot);
-        Assert.Single(equationsSnapshot);
-        Assert.Single(unknownCoefficientsSnapshot);
-        Assert.Single(generalSolutionsSnapshot);
+        equationsSnapshot.ShouldNotBeSameAs(equations);
+        unknownCoefficientsSnapshot.ShouldNotBeSameAs(unknownCoefficients);
+        generalSolutionsSnapshot.ShouldNotBeSameAs(generalSolutions);
+        equationsSnapshot.ShouldHaveSingleItem();
+        unknownCoefficientsSnapshot.ShouldHaveSingleItem();
+        generalSolutionsSnapshot.ShouldHaveSingleItem();
 
         equationsSnapshot[0] = replacementExpression;
         unknownCoefficientsSnapshot[0] = replacementSimpleTensor;
         generalSolutionsSnapshot[0] = replacementExpression;
 
-        Assert.Same(expression, reducedSystem.GetEquations()[0]);
-        Assert.Same(simpleTensor, reducedSystem.GetUnknownCoefficients()[0]);
-        Assert.Same(expression, reducedSystem.GetGeneralSolutions()[0]);
+        reducedSystem.GetEquations()[0].ShouldBeSameAs(expression);
+        reducedSystem.GetUnknownCoefficients()[0].ShouldBeSameAs(simpleTensor);
+        reducedSystem.GetGeneralSolutions()[0].ShouldBeSameAs(expression);
     }
 }

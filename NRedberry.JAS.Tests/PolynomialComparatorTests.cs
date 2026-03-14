@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using Xunit;
 
@@ -18,7 +18,7 @@ public sealed class PolynomialComparatorTests
         int forwardResult = forward.Compare(xSquared, x);
         int reverseResult = reverse.Compare(xSquared, x);
 
-        Assert.NotEqual(0, forwardResult);
-        Assert.Equal(-forwardResult, reverseResult);
+        forwardResult.ShouldNotBe(0);
+        reverseResult.ShouldBe(-forwardResult);
     }
 }

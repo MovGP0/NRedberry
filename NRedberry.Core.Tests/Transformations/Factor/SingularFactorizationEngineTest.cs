@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Transformations.Factor;
 using NRedberry.Transformations.Expand;
 using Xunit;
@@ -36,6 +36,6 @@ public sealed class SingularFactorizationEngineTest
         tensor = ExpandTransformation.Expand(tensor);
         TensorType factored = engine.Transform(tensor);
 
-        Assert.NotNull(factored);
+        factored.ShouldNotBeNull();
     }
 }

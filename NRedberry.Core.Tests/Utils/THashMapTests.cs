@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -12,8 +12,8 @@ public sealed class THashMapTests
         map["a"] = 1;
         map["b"] = 2;
 
-        Assert.Equal(1, map["a"]);
-        Assert.True(map.ContainsKey("b"));
-        Assert.Equal(2, map.Count);
+        map["a"].ShouldBe(1);
+        map.ContainsKey("b").ShouldBeTrue();
+        map.Count.ShouldBe(2);
     }
 }

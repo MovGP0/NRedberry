@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using NRedberry.Tensors.Functions;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -15,12 +15,12 @@ public sealed class LogTests
 
         NRedberry.Tensors.Tensor derivative = function.Derivative();
 
-        Assert.Same(argument, function[0]);
-        Assert.Equal(1, function.Size);
-        Assert.Equal("Log[a]", function.ToString(OutputFormat.Redberry));
-        Assert.IsType<Power>(derivative);
-        Assert.Contains("a**(-1)", derivative.ToString(OutputFormat.Redberry));
-        Assert.Equal("ScalarFunctionBuilder", function.GetBuilder().GetType().Name);
-        Assert.Same(LogFactory.Factory, function.GetFactory());
+        function[0].ShouldBeSameAs(argument);
+        function.Size.ShouldBe(1);
+        function.ToString(OutputFormat.Redberry).ShouldBe("Log[a]");
+        derivative.ShouldBeOfType<Power>();
+        derivative.ToString(OutputFormat.Redberry).ShouldContain("a**(-1)");
+        function.GetBuilder().GetType().Name.ShouldBe("ScalarFunctionBuilder");
+        function.GetFactory().ShouldBeSameAs(LogFactory.Factory);
     }
 }

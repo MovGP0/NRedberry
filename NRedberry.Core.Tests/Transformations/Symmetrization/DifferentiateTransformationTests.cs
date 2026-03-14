@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Symmetrization;
+﻿using NRedberry.Transformations.Symmetrization;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -9,18 +9,18 @@ public sealed class DifferentiateTransformationTests
     [Fact]
     public void ShouldThrowForConstructors()
     {
-        NRedberry.Tensors.SimpleTensor x = Assert.IsType<NRedberry.Tensors.SimpleTensor>(TensorApi.Parse("x"));
+        NRedberry.Tensors.SimpleTensor x = TensorApi.Parse("x").ShouldBeOfType<NRedberry.Tensors.SimpleTensor>();
 
-        Assert.Throws<NotImplementedException>(() => new DifferentiateTransformation(x));
-        Assert.Throws<NotImplementedException>(() => new DifferentiateTransformation(false, x));
+        Should.Throw<NotImplementedException>(() => new DifferentiateTransformation(x));
+        Should.Throw<NotImplementedException>(() => new DifferentiateTransformation(false, x));
     }
 
     [Fact]
     public void ShouldThrowForStaticHelpers()
     {
-        NRedberry.Tensors.SimpleTensor x = Assert.IsType<NRedberry.Tensors.SimpleTensor>(TensorApi.Parse("x"));
+        NRedberry.Tensors.SimpleTensor x = TensorApi.Parse("x").ShouldBeOfType<NRedberry.Tensors.SimpleTensor>();
 
-        Assert.Throws<NotImplementedException>(() =>
+        Should.Throw<NotImplementedException>(() =>
             DifferentiateTransformation.Differentiate(TensorApi.Parse("x"), x, 1));
     }
 }

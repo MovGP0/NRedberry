@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Factor;
+﻿using NRedberry.Transformations.Factor;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -13,14 +13,12 @@ public sealed class FactorTransformationTests
 
         NRedberry.Tensors.Tensor actual = FactorTransformation.Factor(tensor);
 
-        Assert.Equal(
-            tensor.ToString(OutputFormat.Redberry),
-            actual.ToString(OutputFormat.Redberry));
+        actual.ToString(OutputFormat.Redberry).ShouldBe(tensor.ToString(OutputFormat.Redberry));
     }
 
     [Fact]
     public void ShouldExposeReadableName()
     {
-        Assert.Equal("Factor", FactorTransformation.Instance.ToString(OutputFormat.Redberry));
+        FactorTransformation.Instance.ToString(OutputFormat.Redberry).ShouldBe("Factor");
     }
 }

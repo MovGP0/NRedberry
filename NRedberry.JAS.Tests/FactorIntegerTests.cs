@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
+using Shouldly;
 using Xunit;
 using JasBigInteger = NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith.BigInteger;
 
@@ -22,11 +23,11 @@ public sealed class FactorIntegerTests
 
         BitArray degrees = factor.FactorDegrees(exponents, 4);
 
-        Assert.True(degrees[0]);
-        Assert.True(degrees[1]);
-        Assert.False(degrees[2]);
-        Assert.True(degrees[3]);
-        Assert.True(degrees[4]);
+        degrees[0].ShouldBeTrue();
+        degrees[1].ShouldBeTrue();
+        degrees[2].ShouldBeFalse();
+        degrees[3].ShouldBeTrue();
+        degrees[4].ShouldBeTrue();
     }
 
     [Fact]
@@ -39,10 +40,10 @@ public sealed class FactorIntegerTests
         List<GenPolynomial<JasBigInteger>> factors = factor.BaseFactorsSquarefree(polynomial);
         List<GenPolynomial<JasBigInteger>> henselFactors = factor.FactorsSquarefreeHensel(polynomial);
 
-        Assert.Single(factors);
-        Assert.Equal(polynomial, factors[0]);
-        Assert.Single(henselFactors);
-        Assert.Equal(1L, FactorInteger<ModLong>.DegreeSum(factors));
+        factors.Count.ShouldBe(1);
+        factors[0].ShouldBe(polynomial);
+        henselFactors.Count.ShouldBe(1);
+        FactorInteger<ModLong>.DegreeSum(factors).ShouldBe(1L);
     }
 
     private static GenPolynomialRing<JasBigInteger> CreateRing()

@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using NRedberry.Numbers;
 using Xunit;
 using NumberComplex = NRedberry.Numbers.Complex;
@@ -12,7 +12,7 @@ public sealed class ComplexTest
     {
         NumberComplex result = NumberComplex.One.Divide(NumberComplex.Zero);
 
-        Assert.True(result.IsNaN());
+        result.IsNaN().ShouldBeTrue();
     }
 
     [Fact]
@@ -20,6 +20,6 @@ public sealed class ComplexTest
     {
         NumberComplex result = new(new System.Numerics.Complex(2.5, -1.5));
 
-        Assert.Equal(new NumberComplex(2.5, -1.5), result);
+        result.ShouldBe(new NumberComplex(2.5, -1.5));
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry.TensorGenerators;
+﻿using NRedberry.TensorGenerators;
 using NRedberry.Tensors;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -14,7 +14,7 @@ public sealed class GeneratedTensorTests
     {
         TensorType tensor = (Expression)RuntimeHelpers.GetUninitializedObject(typeof(Expression));
 
-        Assert.Throws<ArgumentNullException>(() => new GeneratedTensor(null!, tensor));
+        Should.Throw<ArgumentNullException>(() => new GeneratedTensor(null!, tensor));
     }
 
     [Fact]
@@ -22,7 +22,7 @@ public sealed class GeneratedTensorTests
     {
         var coefficients = new[] { (SimpleTensor)RuntimeHelpers.GetUninitializedObject(typeof(SimpleTensor)) };
 
-        Assert.Throws<ArgumentNullException>(() => new GeneratedTensor(coefficients, null!));
+        Should.Throw<ArgumentNullException>(() => new GeneratedTensor(coefficients, null!));
     }
 
     [Fact]
@@ -38,8 +38,8 @@ public sealed class GeneratedTensorTests
 
         GeneratedTensor generated = new(coefficients, tensor);
 
-        Assert.Same(coefficients, generated.Coefficients);
-        Assert.Same(tensor, generated.Tensor);
+        generated.Coefficients.ShouldBeSameAs(coefficients);
+        generated.Tensor.ShouldBeSameAs(tensor);
     }
 }
 
@@ -50,7 +50,7 @@ public sealed class SymbolsGeneratorTests
     [InlineData("")]
     public void ShouldThrowWhenNameIsNullOrEmpty(string? name)
     {
-        Assert.Throws<ArgumentException>(() => new SymbolsGenerator(name!));
+        Should.Throw<ArgumentException>(() => new SymbolsGenerator(name!));
     }
 
     [Fact]
@@ -58,10 +58,10 @@ public sealed class SymbolsGeneratorTests
     {
         SymbolsGenerator generator = new("a");
 
-        Assert.True(generator.MoveNext());
-        Assert.Equal(1, CountProperty.GetValue(generator));
-        Assert.True(generator.MoveNext());
-        Assert.Equal(2, CountProperty.GetValue(generator));
+        generator.MoveNext().ShouldBeTrue();
+        CountProperty.GetValue(generator).ShouldBe(1);
+        generator.MoveNext().ShouldBeTrue();
+        CountProperty.GetValue(generator).ShouldBe(2);
     }
 
     [Fact]
@@ -69,16 +69,16 @@ public sealed class SymbolsGeneratorTests
     {
         SymbolsGenerator generator = new("z");
 
-        Assert.True(generator.MoveNext());
-        Assert.Equal(1, CountProperty.GetValue(generator));
-        Assert.True(generator.MoveNext());
-        Assert.Equal(2, CountProperty.GetValue(generator));
+        generator.MoveNext().ShouldBeTrue();
+        CountProperty.GetValue(generator).ShouldBe(1);
+        generator.MoveNext().ShouldBeTrue();
+        CountProperty.GetValue(generator).ShouldBe(2);
 
         generator.Reset();
-        Assert.Equal(0, CountProperty.GetValue(generator));
+        CountProperty.GetValue(generator).ShouldBe(0);
 
-        Assert.True(generator.MoveNext());
-        Assert.Equal(1, CountProperty.GetValue(generator));
+        generator.MoveNext().ShouldBeTrue();
+        CountProperty.GetValue(generator).ShouldBe(1);
     }
 
     private static PropertyInfo CountProperty => typeof(SymbolsGenerator).GetProperty("Count", BindingFlags.Instance | BindingFlags.NonPublic)!;

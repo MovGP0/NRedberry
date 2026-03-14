@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Expand;
+﻿using NRedberry.Transformations.Expand;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -12,14 +12,12 @@ public sealed class ExpandNumeratorTransformationTests
         NRedberry.Tensors.Tensor tensor = TensorApi.Parse("a/c");
         NRedberry.Tensors.Tensor actual = ExpandNumeratorTransformation.Expand(tensor);
 
-        Assert.Equal(
-            tensor.ToString(OutputFormat.Redberry),
-            actual.ToString(OutputFormat.Redberry));
+        actual.ToString(OutputFormat.Redberry).ShouldBe(tensor.ToString(OutputFormat.Redberry));
     }
 
     [Fact]
     public void ShouldExposeReadableName()
     {
-        Assert.Equal("ExpandNumerator", ExpandNumeratorTransformation.Instance.ToString(OutputFormat.Redberry));
+        ExpandNumeratorTransformation.Instance.ToString(OutputFormat.Redberry).ShouldBe("ExpandNumerator");
     }
 }

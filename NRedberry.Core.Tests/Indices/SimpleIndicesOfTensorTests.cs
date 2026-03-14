@@ -16,8 +16,8 @@ public sealed class SimpleIndicesOfTensorTests
             SimpleIndicesOfTensor fromDefaultConstructor = new(data, null);
             SimpleIndicesOfTensor fromNotResortConstructor = new(true, data, null);
 
-            Assert.Equal(data, fromDefaultConstructor.AllIndices.ToArray());
-            Assert.Equal(data, fromNotResortConstructor.AllIndices.ToArray());
+            fromDefaultConstructor.AllIndices.ToArray().ShouldBe(data);
+            fromNotResortConstructor.AllIndices.ToArray().ShouldBe(data);
         });
     }
 
@@ -32,9 +32,9 @@ public sealed class SimpleIndicesOfTensorTests
 
             IndicesContract mappedIndices = sut.ApplyIndexMapping(new ReplaceIndexMapping(data[0], mapped));
 
-            SimpleIndicesOfTensor result = Assert.IsType<SimpleIndicesOfTensor>(mappedIndices);
-            Assert.NotSame(sut, result);
-            Assert.Equal([mapped, data[1]], result.AllIndices.ToArray());
+            SimpleIndicesOfTensor result = mappedIndices.ShouldBeOfType<SimpleIndicesOfTensor>();
+            result.ShouldNotBeSameAs(sut);
+            result.AllIndices.ToArray().ShouldBe([mapped, data[1]]);
         });
     }
 
@@ -46,11 +46,11 @@ public sealed class SimpleIndicesOfTensorTests
             int[] data = CreateLatinLowerData(2, 30);
 
             SimpleIndicesOfTensor withoutSymmetries = new(true, data, null);
-            Assert.Throws<InvalidOperationException>(() => _ = withoutSymmetries.Symmetries);
+            Should.Throw<InvalidOperationException>(() => _ = withoutSymmetries.Symmetries);
 
             IndicesSymmetries symmetries = IndicesSymmetries.Create(withoutSymmetries.StructureOfIndices);
             SimpleIndicesOfTensor withSymmetries = new(true, data, symmetries);
-            Assert.Same(symmetries, withSymmetries.Symmetries);
+            withSymmetries.Symmetries.ShouldBeSameAs(symmetries);
         });
     }
 
@@ -63,7 +63,7 @@ public sealed class SimpleIndicesOfTensorTests
             SimpleIndicesOfTensor sut = new(true, data, null);
             IndicesSymmetries symmetries = IndicesSymmetries.Create(sut.StructureOfIndices);
 
-            Assert.Throws<NotSupportedException>(() => sut.Symmetries = symmetries);
+            Should.Throw<NotSupportedException>(() => sut.Symmetries = symmetries);
         });
     }
 

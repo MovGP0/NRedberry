@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Test;
@@ -11,10 +11,9 @@ public sealed class PerformanceTestAttributeTests
     [Fact]
     public void ShouldTargetMethodsOnly()
     {
-        AttributeUsageAttribute attributeUsage = Assert.IsType<AttributeUsageAttribute>(
-            Attribute.GetCustomAttribute(typeof(PerformanceTestAttribute), typeof(AttributeUsageAttribute)));
+        AttributeUsageAttribute attributeUsage = Attribute.GetCustomAttribute(typeof(PerformanceTestAttribute), typeof(AttributeUsageAttribute)).ShouldBeOfType<AttributeUsageAttribute>();
 
-        Assert.Equal(AttributeTargets.Method, attributeUsage.ValidOn);
-        Assert.False(attributeUsage.Inherited);
+        attributeUsage.ValidOn.ShouldBe(AttributeTargets.Method);
+        attributeUsage.Inherited.ShouldBeFalse();
     }
 }

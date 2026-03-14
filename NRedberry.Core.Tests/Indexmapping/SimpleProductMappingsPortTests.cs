@@ -19,7 +19,7 @@ public sealed class SimpleProductMappingsPortTests
         ArgumentNullException exception = AssertInnerException<ArgumentNullException>(() =>
             CreateWithProviders(providers: null!));
 
-        Assert.Equal("providers", exception.ParamName);
+        exception.ParamName.ShouldBe("providers");
     }
 
     [Fact]
@@ -31,7 +31,7 @@ public sealed class SimpleProductMappingsPortTests
         ArgumentNullException exception = AssertInnerException<ArgumentNullException>(() =>
             CreateWithProviderAndTensors(provider: null!, from, to));
 
-        Assert.Equal("provider", exception.ParamName);
+        exception.ParamName.ShouldBe("provider");
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public sealed class SimpleProductMappingsPortTests
         ArgumentNullException exception = AssertInnerException<ArgumentNullException>(() =>
             CreateWithProviderAndTensors(provider, from: null!, to));
 
-        Assert.Equal("from", exception.ParamName);
+        exception.ParamName.ShouldBe("from");
     }
 
     [Fact]
@@ -55,7 +55,7 @@ public sealed class SimpleProductMappingsPortTests
         ArgumentNullException exception = AssertInnerException<ArgumentNullException>(() =>
             CreateWithProviderAndTensors(provider, from, to: null!));
 
-        Assert.Equal("to", exception.ParamName);
+        exception.ParamName.ShouldBe("to");
     }
 
     [Fact]
@@ -71,16 +71,16 @@ public sealed class SimpleProductMappingsPortTests
         IIndexMappingBuffer? take1 = InvokeTake(port);
         IIndexMappingBuffer? take2 = InvokeTake(port);
 
-        Assert.Equal(1, first.TickCallCount);
-        Assert.Equal(1, last.TickCallCount);
-        Assert.Same(firstBuffer, take1);
-        Assert.Same(secondBuffer, take2);
+        first.TickCallCount.ShouldBe(1);
+        last.TickCallCount.ShouldBe(1);
+        take1.ShouldBeSameAs(firstBuffer);
+        take2.ShouldBeSameAs(secondBuffer);
 
         IIndexMappingBuffer? take3 = InvokeTake(port);
 
-        Assert.Null(take3);
-        Assert.Equal(2, first.TickCallCount);
-        Assert.Equal(2, last.TickCallCount);
+        take3.ShouldBeNull();
+        first.TickCallCount.ShouldBe(2);
+        last.TickCallCount.ShouldBe(2);
     }
 
     [Fact]
@@ -93,7 +93,7 @@ public sealed class SimpleProductMappingsPortTests
         NotImplementedException exception = AssertInnerException<NotImplementedException>(() =>
             CreateWithProviderAndTensors(provider, from, to));
 
-        Assert.NotNull(exception);
+        exception.ShouldNotBeNull();
     }
 
     private static object CreateWithProviders(IIndexMappingProvider[] providers)
@@ -104,7 +104,7 @@ public sealed class SimpleProductMappingsPortTests
             [typeof(IIndexMappingProvider[])],
             modifiers: null);
 
-        Assert.NotNull(constructor);
+        constructor.ShouldNotBeNull();
         return constructor.Invoke([providers]);
     }
 
@@ -116,7 +116,7 @@ public sealed class SimpleProductMappingsPortTests
             [typeof(IIndexMappingProvider), typeof(TensorType[]), typeof(TensorType[])],
             modifiers: null);
 
-        Assert.NotNull(constructor);
+        constructor.ShouldNotBeNull();
         return constructor.Invoke([provider, from, to]);
     }
 
@@ -126,16 +126,16 @@ public sealed class SimpleProductMappingsPortTests
             nameof(IIndexMappingProvider.Take),
             BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
-        Assert.NotNull(take);
+        take.ShouldNotBeNull();
         return (IIndexMappingBuffer?)take.Invoke(port, null);
     }
 
     private static TException AssertInnerException<TException>(Action action)
         where TException : Exception
     {
-        TargetInvocationException exception = Assert.Throws<TargetInvocationException>(action);
+        TargetInvocationException exception = Should.Throw<TargetInvocationException>(action);
 
-        return Assert.IsType<TException>(exception.InnerException);
+        return exception.InnerException.ShouldBeOfType<TException>();
     }
 
     private sealed class SequenceIndexMappingProvider(IEnumerable<bool> ticks, IEnumerable<IIndexMappingBuffer?> takes)

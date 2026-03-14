@@ -1,4 +1,4 @@
-using NRedberry.Parsers;
+﻿using NRedberry.Parsers;
 using RedberryParser = NRedberry.Parsers.Parser;
 using Xunit;
 
@@ -17,9 +17,9 @@ public sealed class ITokenParserTests
 
         var result = parser.Parse(" expression ");
 
-        Assert.Same(highPriorityToken, result);
-        Assert.Equal(0, lowPriorityParser.CallCount);
-        Assert.Equal(1, highPriorityParser.CallCount);
+        result.ShouldBeSameAs(highPriorityToken);
+        lowPriorityParser.CallCount.ShouldBe(0);
+        highPriorityParser.CallCount.ShouldBe(1);
     }
 
     [Fact]
@@ -32,11 +32,11 @@ public sealed class ITokenParserTests
 
         var result = parser.Parse(" x ");
 
-        Assert.Same(fallbackToken, result);
-        Assert.Equal(1, firstParser.CallCount);
-        Assert.Equal(1, secondParser.CallCount);
-        Assert.Equal("x", firstParser.LastExpression);
-        Assert.Equal("x", secondParser.LastExpression);
+        result.ShouldBeSameAs(fallbackToken);
+        firstParser.CallCount.ShouldBe(1);
+        secondParser.CallCount.ShouldBe(1);
+        firstParser.LastExpression.ShouldBe("x");
+        secondParser.LastExpression.ShouldBe("x");
     }
 
     [Fact]
@@ -48,7 +48,7 @@ public sealed class ITokenParserTests
 
         parser.Parse("expr");
 
-        Assert.Same(parser, tokenParser.LastParser);
+        tokenParser.LastParser.ShouldBeSameAs(parser);
     }
 }
 

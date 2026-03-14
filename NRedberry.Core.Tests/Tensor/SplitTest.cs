@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
 using TensorFactory = NRedberry.Tensors.Tensors;
@@ -13,8 +13,8 @@ public sealed class SplitTest
     {
         Split split = Split.SplitScalars(TensorFactory.Parse("2*a"));
 
-        Assert.Equal("2*a", split.Factor.ToString(OutputFormat.Redberry));
-        Assert.Equal("1", split.Summand.ToString(OutputFormat.Redberry));
+        split.Factor.ToString(OutputFormat.Redberry).ShouldBe("2*a");
+        split.Summand.ToString(OutputFormat.Redberry).ShouldBe("1");
     }
 
     [Fact]
@@ -22,32 +22,32 @@ public sealed class SplitTest
     {
         Split split = Split.SplitScalars(TensorFactory.Parse("2*a*g_mn"));
 
-        Assert.Equal("g_{mn}", split.Factor.ToString(OutputFormat.Redberry));
-        Assert.Equal("2*a", split.Summand.ToString(OutputFormat.Redberry));
+        split.Factor.ToString(OutputFormat.Redberry).ShouldBe("g_{mn}");
+        split.Summand.ToString(OutputFormat.Redberry).ShouldBe("2*a");
     }
 
     [Fact]
     public void ShouldSplitScalarsWithMetricFactor()
     {
         Split split = Split.SplitScalars(TensorFactory.Parse("g^ab*g^cd*g_mn*F_ab*K_cd"));
-        SimpleTensor factor = Assert.IsType<SimpleTensor>(split.Factor);
-        Product summand = Assert.IsType<Product>(split.Summand);
+        SimpleTensor factor = split.Factor.ShouldBeOfType<SimpleTensor>();
+        Product summand = split.Summand.ShouldBeOfType<Product>();
 
-        Assert.Equal(2, factor.Indices.GetFree().Size());
-        Assert.Equal(4, summand.Size);
-        Assert.Equal(0, summand.Indices.GetFree().Size());
+        factor.Indices.GetFree().Size().ShouldBe(2);
+        summand.Size.ShouldBe(4);
+        summand.Indices.GetFree().Size().ShouldBe(0);
     }
 
     [Fact]
     public void ShouldProduceEquivalentFactorsWithMatchingFreeIndices()
     {
-        Product left = Assert.IsType<Product>(Split.SplitScalars(TensorFactory.Parse("c1*k_b*k^c")).Factor);
-        Product right = Assert.IsType<Product>(Split.SplitScalars(TensorFactory.Parse("(c0-c0*a**(-1))*k_i*k^i*k_b*k^c")).Factor);
+        Product left = Split.SplitScalars(TensorFactory.Parse("c1*k_b*k^c")).Factor.ShouldBeOfType<Product>();
+        Product right = Split.SplitScalars(TensorFactory.Parse("(c0-c0*a**(-1))*k_i*k^i*k_b*k^c")).Factor.ShouldBeOfType<Product>();
 
-        Assert.Equal(2, left.Size);
-        Assert.Equal(2, right.Size);
-        Assert.Equal(GetVarianceSignature(left), GetVarianceSignature(right));
-        Assert.True(left.Indices.GetFree().EqualsRegardlessOrder(right.Indices.GetFree()));
+        left.Size.ShouldBe(2);
+        right.Size.ShouldBe(2);
+        GetVarianceSignature(right).ShouldBe(GetVarianceSignature(left));
+        left.Indices.GetFree().EqualsRegardlessOrder(right.Indices.GetFree()).ShouldBeTrue();
     }
 
     private static string GetVarianceSignature(Product product)
@@ -56,7 +56,7 @@ public sealed class SplitTest
 
         foreach (TensorType factor in product)
         {
-            SimpleTensor simpleTensor = Assert.IsType<SimpleTensor>(factor);
+            SimpleTensor simpleTensor = factor.ShouldBeOfType<SimpleTensor>();
             int freeIndex = simpleTensor.Indices.GetFree()[0];
             signature.Add($"{IndicesUtils.GetStateInt(freeIndex)}");
         }

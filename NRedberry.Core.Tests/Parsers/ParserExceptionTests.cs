@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using NRedberry.Parsers;
 using Xunit;
 
@@ -9,7 +9,7 @@ public sealed class ParserExceptionTests
     [Fact]
     public void ShouldDeriveFromExceptionWhenTypeIsInspected()
     {
-        Assert.True(typeof(Exception).IsAssignableFrom(typeof(ParserException)));
+        typeof(Exception).IsAssignableFrom(typeof(ParserException)).ShouldBeTrue();
     }
 
     [Fact]
@@ -17,8 +17,8 @@ public sealed class ParserExceptionTests
     {
         var exception = new ParserException();
 
-        Assert.Null(exception.InnerException);
-        Assert.False(string.IsNullOrWhiteSpace(exception.Message));
+        exception.InnerException.ShouldBeNull();
+        string.IsNullOrWhiteSpace(exception.Message).ShouldBeFalse();
     }
 
     [Fact]
@@ -27,8 +27,8 @@ public sealed class ParserExceptionTests
         const string expectedMessage = "parser failed";
         var exception = new ParserException(expectedMessage);
 
-        Assert.Equal(expectedMessage, exception.Message);
-        Assert.Null(exception.InnerException);
+        exception.Message.ShouldBe(expectedMessage);
+        exception.InnerException.ShouldBeNull();
     }
 
     [Fact]
@@ -39,7 +39,7 @@ public sealed class ParserExceptionTests
 
         var exception = new ParserException(expectedMessage, innerException);
 
-        Assert.Equal(expectedMessage, exception.Message);
-        Assert.Same(innerException, exception.InnerException);
+        exception.Message.ShouldBe(expectedMessage);
+        exception.InnerException.ShouldBeSameAs(innerException);
     }
 }

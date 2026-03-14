@@ -1,4 +1,4 @@
-using NRedberry;
+﻿using NRedberry;
 using NRedberry.Numbers.Parser;
 using Xunit;
 
@@ -11,13 +11,13 @@ public sealed class BracketTokenTests
     {
         var parser = CreateCapturingParser();
 
-        Assert.Throws<ArgumentNullException>(() => BracketToken<Real>.Instance.Parse(null!, parser.Parser));
+        Should.Throw<ArgumentNullException>(() => BracketToken<Real>.Instance.Parse(null!, parser.Parser));
     }
 
     [Fact]
     public void ShouldThrowWhenParserIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => BracketToken<Real>.Instance.Parse("(1+2)", null!));
+        Should.Throw<ArgumentNullException>(() => BracketToken<Real>.Instance.Parse("(1+2)", null!));
     }
 
     [Fact]
@@ -27,8 +27,8 @@ public sealed class BracketTokenTests
 
         var result = BracketToken<Real>.Instance.Parse("1+2", parser.Parser);
 
-        Assert.Null(result);
-        Assert.Null(parser.Token.LastExpression);
+        result.ShouldBeNull();
+        parser.Token.LastExpression.ShouldBeNull();
     }
 
     [Fact]
@@ -38,8 +38,8 @@ public sealed class BracketTokenTests
 
         var result = BracketToken<Real>.Instance.Parse("(1+2)", parser.Parser);
 
-        Assert.Same(parser.Token.Result, result);
-        Assert.Equal("1+2", parser.Token.LastExpression);
+        result.ShouldBeSameAs(parser.Token.Result);
+        parser.Token.LastExpression.ShouldBe("1+2");
     }
 
     [Fact]
@@ -49,8 +49,8 @@ public sealed class BracketTokenTests
 
         var result = BracketToken<Real>.Instance.Parse("())", parser.Parser);
 
-        Assert.Null(result);
-        Assert.Null(parser.Token.LastExpression);
+        result.ShouldBeNull();
+        parser.Token.LastExpression.ShouldBeNull();
     }
 
     [Fact]
@@ -60,8 +60,8 @@ public sealed class BracketTokenTests
 
         var result = BracketToken<Real>.Instance.Parse("((1+2)", parser.Parser);
 
-        Assert.Same(parser.Token.Result, result);
-        Assert.Equal("(1+2", parser.Token.LastExpression);
+        result.ShouldBeSameAs(parser.Token.Result);
+        parser.Token.LastExpression.ShouldBe("(1+2");
     }
 
     private static TestParserContext CreateCapturingParser()

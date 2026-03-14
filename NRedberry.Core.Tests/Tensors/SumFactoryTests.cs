@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -12,7 +12,7 @@ public sealed class SumFactoryTests
     {
         NRedberry.Tensors.TensorFactory factory = SumFactory.Factory;
 
-        Assert.Equal(Complex.Zero, factory.Create());
+        factory.Create().ShouldBe(Complex.Zero);
     }
 
     [Fact]
@@ -21,7 +21,7 @@ public sealed class SumFactoryTests
         NRedberry.Tensors.TensorFactory factory = SumFactory.Factory;
         NRedberry.Tensors.Tensor tensor = TensorFactory.Parse("a");
 
-        Assert.Same(tensor, factory.Create(tensor));
+        factory.Create(tensor).ShouldBeSameAs(tensor);
     }
 
     [Fact]
@@ -33,9 +33,9 @@ public sealed class SumFactoryTests
             TensorFactory.Parse("a"),
             TensorFactory.Parse("b"));
 
-        Sum sum = Assert.IsType<Sum>(result);
-        Assert.Equal(2, sum.Size);
-        Assert.Contains("a", sum.ToString(OutputFormat.Redberry));
-        Assert.Contains("b", sum.ToString(OutputFormat.Redberry));
+        Sum sum = result.ShouldBeOfType<Sum>();
+        sum.Size.ShouldBe(2);
+        sum.ToString(OutputFormat.Redberry).ShouldContain("a");
+        sum.ToString(OutputFormat.Redberry).ShouldContain("b");
     }
 }

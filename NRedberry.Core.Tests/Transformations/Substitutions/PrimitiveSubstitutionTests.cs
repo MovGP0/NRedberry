@@ -9,7 +9,7 @@ public sealed class PrimitiveSubstitutionTests
     [Fact]
     public void ShouldThrowFromBaseConstructor()
     {
-        Assert.Throws<NotImplementedException>(() =>
+        Should.Throw<NotImplementedException>(() =>
             new PrimitiveSubstitutionProbe(TensorApi.Parse("a"), TensorApi.Parse("b")));
     }
 }

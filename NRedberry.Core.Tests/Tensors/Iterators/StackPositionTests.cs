@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using NRedberry.Tensors;
 using NRedberry.Tensors.Iterators;
 using TensorApi = NRedberry.Tensors.Tensors;
@@ -16,24 +16,24 @@ public sealed class StackPositionTests
             TraverseGuide.All,
             new TrackingPayloadFactory());
 
-        Assert.Equal(TraverseState.Entering, iterator.Next());
-        Assert.Equal(TraverseState.Entering, iterator.Next());
+        iterator.Next().ShouldBe(TraverseState.Entering);
+        iterator.Next().ShouldBe(TraverseState.Entering);
 
         StackPosition<TrackingPayload> stackPosition = iterator.CurrentStackPosition();
 
-        Assert.Equal("a", stackPosition.GetInitialTensor().ToString(OutputFormat.Redberry));
-        Assert.Equal("a", stackPosition.GetTensor().ToString(OutputFormat.Redberry));
-        Assert.False(stackPosition.IsModified());
-        Assert.Equal("a+b", stackPosition.Previous().GetTensor().ToString(OutputFormat.Redberry));
-        Assert.Same(stackPosition, stackPosition.Previous(0));
-        Assert.Equal("a+b", stackPosition.Previous(1).GetTensor().ToString(OutputFormat.Redberry));
-        Assert.False(stackPosition.IsPayloadInitialized());
-        Assert.Equal("a", stackPosition.GetPayload().CapturedTensor);
-        Assert.True(stackPosition.IsPayloadInitialized());
-        Assert.Equal(1, stackPosition.GetDepth());
-        Assert.True(stackPosition.IsUnder(new TensorTextIndicator("a+b"), 1));
-        Assert.False(stackPosition.IsUnder(new TensorTextIndicator("b"), 0));
-        Assert.Equal(-1, stackPosition.CurrentIndex());
+        stackPosition.GetInitialTensor().ToString(OutputFormat.Redberry).ShouldBe("a");
+        stackPosition.GetTensor().ToString(OutputFormat.Redberry).ShouldBe("a");
+        stackPosition.IsModified().ShouldBeFalse();
+        stackPosition.Previous().GetTensor().ToString(OutputFormat.Redberry).ShouldBe("a+b");
+        stackPosition.Previous(0).ShouldBeSameAs(stackPosition);
+        stackPosition.Previous(1).GetTensor().ToString(OutputFormat.Redberry).ShouldBe("a+b");
+        stackPosition.IsPayloadInitialized().ShouldBeFalse();
+        stackPosition.GetPayload().CapturedTensor.ShouldBe("a");
+        stackPosition.IsPayloadInitialized().ShouldBeTrue();
+        stackPosition.GetDepth().ShouldBe(1);
+        stackPosition.IsUnder(new TensorTextIndicator("a+b"), 1).ShouldBeTrue();
+        stackPosition.IsUnder(new TensorTextIndicator("b"), 0).ShouldBeFalse();
+        stackPosition.CurrentIndex().ShouldBe(-1);
     }
 
     private sealed class TrackingPayload(string capturedTensor) : Payload<TrackingPayload>

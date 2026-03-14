@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using Xunit;
 
@@ -11,17 +11,17 @@ public sealed class PrimeListTests
     {
         PrimeList small = new(PrimeList.Range.Small);
 
-        Assert.Equal(10, small.Size());
-        Assert.Equal("2", small.Get(0).ToString());
-        Assert.Equal("29", small.Get(9).ToString());
-        Assert.Equal("31", small.Get(10).ToString());
+        small.Size().ShouldBe(10);
+        small.Get(0).ToString().ShouldBe("2");
+        small.Get(9).ToString().ShouldBe("29");
+        small.Get(10).ToString().ShouldBe("31");
     }
 
     [Fact]
     public void ShouldComputeSpecificPrimeFamilies()
     {
-        Assert.Equal("31", PrimeList.GetLongPrime(5, 1).ToString());
-        Assert.Equal("31", PrimeList.GetMersennePrime(5).ToString());
+        PrimeList.GetLongPrime(5, 1).ToString().ShouldBe("31");
+        PrimeList.GetMersennePrime(5).ToString().ShouldBe("31");
     }
 
     [Fact]
@@ -29,6 +29,6 @@ public sealed class PrimeListTests
     {
         PrimeList primes = new(PrimeList.Range.Small);
 
-        Assert.Equal(["2", "3", "5", "7", "11"], primes.Take(5).Select(x => x.ToString()).ToArray());
+        primes.Take(5).Select(x => x.ToString()).ToArray().ShouldBe(["2", "3", "5", "7", "11"]);
     }
 }

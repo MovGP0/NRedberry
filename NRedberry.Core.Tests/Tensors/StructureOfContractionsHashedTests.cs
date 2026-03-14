@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Tensors;
@@ -13,11 +13,11 @@ public sealed class StructureOfContractionsHashedTests
         TensorContraction second = new(2, [Pack(-1, 1, 0)]);
         StructureOfContractionsHashed hashed = new(free, first, second);
 
-        Assert.Same(free, hashed.FreeContraction);
-        Assert.Same(first, hashed[0]);
-        Assert.Same(second, hashed.Get(1));
-        Assert.Contains("Free: -1x", hashed.ToString());
-        Assert.Contains("0x{^0->1^0}", hashed.ToString());
+        hashed.FreeContraction.ShouldBeSameAs(free);
+        hashed[0].ShouldBeSameAs(first);
+        hashed.Get(1).ShouldBeSameAs(second);
+        hashed.ToString().ShouldContain("Free: -1x");
+        hashed.ToString().ShouldContain("0x{^0->1^0}");
     }
 
     [Fact]
@@ -33,11 +33,11 @@ public sealed class StructureOfContractionsHashedTests
             new TensorContraction(-1, []),
             new TensorContraction(0, [Pack(2, 0, 0)]));
 
-        Assert.Equal(left, right);
-        Assert.True(left == right);
-        Assert.Equal(left.GetHashCode(), right.GetHashCode());
-        Assert.NotEqual(left, other);
-        Assert.True(left != other);
+        right.ShouldBe(left);
+        left == right.ShouldBeTrue();
+        right.GetHashCode().ShouldBe(left.GetHashCode());
+        other.ShouldNotBe(left);
+        left != other.ShouldBeTrue();
     }
 
     [Fact]
@@ -45,8 +45,8 @@ public sealed class StructureOfContractionsHashedTests
     {
         StructureOfContractionsHashed empty = StructureOfContractionsHashed.EmptyInstance;
 
-        Assert.Equal((short)-1, empty.FreeContraction.TensorId);
-        Assert.Empty(empty.FreeContraction.IndexContractions);
+        empty.FreeContraction.TensorId.ShouldBe((short)-1);
+        empty.FreeContraction.IndexContractions.ShouldBeEmpty();
     }
 
     private static long Pack(int toTensorId, int toIndexId, int fromIndexId)

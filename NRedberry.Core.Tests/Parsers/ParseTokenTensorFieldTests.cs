@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Parsers;
 using NRedberry.Tensors;
@@ -11,7 +11,7 @@ public sealed class ParseTokenTensorFieldTests
     [Fact]
     public void ShouldThrowArgumentNullExceptionWhenArgumentsIndicesIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => new ParseTokenTensorField(
+        Should.Throw<ArgumentNullException>(() => new ParseTokenTensorField(
             ParserIndices.ParseSimple(string.Empty),
             "F",
             [new ParseTokenNumber(Complex.One)],
@@ -38,13 +38,13 @@ public sealed class ParseTokenTensorFieldTests
 
             var signature = token.GetIndicesTypeStructureAndName();
 
-            Assert.Equal("F", signature.Name);
-            Assert.Equal(3, signature.Structure.Length);
-            Assert.NotNull(token.ArgumentsIndices[0]);
-            Assert.True(token.ArgumentsIndices[0].EqualsRegardlessOrder(firstArgument.GetIndices().GetFree()));
-            Assert.Equal(StructureOfIndices.Create(token.Indices), signature.Structure[0]);
-            Assert.Equal(StructureOfIndices.Create(token.ArgumentsIndices[0]), signature.Structure[1]);
-            Assert.Equal(StructureOfIndices.Create(token.ArgumentsIndices[1]), signature.Structure[2]);
+            signature.Name.ShouldBe("F");
+            signature.Structure.Length.ShouldBe(3);
+            token.ArgumentsIndices[0].ShouldNotBeNull();
+            token.ArgumentsIndices[0].EqualsRegardlessOrder(firstArgument.GetIndices().GetFree()).ShouldBeTrue();
+            signature.Structure[0].ShouldBe(StructureOfIndices.Create(token.Indices));
+            signature.Structure[1].ShouldBe(StructureOfIndices.Create(token.ArgumentsIndices[0]));
+            signature.Structure[2].ShouldBe(StructureOfIndices.Create(token.ArgumentsIndices[1]));
         }
         catch (TypeInitializationException)
         {
@@ -62,7 +62,7 @@ public sealed class ParseTokenTensorFieldTests
 
         var value = token.ToString();
 
-        Assert.Equal("F[x, y]", value);
+        value.ShouldBe("F[x, y]");
     }
 
     [Fact]
@@ -78,9 +78,9 @@ public sealed class ParseTokenTensorFieldTests
 
             var tensor = token.ToTensor();
 
-            Assert.IsType<TensorField>(tensor);
-            Assert.NotNull(token.ArgumentsIndices[0]);
-            Assert.Equal(0, token.ArgumentsIndices[0].Size());
+            tensor.ShouldBeOfType<TensorField>();
+            token.ArgumentsIndices[0].ShouldNotBeNull();
+            token.ArgumentsIndices[0].Size().ShouldBe(0);
         }
         catch (TypeInitializationException)
         {
@@ -96,9 +96,9 @@ public sealed class ParseTokenTensorFieldTests
             [new ParseTokenNumber(Complex.One)],
             [ParserIndices.ParseSimple(string.Empty)]);
 
-        var exception = Assert.Throws<ParserException>(() => token.ToTensor());
+        var exception = Should.Throw<ParserException>(() => token.ToTensor());
 
-        Assert.Contains("Error in derivative orders", exception.Message, StringComparison.Ordinal);
+        exception.Message.ShouldContain("Error in derivative orders");
     }
 
     [Fact]
@@ -110,9 +110,9 @@ public sealed class ParseTokenTensorFieldTests
             [new ParseTokenNumber(Complex.One)],
             [ParserIndices.ParseSimple(string.Empty)]);
 
-        var exception = Assert.Throws<ParserException>(() => token.ToTensor());
+        var exception = Should.Throw<ParserException>(() => token.ToTensor());
 
-        Assert.Contains("Number of arguments does not match number of derivative orders", exception.Message, StringComparison.Ordinal);
+        exception.Message.ShouldContain("Number of arguments does not match number of derivative orders");
     }
 
     [Fact]
@@ -124,8 +124,8 @@ public sealed class ParseTokenTensorFieldTests
             [new ParseTokenNumber(Complex.One), new ParseTokenNumber(Complex.One)],
             [ParserIndices.ParseSimple(string.Empty), ParserIndices.ParseSimple(string.Empty)]);
 
-        var exception = Assert.Throws<ParserException>(() => token.ToTensor());
+        var exception = Should.Throw<ParserException>(() => token.ToTensor());
 
-        Assert.Contains("Illegal order of derivative", exception.Message, StringComparison.Ordinal);
+        exception.Message.ShouldContain("Illegal order of derivative");
     }
 }

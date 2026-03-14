@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Fractions;
+﻿using NRedberry.Transformations.Fractions;
 using NRedberry.Transformations.Expand;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -10,15 +10,15 @@ public sealed class ExpandUtilsTests
     [Fact]
     public void ShouldDetectExpandablePower()
     {
-        Assert.True(ExpandUtils.IsExpandablePower(TensorApi.Parse("Power[a+b,2]")));
-        Assert.False(ExpandUtils.IsExpandablePower(TensorApi.Parse("Power[a+b,x]")));
+        ExpandUtils.IsExpandablePower(TensorApi.Parse("Power[a+b,2]")).ShouldBeTrue();
+        ExpandUtils.IsExpandablePower(TensorApi.Parse("Power[a+b,x]")).ShouldBeFalse();
     }
 
     [Fact]
     public void ShouldDetectIndexedSummands()
     {
-        Assert.True(ExpandUtils.SumContainsIndexed(TensorApi.Parse("A_i+B_i")));
-        Assert.False(ExpandUtils.SumContainsIndexed(TensorApi.Parse("a+b")));
+        ExpandUtils.SumContainsIndexed(TensorApi.Parse("A_i+B_i")).ShouldBeTrue();
+        ExpandUtils.SumContainsIndexed(TensorApi.Parse("a+b")).ShouldBeFalse();
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public sealed class ExpandUtilsTests
             [GetNumeratorTransformation.Instance, GetDenominatorTransformation.Instance],
             TensorApi.Parse("a/b"));
 
-        Assert.Equal("1", actual.ToString(OutputFormat.Redberry));
+        actual.ToString(OutputFormat.Redberry).ShouldBe("1");
     }
 
     [Fact]
@@ -36,11 +36,9 @@ public sealed class ExpandUtilsTests
     {
         IList<NRedberry.Tensors.Tensor> expanded = NumeratorDenominator.ExpandPower(TensorApi.Parse("Power[a,x+y]"));
 
-        Assert.Equal(
-            ["a**x", "a**y"],
-            expanded
+        expanded
                 .Select(tensor => tensor.ToString(OutputFormat.Redberry))
                 .OrderBy(term => term, StringComparer.Ordinal)
-                .ToArray());
+                .ToArray().ShouldBe(["a**x", "a**y"]);
     }
 }

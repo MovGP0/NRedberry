@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Expand;
+﻿using NRedberry.Transformations.Expand;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -13,7 +13,7 @@ public sealed class AbstractExpandNumeratorDenominatorTransformationTests
 
         NRedberry.Tensors.Tensor actual = transformation.Transform(TensorApi.Parse("a+b*c"));
 
-        Assert.Equal(["a", "p"], NormalizeSum(actual.ToString(OutputFormat.Redberry)));
+        NormalizeSum(actual.ToString(OutputFormat.Redberry)).ShouldBe(["a", "p"]);
     }
 
     [Fact]
@@ -21,9 +21,7 @@ public sealed class AbstractExpandNumeratorDenominatorTransformationTests
     {
         TestExpandNumeratorDenominatorTransformation transformation = new();
 
-        Assert.Equal(
-            nameof(TestExpandNumeratorDenominatorTransformation),
-            transformation.ToString(OutputFormat.Redberry));
+        transformation.ToString(OutputFormat.Redberry).ShouldBe(nameof(TestExpandNumeratorDenominatorTransformation));
     }
 
     private sealed class TestExpandNumeratorDenominatorTransformation

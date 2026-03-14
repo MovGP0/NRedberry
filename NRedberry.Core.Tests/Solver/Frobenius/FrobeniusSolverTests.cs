@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using NRedberry.Solver.Frobenius;
 using Xunit;
@@ -10,25 +10,25 @@ public sealed class FrobeniusSolverTests
     [Fact]
     public void ShouldThrowWhenNoEquationsProvided()
     {
-        Assert.Throws<ArgumentException>(() => new FrobeniusSolver());
+        Should.Throw<ArgumentException>(() => new FrobeniusSolver());
     }
 
     [Fact]
     public void ShouldThrowWhenEquationLengthIsLessThanTwo()
     {
-        Assert.Throws<ArgumentException>(() => new FrobeniusSolver([1]));
+        Should.Throw<ArgumentException>(() => new FrobeniusSolver([1]));
     }
 
     [Fact]
     public void ShouldThrowWhenEquationLengthsDiffer()
     {
-        Assert.Throws<ArgumentException>(() => new FrobeniusSolver([1, 2, 3], [1, 2]));
+        Should.Throw<ArgumentException>(() => new FrobeniusSolver([1, 2, 3], [1, 2]));
     }
 
     [Fact]
     public void ShouldThrowWhenAnyCoefficientIsNegative()
     {
-        Assert.Throws<ArgumentException>(() => new FrobeniusSolver([1, -2, 3]));
+        Should.Throw<ArgumentException>(() => new FrobeniusSolver([1, -2, 3]));
     }
 
     [Fact]
@@ -38,13 +38,13 @@ public sealed class FrobeniusSolverTests
 
         List<int[]> solutions = TakeAllSolutions(solver);
 
-        Assert.Equal(6, solutions.Count);
-        Assert.Equal([0, 0, 2], solutions[0]);
-        Assert.Equal([0, 1, 1], solutions[1]);
-        Assert.Equal([0, 2, 0], solutions[2]);
-        Assert.Equal([1, 0, 1], solutions[3]);
-        Assert.Equal([1, 1, 0], solutions[4]);
-        Assert.Equal([2, 0, 0], solutions[5]);
+        solutions.Count.ShouldBe(6);
+        solutions[0].ShouldBe([0, 0, 2]);
+        solutions[1].ShouldBe([0, 1, 1]);
+        solutions[2].ShouldBe([0, 2, 0]);
+        solutions[3].ShouldBe([1, 0, 1]);
+        solutions[4].ShouldBe([1, 1, 0]);
+        solutions[5].ShouldBe([2, 0, 0]);
     }
 
     [Fact]
@@ -60,9 +60,9 @@ public sealed class FrobeniusSolverTests
 
         List<int[]> solutions = TakeAllSolutions(solver);
 
-        Assert.Equal(2, solutions.Count);
-        Assert.Equal([0, 1, 4, 1], solutions[0]);
-        Assert.Equal([3, 0, 3, 1], solutions[1]);
+        solutions.Count.ShouldBe(2);
+        solutions[0].ShouldBe([0, 1, 4, 1]);
+        solutions[1].ShouldBe([3, 0, 3, 1]);
     }
 
     [Fact]
@@ -72,8 +72,8 @@ public sealed class FrobeniusSolverTests
 
         List<int[]> solutions = TakeAllSolutions(solver);
 
-        Assert.Single(solutions);
-        Assert.Equal([-1, 2], solutions[0]);
+        solutions.ShouldHaveSingleItem();
+        solutions[0].ShouldBe([-1, 2]);
     }
 
     private static List<int[]> TakeAllSolutions(FrobeniusSolver solver)

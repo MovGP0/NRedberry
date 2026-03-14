@@ -1,4 +1,4 @@
-using NRedberry.Tensors.Iterators;
+﻿using NRedberry.Tensors.Iterators;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Tensors.Iterators;
@@ -13,7 +13,7 @@ public sealed class DummyPayloadTests
 
         NRedberry.Tensors.Tensor result = payload.OnLeaving(stackPosition);
 
-        Assert.Null(result);
+        result.ShouldBeNull();
     }
 
     private sealed class TestPayload : Payload<TestPayload>

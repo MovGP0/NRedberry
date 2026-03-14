@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 using Xunit;
@@ -17,7 +17,7 @@ public sealed class GreatestCommonDivisorTests
 
         GenPolynomial<BigRational> result = gcd.Gcd(first, second);
 
-        Assert.Equal(second, result);
+        result.ShouldBe(second);
     }
 
     private static GenPolynomialRing<BigRational> CreateRing()

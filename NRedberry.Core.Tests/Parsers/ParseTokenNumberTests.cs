@@ -1,4 +1,4 @@
-using NRedberry;
+﻿using NRedberry;
 using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Parsers;
@@ -11,9 +11,9 @@ public sealed class ParseTokenNumberTests
     [Fact]
     public void ShouldThrowWhenConstructedWithNullValue()
     {
-        var exception = Assert.Throws<ArgumentNullException>(() => new ParseTokenNumber(null!));
+        var exception = Should.Throw<ArgumentNullException>(() => new ParseTokenNumber(null!));
 
-        Assert.Equal("value", exception.ParamName);
+        exception.ParamName.ShouldBe("value");
     }
 
     [Fact]
@@ -23,8 +23,8 @@ public sealed class ParseTokenNumberTests
 
         var token = new ParseTokenNumber(value);
 
-        Assert.Equal(TokenType.Number, token.TokenType);
-        Assert.Same(value, token.Value);
+        token.TokenType.ShouldBe(TokenType.Number);
+        token.Value.ShouldBeSameAs(value);
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public sealed class ParseTokenNumberTests
 
         var indices = token.GetIndices();
 
-        Assert.Same(IndicesFactory.EmptyIndices, indices);
+        indices.ShouldBeSameAs(IndicesFactory.EmptyIndices);
     }
 
     [Fact]
@@ -45,7 +45,7 @@ public sealed class ParseTokenNumberTests
 
         var text = token.ToString(OutputFormat.Redberry);
 
-        Assert.Equal("(" + value.ToString(OutputFormat.Redberry) + ")", text);
+        text.ShouldBe("(" + value.ToString(OutputFormat.Redberry) + ")");
     }
 
     [Fact]
@@ -56,7 +56,7 @@ public sealed class ParseTokenNumberTests
 
         var tensor = token.ToTensor();
 
-        Assert.Same(value, tensor);
+        tensor.ShouldBeSameAs(value);
     }
 
     [Fact]
@@ -67,8 +67,8 @@ public sealed class ParseTokenNumberTests
 
         var areEqual = left.Equals(right);
 
-        Assert.True(areEqual);
-        Assert.Equal(right.GetHashCode(), left.GetHashCode());
+        areEqual.ShouldBeTrue();
+        left.GetHashCode().ShouldBe(right.GetHashCode());
     }
 
     [Fact]
@@ -79,7 +79,7 @@ public sealed class ParseTokenNumberTests
 
         var areEqual = token.Equals(other);
 
-        Assert.False(areEqual);
+        areEqual.ShouldBeFalse();
     }
 
     [Fact]
@@ -89,7 +89,7 @@ public sealed class ParseTokenNumberTests
 
         var areEqual = token.Equals(null);
 
-        Assert.False(areEqual);
+        areEqual.ShouldBeFalse();
     }
 
     [Fact]
@@ -100,6 +100,6 @@ public sealed class ParseTokenNumberTests
 
         var hashCode = token.GetHashCode();
 
-        Assert.Equal(value.GetHashCode(), hashCode);
+        hashCode.ShouldBe(value.GetHashCode());
     }
 }

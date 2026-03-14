@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
@@ -21,7 +21,7 @@ public sealed class SquarefreeInfiniteAlgebraicFieldCharPTests
             polynomialRing.Univariate(0, 2L).Sum(polynomialRing.Univariate(0)).Sum(polynomialRing.FromInteger(1)),
             true);
 
-        Assert.Throws<ArgumentException>(() => new SquarefreeInfiniteAlgebraicFieldCharP<ModLong>(algebraicRing));
+        Should.Throw<ArgumentException>(() => new SquarefreeInfiniteAlgebraicFieldCharP<ModLong>(algebraicRing));
     }
 
     [Fact]
@@ -33,9 +33,9 @@ public sealed class SquarefreeInfiniteAlgebraicFieldCharPTests
 
         SortedDictionary<AlgebraicNumber<Quotient<ModLong>>, long> factors = squarefree.SquarefreeFactors(generator);
 
-        Assert.Single(factors);
-        Assert.Equal(1L, factors.Single().Value);
-        Assert.Equal(generator, factors.Single().Key);
+        factors.ShouldHaveSingleItem();
+        factors.Single().Value.ShouldBe(1L);
+        factors.Single().Key.ShouldBe(generator);
     }
 
     private static AlgebraicNumberRing<Quotient<ModLong>> CreateInfiniteAlgebraicRing()

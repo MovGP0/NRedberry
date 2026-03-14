@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 using Xunit;
@@ -17,8 +17,8 @@ public sealed class GreatestCommonDivisorModularTests
         GenPolynomial<JasBigInteger> first = ring.Univariate(0, 2L).Subtract(ring.FromInteger(1));
         GenPolynomial<JasBigInteger> second = ring.Univariate(0).Subtract(ring.FromInteger(1));
 
-        Assert.Equal(second, modular.BaseGcd(first, second));
-        Assert.Equal(second, simple.BaseGcd(first, second));
+        modular.BaseGcd(first, second).ShouldBe(second);
+        simple.BaseGcd(first, second).ShouldBe(second);
     }
 
     private static GenPolynomialRing<JasBigInteger> CreateRing()

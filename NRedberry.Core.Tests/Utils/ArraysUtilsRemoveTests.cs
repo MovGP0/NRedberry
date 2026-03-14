@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -10,7 +10,7 @@ public sealed class ArraysUtilsRemoveTests
     {
         int[] actual = ArraysUtils.Remove([1, 2, 3], 1);
 
-        Assert.Equal([1, 3], actual);
+        actual.ShouldBe([1, 3]);
     }
 
     [Fact]
@@ -18,12 +18,12 @@ public sealed class ArraysUtilsRemoveTests
     {
         string[] actual = ArraysUtils.Remove(["a", "b", "c", "d"], [3, 1, 3]);
 
-        Assert.Equal(["a", "c"], actual);
+        actual.ShouldBe(["a", "c"]);
     }
 
     [Fact]
     public void ShouldThrowWhenPositionIsOutsideArray()
     {
-        Assert.Throws<IndexOutOfRangeException>(() => ArraysUtils.Remove([1, 2, 3], [3]));
+        Should.Throw<IndexOutOfRangeException>(() => ArraysUtils.Remove([1, 2, 3], [3]));
     }
 }

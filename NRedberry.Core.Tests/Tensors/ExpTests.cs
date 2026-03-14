@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using NRedberry.Tensors.Functions;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -13,11 +13,11 @@ public sealed class ExpTests
         NRedberry.Tensors.Tensor argument = TensorApi.Parse("a");
         Exp function = new(argument);
 
-        Assert.Same(argument, function[0]);
-        Assert.Equal(1, function.Size);
-        Assert.Equal("Exp[a]", function.ToString(OutputFormat.Redberry));
-        Assert.Same(function, function.Derivative());
-        Assert.Equal("ScalarFunctionBuilder", function.GetBuilder().GetType().Name);
-        Assert.Same(ExpFactory.Factory, function.GetFactory());
+        function[0].ShouldBeSameAs(argument);
+        function.Size.ShouldBe(1);
+        function.ToString(OutputFormat.Redberry).ShouldBe("Exp[a]");
+        function.Derivative().ShouldBeSameAs(function);
+        function.GetBuilder().GetType().Name.ShouldBe("ScalarFunctionBuilder");
+        function.GetFactory().ShouldBeSameAs(ExpFactory.Factory);
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry;
+﻿using NRedberry;
 using NRedberry.Parsers;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
@@ -19,7 +19,7 @@ public sealed class ParseTokenExpressionTests
 
         var indices = token.GetIndices();
 
-        Assert.Equal(lhs.GetIndices().GetFree(), indices);
+        indices.ShouldBe(lhs.GetIndices().GetFree());
     }
 
     [Fact]
@@ -31,10 +31,10 @@ public sealed class ParseTokenExpressionTests
 
         var tensor = token.ToTensor();
 
-        var expression = Assert.IsType<Expression>(tensor);
-        Assert.Same(Complex.One, expression[0]);
-        Assert.Same(Complex.Two, expression[1]);
-        Assert.Equal("1 = 2", expression.ToString(OutputFormat.Redberry));
+        var expression = tensor.ShouldBeOfType<Expression>();
+        expression[0].ShouldBeSameAs(Complex.One);
+        expression[1].ShouldBeSameAs(Complex.Two);
+        expression.ToString(OutputFormat.Redberry).ShouldBe("1 = 2");
     }
 
     [Fact]
@@ -55,11 +55,11 @@ public sealed class ParseTokenExpressionTests
 
             var tensor = token.ToTensor();
 
-            var expression = Assert.IsType<Expression>(tensor);
-            Assert.Equal(1, transformation.CallCount);
-            Assert.Equal(2, preprocessors.Count);
-            Assert.Same(transformation, preprocessors[0]);
-            Assert.Same(expression, preprocessors[1]);
+            var expression = tensor.ShouldBeOfType<Expression>();
+            transformation.CallCount.ShouldBe(1);
+            preprocessors.Count.ShouldBe(2);
+            preprocessors[0].ShouldBeSameAs(transformation);
+            preprocessors[1].ShouldBeSameAs(expression);
             parseManager.Reset();
         }
         catch (TypeInitializationException)

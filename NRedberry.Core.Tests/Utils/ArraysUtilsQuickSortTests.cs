@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -13,8 +13,8 @@ public sealed class ArraysUtilsQuickSortTests
 
         int[] permutation = ArraysUtils.QuickSortP(sorted);
 
-        Assert.Equal([1, 2, 3, 4], sorted);
-        Assert.Equal([1, 3, 2, 0], permutation);
+        sorted.ShouldBe([1, 2, 3, 4]);
+        permutation.ShouldBe([1, 3, 2, 0]);
     }
 
     [Fact]
@@ -24,7 +24,7 @@ public sealed class ArraysUtilsQuickSortTests
 
         ArraysUtils.QuickSort(values, Comparer<int>.Create(static (left, right) => right.CompareTo(left)));
 
-        Assert.Equal([4, 3, 2, 1], values);
+        values.ShouldBe([4, 3, 2, 1]);
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public sealed class ArraysUtilsQuickSortTests
 
         ArraysUtils.QuickSort(values, coSort, Comparer<int>.Create(static (left, right) => right.CompareTo(left)));
 
-        Assert.Equal([4, 3, 2, 1], values);
-        Assert.Equal([40, 30, 20, 10], coSort);
+        values.ShouldBe([4, 3, 2, 1]);
+        coSort.ShouldBe([40, 30, 20, 10]);
     }
 }

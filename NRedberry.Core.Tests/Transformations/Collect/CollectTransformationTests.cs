@@ -1,4 +1,4 @@
-using NRedberry.Transformations;
+﻿using NRedberry.Transformations;
 using NRedberry.Transformations.Collect;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -10,14 +10,12 @@ public sealed class CollectTransformationTests
     [Fact]
     public void ShouldLeaveTensorUntouchedWhenPatternDoesNotMatch()
     {
-        CollectTransformation transformation = new([Assert.IsType<NRedberry.Tensors.SimpleTensor>(TensorApi.Parse("x"))]);
+        CollectTransformation transformation = new([TensorApi.Parse("x").ShouldBeOfType<NRedberry.Tensors.SimpleTensor>()]);
 
         NRedberry.Tensors.Tensor tensor = TensorApi.Parse("a*y+b*y");
         NRedberry.Tensors.Tensor actual = transformation.Transform(tensor);
 
-        Assert.Equal(
-            tensor.ToString(OutputFormat.Redberry),
-            actual.ToString(OutputFormat.Redberry));
+        actual.ToString(OutputFormat.Redberry).ShouldBe(tensor.ToString(OutputFormat.Redberry));
     }
 
     [Fact]
@@ -28,13 +26,11 @@ public sealed class CollectTransformationTests
             Simplifications = Transformation.Identity,
             ExpandSymbolic = false
         };
-        CollectTransformation transformation = new([Assert.IsType<NRedberry.Tensors.SimpleTensor>(TensorApi.Parse("x"))], options);
+        CollectTransformation transformation = new([TensorApi.Parse("x").ShouldBeOfType<NRedberry.Tensors.SimpleTensor>()], options);
 
         NRedberry.Tensors.Tensor tensor = TensorApi.Parse("a*y+b*y");
         NRedberry.Tensors.Tensor actual = transformation.Transform(tensor);
 
-        Assert.Equal(
-            tensor.ToString(OutputFormat.Redberry),
-            actual.ToString(OutputFormat.Redberry));
+        actual.ToString(OutputFormat.Redberry).ShouldBe(tensor.ToString(OutputFormat.Redberry));
     }
 }

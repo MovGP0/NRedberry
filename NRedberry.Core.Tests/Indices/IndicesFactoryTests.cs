@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using NRedberry.Indices;
 using Xunit;
 using IndicesContract = NRedberry.Indices.Indices;
@@ -10,8 +10,8 @@ public sealed class IndicesFactoryTests
     [Fact]
     public void ShouldExposeNonNullEmptySingletons()
     {
-        Assert.NotNull(IndicesFactory.EmptyIndices);
-        Assert.NotNull(IndicesFactory.EmptySimpleIndices);
+        IndicesFactory.EmptyIndices.ShouldNotBeNull();
+        IndicesFactory.EmptySimpleIndices.ShouldNotBeNull();
     }
 
     [Fact]
@@ -19,7 +19,7 @@ public sealed class IndicesFactoryTests
     {
         IndicesContract result = IndicesFactory.Create([]);
 
-        Assert.Same(IndicesFactory.EmptyIndices, result);
+        result.ShouldBeSameAs(IndicesFactory.EmptyIndices);
     }
 
     [Fact]
@@ -30,8 +30,8 @@ public sealed class IndicesFactoryTests
         IndicesContract result = IndicesFactory.Create(source);
         source[0] = 99;
 
-        Assert.IsType<SortedIndices>(result);
-        Assert.Equal([1, 3], result.AllIndices.ToArray());
+        result.ShouldBeOfType<SortedIndices>();
+        result.AllIndices.ToArray().ShouldBe([1, 3]);
     }
 
     [Fact]
@@ -39,7 +39,7 @@ public sealed class IndicesFactoryTests
     {
         IndicesContract result = IndicesFactory.Create(IndicesFactory.EmptyIndices);
 
-        Assert.Same(IndicesFactory.EmptyIndices, result);
+        result.ShouldBeSameAs(IndicesFactory.EmptyIndices);
     }
 
     [Fact]
@@ -49,7 +49,7 @@ public sealed class IndicesFactoryTests
 
         IndicesContract result = IndicesFactory.Create(sorted);
 
-        Assert.Same(sorted, result);
+        result.ShouldBeSameAs(sorted);
     }
 
     [Fact]
@@ -59,9 +59,9 @@ public sealed class IndicesFactoryTests
 
         IndicesContract result = IndicesFactory.Create(nonSorted);
 
-        Assert.IsType<SortedIndices>(result);
-        Assert.NotSame(nonSorted, result);
-        Assert.Equal([1, 3], result.AllIndices.ToArray());
+        result.ShouldBeOfType<SortedIndices>();
+        result.ShouldNotBeSameAs(nonSorted);
+        result.AllIndices.ToArray().ShouldBe([1, 3]);
     }
 
     [Fact]
@@ -69,7 +69,7 @@ public sealed class IndicesFactoryTests
     {
         SimpleIndices result = IndicesFactory.CreateSimple(null, []);
 
-        Assert.Same(IndicesFactory.EmptySimpleIndices, result);
+        result.ShouldBeSameAs(IndicesFactory.EmptySimpleIndices);
     }
 
     [Fact]
@@ -80,8 +80,8 @@ public sealed class IndicesFactoryTests
         SimpleIndices result = IndicesFactory.CreateSimple(null, source);
         source[0] = 99;
 
-        Assert.NotSame(IndicesFactory.EmptySimpleIndices, result);
-        Assert.Equal([3, 1], result.AllIndices.ToArray());
+        result.ShouldNotBeSameAs(IndicesFactory.EmptySimpleIndices);
+        result.AllIndices.ToArray().ShouldBe([3, 1]);
     }
 
     [Fact]
@@ -89,7 +89,7 @@ public sealed class IndicesFactoryTests
     {
         SimpleIndices result = IndicesFactory.CreateSimple(null, IndicesFactory.EmptyIndices);
 
-        Assert.Same(IndicesFactory.EmptySimpleIndices, result);
+        result.ShouldBeSameAs(IndicesFactory.EmptySimpleIndices);
     }
 
     [Fact]
@@ -99,7 +99,7 @@ public sealed class IndicesFactoryTests
 
         SimpleIndices result = IndicesFactory.CreateSimple(null, indices);
 
-        Assert.NotSame(IndicesFactory.EmptySimpleIndices, result);
-        Assert.Equal([1, 3], result.AllIndices.ToArray());
+        result.ShouldNotBeSameAs(IndicesFactory.EmptySimpleIndices);
+        result.AllIndices.ToArray().ShouldBe([1, 3]);
     }
 }

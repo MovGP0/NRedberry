@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
 using NRedberry.Indices;
@@ -15,10 +15,10 @@ public sealed class IndicesUtilsAdditionalTests
         const IndexType type = IndexType.Matrix4;
         int index = IndicesUtils.CreateIndex(0x12345, type, true);
 
-        Assert.True(IndicesUtils.GetState(index));
-        Assert.Equal(0x2345, IndicesUtils.GetNameWithoutType(index));
-        Assert.Equal(type.GetType_(), IndicesUtils.GetType(index));
-        Assert.Equal(IndexTypeMethods.GetType(type.GetType_()), IndicesUtils.GetTypeEnum(index));
+        IndicesUtils.GetState(index).ShouldBeTrue();
+        IndicesUtils.GetNameWithoutType(index).ShouldBe(0x2345);
+        IndicesUtils.GetType(index).ShouldBe(type.GetType_());
+        IndicesUtils.GetTypeEnum(index).ShouldBe(IndexTypeMethods.GetType(type.GetType_()));
         Assert.Equal(
             (type.GetType_() << 24) | 0x2345,
             IndicesUtils.GetNameWithType(index));
@@ -31,10 +31,10 @@ public sealed class IndicesUtilsAdditionalTests
         int changedType = IndicesUtils.SetType(IndexType.Matrix2, original);
         int lowered = IndicesUtils.SetState(false, changedType);
 
-        Assert.Equal(IndicesUtils.GetNameWithoutType(original), IndicesUtils.GetNameWithoutType(changedType));
-        Assert.Equal(IndexType.Matrix2, IndicesUtils.GetTypeEnum(changedType));
-        Assert.True(IndicesUtils.GetState(changedType));
-        Assert.False(IndicesUtils.GetState(lowered));
+        IndicesUtils.GetNameWithoutType(changedType).ShouldBe(IndicesUtils.GetNameWithoutType(original));
+        IndicesUtils.GetTypeEnum(changedType).ShouldBe(IndexType.Matrix2);
+        IndicesUtils.GetState(changedType).ShouldBeTrue();
+        IndicesUtils.GetState(lowered).ShouldBeFalse();
     }
 
     [Fact]
@@ -45,10 +45,10 @@ public sealed class IndicesUtilsAdditionalTests
         int loweredAgain = IndicesUtils.Lower(raised);
         int inverted = IndicesUtils.InverseIndexState(lower);
 
-        Assert.True(IndicesUtils.GetState(raised));
-        Assert.False(IndicesUtils.GetState(loweredAgain));
-        Assert.Equal(raised, inverted);
-        Assert.Equal(lower, IndicesUtils.InverseIndexState(inverted));
+        IndicesUtils.GetState(raised).ShouldBeTrue();
+        IndicesUtils.GetState(loweredAgain).ShouldBeFalse();
+        inverted.ShouldBe(raised);
+        IndicesUtils.InverseIndexState(inverted).ShouldBe(lower);
     }
 
     [Fact]
@@ -59,20 +59,20 @@ public sealed class IndicesUtilsAdditionalTests
         int upperLatinB = IndicesUtils.CreateIndex(11, IndexType.LatinLower, true);
         int upperGreekA = IndicesUtils.CreateIndex(10, IndexType.GreekLower, true);
 
-        Assert.True(IndicesUtils.HasEqualTypeAndName(lowerLatinA, upperLatinA));
-        Assert.False(IndicesUtils.HasEqualTypeAndName(lowerLatinA, upperLatinB));
+        IndicesUtils.HasEqualTypeAndName(lowerLatinA, upperLatinA).ShouldBeTrue();
+        IndicesUtils.HasEqualTypeAndName(lowerLatinA, upperLatinB).ShouldBeFalse();
 
-        Assert.True(IndicesUtils.HasEqualTypes(lowerLatinA, upperLatinA));
-        Assert.False(IndicesUtils.HasEqualTypes(lowerLatinA, upperGreekA));
+        IndicesUtils.HasEqualTypes(lowerLatinA, upperLatinA).ShouldBeTrue();
+        IndicesUtils.HasEqualTypes(lowerLatinA, upperGreekA).ShouldBeFalse();
 
-        Assert.False(IndicesUtils.HasEqualTypesAndStates(lowerLatinA, upperLatinA));
-        Assert.True(IndicesUtils.HasEqualTypesAndStates(upperLatinA, upperLatinB));
+        IndicesUtils.HasEqualTypesAndStates(lowerLatinA, upperLatinA).ShouldBeFalse();
+        IndicesUtils.HasEqualTypesAndStates(upperLatinA, upperLatinB).ShouldBeTrue();
 
-        Assert.True(IndicesUtils.AreContracted(lowerLatinA, upperLatinA));
-        Assert.False(IndicesUtils.AreContracted(lowerLatinA, upperLatinB));
+        IndicesUtils.AreContracted(lowerLatinA, upperLatinA).ShouldBeTrue();
+        IndicesUtils.AreContracted(lowerLatinA, upperLatinB).ShouldBeFalse();
 
-        Assert.False(IndicesUtils.HaveEqualStates(lowerLatinA, upperLatinA));
-        Assert.True(IndicesUtils.HaveEqualStates(upperLatinA, upperLatinB));
+        IndicesUtils.HaveEqualStates(lowerLatinA, upperLatinA).ShouldBeFalse();
+        IndicesUtils.HaveEqualStates(upperLatinA, upperLatinB).ShouldBeTrue();
     }
 
     [Fact]
@@ -85,9 +85,9 @@ public sealed class IndicesUtilsAdditionalTests
             IndicesUtils.CreateIndex(3, IndexType.GreekUpper, false)
         ];
 
-        Assert.True(IndicesUtils.IsPermutationConsistentWithIndices(indices, [1, 0, 2]));
-        Assert.False(IndicesUtils.IsPermutationConsistentWithIndices(indices, [2, 1, 0]));
-        Assert.False(IndicesUtils.IsPermutationConsistentWithIndices(indices, [1, 0]));
+        IndicesUtils.IsPermutationConsistentWithIndices(indices, [1, 0, 2]).ShouldBeTrue();
+        IndicesUtils.IsPermutationConsistentWithIndices(indices, [2, 1, 0]).ShouldBeFalse();
+        IndicesUtils.IsPermutationConsistentWithIndices(indices, [1, 0]).ShouldBeFalse();
     }
 
     [Fact]
@@ -104,9 +104,9 @@ public sealed class IndicesUtilsAdditionalTests
         Permutation invalidByType = Permutations.CreatePermutation(2, 1, 0);
         Permutation tooLargeDegree = Permutations.CreatePermutation(1, 0, 2, 3);
 
-        Assert.True(IndicesUtils.IsPermutationConsistentWithIndices(indices, valid));
-        Assert.False(IndicesUtils.IsPermutationConsistentWithIndices(indices, invalidByType));
-        Assert.False(IndicesUtils.IsPermutationConsistentWithIndices(indices, tooLargeDegree));
+        IndicesUtils.IsPermutationConsistentWithIndices(indices, valid).ShouldBeTrue();
+        IndicesUtils.IsPermutationConsistentWithIndices(indices, invalidByType).ShouldBeFalse();
+        IndicesUtils.IsPermutationConsistentWithIndices(indices, tooLargeDegree).ShouldBeFalse();
     }
 
     [Fact]
@@ -131,9 +131,9 @@ public sealed class IndicesUtilsAdditionalTests
             first[2]
         ];
 
-        Assert.True(IndicesUtils.EqualsRegardlessOrder(first, second));
-        Assert.False(IndicesUtils.EqualsRegardlessOrder(first, differentMultiplicity));
-        Assert.False(IndicesUtils.EqualsRegardlessOrder(first, [first[0], first[1]]));
+        IndicesUtils.EqualsRegardlessOrder(first, second).ShouldBeTrue();
+        IndicesUtils.EqualsRegardlessOrder(first, differentMultiplicity).ShouldBeFalse();
+        IndicesUtils.EqualsRegardlessOrder(first, [first[0], first[1]]).ShouldBeFalse();
     }
 
     [Fact]
@@ -147,10 +147,10 @@ public sealed class IndicesUtilsAdditionalTests
         ];
         TensorIndices indices = IndicesFactory.CreateSimple(null, source);
 
-        Assert.True(IndicesUtils.EqualsRegardlessOrder(indices, [source[2], source[0], source[1]]));
-        Assert.False(IndicesUtils.EqualsRegardlessOrder(indices, [source[0], source[1]]));
-        Assert.False(IndicesUtils.EqualsRegardlessOrder(indices, [source[0], source[1], source[1]]));
-        Assert.True(IndicesUtils.EqualsRegardlessOrder(EmptyIndices.EmptyIndicesInstance, []));
+        IndicesUtils.EqualsRegardlessOrder(indices, [source[2], source[0], source[1]]).ShouldBeTrue();
+        IndicesUtils.EqualsRegardlessOrder(indices, [source[0], source[1]]).ShouldBeFalse();
+        IndicesUtils.EqualsRegardlessOrder(indices, [source[0], source[1], source[1]]).ShouldBeFalse();
+        IndicesUtils.EqualsRegardlessOrder(EmptyIndices.EmptyIndicesInstance, []).ShouldBeTrue();
     }
 
     [Fact]
@@ -169,9 +169,9 @@ public sealed class IndicesUtilsAdditionalTests
         int[] fromImmutable = IndicesUtils.GetIndicesNames(source.ToImmutableArray());
         int[] fromIndices = IndicesUtils.GetIndicesNames(IndicesFactory.CreateSimple(null, source));
 
-        Assert.Equal(expected, fromArray);
-        Assert.Equal(expected, fromImmutable);
-        Assert.Equal(expected, fromIndices);
+        fromArray.ShouldBe(expected);
+        fromImmutable.ShouldBe(expected);
+        fromIndices.ShouldBe(expected);
     }
 
     [Fact]
@@ -186,12 +186,10 @@ public sealed class IndicesUtilsAdditionalTests
             [lowerLatinA, upperGreekB],
             [upperLatinA, lowerGreekB]);
 
-        Assert.Equal(
-            [
+        intersections.ShouldBe([
                 IndicesUtils.GetNameWithType(upperLatinA),
                 IndicesUtils.GetNameWithType(lowerGreekB)
-            ],
-            intersections);
-        Assert.Empty(IndicesUtils.GetIntersections([], [upperLatinA]));
+            ]);
+        IndicesUtils.GetIntersections([], [upperLatinA]).ShouldBeEmpty();
     }
 }

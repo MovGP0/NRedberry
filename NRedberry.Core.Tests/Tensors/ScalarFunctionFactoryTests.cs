@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using NRedberry.Tensors.Functions;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -13,10 +13,10 @@ public sealed class ScalarFunctionFactoryTests
         ScalarFunctionFactory factory = TestScalarFunctionFactory.Instance;
         NRedberry.Tensors.Tensor argument = TensorApi.Parse("a");
 
-        Assert.IsType<TestScalarFunction>(factory.Create(argument));
-        Assert.Throws<ArgumentException>(() => factory.Create());
-        Assert.Throws<ArgumentException>(() => factory.Create(argument, argument));
-        Assert.Throws<ArgumentException>(() => factory.Create(TensorApi.Parse("f_m")));
-        Assert.Throws<ArgumentNullException>(() => factory.Create(null!));
+        factory.Create(argument).ShouldBeOfType<TestScalarFunction>();
+        Should.Throw<ArgumentException>(() => factory.Create());
+        Should.Throw<ArgumentException>(() => factory.Create(argument, argument));
+        Should.Throw<ArgumentException>(() => factory.Create(TensorApi.Parse("f_m")));
+        Should.Throw<ArgumentNullException>(() => factory.Create(null!));
     }
 }

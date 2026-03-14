@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Reflection;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -19,7 +20,7 @@ public sealed class PermutationsNextZeroBitTests
 
         int index = InvokeNextZeroBit(bitArray);
 
-        Assert.Equal(2, index);
+        index.ShouldBe(2);
     }
 
     [Fact]
@@ -29,7 +30,7 @@ public sealed class PermutationsNextZeroBitTests
 
         int index = InvokeNextZeroBit(bitArray);
 
-        Assert.Equal(-1, index);
+        index.ShouldBe(-1);
     }
 
     [Fact]
@@ -39,7 +40,7 @@ public sealed class PermutationsNextZeroBitTests
 
         int index = InvokeNextZeroBit(bitArray);
 
-        Assert.Equal(-1, index);
+        index.ShouldBe(-1);
     }
 
     [Fact]
@@ -49,7 +50,7 @@ public sealed class PermutationsNextZeroBitTests
 
         int index = InvokeNextZeroBit(bitArray, 2);
 
-        Assert.Equal(2, index);
+        index.ShouldBe(2);
     }
 
     [Fact]
@@ -59,7 +60,7 @@ public sealed class PermutationsNextZeroBitTests
 
         int index = InvokeNextZeroBit(bitArray, bitArray.Length);
 
-        Assert.Equal(-1, index);
+        index.ShouldBe(-1);
     }
 
     [Fact]
@@ -69,7 +70,7 @@ public sealed class PermutationsNextZeroBitTests
 
         int index = InvokeNextZeroBit(bitArray, 2);
 
-        Assert.Equal(-1, index);
+        index.ShouldBe(-1);
     }
 
     [Fact]
@@ -77,9 +78,9 @@ public sealed class PermutationsNextZeroBitTests
     {
         BitArray bitArray = new([false, true, false]);
 
-        TargetInvocationException exception = Assert.Throws<TargetInvocationException>(() => _ = InvokeNextZeroBit(bitArray, -1));
+        TargetInvocationException exception = Should.Throw<TargetInvocationException>(() => _ = InvokeNextZeroBit(bitArray, -1));
 
-        Assert.IsType<ArgumentOutOfRangeException>(exception.InnerException);
+        exception.InnerException.ShouldBeOfType<ArgumentOutOfRangeException>();
     }
 
     private static int InvokeNextZeroBit(BitArray bitArray)

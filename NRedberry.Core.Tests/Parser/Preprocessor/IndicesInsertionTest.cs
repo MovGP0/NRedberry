@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using NRedberry.Indices;
 using NRedberry.Parsers;
 using NRedberry.Parsers.Preprocessor;
@@ -25,8 +25,8 @@ public sealed class IndicesInsertionTest
         TensorType tensor = Parse("A*(B*A+C*K)*F", "^i", "_j");
 
         AssertIndicesParity(tensor, "^i_j");
-        Assert.Contains("A", tensor.ToString(OutputFormat.Redberry));
-        Assert.Contains("F", tensor.ToString(OutputFormat.Redberry));
+        tensor.ToString(OutputFormat.Redberry).ShouldContain("A");
+        tensor.ToString(OutputFormat.Redberry).ShouldContain("F");
     }
 
     [Fact]
@@ -51,8 +51,8 @@ public sealed class IndicesInsertionTest
         TensorType tensor = Parse("a*(b+a)*A*(c+d)*B*C", "^ij", "_pq", "a", "b", "c", "d");
         string actual = tensor.ToString(OutputFormat.Redberry);
 
-        Assert.Contains("a^{ij}", actual);
-        Assert.Contains("A", actual);
+        actual.ShouldContain("a^{ij}");
+        actual.ShouldContain("A");
     }
 
     [Fact]
@@ -69,7 +69,7 @@ public sealed class IndicesInsertionTest
         TensorType tensor = Parse("A*(B+E*(R+K*U))", "^i", "_j");
 
         AssertIndicesParity(tensor, "^i_j");
-        Assert.Contains("A^{i}", tensor.ToString(OutputFormat.Redberry));
+        tensor.ToString(OutputFormat.Redberry).ShouldContain("A^{i}");
     }
 
     [Fact]
@@ -116,9 +116,9 @@ public sealed class IndicesInsertionTest
 
         string actualText = actual.ToString(OutputFormat.Redberry);
 
-        Assert.Contains("DELTA", actualText);
-        Assert.Contains("HATK", actualText);
-        Assert.Contains("_{a}", actualText);
+        actualText.ShouldContain("DELTA");
+        actualText.ShouldContain("HATK");
+        actualText.ShouldContain("_{a}");
     }
 
     [Fact]
@@ -128,8 +128,8 @@ public sealed class IndicesInsertionTest
 
         string actualText = actual.ToString(OutputFormat.Redberry);
 
-        Assert.Contains("A^{i}_{i}", actualText);
-        Assert.Contains("B", actualText);
+        actualText.ShouldContain("A^{i}_{i}");
+        actualText.ShouldContain("B");
     }
 
     private static NRedberry.Tensors.Tensor Parse(string tensor, string upper, string lower, params string[] indicator)
@@ -150,7 +150,7 @@ public sealed class IndicesInsertionTest
     {
         SimpleIndices expected = ParserIndices.ParseSimple(expectedIndices);
 
-        Assert.True(tensor.Indices.GetFree().EqualsRegardlessOrder(expected.GetFree()));
+        tensor.Indices.GetFree().EqualsRegardlessOrder(expected.GetFree()).ShouldBeTrue();
     }
 
     private sealed class NamesIndicator(params string[] names) : IIndicator<ParseTokenSimpleTensor>

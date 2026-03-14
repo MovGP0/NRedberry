@@ -1,4 +1,4 @@
-using NRedberry.Tensors.Playground;
+﻿using NRedberry.Tensors.Playground;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Tensors.Playground;
@@ -10,9 +10,9 @@ public sealed class GraphStructureHashedTests
     {
         GraphStructureHashed empty = GraphStructureHashed.EmptyInstance;
 
-        Assert.Empty(empty.StretchIndices);
-        Assert.Empty(empty.FreeContraction);
-        Assert.Empty(empty.Contractions);
+        empty.StretchIndices.ShouldBeEmpty();
+        empty.FreeContraction.ShouldBeEmpty();
+        empty.Contractions.ShouldBeEmpty();
     }
 
     [Fact]
@@ -24,8 +24,8 @@ public sealed class GraphStructureHashedTests
 
         GraphStructureHashed graphStructureHashed = new(stretchIndices, freeContraction, contractions);
 
-        Assert.Same(stretchIndices, graphStructureHashed.StretchIndices);
-        Assert.Same(freeContraction, graphStructureHashed.FreeContraction);
-        Assert.Same(contractions, graphStructureHashed.Contractions);
+        graphStructureHashed.StretchIndices.ShouldBeSameAs(stretchIndices);
+        graphStructureHashed.FreeContraction.ShouldBeSameAs(freeContraction);
+        graphStructureHashed.Contractions.ShouldBeSameAs(contractions);
     }
 }

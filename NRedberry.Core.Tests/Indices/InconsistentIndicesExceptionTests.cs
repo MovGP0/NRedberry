@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Numbers;
 using Xunit;
 
@@ -22,8 +22,8 @@ public sealed class InconsistentIndicesExceptionTests
 
         if (creationError is null)
         {
-            Assert.Equal("Inconsistent indices", exception!.Message);
-            Assert.Null(exception.Index);
+            exception!.Message.ShouldBe("Inconsistent indices");
+            exception.Index.ShouldBeNull();
             return;
         }
 
@@ -47,8 +47,8 @@ public sealed class InconsistentIndicesExceptionTests
 
         if (creationError is null)
         {
-            Assert.Equal(message, exception!.Message);
-            Assert.Null(exception.Index);
+            exception!.Message.ShouldBe(message);
+            exception.Index.ShouldBeNull();
             return;
         }
 
@@ -72,7 +72,7 @@ public sealed class InconsistentIndicesExceptionTests
 
         if (creationError is null)
         {
-            Assert.Equal(index, exception!.Index);
+            exception!.Index.ShouldBe(index);
             return;
         }
 
@@ -108,7 +108,7 @@ public sealed class InconsistentIndicesExceptionTests
 
         if (creationError is null)
         {
-            Assert.Equal(index, exception!.Index);
+            exception!.Index.ShouldBe(index);
             return;
         }
 
@@ -149,7 +149,7 @@ public sealed class InconsistentIndicesExceptionTests
 
         if (creationError is null)
         {
-            Assert.Equal(index, exception!.Index);
+            exception!.Index.ShouldBe(index);
             return;
         }
 
@@ -159,7 +159,7 @@ public sealed class InconsistentIndicesExceptionTests
     [Fact]
     public void CauseAndTensorConstructorShouldThrowArgumentNullExceptionWhenCauseIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => new InconsistentIndicesException(cause: null!, Complex.One));
+        Should.Throw<ArgumentNullException>(() => new InconsistentIndicesException(cause: null!, Complex.One));
     }
 
     [Fact]
@@ -217,7 +217,7 @@ public sealed class InconsistentIndicesExceptionTests
 
     private static void AssertTypeInitializationFailure(Exception exception)
     {
-        TypeInitializationException tie = Assert.IsType<TypeInitializationException>(exception);
-        Assert.NotNull(tie.InnerException);
+        TypeInitializationException tie = exception.ShouldBeOfType<TypeInitializationException>();
+        tie.InnerException.ShouldNotBeNull();
     }
 }

@@ -1,5 +1,6 @@
-using System.Linq;
+﻿using System.Linq;
 using NRedberry.Tensors;
+using Shouldly;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -12,10 +13,10 @@ public sealed class PowersContainerTests
     {
         PowersContainer container = new();
 
-        Assert.True(container.IsEmpty());
-        Assert.False(container.Sign);
-        Assert.Equal(0, container.Count);
-        Assert.Empty(container);
+        container.IsEmpty().ShouldBeTrue();
+        container.Sign.ShouldBeFalse();
+        container.Count.ShouldBe(0);
+        container.ShouldBeEmpty();
     }
 
     [Fact]
@@ -28,10 +29,10 @@ public sealed class PowersContainerTests
 
         NRedberry.Tensors.Tensor[] tensors = container.ToArray();
 
-        Assert.Equal(2, tensors.Length);
-        Assert.Contains(tensors, t => t.ToString(OutputFormat.Redberry) == "a");
-        Assert.Contains(tensors, t => t.ToString(OutputFormat.Redberry) == "a**2");
-        Assert.False(container.Sign);
+        tensors.Length.ShouldBe(2);
+        tensors.ShouldContain(t => t.ToString(OutputFormat.Redberry) == "a");
+        tensors.ShouldContain(t => t.ToString(OutputFormat.Redberry) == "a**2");
+        container.Sign.ShouldBeFalse();
     }
 
     [Fact]
@@ -44,10 +45,10 @@ public sealed class PowersContainerTests
 
         NRedberry.Tensors.Tensor[] tensors = container.ToArray();
 
-        Assert.Equal(2, tensors.Length);
-        Assert.Contains(tensors, t => t.ToString(OutputFormat.Redberry) == "a-b");
-        Assert.Contains(tensors, t => t.ToString(OutputFormat.Redberry) == "(b-a)**3");
-        Assert.False(container.Sign);
+        tensors.Length.ShouldBe(2);
+        tensors.ShouldContain(t => t.ToString(OutputFormat.Redberry) == "a-b");
+        tensors.ShouldContain(t => t.ToString(OutputFormat.Redberry) == "(b-a)**3");
+        container.Sign.ShouldBeFalse();
     }
 
     [Fact]
@@ -63,10 +64,10 @@ public sealed class PowersContainerTests
         left.Merge(right);
 
         NRedberry.Tensors.Tensor[] tensors = left.ToArray();
-        Assert.False(left.IsEmpty());
-        Assert.Equal(3, tensors.Length);
-        Assert.Contains(tensors, t => t.ToString(OutputFormat.Redberry) == "a");
-        Assert.Contains(tensors, t => t.ToString(OutputFormat.Redberry) == "a**2");
-        Assert.Contains(tensors, t => t.ToString(OutputFormat.Redberry) == "b");
+        left.IsEmpty().ShouldBeFalse();
+        tensors.Length.ShouldBe(3);
+        tensors.ShouldContain(t => t.ToString(OutputFormat.Redberry) == "a");
+        tensors.ShouldContain(t => t.ToString(OutputFormat.Redberry) == "a**2");
+        tensors.ShouldContain(t => t.ToString(OutputFormat.Redberry) == "b");
     }
 }

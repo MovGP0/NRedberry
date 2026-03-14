@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using NRedberry.Parsers;
 using Xunit;
 
@@ -13,7 +13,7 @@ public sealed class ParserIndicesTests
         {
             var indices = ParserIndices.ParseSimple("_{AC_{21}B}");
 
-            Assert.Equal(3, indices.Size());
+            indices.Size().ShouldBe(3);
         }
         catch (TypeInitializationException)
         {
@@ -23,11 +23,11 @@ public sealed class ParserIndicesTests
     [Fact]
     public void ShouldRejectUnicodeGreekSymbolsWithoutConverters()
     {
-        Assert.Throws<ArgumentException>(() => ParserIndices.ParseSimple("_μν^αβ"));
+        Should.Throw<ArgumentException>(() => ParserIndices.ParseSimple("_μν^αβ"));
 
         var latexNames = ParserIndices.ParseSimple("_\\mu\\nu^\\alpha\\beta");
 
-        Assert.Equal(4, latexNames.Size());
+        latexNames.Size().ShouldBe(4);
     }
 
     [Fact]
@@ -35,10 +35,10 @@ public sealed class ParserIndicesTests
     {
         try
         {
-            Assert.Equal(ParserIndices.ParseSimpleIgnoringVariance("_aabc"), ParserIndices.ParseSimple("^a_abc"));
-            Assert.Equal(ParserIndices.ParseSimpleIgnoringVariance("_abca"), ParserIndices.ParseSimple("^a_bca"));
-            Assert.Equal(ParserIndices.ParseSimpleIgnoringVariance("_bcaa"), ParserIndices.ParseSimple("_bc^a_a"));
-            Assert.Equal(ParserIndices.ParseSimpleIgnoringVariance("^abab"), ParserIndices.ParseSimple("_ab^ab"));
+            ParserIndices.ParseSimple("^a_abc").ShouldBe(ParserIndices.ParseSimpleIgnoringVariance("_aabc"));
+            ParserIndices.ParseSimple("^a_bca").ShouldBe(ParserIndices.ParseSimpleIgnoringVariance("_abca"));
+            ParserIndices.ParseSimple("_bc^a_a").ShouldBe(ParserIndices.ParseSimpleIgnoringVariance("_bcaa"));
+            ParserIndices.ParseSimple("_ab^ab").ShouldBe(ParserIndices.ParseSimpleIgnoringVariance("^abab"));
         }
         catch (TypeInitializationException)
         {
@@ -50,7 +50,7 @@ public sealed class ParserIndicesTests
     {
         var result = ParserIndices.Parse(string.Empty);
 
-        Assert.Empty(result);
+        result.ShouldBeEmpty();
     }
 
     [Fact]
@@ -58,7 +58,7 @@ public sealed class ParserIndicesTests
     {
         try
         {
-            Assert.Throws<BracketsError>(() => ParserIndices.Parse("_{a"));
+            Should.Throw<BracketsError>(() => ParserIndices.Parse("_{a"));
         }
         catch (TypeInitializationException)
         {
@@ -84,8 +84,8 @@ public sealed class ParserIndicesTests
     [Fact]
     public void ShouldThrowArgumentNullExceptionWhenExpressionIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => ParserIndices.Parse(null!));
-        Assert.Throws<ArgumentNullException>(() => ParserIndices.ParseSimple(null!));
-        Assert.Throws<ArgumentNullException>(() => ParserIndices.ParseSimpleIgnoringVariance(null!));
+        Should.Throw<ArgumentNullException>(() => ParserIndices.Parse(null!));
+        Should.Throw<ArgumentNullException>(() => ParserIndices.ParseSimple(null!));
+        Should.Throw<ArgumentNullException>(() => ParserIndices.ParseSimpleIgnoringVariance(null!));
     }
 }

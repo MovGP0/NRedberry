@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
@@ -19,8 +19,8 @@ public sealed class HenselUtilTests
         List<GenPolynomial<ModLong>> factors = [a, b];
         List<GenPolynomial<ModLong>> coefficients = [ring.Zero, one];
 
-        Assert.True(HenselUtil.IsDiophantLift(a, b, one, ring.Zero, a));
-        Assert.True(HenselUtil.IsDiophantLift(factors, coefficients, a));
+        HenselUtil.IsDiophantLift(a, b, one, ring.Zero, a).ShouldBeTrue();
+        HenselUtil.IsDiophantLift(factors, coefficients, a).ShouldBeTrue();
     }
 
     [Fact]
@@ -35,11 +35,11 @@ public sealed class HenselUtilTests
         List<GenPolynomial<ModLong>> diophant = HenselUtil.LiftDiophant(a, b, c, 1);
         List<GenPolynomial<ModLong>> diophantList = HenselUtil.LiftDiophant([a, b], c, 1);
 
-        Assert.Equal(2, bezout.Length);
-        Assert.Equal(2, liftedList.Count);
-        Assert.Equal(2, diophant.Count);
-        Assert.Equal(2, diophantList.Count);
-        Assert.Throws<ArgumentException>(() => HenselUtil.LiftExtendedEuclidean(ring.Zero, b, 1));
+        bezout.Length.ShouldBe(2);
+        liftedList.Count.ShouldBe(2);
+        diophant.Count.ShouldBe(2);
+        diophantList.Count.ShouldBe(2);
+        Should.Throw<ArgumentException>(() => HenselUtil.LiftExtendedEuclidean(ring.Zero, b, 1));
     }
 
     [Fact]
@@ -63,12 +63,12 @@ public sealed class HenselUtilTests
             modularFactor,
             modularRing.Univariate(0).Sum(modularRing.FromInteger(2)));
 
-        Assert.Single(lifted);
-        Assert.Equal(modularFactor, lifted[0]);
-        Assert.True(directApprox.A.IsZero());
-        Assert.True(directApprox.B.IsZero());
-        Assert.True(inferredApprox.A.IsZero());
-        Assert.True(inferredApprox.B.IsZero());
+        lifted.ShouldHaveSingleItem();
+        lifted[0].ShouldBe(modularFactor);
+        directApprox.A.IsZero().ShouldBeTrue();
+        directApprox.B.IsZero().ShouldBeTrue();
+        inferredApprox.A.IsZero().ShouldBeTrue();
+        inferredApprox.B.IsZero().ShouldBeTrue();
     }
 
     private static GenPolynomialRing<ModLong> CreateModularRing()

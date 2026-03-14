@@ -18,5 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NRedberry.Core\NRedberry.Core.csproj" />
+    <ProjectReference Include="..\TestInfrastructure\TestInfrastructure.csproj" />
   </ItemGroup>
 </Project>

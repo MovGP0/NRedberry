@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -9,27 +9,27 @@ public sealed class SimpleTensorFactoryTests
     [Fact]
     public void ShouldReturnWrappedTensorWhenNoArgumentsAreProvided()
     {
-        SimpleTensor tensor = Assert.IsType<SimpleTensor>(TensorFactory.Parse("T_a"));
-        NRedberry.Tensors.TensorFactory factory = Assert.IsAssignableFrom<NRedberry.Tensors.TensorFactory>(tensor.GetFactory());
+        SimpleTensor tensor = TensorFactory.Parse("T_a").ShouldBeOfType<SimpleTensor>();
+        NRedberry.Tensors.TensorFactory factory = tensor.GetFactory().ShouldBeAssignableTo<NRedberry.Tensors.TensorFactory>();
 
-        Assert.Same(tensor, factory.Create());
+        factory.Create().ShouldBeSameAs(tensor);
     }
 
     [Fact]
     public void ShouldRejectUnexpectedArguments()
     {
-        SimpleTensor tensor = Assert.IsType<SimpleTensor>(TensorFactory.Parse("T_a"));
-        NRedberry.Tensors.TensorFactory factory = Assert.IsAssignableFrom<NRedberry.Tensors.TensorFactory>(tensor.GetFactory());
+        SimpleTensor tensor = TensorFactory.Parse("T_a").ShouldBeOfType<SimpleTensor>();
+        NRedberry.Tensors.TensorFactory factory = tensor.GetFactory().ShouldBeAssignableTo<NRedberry.Tensors.TensorFactory>();
 
-        Assert.Throws<NotSupportedException>(() => factory.Create(TensorFactory.Parse("a")));
+        Should.Throw<NotSupportedException>(() => factory.Create(TensorFactory.Parse("a")));
     }
 
     [Fact]
     public void ShouldRejectUnexpectedArgumentsForConcreteOverload()
     {
-        SimpleTensor tensor = Assert.IsType<SimpleTensor>(TensorFactory.Parse("T_a"));
-        SimpleTensorFactory factory = Assert.IsType<SimpleTensorFactory>(tensor.GetFactory());
+        SimpleTensor tensor = TensorFactory.Parse("T_a").ShouldBeOfType<SimpleTensor>();
+        SimpleTensorFactory factory = tensor.GetFactory().ShouldBeOfType<SimpleTensorFactory>();
 
-        Assert.Throws<NotSupportedException>(() => factory.Create(TensorFactory.Parse("a")));
+        Should.Throw<NotSupportedException>(() => factory.Create(TensorFactory.Parse("a")));
     }
 }

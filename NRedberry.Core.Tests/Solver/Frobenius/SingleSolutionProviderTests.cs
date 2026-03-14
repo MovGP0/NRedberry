@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using NRedberry.Solver.Frobenius;
 using Xunit;
 
@@ -13,7 +13,7 @@ public sealed class SingleSolutionProviderTests
 
         int[]? solution = Take(provider);
 
-        Assert.Null(solution);
+        solution.ShouldBeNull();
     }
 
     [Fact]
@@ -21,12 +21,12 @@ public sealed class SingleSolutionProviderTests
     {
         object provider = CreateSingleProvider([7], [5], 0, [2]);
 
-        Assert.True(Tick(provider));
-        Assert.Equal([7], Take(provider));
-        Assert.Equal([8], Take(provider));
-        Assert.Equal([9], Take(provider));
-        Assert.Null(Take(provider));
-        Assert.False(Tick(provider));
+        Tick(provider).ShouldBeTrue();
+        Take(provider).ShouldBe([7]);
+        Take(provider).ShouldBe([8]);
+        Take(provider).ShouldBe([9]);
+        Take(provider).ShouldBeNull();
+        Tick(provider).ShouldBeFalse();
     }
 
     [Fact]
@@ -34,14 +34,14 @@ public sealed class SingleSolutionProviderTests
     {
         object provider = CreateSingleProvider([3, 4], [5, 8], 1, [2, 3]);
 
-        Assert.True(Tick(provider));
-        Assert.Equal([3, 4], Take(provider));
-        Assert.Equal([5, 8], CurrentRemainders(provider));
-        Assert.Equal([3, 5], Take(provider));
-        Assert.Equal([3, 5], CurrentRemainders(provider));
-        Assert.Equal([3, 6], Take(provider));
-        Assert.Equal([1, 2], CurrentRemainders(provider));
-        Assert.Null(Take(provider));
+        Tick(provider).ShouldBeTrue();
+        Take(provider).ShouldBe([3, 4]);
+        CurrentRemainders(provider).ShouldBe([5, 8]);
+        Take(provider).ShouldBe([3, 5]);
+        CurrentRemainders(provider).ShouldBe([3, 5]);
+        Take(provider).ShouldBe([3, 6]);
+        CurrentRemainders(provider).ShouldBe([1, 2]);
+        Take(provider).ShouldBeNull();
     }
 
     private static object CreateSingleProvider(int[] baseSolution, int[] remainders, int position, int[] coefficients)

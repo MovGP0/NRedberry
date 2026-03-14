@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using NRedberry.Transformations.Symmetrization;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
@@ -20,6 +20,6 @@ public sealed class CollectNonScalarsTransformationTest
 
         TensorType built = builder.Build();
         TensorType collected = CollectNonScalarsITransformation.CollectNonScalars(tensor);
-        Assert.True(TensorUtils.Equals(built, collected));
+        TensorUtils.Equals(built, collected).ShouldBeTrue();
     }
 }

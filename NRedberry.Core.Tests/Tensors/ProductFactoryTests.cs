@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -12,7 +12,7 @@ public sealed class ProductFactoryTests
     {
         NRedberry.Tensors.TensorFactory factory = ProductFactory.Factory;
 
-        Assert.Equal(Complex.One, factory.Create());
+        factory.Create().ShouldBe(Complex.One);
     }
 
     [Fact]
@@ -21,7 +21,7 @@ public sealed class ProductFactoryTests
         NRedberry.Tensors.TensorFactory factory = ProductFactory.Factory;
         NRedberry.Tensors.Tensor tensor = TensorFactory.Parse("T_i");
 
-        Assert.Same(tensor, factory.Create(tensor));
+        factory.Create(tensor).ShouldBeSameAs(tensor);
     }
 
     [Fact]
@@ -29,7 +29,7 @@ public sealed class ProductFactoryTests
     {
         NRedberry.Tensors.Tensor tensor = TensorFactory.Parse("T_i");
 
-        Assert.Same(tensor, ProductFactory.Factory.Create(tensor));
+        ProductFactory.Factory.Create(tensor).ShouldBeSameAs(tensor);
     }
 
     [Fact]
@@ -41,7 +41,7 @@ public sealed class ProductFactoryTests
             TensorFactory.Parse("2*a"),
             TensorFactory.Parse("3*T_i"));
 
-        Assert.Equal("6*a*T_{i}", result.ToString(OutputFormat.Redberry));
+        result.ToString(OutputFormat.Redberry).ShouldBe("6*a*T_{i}");
     }
 
     [Fact]
@@ -53,6 +53,6 @@ public sealed class ProductFactoryTests
 
         string text = result.ToString(OutputFormat.Redberry);
 
-        Assert.True(text is "-a-b" or "-b-a");
+        text is "-a-b" or "-b-a".ShouldBeTrue();
     }
 }

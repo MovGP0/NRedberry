@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 using Xunit;
@@ -18,8 +18,8 @@ public sealed class SquarefreeFieldCharPTests
         GenPolynomial<ModLong> part = squarefree.BaseSquarefreePart(polynomial);
         SortedDictionary<ModLong, long> coefficientFactors = squarefree.SquarefreeFactors(coefficientRing.FromInteger(1));
 
-        Assert.Equal(ring.Univariate(0).Sum(ring.FromInteger(1)), part);
-        Assert.Empty(coefficientFactors);
+        part.ShouldBe(ring.Univariate(0).Sum(ring.FromInteger(1)));
+        coefficientFactors.ShouldBeEmpty();
     }
 
     private static GenPolynomialRing<ModLong> CreateRing(ModLongRing coefficientRing)

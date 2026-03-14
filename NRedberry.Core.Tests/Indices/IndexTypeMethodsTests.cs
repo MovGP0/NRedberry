@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Indices;
@@ -11,9 +11,9 @@ public sealed class IndexTypeMethodsTests
         IndexType[] values = IndexTypeMethods.Values;
         IndexType[] enumValues = Enum.GetValues<IndexType>();
 
-        Assert.Equal((int)IndexTypeMethods.TypesCount, values.Length);
-        Assert.Equal(enumValues.Length, values.Length);
-        Assert.Equal(enumValues, values);
+        values.Length.ShouldBe((int)IndexTypeMethods.TypesCount);
+        values.Length.ShouldBe(enumValues.Length);
+        values.ShouldBe(enumValues);
     }
 
     [Theory]
@@ -23,8 +23,8 @@ public sealed class IndexTypeMethodsTests
     [InlineData(IndexType.Matrix4, "G'")]
     public void ShouldRoundtripShortStringForRepresentativeTypes(IndexType indexType, string shortString)
     {
-        Assert.Equal(shortString, indexType.GetShortString());
-        Assert.Equal(indexType, IndexTypeMethods.FromShortString(shortString));
+        indexType.GetShortString().ShouldBe(shortString);
+        IndexTypeMethods.FromShortString(shortString).ShouldBe(indexType);
     }
 
     [Fact]
@@ -35,11 +35,11 @@ public sealed class IndexTypeMethodsTests
         foreach (byte type in types)
         {
             IndexType indexType = IndexTypeMethods.GetType(type);
-            Assert.Equal(type, indexType.GetType_());
+            indexType.GetType_().ShouldBe(type);
         }
 
-        Assert.Throws<ArgumentException>(() => IndexTypeMethods.GetType(IndexTypeMethods.TypesCount));
-        Assert.Throws<ArgumentException>(() => IndexTypeMethods.GetType(byte.MaxValue));
+        Should.Throw<ArgumentException>(() => IndexTypeMethods.GetType(IndexTypeMethods.TypesCount));
+        Should.Throw<ArgumentException>(() => IndexTypeMethods.GetType(byte.MaxValue));
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public sealed class IndexTypeMethodsTests
         mutated[0] = byte.MaxValue;
 
         byte[] next = IndexTypeMethods.GetBytes();
-        Assert.Equal(original, next);
+        next.ShouldBe(original);
     }
 
     [Fact]
@@ -63,8 +63,8 @@ public sealed class IndexTypeMethodsTests
         mutated[0] = mutated[1];
 
         IIndexSymbolConverter[] next = IndexTypeMethods.GetAllConverters();
-        Assert.Same(original[0], next[0]);
-        Assert.NotSame(mutated[0], next[0]);
+        next[0].ShouldBeSameAs(original[0]);
+        next[0].ShouldNotBeSameAs(mutated[0]);
     }
 
     [Fact]
@@ -75,10 +75,10 @@ public sealed class IndexTypeMethodsTests
             IIndexSymbolConverter converter = indexType.GetSymbolConverter();
             byte type = indexType.GetType_();
 
-            Assert.Equal(type, converter.Type);
-            Assert.Equal(type, IndexTypeMethods.GetType(type).GetType_());
-            Assert.Equal(type, IndexTypeMethods.GetType_(type).GetType_());
-            Assert.Equal(type, IndexTypeMethods.GetType(type).GetSymbolConverter().Type);
+            converter.Type.ShouldBe(type);
+            IndexTypeMethods.GetType(type).GetType_().ShouldBe(type);
+            IndexTypeMethods.GetType_(type).GetType_().ShouldBe(type);
+            IndexTypeMethods.GetType(type).GetSymbolConverter().Type.ShouldBe(type);
         }
     }
 }

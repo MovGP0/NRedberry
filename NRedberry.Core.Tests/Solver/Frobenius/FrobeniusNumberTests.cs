@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using NRedberry.Solver.Frobenius;
 using Xunit;
 
@@ -21,58 +21,58 @@ public sealed class FrobeniusNumberTests
     public void ShouldComputeKnownValuesForIntInput(int[] values, long expected)
     {
         BigInteger result = FrobeniusNumber.Calculate(values);
-        Assert.Equal(new BigInteger(expected), result);
+        result.ShouldBe(new BigInteger(expected));
     }
 
     [Fact]
     public void ShouldReturnMinusOneWhenNoFiniteResult()
     {
         BigInteger result = FrobeniusNumber.Calculate(112, 432, 122, 8, 32);
-        Assert.Equal(new BigInteger(-1), result);
+        result.ShouldBe(new BigInteger(-1));
     }
 
     [Fact]
     public void ShouldComputeValueForLongInput()
     {
         BigInteger result = FrobeniusNumber.Calculate(112L, 432L, 123L, 7L);
-        Assert.Equal(new BigInteger(731), result);
+        result.ShouldBe(new BigInteger(731));
     }
 
     [Fact]
     public void ShouldComputeValueForBigIntegerInput()
     {
         BigInteger result = FrobeniusNumber.Calculate(new BigInteger(112), new BigInteger(432), new BigInteger(123), new BigInteger(7));
-        Assert.Equal(new BigInteger(731), result);
+        result.ShouldBe(new BigInteger(731));
     }
 
     [Fact]
     public void ShouldComputeValueUsingBigIntegerSpecificAlgorithm()
     {
         BigInteger result = FrobeniusNumber.CalculateFromBigIntegerArray(new BigInteger(112), new BigInteger(432), new BigInteger(123), new BigInteger(7));
-        Assert.Equal(new BigInteger(731), result);
+        result.ShouldBe(new BigInteger(731));
     }
 
     [Fact]
     public void ShouldThrowForNullIntArray()
     {
-        Assert.Throws<ArgumentNullException>(() => FrobeniusNumber.Calculate((int[])null!));
+        Should.Throw<ArgumentNullException>(() => FrobeniusNumber.Calculate((int[])null!));
     }
 
     [Fact]
     public void ShouldThrowForNullLongArray()
     {
-        Assert.Throws<ArgumentNullException>(() => FrobeniusNumber.Calculate((long[])null!));
+        Should.Throw<ArgumentNullException>(() => FrobeniusNumber.Calculate((long[])null!));
     }
 
     [Fact]
     public void ShouldThrowForNullBigIntegerArray()
     {
-        Assert.Throws<ArgumentNullException>(() => FrobeniusNumber.Calculate((BigInteger[])null!));
+        Should.Throw<ArgumentNullException>(() => FrobeniusNumber.Calculate((BigInteger[])null!));
     }
 
     [Fact]
     public void ShouldThrowForNullBigIntegerArrayInSpecificAlgorithm()
     {
-        Assert.Throws<ArgumentNullException>(() => FrobeniusNumber.CalculateFromBigIntegerArray((BigInteger[])null!));
+        Should.Throw<ArgumentNullException>(() => FrobeniusNumber.CalculateFromBigIntegerArray((BigInteger[])null!));
     }
 }

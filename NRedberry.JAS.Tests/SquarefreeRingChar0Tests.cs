@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 using Xunit;
@@ -20,16 +20,16 @@ public sealed class SquarefreeRingChar0Tests
         GenPolynomial<JasBigInteger> part = squarefree.BaseSquarefreePart(repeated);
         SortedDictionary<GenPolynomial<JasBigInteger>, long> factors = squarefree.BaseSquarefreeFactors(repeated);
 
-        Assert.Equal(x.Subtract(ring.FromInteger(1)).Multiply(x.Sum(ring.FromInteger(2))), part);
-        Assert.Equal(2, factors.Count);
-        Assert.Equal(2L, factors.Single(entry => entry.Key.Equals(x.Subtract(ring.FromInteger(1)))).Value);
-        Assert.Equal(1L, factors.Single(entry => entry.Key.Equals(x.Sum(ring.FromInteger(2)))).Value);
+        part.ShouldBe(x.Subtract(ring.FromInteger(1)).Multiply(x.Sum(ring.FromInteger(2))));
+        factors.Count.ShouldBe(2);
+        factors.Single(entry => entry.Key.Equals(x.Subtract(ring.FromInteger(1)))).Value.ShouldBe(2L);
+        factors.Single(entry => entry.Key.Equals(x.Sum(ring.FromInteger(2)))).Value.ShouldBe(1L);
     }
 
     [Fact]
     public void ShouldRejectFieldCoefficientFactory()
     {
-        Assert.Throws<ArgumentException>(
+        Should.Throw<ArgumentException>(
             () => new SquarefreeRingChar0<NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith.BigRational>(
                 new NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith.BigRational()));
     }

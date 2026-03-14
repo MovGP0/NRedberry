@@ -1,4 +1,4 @@
-using NRedberry.Contexts;
+﻿using NRedberry.Contexts;
 using NRedberry.Numbers;
 using NRedberry.Parsers;
 using NRedberry.Tensors;
@@ -21,10 +21,10 @@ public sealed class ParseTokenTransformerTests
 
         var tensor = parseManager.Parse("x", [], [transformer]);
 
-        var number = Assert.IsType<Complex>(tensor);
-        Assert.Same(initialNode, transformer.LastInput);
-        Assert.Equal(1, transformer.CallCount);
-        Assert.Equal(Complex.Two, number);
+        var number = tensor.ShouldBeOfType<Complex>();
+        transformer.LastInput.ShouldBeSameAs(initialNode);
+        transformer.CallCount.ShouldBe(1);
+        number.ShouldBe(Complex.Two);
     }
 
     [Fact]
@@ -40,12 +40,12 @@ public sealed class ParseTokenTransformerTests
 
         var tensor = parseManager.Parse("x", [first, second]);
 
-        var number = Assert.IsType<Complex>(tensor);
-        Assert.Same(initialNode, first.LastInput);
-        Assert.Same(firstOutput, second.LastInput);
-        Assert.Equal(1, first.CallCount);
-        Assert.Equal(1, second.CallCount);
-        Assert.Equal(new Complex(3), number);
+        var number = tensor.ShouldBeOfType<Complex>();
+        first.LastInput.ShouldBeSameAs(initialNode);
+        second.LastInput.ShouldBeSameAs(firstOutput);
+        first.CallCount.ShouldBe(1);
+        second.CallCount.ShouldBe(1);
+        number.ShouldBe(new Complex(3));
     }
 
     [Fact]
@@ -60,10 +60,10 @@ public sealed class ParseTokenTransformerTests
 
         var tensor = parseManager.Parse("x");
 
-        var number = Assert.IsType<Complex>(tensor);
-        Assert.Equal(1, transformer.CallCount);
-        Assert.Same(initialNode, transformer.LastInput);
-        Assert.Equal(Complex.Two, number);
+        var number = tensor.ShouldBeOfType<Complex>();
+        transformer.CallCount.ShouldBe(1);
+        transformer.LastInput.ShouldBeSameAs(initialNode);
+        number.ShouldBe(Complex.Two);
     }
 }
 

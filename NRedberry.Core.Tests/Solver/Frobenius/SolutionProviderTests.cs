@@ -1,4 +1,4 @@
-using NRedberry.Solver.Frobenius;
+﻿using NRedberry.Solver.Frobenius;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Solver.Frobenius;
@@ -8,7 +8,7 @@ public sealed class SolutionProviderTests
     [Fact]
     public void ShouldBeInterface()
     {
-        Assert.True(SolutionProviderType.IsInterface);
+        SolutionProviderType.IsInterface.ShouldBeTrue();
     }
 
     [Fact]
@@ -16,8 +16,8 @@ public sealed class SolutionProviderTests
     {
         var tick = SolutionProviderType.GetMethod("Tick");
 
-        Assert.NotNull(tick);
-        Assert.Equal(typeof(bool), tick!.ReturnType);
+        tick.ShouldNotBeNull();
+        tick!.ReturnType.ShouldBe(typeof(bool));
     }
 
     [Fact]
@@ -25,8 +25,8 @@ public sealed class SolutionProviderTests
     {
         var currentRemainders = SolutionProviderType.GetMethod("CurrentRemainders");
 
-        Assert.NotNull(currentRemainders);
-        Assert.Equal(typeof(int[]), currentRemainders!.ReturnType);
+        currentRemainders.ShouldNotBeNull();
+        currentRemainders!.ReturnType.ShouldBe(typeof(int[]));
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public sealed class SolutionProviderTests
     {
         var baseInterface = typeof(NRedberry.Concurrent.IOutputPort<int[]>);
 
-        Assert.Contains(baseInterface, SolutionProviderType.GetInterfaces());
+        SolutionProviderType.GetInterfaces().ShouldContain(baseInterface);
     }
 
     private static Type SolutionProviderType => GetFrobeniusType("SolutionProvider");

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using NRedberry.Indices;
@@ -15,16 +15,16 @@ public class IIndexMappingTests
 
         MethodInfo[] methods = interfaceType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 
-        Assert.Single(methods);
+        methods.ShouldHaveSingleItem();
 
         MethodInfo mapMethod = methods.Single();
 
-        Assert.Equal(nameof(IIndexMapping.Map), mapMethod.Name);
-        Assert.Equal(typeof(int), mapMethod.ReturnType);
+        mapMethod.Name.ShouldBe(nameof(IIndexMapping.Map));
+        mapMethod.ReturnType.ShouldBe(typeof(int));
 
         ParameterInfo[] parameters = mapMethod.GetParameters();
-        Assert.Single(parameters);
-        Assert.Equal(typeof(int), parameters[0].ParameterType);
+        parameters.ShouldHaveSingleItem();
+        parameters[0].ParameterType.ShouldBe(typeof(int));
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public class IIndexMappingTests
 
         PropertyInfo[] properties = interfaceType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 
-        Assert.Empty(properties);
+        properties.ShouldBeEmpty();
     }
 
     [Fact]
@@ -44,6 +44,6 @@ public class IIndexMappingTests
 
         EventInfo[] events = interfaceType.GetEvents(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 
-        Assert.Empty(events);
+        events.ShouldBeEmpty();
     }
 }

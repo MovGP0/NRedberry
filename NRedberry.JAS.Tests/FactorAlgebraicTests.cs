@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
@@ -18,9 +19,9 @@ public sealed class FactorAlgebraicTests
         List<GenPolynomial<AlgebraicNumber<BigRational>>> zeroFactors = factor.BaseFactorsSquarefree(ring.Zero);
         List<GenPolynomial<AlgebraicNumber<BigRational>>> oneFactors = factor.BaseFactorsSquarefree(ring.One);
 
-        Assert.Empty(zeroFactors);
-        Assert.Single(oneFactors);
-        Assert.Equal(ring.One, oneFactors[0]);
+        zeroFactors.ShouldBeEmpty();
+        oneFactors.Count.ShouldBe(1);
+        oneFactors[0].ShouldBe(ring.One);
     }
 
     [Fact]
@@ -31,7 +32,7 @@ public sealed class FactorAlgebraicTests
         GenPolynomialRing<AlgebraicNumber<BigRational>> ring = CreateRing(coefficientRing, 2);
         GenPolynomial<AlgebraicNumber<BigRational>> polynomial = ring.Univariate(0).Sum(ring.FromInteger(1));
 
-        Assert.Throws<ArgumentException>(() => factor.BaseFactorsSquarefree(polynomial));
+        Should.Throw<ArgumentException>(() => factor.BaseFactorsSquarefree(polynomial));
     }
 
     private static GenPolynomialRing<AlgebraicNumber<BigRational>> CreateRing(AlgebraicNumberRing<BigRational> coefficientRing, int nvar)

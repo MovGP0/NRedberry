@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -13,8 +13,8 @@ public sealed class ArraysUtilsInsertionSortTests
 
         ArraysUtils.InsertionSort(target, coSort);
 
-        Assert.Equal([1, 2, 3, 4], target);
-        Assert.Equal([10, 20, 30, 40], coSort);
+        target.ShouldBe([1, 2, 3, 4]);
+        coSort.ShouldBe([10, 20, 30, 40]);
     }
 
     [Fact]
@@ -25,8 +25,8 @@ public sealed class ArraysUtilsInsertionSortTests
 
         ArraysUtils.InsertionSort(target, 1, 4, coSort);
 
-        Assert.Equal([9, 3, 4, 8, 1], target);
-        Assert.Equal([90L, 30L, 40L, 80L, 10L], coSort);
+        target.ShouldBe([9, 3, 4, 8, 1]);
+        coSort.ShouldBe([90L, 30L, 40L, 80L, 10L]);
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public sealed class ArraysUtilsInsertionSortTests
 
         ArraysUtils.InsertionSort(target, coSort);
 
-        Assert.Equal(["a", "b", "c", "d"], target);
-        Assert.Equal([1, 2, 3, 4], coSort);
+        target.ShouldBe(["a", "b", "c", "d"]);
+        coSort.ShouldBe([1, 2, 3, 4]);
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -16,7 +16,7 @@ public sealed class PowerBuilderTest
 
         NRedberry.Tensors.Tensor result = builder.Build();
 
-        Assert.Equal(new Complex(4), result);
+        result.ShouldBe(new Complex(4));
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public sealed class PowerBuilderTest
 
         NRedberry.Tensors.Tensor result = builder.Build();
 
-        Assert.Equal(new Complex(531441), result);
+        result.ShouldBe(new Complex(531441));
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public sealed class PowerBuilderTest
 
         NRedberry.Tensors.Tensor result = builder.Build();
 
-        Assert.Equal(new Complex(-177147), result);
+        result.ShouldBe(new Complex(-177147));
     }
 
     [Fact]
@@ -48,9 +48,9 @@ public sealed class PowerBuilderTest
     {
         PowerBuilder builder = new();
 
-        ArgumentException exception = Assert.Throws<ArgumentException>(() => builder.Put(TensorFactory.Parse("T_a")));
+        ArgumentException exception = Should.Throw<ArgumentException>(() => builder.Put(TensorFactory.Parse("T_a")));
 
-        Assert.Contains("Non-scalar tensor", exception.Message);
+        exception.Message.ShouldContain("Non-scalar tensor");
     }
 
     [Fact]
@@ -59,7 +59,7 @@ public sealed class PowerBuilderTest
         PowerBuilder builder = new();
         builder.Put(new Complex(2));
 
-        Assert.Throws<InvalidOperationException>(() => builder.Build());
+        Should.Throw<InvalidOperationException>(() => builder.Build());
     }
 
     [Fact]
@@ -69,7 +69,7 @@ public sealed class PowerBuilderTest
         builder.Put(new Complex(2));
         builder.Put(new Complex(3));
 
-        Assert.Throws<InvalidOperationException>(() => builder.Put(new Complex(4)));
+        Should.Throw<InvalidOperationException>(() => builder.Put(new Complex(4)));
     }
 
     [Fact]
@@ -81,7 +81,7 @@ public sealed class PowerBuilderTest
 
         clone.Put(new Complex(5));
 
-        Assert.Equal(new Complex(32), clone.Build());
-        Assert.Throws<InvalidOperationException>(() => builder.Build());
+        clone.Build().ShouldBe(new Complex(32));
+        Should.Throw<InvalidOperationException>(() => builder.Build());
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -14,7 +14,7 @@ public sealed class HashFunctionsTests
         int fromBytes = HashFunctions.FVN32hash(bytes);
         int fromInt = HashFunctions.FVN32hash(value);
 
-        Assert.Equal(fromInt, fromBytes);
+        fromBytes.ShouldBe(fromInt);
     }
 
     [Fact]
@@ -26,7 +26,7 @@ public sealed class HashFunctionsTests
         long fromBytes = HashFunctions.FVN64hash(bytes);
         long fromLong = HashFunctions.FVN64hash(value);
 
-        Assert.Equal(fromLong, fromBytes);
+        fromBytes.ShouldBe(fromLong);
     }
 
     [Fact]
@@ -39,17 +39,17 @@ public sealed class HashFunctionsTests
         int fromBytes = HashFunctions.MurmurHash2(bytes, seed);
         int fromInt = HashFunctions.MurmurHash2(value, seed);
 
-        Assert.Equal(fromInt, fromBytes);
+        fromBytes.ShouldBe(fromInt);
     }
 
     [Fact]
     public void ShouldProduceDifferentHashesForDifferentInputs()
     {
-        Assert.NotEqual(HashFunctions.mix(1, 2, 3), HashFunctions.mix(1, 2, 4));
-        Assert.NotEqual(HashFunctions.JenkinWang32shift(123), HashFunctions.JenkinWang32shift(124));
-        Assert.NotEqual(HashFunctions.Wang32shiftmult(123L), HashFunctions.Wang32shiftmult(124L));
-        Assert.NotEqual(HashFunctions.JenkinWang64shift(123L), HashFunctions.JenkinWang64shift(124L));
-        Assert.NotEqual(HashFunctions.Wang64to32shift(123L), HashFunctions.Wang64to32shift(124L));
-        Assert.NotEqual(HashFunctions.FVN64to32hash(123L), HashFunctions.FVN64to32hash(124L));
+        HashFunctions.mix(1, 2, 4).ShouldNotBe(HashFunctions.mix(1, 2, 3));
+        HashFunctions.JenkinWang32shift(124).ShouldNotBe(HashFunctions.JenkinWang32shift(123));
+        HashFunctions.Wang32shiftmult(124L).ShouldNotBe(HashFunctions.Wang32shiftmult(123L));
+        HashFunctions.JenkinWang64shift(124L).ShouldNotBe(HashFunctions.JenkinWang64shift(123L));
+        HashFunctions.Wang64to32shift(124L).ShouldNotBe(HashFunctions.Wang64to32shift(123L));
+        HashFunctions.FVN64to32hash(124L).ShouldNotBe(HashFunctions.FVN64to32hash(123L));
     }
 }

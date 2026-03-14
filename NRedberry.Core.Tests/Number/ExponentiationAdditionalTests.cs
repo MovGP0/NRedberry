@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using Xunit;
 using BigInteger = System.Numerics.BigInteger;
 using TensorComplex = NRedberry.Numbers.Complex;
@@ -12,8 +12,8 @@ public sealed class ExponentiationAdditionalTests
     {
         var result = Exponentiation.ExponentiateIfPossible(Rational.Zero, Numeric.PositiveInfinity);
 
-        Assert.NotNull(result);
-        Assert.True(result.IsNaN());
+        result.ShouldNotBeNull();
+        result.IsNaN().ShouldBeTrue();
     }
 
     [Fact]
@@ -21,7 +21,7 @@ public sealed class ExponentiationAdditionalTests
     {
         var result = Exponentiation.ExponentiateIfPossible(Rational.Zero, Rational.MinusOne);
 
-        Assert.Equal(Rational.Zero, result);
+        result.ShouldBe(Rational.Zero);
     }
 
     [Fact]
@@ -29,7 +29,7 @@ public sealed class ExponentiationAdditionalTests
     {
         var result = Exponentiation.ExponentiateIfPossible(new Rational(2, 3), new Rational(3));
 
-        Assert.Equal(new Rational(8, 27), result);
+        result.ShouldBe(new Rational(8, 27));
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public sealed class ExponentiationAdditionalTests
     {
         var result = Exponentiation.ExponentiateIfPossible(new Rational(16, 81), new Rational(1, 4));
 
-        Assert.Equal(new Rational(2, 3), result);
+        result.ShouldBe(new Rational(2, 3));
     }
 
     [Fact]
@@ -45,7 +45,7 @@ public sealed class ExponentiationAdditionalTests
     {
         var result = Exponentiation.ExponentiateIfPossible(new Rational(2, 3), new Rational(1, 2));
 
-        Assert.Null(result);
+        result.ShouldBeNull();
     }
 
     [Fact]
@@ -54,8 +54,8 @@ public sealed class ExponentiationAdditionalTests
         var oddRoot = Exponentiation.ExponentiateIfPossible(new Rational(-8), new Rational(1, 3));
         var evenRoot = Exponentiation.ExponentiateIfPossible(new Rational(-16), new Rational(1, 2));
 
-        Assert.Equal(new Rational(-2), oddRoot);
-        Assert.Null(evenRoot);
+        oddRoot.ShouldBe(new Rational(-2));
+        evenRoot.ShouldBeNull();
     }
 
     [Fact]
@@ -64,7 +64,7 @@ public sealed class ExponentiationAdditionalTests
         var hugePower = BigInteger.Pow(new BigInteger(2), 60);
         var result = Exponentiation.ExponentiateIfPossible(new Rational(hugePower), new Rational(1, 6));
 
-        Assert.Equal(new Rational(1024), result);
+        result.ShouldBe(new Rational(1024));
     }
 
     [Fact]
@@ -72,7 +72,7 @@ public sealed class ExponentiationAdditionalTests
     {
         var result = Exponentiation.ExponentiateIfPossible(TensorComplex.One, TensorComplex.RealPositiveInfinity);
 
-        Assert.Equal(TensorComplex.RealPositiveInfinity, result);
+        result.ShouldBe(TensorComplex.RealPositiveInfinity);
     }
 
     [Fact]
@@ -83,8 +83,8 @@ public sealed class ExponentiationAdditionalTests
         var powerOne = Exponentiation.ExponentiateIfPossible(baseValue, TensorComplex.One);
         var powerZero = Exponentiation.ExponentiateIfPossible(baseValue, TensorComplex.Zero);
 
-        Assert.Equal(baseValue, powerOne);
-        Assert.Equal(TensorComplex.One, powerZero);
+        powerOne.ShouldBe(baseValue);
+        powerZero.ShouldBe(TensorComplex.One);
     }
 
     [Fact]
@@ -94,9 +94,9 @@ public sealed class ExponentiationAdditionalTests
         var zeroPower = Exponentiation.ExponentiateIfPossible(TensorComplex.Zero, TensorComplex.Zero);
         var negativePower = Exponentiation.ExponentiateIfPossible(TensorComplex.Zero, new TensorComplex(-1));
 
-        Assert.Equal(TensorComplex.Zero, positivePower);
-        Assert.Equal(TensorComplex.ComplexNaN, zeroPower);
-        Assert.Equal(TensorComplex.ComplexNaN, negativePower);
+        positivePower.ShouldBe(TensorComplex.Zero);
+        zeroPower.ShouldBe(TensorComplex.ComplexNaN);
+        negativePower.ShouldBe(TensorComplex.ComplexNaN);
     }
 
     [Fact]
@@ -104,7 +104,7 @@ public sealed class ExponentiationAdditionalTests
     {
         var result = Exponentiation.ExponentiateIfPossible(new TensorComplex(1, 1), new TensorComplex(2));
 
-        Assert.Equal(new TensorComplex(0, 2), result);
+        result.ShouldBe(new TensorComplex(0, 2));
     }
 
     [Fact]
@@ -112,8 +112,8 @@ public sealed class ExponentiationAdditionalTests
     {
         var result = Exponentiation.ExponentiateIfPossible(new TensorComplex(4.0), new TensorComplex(0.5));
 
-        Assert.NotNull(result);
-        Assert.True(result.Real.IsNumeric());
+        result.ShouldNotBeNull();
+        result.Real.IsNumeric().ShouldBeTrue();
         Assert.Equal(2.0, result.Real.DoubleValue(), 10);
         Assert.Equal(0.0, result.Imaginary.DoubleValue(), 10);
     }

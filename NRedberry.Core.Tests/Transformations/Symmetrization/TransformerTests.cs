@@ -1,4 +1,4 @@
-using NRedberry.Tensors.Iterators;
+﻿using NRedberry.Tensors.Iterators;
 using NRedberry.Transformations.Symmetrization;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -18,7 +18,7 @@ public sealed class TransformerTests
         string[] terms = actual.ToString(OutputFormat.Redberry).Split('+', StringSplitOptions.RemoveEmptyEntries);
         Array.Sort(terms, StringComparer.Ordinal);
 
-        Assert.Equal(["b", "x"], terms);
+        terms.ShouldBe(["b", "x"]);
     }
 
     [Fact]
@@ -31,7 +31,7 @@ public sealed class TransformerTests
 
         NRedberry.Tensors.Tensor actual = transformer.Transform(TensorApi.Parse("Sin[a]"));
 
-        Assert.Equal("Sin[a]", actual.ToString(OutputFormat.Redberry));
+        actual.ToString(OutputFormat.Redberry).ShouldBe("Sin[a]");
     }
 
     private sealed class ReplaceATransformation : ITransformation

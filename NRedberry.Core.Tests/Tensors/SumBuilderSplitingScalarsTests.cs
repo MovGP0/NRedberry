@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -15,8 +15,8 @@ public sealed class SumBuilderSplitingScalarsTests
 
         string text = builder.Build().ToString(OutputFormat.Redberry);
 
-        Assert.Contains("f_{m}", text);
-        Assert.Contains("2", text);
+        text.ShouldContain("f_{m}");
+        text.ShouldContain("2");
     }
 
     [Fact]
@@ -24,7 +24,7 @@ public sealed class SumBuilderSplitingScalarsTests
     {
         SumBuilderSplitingScalars builder = new();
 
-        Assert.Equal(Complex.Zero, builder.Build());
+        builder.Build().ShouldBe(Complex.Zero);
     }
 
     [Fact]
@@ -36,9 +36,9 @@ public sealed class SumBuilderSplitingScalarsTests
         TensorBuilder clone = builder.Clone();
         clone.Put(TensorFactory.Parse("g_m"));
 
-        Assert.Equal("f_{m}", builder.Build().ToString(OutputFormat.Redberry));
+        builder.Build().ToString(OutputFormat.Redberry).ShouldBe("f_{m}");
         string cloneText = clone.Build().ToString(OutputFormat.Redberry);
-        Assert.Contains("f_{m}", cloneText);
-        Assert.Contains("g_{m}", cloneText);
+        cloneText.ShouldContain("f_{m}");
+        cloneText.ShouldContain("g_{m}");
     }
 }

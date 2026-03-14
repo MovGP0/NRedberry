@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using Xunit;
@@ -16,10 +16,10 @@ public sealed class GenPolynomialTests
         GenPolynomial<BigRational> squared = polynomial.Multiply(polynomial);
         GenPolynomial<BigRational> scaled = x.Multiply(new BigRational(2));
 
-        Assert.Equal("4", squared.Coefficient(ExpVector.Create([0L])).ToString());
-        Assert.Equal("4", squared.Coefficient(ExpVector.Create([1L])).ToString());
-        Assert.Equal("1", squared.Coefficient(ExpVector.Create([2L])).ToString());
-        Assert.Equal("x", scaled.Monic().ToString(["x"]));
+        squared.Coefficient(ExpVector.Create([0L])).ToString().ShouldBe("4");
+        squared.Coefficient(ExpVector.Create([1L])).ToString().ShouldBe("4");
+        squared.Coefficient(ExpVector.Create([2L])).ToString().ShouldBe("1");
+        scaled.Monic().ToString(["x"]).ShouldBe("x");
     }
 
     [Fact]
@@ -30,10 +30,10 @@ public sealed class GenPolynomialTests
 
         Monomial<BigRational>[] monomials = polynomial.ToArray();
 
-        Assert.Equal(2, monomials.Length);
-        Assert.Equal([1L], monomials[0].Exponent().GetVal());
-        Assert.Equal("1", monomials[0].Coefficient().ToString());
-        Assert.Equal([0L], monomials[1].Exponent().GetVal());
+        monomials.Length.ShouldBe(2);
+        monomials[0].Exponent().GetVal().ShouldBe([1L]);
+        monomials[0].Coefficient().ToString().ShouldBe("1");
+        monomials[1].Exponent().GetVal().ShouldBe([0L]);
     }
 
     private static GenPolynomialRing<BigRational> CreateRing()

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reflection;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
@@ -13,9 +13,9 @@ public sealed class ComplexBuilderTests
     {
         Type builderType = typeof(Complex).Assembly.GetType("NRedberry.Numbers.ComplexBuilder", throwOnError: true)!;
 
-        var exception = Assert.Throws<TargetInvocationException>(() => Activator.CreateInstance(builderType, [null]));
-        ArgumentNullException argumentNullException = Assert.IsType<ArgumentNullException>(exception.InnerException);
-        Assert.Equal("complex", argumentNullException.ParamName);
+        var exception = Should.Throw<TargetInvocationException>(() => Activator.CreateInstance(builderType, [null]));
+        ArgumentNullException argumentNullException = exception.InnerException.ShouldBeOfType<ArgumentNullException>();
+        argumentNullException.ParamName.ShouldBe("complex");
     }
 
     [Fact]
@@ -26,7 +26,7 @@ public sealed class ComplexBuilderTests
 
         var result = builder.Build();
 
-        Assert.Same(complex, result);
+        result.ShouldBeSameAs(complex);
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public sealed class ComplexBuilderTests
 
         TensorBuilder clone = builder.Clone();
 
-        Assert.Same(builder, clone);
+        clone.ShouldBeSameAs(builder);
     }
 
     [Fact]
@@ -46,7 +46,7 @@ public sealed class ComplexBuilderTests
         Complex complex = new(1, 1);
         TensorBuilder builder = complex.GetBuilder();
 
-        InvalidOperationException exception = Assert.Throws<InvalidOperationException>(() => builder.Put(Complex.Zero));
-        Assert.Contains("Can not put to Complex tensor builder", exception.Message, StringComparison.Ordinal);
+        InvalidOperationException exception = Should.Throw<InvalidOperationException>(() => builder.Put(Complex.Zero));
+        exception.Message.ShouldContain("Can not put to Complex tensor builder");
     }
 }

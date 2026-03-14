@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Expand;
+﻿using NRedberry.Transformations.Expand;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -11,9 +11,7 @@ public sealed class ExpandPortTests
     {
         NRedberry.Tensors.Tensor actual = ExpandPort.ExpandUsingPort(TensorApi.Parse("(a+b)*c"));
 
-        Assert.Equal(
-            ["a*c", "b*c"],
-            NormalizeSumOfProducts(actual.ToString(OutputFormat.Redberry)));
+        NormalizeSumOfProducts(actual.ToString(OutputFormat.Redberry)).ShouldBe(["a*c", "b*c"]);
     }
 
     [Fact]
@@ -23,7 +21,7 @@ public sealed class ExpandPortTests
 
         NRedberry.Tensors.Tensor actual = ExpandPort.ExpandUsingPort(tensor, false);
 
-        Assert.Same(tensor, actual);
+        actual.ShouldBeSameAs(tensor);
     }
 
     [Fact]
@@ -44,7 +42,7 @@ public sealed class ExpandPortTests
             .Select(NormalizeProduct)
             .OrderBy(term => term, StringComparer.Ordinal)
             .ToArray();
-        Assert.Equal(["a*c", "a*d", "b*c", "b*d"], normalized);
+        normalized.ShouldBe(["a*c", "a*d", "b*c", "b*d"]);
     }
 
     private static string[] NormalizeSumOfProducts(string expression)

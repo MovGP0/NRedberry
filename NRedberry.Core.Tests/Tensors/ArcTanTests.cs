@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using NRedberry.Tensors.Functions;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -15,12 +15,12 @@ public sealed class ArcTanTests
 
         NRedberry.Tensors.Tensor derivative = function.Derivative();
 
-        Assert.Same(argument, function[0]);
-        Assert.Equal(1, function.Size);
-        Assert.Equal("ArcTan[a]", function.ToString(OutputFormat.Redberry));
-        Assert.IsType<Power>(derivative);
-        Assert.Contains("a**2", derivative.ToString(OutputFormat.Redberry));
-        Assert.Equal("ScalarFunctionBuilder", function.GetBuilder().GetType().Name);
-        Assert.Same(ArcTanFactory.Factory, function.GetFactory());
+        function[0].ShouldBeSameAs(argument);
+        function.Size.ShouldBe(1);
+        function.ToString(OutputFormat.Redberry).ShouldBe("ArcTan[a]");
+        derivative.ShouldBeOfType<Power>();
+        derivative.ToString(OutputFormat.Redberry).ShouldContain("a**2");
+        function.GetBuilder().GetType().Name.ShouldBe("ScalarFunctionBuilder");
+        function.GetFactory().ShouldBeSameAs(ArcTanFactory.Factory);
     }
 }

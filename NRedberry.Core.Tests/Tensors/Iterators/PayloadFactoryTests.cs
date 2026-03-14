@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using NRedberry.Tensors.Iterators;
 using TensorApi = NRedberry.Tensors.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
@@ -17,20 +17,20 @@ public sealed class PayloadFactoryTests
             tensor,
             TraverseGuide.All,
             new TrackingPayloadFactory(allowLazyInitialization: true));
-        Assert.Equal(TraverseState.Entering, lazyIterator.Next());
+        lazyIterator.Next().ShouldBe(TraverseState.Entering);
         StackPosition<TrackingPayload> lazyStackPosition = lazyIterator.CurrentStackPosition();
-        Assert.False(lazyStackPosition.IsPayloadInitialized());
-        Assert.Equal("a+b", lazyStackPosition.GetPayload().CapturedTensor);
-        Assert.True(lazyStackPosition.IsPayloadInitialized());
+        lazyStackPosition.IsPayloadInitialized().ShouldBeFalse();
+        lazyStackPosition.GetPayload().CapturedTensor.ShouldBe("a+b");
+        lazyStackPosition.IsPayloadInitialized().ShouldBeTrue();
 
         TreeTraverseIterator<TrackingPayload> eagerIterator = new(
             tensor,
             TraverseGuide.All,
             new TrackingPayloadFactory(allowLazyInitialization: false));
-        Assert.Equal(TraverseState.Entering, eagerIterator.Next());
+        eagerIterator.Next().ShouldBe(TraverseState.Entering);
         StackPosition<TrackingPayload> eagerStackPosition = eagerIterator.CurrentStackPosition();
-        Assert.True(eagerStackPosition.IsPayloadInitialized());
-        Assert.Equal("a+b", eagerStackPosition.GetPayload().CapturedTensor);
+        eagerStackPosition.IsPayloadInitialized().ShouldBeTrue();
+        eagerStackPosition.GetPayload().CapturedTensor.ShouldBe("a+b");
     }
 
     private sealed class TrackingPayload(string capturedTensor) : Payload<TrackingPayload>

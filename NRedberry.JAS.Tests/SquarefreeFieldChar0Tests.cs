@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 using Xunit;
@@ -19,9 +19,9 @@ public sealed class SquarefreeFieldChar0Tests
         GenPolynomial<BigRational> part = squarefree.BaseSquarefreePart(repeated);
         SortedDictionary<GenPolynomial<BigRational>, long> factors = squarefree.BaseSquarefreeFactors(repeated);
 
-        Assert.Equal(ring.Univariate(0).Subtract(ring.FromInteger(1)), part);
-        Assert.Single(factors);
-        Assert.Contains(part, factors.Keys);
+        part.ShouldBe(ring.Univariate(0).Subtract(ring.FromInteger(1)));
+        factors.ShouldHaveSingleItem();
+        factors.Keys.ShouldContain(part);
     }
 
     private static GenPolynomialRing<BigRational> CreateRing()

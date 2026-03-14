@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Gb;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using Xunit;
@@ -15,8 +15,8 @@ public sealed class GroebnerBaseTests
         GenPolynomial<BigRational> constant = ring.FromInteger(1);
         GroebnerBase<BigRational> groebnerBase = new();
 
-        Assert.Equal(1, groebnerBase.CommonZeroTest([]));
-        Assert.Equal(0, groebnerBase.CommonZeroTest([x]));
-        Assert.Equal(-1, groebnerBase.CommonZeroTest([constant]));
+        groebnerBase.CommonZeroTest([]).ShouldBe(1);
+        groebnerBase.CommonZeroTest([x]).ShouldBe(0);
+        groebnerBase.CommonZeroTest([constant]).ShouldBe(-1);
     }
 }

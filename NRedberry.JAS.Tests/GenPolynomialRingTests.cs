@@ -1,5 +1,6 @@
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
@@ -13,10 +14,10 @@ public sealed class GenPolynomialRingTests
         GenPolynomial<BigRational> constant = ring.FromInteger(3);
         GenPolynomial<BigRational> variable = ring.Univariate(0);
 
-        Assert.True(constant.IsConstant());
-        Assert.Equal("3", constant.LeadingBaseCoefficient().ToString());
-        Assert.Equal([1L], variable.LeadingExpVector()!.GetVal());
-        Assert.Equal("1", ring.GetOneCoefficient().ToString());
+        constant.IsConstant().ShouldBeTrue();
+        constant.LeadingBaseCoefficient().ToString().ShouldBe("3");
+        variable.LeadingExpVector()!.GetVal().ShouldBe([1L]);
+        ring.GetOneCoefficient().ToString().ShouldBe("1");
     }
 
     [Fact]
@@ -25,9 +26,9 @@ public sealed class GenPolynomialRingTests
         GenPolynomialRing<BigRational> ring = CreateRing();
         string[]? variables = ring.GetVars();
 
-        Assert.NotNull(variables);
-        Assert.Equal(["x"], variables);
-        Assert.Contains("x", ring.VarsToString(), System.StringComparison.Ordinal);
+        variables.ShouldNotBeNull();
+        variables.ShouldBe(["x"]);
+        ring.VarsToString().ShouldContain("x");
     }
 
     private static GenPolynomialRing<BigRational> CreateRing()

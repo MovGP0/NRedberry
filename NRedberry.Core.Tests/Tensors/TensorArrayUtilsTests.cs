@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -14,7 +14,7 @@ public sealed class TensorArrayUtilsTests
             TensorFactory.Parse("c"),
             TensorFactory.Parse("d"));
 
-        Assert.Equal(["a", "b", "c", "d"], result.Select(t => t.ToString(OutputFormat.Redberry)).ToArray());
+        result.Select(t => t.ToString(OutputFormat.Redberry)).ToArray().ShouldBe(["a", "b", "c", "d"]);
     }
 
     [Fact]
@@ -24,6 +24,6 @@ public sealed class TensorArrayUtilsTests
             [TensorFactory.Parse("a"), TensorFactory.Parse("b"), TensorFactory.Parse("c")],
             1);
 
-        Assert.Equal(["a", "c"], result.Select(t => t.ToString(OutputFormat.Redberry)).ToArray());
+        result.Select(t => t.ToString(OutputFormat.Redberry)).ToArray().ShouldBe(["a", "c"]);
     }
 }

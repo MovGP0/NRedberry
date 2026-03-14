@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -10,7 +10,7 @@ public sealed class ArraysTests
     {
         int[] actual = Arrays.copyOfRange([1, 2, 3, 4], 1, 3);
 
-        Assert.Equal([2, 3], actual);
+        actual.ShouldBe([2, 3]);
     }
 
     [Fact]
@@ -18,7 +18,7 @@ public sealed class ArraysTests
     {
         int[] actual = Arrays.copyOf([1, 2], 4);
 
-        Assert.Equal([1, 2, 0, 0], actual);
+        actual.ShouldBe([1, 2, 0, 0]);
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public sealed class ArraysTests
 
         Arrays.fill(actual, 7);
 
-        Assert.Equal([7, 7, 7], actual);
+        actual.ShouldBe([7, 7, 7]);
     }
 
     [Fact]
@@ -36,7 +36,7 @@ public sealed class ArraysTests
     {
         int actual = Arrays.BinarySearch([1, 3, 5, 7], 5);
 
-        Assert.Equal(2, actual);
+        actual.ShouldBe(2);
     }
 
     [Fact]
@@ -44,6 +44,6 @@ public sealed class ArraysTests
     {
         int actual = Arrays.BinarySearch([1, 3, 5, 7], 4);
 
-        Assert.Equal(-3, actual);
+        actual.ShouldBe(-3);
     }
 }

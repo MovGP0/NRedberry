@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NRedberry.Concurrent;
 using NRedberry.IndexMapping;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Indexmapping;
@@ -12,9 +13,9 @@ public sealed class MappingsPortTests
     [Fact]
     public void ConstructorShouldThrowWhenInnerPortIsNull()
     {
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => new MappingsPort(null!));
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() => new MappingsPort(null!));
 
-        Assert.Equal("innerPort", exception.ParamName);
+        exception.ParamName.ShouldBe("innerPort");
     }
 
     [Fact]
@@ -24,7 +25,7 @@ public sealed class MappingsPortTests
 
         Mapping? result = mappingsPort.Take();
 
-        Assert.Null(result);
+        result.ShouldBeNull();
     }
 
     [Fact]
@@ -32,7 +33,7 @@ public sealed class MappingsPortTests
     {
         var mappingsPort = new MappingsPort(new MappingsPortTestsSingleBufferOutputPortDouble(new MappingsPortTestsBufferDouble()));
 
-        Assert.Throws<NotImplementedException>(() => mappingsPort.Take());
+        Should.Throw<NotImplementedException>(() => mappingsPort.Take());
     }
 
     private sealed class MappingsPortTestsNullOutputPortDouble : IOutputPort<IIndexMappingBuffer>

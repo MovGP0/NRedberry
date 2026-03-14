@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -10,8 +10,8 @@ public sealed class EmptyIteratorTests
     {
         EmptyIterator<int> iterator = EmptyIterator<int>.Instance;
 
-        Assert.False(iterator.MoveNext());
-        Assert.Throws<InvalidOperationException>(() => _ = iterator.Current);
+        iterator.MoveNext().ShouldBeFalse();
+        Should.Throw<InvalidOperationException>(() => _ = iterator.Current);
     }
 
     [Fact]
@@ -22,6 +22,6 @@ public sealed class EmptyIteratorTests
         iterator.Reset();
         iterator.Dispose();
 
-        Assert.False(iterator.MoveNext());
+        iterator.MoveNext().ShouldBeFalse();
     }
 }

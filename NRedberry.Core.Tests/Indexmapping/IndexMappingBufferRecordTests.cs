@@ -1,5 +1,6 @@
 using NRedberry.IndexMapping;
 using NRedberry.Indices;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Indexmapping;
@@ -18,10 +19,10 @@ public sealed class IndexMappingBufferRecordTests
 
         IndexMappingBufferRecord record = new(from, to);
 
-        Assert.Equal(IndicesUtils.GetNameWithType(to), record.GetIndexName());
-        Assert.Equal(0b110, record.GetStates());
-        Assert.True(record.DiffStatesInitialized());
-        Assert.False(record.IsContracted());
+        record.GetIndexName().ShouldBe(IndicesUtils.GetNameWithType(to));
+        record.GetStates().ShouldBe((byte)0b110);
+        record.DiffStatesInitialized().ShouldBeTrue();
+        record.IsContracted().ShouldBeFalse();
     }
 
     [Fact]
@@ -32,10 +33,10 @@ public sealed class IndexMappingBufferRecordTests
 
         IndexMappingBufferRecord record = new(from, to);
 
-        Assert.Equal(IndicesUtils.GetNameWithType(to), record.GetIndexName());
-        Assert.Equal(0b001, record.GetStates());
-        Assert.False(record.DiffStatesInitialized());
-        Assert.False(record.IsContracted());
+        record.GetIndexName().ShouldBe(IndicesUtils.GetNameWithType(to));
+        record.GetStates().ShouldBe((byte)0b001);
+        record.DiffStatesInitialized().ShouldBeFalse();
+        record.IsContracted().ShouldBeFalse();
     }
 
     [Fact]
@@ -49,8 +50,8 @@ public sealed class IndexMappingBufferRecordTests
 
         bool result = record.TryMap(from, differentTargetName);
 
-        Assert.False(result);
-        Assert.Equal(0b001, record.GetStates());
+        result.ShouldBeFalse();
+        record.GetStates().ShouldBe((byte)0b001);
     }
 
     [Fact]
@@ -64,7 +65,7 @@ public sealed class IndexMappingBufferRecordTests
         int inconsistentFrom = CreateIndex(NameA, true);
         int matchingTargetName = CreateIndex(NameA, false);
 
-        AssertInconsistentMappingFailure(() => record.TryMap(inconsistentFrom, matchingTargetName));
+        ShouldFailWithInconsistentMapping(() => record.TryMap(inconsistentFrom, matchingTargetName));
     }
 
     [Fact]
@@ -78,7 +79,7 @@ public sealed class IndexMappingBufferRecordTests
         int anotherFrom = CreateIndex(NameA, true);
         int sameTargetState = CreateIndex(NameA, false);
 
-        AssertInconsistentMappingFailure(() => record.TryMap(anotherFrom, sameTargetState));
+        ShouldFailWithInconsistentMapping(() => record.TryMap(anotherFrom, sameTargetState));
     }
 
     [Fact]
@@ -94,9 +95,9 @@ public sealed class IndexMappingBufferRecordTests
 
         bool result = record.TryMap(secondFrom, secondTo);
 
-        Assert.True(result);
-        Assert.Equal(0b011, record.GetStates());
-        Assert.True(record.IsContracted());
+        result.ShouldBeTrue();
+        record.GetStates().ShouldBe((byte)0b011);
+        record.IsContracted().ShouldBeTrue();
     }
 
     [Fact]
@@ -111,9 +112,9 @@ public sealed class IndexMappingBufferRecordTests
 
         record.InvertStates();
 
-        Assert.Equal((byte)(before ^ 0b011), record.GetStates());
-        Assert.NotEqual(toRawBefore, record.GetToRawState());
-        Assert.False(record.IsContracted());
+        record.GetStates().ShouldBe((byte)(before ^ 0b011));
+        record.GetToRawState().ShouldNotBe(toRawBefore);
+        record.IsContracted().ShouldBeFalse();
     }
 
     [Fact]
@@ -130,10 +131,10 @@ public sealed class IndexMappingBufferRecordTests
 
         record.InvertStates();
 
-        Assert.Equal(before, record.GetStates());
-        Assert.Equal(toRawBefore, record.GetToRawState());
-        Assert.Equal(fromRawBefore, record.GetFromRawState());
-        Assert.True(record.IsContracted());
+        record.GetStates().ShouldBe(before);
+        record.GetToRawState().ShouldBe(toRawBefore);
+        record.GetFromRawState().ShouldBe(fromRawBefore);
+        record.IsContracted().ShouldBeTrue();
     }
 
     [Fact]
@@ -143,28 +144,28 @@ public sealed class IndexMappingBufferRecordTests
 
         IndexMappingBufferRecord clone = original.Clone();
 
-        Assert.NotSame(original, clone);
-        Assert.Equal(original, clone);
-        Assert.Equal(original.GetHashCode(), clone.GetHashCode());
+        clone.ShouldNotBeSameAs(original);
+        clone.ShouldBe(original);
+        clone.GetHashCode().ShouldBe(original.GetHashCode());
 
         clone.InvertStates();
 
-        Assert.NotEqual(original, clone);
-        Assert.NotEqual(original.GetHashCode(), clone.GetHashCode());
+        clone.ShouldNotBe(original);
+        clone.GetHashCode().ShouldNotBe(original.GetHashCode());
     }
 
-    private static void AssertInconsistentMappingFailure(Action action)
+    private static void ShouldFailWithInconsistentMapping(Action action)
     {
         Exception exception = Record.Exception(action);
-        Assert.NotNull(exception);
+        exception.ShouldNotBeNull();
 
         if (exception is InconsistentIndicesException)
         {
             return;
         }
 
-        TypeInitializationException typeInitializationException = Assert.IsType<TypeInitializationException>(exception);
-        Assert.Contains("InconsistentIndicesException", typeInitializationException.StackTrace);
+        TypeInitializationException typeInitializationException = exception.ShouldBeOfType<TypeInitializationException>();
+        typeInitializationException.StackTrace.ShouldContain("InconsistentIndicesException");
     }
 
     private static int CreateIndex(int name, bool upper)

@@ -1,3 +1,4 @@
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -16,12 +17,12 @@ public sealed class PermutationsOrderOfPermutationIsOddTests
         short[] identityShortPermutation = [0, 1, 2, 3, 4];
         sbyte[] identitySbytePermutation = [0, 1, 2, 3, 4];
 
-        Assert.True(GroupPermutations.OrderOfPermutationIsOdd(emptyIntPermutation));
-        Assert.True(GroupPermutations.OrderOfPermutationIsOdd(emptyShortPermutation));
-        Assert.True(GroupPermutations.OrderOfPermutationIsOdd(emptySbytePermutation));
-        Assert.True(GroupPermutations.OrderOfPermutationIsOdd(identityIntPermutation));
-        Assert.True(GroupPermutations.OrderOfPermutationIsOdd(identityShortPermutation));
-        Assert.True(GroupPermutations.OrderOfPermutationIsOdd(identitySbytePermutation));
+        GroupPermutations.OrderOfPermutationIsOdd(emptyIntPermutation).ShouldBeTrue();
+        GroupPermutations.OrderOfPermutationIsOdd(emptyShortPermutation).ShouldBeTrue();
+        GroupPermutations.OrderOfPermutationIsOdd(emptySbytePermutation).ShouldBeTrue();
+        GroupPermutations.OrderOfPermutationIsOdd(identityIntPermutation).ShouldBeTrue();
+        GroupPermutations.OrderOfPermutationIsOdd(identityShortPermutation).ShouldBeTrue();
+        GroupPermutations.OrderOfPermutationIsOdd(identitySbytePermutation).ShouldBeTrue();
     }
 
     [Fact(DisplayName = "OrderOfPermutationIsOdd should return true when all cycles are odd length")]
@@ -31,9 +32,9 @@ public sealed class PermutationsOrderOfPermutationIsOddTests
         short[] shortPermutation = [1, 2, 0, 4, 5, 3, 6];
         sbyte[] sbytePermutation = [1, 2, 0, 4, 5, 3, 6];
 
-        Assert.True(GroupPermutations.OrderOfPermutationIsOdd(intPermutation));
-        Assert.True(GroupPermutations.OrderOfPermutationIsOdd(shortPermutation));
-        Assert.True(GroupPermutations.OrderOfPermutationIsOdd(sbytePermutation));
+        GroupPermutations.OrderOfPermutationIsOdd(intPermutation).ShouldBeTrue();
+        GroupPermutations.OrderOfPermutationIsOdd(shortPermutation).ShouldBeTrue();
+        GroupPermutations.OrderOfPermutationIsOdd(sbytePermutation).ShouldBeTrue();
     }
 
     [Fact(DisplayName = "OrderOfPermutationIsOdd should return false when any cycle has even length")]
@@ -43,9 +44,9 @@ public sealed class PermutationsOrderOfPermutationIsOddTests
         short[] shortPermutation = [1, 0, 3, 2, 4];
         sbyte[] sbytePermutation = [1, 0, 3, 2, 4];
 
-        Assert.False(GroupPermutations.OrderOfPermutationIsOdd(intPermutation));
-        Assert.False(GroupPermutations.OrderOfPermutationIsOdd(shortPermutation));
-        Assert.False(GroupPermutations.OrderOfPermutationIsOdd(sbytePermutation));
+        GroupPermutations.OrderOfPermutationIsOdd(intPermutation).ShouldBeFalse();
+        GroupPermutations.OrderOfPermutationIsOdd(shortPermutation).ShouldBeFalse();
+        GroupPermutations.OrderOfPermutationIsOdd(sbytePermutation).ShouldBeFalse();
     }
 
     [Fact(DisplayName = "OrderOfPermutationIsOdd should not mutate input arrays")]
@@ -63,8 +64,8 @@ public sealed class PermutationsOrderOfPermutationIsOddTests
         _ = GroupPermutations.OrderOfPermutationIsOdd(shortPermutation);
         _ = GroupPermutations.OrderOfPermutationIsOdd(sbytePermutation);
 
-        Assert.Equal(intSnapshot, intPermutation);
-        Assert.Equal(shortSnapshot, shortPermutation);
-        Assert.Equal(sbyteSnapshot, sbytePermutation);
+        intPermutation.ShouldBe(intSnapshot);
+        shortPermutation.ShouldBe(shortSnapshot);
+        sbytePermutation.ShouldBe(sbyteSnapshot);
     }
 }

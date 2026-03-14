@@ -1,4 +1,5 @@
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -17,9 +18,9 @@ public sealed class PermutationsParityTests
         int shortParity = GroupPermutations.Parity(shortIdentity);
         int sbyteParity = GroupPermutations.Parity(sbyteIdentity);
 
-        Assert.Equal(0, intParity);
-        Assert.Equal(0, shortParity);
-        Assert.Equal(0, sbyteParity);
+        intParity.ShouldBe(0);
+        shortParity.ShouldBe(0);
+        sbyteParity.ShouldBe(0);
     }
 
     [Fact(DisplayName = "Parity should return one for a single transposition across array overloads")]
@@ -33,9 +34,9 @@ public sealed class PermutationsParityTests
         int shortParity = GroupPermutations.Parity(shortTransposition);
         int sbyteParity = GroupPermutations.Parity(sbyteTransposition);
 
-        Assert.Equal(1, intParity);
-        Assert.Equal(1, shortParity);
-        Assert.Equal(1, sbyteParity);
+        intParity.ShouldBe(1);
+        shortParity.ShouldBe(1);
+        sbyteParity.ShouldBe(1);
     }
 
     [Fact(DisplayName = "Parity should match mixed disjoint cycle parity calculation")]
@@ -45,7 +46,7 @@ public sealed class PermutationsParityTests
 
         int parity = GroupPermutations.Parity(permutation);
 
-        Assert.Equal(1, parity);
+        parity.ShouldBe(1);
     }
 
     [Fact(DisplayName = "Parity overloads should produce consistent results")]
@@ -59,8 +60,8 @@ public sealed class PermutationsParityTests
         int shortParity = GroupPermutations.Parity(shortPermutation);
         int sbyteParity = GroupPermutations.Parity(sbytePermutation);
 
-        Assert.Equal(intParity, shortParity);
-        Assert.Equal(intParity, sbyteParity);
+        shortParity.ShouldBe(intParity);
+        sbyteParity.ShouldBe(intParity);
     }
 
     [Fact(DisplayName = "Parity should not mutate input arrays")]
@@ -78,8 +79,8 @@ public sealed class PermutationsParityTests
         _ = GroupPermutations.Parity(shortPermutation);
         _ = GroupPermutations.Parity(sbytePermutation);
 
-        Assert.Equal(intSnapshot, intPermutation);
-        Assert.Equal(shortSnapshot, shortPermutation);
-        Assert.Equal(sbyteSnapshot, sbytePermutation);
+        intPermutation.ShouldBe(intSnapshot);
+        shortPermutation.ShouldBe(shortSnapshot);
+        sbytePermutation.ShouldBe(sbyteSnapshot);
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -12,8 +12,8 @@ public sealed class TensorExtensionsTests
     {
         NRedberry.Tensors.Tensor result = TensorFactory.Parse("a").Pow(new Complex(2));
 
-        Assert.IsType<Power>(result);
-        Assert.Equal("a**2", result.ToString(OutputFormat.Redberry));
+        result.ShouldBeOfType<Power>();
+        result.ToString(OutputFormat.Redberry).ShouldBe("a**2");
     }
 
     [Fact]
@@ -25,10 +25,10 @@ public sealed class TensorExtensionsTests
         NRedberry.Tensors.Tensor product = TensorExtensions.Multiply(left, right);
         NRedberry.Tensors.Tensor chained = left.Multiply(right);
 
-        Assert.IsType<Product>(product);
-        Assert.Equal(product.ToString(OutputFormat.Redberry), chained.ToString(OutputFormat.Redberry));
-        Assert.Contains("a", product.ToString(OutputFormat.Redberry));
-        Assert.Contains("b", product.ToString(OutputFormat.Redberry));
+        product.ShouldBeOfType<Product>();
+        chained.ToString(OutputFormat.Redberry).ShouldBe(product.ToString(OutputFormat.Redberry));
+        product.ToString(OutputFormat.Redberry).ShouldContain("a");
+        product.ToString(OutputFormat.Redberry).ShouldContain("b");
     }
 
     [Fact]
@@ -38,9 +38,9 @@ public sealed class TensorExtensionsTests
             TensorFactory.Parse("a"),
             TensorFactory.Parse("b"));
 
-        Sum sum = Assert.IsType<Sum>(result);
-        Assert.Equal(2, sum.Size);
-        Assert.Contains("a", sum.ToString(OutputFormat.Redberry));
-        Assert.Contains("b", sum.ToString(OutputFormat.Redberry));
+        Sum sum = result.ShouldBeOfType<Sum>();
+        sum.Size.ShouldBe(2);
+        sum.ToString(OutputFormat.Redberry).ShouldContain("a");
+        sum.ToString(OutputFormat.Redberry).ShouldContain("b");
     }
 }

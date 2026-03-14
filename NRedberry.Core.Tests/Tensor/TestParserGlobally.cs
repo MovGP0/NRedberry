@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using TensorApi = NRedberry.Tensors.Tensors;
 using TensorCC = NRedberry.Tensors.CC;
 using TensorType = NRedberry.Tensors.Tensor;
@@ -76,7 +76,7 @@ public sealed class TestParserGlobally
             TensorType tensor = TensorApi.Parse(expression);
             TensorType reparsed = TensorApi.Parse(tensor.ToString());
 
-            Assert.True(TensorUtils.EqualsExactly(tensor, reparsed));
+            TensorUtils.EqualsExactly(tensor, reparsed).ShouldBeTrue();
         }
     }
 
@@ -93,7 +93,7 @@ public sealed class TestParserGlobally
             foreach (string expression in expressions)
             {
                 TensorType tensor = TensorApi.Parse(expression);
-                Assert.NotNull(tensor);
+                tensor.ShouldNotBeNull();
             }
         }
         finally

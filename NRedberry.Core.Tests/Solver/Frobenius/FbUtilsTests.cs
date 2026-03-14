@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using NRedberry.Solver.Frobenius;
@@ -13,27 +13,27 @@ public sealed class FbUtilsTests
     {
         int result = FbUtils.SolutionComparator.Compare([1, 2, 3], [1, 2, 4]);
 
-        Assert.True(result < 0);
-        Assert.Equal(0, FbUtils.SolutionComparator.Compare([1, 2, 3], [1, 2, 3]));
-        Assert.True(FbUtils.SolutionComparator.Compare([1, 3, 0], [1, 2, 9]) > 0);
+        result < 0.ShouldBeTrue();
+        FbUtils.SolutionComparator.Compare([1, 2, 3], [1, 2, 3]).ShouldBe(0);
+        FbUtils.SolutionComparator.Compare([1, 3, 0], [1, 2, 9]) > 0.ShouldBeTrue();
     }
 
     [Fact]
     public void ShouldThrowWhenComparingDifferentSolutionSizes()
     {
-        Assert.Throws<ArgumentException>(() => FbUtils.SolutionComparator.Compare([1, 2], [1]));
+        Should.Throw<ArgumentException>(() => FbUtils.SolutionComparator.Compare([1, 2], [1]));
     }
 
     [Fact]
     public void ShouldThrowWhenGetAllSolutionsInputIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => FbUtils.GetAllSolutions(null!));
+        Should.Throw<ArgumentNullException>(() => FbUtils.GetAllSolutions(null!));
     }
 
     [Fact]
     public void ShouldThrowWhenIterableInputIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => FbUtils.Iterable(null!));
+        Should.Throw<ArgumentNullException>(() => FbUtils.Iterable(null!));
     }
 
     [Fact]
@@ -83,9 +83,9 @@ public sealed class FbUtilsTests
 
         IEnumerator<int[]> iterator = FbUtils.Iterator(equations);
 
-        Assert.True(iterator.MoveNext());
-        Assert.Equal(expected[0], iterator.Current);
-        Assert.False(iterator.MoveNext());
+        iterator.MoveNext().ShouldBeTrue();
+        iterator.Current.ShouldBe(expected[0]);
+        iterator.MoveNext().ShouldBeFalse();
     }
 
     private static void AssertSolutionsEqual(IReadOnlyCollection<int[]> expected, IEnumerable<int[]> actual)
@@ -96,10 +96,10 @@ public sealed class FbUtilsTests
         expectedSorted.Sort(FbUtils.SolutionComparator);
         actualSorted.Sort(FbUtils.SolutionComparator);
 
-        Assert.Equal(expectedSorted.Count, actualSorted.Count);
+        actualSorted.Count.ShouldBe(expectedSorted.Count);
         for (int i = 0; i < expectedSorted.Count; i++)
         {
-            Assert.Equal(expectedSorted[i], actualSorted[i]);
+            actualSorted[i].ShouldBe(expectedSorted[i]);
         }
     }
 }

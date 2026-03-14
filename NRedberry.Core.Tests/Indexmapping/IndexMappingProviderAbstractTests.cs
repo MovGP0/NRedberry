@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NRedberry.Concurrent;
 using NRedberry.IndexMapping;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Indexmapping;
@@ -11,10 +12,10 @@ public sealed class IndexMappingProviderAbstractTests
     [Fact]
     public void ConstructorShouldThrowWhenOutputPortIsNull()
     {
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() =>
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() =>
             new IndexMappingProviderAbstractTestDouble(null!));
 
-        Assert.Equal("outputPort", exception.ParamName);
+        exception.ParamName.ShouldBe("outputPort");
     }
 
     [Fact]
@@ -27,10 +28,10 @@ public sealed class IndexMappingProviderAbstractTests
 
         bool result = provider.Tick();
 
-        Assert.True(result);
-        Assert.Equal(1, provider.BeforeTickCallCount);
-        Assert.Equal(1, outputPort.TakeCallCount);
-        Assert.Equal(["BeforeTick", "Take"], events);
+        result.ShouldBeTrue();
+        provider.BeforeTickCallCount.ShouldBe(1);
+        outputPort.TakeCallCount.ShouldBe(1);
+        events.ShouldBe(["BeforeTick", "Take"]);
     }
 
     [Fact]
@@ -42,10 +43,10 @@ public sealed class IndexMappingProviderAbstractTests
 
         bool result = provider.Tick();
 
-        Assert.False(result);
-        Assert.Equal(1, provider.BeforeTickCallCount);
-        Assert.Equal(1, outputPort.TakeCallCount);
-        Assert.Equal(["BeforeTick", "Take"], events);
+        result.ShouldBeFalse();
+        provider.BeforeTickCallCount.ShouldBe(1);
+        outputPort.TakeCallCount.ShouldBe(1);
+        events.ShouldBe(["BeforeTick", "Take"]);
     }
 
     [Fact]
@@ -63,12 +64,12 @@ public sealed class IndexMappingProviderAbstractTests
         IIndexMappingBuffer? secondTake = provider.Take();
         IIndexMappingBuffer? thirdTakeWithoutTick = provider.Take();
 
-        Assert.True(firstTick);
-        Assert.True(secondTick);
-        Assert.Same(firstBuffer, firstTake);
-        Assert.Same(secondBuffer, secondTake);
-        Assert.Null(secondTakeWithoutTick);
-        Assert.Null(thirdTakeWithoutTick);
+        firstTick.ShouldBeTrue();
+        secondTick.ShouldBeTrue();
+        firstTake.ShouldBeSameAs(firstBuffer);
+        secondTake.ShouldBeSameAs(secondBuffer);
+        secondTakeWithoutTick.ShouldBeNull();
+        thirdTakeWithoutTick.ShouldBeNull();
     }
 }
 

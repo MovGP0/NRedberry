@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NRedberry.Concurrent;
 using NRedberry.IndexMapping;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Indexmapping;
@@ -14,7 +15,7 @@ public sealed class IIndexMappingProviderTests
     {
         Type type = typeof(IIndexMappingProvider);
 
-        Assert.Contains(typeof(IOutputPort<IIndexMappingBuffer>), type.GetInterfaces());
+        type.GetInterfaces().ShouldContain(typeof(IOutputPort<IIndexMappingBuffer>));
     }
 
     [Fact]
@@ -24,8 +25,8 @@ public sealed class IIndexMappingProviderTests
 
         var method = type.GetMethod(nameof(IIndexMappingProvider.Tick), Type.EmptyTypes);
 
-        Assert.NotNull(method);
-        Assert.Equal(typeof(bool), method.ReturnType);
+        method.ShouldNotBeNull();
+        method.ReturnType.ShouldBe(typeof(bool));
     }
 
     [Fact]
@@ -33,7 +34,7 @@ public sealed class IIndexMappingProviderTests
     {
         IIndexMappingProvider provider = IndexMappingProviderUtil.EmptyProvider;
 
-        Assert.NotNull(provider);
+        provider.ShouldNotBeNull();
     }
 
     [Fact]
@@ -43,7 +44,7 @@ public sealed class IIndexMappingProviderTests
 
         bool result = provider.Tick();
 
-        Assert.False(result);
+        result.ShouldBeFalse();
     }
 
     [Fact]
@@ -53,16 +54,16 @@ public sealed class IIndexMappingProviderTests
 
         IIndexMappingBuffer? result = provider.Take();
 
-        Assert.Null(result);
+        result.ShouldBeNull();
     }
 
     [Fact]
     public void SingletonShouldThrowArgumentNullExceptionWhenBufferIsNull()
     {
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() =>
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() =>
             IndexMappingProviderUtil.Singleton(buffer: null!));
 
-        Assert.Equal("buffer", exception.ParamName);
+        exception.ParamName.ShouldBe("buffer");
     }
 
     [Fact]
@@ -75,8 +76,8 @@ public sealed class IIndexMappingProviderTests
         IIndexMappingBuffer first = provider.Take();
         IIndexMappingBuffer? second = provider.Take();
 
-        Assert.Same(buffer, first);
-        Assert.Null(second);
+        first.ShouldBeSameAs(buffer);
+        second.ShouldBeNull();
     }
 }
 #pragma warning restore CS0618

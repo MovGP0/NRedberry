@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using Xunit;
 
@@ -19,11 +19,11 @@ public sealed class TermOrderOptimizationTests
 
         sortedPermutation.Sort();
 
-        Assert.NotNull(matrix);
-        Assert.Equal(2, matrix!.Count);
-        Assert.NotNull(aggregated);
-        Assert.NotEmpty(aggregated!);
-        Assert.Equal([0, 1], sortedPermutation);
+        matrix.ShouldNotBeNull();
+        matrix!.Count.ShouldBe(2);
+        aggregated.ShouldNotBeNull();
+        aggregated!.ShouldNotBeEmpty();
+        sortedPermutation.ShouldBe([0, 1]);
     }
 
     [Fact]
@@ -44,15 +44,15 @@ public sealed class TermOrderOptimizationTests
         List<int> inverse = TermOrderOptimization.InversePermutation(permutation);
         OptimizedPolynomialList<BigRational> optimized = TermOrderOptimization.OptimizeTermOrder(ring, [polynomial]);
 
-        Assert.Equal(["y", "x"], permutedStrings);
-        Assert.Equal([20L, 10L], permutedLongs);
-        Assert.Equal([2L, 1L], permutedExponent.GetVal());
-        Assert.Equal(["y", "x"], permutedRing!.GetVars()!);
-        Assert.Equal("2", permutedPolynomial!.Coefficient(ExpVector.Create([1L, 0L])).ToString());
-        Assert.Equal("1", permutedPolynomial.Coefficient(ExpVector.Create([0L, 1L])).ToString());
-        Assert.Single(permutedList!);
-        Assert.Equal([1, 0], inverse);
-        Assert.Single(optimized.Polynomials);
-        Assert.Equal(2, optimized.Perm.Count);
+        permutedStrings.ShouldBe(["y", "x"]);
+        permutedLongs.ShouldBe([20L, 10L]);
+        permutedExponent.GetVal().ShouldBe([2L, 1L]);
+        permutedRing!.GetVars()!.ShouldBe(["y", "x"]);
+        permutedPolynomial!.Coefficient(ExpVector.Create([1L, 0L])).ToString().ShouldBe("2");
+        permutedPolynomial.Coefficient(ExpVector.Create([0L, 1L])).ToString().ShouldBe("1");
+        permutedList!.ShouldHaveSingleItem();
+        inverse.ShouldBe([1, 0]);
+        optimized.Polynomials.ShouldHaveSingleItem();
+        optimized.Perm.Count.ShouldBe(2);
     }
 }

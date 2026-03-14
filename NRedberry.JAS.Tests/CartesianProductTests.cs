@@ -1,5 +1,6 @@
 using System.Linq;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Util;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
@@ -17,9 +18,7 @@ public sealed class CartesianProductTests
 
         List<string> tuples = product.Select(tuple => string.Join(",", tuple)).ToList();
 
-        Assert.Equal(
-            ["1,10,100", "1,20,100", "2,10,100", "2,20,100"],
-            tuples);
+        tuples.ShouldBe(["1,10,100", "1,20,100", "2,10,100", "2,20,100"]);
     }
 
     [Fact]
@@ -30,6 +29,6 @@ public sealed class CartesianProductTests
             []
         ]);
 
-        Assert.Empty(product);
+        product.ShouldBeEmpty();
     }
 }

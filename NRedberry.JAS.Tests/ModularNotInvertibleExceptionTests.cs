@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using Xunit;
 
@@ -12,10 +12,10 @@ public sealed class ModularNotInvertibleExceptionTests
         InvalidOperationException innerException = new("boom");
         ModularNotInvertibleException exception = new(innerException, 6, 3, 2);
 
-        Assert.Same(innerException, exception.InnerException);
-        Assert.Equal("6", exception.F?.ToString());
-        Assert.Equal("3", exception.F1?.ToString());
-        Assert.Equal("2", exception.F2?.ToString());
-        Assert.Contains("f = 6", exception.ToString(), StringComparison.Ordinal);
+        exception.InnerException.ShouldBeSameAs(innerException);
+        exception.F?.ToString().ShouldBe("6");
+        exception.F1?.ToString().ShouldBe("3");
+        exception.F2?.ToString().ShouldBe("2");
+        exception.ToString().ShouldContain("f = 6");
     }
 }

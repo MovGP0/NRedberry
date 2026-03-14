@@ -404,6 +404,9 @@ public override int GetHashCode()
 - Build error note: comparer-aware Shouldly string helpers should use `System.StringComparison` directly; this avoids coupling to Shouldly-specific enums and keeps call sites aligned with standard .NET string APIs.
 - Build error note: `ShouldBeTrue` takes only the optional custom-message string; after converting from `Assert.True(condition, message)`, keep the condition as the receiver and pass only the message to avoid CS1501.
 - Build error note: collection expressions can make `Permute(...)` calls ambiguous when both array and `List<T>` overloads exist; use explicit `new T[] { ... }` arrays in tests to force the intended overload and avoid CS0121.
+- Build error note: private helper methods inside test classes must not keep the `this` modifier after an assertion rewrite; extension methods are only valid on non-generic static classes, so convert them back to ordinary private static helpers to avoid CS1106.
+- Build error note: `dotnet format` on SHU001 can rewrite predicate `ShouldContain` calls backwards (for example `item => ... .ShouldContain(collection)`), which yields CS0201; the collection must remain the receiver, i.e. `collection.ShouldContain(item => ...)`.
+- Build error note: `IndexMappings.Compare1(...)` returns `bool?`; use `ShouldBe(false)`/`ShouldBeNull()` instead of `ShouldBeFalse()` to avoid CS1929 on nullable booleans.
 
 ## Roslynator Diagnostics Reference
 

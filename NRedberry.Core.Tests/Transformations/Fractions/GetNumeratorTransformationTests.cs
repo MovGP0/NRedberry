@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Fractions;
+﻿using NRedberry.Transformations.Fractions;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -11,12 +11,12 @@ public sealed class GetNumeratorTransformationTests
     {
         NRedberry.Tensors.Tensor actual = GetNumeratorTransformation.Instance.Transform(TensorApi.Parse("a/b"));
 
-        Assert.Equal("a", actual.ToString(OutputFormat.Redberry));
+        actual.ToString(OutputFormat.Redberry).ShouldBe("a");
     }
 
     [Fact]
     public void ShouldExposeReadableName()
     {
-        Assert.Equal("Numerator", GetNumeratorTransformation.Instance.ToString(OutputFormat.Redberry));
+        GetNumeratorTransformation.Instance.ToString(OutputFormat.Redberry).ShouldBe("Numerator");
     }
 }

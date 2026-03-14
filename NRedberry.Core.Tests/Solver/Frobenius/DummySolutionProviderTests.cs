@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using NRedberry.Solver.Frobenius;
 using Xunit;
 
@@ -9,19 +9,19 @@ public sealed class DummySolutionProviderTests
     [Fact]
     public void ShouldThrowWhenSolutionIsNull()
     {
-        var exception = Assert.Throws<TargetInvocationException>(() => CreateProvider(null!, [1, 2]));
+        var exception = Should.Throw<TargetInvocationException>(() => CreateProvider(null!, [1, 2]));
 
-        ArgumentNullException innerException = Assert.IsType<ArgumentNullException>(exception.InnerException);
-        Assert.Equal("solution", innerException.ParamName);
+        ArgumentNullException innerException = exception.InnerException.ShouldBeOfType<ArgumentNullException>();
+        innerException.ParamName.ShouldBe("solution");
     }
 
     [Fact]
     public void ShouldThrowWhenCurrentRemainderIsNull()
     {
-        var exception = Assert.Throws<TargetInvocationException>(() => CreateProvider([1, 2], null!));
+        var exception = Should.Throw<TargetInvocationException>(() => CreateProvider([1, 2], null!));
 
-        ArgumentNullException innerException = Assert.IsType<ArgumentNullException>(exception.InnerException);
-        Assert.Equal("currentRemainder", innerException.ParamName);
+        ArgumentNullException innerException = exception.InnerException.ShouldBeOfType<ArgumentNullException>();
+        innerException.ParamName.ShouldBe("currentRemainder");
     }
 
     [Fact]
@@ -30,10 +30,10 @@ public sealed class DummySolutionProviderTests
         int[] solution = [3, 5];
         object provider = CreateProvider(solution, [10]);
 
-        Assert.True(Tick(provider));
-        Assert.Same(solution, Take(provider));
-        Assert.False(Tick(provider));
-        Assert.Null(Take(provider));
+        Tick(provider).ShouldBeTrue();
+        Take(provider).ShouldBeSameAs(solution);
+        Tick(provider).ShouldBeFalse();
+        Take(provider).ShouldBeNull();
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public sealed class DummySolutionProviderTests
         int[] remainders = [7, 11];
         object provider = CreateProvider([1], remainders);
 
-        Assert.Same(remainders, CurrentRemainders(provider));
+        CurrentRemainders(provider).ShouldBeSameAs(remainders);
     }
 
     private static object CreateProvider(int[] solution, int[] currentRemainder)

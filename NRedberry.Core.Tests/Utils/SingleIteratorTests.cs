@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -10,9 +10,9 @@ public sealed class SingleIteratorTests
     {
         using SingleIterator<int> iterator = new(42);
 
-        Assert.True(iterator.MoveNext());
-        Assert.Equal(42, iterator.Current);
-        Assert.False(iterator.MoveNext());
+        iterator.MoveNext().ShouldBeTrue();
+        iterator.Current.ShouldBe(42);
+        iterator.MoveNext().ShouldBeFalse();
     }
 
     [Fact]
@@ -20,10 +20,10 @@ public sealed class SingleIteratorTests
     {
         using SingleIterator<string> iterator = new("value");
 
-        Assert.True(iterator.MoveNext());
+        iterator.MoveNext().ShouldBeTrue();
         iterator.Reset();
-        Assert.Throws<InvalidOperationException>(() => _ = iterator.Current);
-        Assert.True(iterator.MoveNext());
-        Assert.Equal("value", iterator.Current);
+        Should.Throw<InvalidOperationException>(() => _ = iterator.Current);
+        iterator.MoveNext().ShouldBeTrue();
+        iterator.Current.ShouldBe("value");
     }
 }

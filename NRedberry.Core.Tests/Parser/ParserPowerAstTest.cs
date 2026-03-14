@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using Xunit;
 using TensorApi = NRedberry.Tensors.Tensors;
 
@@ -11,45 +11,45 @@ public sealed class ParserPowerAstTest
     {
         NRedberry.Tensors.Tensor tensor = TensorApi.Parse("Power[a,b]");
 
-        Assert.IsType<Power>(tensor);
-        Assert.True(TensorUtils.EqualsExactly(tensor, "Power[a,b]"));
+        tensor.ShouldBeOfType<Power>();
+        TensorUtils.EqualsExactly(tensor, "Power[a,b]").ShouldBeTrue();
     }
 
     [Fact]
     public void ShouldParseNestedPowerAssociativity()
     {
-        Assert.True(TensorUtils.EqualsExactly(TensorApi.Parse("Power[a,Power[b,c]]"), "Power[a,Power[b,c]]"));
-        Assert.True(TensorUtils.EqualsExactly(TensorApi.Parse("Power[a,Power[b,c]]"), "Power[a,Power[b,c]]"));
-        Assert.True(TensorUtils.EqualsExactly(TensorApi.Parse("Power[a,b*c]"), "Power[a,b*c]"));
+        TensorUtils.EqualsExactly(TensorApi.Parse("Power[a,Power[b,c]]"), "Power[a,Power[b,c]]").ShouldBeTrue();
+        TensorUtils.EqualsExactly(TensorApi.Parse("Power[a,Power[b,c]]"), "Power[a,Power[b,c]]").ShouldBeTrue();
+        TensorUtils.EqualsExactly(TensorApi.Parse("Power[a,b*c]"), "Power[a,b*c]").ShouldBeTrue();
     }
 
     [Fact]
     public void ShouldParsePowerWithProductSuffix()
     {
-        Assert.True(TensorUtils.EqualsExactly(TensorApi.Parse("Power[a,b]*c"), "Power[a,b]*c"));
+        TensorUtils.EqualsExactly(TensorApi.Parse("Power[a,b]*c"), "Power[a,b]*c").ShouldBeTrue();
     }
 
     [Fact]
     public void ShouldParsePowerWithProductPrefix()
     {
-        Assert.True(TensorUtils.EqualsExactly(TensorApi.Parse("c*Power[a,b]"), "Power[a,b]*c"));
+        TensorUtils.EqualsExactly(TensorApi.Parse("c*Power[a,b]"), "Power[a,b]*c").ShouldBeTrue();
     }
 
     [Fact]
     public void ShouldParsePowerWithSumSuffix()
     {
-        Assert.True(TensorUtils.EqualsExactly(TensorApi.Parse("Power[a,b]+c"), "Power[a,b]+c"));
+        TensorUtils.EqualsExactly(TensorApi.Parse("Power[a,b]+c"), "Power[a,b]+c").ShouldBeTrue();
     }
 
     [Fact]
     public void ShouldParsePowerWithSumInExponent()
     {
-        Assert.True(TensorUtils.EqualsExactly(TensorApi.Parse("Power[a,b+c]"), "Power[a,b+c]"));
+        TensorUtils.EqualsExactly(TensorApi.Parse("Power[a,b+c]"), "Power[a,b+c]").ShouldBeTrue();
     }
 
     [Fact]
     public void ShouldParsePowerWithSumPrefix()
     {
-        Assert.True(TensorUtils.EqualsExactly(TensorApi.Parse("c+Power[a,b]"), "Power[a,b]+c"));
+        TensorUtils.EqualsExactly(TensorApi.Parse("c+Power[a,b]"), "Power[a,b]+c").ShouldBeTrue();
     }
 }

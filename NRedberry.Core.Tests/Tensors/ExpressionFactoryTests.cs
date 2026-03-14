@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
 using IndicesType = NRedberry.Indices.Indices;
@@ -12,28 +12,28 @@ public sealed class ExpressionFactoryTests
     [Fact]
     public void ShouldExposeSingletonInstance()
     {
-        Assert.Same(ExpressionFactory.Instance, ExpressionFactory.Instance);
+        ExpressionFactory.Instance.ShouldBeSameAs(ExpressionFactory.Instance);
     }
 
     [Fact]
     public void ShouldThrowWhenTensorArrayIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => ExpressionFactory.Instance.Create(null!));
+        Should.Throw<ArgumentNullException>(() => ExpressionFactory.Instance.Create(null!));
     }
 
     [Fact]
     public void ShouldThrowWhenArgumentCountIsNotTwo()
     {
-        Assert.Throws<ArgumentException>(() => ExpressionFactory.Instance.Create());
-        Assert.Throws<ArgumentException>(() => ExpressionFactory.Instance.Create(Complex.One));
-        Assert.Throws<ArgumentException>(() => ExpressionFactory.Instance.Create(Complex.One, Complex.One, Complex.One));
+        Should.Throw<ArgumentException>(() => ExpressionFactory.Instance.Create());
+        Should.Throw<ArgumentException>(() => ExpressionFactory.Instance.Create(Complex.One));
+        Should.Throw<ArgumentException>(() => ExpressionFactory.Instance.Create(Complex.One, Complex.One, Complex.One));
     }
 
     [Fact]
     public void ShouldThrowWhenAnyArgumentIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => ExpressionFactory.Instance.Create(null!, Complex.One));
-        Assert.Throws<ArgumentNullException>(() => ExpressionFactory.Instance.Create(Complex.One, null!));
+        Should.Throw<ArgumentNullException>(() => ExpressionFactory.Instance.Create(null!, Complex.One));
+        Should.Throw<ArgumentNullException>(() => ExpressionFactory.Instance.Create(Complex.One, null!));
     }
 
     [Fact]
@@ -42,11 +42,11 @@ public sealed class ExpressionFactoryTests
         TensorType left = new TestTensor("L", 1, IndicesFactory.Create(Lower(1)));
         TensorType right = new TestTensor("R", 2, IndicesFactory.Create(Lower(1)));
 
-        Expression expression = Assert.IsType<Expression>(ExpressionFactory.Instance.Create(left, right));
+        Expression expression = ExpressionFactory.Instance.Create(left, right).ShouldBeOfType<Expression>();
 
-        Assert.Same(left, expression[0]);
-        Assert.Same(right, expression[1]);
-        Assert.True(expression.Indices.EqualsRegardlessOrder(left.Indices.GetFree()));
+        expression[0].ShouldBeSameAs(left);
+        expression[1].ShouldBeSameAs(right);
+        expression.Indices.EqualsRegardlessOrder(left.Indices.GetFree()).ShouldBeTrue();
     }
 
     [Fact]
@@ -54,9 +54,9 @@ public sealed class ExpressionFactoryTests
     {
         TensorType left = new TestTensor("L", 1, IndicesFactory.Create(Lower(1)));
 
-        Expression expression = Assert.IsType<Expression>(ExpressionFactory.Instance.Create(left, Complex.Zero));
+        Expression expression = ExpressionFactory.Instance.Create(left, Complex.Zero).ShouldBeOfType<Expression>();
 
-        Assert.Same(Complex.Zero, expression[1]);
+        expression[1].ShouldBeSameAs(Complex.Zero);
     }
 
     [Fact]
@@ -67,8 +67,8 @@ public sealed class ExpressionFactoryTests
 
         Exception? exception = Record.Exception(() => ExpressionFactory.Instance.Create(left, right));
 
-        Assert.NotNull(exception);
-        Assert.True(exception is TensorException or TypeInitializationException);
+        exception.ShouldNotBeNull();
+        exception is TensorException or TypeInitializationException.ShouldBeTrue();
     }
 
     private static int Lower(int name)

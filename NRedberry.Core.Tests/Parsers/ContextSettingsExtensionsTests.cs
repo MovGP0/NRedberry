@@ -1,4 +1,4 @@
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using NRedberry.Contexts;
 using NRedberry.Parsers;
 using RedberryParser = NRedberry.Parsers.Parser;
@@ -15,7 +15,7 @@ public sealed class ContextSettingsExtensionsTests
 
         var parser = settings.Parser();
 
-        Assert.Same(RedberryParser.Default, parser);
+        parser.ShouldBeSameAs(RedberryParser.Default);
     }
 
     [Fact]
@@ -26,8 +26,8 @@ public sealed class ContextSettingsExtensionsTests
 
         var parser = settings.Parser();
 
-        Assert.Same(RedberryParser.Default, parser);
-        Assert.NotSame(settings.Parser, parser);
+        parser.ShouldBeSameAs(RedberryParser.Default);
+        parser.ShouldNotBeSameAs(settings.Parser);
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public sealed class ContextSettingsExtensionsTests
 
         var parser = ContextSettingsExtensions.Parser(settings!);
 
-        Assert.Same(RedberryParser.Default, parser);
+        parser.ShouldBeSameAs(RedberryParser.Default);
     }
 
     private static ContextSettings CreateContextSettingsWithoutConstructor()

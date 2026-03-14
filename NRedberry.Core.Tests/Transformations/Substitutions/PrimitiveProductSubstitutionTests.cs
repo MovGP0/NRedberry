@@ -9,7 +9,7 @@ public sealed class PrimitiveProductSubstitutionTests
     [Fact]
     public void ShouldThrowWhilePrimitiveProductSubstitutionIsUnimplemented()
     {
-        Assert.Throws<NotImplementedException>(() =>
+        Should.Throw<NotImplementedException>(() =>
             new PrimitiveProductSubstitution(TensorApi.Parse("a*b"), TensorApi.Parse("c")));
     }
 }

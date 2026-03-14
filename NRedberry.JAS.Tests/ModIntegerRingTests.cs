@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using Xunit;
 
@@ -12,8 +12,8 @@ public sealed class ModIntegerRingTests
         ModIntegerRing primeRing = new(new BigInteger(7));
         ModIntegerRing compositeRing = new(new BigInteger(8));
 
-        Assert.True(primeRing.IsField());
-        Assert.False(compositeRing.IsField());
+        primeRing.IsField().ShouldBeTrue();
+        compositeRing.IsField().ShouldBeFalse();
     }
 
     [Fact]
@@ -21,6 +21,6 @@ public sealed class ModIntegerRingTests
     {
         ModIntegerRing ring = new(new BigInteger(5));
 
-        Assert.Equal(["0", "1", "2", "3", "4"], ring.Select(x => x.ToString()).ToArray());
+        ring.Select(x => x.ToString()).ToArray().ShouldBe(["0", "1", "2", "3", "4"]);
     }
 }

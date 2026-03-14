@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using NRedberry.Solver.Frobenius;
 using Xunit;
 
@@ -11,9 +11,9 @@ public sealed class TotalSolutionProviderTests
     {
         ConstructorInfo? constructor = TotalProviderType.GetConstructor([SolutionProviderArrayType]);
 
-        TargetInvocationException exception = Assert.Throws<TargetInvocationException>(() => constructor!.Invoke([null!]));
-        ArgumentNullException innerException = Assert.IsType<ArgumentNullException>(exception.InnerException);
-        Assert.Equal("providers", innerException.ParamName);
+        TargetInvocationException exception = Should.Throw<TargetInvocationException>(() => constructor!.Invoke([null!]));
+        ArgumentNullException innerException = exception.InnerException.ShouldBeOfType<ArgumentNullException>();
+        innerException.ParamName.ShouldBe("providers");
     }
 
     [Fact]
@@ -24,10 +24,10 @@ public sealed class TotalSolutionProviderTests
         object finalProvider = CreateFinalProvider(firstProvider, 1, [1]);
         object totalProvider = CreateTotalProvider([firstProvider, finalProvider]);
 
-        Assert.Equal([0, 2], Take(totalProvider));
-        Assert.Equal([1, 1], Take(totalProvider));
-        Assert.Equal([2, 0], Take(totalProvider));
-        Assert.Null(Take(totalProvider));
+        Take(totalProvider).ShouldBe([0, 2]);
+        Take(totalProvider).ShouldBe([1, 1]);
+        Take(totalProvider).ShouldBe([2, 0]);
+        Take(totalProvider).ShouldBeNull();
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public sealed class TotalSolutionProviderTests
         object finalProvider = CreateFinalProvider(dummyProvider, 0, [2]);
         object totalProvider = CreateTotalProvider([finalProvider]);
 
-        Assert.Null(Take(totalProvider));
+        Take(totalProvider).ShouldBeNull();
     }
 
     private static object CreateDummyProvider(int[] solution, int[] remainders)

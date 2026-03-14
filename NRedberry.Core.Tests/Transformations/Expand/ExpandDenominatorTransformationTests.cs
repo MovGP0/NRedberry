@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Expand;
+﻿using NRedberry.Transformations.Expand;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -11,15 +11,13 @@ public sealed class ExpandDenominatorTransformationTests
     {
         NRedberry.Tensors.Tensor actual = ExpandDenominatorTransformation.Expand(TensorApi.Parse("1/((a+b)*c)"));
 
-        Assert.Equal(
-            "(a*c+b*c)**(-1)",
-            NormalizeReciprocalSumOfProducts(actual.ToString(OutputFormat.Redberry)));
+        NormalizeReciprocalSumOfProducts(actual.ToString(OutputFormat.Redberry)).ShouldBe("(a*c+b*c)**(-1)");
     }
 
     [Fact]
     public void ShouldExposeReadableName()
     {
-        Assert.Equal("ExpandDenominator", ExpandDenominatorTransformation.Instance.ToString(OutputFormat.Redberry));
+        ExpandDenominatorTransformation.Instance.ToString(OutputFormat.Redberry).ShouldBe("ExpandDenominator");
     }
 
     private static string NormalizeReciprocalSumOfProducts(string expression)

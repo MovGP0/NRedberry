@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -10,8 +10,8 @@ public sealed class IntComparatorTests
     {
         IntComparator comparator = IntComparators.Default;
 
-        Assert.True(comparator.Compare(1, 2) < 0);
-        Assert.Equal(0, comparator.Compare(7, 7));
-        Assert.True(comparator.Compare(9, 3) > 0);
+        comparator.Compare(1, 2) < 0.ShouldBeTrue();
+        comparator.Compare(7, 7).ShouldBe(0);
+        comparator.Compare(9, 3) > 0.ShouldBeTrue();
     }
 }

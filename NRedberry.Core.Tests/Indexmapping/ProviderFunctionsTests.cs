@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using NRedberry.IndexMapping;
 using NRedberry.Numbers;
 using Xunit;
@@ -17,8 +17,8 @@ public sealed class ProviderFunctionsTests
     {
         IIndexMappingProviderFactory factory = GetFactoryFromProperty(propertyName);
 
-        Assert.NotNull(factory);
-        Assert.IsAssignableFrom<IIndexMappingProviderFactory>(factory);
+        factory.ShouldNotBeNull();
+        factory.ShouldBeAssignableTo<IIndexMappingProviderFactory>();
     }
 
     [Theory]
@@ -30,9 +30,9 @@ public sealed class ProviderFunctionsTests
         MethodInfo method = GetCreateMethod(methodName);
 
         ArgumentNullException exception = AssertInnerException<ArgumentNullException>(
-            Assert.Throws<TargetInvocationException>(() => method.Invoke(null, [null, Complex.One, Complex.Zero])));
+            Should.Throw<TargetInvocationException>(() => method.Invoke(null, [null, Complex.One, Complex.Zero])));
 
-        Assert.Equal(expectedParamName, exception.ParamName);
+        exception.ParamName.ShouldBe(expectedParamName);
     }
 
     [Theory]
@@ -44,9 +44,9 @@ public sealed class ProviderFunctionsTests
         MethodInfo method = GetCreateMethod(methodName);
 
         ArgumentNullException exception = AssertInnerException<ArgumentNullException>(
-            Assert.Throws<TargetInvocationException>(() => method.Invoke(null, [IndexMappingProviderUtil.EmptyProvider, null, Complex.Zero])));
+            Should.Throw<TargetInvocationException>(() => method.Invoke(null, [IndexMappingProviderUtil.EmptyProvider, null, Complex.Zero])));
 
-        Assert.Equal(expectedParamName, exception.ParamName);
+        exception.ParamName.ShouldBe(expectedParamName);
     }
 
     [Theory]
@@ -58,9 +58,9 @@ public sealed class ProviderFunctionsTests
         MethodInfo method = GetCreateMethod(methodName);
 
         ArgumentNullException exception = AssertInnerException<ArgumentNullException>(
-            Assert.Throws<TargetInvocationException>(() => method.Invoke(null, [IndexMappingProviderUtil.EmptyProvider, Complex.One, null])));
+            Should.Throw<TargetInvocationException>(() => method.Invoke(null, [IndexMappingProviderUtil.EmptyProvider, Complex.One, null])));
 
-        Assert.Equal(expectedParamName, exception.ParamName);
+        exception.ParamName.ShouldBe(expectedParamName);
     }
 
     [Theory]
@@ -71,9 +71,9 @@ public sealed class ProviderFunctionsTests
     {
         IIndexMappingProviderFactory factory = GetFactoryFromProperty(propertyName);
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => factory.Create(null!, Complex.One, Complex.Zero));
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() => factory.Create(null!, Complex.One, Complex.Zero));
 
-        Assert.Equal(expectedParamName, exception.ParamName);
+        exception.ParamName.ShouldBe(expectedParamName);
     }
 
     [Theory]
@@ -84,9 +84,9 @@ public sealed class ProviderFunctionsTests
     {
         IIndexMappingProviderFactory factory = GetFactoryFromProperty(propertyName);
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => factory.Create(IndexMappingProviderUtil.EmptyProvider, null!, Complex.Zero));
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() => factory.Create(IndexMappingProviderUtil.EmptyProvider, null!, Complex.Zero));
 
-        Assert.Equal(expectedParamName, exception.ParamName);
+        exception.ParamName.ShouldBe(expectedParamName);
     }
 
     [Theory]
@@ -97,9 +97,9 @@ public sealed class ProviderFunctionsTests
     {
         IIndexMappingProviderFactory factory = GetFactoryFromProperty(propertyName);
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => factory.Create(IndexMappingProviderUtil.EmptyProvider, Complex.One, null!));
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() => factory.Create(IndexMappingProviderUtil.EmptyProvider, Complex.One, null!));
 
-        Assert.Equal(expectedParamName, exception.ParamName);
+        exception.ParamName.ShouldBe(expectedParamName);
     }
 
     [Theory]
@@ -111,10 +111,9 @@ public sealed class ProviderFunctionsTests
         MethodInfo method = GetCreateMethod(methodName);
         TensorType tensor = CreateCompositeTensor();
 
-        TargetInvocationException exception = Assert.Throws<TargetInvocationException>(
-            () => method.Invoke(null, [IndexMappingProviderUtil.EmptyProvider, tensor, tensor]));
+        TargetInvocationException exception = Should.Throw<TargetInvocationException>(() => method.Invoke(null, [IndexMappingProviderUtil.EmptyProvider, tensor, tensor]));
 
-        Assert.IsType<NotImplementedException>(exception.InnerException);
+        exception.InnerException.ShouldBeOfType<NotImplementedException>();
     }
 
     [Theory]
@@ -126,8 +125,7 @@ public sealed class ProviderFunctionsTests
         IIndexMappingProviderFactory factory = GetFactoryFromProperty(propertyName);
         TensorType tensor = CreateCompositeTensor();
 
-        Assert.Throws<NotImplementedException>(
-            () => factory.Create(IndexMappingProviderUtil.EmptyProvider, tensor, tensor));
+        Should.Throw<NotImplementedException>(() => factory.Create(IndexMappingProviderUtil.EmptyProvider, tensor, tensor));
     }
 
     private static MethodInfo GetCreateMethod(string methodName)
@@ -140,7 +138,7 @@ public sealed class ProviderFunctionsTests
             [typeof(IIndexMappingProvider), typeof(TensorType), typeof(TensorType)],
             modifiers: null);
 
-        Assert.NotNull(method);
+        method.ShouldNotBeNull();
         return method!;
     }
 
@@ -151,9 +149,9 @@ public sealed class ProviderFunctionsTests
             propertyName,
             BindingFlags.Public | BindingFlags.Static);
 
-        Assert.NotNull(property);
+        property.ShouldNotBeNull();
         object? value = property!.GetValue(null);
-        return Assert.IsAssignableFrom<IIndexMappingProviderFactory>(value);
+        return value.ShouldBeAssignableTo<IIndexMappingProviderFactory>();
     }
 
     private static Type GetProviderFunctionsType()
@@ -162,7 +160,7 @@ public sealed class ProviderFunctionsTests
             "NRedberry.IndexMapping.ProviderFunctions",
             throwOnError: false);
 
-        Assert.NotNull(providerFunctionsType);
+        providerFunctionsType.ShouldNotBeNull();
         return providerFunctionsType!;
     }
 
@@ -171,7 +169,7 @@ public sealed class ProviderFunctionsTests
     {
         TException? innerException = exception.InnerException as TException;
 
-        Assert.NotNull(innerException);
+        innerException.ShouldNotBeNull();
         return innerException!;
     }
 

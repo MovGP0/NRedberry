@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using NRedberry.Contexts;
 using NRedberry.Indices;
 using Xunit;
@@ -20,12 +20,12 @@ public sealed class StructureOfIndicesAdditionalTests
             byte type = metricTypes[0];
 
             StructureOfIndices structure = StructureOfIndices.Create(type, 3);
-            Assert.Equal(3, structure.Size);
-            Assert.Equal(3, structure.Count);
-            Assert.Equal(3, structure.TypeCount(type));
+            structure.Size.ShouldBe(3);
+            structure.Count.ShouldBe(3);
+            structure.TypeCount(type).ShouldBe(3);
 
             StructureOfIndices empty = StructureOfIndices.Create(type, 0);
-            Assert.Same(StructureOfIndices.Empty, empty);
+            empty.ShouldBeSameAs(StructureOfIndices.Empty);
         }
         catch (TypeInitializationException)
         {
@@ -46,12 +46,12 @@ public sealed class StructureOfIndicesAdditionalTests
             int[] counts = [2, 1];
             StructureOfIndices structure = StructureOfIndices.Create(types, counts);
 
-            Assert.Equal(3, structure.Size);
-            Assert.Equal(2, structure.TypeCount(types[0]));
-            Assert.Equal(1, structure.TypeCount(types[1]));
+            structure.Size.ShouldBe(3);
+            structure.TypeCount(types[0]).ShouldBe(2);
+            structure.TypeCount(types[1]).ShouldBe(1);
 
             StructureOfIndices empty = StructureOfIndices.Create(types, [0, 0]);
-            Assert.Same(StructureOfIndices.Empty, empty);
+            empty.ShouldBeSameAs(StructureOfIndices.Empty);
         }
         catch (TypeInitializationException)
         {
@@ -103,9 +103,9 @@ public sealed class StructureOfIndicesAdditionalTests
             states[nonMetricType] = new BitArray([true, false]);
 
             StructureOfIndices structure = StructureOfIndices.Create(counts, states);
-            Assert.Equal(4, structure.Size);
-            Assert.Equal(2, structure.TypeCount(metricType));
-            Assert.Equal(2, structure.TypeCount(nonMetricType));
+            structure.Size.ShouldBe(4);
+            structure.TypeCount(metricType).ShouldBe(2);
+            structure.TypeCount(nonMetricType).ShouldBe(2);
 
             int[] zeroCounts = new int[typeCount];
             BitArray[] zeroStates = new BitArray[typeCount];
@@ -115,7 +115,7 @@ public sealed class StructureOfIndicesAdditionalTests
             }
 
             StructureOfIndices empty = StructureOfIndices.Create(zeroCounts, zeroStates);
-            Assert.Same(StructureOfIndices.Empty, empty);
+            empty.ShouldBeSameAs(StructureOfIndices.Empty);
         }
         catch (TypeInitializationException)
         {
@@ -137,7 +137,7 @@ public sealed class StructureOfIndicesAdditionalTests
             int[] copy = structure.GetTypesCounts();
             copy[metricType] = 99;
 
-            Assert.Equal(2, structure.TypeCount(metricType));
+            structure.TypeCount(metricType).ShouldBe(2);
         }
         catch (TypeInitializationException)
         {
@@ -159,8 +159,8 @@ public sealed class StructureOfIndicesAdditionalTests
             statesCopy[nonMetricType].Set(0, false);
 
             BitArray[] statesCopyAgain = structure.GetStates();
-            Assert.True(statesCopyAgain[nonMetricType].Get(0));
-            Assert.False(statesCopyAgain[nonMetricType].Get(1));
+            statesCopyAgain[nonMetricType].Get(0).ShouldBeTrue();
+            statesCopyAgain[nonMetricType].Get(1).ShouldBeFalse();
         }
         catch (TypeInitializationException)
         {
@@ -182,15 +182,15 @@ public sealed class StructureOfIndicesAdditionalTests
             StructureOfIndices right = StructureOfIndices.Create(metricType, 1);
 
             StructureOfIndices appended = left.Append(right);
-            Assert.Equal(3, appended.Size);
-            Assert.Equal(3, appended.TypeCount(metricType));
+            appended.Size.ShouldBe(3);
+            appended.TypeCount(metricType).ShouldBe(3);
 
             StructureOfIndices pow = left.Pow(3);
-            Assert.Equal(6, pow.Size);
-            Assert.Equal(6, pow.TypeCount(metricType));
+            pow.Size.ShouldBe(6);
+            pow.TypeCount(metricType).ShouldBe(6);
 
             StructureOfIndices subtracted = appended.Subtract(right);
-            Assert.Equal(left, subtracted);
+            subtracted.ShouldBe(left);
         }
         catch (TypeInitializationException)
         {
@@ -211,8 +211,8 @@ public sealed class StructureOfIndicesAdditionalTests
             StructureOfIndices left = StructureOfIndices.Create(metricType, 3);
             StructureOfIndices right = StructureOfIndices.Create([metricType], [3]);
 
-            Assert.Equal(left, right);
-            Assert.Equal(left.GetHashCode(), right.GetHashCode());
+            right.ShouldBe(left);
+            right.GetHashCode().ShouldBe(left.GetHashCode());
         }
         catch (TypeInitializationException)
         {
@@ -236,18 +236,18 @@ public sealed class StructureOfIndicesAdditionalTests
                 [firstType, secondType],
                 [2, 3]);
 
-            Assert.Equal(2, structure.TypeCount(firstType));
-            Assert.Equal(3, structure.TypeCount(secondType));
+            structure.TypeCount(firstType).ShouldBe(2);
+            structure.TypeCount(secondType).ShouldBe(3);
 
             TypeData first = structure.GetTypeData(firstType);
-            Assert.Equal(0, first.From);
-            Assert.Equal(2, first.Length);
-            Assert.Null(first.States);
+            first.From.ShouldBe(0);
+            first.Length.ShouldBe(2);
+            first.States.ShouldBeNull();
 
             TypeData second = structure.GetTypeData(secondType);
-            Assert.Equal(2, second.From);
-            Assert.Equal(3, second.Length);
-            Assert.Null(second.States);
+            second.From.ShouldBe(2);
+            second.Length.ShouldBe(3);
+            second.States.ShouldBeNull();
         }
         catch (TypeInitializationException)
         {

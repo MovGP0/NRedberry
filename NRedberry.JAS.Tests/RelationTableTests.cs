@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using Xunit;
 
@@ -15,10 +15,10 @@ public sealed class RelationTableTests
 
         TableRelation<BigRational> relation = ring.Table.Lookup(x, y);
 
-        Assert.Null(relation.Left);
-        Assert.Null(relation.Right);
-        Assert.Equal([1L, 1L], relation.Product.LeadingExpVector()!.GetVal());
-        Assert.Contains("null | null", relation.ToString(), System.StringComparison.Ordinal);
+        relation.Left.ShouldBeNull();
+        relation.Right.ShouldBeNull();
+        relation.Product.LeadingExpVector()!.GetVal().ShouldBe([1L, 1L]);
+        relation.ToString().ShouldContain("null | null");
     }
 
     [Fact]
@@ -41,11 +41,11 @@ public sealed class RelationTableTests
 
         TableRelation<BigRational> relation = firstRing.Table.Lookup(x, y);
 
-        Assert.Equal(1, firstRing.Table.Size());
-        Assert.Equal(relationProduct.ToString(["x", "y"]), relation.Product.ToString(["x", "y"]));
-        Assert.Equal(firstRing.Table, secondRing.Table);
-        Assert.Equal(firstRing.Table.GetHashCode(), secondRing.Table.GetHashCode());
-        Assert.Contains("RelationTable", firstRing.Table.ToString(["x", "y"]), System.StringComparison.Ordinal);
+        firstRing.Table.Size().ShouldBe(1);
+        relation.Product.ToString(["x", "y"]).ShouldBe(relationProduct.ToString(["x", "y"]));
+        secondRing.Table.ShouldBe(firstRing.Table);
+        secondRing.Table.GetHashCode().ShouldBe(firstRing.Table.GetHashCode());
+        firstRing.Table.ToString(["x", "y"]).ShouldContain("RelationTable");
     }
 
     [Fact]
@@ -63,9 +63,9 @@ public sealed class RelationTableTests
         GenSolvablePolynomialRing<BigRational> contracted = extended.Contract(1);
         GenSolvablePolynomialRing<BigRational> reversed = ring.Reverse();
 
-        Assert.Equal(1, extended.Table.Size());
-        Assert.Equal(1, contracted.Table.Size());
-        Assert.Equal(1, reversed.Table.Size());
+        extended.Table.Size().ShouldBe(1);
+        contracted.Table.Size().ShouldBe(1);
+        reversed.Table.Size().ShouldBe(1);
     }
 
     private static GenSolvablePolynomialRing<BigRational> CreateRing()

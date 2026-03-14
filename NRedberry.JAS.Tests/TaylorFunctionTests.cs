@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ps;
 using Xunit;
 
@@ -15,11 +15,11 @@ public sealed class TaylorFunctionTests
 
         TaylorFunction<BigRational> derivative = function.Deriviative();
 
-        Assert.False(function.IsZERO());
-        Assert.Equal("3", function.Evaluate(new BigRational(10)).ToString());
-        Assert.Same(firstDerivative, derivative);
-        Assert.Equal("5", derivative.Evaluate(new BigRational(2)).ToString());
-        Assert.True(derivative.Deriviative().IsZERO());
+        function.IsZERO().ShouldBeFalse();
+        function.Evaluate(new BigRational(10)).ToString().ShouldBe("3");
+        derivative.ShouldBeSameAs(firstDerivative);
+        derivative.Evaluate(new BigRational(2)).ToString().ShouldBe("5");
+        derivative.Deriviative().IsZERO().ShouldBeTrue();
     }
 }
 

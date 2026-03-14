@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Util;
 using Xunit;
 
@@ -12,7 +12,7 @@ public sealed class LongIterableTests
         LongIterable iterable = new();
         iterable.SetUpperBound(3);
 
-        Assert.Equal([0L, 1L, 2L, 3L], iterable.ToList());
+        iterable.ToList().ShouldBe([0L, 1L, 2L, 3L]);
     }
 
     [Fact]
@@ -22,6 +22,6 @@ public sealed class LongIterableTests
         iterable.SetAllIterator();
         iterable.SetUpperBound(3);
 
-        Assert.Equal([0L, 1L, -1L, 2L, -2L, 3L, -3L], iterable.ToList());
+        iterable.ToList().ShouldBe([0L, 1L, -1L, 2L, -2L, 3L, -3L]);
     }
 }

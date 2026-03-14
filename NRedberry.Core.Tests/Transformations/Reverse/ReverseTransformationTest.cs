@@ -1,4 +1,4 @@
-using NRedberry;
+﻿using NRedberry;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Reverse;
 using Xunit;
@@ -22,7 +22,7 @@ public sealed class ReverseTransformationTest
             "H^{a'}_{b'}",
             "U^{B'}_{C'}",
             "V^{A'}_{B'}");
-        Assert.Equal(tensor.Indices.ToString(), actual.Indices.ToString());
+        actual.Indices.ToString().ShouldBe(tensor.Indices.ToString());
     }
 
     [Fact]
@@ -30,8 +30,8 @@ public sealed class ReverseTransformationTest
     {
         ReverseTransformation transformation = new(IndexType.Matrix1, IndexType.Matrix2);
 
-        Assert.Equal("Reverse[Matrix1,Matrix2]", transformation.ToString());
-        Assert.Equal("Reverse[Matrix1,Matrix2]", transformation.ToString(OutputFormat.Redberry));
+        transformation.ToString().ShouldBe("Reverse[Matrix1,Matrix2]");
+        transformation.ToString(OutputFormat.Redberry).ShouldBe("Reverse[Matrix1,Matrix2]");
     }
 
     private static void AssertIndexedFactors(TensorType tensor, params string[] expected)
@@ -39,7 +39,7 @@ public sealed class ReverseTransformationTest
         string[] actual = GetIndexedFactorTexts(tensor);
         string[] sortedExpected = expected.OrderBy(text => text, StringComparer.Ordinal).ToArray();
 
-        Assert.Equal(sortedExpected, actual);
+        actual.ShouldBe(sortedExpected);
     }
 
     private static string[] GetIndexedFactorTexts(TensorType tensor)

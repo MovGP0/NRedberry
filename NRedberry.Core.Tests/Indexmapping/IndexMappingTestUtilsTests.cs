@@ -1,4 +1,5 @@
 using NRedberry.IndexMapping;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Indexmapping;
@@ -11,7 +12,7 @@ public sealed class IndexMappingTestUtilsTests
         Mapping mapping = IndexMappingTestUtils.Parse("-;_a->^c;^b->_d");
         Mapping expected = Mapping.ValueOf("-{_a->^c, ^b->_d}");
 
-        Assert.Equal(expected, mapping);
+        mapping.ShouldBe(expected);
     }
 
     [Fact]
@@ -28,7 +29,7 @@ public sealed class IndexMappingTestUtilsTests
             IndexMappingTestUtils.Parse("+;_a->^b"),
         ];
 
-        Assert.True(IndexMappingTestUtils.Compare(first, second));
+        IndexMappingTestUtils.Compare(first, second).ShouldBeTrue();
     }
 
     [Fact]
@@ -40,6 +41,6 @@ public sealed class IndexMappingTestUtilsTests
 
         int comparison = comparator.Compare(first, second);
 
-        Assert.Equal(first.GetHashCode().CompareTo(second.GetHashCode()), comparison);
+        comparison.ShouldBe(first.GetHashCode().CompareTo(second.GetHashCode()));
     }
 }

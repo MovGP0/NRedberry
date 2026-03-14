@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Symmetrization;
+﻿using NRedberry.Transformations.Symmetrization;
 using NRedberry.Tensors;
 using TensorCC = NRedberry.Tensors.CC;
 using TensorFactory = NRedberry.Tensors.Tensors;
@@ -18,7 +18,7 @@ public sealed class ApplyDiracDeltasTransformationTest
             TensorType tensor = TensorFactory.Parse("DiracDelta[q,p-l]*DiracDelta[l,f]*(q**2-2)");
             TensorType actual = ApplyDiracDeltasTransformation.Instance.Transform(tensor);
             TensorType expected = TensorFactory.Parse("(p-f)**2-2");
-            Assert.True(TensorUtils.Equals(expected, actual));
+            TensorUtils.Equals(expected, actual).ShouldBeTrue();
         }
     }
 
@@ -31,7 +31,7 @@ public sealed class ApplyDiracDeltasTransformationTest
             TensorType tensor = TensorFactory.Parse("DiracDelta[q,p-l]*DiracDelta[l,f-k]*DiracDelta[-k,r]*(q**2-2)");
             TensorType actual = ApplyDiracDeltasTransformation.Instance.Transform(tensor);
             TensorType expected = TensorFactory.Parse("(p-f-r)**2-2");
-            Assert.True(TensorUtils.Equals(expected, actual));
+            TensorUtils.Equals(expected, actual).ShouldBeTrue();
         }
     }
 
@@ -41,6 +41,6 @@ public sealed class ApplyDiracDeltasTransformationTest
         TensorType tensor = TensorFactory.Parse("DiracDelta[q,f]*DiracDelta[-q,p]*(q**2-2)");
         TensorType actual = ApplyDiracDeltasTransformation.Instance.Transform(tensor);
         TensorType expected = TensorFactory.Parse("p**2-2");
-        Assert.True(TensorUtils.Equals(expected, actual));
+        TensorUtils.Equals(expected, actual).ShouldBeTrue();
     }
 }

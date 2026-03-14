@@ -11,7 +11,7 @@ public sealed class MinusIndexMappingProviderWrapperTests
     {
         Type wrapperType = GetWrapperType();
 
-        TargetInvocationException exception = Assert.Throws<TargetInvocationException>(() =>
+        TargetInvocationException exception = Should.Throw<TargetInvocationException>(() =>
             Activator.CreateInstance(
                 wrapperType,
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
@@ -19,8 +19,8 @@ public sealed class MinusIndexMappingProviderWrapperTests
                 args: [null],
                 culture: null));
 
-        ArgumentNullException innerException = Assert.IsType<ArgumentNullException>(exception.InnerException);
-        Assert.Equal("provider", innerException.ParamName);
+        ArgumentNullException innerException = exception.InnerException.ShouldBeOfType<ArgumentNullException>();
+        innerException.ParamName.ShouldBe("provider");
     }
 
     [Fact]
@@ -35,8 +35,8 @@ public sealed class MinusIndexMappingProviderWrapperTests
 
         bool result = InvokeTick(wrapper);
 
-        Assert.True(result);
-        Assert.Equal(1, wrappedProvider.TickCallCount);
+        result.ShouldBeTrue();
+        wrappedProvider.TickCallCount.ShouldBe(1);
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public sealed class MinusIndexMappingProviderWrapperTests
 
         IIndexMappingBuffer? result = InvokeTake(wrapper);
 
-        Assert.Null(result);
+        result.ShouldBeNull();
     }
 
     [Fact]
@@ -67,9 +67,9 @@ public sealed class MinusIndexMappingProviderWrapperTests
 
         IIndexMappingBuffer? result = InvokeTake(wrapper);
 
-        Assert.Same(buffer, result);
-        Assert.Equal(1, buffer.AddSignCallCount);
-        Assert.True(buffer.LastSignArgument);
+        result.ShouldBeSameAs(buffer);
+        buffer.AddSignCallCount.ShouldBe(1);
+        buffer.LastSignArgument.ShouldBeTrue();
     }
 
     private static object CreateWrapper(IIndexMappingProvider provider)
@@ -83,8 +83,8 @@ public sealed class MinusIndexMappingProviderWrapperTests
             args: [provider],
             culture: null);
 
-        Assert.NotNull(instance);
-        Assert.Equal(wrapperType, instance.GetType());
+        instance.ShouldNotBeNull();
+        instance.GetType().ShouldBe(wrapperType);
         return instance;
     }
 
@@ -93,7 +93,7 @@ public sealed class MinusIndexMappingProviderWrapperTests
         Type? wrapperType = typeof(IIndexMappingProvider).Assembly
             .GetType("NRedberry.IndexMapping.MinusIndexMappingProviderWrapper", throwOnError: false);
 
-        Assert.True(wrapperType is not null);
+        wrapperType is not null.ShouldBeTrue();
         return wrapperType;
     }
 
@@ -101,7 +101,7 @@ public sealed class MinusIndexMappingProviderWrapperTests
     {
         MethodInfo tickMethod = wrapper.GetType().GetMethod("Tick")!;
         object? tickResult = tickMethod.Invoke(wrapper, null);
-        return Assert.IsType<bool>(tickResult);
+        return tickResult.ShouldBeOfType<bool>();
     }
 
     private static IIndexMappingBuffer? InvokeTake(object wrapper)

@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
@@ -15,7 +15,7 @@ public sealed class FastTensorsTest
 
         TensorType result = FastTensors.MultiplySumElementsOnFactor(sum, Complex.Two);
 
-        Assert.True(TensorUtils.EqualsExactly(result, CreateNumericSum(Complex.Two, new Complex(4))));
+        TensorUtils.EqualsExactly(result, CreateNumericSum(Complex.Two, new Complex(4))).ShouldBeTrue();
     }
 
     [Fact]
@@ -25,7 +25,7 @@ public sealed class FastTensorsTest
 
         TensorType result = FastTensors.MultiplySumElementsOnFactor(sum, Complex.ImaginaryOne);
 
-        Assert.True(TensorUtils.EqualsExactly(result, CreateNumericSum(Complex.ImaginaryOne, new Complex(0, 2))));
+        TensorUtils.EqualsExactly(result, CreateNumericSum(Complex.ImaginaryOne, new Complex(0, 2))).ShouldBeTrue();
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public sealed class FastTensorsTest
 
         TensorType result = FastTensors.MultiplySumElementsOnFactorAndExpand(sum, Complex.Two);
 
-        Assert.True(TensorUtils.EqualsExactly(result, CreateNumericSum(Complex.Two, new Complex(4))));
+        TensorUtils.EqualsExactly(result, CreateNumericSum(Complex.Two, new Complex(4))).ShouldBeTrue();
     }
 
     [Fact]
@@ -45,7 +45,7 @@ public sealed class FastTensorsTest
 
         TensorType result = FastTensors.MultiplySumElementsOnFactor(sum, Complex.Zero);
 
-        Assert.Same(Complex.Zero, result);
+        result.ShouldBeSameAs(Complex.Zero);
     }
 
     [Fact]
@@ -55,7 +55,7 @@ public sealed class FastTensorsTest
 
         TensorType result = FastTensors.MultiplySumElementsOnFactor(sum, Complex.One);
 
-        Assert.Same(sum, result);
+        result.ShouldBeSameAs(sum);
     }
 
     [Fact]
@@ -66,7 +66,7 @@ public sealed class FastTensorsTest
         TensorType first = FastTensors.MultiplySumElementsOnFactor(sum, Complex.Two);
         TensorType second = FastTensors.MultiplySumElementsOnFactorAndExpand((Sum)first, Complex.Two);
 
-        Assert.True(TensorUtils.EqualsExactly(second, CreateNumericSum(new Complex(4), new Complex(8))));
+        TensorUtils.EqualsExactly(second, CreateNumericSum(new Complex(4), new Complex(8))).ShouldBeTrue();
     }
 
     [Fact]
@@ -80,7 +80,7 @@ public sealed class FastTensorsTest
             ],
             IndicesFactory.Create(Lower(1)));
 
-        Assert.Throws<ArgumentException>(() => FastTensors.MultiplySumElementsOnFactorAndExpand(sum, indexedFactor));
+        Should.Throw<ArgumentException>(() => FastTensors.MultiplySumElementsOnFactorAndExpand(sum, indexedFactor));
     }
 
     private static Sum CreateNumericSum(params Complex[] terms)

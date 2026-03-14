@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using NRedberry.Parsers;
 using Xunit;
@@ -27,7 +27,7 @@ public sealed class TokenTypeTests
 
         var actual = Enum.GetNames<TokenType>();
 
-        Assert.Equal(expected, actual);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public sealed class TokenTypeTests
     {
         var values = Enum.GetValues<TokenType>();
 
-        Assert.Equal(Enumerable.Range(0, values.Length), values.Select(static value => (int)value));
+        values.Select(static value => (int)value).ShouldBe(Enumerable.Range(0, values.Length));
     }
 
     [Theory]
@@ -45,15 +45,15 @@ public sealed class TokenTypeTests
         var name = tokenType.ToString();
         var isParsed = Enum.TryParse<TokenType>(name, out var parsed);
 
-        Assert.True(isParsed);
-        Assert.Equal(tokenType, parsed);
+        isParsed.ShouldBeTrue();
+        parsed.ShouldBe(tokenType);
     }
 
     [Fact]
     public void ShouldNotParseUnknownOrWrongCaseValues()
     {
-        Assert.False(Enum.TryParse<TokenType>("Unknown", out _));
-        Assert.False(Enum.TryParse<TokenType>("sum", out _));
+        Enum.TryParse<TokenType>("Unknown", out _).ShouldBeFalse();
+        Enum.TryParse<TokenType>("sum", out _).ShouldBeFalse();
     }
 
     public static TheoryData<TokenType> GetAllTokenTypes()

@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -18,8 +18,8 @@ public sealed class IteratorWithProgressTests
             values.Add(iterator.Current);
         }
 
-        Assert.Equal(new[] { 1, 2, 3, 4 }, values);
-        Assert.Equal(new[] { 25, 50, 75, 100 }, consumer.Values);
+        values.ShouldBe(new[] { 1, 2, 3, 4 });
+        consumer.Values.ShouldBe(new[] { 25, 50, 75, 100 });
     }
 
     [Fact]
@@ -29,10 +29,10 @@ public sealed class IteratorWithProgressTests
         using IteratorWithProgress<int> iterator =
             new(new List<int> { 10, 20 }.GetEnumerator(), 2, consumer);
 
-        Assert.True(iterator.MoveNext());
+        iterator.MoveNext().ShouldBeTrue();
         iterator.Reset();
-        Assert.True(iterator.MoveNext());
-        Assert.Equal(10, iterator.Current);
+        iterator.MoveNext().ShouldBeTrue();
+        iterator.Current.ShouldBe(10);
     }
 }
 

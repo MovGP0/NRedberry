@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using NRedberry.Tensors.Iterators;
 using TensorApi = NRedberry.Tensors.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
@@ -25,9 +25,9 @@ public sealed class TreeTraverseIteratorTest
             visited.Add(iterator.Current());
         }
 
-        Assert.Equal([TraverseState.Entering, TraverseState.Entering, TraverseState.Leaving, TraverseState.Leaving], states);
-        Assert.Equal([0, 1, 1, 0], depths);
-        Assert.True(TensorUtils.EqualsExactly([tensor, tensor[0], tensor[0], tensor], visited.ToArray()));
+        states.ShouldBe([TraverseState.Entering, TraverseState.Entering, TraverseState.Leaving, TraverseState.Leaving]);
+        depths.ShouldBe([0, 1, 1, 0]);
+        TensorUtils.EqualsExactly([tensor, tensor[0], tensor[0], tensor], visited.ToArray()).ShouldBeTrue();
     }
 
     [Fact]
@@ -49,9 +49,9 @@ public sealed class TreeTraverseIteratorTest
         {
         }
 
-        SimpleTensor result = Assert.IsType<SimpleTensor>(iterator.Result());
+        SimpleTensor result = iterator.Result().ShouldBeOfType<SimpleTensor>();
 
-        Assert.Equal(0, result.Indices.GetFree().Size());
+        result.Indices.GetFree().Size().ShouldBe(0);
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public sealed class TreeTraverseIteratorTest
             depths.Add(iterator.Depth);
         }
 
-        Assert.Equal([0, 1, 1, 1, 1, 0], depths);
+        depths.ShouldBe([0, 1, 1, 1, 1, 0]);
     }
 
     private sealed class HideSecondChildGuide : TraverseGuide

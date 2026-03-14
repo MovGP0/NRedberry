@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 using Xunit;
@@ -29,9 +29,9 @@ public sealed class PolyUfdUtilTests
         GenPolynomial<GenPolynomial<BigRational>> integral = PolyUfdUtil.IntegralFromQuotientCoefficients(integralRing, quotientPolynomial);
         GenPolynomial<Quotient<BigRational>> converted = PolyUfdUtil.QuotientFromIntegralCoefficients(quotientPolynomialRing, integral);
 
-        Assert.False(integral.IsZero());
-        Assert.Equal(1L, integral.Degree(0));
-        Assert.True(converted.LeadingBaseCoefficient().Den.IsOne());
+        integral.IsZero().ShouldBeFalse();
+        integral.Degree(0).ShouldBe(1L);
+        converted.LeadingBaseCoefficient().Den.IsOne().ShouldBeTrue();
     }
 
     [Fact]
@@ -50,9 +50,9 @@ public sealed class PolyUfdUtilTests
 
         PolyUfdUtil.EnsureFieldProperty(fieldRing);
 
-        Assert.False(kronecker.IsZero());
-        Assert.NotEqual(-1, fieldRing.GetField());
-        Assert.Throws<ArgumentOutOfRangeException>(() => PolyUfdUtil.SubstituteKronecker(polynomial, 0));
+        kronecker.IsZero().ShouldBeFalse();
+        fieldRing.GetField().ShouldNotBe(-1);
+        Should.Throw<ArgumentOutOfRangeException>(() => PolyUfdUtil.SubstituteKronecker(polynomial, 0));
     }
 
     private static GenPolynomialRing<BigRational> CreateCoefficientRing()

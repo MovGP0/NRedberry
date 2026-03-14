@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -13,8 +13,8 @@ public sealed class ListExtensionsTests
         List<int> clone = original.Clone();
         clone[0] = 9;
 
-        Assert.Equal(new[] { 1, 2, 3 }, original);
-        Assert.Equal(new[] { 9, 2, 3 }, clone);
+        original.ShouldBe(new[] { 1, 2, 3 });
+        clone.ShouldBe(new[] { 9, 2, 3 });
     }
 
     [Fact]
@@ -24,6 +24,6 @@ public sealed class ListExtensionsTests
 
         values.RemoveAfter(1);
 
-        Assert.Equal(new[] { 1, 2 }, values);
+        values.ShouldBe(new[] { 1, 2 });
     }
 }

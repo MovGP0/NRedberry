@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
@@ -15,7 +16,7 @@ public sealed class FactorsTests
         GenPolynomial<BigRational> polynomial = ring.Univariate(0).Sum(ring.FromInteger(1));
         Factors<BigRational> factors = new(polynomial, null, null, null, null);
 
-        Assert.Equal(polynomial.GetHashCode(), factors.GetHashCode());
+        factors.GetHashCode().ShouldBe(polynomial.GetHashCode());
     }
 
     [Fact]
@@ -36,12 +37,12 @@ public sealed class FactorsTests
         List<Factors<AlgebraicNumber<BigRational>>> nestedFactors = [nested];
         Factors<BigRational> factors = new(polynomial, algebraicRing, algebraicPolynomial, algebraicFactors, nestedFactors);
 
-        Assert.Same(polynomial, factors.Poly);
-        Assert.Same(algebraicRing, factors.Afac);
-        Assert.Same(algebraicPolynomial, factors.Apoly);
-        Assert.Same(algebraicFactors, factors.Afactors);
-        Assert.Same(nestedFactors, factors.Arfactors);
-        Assert.NotEqual(polynomial.GetHashCode(), factors.GetHashCode());
+        factors.Poly.ShouldBeSameAs(polynomial);
+        factors.Afac.ShouldBeSameAs(algebraicRing);
+        factors.Apoly.ShouldBeSameAs(algebraicPolynomial);
+        factors.Afactors.ShouldBeSameAs(algebraicFactors);
+        factors.Arfactors.ShouldBeSameAs(nestedFactors);
+        factors.GetHashCode().ShouldNotBe(polynomial.GetHashCode());
     }
 
     private static GenPolynomialRing<BigRational> CreateRing()

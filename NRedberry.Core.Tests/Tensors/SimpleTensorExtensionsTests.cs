@@ -1,4 +1,4 @@
-using NRedberry.Contexts;
+﻿using NRedberry.Contexts;
 using NRedberry.Indices;
 using NRedberry.Tensors;
 using Xunit;
@@ -14,9 +14,9 @@ public sealed class SimpleTensorExtensionsTests
 
         SimpleTensor tensor = currentContext.CreateKronecker(IndicesUtils.ParseIndex("^a"), IndicesUtils.ParseIndex("_a"));
 
-        Assert.True(currentContext.IsKronecker(tensor));
-        Assert.True(currentContext.IsKroneckerOrMetric(tensor));
-        Assert.False(currentContext.IsMetric(tensor));
+        currentContext.IsKronecker(tensor).ShouldBeTrue();
+        currentContext.IsKroneckerOrMetric(tensor).ShouldBeTrue();
+        currentContext.IsMetric(tensor).ShouldBeFalse();
     }
 
     [Fact]
@@ -26,9 +26,9 @@ public sealed class SimpleTensorExtensionsTests
 
         SimpleTensor tensor = currentContext.CreateMetric(IndicesUtils.ParseIndex("_a"), IndicesUtils.ParseIndex("_b"));
 
-        Assert.True(currentContext.IsMetric(tensor));
-        Assert.True(currentContext.IsKroneckerOrMetric(tensor));
-        Assert.False(currentContext.IsKronecker(tensor));
+        currentContext.IsMetric(tensor).ShouldBeTrue();
+        currentContext.IsKroneckerOrMetric(tensor).ShouldBeTrue();
+        currentContext.IsKronecker(tensor).ShouldBeFalse();
     }
 
     [Fact]
@@ -39,8 +39,8 @@ public sealed class SimpleTensorExtensionsTests
         SimpleTensor metric = currentContext.CreateMetricOrKronecker(IndicesUtils.ParseIndex("_a"), IndicesUtils.ParseIndex("_b"));
         SimpleTensor kronecker = currentContext.CreateMetricOrKronecker(IndicesUtils.ParseIndex("^a"), IndicesUtils.ParseIndex("_a"));
 
-        Assert.True(currentContext.IsMetric(metric));
-        Assert.True(currentContext.IsKronecker(kronecker));
+        currentContext.IsMetric(metric).ShouldBeTrue();
+        currentContext.IsKronecker(kronecker).ShouldBeTrue();
     }
 
     [Fact]
@@ -48,7 +48,7 @@ public sealed class SimpleTensorExtensionsTests
     {
         NRedberry.Contexts.Context currentContext = NRedberry.Contexts.Context.Get();
 
-        Assert.Throws<ArgumentException>(() => currentContext.CreateKronecker(IndicesUtils.ParseIndex("_a"), IndicesUtils.ParseIndex("_b")));
-        Assert.Throws<ArgumentException>(() => currentContext.CreateMetric(IndicesUtils.ParseIndex("^a"), IndicesUtils.ParseIndex("_a")));
+        Should.Throw<ArgumentException>(() => currentContext.CreateKronecker(IndicesUtils.ParseIndex("_a"), IndicesUtils.ParseIndex("_b")));
+        Should.Throw<ArgumentException>(() => currentContext.CreateMetric(IndicesUtils.ParseIndex("^a"), IndicesUtils.ParseIndex("_a")));
     }
 }

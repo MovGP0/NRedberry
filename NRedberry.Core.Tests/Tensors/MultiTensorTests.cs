@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
@@ -16,10 +16,10 @@ public sealed class MultiTensorTests
 
         TensorType result = tensor.Remove(child);
 
-        Assert.IsType<TestMultiTensor>(result);
-        Assert.Equal(2, ((TestMultiTensor)result).Size);
-        Assert.Same(Complex.Two, result[0]);
-        Assert.Same(child, result[1]);
+        result.ShouldBeOfType<TestMultiTensor>();
+        ((TestMultiTensor)result).Size.ShouldBe(2);
+        result[0].ShouldBeSameAs(Complex.Two);
+        result[1].ShouldBeSameAs(child);
     }
 
     [Fact]
@@ -30,7 +30,7 @@ public sealed class MultiTensorTests
 
         TensorType result = tensor.Remove(missing);
 
-        Assert.Same(missing, result);
+        result.ShouldBeSameAs(missing);
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public sealed class MultiTensorTests
 
         TensorType result = tensor.Remove([]);
 
-        Assert.Same(tensor, result);
+        result.ShouldBeSameAs(tensor);
     }
 
     [Fact]
@@ -48,8 +48,8 @@ public sealed class MultiTensorTests
     {
         TestMultiTensor tensor = new([Complex.One, Complex.Two]);
 
-        Assert.Throws<IndexOutOfRangeException>(() => tensor.Remove([2]));
-        Assert.Throws<IndexOutOfRangeException>(() => tensor.Remove([-1]));
+        Should.Throw<IndexOutOfRangeException>(() => tensor.Remove([2]));
+        Should.Throw<IndexOutOfRangeException>(() => tensor.Remove([-1]));
     }
 
     [Fact]
@@ -59,7 +59,7 @@ public sealed class MultiTensorTests
 
         TensorType result = tensor.Remove([2, 0, 1, 1]);
 
-        Assert.Same(Complex.Zero, result);
+        result.ShouldBeSameAs(Complex.Zero);
     }
 
     [Fact]
@@ -69,9 +69,9 @@ public sealed class MultiTensorTests
 
         TensorType result = tensor.Remove([3, 1, 3]);
 
-        Assert.Same(tensor.RemoveMarker, result);
-        Assert.NotNull(tensor.LastRemovedPositions);
-        Assert.Equal([1, 3], tensor.LastRemovedPositions);
+        result.ShouldBeSameAs(tensor.RemoveMarker);
+        tensor.LastRemovedPositions.ShouldNotBeNull();
+        tensor.LastRemovedPositions.ShouldBe([1, 3]);
     }
 
     [Fact]
@@ -81,7 +81,7 @@ public sealed class MultiTensorTests
 
         TensorType result = tensor.Select([]);
 
-        Assert.Same(Complex.Zero, result);
+        result.ShouldBeSameAs(Complex.Zero);
     }
 
     [Fact]
@@ -91,7 +91,7 @@ public sealed class MultiTensorTests
 
         TensorType result = tensor.Select([1]);
 
-        Assert.Same(Complex.Two, result);
+        result.ShouldBeSameAs(Complex.Two);
     }
 
     [Fact]
@@ -101,7 +101,7 @@ public sealed class MultiTensorTests
 
         TensorType result = tensor.Select([2, 0, 1, 1]);
 
-        Assert.Same(tensor, result);
+        result.ShouldBeSameAs(tensor);
     }
 
     [Fact]
@@ -111,9 +111,9 @@ public sealed class MultiTensorTests
 
         TensorType result = tensor.Select([3, 1, 3]);
 
-        Assert.Same(tensor.SelectMarker, result);
-        Assert.NotNull(tensor.LastSelectedPositions);
-        Assert.Equal([1, 3], tensor.LastSelectedPositions);
+        result.ShouldBeSameAs(tensor.SelectMarker);
+        tensor.LastSelectedPositions.ShouldNotBeNull();
+        tensor.LastSelectedPositions.ShouldBe([1, 3]);
     }
 
     private sealed class TestMultiTensor(TensorType[] children) : MultiTensor(IndicesFactory.EmptyIndices)

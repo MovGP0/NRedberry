@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NRedberry.Physics\NRedberry.Physics.csproj" />
+    <ProjectReference Include="..\TestInfrastructure\TestInfrastructure.csproj" />
   </ItemGroup>
 
 </Project>

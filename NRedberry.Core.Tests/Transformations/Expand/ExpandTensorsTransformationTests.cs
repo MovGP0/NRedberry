@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Expand;
+﻿using NRedberry.Transformations.Expand;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -13,9 +13,7 @@ public sealed class ExpandTensorsTransformationTests
 
         NRedberry.Tensors.Tensor actual = ExpandTensorsTransformation.Expand(tensor);
 
-        Assert.Equal(
-            tensor.ToString(OutputFormat.Redberry),
-            actual.ToString(OutputFormat.Redberry));
+        actual.ToString(OutputFormat.Redberry).ShouldBe(tensor.ToString(OutputFormat.Redberry));
     }
 
     [Fact]
@@ -26,14 +24,12 @@ public sealed class ExpandTensorsTransformationTests
 
         NRedberry.Tensors.Tensor actual = transformation.Transform(tensor);
 
-        Assert.Equal(
-            tensor.ToString(OutputFormat.Redberry),
-            actual.ToString(OutputFormat.Redberry));
+        actual.ToString(OutputFormat.Redberry).ShouldBe(tensor.ToString(OutputFormat.Redberry));
     }
 
     [Fact]
     public void ShouldExposeReadableName()
     {
-        Assert.Equal("ExpandTensors", ExpandTensorsTransformation.Instance.ToString(OutputFormat.Redberry));
+        ExpandTensorsTransformation.Instance.ToString(OutputFormat.Redberry).ShouldBe("ExpandTensors");
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -10,7 +10,7 @@ public sealed class ArraysUtilsAddAllTests
     {
         int[] actual = ArraysUtils.AddAll([1, 2], 3, 4);
 
-        Assert.Equal([1, 2, 3, 4], actual);
+        actual.ShouldBe([1, 2, 3, 4]);
     }
 
     [Fact]
@@ -18,7 +18,7 @@ public sealed class ArraysUtilsAddAllTests
     {
         int[] actual = ArraysUtils.AddAll([1, 2], [3], [], [4, 5]);
 
-        Assert.Equal([1, 2, 3, 4, 5], actual);
+        actual.ShouldBe([1, 2, 3, 4, 5]);
     }
 
     [Fact]
@@ -26,6 +26,6 @@ public sealed class ArraysUtilsAddAllTests
     {
         int[] actual = ArraysUtils.AddAll();
 
-        Assert.Empty(actual);
+        actual.ShouldBeEmpty();
     }
 }

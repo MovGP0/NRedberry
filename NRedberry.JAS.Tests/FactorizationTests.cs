@@ -1,6 +1,7 @@
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
@@ -14,7 +15,7 @@ public sealed class FactorizationTests
         GenPolynomialRing<BigRational> ring = CreateRing();
         GenPolynomial<BigRational> linear = ring.Univariate(0).Sum(ring.FromInteger(1));
 
-        Assert.True(factorization.IsIrreducible(linear));
+        factorization.IsIrreducible(linear).ShouldBeTrue();
     }
 
     private static GenPolynomialRing<BigRational> CreateRing()

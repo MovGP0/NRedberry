@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
@@ -13,8 +13,8 @@ public sealed class NoLiftingExceptionTests
         NoLiftingException withMessage = new("failed");
         NoLiftingException withInner = new("failed", inner);
 
-        Assert.NotNull(empty);
-        Assert.Equal("failed", withMessage.Message);
-        Assert.Same(inner, withInner.InnerException);
+        empty.ShouldNotBeNull();
+        withMessage.Message.ShouldBe("failed");
+        withInner.InnerException.ShouldBeSameAs(inner);
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils.Stretces;
+﻿using NRedberry.Core.Utils.Stretces;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils.Stretces;
@@ -10,16 +10,16 @@ public sealed class StretchIteratorITests
     {
         StretchIteratorI iterator = new([1, 1, 2, 2, 2]);
 
-        Assert.True(iterator.MoveNext());
-        Assert.Equal(new Stretch(0, 2), iterator.Current);
-        Assert.True(iterator.MoveNext());
-        Assert.Equal(new Stretch(2, 3), iterator.Current);
-        Assert.False(iterator.MoveNext());
+        iterator.MoveNext().ShouldBeTrue();
+        iterator.Current.ShouldBe(new Stretch(0, 2));
+        iterator.MoveNext().ShouldBeTrue();
+        iterator.Current.ShouldBe(new Stretch(2, 3));
+        iterator.MoveNext().ShouldBeFalse();
 
         iterator.Reset();
-        Assert.True(iterator.HasNext());
-        Assert.True(iterator.MoveNext());
-        Assert.Equal(new Stretch(0, 2), iterator.Current);
+        iterator.HasNext().ShouldBeTrue();
+        iterator.MoveNext().ShouldBeTrue();
+        iterator.Current.ShouldBe(new Stretch(0, 2));
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public sealed class StretchIteratorITests
     {
         StretchIteratorI iterator = new([1, 2]);
 
-        Assert.Throws<InvalidOperationException>(() => _ = iterator.Current);
-        Assert.Throws<NotSupportedException>(() => iterator.Remove());
+        Should.Throw<InvalidOperationException>(() => _ = iterator.Current);
+        Should.Throw<NotSupportedException>(() => iterator.Remove());
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Symmetrization;
+﻿using NRedberry.Transformations.Symmetrization;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -11,7 +11,7 @@ public sealed class TransformationExceptionTests
     {
         TransformationException exception = new("boom");
 
-        Assert.Contains("boom", exception.Message, StringComparison.Ordinal);
+        exception.Message.ShouldContain("boom");
     }
 
     [Fact]
@@ -19,6 +19,6 @@ public sealed class TransformationExceptionTests
     {
         TransformationException exception = new(TensorApi.Parse("a"), TensorApi.Parse("b"));
 
-        Assert.NotNull(exception);
+        exception.ShouldNotBeNull();
     }
 }

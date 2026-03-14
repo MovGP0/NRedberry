@@ -1,4 +1,4 @@
-using NRedberry.Tensors.Iterators;
+﻿using NRedberry.Tensors.Iterators;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -17,7 +17,7 @@ public sealed class FromParentToChildIteratorTests
             visited.Add(current.ToString(OutputFormat.Redberry));
         }
 
-        Assert.Equal(["a+b", "a", "b"], visited);
-        Assert.Equal("a+b", iterator.Result().ToString(OutputFormat.Redberry));
+        visited.ShouldBe(["a+b", "a", "b"]);
+        iterator.Result().ToString(OutputFormat.Redberry).ShouldBe("a+b");
     }
 }

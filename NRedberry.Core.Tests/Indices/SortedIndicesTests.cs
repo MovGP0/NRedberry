@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using NRedberry;
 using NRedberry.Indices;
@@ -20,7 +20,7 @@ public sealed class SortedIndicesTests
 
         SortedIndices indices = new([lowerLatin5, upperGreek1, lowerGreek2, upperLatin1]);
 
-        Assert.Equal([upperLatin1, upperGreek1, lowerLatin5, lowerGreek2], indices.AllIndices.ToArray());
+        indices.AllIndices.ToArray().ShouldBe([upperLatin1, upperGreek1, lowerLatin5, lowerGreek2]);
     }
 
     [Fact]
@@ -34,18 +34,18 @@ public sealed class SortedIndicesTests
 
         SortedIndices indices = new([lowerLatin5, upperLatin2, lowerGreek1, lowerLatin1, upperLatin1]);
 
-        Assert.Equal(4, indices.Size(IndexType.LatinLower));
-        Assert.Equal(1, indices.Size(IndexType.GreekLower));
-        Assert.Equal(0, indices.Size(IndexType.Matrix4));
+        indices.Size(IndexType.LatinLower).ShouldBe(4);
+        indices.Size(IndexType.GreekLower).ShouldBe(1);
+        indices.Size(IndexType.Matrix4).ShouldBe(0);
 
-        Assert.Equal(upperLatin1, indices[IndexType.LatinLower, 0]);
-        Assert.Equal(upperLatin2, indices[IndexType.LatinLower, 1]);
-        Assert.Equal(lowerLatin1, indices[IndexType.LatinLower, 2]);
-        Assert.Equal(lowerLatin5, indices[IndexType.LatinLower, 3]);
-        Assert.Throws<IndexOutOfRangeException>(() => _ = indices[IndexType.LatinLower, 4]);
+        indices[IndexType.LatinLower, 0].ShouldBe(upperLatin1);
+        indices[IndexType.LatinLower, 1].ShouldBe(upperLatin2);
+        indices[IndexType.LatinLower, 2].ShouldBe(lowerLatin1);
+        indices[IndexType.LatinLower, 3].ShouldBe(lowerLatin5);
+        Should.Throw<IndexOutOfRangeException>(() => _ = indices[IndexType.LatinLower, 4]);
 
-        Assert.Equal(lowerGreek1, indices[IndexType.GreekLower, 0]);
-        Assert.Throws<IndexOutOfRangeException>(() => _ = indices[IndexType.GreekLower, 1]);
+        indices[IndexType.GreekLower, 0].ShouldBe(lowerGreek1);
+        Should.Throw<IndexOutOfRangeException>(() => _ = indices[IndexType.GreekLower, 1]);
     }
 
     [Fact]
@@ -59,15 +59,15 @@ public sealed class SortedIndicesTests
         IndicesContract empty = mixed.GetOfType(IndexType.Matrix4);
         IndicesContract subset = mixed.GetOfType(IndexType.LatinLower);
 
-        Assert.Same(IndicesFactory.EmptyIndices, empty);
-        Assert.IsType<SortedIndices>(subset);
-        Assert.NotSame(mixed, subset);
-        Assert.Equal([upperLatin1, lowerLatin2], subset.AllIndices.ToArray());
+        empty.ShouldBeSameAs(IndicesFactory.EmptyIndices);
+        subset.ShouldBeOfType<SortedIndices>();
+        subset.ShouldNotBeSameAs(mixed);
+        subset.AllIndices.ToArray().ShouldBe([upperLatin1, lowerLatin2]);
 
         SortedIndices onlyLatin = new([lowerLatin2, upperLatin1]);
         IndicesContract all = onlyLatin.GetOfType(IndexType.LatinLower);
 
-        Assert.Same(onlyLatin, all);
+        all.ShouldBeSameAs(onlyLatin);
     }
 
     [Fact]
@@ -83,8 +83,8 @@ public sealed class SortedIndicesTests
         int[] expectedUpper = original.LowerIndices.Select(i => i ^ IndicesUtils.UpperRawStateInt).ToArray();
         int[] expectedLower = original.UpperIndices.Select(i => i ^ IndicesUtils.UpperRawStateInt).ToArray();
 
-        Assert.Equal(expectedUpper, inverted.UpperIndices.ToArray());
-        Assert.Equal(expectedLower, inverted.LowerIndices.ToArray());
+        inverted.UpperIndices.ToArray().ShouldBe(expectedUpper);
+        inverted.LowerIndices.ToArray().ShouldBe(expectedLower);
     }
 
     [Fact]
@@ -98,7 +98,7 @@ public sealed class SortedIndicesTests
 
         IndicesContract mapped = indices.ApplyIndexMapping(identity);
 
-        Assert.Same(indices, mapped);
+        mapped.ShouldBeSameAs(indices);
     }
 
     [Fact]
@@ -116,15 +116,13 @@ public sealed class SortedIndicesTests
 
         IndicesContract mapped = indices.ApplyIndexMapping(mapper);
 
-        Assert.IsType<SortedIndices>(mapped);
-        Assert.NotSame(indices, mapped);
-        Assert.Equal(
-            [
+        mapped.ShouldBeOfType<SortedIndices>();
+        mapped.ShouldNotBeSameAs(indices);
+        mapped.AllIndices.ToArray().ShouldBe([
                 IndicesUtils.CreateIndex(9, IndexType.LatinLower, true),
                 IndicesUtils.CreateIndex(9, IndexType.LatinLower, false),
                 lowerGreek2,
-            ],
-            mapped.AllIndices.ToArray());
+            ]);
     }
 
     [Fact]
@@ -137,7 +135,7 @@ public sealed class SortedIndicesTests
 
         short[] diffIds = indices.GetDiffIds();
 
-        Assert.Equal(indices.Size(), diffIds.Length);
+        diffIds.Length.ShouldBe(indices.Size());
     }
 
     [Fact]
@@ -147,9 +145,7 @@ public sealed class SortedIndicesTests
 
         Exception? exception = Record.Exception(() => _ = new SortedIndices([duplicate, duplicate]));
 
-        Assert.NotNull(exception);
-        Assert.True(
-            exception is InconsistentIndicesException || exception is TypeInitializationException,
-            "Unexpected exception type.");
+        exception.ShouldNotBeNull();
+        exception is InconsistentIndicesException || exception is TypeInitializationException.ShouldBeTrue("Unexpected exception type.");
     }
 }

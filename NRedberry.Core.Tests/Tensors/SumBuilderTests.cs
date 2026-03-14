@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -17,10 +17,10 @@ public sealed class SumBuilderTests
 
         string text = builder.Build().ToString(OutputFormat.Redberry);
 
-        Assert.Contains("a", text);
-        Assert.Contains("b", text);
-        Assert.Contains("Sin[c]", text);
-        Assert.Contains("d", text);
+        text.ShouldContain("a");
+        text.ShouldContain("b");
+        text.ShouldContain("Sin[c]");
+        text.ShouldContain("d");
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public sealed class SumBuilderTests
     {
         SumBuilder builder = new();
 
-        Assert.Equal(Complex.Zero, builder.Build());
+        builder.Build().ShouldBe(Complex.Zero);
     }
 
     [Fact]
@@ -40,9 +40,9 @@ public sealed class SumBuilderTests
         TensorBuilder clone = builder.Clone();
         clone.Put(TensorFactory.Parse("b"));
 
-        Assert.Equal("a", builder.Build().ToString(OutputFormat.Redberry));
+        builder.Build().ToString(OutputFormat.Redberry).ShouldBe("a");
         string cloneText = clone.Build().ToString(OutputFormat.Redberry);
-        Assert.Contains("a", cloneText);
-        Assert.Contains("b", cloneText);
+        cloneText.ShouldContain("a");
+        cloneText.ShouldContain("b");
     }
 }

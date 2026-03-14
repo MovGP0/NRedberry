@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
@@ -29,7 +29,7 @@ public sealed class HenselMultUtilTests
             1,
             1);
 
-        Assert.Equal(expected[0], lifted[0]);
-        Assert.Equal(expected[1], lifted[1]);
+        lifted[0].ShouldBe(expected[0]);
+        lifted[1].ShouldBe(expected[1]);
     }
 }

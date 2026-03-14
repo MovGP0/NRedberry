@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Parsers;
 using RedberryParser = NRedberry.Parsers.Parser;
 using Xunit;
@@ -10,13 +10,13 @@ public sealed class ParserSumTests
     [Fact]
     public void ShouldExposeSingletonInstance()
     {
-        Assert.Same(ParserSum.Instance, ParserSum.Instance);
+        ParserSum.Instance.ShouldBeSameAs(ParserSum.Instance);
     }
 
     [Fact]
     public void ShouldExposeExpectedPriority()
     {
-        Assert.Equal(1000, ParserSum.Instance.Priority);
+        ParserSum.Instance.Priority.ShouldBe(1000);
     }
 
     [Fact]
@@ -24,7 +24,7 @@ public sealed class ParserSumTests
     {
         var token = ParserSum.Instance.ParseToken("a*b", RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
@@ -32,19 +32,19 @@ public sealed class ParserSumTests
     {
         var token = ParserSum.Instance.ParseToken("a+b-c", RedberryParser.Default);
 
-        var sum = Assert.IsType<ParseToken>(token);
-        Assert.Equal(TokenType.Sum, sum.TokenType);
-        Assert.Equal(3, sum.Content.Length);
-        Assert.Equal(TokenType.SimpleTensor, sum.Content[0].TokenType);
-        Assert.Equal(TokenType.SimpleTensor, sum.Content[1].TokenType);
+        var sum = token.ShouldBeOfType<ParseToken>();
+        sum.TokenType.ShouldBe(TokenType.Sum);
+        sum.Content.Length.ShouldBe(3);
+        sum.Content[0].TokenType.ShouldBe(TokenType.SimpleTensor);
+        sum.Content[1].TokenType.ShouldBe(TokenType.SimpleTensor);
 
-        var negativeTerm = Assert.IsType<ParseToken>(sum.Content[2]);
-        Assert.Equal(TokenType.Product, negativeTerm.TokenType);
-        Assert.Equal(2, negativeTerm.Content.Length);
+        var negativeTerm = sum.Content[2].ShouldBeOfType<ParseToken>();
+        negativeTerm.TokenType.ShouldBe(TokenType.Product);
+        negativeTerm.Content.Length.ShouldBe(2);
 
-        var minusOne = Assert.IsType<ParseTokenNumber>(negativeTerm.Content[0]);
-        Assert.Equal(Complex.MinusOne, minusOne.Value);
-        Assert.Equal(TokenType.SimpleTensor, negativeTerm.Content[1].TokenType);
+        var minusOne = negativeTerm.Content[0].ShouldBeOfType<ParseTokenNumber>();
+        minusOne.Value.ShouldBe(Complex.MinusOne);
+        negativeTerm.Content[1].TokenType.ShouldBe(TokenType.SimpleTensor);
     }
 
     [Fact]
@@ -52,18 +52,18 @@ public sealed class ParserSumTests
     {
         var token = ParserSum.Instance.ParseToken("a-b*c", RedberryParser.Default);
 
-        var sum = Assert.IsType<ParseToken>(token);
-        Assert.Equal(TokenType.Sum, sum.TokenType);
-        Assert.Equal(2, sum.Content.Length);
+        var sum = token.ShouldBeOfType<ParseToken>();
+        sum.TokenType.ShouldBe(TokenType.Sum);
+        sum.Content.Length.ShouldBe(2);
 
-        var negativeProduct = Assert.IsType<ParseToken>(sum.Content[1]);
-        Assert.Equal(TokenType.Product, negativeProduct.TokenType);
-        Assert.Equal(3, negativeProduct.Content.Length);
+        var negativeProduct = sum.Content[1].ShouldBeOfType<ParseToken>();
+        negativeProduct.TokenType.ShouldBe(TokenType.Product);
+        negativeProduct.Content.Length.ShouldBe(3);
 
-        var minusOne = Assert.IsType<ParseTokenNumber>(negativeProduct.Content[0]);
-        Assert.Equal(Complex.MinusOne, minusOne.Value);
-        Assert.Equal(TokenType.SimpleTensor, negativeProduct.Content[1].TokenType);
-        Assert.Equal(TokenType.SimpleTensor, negativeProduct.Content[2].TokenType);
+        var minusOne = negativeProduct.Content[0].ShouldBeOfType<ParseTokenNumber>();
+        minusOne.Value.ShouldBe(Complex.MinusOne);
+        negativeProduct.Content[1].TokenType.ShouldBe(TokenType.SimpleTensor);
+        negativeProduct.Content[2].TokenType.ShouldBe(TokenType.SimpleTensor);
     }
 
     [Fact]
@@ -71,13 +71,13 @@ public sealed class ParserSumTests
     {
         var token = ParserSum.Instance.ParseToken("(a+b)-c", RedberryParser.Default);
 
-        var sum = Assert.IsType<ParseToken>(token);
-        Assert.Equal(TokenType.Sum, sum.TokenType);
-        Assert.Equal(2, sum.Content.Length);
-        Assert.Equal(TokenType.Sum, sum.Content[0].TokenType);
+        var sum = token.ShouldBeOfType<ParseToken>();
+        sum.TokenType.ShouldBe(TokenType.Sum);
+        sum.Content.Length.ShouldBe(2);
+        sum.Content[0].TokenType.ShouldBe(TokenType.Sum);
 
-        var negativeTerm = Assert.IsType<ParseToken>(sum.Content[1]);
-        Assert.Equal(TokenType.Product, negativeTerm.TokenType);
+        var negativeTerm = sum.Content[1].ShouldBeOfType<ParseToken>();
+        negativeTerm.TokenType.ShouldBe(TokenType.Product);
     }
 
     [Fact]
@@ -85,10 +85,10 @@ public sealed class ParserSumTests
     {
         var token = ParserSum.Instance.ParseToken("a--b", RedberryParser.Default);
 
-        var sum = Assert.IsType<ParseToken>(token);
-        Assert.Equal(TokenType.Sum, sum.TokenType);
-        Assert.Equal(2, sum.Content.Length);
-        Assert.Equal(TokenType.SimpleTensor, sum.Content[0].TokenType);
-        Assert.Equal(TokenType.SimpleTensor, sum.Content[1].TokenType);
+        var sum = token.ShouldBeOfType<ParseToken>();
+        sum.TokenType.ShouldBe(TokenType.Sum);
+        sum.Content.Length.ShouldBe(2);
+        sum.Content[0].TokenType.ShouldBe(TokenType.SimpleTensor);
+        sum.Content[1].TokenType.ShouldBe(TokenType.SimpleTensor);
     }
 }

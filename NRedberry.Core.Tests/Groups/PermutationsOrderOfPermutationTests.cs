@@ -1,5 +1,6 @@
 using System.Numerics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -14,7 +15,7 @@ public sealed class PermutationsOrderOfPermutationTests
 
         BigInteger order = GroupPermutations.OrderOfPermutation(permutation);
 
-        Assert.Equal(BigInteger.One, order);
+        order.ShouldBe(BigInteger.One);
     }
 
     [Fact(DisplayName = "OrderOfPermutation should return one for identity permutation")]
@@ -24,7 +25,7 @@ public sealed class PermutationsOrderOfPermutationTests
 
         BigInteger order = GroupPermutations.OrderOfPermutation(permutation);
 
-        Assert.Equal(BigInteger.One, order);
+        order.ShouldBe(BigInteger.One);
     }
 
     [Fact(DisplayName = "OrderOfPermutation should compute lcm of disjoint cycle lengths")]
@@ -34,7 +35,7 @@ public sealed class PermutationsOrderOfPermutationTests
 
         BigInteger order = GroupPermutations.OrderOfPermutation(permutation);
 
-        Assert.Equal(new BigInteger(6), order);
+        order.ShouldBe(new BigInteger(6));
     }
 
     [Fact(DisplayName = "OrderOfPermutation should ignore fixed points in lcm")]
@@ -44,7 +45,7 @@ public sealed class PermutationsOrderOfPermutationTests
 
         BigInteger order = GroupPermutations.OrderOfPermutation(permutation);
 
-        Assert.Equal(new BigInteger(2), order);
+        order.ShouldBe(new BigInteger(2));
     }
 
     [Fact(DisplayName = "OrderOfPermutation should support short and sbyte overloads")]
@@ -56,8 +57,8 @@ public sealed class PermutationsOrderOfPermutationTests
         BigInteger shortOrder = GroupPermutations.OrderOfPermutation(shortPermutation);
         BigInteger sbyteOrder = GroupPermutations.OrderOfPermutation(sbytePermutation);
 
-        Assert.Equal(new BigInteger(6), shortOrder);
-        Assert.Equal(new BigInteger(6), sbyteOrder);
+        shortOrder.ShouldBe(new BigInteger(6));
+        sbyteOrder.ShouldBe(new BigInteger(6));
     }
 
     [Fact(DisplayName = "OrderOfPermutation should not mutate input arrays")]
@@ -75,8 +76,8 @@ public sealed class PermutationsOrderOfPermutationTests
         _ = GroupPermutations.OrderOfPermutation(shortPermutation);
         _ = GroupPermutations.OrderOfPermutation(sbytePermutation);
 
-        Assert.Equal(intSnapshot, intPermutation);
-        Assert.Equal(shortSnapshot, shortPermutation);
-        Assert.Equal(sbyteSnapshot, sbytePermutation);
+        intPermutation.ShouldBe(intSnapshot);
+        shortPermutation.ShouldBe(shortSnapshot);
+        sbytePermutation.ShouldBe(sbyteSnapshot);
     }
 }

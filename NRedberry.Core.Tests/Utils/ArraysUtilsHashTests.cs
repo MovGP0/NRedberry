@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -11,7 +11,7 @@ public sealed class ArraysUtilsHashTests
         int left = ArraysUtils.CommutativeHashCode("a", 1, null);
         int right = ArraysUtils.CommutativeHashCode(1, null, "a");
 
-        Assert.Equal(left, right);
+        right.ShouldBe(left);
     }
 
     [Fact]
@@ -22,14 +22,14 @@ public sealed class ArraysUtilsHashTests
         int left = ArraysUtils.CommutativeHashCode(values, 0, 3);
         int right = ArraysUtils.CommutativeHashCode([1, null, "a"], 0, 3);
 
-        Assert.Equal(left, right);
+        right.ShouldBe(left);
     }
 
     [Fact]
     public void ShouldCompareIntegerArraysByValue()
     {
-        Assert.True(ArraysUtils.Equals([1, 2, 3], [1, 2, 3]));
-        Assert.False(ArraysUtils.Equals([1, 2, 3], [1, 2, 4]));
-        Assert.False(ArraysUtils.Equals([1, 2, 3], null));
+        ArraysUtils.Equals([1, 2, 3], [1, 2, 3]).ShouldBeTrue();
+        ArraysUtils.Equals([1, 2, 3], [1, 2, 4]).ShouldBeFalse();
+        ArraysUtils.Equals([1, 2, 3], null).ShouldBeFalse();
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry.Tensors.Iterators;
+﻿using NRedberry.Tensors.Iterators;
 using NRedberry.Transformations.Substitutions;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -12,10 +12,10 @@ public sealed class SubstitutionIteratorTests
     {
         SubstitutionIterator iterator = new(TensorApi.Parse("a+b"));
 
-        Assert.Equal("a", iterator.Next().ToString(OutputFormat.Redberry));
-        Assert.Equal("b", iterator.Next().ToString(OutputFormat.Redberry));
-        Assert.Equal("a+b", iterator.Next().ToString(OutputFormat.Redberry));
-        Assert.Null(iterator.Next());
+        iterator.Next().ToString(OutputFormat.Redberry).ShouldBe("a");
+        iterator.Next().ToString(OutputFormat.Redberry).ShouldBe("b");
+        iterator.Next().ToString(OutputFormat.Redberry).ShouldBe("a+b");
+        iterator.Next().ShouldBeNull();
     }
 
     [Fact]
@@ -26,11 +26,11 @@ public sealed class SubstitutionIteratorTests
         _ = iterator.Next();
         iterator.UnsafeSet(TensorApi.Parse("c"));
 
-        Assert.True(iterator.IsCurrentModified());
-        Assert.Equal("b", iterator.Next().ToString(OutputFormat.Redberry));
-        Assert.Equal("c+b", iterator.Next().ToString(OutputFormat.Redberry));
-        Assert.Null(iterator.Next());
-        Assert.Equal("c+b", iterator.Result().ToString(OutputFormat.Redberry));
+        iterator.IsCurrentModified().ShouldBeTrue();
+        iterator.Next().ToString(OutputFormat.Redberry).ShouldBe("b");
+        iterator.Next().ToString(OutputFormat.Redberry).ShouldBe("c+b");
+        iterator.Next().ShouldBeNull();
+        iterator.Result().ToString(OutputFormat.Redberry).ShouldBe("c+b");
     }
 
     [Fact]
@@ -38,6 +38,6 @@ public sealed class SubstitutionIteratorTests
     {
         SubstitutionIterator iterator = new(TensorApi.Parse("a+b"), TraverseGuide.All);
 
-        Assert.Empty(iterator.GetForbidden());
+        iterator.GetForbidden().ShouldBeEmpty();
     }
 }

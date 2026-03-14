@@ -1,4 +1,5 @@
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -13,10 +14,10 @@ public sealed class SchreierVectorTests
         SchreierVector vector = new(1);
 
         // Assert
-        Assert.Equal(GroupPermutations.DefaultIdentityLength, vector.Length);
+        vector.Length.ShouldBe(GroupPermutations.DefaultIdentityLength);
         for (int i = 0; i < vector.Length; i++)
         {
-            Assert.Equal(-2, vector[i]);
+            vector[i].ShouldBe(-2);
         }
     }
 
@@ -30,7 +31,7 @@ public sealed class SchreierVectorTests
         int value = vector[vector.Length + 5];
 
         // Assert
-        Assert.Equal(-2, value);
+        value.ShouldBe(-2);
     }
 
     [Fact(DisplayName = "Indexer set auto-expands and writes value")]
@@ -44,9 +45,9 @@ public sealed class SchreierVectorTests
         vector[position] = 17;
 
         // Assert
-        Assert.True(vector.Length >= position + 1);
-        Assert.Equal(17, vector[position]);
-        Assert.Equal(-2, vector[position - 1]);
+        (vector.Length >= position + 1).ShouldBeTrue();
+        vector[position].ShouldBe(17);
+        vector[position - 1].ShouldBe(-2);
     }
 
     [Fact(DisplayName = "Reset restores all positions to -2")]
@@ -64,7 +65,7 @@ public sealed class SchreierVectorTests
         // Assert
         for (int i = 0; i < vector.Length; i++)
         {
-            Assert.Equal(-2, vector[i]);
+            vector[i].ShouldBe(-2);
         }
     }
 
@@ -84,11 +85,11 @@ public sealed class SchreierVectorTests
         original[originalFarPosition] = 5;
 
         // Assert
-        Assert.NotSame(original, clone);
-        Assert.Equal(1, original[0]);
-        Assert.Equal(7, clone[0]);
-        Assert.Equal(5, original[originalFarPosition]);
-        Assert.Equal(8, clone[originalFarPosition]);
-        Assert.True(clone.Length > original.Length);
+        clone.ShouldNotBeSameAs(original);
+        original[0].ShouldBe(1);
+        clone[0].ShouldBe(7);
+        original[originalFarPosition].ShouldBe(5);
+        clone[originalFarPosition].ShouldBe(8);
+        (clone.Length > original.Length).ShouldBeTrue();
     }
 }

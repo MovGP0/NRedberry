@@ -1,4 +1,4 @@
-using Xunit;
+﻿using Xunit;
 
 namespace NRedberry.Core.Tests.Test;
 
@@ -47,9 +47,9 @@ public sealed class TestUtilsTests
     {
         using EnvironmentVariableScope _ = new("longTest", "true");
 
-        Assert.True(TestUtils.DoLongTests());
-        Assert.Equal(2, TestUtils.Its(1, 2));
-        Assert.Equal(4L, TestUtils.Its(3L, 4L));
+        TestUtils.DoLongTests().ShouldBeTrue();
+        TestUtils.Its(1, 2).ShouldBe(2);
+        TestUtils.Its(3L, 4L).ShouldBe(4L);
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public sealed class TestUtilsTests
     {
         using EnvironmentVariableScope _ = new("testPerformance", "true");
 
-        Assert.True(TestUtils.DoPerformanceTests());
+        TestUtils.DoPerformanceTests().ShouldBeTrue();
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public sealed class TestUtilsTests
     {
         using EnvironmentVariableScope _ = new("noGap", "true");
 
-        Assert.True(TestUtils.SkipGapTests());
+        TestUtils.SkipGapTests().ShouldBeTrue();
     }
 }
 

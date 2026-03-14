@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 using Xunit;
@@ -15,8 +15,8 @@ public sealed class GreatestCommonDivisorSubresTests
         GenPolynomial<BigRational> first = ring.Univariate(0, 2L).Subtract(ring.FromInteger(1));
         GenPolynomial<BigRational> second = ring.Univariate(0).Subtract(ring.FromInteger(1));
 
-        Assert.Equal(second, gcd.BaseGcd(first, second));
-        Assert.True(gcd.BaseResultant(first, second).IsZero());
+        gcd.BaseGcd(first, second).ShouldBe(second);
+        gcd.BaseResultant(first, second).IsZero().ShouldBeTrue();
     }
 
     private static GenPolynomialRing<BigRational> CreateRing()

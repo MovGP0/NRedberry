@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 using Xunit;
@@ -19,10 +19,10 @@ public sealed class QuotientTests
             t.Subtract(polynomialRing.FromInteger(1)));
         Quotient<BigRational> one = ring.One;
 
-        Assert.True(reduced.Den.IsOne());
-        Assert.Equal(t.Sum(polynomialRing.FromInteger(1)), reduced.Num);
-        Assert.True(reduced.Multiply(reduced.Inverse()).IsOne());
-        Assert.True(reduced.Divide(reduced).IsOne());
+        reduced.Den.IsOne().ShouldBeTrue();
+        reduced.Num.ShouldBe(t.Sum(polynomialRing.FromInteger(1)));
+        reduced.Multiply(reduced.Inverse()).IsOne().ShouldBeTrue();
+        reduced.Divide(reduced).IsOne().ShouldBeTrue();
     }
 
     [Fact]
@@ -32,9 +32,9 @@ public sealed class QuotientTests
         Quotient<BigRational> parsed = ring.Parse("{ 2 | 3 }");
         Quotient<BigRational> same = new(ring, ring.Ring.FromInteger(2), ring.Ring.FromInteger(3));
 
-        Assert.Equal(same, parsed);
-        Assert.Equal(0, parsed.CompareTo(same));
-        Assert.Equal("{ 2/3 }", parsed.ToString());
+        parsed.ShouldBe(same);
+        parsed.CompareTo(same).ShouldBe(0);
+        parsed.ToString().ShouldBe("{ 2/3 }");
     }
 
     private static QuotientRing<BigRational> CreateRing()

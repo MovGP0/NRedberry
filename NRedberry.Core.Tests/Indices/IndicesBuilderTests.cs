@@ -26,8 +26,8 @@ public sealed class IndicesBuilderTests
 
         int[] expected = [1, 2, 3, 4, 5, 6, 10, 11, 7, 8, 9];
 
-        Assert.Equal(expected, builder.ToArray());
-        Assert.Equal(expected, builder.ToList());
+        builder.ToArray().ShouldBe(expected);
+        builder.ToList().ShouldBe(expected);
     }
 
     [Fact]
@@ -35,9 +35,9 @@ public sealed class IndicesBuilderTests
     {
         IndicesBuilder builder = new();
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => builder.Append((int[])null!));
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() => builder.Append((int[])null!));
 
-        Assert.Equal("indices", exception.ParamName);
+        exception.ParamName.ShouldBe("indices");
     }
 
     [Fact]
@@ -45,9 +45,9 @@ public sealed class IndicesBuilderTests
     {
         IndicesBuilder builder = new();
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => builder.Append((int[][])null!));
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() => builder.Append((int[][])null!));
 
-        Assert.Equal("indices", exception.ParamName);
+        exception.ParamName.ShouldBe("indices");
     }
 
     [Fact]
@@ -55,13 +55,13 @@ public sealed class IndicesBuilderTests
     {
         IndicesBuilder builder = new();
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => builder.Append(new int[][]
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() => builder.Append(new int[][]
         {
             [1],
             null!
         }));
 
-        Assert.Equal("array", exception.ParamName);
+        exception.ParamName.ShouldBe("array");
     }
 
     [Fact]
@@ -69,9 +69,9 @@ public sealed class IndicesBuilderTests
     {
         IndicesBuilder builder = new();
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => builder.Append((IEnumerable<int>)null!));
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() => builder.Append((IEnumerable<int>)null!));
 
-        Assert.Equal("indices", exception.ParamName);
+        exception.ParamName.ShouldBe("indices");
     }
 
     [Fact]
@@ -79,9 +79,9 @@ public sealed class IndicesBuilderTests
     {
         IndicesBuilder builder = new();
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => builder.Append((IndicesBuilder)null!));
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() => builder.Append((IndicesBuilder)null!));
 
-        Assert.Equal("ib", exception.ParamName);
+        exception.ParamName.ShouldBe("ib");
     }
 
     [Fact]
@@ -93,8 +93,8 @@ public sealed class IndicesBuilderTests
         IndicesBuilder clone = original.Clone();
         clone.Append(4);
 
-        Assert.Equal([1, 2, 3], original.ToArray());
-        Assert.Equal([1, 2, 3, 4], clone.ToArray());
+        original.ToArray().ShouldBe([1, 2, 3]);
+        clone.ToArray().ShouldBe([1, 2, 3, 4]);
     }
 
     [Fact]
@@ -105,16 +105,16 @@ public sealed class IndicesBuilderTests
         Exception? exception = Record.Exception(() =>
         {
             NRedberry.Indices.Indices indices = builder.Indices;
-            Assert.IsType<SortedIndices>(indices);
-            Assert.True(indices.AllIndices.SequenceEqual([1, 2, 3, 4]));
+            indices.ShouldBeOfType<SortedIndices>();
+            indices.AllIndices.SequenceEqual([1, 2, 3, 4]).ShouldBeTrue();
         });
         if (exception is TypeInitializationException)
         {
             return;
         }
 
-        Assert.Null(exception);
-        Assert.Equal([3, 1, 2, 4], builder.ToArray());
+        exception.ShouldBeNull();
+        builder.ToArray().ShouldBe([3, 1, 2, 4]);
     }
 
     [Fact]
@@ -124,13 +124,13 @@ public sealed class IndicesBuilderTests
         Exception? exception = Record.Exception(() =>
         {
             string value = builder.ToString();
-            Assert.NotNull(value);
+            value.ShouldNotBeNull();
         });
         if (exception is TypeInitializationException)
         {
             return;
         }
 
-        Assert.Null(exception);
+        exception.ShouldBeNull();
     }
 }

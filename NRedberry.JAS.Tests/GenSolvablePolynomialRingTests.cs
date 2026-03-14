@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using Xunit;
@@ -12,13 +12,13 @@ public sealed class GenSolvablePolynomialRingTests
     {
         GenSolvablePolynomialRing<BigRational> ring = CreateRing();
 
-        Assert.True(ring.IsCommutative());
-        Assert.True(ring.IsAssociative());
-        Assert.Equal("3", ring.FromInteger(3).ToString(["x"]));
-        Assert.Equal("x", ring.Univariate(0).ToString(["x"]));
-        Assert.Single(ring.UnivariateList());
-        Assert.Equal(["x"], ring.GetVars()!);
-        Assert.Contains("RelationTable", ring.ToString(), StringComparison.Ordinal);
+        ring.IsCommutative().ShouldBeTrue();
+        ring.IsAssociative().ShouldBeTrue();
+        ring.FromInteger(3).ToString(["x"]).ShouldBe("3");
+        ring.Univariate(0).ToString(["x"]).ShouldBe("x");
+        ring.UnivariateList().ShouldHaveSingleItem();
+        ring.GetVars()!.ShouldBe(["x"]);
+        ring.ToString().ShouldContain("RelationTable");
     }
 
     [Fact]
@@ -26,10 +26,10 @@ public sealed class GenSolvablePolynomialRingTests
     {
         GenSolvablePolynomialRing<BigRational> ring = CreateRing();
 
-        Assert.Equal(2, ring.Extend(1).Nvar);
-        Assert.Equal(1, ring.Extend(1).Contract(1).Nvar);
-        Assert.Equal("x", ring.Reverse().GetVars()!.Single());
-        Assert.Equal("x", ring.Copy(ring.Univariate(0)).ToString(["x"]));
+        ring.Extend(1).Nvar.ShouldBe(2);
+        ring.Extend(1).Contract(1).Nvar.ShouldBe(1);
+        ring.Reverse().GetVars()!.Single().ShouldBe("x");
+        ring.Copy(ring.Univariate(0)).ToString(["x"]).ShouldBe("x");
     }
 
     private static GenSolvablePolynomialRing<BigRational> CreateRing()

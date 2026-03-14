@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Numbers.Parser;
 using Xunit;
 using NumberComplex = NRedberry.Numbers.Complex;
@@ -13,27 +13,27 @@ public sealed class NumberParserTest
         Real left = NumberParser<Real>.RealParser.Parse("2/3");
         Real right = NumberParser<Real>.RealParser.Parse("2/3-2/3");
 
-        Assert.True(right.IsZero());
-        Assert.True(left.Multiply(right).IsZero());
-        Assert.True(left.Divide(right).IsInfinite());
+        right.IsZero().ShouldBeTrue();
+        left.Multiply(right).IsZero().ShouldBeTrue();
+        left.Divide(right).IsInfinite().ShouldBeTrue();
     }
 
     [Fact]
     public void ShouldRejectInvalidLiteral1()
     {
-        Assert.Throws<FormatException>(() => NumberParser<Real>.RealParser.Parse("1+a"));
+        Should.Throw<FormatException>(() => NumberParser<Real>.RealParser.Parse("1+a"));
     }
 
     [Fact]
     public void ShouldRejectInvalidLiteral2()
     {
-        Assert.Throws<FormatException>(() => NumberParser<Real>.RealParser.Parse("2/5+7/(3-(2+1/(4+o-9))*5/4)"));
+        Should.Throw<FormatException>(() => NumberParser<Real>.RealParser.Parse("2/5+7/(3-(2+1/(4+o-9))*5/4)"));
     }
 
     [Fact]
     public void ShouldRejectInvalidLiteral3()
     {
-        Assert.Throws<FormatException>(() => NumberParser<Real>.RealParser.Parse("2/5+7/(3-(2+1/(4^-9))*5/4)"));
+        Should.Throw<FormatException>(() => NumberParser<Real>.RealParser.Parse("2/5+7/(3-(2+1/(4^-9))*5/4)"));
     }
 
     [Fact]
@@ -41,7 +41,7 @@ public sealed class NumberParserTest
     {
         Real value = NumberParser<Real>.RealParser.Parse("2/5+7/(3-(2+1/(4-9))*5/4)");
 
-        Assert.Equal(new Rational(146, 15), value);
+        value.ShouldBe(new Rational(146, 15));
     }
 
     [Fact]
@@ -49,7 +49,7 @@ public sealed class NumberParserTest
     {
         Real value = NumberParser<Real>.RealParser.Parse("2/5+7/(3-(2+1/(4-9))*5/4)");
 
-        Assert.Equal(new Rational(146, 15), value);
+        value.ShouldBe(new Rational(146, 15));
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public sealed class NumberParserTest
     {
         Real value = NumberParser<Real>.RealParser.Parse("2/5+7/(3-(2+1/(4-9))*5/4)+1/0");
 
-        Assert.True(value.IsInfinite());
+        value.IsInfinite().ShouldBeTrue();
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public sealed class NumberParserTest
     {
         Real value = NumberParser<Real>.RealParser.Parse("1/(2/5+7/(3-(2+1/(4-9))*5/4)+1/0)");
 
-        Assert.True(value.IsZero());
+        value.IsZero().ShouldBeTrue();
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public sealed class NumberParserTest
     {
         Real value = NumberParser<Real>.RealParser.Parse("(1-3/3*1.0-2.2+22/10)/(2/5+7/(3-(2+1/(4-9))*5/4)+1/0)");
 
-        Assert.True(value.IsZero());
+        value.IsZero().ShouldBeTrue();
     }
 
     [Fact]
@@ -81,7 +81,7 @@ public sealed class NumberParserTest
     {
         Real value = NumberParser<Real>.RealParser.Parse("1-3/3*1.0-2.2+22/10");
 
-        Assert.True(value.IsZero());
+        value.IsZero().ShouldBeTrue();
     }
 
     [Fact]
@@ -89,7 +89,7 @@ public sealed class NumberParserTest
     {
         Real value = NumberParser<Real>.RealParser.Parse("1/(1-3/3*1.0-2.2+22/10)/(2/5+7/(3-(2+1/(4-9))*5/4)+1/0)");
 
-        Assert.True(value.IsNaN());
+        value.IsNaN().ShouldBeTrue();
     }
 
     [Fact]
@@ -97,7 +97,7 @@ public sealed class NumberParserTest
     {
         Real value = NumberParser<Real>.RealParser.Parse("1+0.0");
 
-        Assert.True(value.IsNumeric());
+        value.IsNumeric().ShouldBeTrue();
     }
 
     [Fact]
@@ -105,7 +105,7 @@ public sealed class NumberParserTest
     {
         Real value = NumberParser<Real>.RealParser.Parse("2*1.0");
 
-        Assert.True(value.IsNumeric());
+        value.IsNumeric().ShouldBeTrue();
     }
 
     [Fact]
@@ -113,7 +113,7 @@ public sealed class NumberParserTest
     {
         Real value = NumberParser<Real>.RealParser.Parse("2/1.0");
 
-        Assert.True(value.IsNumeric());
+        value.IsNumeric().ShouldBeTrue();
     }
 
     [Fact]
@@ -122,7 +122,7 @@ public sealed class NumberParserTest
         NumberComplex actual = NumberParser<NumberComplex>.ComplexParser.Parse("4/2+I*3/2");
         NumberComplex expected = new(new Rational(4, 2), new Rational(3, 2));
 
-        Assert.Equal(expected, actual);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -130,7 +130,7 @@ public sealed class NumberParserTest
     {
         NumberComplex actual = NumberParser<NumberComplex>.ComplexParser.Parse("0/0");
 
-        Assert.Equal(NumberComplex.ComplexNaN, actual);
+        actual.ShouldBe(NumberComplex.ComplexNaN);
     }
 
     [Fact]
@@ -138,7 +138,7 @@ public sealed class NumberParserTest
     {
         NumberComplex actual = NumberParser<NumberComplex>.ComplexParser.Parse("1/0");
 
-        Assert.Equal(NumberComplex.ComplexNaN, actual);
+        actual.ShouldBe(NumberComplex.ComplexNaN);
     }
 
     [Fact]
@@ -146,7 +146,7 @@ public sealed class NumberParserTest
     {
         NumberComplex actual = NumberParser<NumberComplex>.ComplexParser.Parse("-2+3");
 
-        Assert.Equal(NumberComplex.One, actual);
+        actual.ShouldBe(NumberComplex.One);
     }
 
     [Fact]
@@ -154,6 +154,6 @@ public sealed class NumberParserTest
     {
         Real value = NumberParser<Real>.RealParser.Parse("2/5+7/(-3-(-2+1/(-4-9))*5/4)");
 
-        Assert.Equal(new Rational(-254, 15), value);
+        value.ShouldBe(new Rational(-254, 15));
     }
 }

@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
@@ -13,9 +13,9 @@ public sealed class ComplexSumBuilderTests
     {
         object builder = Activator.CreateInstance(BuilderType)!;
 
-        Complex result = Assert.IsType<Complex>(Build(builder));
+        Complex result = Build(builder).ShouldBeOfType<Complex>();
 
-        Assert.Equal(Complex.Zero, result);
+        result.ShouldBe(Complex.Zero);
     }
 
     [Fact]
@@ -23,9 +23,9 @@ public sealed class ComplexSumBuilderTests
     {
         object builder = Activator.CreateInstance(BuilderType, new object[] { Complex.Two })!;
 
-        Complex result = Assert.IsType<Complex>(Build(builder));
+        Complex result = Build(builder).ShouldBeOfType<Complex>();
 
-        Assert.Equal(Complex.Two, result);
+        result.ShouldBe(Complex.Two);
     }
 
     [Fact]
@@ -36,9 +36,9 @@ public sealed class ComplexSumBuilderTests
         Put(builder, Complex.One);
         Put(builder, Complex.Two);
 
-        Complex result = Assert.IsType<Complex>(Build(builder));
+        Complex result = Build(builder).ShouldBeOfType<Complex>();
 
-        Assert.Equal(new Complex(3), result);
+        result.ShouldBe(new Complex(3));
     }
 
     [Fact]
@@ -49,11 +49,11 @@ public sealed class ComplexSumBuilderTests
 
         Put(clone, Complex.Two);
 
-        Complex originalResult = Assert.IsType<Complex>(Build(builder));
-        Complex cloneResult = Assert.IsType<Complex>(Build(clone));
+        Complex originalResult = Build(builder).ShouldBeOfType<Complex>();
+        Complex cloneResult = Build(clone).ShouldBeOfType<Complex>();
 
-        Assert.Equal(Complex.One, originalResult);
-        Assert.Equal(new Complex(3), cloneResult);
+        originalResult.ShouldBe(Complex.One);
+        cloneResult.ShouldBe(new Complex(3));
     }
 
     private static TensorType Build(object builder)

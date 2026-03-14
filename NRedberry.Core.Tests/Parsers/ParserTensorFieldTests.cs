@@ -1,4 +1,4 @@
-using NRedberry.Parsers;
+﻿using NRedberry.Parsers;
 using NRedberry.Numbers;
 using RedberryParser = NRedberry.Parsers.Parser;
 using Xunit;
@@ -13,13 +13,13 @@ public sealed class ParserTensorFieldTests
         var first = ParserTensorField.Instance;
         var second = ParserTensorField.Instance;
 
-        Assert.Same(first, second);
+        second.ShouldBeSameAs(first);
     }
 
     [Fact]
     public void ShouldExposeExpectedPriority()
     {
-        Assert.Equal(7000, ParserTensorField.Instance.Priority);
+        ParserTensorField.Instance.Priority.ShouldBe(7000);
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public sealed class ParserTensorFieldTests
     {
         var token = ParserTensorField.Instance.ParseToken("F_a", RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
@@ -35,21 +35,21 @@ public sealed class ParserTensorFieldTests
     {
         var token = ParserTensorField.Instance.ParseToken("F[x]+G[y]", RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
     public void ShouldThrowBracketsErrorWhenClosingBracketAppearsBeforeOpeningBracket()
     {
-        Assert.Throws<BracketsError>(() => ParserTensorField.Instance.ParseToken("F]x[", RedberryParser.Default));
+        Should.Throw<BracketsError>(() => ParserTensorField.Instance.ParseToken("F]x[", RedberryParser.Default));
     }
 
     [Fact]
     public void ShouldThrowParserExceptionWhenArgumentContainsMoreThanOneColon()
     {
-        var exception = Assert.Throws<ParserException>(() => ParserTensorField.Instance.ParseToken("F[x:_a:_b]", RedberryParser.Default));
+        var exception = Should.Throw<ParserException>(() => ParserTensorField.Instance.ParseToken("F[x:_a:_b]", RedberryParser.Default));
 
-        Assert.Equal("F[x:_a:_b]", exception.Message);
+        exception.Message.ShouldBe("F[x:_a:_b]");
     }
 
     [Fact]
@@ -57,13 +57,13 @@ public sealed class ParserTensorFieldTests
     {
         var token = ParserTensorField.Instance.ParseToken("sqrt[x]", RedberryParser.Default);
 
-        var power = Assert.IsType<ParseToken>(token);
-        Assert.Equal(TokenType.Power, power.TokenType);
-        Assert.Equal(2, power.Content.Length);
-        Assert.Equal(TokenType.SimpleTensor, power.Content[0].TokenType);
+        var power = token.ShouldBeOfType<ParseToken>();
+        power.TokenType.ShouldBe(TokenType.Power);
+        power.Content.Length.ShouldBe(2);
+        power.Content[0].TokenType.ShouldBe(TokenType.SimpleTensor);
 
-        var exponent = Assert.IsType<ParseTokenNumber>(power.Content[1]);
-        Assert.Equal(Complex.OneHalf, exponent.Value);
+        var exponent = power.Content[1].ShouldBeOfType<ParseTokenNumber>();
+        exponent.Value.ShouldBe(Complex.OneHalf);
     }
 
     [Fact]
@@ -71,9 +71,9 @@ public sealed class ParserTensorFieldTests
     {
         var token = ParserTensorField.Instance.ParseToken("sqrt[x,y]", RedberryParser.Default);
 
-        var tensorField = Assert.IsType<ParseTokenTensorField>(token);
-        Assert.Equal(TokenType.TensorField, tensorField.TokenType);
-        Assert.Equal("sqrt", tensorField.Name);
+        var tensorField = token.ShouldBeOfType<ParseTokenTensorField>();
+        tensorField.TokenType.ShouldBe(TokenType.TensorField);
+        tensorField.Name.ShouldBe("sqrt");
     }
 
     [Fact]
@@ -81,9 +81,9 @@ public sealed class ParserTensorFieldTests
     {
         var token = ParserTensorField.Instance.ParseToken("tr[x,y]", RedberryParser.Default);
 
-        var trace = Assert.IsType<ParseToken>(token);
-        Assert.Equal(TokenType.Trace, trace.TokenType);
-        Assert.Equal(2, trace.Content.Length);
+        var trace = token.ShouldBeOfType<ParseToken>();
+        trace.TokenType.ShouldBe(TokenType.Trace);
+        trace.Content.Length.ShouldBe(2);
     }
 
     [Fact]
@@ -91,15 +91,15 @@ public sealed class ParserTensorFieldTests
     {
         var token = ParserTensorField.Instance.ParseToken("F[x:,Sin[g[m,n]]]", RedberryParser.Default);
 
-        var tensorField = Assert.IsType<ParseTokenTensorField>(token);
-        Assert.Equal(TokenType.TensorField, tensorField.TokenType);
-        Assert.Equal("F", tensorField.Name);
-        Assert.Equal(2, tensorField.Content.Length);
-        Assert.Equal(TokenType.SimpleTensor, tensorField.Content[0].TokenType);
-        Assert.Equal(TokenType.ScalarFunction, tensorField.Content[1].TokenType);
-        Assert.Equal(2, tensorField.ArgumentsIndices.Length);
-        Assert.NotNull(tensorField.ArgumentsIndices[0]);
-        Assert.Equal(0, tensorField.ArgumentsIndices[0].Size());
-        Assert.Null(tensorField.ArgumentsIndices[1]);
+        var tensorField = token.ShouldBeOfType<ParseTokenTensorField>();
+        tensorField.TokenType.ShouldBe(TokenType.TensorField);
+        tensorField.Name.ShouldBe("F");
+        tensorField.Content.Length.ShouldBe(2);
+        tensorField.Content[0].TokenType.ShouldBe(TokenType.SimpleTensor);
+        tensorField.Content[1].TokenType.ShouldBe(TokenType.ScalarFunction);
+        tensorField.ArgumentsIndices.Length.ShouldBe(2);
+        tensorField.ArgumentsIndices[0].ShouldNotBeNull();
+        tensorField.ArgumentsIndices[0].Size().ShouldBe(0);
+        tensorField.ArgumentsIndices[1].ShouldBeNull();
     }
 }

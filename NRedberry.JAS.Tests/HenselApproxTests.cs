@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 using Xunit;
@@ -34,8 +34,8 @@ public sealed class HenselApproxTests
             modularPolynomialRing.Univariate(0).Sum(modularPolynomialRing.FromInteger(1)),
             modularPolynomialRing.Univariate(0).Subtract(modularPolynomialRing.FromInteger(1)));
 
-        Assert.Equal(first, second);
-        Assert.Equal(first.GetHashCode(), second.GetHashCode());
-        Assert.Contains(",", first.ToString(), System.StringComparison.Ordinal);
+        second.ShouldBe(first);
+        second.GetHashCode().ShouldBe(first.GetHashCode());
+        first.ToString().ShouldContain(",");
     }
 }

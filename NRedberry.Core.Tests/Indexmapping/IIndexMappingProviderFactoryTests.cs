@@ -1,5 +1,6 @@
 using System.Reflection;
 using NRedberry.IndexMapping;
+using Shouldly;
 using Xunit;
 using TensorType = NRedberry.Tensors.Tensor;
 
@@ -18,8 +19,8 @@ public sealed class IIndexMappingProviderFactoryTests
                 typeof(TensorType)
             ]);
 
-        Assert.NotNull(method);
-        Assert.Equal(typeof(IIndexMappingProvider), method.ReturnType);
+        method.ShouldNotBeNull();
+        method.ReturnType.ShouldBe(typeof(IIndexMappingProvider));
     }
 
     [Fact]
@@ -28,7 +29,7 @@ public sealed class IIndexMappingProviderFactoryTests
         MethodInfo[] methods = typeof(IIndexMappingProviderFactory).GetMethods(
             BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 
-        Assert.Single(methods);
-        Assert.Equal("Create", methods[0].Name);
+        methods.ShouldHaveSingleItem();
+        methods[0].Name.ShouldBe("Create");
     }
 }

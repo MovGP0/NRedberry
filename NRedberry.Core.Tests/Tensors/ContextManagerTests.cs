@@ -1,4 +1,4 @@
-using NRedberry.Contexts;
+﻿using NRedberry.Contexts;
 using NRedberry.Tensors.Functions;
 using RedberryContext = NRedberry.Contexts.Context;
 using Xunit;
@@ -15,18 +15,18 @@ public sealed class ContextManagerTests
         try
         {
             RedberryContext created = ContextManager.InitializeNew();
-            Assert.Same(created, ContextManager.GetCurrentContext());
+            ContextManager.GetCurrentContext().ShouldBeSameAs(created);
 
             ContextSettings settings = new(OutputFormat.LaTeX, "delta", "eta");
             RedberryContext configured = ContextManager.InitializeNew(settings);
 
-            Assert.Same(configured, ContextManager.CurrentContext);
-            Assert.Equal(OutputFormat.LaTeX, configured.DefaultOutputFormat);
-            Assert.Equal("delta", configured.KroneckerName);
-            Assert.Equal("eta", configured.MetricName);
+            ContextManager.CurrentContext.ShouldBeSameAs(configured);
+            configured.DefaultOutputFormat.ShouldBe(OutputFormat.LaTeX);
+            configured.KroneckerName.ShouldBe("delta");
+            configured.MetricName.ShouldBe("eta");
 
             ContextManager.SetCurrentContext(original);
-            Assert.Same(original, ContextManager.CurrentContext);
+            ContextManager.CurrentContext.ShouldBeSameAs(original);
         }
         finally
         {

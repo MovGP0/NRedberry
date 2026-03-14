@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -13,42 +13,38 @@ public sealed class SimpleTensorTests
         SimpleTensor first = NRedberry.Tensors.Tensor.SimpleTensor("A", IndicesFactory.EmptySimpleIndices);
         SimpleTensor second = NRedberry.Tensors.Tensor.SimpleTensor("A", IndicesFactory.EmptySimpleIndices);
 
-        Assert.Same(first, second);
+        second.ShouldBeSameAs(first);
     }
 
     [Fact]
     public void ShouldExposeIndicesNameAndZeroSize()
     {
-        SimpleTensor tensor = Assert.IsType<SimpleTensor>(TensorFactory.Parse("T_a"));
+        SimpleTensor tensor = TensorFactory.Parse("T_a").ShouldBeOfType<SimpleTensor>();
 
-        Assert.Same(tensor.SimpleIndices, tensor.Indices);
-        Assert.True(tensor.Name > 0);
-        Assert.Equal(0, tensor.Size);
-        Assert.Throws<IndexOutOfRangeException>(() => _ = tensor[0]);
+        tensor.Indices.ShouldBeSameAs(tensor.SimpleIndices);
+        tensor.Name > 0.ShouldBeTrue();
+        tensor.Size.ShouldBe(0);
+        Should.Throw<IndexOutOfRangeException>(() => _ = tensor[0]);
     }
 
     [Fact]
     public void ShouldCompareByNameAndIndices()
     {
-        SimpleTensor first = Assert.IsType<SimpleTensor>(TensorFactory.Parse("T_a"));
-        SimpleTensor second = Assert.IsType<SimpleTensor>(TensorFactory.Parse("T_a"));
-        SimpleTensor third = Assert.IsType<SimpleTensor>(TensorFactory.Parse("T_b"));
+        SimpleTensor first = TensorFactory.Parse("T_a").ShouldBeOfType<SimpleTensor>();
+        SimpleTensor second = TensorFactory.Parse("T_a").ShouldBeOfType<SimpleTensor>();
+        SimpleTensor third = TensorFactory.Parse("T_b").ShouldBeOfType<SimpleTensor>();
 
-        Assert.Equal(
-            first.ToString(OutputFormat.Redberry),
-            second.ToString(OutputFormat.Redberry));
-        Assert.NotEqual(
-            first.SimpleIndices.ToString(OutputFormat.Redberry),
-            third.SimpleIndices.ToString(OutputFormat.Redberry));
+        second.ToString(OutputFormat.Redberry).ShouldBe(first.ToString(OutputFormat.Redberry));
+        third.SimpleIndices.ToString(OutputFormat.Redberry).ShouldNotBe(first.SimpleIndices.ToString(OutputFormat.Redberry));
     }
 
     [Fact]
     public void ShouldExposeBuilderFactoryAndStringName()
     {
-        SimpleTensor tensor = Assert.IsType<SimpleTensor>(TensorFactory.Parse("T_a"));
+        SimpleTensor tensor = TensorFactory.Parse("T_a").ShouldBeOfType<SimpleTensor>();
 
-        Assert.IsType<SimpleTensorBuilder>(tensor.GetBuilder());
-        Assert.IsType<SimpleTensorFactory>(tensor.GetFactory());
-        Assert.Equal("T", tensor.GetStringName());
+        tensor.GetBuilder().ShouldBeOfType<SimpleTensorBuilder>();
+        tensor.GetFactory().ShouldBeOfType<SimpleTensorFactory>();
+        tensor.GetStringName().ShouldBe("T");
     }
 }

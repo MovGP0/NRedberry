@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Symmetrization;
+﻿using NRedberry.Transformations.Symmetrization;
 using SumBuilderType = NRedberry.Tensors.SumBuilderSplitingScalars;
 using TensorType = NRedberry.Tensors.Tensor;
 using TensorApi = NRedberry.Tensors.Tensors;
@@ -12,9 +12,7 @@ public sealed class CollectNonScalarsITransformationTests
     [Fact]
     public void ShouldReturnSingletonInstance()
     {
-        Assert.Same(
-            CollectNonScalarsITransformation.Instance,
-            CollectNonScalarsITransformation.Instance);
+        CollectNonScalarsITransformation.Instance.ShouldBeSameAs(CollectNonScalarsITransformation.Instance);
     }
 
     [Fact]
@@ -28,7 +26,7 @@ public sealed class CollectNonScalarsITransformationTests
         }
 
         TensorType collected = CollectNonScalarsITransformation.CollectNonScalars(tensor);
-        Assert.True(TensorUtilsApi.Equals(builder.Build(), collected));
+        TensorUtilsApi.Equals(builder.Build(), collected).ShouldBeTrue();
     }
 
     [Fact]
@@ -42,6 +40,6 @@ public sealed class CollectNonScalarsITransformationTests
         }
 
         TensorType collected = CollectNonScalarsITransformation.Instance.Transform(tensor);
-        Assert.True(TensorUtilsApi.Equals(builder.Build(), collected));
+        TensorUtilsApi.Equals(builder.Build(), collected).ShouldBeTrue();
     }
 }

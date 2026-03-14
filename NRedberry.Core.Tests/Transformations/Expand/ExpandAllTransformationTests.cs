@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Expand;
+﻿using NRedberry.Transformations.Expand;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -11,15 +11,13 @@ public sealed class ExpandAllTransformationTests
     {
         NRedberry.Tensors.Tensor actual = ExpandAllTransformation.Expand(TensorApi.Parse("(a+b)*(c+d)"));
 
-        Assert.Equal(
-            ["a*c", "a*d", "b*c", "b*d"],
-            NormalizeSumOfProducts(actual.ToString(OutputFormat.Redberry)));
+        NormalizeSumOfProducts(actual.ToString(OutputFormat.Redberry)).ShouldBe(["a*c", "a*d", "b*c", "b*d"]);
     }
 
     [Fact]
     public void ShouldExposeReadableName()
     {
-        Assert.Equal("ExpandAll", ExpandAllTransformation.Instance.ToString(OutputFormat.Redberry));
+        ExpandAllTransformation.Instance.ToString(OutputFormat.Redberry).ShouldBe("ExpandAll");
     }
 
     private static string[] NormalizeSumOfProducts(string expression)

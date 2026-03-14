@@ -1,5 +1,6 @@
 using NRedberry.IndexGeneration;
 using NRedberry.Indices;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.IndexGeneration;
@@ -13,8 +14,8 @@ public sealed class IndexGeneratorTests
 
         int generated = generator.Generate(IndexType.GreekUpper);
 
-        Assert.Equal(IndexType.GreekUpper.GetType_(), IndicesUtils.GetType(generated));
-        Assert.Equal(0, IndicesUtils.GetNameWithoutType(generated));
+        IndicesUtils.GetType(generated).ShouldBe(IndexType.GreekUpper.GetType_());
+        IndicesUtils.GetNameWithoutType(generated).ShouldBe(0);
     }
 
     [Fact]
@@ -27,10 +28,10 @@ public sealed class IndexGeneratorTests
         int firstGenerated = generator.Generate(IndexType.LatinLower);
         int secondGenerated = generator.Generate(IndexType.LatinLower);
 
-        Assert.Equal(1, IndicesUtils.GetNameWithoutType(firstGenerated));
-        Assert.Equal(3, IndicesUtils.GetNameWithoutType(secondGenerated));
-        Assert.Equal(IndexType.LatinLower.GetType_(), IndicesUtils.GetType(firstGenerated));
-        Assert.Equal(IndexType.LatinLower.GetType_(), IndicesUtils.GetType(secondGenerated));
+        IndicesUtils.GetNameWithoutType(firstGenerated).ShouldBe(1);
+        IndicesUtils.GetNameWithoutType(secondGenerated).ShouldBe(3);
+        IndicesUtils.GetType(firstGenerated).ShouldBe(IndexType.LatinLower.GetType_());
+        IndicesUtils.GetType(secondGenerated).ShouldBe(IndexType.LatinLower.GetType_());
     }
 
     [Fact]
@@ -40,10 +41,10 @@ public sealed class IndexGeneratorTests
         int seededGreek = IndicesUtils.CreateIndex(7, IndexType.GreekLower, true);
         var generator = new IndexGenerator(seededLatin, seededGreek);
 
-        Assert.True(generator.Contains(seededLatin));
-        Assert.True(generator.Contains(IndicesUtils.Raise(seededLatin)));
-        Assert.True(generator.Contains(seededGreek));
-        Assert.False(generator.Contains(IndicesUtils.CreateIndex(9, IndexType.LatinUpper, false)));
+        generator.Contains(seededLatin).ShouldBeTrue();
+        generator.Contains(IndicesUtils.Raise(seededLatin)).ShouldBeTrue();
+        generator.Contains(seededGreek).ShouldBeTrue();
+        generator.Contains(IndicesUtils.CreateIndex(9, IndexType.LatinUpper, false)).ShouldBeFalse();
     }
 
     [Fact]
@@ -64,10 +65,10 @@ public sealed class IndexGeneratorTests
         int mergedGreekUpper = generator.Generate(IndexType.GreekUpper);
         int nextLatinFromOther = other.Generate(IndexType.LatinLower);
 
-        Assert.Equal(IndexType.LatinLower.GetType_(), IndicesUtils.GetType(mergedLatin));
-        Assert.Equal(nextLatinFromOther, mergedLatin);
-        Assert.True(IndicesUtils.GetNameWithoutType(mergedLatin) > 3);
-        Assert.Equal(IndexType.GreekUpper.GetType_(), IndicesUtils.GetType(mergedGreekUpper));
-        Assert.Equal(1, IndicesUtils.GetNameWithoutType(mergedGreekUpper));
+        IndicesUtils.GetType(mergedLatin).ShouldBe(IndexType.LatinLower.GetType_());
+        mergedLatin.ShouldBe(nextLatinFromOther);
+        IndicesUtils.GetNameWithoutType(mergedLatin).ShouldBeGreaterThan(3);
+        IndicesUtils.GetType(mergedGreekUpper).ShouldBe(IndexType.GreekUpper.GetType_());
+        IndicesUtils.GetNameWithoutType(mergedGreekUpper).ShouldBe(1);
     }
 }

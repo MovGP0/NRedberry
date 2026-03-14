@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -14,7 +14,7 @@ public sealed class ScalarsBackedProductBuilderTests
         builder.Put(new Complex(2));
         builder.Put(new Complex(3));
 
-        Assert.Equal(new Complex(6), builder.Build());
+        builder.Build().ShouldBe(new Complex(6));
     }
 
     [Fact]
@@ -24,7 +24,7 @@ public sealed class ScalarsBackedProductBuilderTests
         builder.Put(TensorFactory.Parse("2*a"));
         builder.Put(TensorFactory.Parse("3*T_i"));
 
-        Assert.Equal("6*a*T_{i}", builder.Build().ToString(OutputFormat.Redberry));
+        builder.Build().ToString(OutputFormat.Redberry).ShouldBe("6*a*T_{i}");
     }
 
     [Fact]
@@ -36,8 +36,8 @@ public sealed class ScalarsBackedProductBuilderTests
         TensorBuilder clone = builder.Clone();
         clone.Put(TensorFactory.Parse("b"));
 
-        Assert.Equal("a", builder.Build().ToString(OutputFormat.Redberry));
-        Assert.Equal("a*b", clone.Build().ToString(OutputFormat.Redberry));
+        builder.Build().ToString(OutputFormat.Redberry).ShouldBe("a");
+        clone.Build().ToString(OutputFormat.Redberry).ShouldBe("a*b");
     }
 
     [Fact]
@@ -45,6 +45,6 @@ public sealed class ScalarsBackedProductBuilderTests
     {
         ScalarsBackedProductBuilder builder = new();
 
-        Assert.Throws<ArgumentNullException>(() => builder.Put(null!));
+        Should.Throw<ArgumentNullException>(() => builder.Put(null!));
     }
 }

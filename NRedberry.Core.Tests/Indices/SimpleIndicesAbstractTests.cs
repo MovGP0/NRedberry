@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Indices;
@@ -20,12 +20,12 @@ public class SimpleIndicesAbstractTests
             int[] sorted = indices.GetSortedData();
             int[] expected = indices.Data.Order().ToArray();
 
-            Assert.Equal(expected, sorted);
-            Assert.NotSame(indices.Data, sorted);
+            sorted.ShouldBe(expected);
+            sorted.ShouldNotBeSameAs(indices.Data);
 
             int originalFirst = indices.Data[0];
             sorted[0] ^= 0x1234;
-            Assert.Equal(originalFirst, indices.Data[0]);
+            indices.Data[0].ShouldBe(originalFirst);
         });
     }
 
@@ -41,14 +41,14 @@ public class SimpleIndicesAbstractTests
 
             var indices = new TestSimpleIndices(greekLowerA, latinUpperA, latinLowerA, greekLowerB);
 
-            Assert.Equal(1, indices.Size(IndexType.LatinLower));
-            Assert.Equal(1, indices.Size(IndexType.LatinUpper));
-            Assert.Equal(2, indices.Size(IndexType.GreekLower));
+            indices.Size(IndexType.LatinLower).ShouldBe(1);
+            indices.Size(IndexType.LatinUpper).ShouldBe(1);
+            indices.Size(IndexType.GreekLower).ShouldBe(2);
 
-            Assert.Equal(latinLowerA, indices[IndexType.LatinLower, 0]);
-            Assert.Equal(latinUpperA, indices[IndexType.LatinUpper, 0]);
-            Assert.Equal(greekLowerA, indices[IndexType.GreekLower, 0]);
-            Assert.Equal(greekLowerB, indices[IndexType.GreekLower, 1]);
+            indices[IndexType.LatinLower, 0].ShouldBe(latinLowerA);
+            indices[IndexType.LatinUpper, 0].ShouldBe(latinUpperA);
+            indices[IndexType.GreekLower, 0].ShouldBe(greekLowerA);
+            indices[IndexType.GreekLower, 1].ShouldBe(greekLowerB);
         });
     }
 
@@ -63,10 +63,10 @@ public class SimpleIndicesAbstractTests
 
             var inverted = (TestSimpleIndices)indices.GetInverted();
 
-            Assert.Equal(lower ^ StateMask, inverted[0]);
-            Assert.Equal(upper ^ StateMask, inverted[1]);
-            Assert.Equal(lower, indices[0]);
-            Assert.Equal(upper, indices[1]);
+            inverted[0].ShouldBe(lower ^ StateMask);
+            inverted[1].ShouldBe(upper ^ StateMask);
+            indices[0].ShouldBe(lower);
+            indices[1].ShouldBe(upper);
         });
     }
 
@@ -81,7 +81,7 @@ public class SimpleIndicesAbstractTests
 
             var result = indices.ApplyIndexMapping(new DelegateIndexMapping(i => i));
 
-            Assert.Same(indices, result);
+            result.ShouldBeSameAs(indices);
         });
     }
 
@@ -98,9 +98,9 @@ public class SimpleIndicesAbstractTests
             var result = (TestSimpleIndices)indices.ApplyIndexMapping(new DelegateIndexMapping(i =>
                 i == first ? mappedFirst : i));
 
-            Assert.NotSame(indices, result);
-            Assert.Equal(mappedFirst, result[0]);
-            Assert.Equal(second, result[1]);
+            result.ShouldNotBeSameAs(indices);
+            result[0].ShouldBe(mappedFirst);
+            result[1].ShouldBe(second);
         });
     }
 
@@ -114,8 +114,8 @@ public class SimpleIndicesAbstractTests
             var differentType = new AnotherTestSimpleIndices(index);
             var differentSize = new TestSimpleIndices(index, CreateIndex(IndexType.GreekUpper, 2));
 
-            Assert.False(left.EqualsWithSymmetriesDetailed(differentType));
-            Assert.False(left.EqualsWithSymmetriesDetailed(differentSize));
+            left.EqualsWithSymmetriesDetailed(differentType).ShouldBeFalse();
+            left.EqualsWithSymmetriesDetailed(differentSize).ShouldBeFalse();
         });
     }
 
@@ -131,7 +131,7 @@ public class SimpleIndicesAbstractTests
 
             bool? result = left.EqualsWithSymmetriesDetailed(right);
 
-            Assert.True(result);
+            result.ShouldBeTrue();
         });
     }
 

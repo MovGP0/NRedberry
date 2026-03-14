@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reflection;
 using NRedberry.Indices;
 using Xunit;
@@ -13,8 +13,8 @@ public sealed class SimpleIndicesTests
     {
         Type interfaceType = typeof(SimpleIndices);
 
-        Assert.True(interfaceType.IsInterface);
-        Assert.Contains(typeof(IndicesContract), interfaceType.GetInterfaces());
+        interfaceType.IsInterface.ShouldBeTrue();
+        interfaceType.GetInterfaces().ShouldContain(typeof(IndicesContract));
     }
 
     [Fact]
@@ -22,9 +22,9 @@ public sealed class SimpleIndicesTests
     {
         PropertyInfo property = GetRequiredProperty(nameof(SimpleIndices.Symmetries));
 
-        Assert.Equal(typeof(IndicesSymmetries), property.PropertyType);
-        Assert.NotNull(property.GetMethod);
-        Assert.NotNull(property.SetMethod);
+        property.PropertyType.ShouldBe(typeof(IndicesSymmetries));
+        property.GetMethod.ShouldNotBeNull();
+        property.SetMethod.ShouldNotBeNull();
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public sealed class SimpleIndicesTests
             nameof(SimpleIndices.EqualsWithSymmetries),
             [typeof(SimpleIndices)]);
 
-        Assert.Equal(typeof(bool), method.ReturnType);
+        method.ReturnType.ShouldBe(typeof(bool));
     }
 
     [Fact]
@@ -42,9 +42,9 @@ public sealed class SimpleIndicesTests
     {
         PropertyInfo property = GetRequiredProperty(nameof(SimpleIndices.StructureOfIndices));
 
-        Assert.Equal(typeof(StructureOfIndices), property.PropertyType);
-        Assert.NotNull(property.GetMethod);
-        Assert.Null(property.SetMethod);
+        property.PropertyType.ShouldBe(typeof(StructureOfIndices));
+        property.GetMethod.ShouldNotBeNull();
+        property.SetMethod.ShouldBeNull();
     }
 
     private static PropertyInfo GetRequiredProperty(string propertyName)
@@ -53,7 +53,7 @@ public sealed class SimpleIndicesTests
             propertyName,
             BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 
-        Assert.NotNull(property);
+        property.ShouldNotBeNull();
         return property!;
     }
 
@@ -66,7 +66,7 @@ public sealed class SimpleIndicesTests
             parameterTypes,
             null);
 
-        Assert.NotNull(method);
+        method.ShouldNotBeNull();
         return method!;
     }
 }

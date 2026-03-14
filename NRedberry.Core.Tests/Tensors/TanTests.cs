@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using NRedberry.Tensors.Functions;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -15,12 +15,12 @@ public sealed class TanTests
 
         NRedberry.Tensors.Tensor derivative = function.Derivative();
 
-        Assert.Same(argument, function[0]);
-        Assert.Equal(1, function.Size);
-        Assert.Equal("Tan[a]", function.ToString(OutputFormat.Redberry));
-        Assert.IsType<Power>(derivative);
-        Assert.Contains("Cos[a]", derivative.ToString(OutputFormat.Redberry));
-        Assert.Equal("ScalarFunctionBuilder", function.GetBuilder().GetType().Name);
-        Assert.Same(TanFactory.Factory, function.GetFactory());
+        function[0].ShouldBeSameAs(argument);
+        function.Size.ShouldBe(1);
+        function.ToString(OutputFormat.Redberry).ShouldBe("Tan[a]");
+        derivative.ShouldBeOfType<Power>();
+        derivative.ToString(OutputFormat.Redberry).ShouldContain("Cos[a]");
+        function.GetBuilder().GetType().Name.ShouldBe("ScalarFunctionBuilder");
+        function.GetFactory().ShouldBeSameAs(TanFactory.Factory);
     }
 }

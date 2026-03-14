@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -17,8 +17,8 @@ public sealed class ProductContentTests
         scalars[0] = TensorFactory.Parse("z");
         stretchIds[0] = 99;
 
-        Assert.Equal("a", content.Scalars[0].ToString(OutputFormat.Redberry));
-        Assert.Equal((short)0, content.StretchIds[0]);
+        content.Scalars[0].ToString(OutputFormat.Redberry).ShouldBe("a");
+        content.StretchIds[0].ShouldBe((short)0);
     }
 
     [Fact]
@@ -29,10 +29,10 @@ public sealed class ProductContentTests
         NRedberry.Tensors.Tensor[] copy = content.GetDataCopy();
         NRedberry.Tensors.Tensor[] range = content.GetRange(1, 3);
 
-        Assert.NotSame(copy, content.GetDataCopy());
-        Assert.Equal(3, copy.Length);
-        Assert.Equal("T_{i}", range[0].ToString(OutputFormat.Redberry));
-        Assert.Equal("U^{i}", range[1].ToString(OutputFormat.Redberry));
+        content.GetDataCopy().ShouldNotBeSameAs(copy);
+        copy.Length.ShouldBe(3);
+        range[0].ToString(OutputFormat.Redberry).ShouldBe("T_{i}");
+        range[1].ToString(OutputFormat.Redberry).ShouldBe("U^{i}");
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public sealed class ProductContentTests
 
         string[] rendered = content.Select(t => t.ToString(OutputFormat.Redberry)).ToArray();
 
-        Assert.Equal(["R_{j}", "T_{i}", "U^{i}"], rendered);
+        rendered.ShouldBe(["R_{j}", "T_{i}", "U^{i}"]);
     }
 
     [Fact]
@@ -50,11 +50,11 @@ public sealed class ProductContentTests
     {
         ProductContent content = CreateContent();
 
-        Assert.Same(StructureOfContractionsHashed.EmptyInstance, content.StructureOfContractionsHashed);
-        Assert.Same(StructureOfContractions.EmptyFullContractionsStructure, content.StructureOfContractions);
-        Assert.Equal("R_{j}", content.NonScalar!.ToString(OutputFormat.Redberry));
-        Assert.Equal(3, content.Size);
-        Assert.Equal((short)1, content.GetStretchId(1));
+        content.StructureOfContractionsHashed.ShouldBeSameAs(StructureOfContractionsHashed.EmptyInstance);
+        content.StructureOfContractions.ShouldBeSameAs(StructureOfContractions.EmptyFullContractionsStructure);
+        content.NonScalar!.ToString(OutputFormat.Redberry).ShouldBe("R_{j}");
+        content.Size.ShouldBe(3);
+        content.GetStretchId(1).ShouldBe((short)1);
     }
 
     private static ProductContent CreateContent()

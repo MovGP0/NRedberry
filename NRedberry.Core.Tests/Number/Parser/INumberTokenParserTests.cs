@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Numbers.Parser;
 using Xunit;
 
@@ -14,10 +14,10 @@ public sealed class INumberTokenParserTests
 
         var result = parser.Parse("  42  ");
 
-        Assert.Equal("42", token.LastExpression);
-        Assert.Same(parser, token.LastParser);
-        Assert.Equal(new Rational(5), result);
-        Assert.Equal(1, token.CallCount);
+        token.LastExpression.ShouldBe("42");
+        token.LastParser.ShouldBeSameAs(parser);
+        result.ShouldBe(new Rational(5));
+        token.CallCount.ShouldBe(1);
     }
 
     [Fact]
@@ -29,9 +29,9 @@ public sealed class INumberTokenParserTests
 
         var result = parser.Parse("17");
 
-        Assert.Equal(new Rational(7), result);
-        Assert.Equal(1, firstToken.CallCount);
-        Assert.Equal(1, secondToken.CallCount);
+        result.ShouldBe(new Rational(7));
+        firstToken.CallCount.ShouldBe(1);
+        secondToken.CallCount.ShouldBe(1);
     }
 
     [Fact]
@@ -43,9 +43,9 @@ public sealed class INumberTokenParserTests
 
         var result = parser.Parse("9");
 
-        Assert.Equal(new Rational(11), result);
-        Assert.Equal(1, firstToken.CallCount);
-        Assert.Equal(0, secondToken.CallCount);
+        result.ShouldBe(new Rational(11));
+        firstToken.CallCount.ShouldBe(1);
+        secondToken.CallCount.ShouldBe(0);
     }
 
     [Fact]
@@ -53,7 +53,7 @@ public sealed class INumberTokenParserTests
     {
         var parser = new NumberParser<Real>([new ObservingToken(null)]);
 
-        Assert.Throws<FormatException>(() => parser.Parse("not-a-number"));
+        Should.Throw<FormatException>(() => parser.Parse("not-a-number"));
     }
 }
 

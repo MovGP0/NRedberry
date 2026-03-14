@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Linq;
 using NRedberry.Core.Utils;
 using Xunit;
@@ -10,7 +10,7 @@ public sealed class BitArrayExtensionsTests
     [Fact]
     public void ShouldExposeEmptyBitArray()
     {
-        Assert.Empty(BitArrayExtensions.Empty.Cast<bool>());
+        BitArrayExtensions.Empty.Cast<bool>().ShouldBeEmpty();
     }
 
     [Fact]
@@ -18,13 +18,13 @@ public sealed class BitArrayExtensionsTests
     {
         string[] actual = new[] { "a", "b", "c", "d" }.CopyOfRange(1, 3);
 
-        Assert.Equal(["b", "c"], actual);
+        actual.ShouldBe(["b", "c"]);
     }
 
     [Fact]
     public void ShouldThrowWhenRangeIsInvalid()
     {
-        Assert.Throws<ArgumentException>(() => new[] { 1, 2, 3 }.CopyOfRange(2, 1));
+        Should.Throw<ArgumentException>(() => new[] { 1, 2, 3 }.CopyOfRange(2, 1));
     }
 
     [Fact]
@@ -35,11 +35,11 @@ public sealed class BitArrayExtensionsTests
 
         BitArray actual = first.Append(second);
 
-        Assert.Equal(5, actual.Count);
-        Assert.True(actual[0]);
-        Assert.False(actual[1]);
-        Assert.True(actual[2]);
-        Assert.False(actual[3]);
-        Assert.True(actual[4]);
+        actual.Count.ShouldBe(5);
+        actual[0].ShouldBeTrue();
+        actual[1].ShouldBeFalse();
+        actual[2].ShouldBeTrue();
+        actual[3].ShouldBeFalse();
+        actual[4].ShouldBeTrue();
     }
 }

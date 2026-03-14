@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 using Xunit;
 
@@ -11,7 +11,7 @@ public sealed class UnaryFunctorTests
     {
         UnaryFunctor<BigRational, BigRational> functor = new IncrementUnaryFunctor();
 
-        Assert.Equal(new BigRational(5), functor.Eval(new BigRational(4)));
+        functor.Eval(new BigRational(4)).ShouldBe(new BigRational(5));
     }
 }
 

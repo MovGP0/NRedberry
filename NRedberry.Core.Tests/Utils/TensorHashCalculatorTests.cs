@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Tensors;
 using NRedberry.Utils;
 using Xunit;
@@ -19,7 +19,7 @@ public sealed class TensorHashCalculatorTests
         int sortedHash = TensorHashCalculator.HashWithIndices(tensor, [firstIndex, secondIndex]);
         int unsortedHash = TensorHashCalculator.HashWithIndices(tensor, [secondIndex, firstIndex]);
 
-        Assert.Equal(sortedHash, unsortedHash);
+        unsortedHash.ShouldBe(sortedHash);
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public sealed class TensorHashCalculatorTests
     {
         NRedberry.Tensors.Tensor tensor = NRedberry.Tensors.Tensors.Parse("a+b");
 
-        Assert.Equal(tensor.GetHashCode(), TensorHashCalculator.HashWithIndices(tensor, []));
+        TensorHashCalculator.HashWithIndices(tensor, []).ShouldBe(tensor.GetHashCode());
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public sealed class TensorHashCalculatorTests
     {
         SimpleTensor tensor = CreateSimpleTensor(IndicesUtils.CreateIndex(5, IndexType.Matrix1, true));
 
-        Assert.Equal(tensor.GetHashCode(), TensorHashCalculator.NonTopologicalHash(tensor));
+        TensorHashCalculator.NonTopologicalHash(tensor).ShouldBe(tensor.GetHashCode());
     }
 
     private static SimpleTensor CreateSimpleTensor(params int[] indices)

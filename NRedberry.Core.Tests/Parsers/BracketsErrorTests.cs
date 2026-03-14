@@ -1,4 +1,4 @@
-using NRedberry.Parsers;
+﻿using NRedberry.Parsers;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Parsers;
@@ -10,7 +10,7 @@ public sealed class BracketsErrorTests
     {
         var error = new BracketsError();
 
-        Assert.Equal("Unbalanced brackets.", error.Message);
+        error.Message.ShouldBe("Unbalanced brackets.");
     }
 
     [Fact]
@@ -18,6 +18,6 @@ public sealed class BracketsErrorTests
     {
         var error = new BracketsError("expression");
 
-        Assert.Equal("Unbalanced brackets in expression", error.Message);
+        error.Message.ShouldBe("Unbalanced brackets in expression");
     }
 }

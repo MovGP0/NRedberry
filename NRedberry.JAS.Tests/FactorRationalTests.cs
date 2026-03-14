@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
@@ -21,11 +22,11 @@ public sealed class FactorRationalTests
         List<GenPolynomial<BigRational>> oneFactors = factor.BaseFactorsSquarefree(one);
         List<GenPolynomial<BigRational>> linearFactors = factor.FactorsSquarefree(linear);
 
-        Assert.Empty(zeroFactors);
-        Assert.Single(oneFactors);
-        Assert.Equal(one, oneFactors[0]);
-        Assert.Single(linearFactors);
-        Assert.Equal(linear, linearFactors[0]);
+        zeroFactors.ShouldBeEmpty();
+        oneFactors.ShouldHaveSingleItem();
+        oneFactors[0].ShouldBe(one);
+        linearFactors.ShouldHaveSingleItem();
+        linearFactors[0].ShouldBe(linear);
     }
 
     private static GenPolynomialRing<BigRational> CreateRing()

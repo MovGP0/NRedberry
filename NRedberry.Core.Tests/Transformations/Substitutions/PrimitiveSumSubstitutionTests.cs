@@ -9,7 +9,7 @@ public sealed class PrimitiveSumSubstitutionTests
     [Fact]
     public void ShouldThrowWhilePrimitiveSumSubstitutionIsUnimplemented()
     {
-        Assert.Throws<NotImplementedException>(() =>
+        Should.Throw<NotImplementedException>(() =>
             new PrimitiveSumSubstitution(TensorApi.Parse("a+b"), TensorApi.Parse("c")));
     }
 }

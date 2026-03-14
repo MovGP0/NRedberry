@@ -48,7 +48,7 @@ public sealed class RedberryTestTests
         using EnvironmentVariableScope _ = new("longTest", null);
         RedberryTestProbe probe = new();
 
-        Assert.Throws<SkipException>(() => probe.LongMarkedMethod());
+        Should.Throw<SkipException>(() => probe.LongMarkedMethod());
     }
 
     [Fact]
@@ -66,7 +66,7 @@ public sealed class RedberryTestTests
         using EnvironmentVariableScope _ = new("testPerformance", null);
         RedberryTestProbe probe = new();
 
-        Assert.Throws<SkipException>(() => probe.PerformanceMarkedMethod());
+        Should.Throw<SkipException>(() => probe.PerformanceMarkedMethod());
     }
 
     [Fact]

@@ -1,4 +1,5 @@
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -14,7 +15,7 @@ public sealed class PermutationsPermuteTests
 
         int[] permuted = GroupPermutations.Permute(values, permutation);
 
-        Assert.Equal(new[] { 30, 10, 40, 20 }, permuted);
+        permuted.ShouldBe([30, 10, 40, 20]);
     }
 
     [Fact(DisplayName = "Permute T[] should reorder according to one-line permutation")]
@@ -25,7 +26,7 @@ public sealed class PermutationsPermuteTests
 
         string[] permuted = GroupPermutations.Permute(values, permutation);
 
-        Assert.Equal(new[] { "d", "b", "a", "c" }, permuted);
+        permuted.ShouldBe(["d", "b", "a", "c"]);
     }
 
     [Fact(DisplayName = "Permute List<T> should return reordered list and keep input unchanged")]
@@ -37,9 +38,9 @@ public sealed class PermutationsPermuteTests
 
         List<int> permuted = GroupPermutations.Permute(values, permutation);
 
-        Assert.Equal(new[] { 20, 40, 10, 30 }, permuted);
-        Assert.Equal(snapshot, values);
-        Assert.NotSame(values, permuted);
+        permuted.ShouldBe([20, 40, 10, 30]);
+        values.ShouldBe(snapshot);
+        permuted.ShouldNotBeSameAs(values);
     }
 
     [Fact(DisplayName = "Permute int[] should throw for mismatched lengths")]
@@ -48,7 +49,7 @@ public sealed class PermutationsPermuteTests
         int[] values = [10, 20, 30];
         int[] permutation = [0, 1];
 
-        Assert.Throws<ArgumentException>(() => GroupPermutations.Permute(values, permutation));
+        Should.Throw<ArgumentException>(() => GroupPermutations.Permute(values, permutation));
     }
 
     [Fact(DisplayName = "Permute T[] should throw for mismatched lengths")]
@@ -57,7 +58,7 @@ public sealed class PermutationsPermuteTests
         string[] values = ["a", "b", "c"];
         int[] permutation = [0, 1];
 
-        Assert.Throws<ArgumentException>(() => GroupPermutations.Permute(values, permutation));
+        Should.Throw<ArgumentException>(() => GroupPermutations.Permute(values, permutation));
     }
 
     [Fact(DisplayName = "Permute List<T> should throw for mismatched lengths")]
@@ -66,7 +67,7 @@ public sealed class PermutationsPermuteTests
         List<int> values = [10, 20, 30];
         int[] permutation = [0, 1];
 
-        Assert.Throws<ArgumentException>(() => GroupPermutations.Permute(values, permutation));
+        Should.Throw<ArgumentException>(() => GroupPermutations.Permute(values, permutation));
     }
 
     [Fact(DisplayName = "Permute int[] should throw for invalid one-line permutation")]
@@ -75,7 +76,7 @@ public sealed class PermutationsPermuteTests
         int[] values = [10, 20, 30];
         int[] permutation = [0, 1, 1];
 
-        Assert.Throws<ArgumentException>(() => GroupPermutations.Permute(values, permutation));
+        Should.Throw<ArgumentException>(() => GroupPermutations.Permute(values, permutation));
     }
 
     [Fact(DisplayName = "Permute T[] should throw for invalid one-line permutation")]
@@ -84,6 +85,6 @@ public sealed class PermutationsPermuteTests
         string[] values = ["a", "b", "c"];
         int[] permutation = [0, 3, 1];
 
-        Assert.Throws<ArgumentException>(() => GroupPermutations.Permute(values, permutation));
+        Should.Throw<ArgumentException>(() => GroupPermutations.Permute(values, permutation));
     }
 }

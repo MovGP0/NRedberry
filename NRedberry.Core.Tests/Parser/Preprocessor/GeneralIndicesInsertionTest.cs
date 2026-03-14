@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using NRedberry.Indices;
 using NRedberry.Parsers;
 using NRedberry.Parsers.Preprocessor;
@@ -26,9 +26,9 @@ public sealed class GeneralIndicesInsertionTest
         string actual = tensor.ToString(OutputFormat.Redberry);
 
         AssertFreeIndices(tensor, "^a_b");
-        Assert.Contains("A", actual);
-        Assert.Contains("B", actual);
-        Assert.Contains("C", actual);
+        actual.ShouldContain("A");
+        actual.ShouldContain("B");
+        actual.ShouldContain("C");
     }
 
     [Fact]
@@ -36,7 +36,7 @@ public sealed class GeneralIndicesInsertionTest
     {
         TensorType tensor = Parse("Tr", "^m", "_m", "Tr");
 
-        Assert.True(tensor.Indices.GetFree().EqualsRegardlessOrder(IndicesFactory.EmptySimpleIndices));
+        tensor.Indices.GetFree().EqualsRegardlessOrder(IndicesFactory.EmptySimpleIndices).ShouldBeTrue();
     }
 
     [Fact]
@@ -52,7 +52,7 @@ public sealed class GeneralIndicesInsertionTest
     [Fact]
     public void ShouldRejectExistingConflictingFreeIndices()
     {
-        Assert.Throws<ArgumentException>(() => Parse("M^i", "^i", "_j", "M"));
+        Should.Throw<ArgumentException>(() => Parse("M^i", "^i", "_j", "M"));
     }
 
     private static TensorType Parse(string expression, string upper, string lower, params string[] indicator)
@@ -73,7 +73,7 @@ public sealed class GeneralIndicesInsertionTest
     {
         SimpleIndices expectedIndices = ParserIndices.ParseSimple(expected);
 
-        Assert.True(tensor.Indices.GetFree().EqualsRegardlessOrder(expectedIndices.GetFree()));
+        tensor.Indices.GetFree().EqualsRegardlessOrder(expectedIndices.GetFree()).ShouldBeTrue();
     }
 
     private sealed class NamesIndicator(params string[] names) : IIndicator<ParseTokenSimpleTensor>

@@ -1,6 +1,7 @@
 using NRedberry.IndexMapping;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
+using Shouldly;
 using Xunit;
 using TensorApi = NRedberry.Tensors.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
@@ -15,10 +16,10 @@ public sealed class IndexMappingsTests
         MappingsPort port = IndexMappings.CreatePort(Complex.One, Complex.One);
 
         Mapping? first = port.Take();
-        Assert.NotNull(first);
-        Assert.False(first.GetSign());
-        Assert.True(first.IsEmpty());
-        Assert.Null(port.Take());
+        first.ShouldNotBeNull();
+        first.GetSign().ShouldBeFalse();
+        first.IsEmpty().ShouldBeTrue();
+        port.Take().ShouldBeNull();
     }
 
     [Fact]
@@ -28,8 +29,8 @@ public sealed class IndexMappingsTests
         SimpleTensor to = TensorApi.ParseSimple("A");
 
         Mapping? mapping = IndexMappings.SimpleTensorsPort(from, to).Take();
-        Assert.NotNull(mapping);
-        Assert.False(mapping.GetSign());
+        mapping.ShouldNotBeNull();
+        mapping.GetSign().ShouldBeFalse();
     }
 
     [Fact]
@@ -39,37 +40,37 @@ public sealed class IndexMappingsTests
         TensorType[] to = [Complex.One, Complex.One];
 
         Mapping? mapping = IndexMappings.CreateBijectiveProductPort(from, to).Take();
-        Assert.NotNull(mapping);
+        mapping.ShouldNotBeNull();
     }
 
     [Fact]
     public void GetFirstShouldReturnNullWhenNoMappingExists()
     {
-        Assert.Null(IndexMappings.GetFirst(Complex.One, Complex.Zero));
+        IndexMappings.GetFirst(Complex.One, Complex.Zero).ShouldBeNull();
     }
 
     [Fact]
     public void MappingQueriesShouldReflectEqualAndUnequalCases()
     {
-        Assert.True(IndexMappings.MappingExists(Complex.One, Complex.One));
-        Assert.True(IndexMappings.PositiveMappingExists(Complex.One, Complex.One));
-        Assert.False(IndexMappings.AnyMappingExists(Complex.One, Complex.Zero));
-        Assert.False(IndexMappings.MappingExists(Complex.One, Complex.Zero));
+        IndexMappings.MappingExists(Complex.One, Complex.One).ShouldBeTrue();
+        IndexMappings.PositiveMappingExists(Complex.One, Complex.One).ShouldBeTrue();
+        IndexMappings.AnyMappingExists(Complex.One, Complex.Zero).ShouldBeFalse();
+        IndexMappings.MappingExists(Complex.One, Complex.Zero).ShouldBeFalse();
     }
 
     [Fact]
     public void EqualityQueriesShouldReflectEqualAndUnequalCases()
     {
-        Assert.True(IndexMappings.Equals(Complex.One, Complex.One));
-        Assert.False(IndexMappings.Equals(Complex.One, Complex.Zero));
-        Assert.False(IndexMappings.Compare1(Complex.One, Complex.One));
-        Assert.Null(IndexMappings.Compare1(Complex.One, Complex.Zero));
+        IndexMappings.Equals(Complex.One, Complex.One).ShouldBeTrue();
+        IndexMappings.Equals(Complex.One, Complex.Zero).ShouldBeFalse();
+        IndexMappings.Compare1(Complex.One, Complex.One).ShouldBe(false);
+        IndexMappings.Compare1(Complex.One, Complex.Zero).ShouldBeNull();
     }
 
     [Fact]
     public void IsZeroDueToSymmetryShouldBeFalseForSimpleScalar()
     {
-        Assert.False(IndexMappings.IsZeroDueToSymmetry(Complex.One));
+        IndexMappings.IsZeroDueToSymmetry(Complex.One).ShouldBeFalse();
     }
 
     [Fact]
@@ -77,16 +78,16 @@ public sealed class IndexMappingsTests
     {
         ISet<Mapping> mappings = IndexMappings.GetAllMappings(Complex.One, Complex.One);
 
-        Assert.Single(mappings);
-        Mapping mapping = Assert.Single(mappings);
-        Assert.False(mapping.GetSign());
-        Assert.True(mapping.IsEmpty());
+        mappings.Count.ShouldBe(1);
+        Mapping mapping = mappings.Single();
+        mapping.GetSign().ShouldBeFalse();
+        mapping.IsEmpty().ShouldBeTrue();
     }
 
     [Fact]
     public void TestMappingShouldValidateReturnedMapping()
     {
-        Mapping mapping = Assert.IsType<Mapping>(IndexMappings.GetFirst(Complex.One, Complex.One));
-        Assert.True(IndexMappings.TestMapping(mapping, Complex.One, Complex.One));
+        Mapping mapping = IndexMappings.GetFirst(Complex.One, Complex.One).ShouldBeOfType<Mapping>();
+        IndexMappings.TestMapping(mapping, Complex.One, Complex.One).ShouldBeTrue();
     }
 }

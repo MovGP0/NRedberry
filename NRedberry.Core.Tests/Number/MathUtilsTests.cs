@@ -1,4 +1,4 @@
-using NRedberry.Maths;
+﻿using NRedberry.Maths;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Number;
@@ -12,9 +12,9 @@ public sealed class MathUtilsTests
 
         int[] result = MathUtils.GetSortedDistinct(values);
 
-        Assert.Equal([1, 2, 3, 5], result);
-        Assert.NotEqual([5, 2, 5, 1, 3, 1], values);
-        Assert.Equal(result, values[..result.Length]);
+        result.ShouldBe([1, 2, 3, 5]);
+        values.ShouldNotBe([5, 2, 5, 1, 3, 1]);
+        values[..result.Length].ShouldBe(result);
     }
 
     [Fact]
@@ -24,8 +24,8 @@ public sealed class MathUtilsTests
 
         int[] result = MathUtils.GetSortedDistinct(values);
 
-        Assert.Empty(result);
-        Assert.Same(values, result);
+        result.ShouldBeEmpty();
+        result.ShouldBeSameAs(values);
     }
 
     [Fact]
@@ -36,7 +36,7 @@ public sealed class MathUtilsTests
 
         int[] result = MathUtils.IntSetDifference(a, b);
 
-        Assert.Equal([3, 4], result);
+        result.ShouldBe([3, 4]);
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public sealed class MathUtilsTests
 
         int[] result = MathUtils.IntSetDifference(a, b);
 
-        Assert.Equal([2, 4, 6], result);
+        result.ShouldBe([2, 4, 6]);
     }
 
     [Fact]
@@ -60,9 +60,9 @@ public sealed class MathUtilsTests
         int[] onlyAEmpty = MathUtils.IntSetDifference([], [1, 2, 3]);
         int[] onlyBEmpty = MathUtils.IntSetDifference([1, 2, 3], []);
 
-        Assert.Empty(bothEmpty);
-        Assert.Equal([1, 2, 3], onlyAEmpty);
-        Assert.Empty(onlyBEmpty);
+        bothEmpty.ShouldBeEmpty();
+        onlyAEmpty.ShouldBe([1, 2, 3]);
+        onlyBEmpty.ShouldBeEmpty();
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public sealed class MathUtilsTests
 
         int[] result = MathUtils.IntSetUnion(a, b);
 
-        Assert.Equal([1, 2, 3, 4], result);
+        result.ShouldBe([1, 2, 3, 4]);
     }
 
     [Fact]
@@ -84,7 +84,7 @@ public sealed class MathUtilsTests
 
         int[] result = MathUtils.IntSetUnion(a, b);
 
-        Assert.Equal([1, 2, 3, 5, 6], result);
+        result.ShouldBe([1, 2, 3, 5, 6]);
     }
 
     [Fact]
@@ -95,6 +95,6 @@ public sealed class MathUtilsTests
 
         int[] result = MathUtils.IntSetUnion(a, b);
 
-        Assert.Equal([1, 2, 3, 4], result);
+        result.ShouldBe([1, 2, 3, 4]);
     }
 }

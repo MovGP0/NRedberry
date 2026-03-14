@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Parsers;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Symmetrization;
@@ -27,7 +27,7 @@ public sealed class RandomTensorTest
 
         TensorType tensor = random.NextProduct(4, ParserIndices.ParseSimple("_nm"));
 
-        Assert.True(tensor.Indices.GetFree().EqualsRegardlessOrder(ParserIndices.ParseSimple("_nm")));
+        tensor.Indices.GetFree().EqualsRegardlessOrder(ParserIndices.ParseSimple("_nm")).ShouldBeTrue();
         TensorUtils.AssertIndicesConsistency(tensor);
     }
 
@@ -45,7 +45,7 @@ public sealed class RandomTensorTest
 
         TensorType tensor = random.NextSum(5, 4, ParserIndices.ParseSimple("_nm"));
 
-        Assert.True(tensor.Indices.EqualsRegardlessOrder(ParserIndices.ParseSimple("_nm")));
+        tensor.Indices.EqualsRegardlessOrder(ParserIndices.ParseSimple("_nm")).ShouldBeTrue();
         TensorUtils.AssertIndicesConsistency(tensor);
     }
 
@@ -68,7 +68,7 @@ public sealed class RandomTensorTest
             {
                 TensorType tensor = random.NextProduct(5, ParserIndices.ParseSimple("_mnab^cd"));
 
-                Assert.True(tensor.Indices.GetFree().EqualsRegardlessOrder(ParserIndices.ParseSimple("_mnab^cd")));
+                tensor.Indices.GetFree().EqualsRegardlessOrder(ParserIndices.ParseSimple("_mnab^cd")).ShouldBeTrue();
                 TensorUtils.AssertIndicesConsistency(tensor);
             }
         }
@@ -97,7 +97,7 @@ public sealed class RandomTensorTest
         RandomTensorGenerator random = new(0, 0, [2, 0, 0, 0], [3, 0, 0, 0], true, true, 77L);
         random.AddToNamespace(CreateMetric("_mn"));
 
-        Assert.True(RedberryContext.Get().IsKroneckerOrMetric(random.NextSimpleTensor()));
+        RedberryContext.Get().IsKroneckerOrMetric(random.NextSimpleTensor()).ShouldBeTrue();
 
         for (int i = 0; i < 10; i++)
         {
@@ -105,7 +105,7 @@ public sealed class RandomTensorTest
             TensorUtils.AssertIndicesConsistency(tensor);
             tensor = EliminateMetricsTransformation.Eliminate(tensor);
             TensorUtils.AssertIndicesConsistency(tensor);
-            Assert.True(tensor.Indices.GetFree().EqualsRegardlessOrder(ParserIndices.ParseSimple("_ab")));
+            tensor.Indices.GetFree().EqualsRegardlessOrder(ParserIndices.ParseSimple("_ab")).ShouldBeTrue();
         }
     }
 
@@ -124,7 +124,7 @@ public sealed class RandomTensorTest
                 2,
                 ParserIndices.ParseSimple("_abc"));
 
-            Assert.True(tensor.Indices.GetFree().EqualsRegardlessOrder(ParserIndices.ParseSimple("_abc")));
+            tensor.Indices.GetFree().EqualsRegardlessOrder(ParserIndices.ParseSimple("_abc")).ShouldBeTrue();
             TensorUtils.AssertIndicesConsistency(tensor);
         }
     }
@@ -165,7 +165,7 @@ public sealed class RandomTensorTest
         random.ClearNamespace();
         random.AddToNamespace(CreateSimpleTensor("T", "_abcd"), CreateSimpleTensor("T", "_ab"));
 
-        Assert.Throws<ArgumentException>(() => random.NextProduct(2, ParserIndices.ParseSimple("_abc")));
+        Should.Throw<ArgumentException>(() => random.NextProduct(2, ParserIndices.ParseSimple("_abc")));
     }
 
     [Fact]
@@ -178,7 +178,7 @@ public sealed class RandomTensorTest
 
         StructureOfIndices actual = StructureOfIndices.Create(IndicesFactory.CreateSimple(null, created));
 
-        Assert.Equal(template.StructureOfIndices.ToString(), actual.ToString());
+        actual.ToString().ShouldBe(template.StructureOfIndices.ToString());
     }
 
     private static global::NRedberry.Tensors.SimpleTensor CreateSimpleTensor(string name, string indices)

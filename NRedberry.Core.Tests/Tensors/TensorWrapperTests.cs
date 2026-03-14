@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -12,14 +12,14 @@ public sealed class TensorWrapperTests
         NRedberry.Tensors.Tensor inner = TensorApi.Parse("a");
         TensorWrapper wrapper = TensorWrapper.Wrap(inner);
 
-        Assert.Same(inner, wrapper[0]);
-        Assert.Equal(1, wrapper.Size);
-        Assert.Equal("@[a]", wrapper.ToString(OutputFormat.Redberry));
-        Assert.Equal(-1, wrapper.GetHashCode());
-        Assert.Equal("TensorWrapperBuilder", wrapper.GetBuilder().GetType().Name);
-        Assert.Equal("TensorWrapperFactory", wrapper.GetFactory()!.GetType().Name);
-        Assert.Throws<IndexOutOfRangeException>(() => _ = wrapper[1]);
-        Assert.Throws<NotSupportedException>(() => _ = wrapper.Indices);
+        wrapper[0].ShouldBeSameAs(inner);
+        wrapper.Size.ShouldBe(1);
+        wrapper.ToString(OutputFormat.Redberry).ShouldBe("@[a]");
+        wrapper.GetHashCode().ShouldBe(-1);
+        wrapper.GetBuilder().GetType().Name.ShouldBe("TensorWrapperBuilder");
+        wrapper.GetFactory()!.GetType().Name.ShouldBe("TensorWrapperFactory");
+        Should.Throw<IndexOutOfRangeException>(() => _ = wrapper[1]);
+        Should.Throw<NotSupportedException>(() => _ = wrapper.Indices);
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public sealed class TensorWrapperTests
         TensorWrapper left = TensorWrapper.Wrap(TensorApi.Parse("a"));
         TensorWrapper right = TensorWrapper.Wrap(TensorApi.Parse("a"));
 
-        Assert.Equal(0, left.CompareTo(right));
-        Assert.True(left.CompareTo(null) < 0);
+        left.CompareTo(right).ShouldBe(0);
+        left.CompareTo(null) < 0.ShouldBeTrue();
     }
 }

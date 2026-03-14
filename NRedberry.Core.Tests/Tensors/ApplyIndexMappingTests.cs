@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NRedberry.Indices;
 using NRedberry.Tensors;
@@ -16,7 +16,7 @@ public sealed class ApplyIndexMappingTests
 
         TensorType result = ApplyIndexMapping.RenameDummy(tensor);
 
-        Assert.Same(tensor, result);
+        result.ShouldBeSameAs(tensor);
     }
 
     [Fact]
@@ -26,7 +26,7 @@ public sealed class ApplyIndexMappingTests
 
         TensorType result = ApplyIndexMapping.RenameDummy(tensor, NameWithType(0));
 
-        Assert.Same(tensor, result);
+        result.ShouldBeSameAs(tensor);
     }
 
     [Fact]
@@ -36,7 +36,7 @@ public sealed class ApplyIndexMappingTests
 
         TensorType result = ApplyIndexMapping.RenameDummy(tensor, [NameWithType(3)], new int[] { NameWithType(0) });
 
-        Assert.Equal([Lower(0), Upper(0)], result.Indices.AllIndices.ToArray());
+        result.Indices.AllIndices.ToArray().ShouldBe([Lower(0), Upper(0)]);
     }
 
     [Fact]
@@ -45,8 +45,7 @@ public sealed class ApplyIndexMappingTests
         SimpleTensor tensor = CreateSimpleTensor(1, Lower(3), Upper(3));
         int allowedUpperCaseName = IndicesUtils.GetNameWithType(IndicesUtils.CreateIndex(0, 1, false));
 
-        Assert.Throws<IndexOutOfRangeException>(
-            () => ApplyIndexMapping.RenameDummy(tensor, [NameWithType(3)], new int[] { allowedUpperCaseName }));
+        Should.Throw<IndexOutOfRangeException>(() => ApplyIndexMapping.RenameDummy(tensor, [NameWithType(3)], new int[] { allowedUpperCaseName }));
     }
 
     [Fact]
@@ -57,9 +56,9 @@ public sealed class ApplyIndexMappingTests
 
         TensorType result = ApplyIndexMapping.RenameDummy(tensor, [NameWithType(3)], added);
 
-        Assert.Single(added);
-        Assert.True(added.SetEquals(TensorUtils.GetAllDummyIndicesT(result)));
-        Assert.DoesNotContain(NameWithType(3), added);
+        added.ShouldHaveSingleItem();
+        added.SetEquals(TensorUtils.GetAllDummyIndicesT(result)).ShouldBeTrue();
+        added.ShouldNotContain(NameWithType(3));
     }
 
     [Fact]
@@ -69,7 +68,7 @@ public sealed class ApplyIndexMappingTests
 
         TensorType result = ApplyIndexMapping.OptimizeDummies(tensor);
 
-        Assert.Same(tensor, result);
+        result.ShouldBeSameAs(tensor);
     }
 
     [Fact]
@@ -81,11 +80,11 @@ public sealed class ApplyIndexMappingTests
 
         TensorType result = ApplyIndexMapping.OptimizeDummies(tensor);
 
-        Sum optimized = Assert.IsType<Sum>(result);
-        SimpleTensor optimizedFirst = Assert.IsType<SimpleTensor>(optimized[0]);
-        SimpleTensor optimizedSecond = Assert.IsType<SimpleTensor>(optimized[1]);
-        Assert.Equal([Lower(7), Upper(7)], optimizedFirst.Indices.AllIndices.ToArray());
-        Assert.Equal([Lower(7), Upper(7)], optimizedSecond.Indices.AllIndices.ToArray());
+        Sum optimized = result.ShouldBeOfType<Sum>();
+        SimpleTensor optimizedFirst = optimized[0].ShouldBeOfType<SimpleTensor>();
+        SimpleTensor optimizedSecond = optimized[1].ShouldBeOfType<SimpleTensor>();
+        optimizedFirst.Indices.AllIndices.ToArray().ShouldBe([Lower(7), Upper(7)]);
+        optimizedSecond.Indices.AllIndices.ToArray().ShouldBe([Lower(7), Upper(7)]);
     }
 
     private static SimpleTensor CreateSimpleTensor(int name, params int[] indices)

@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Parsers;
 using Xunit;
 
@@ -12,13 +12,13 @@ public sealed class ParseTokenTests
         var child = new ParseToken(TokenType.Dummy);
         var parent = new ParseToken(TokenType.Sum, child);
 
-        Assert.Same(parent, child.Parent);
+        child.Parent.ShouldBeSameAs(parent);
     }
 
     [Fact]
     public void ShouldThrowArgumentNullExceptionWhenContentIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => new ParseToken(TokenType.Sum, null!));
+        Should.Throw<ArgumentNullException>(() => new ParseToken(TokenType.Sum, null!));
     }
 
     [Fact]
@@ -30,8 +30,8 @@ public sealed class ParseTokenTests
 
         var indices = token.GetIndices();
 
-        Assert.Equal(3, indices.Size());
-        Assert.Equal(new[] { 1, 2, 3 }, indices.AllIndices);
+        indices.Size().ShouldBe(3);
+        indices.AllIndices.ShouldBe(new[] { 1, 2, 3 });
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public sealed class ParseTokenTests
 
         var indices = token.GetIndices();
 
-        Assert.Equal(first.GetIndices(), indices);
+        indices.ShouldBe(first.GetIndices());
     }
 
     [Fact]
@@ -53,7 +53,7 @@ public sealed class ParseTokenTests
 
         var indices = token.GetIndices();
 
-        Assert.Same(IndicesFactory.EmptyIndices, indices);
+        indices.ShouldBeSameAs(IndicesFactory.EmptyIndices);
     }
 
     [Fact]
@@ -61,9 +61,9 @@ public sealed class ParseTokenTests
     {
         var token = new ParseToken(TokenType.SimpleTensor);
 
-        var exception = Assert.Throws<ParserException>(() => token.GetIndices());
+        var exception = Should.Throw<ParserException>(() => token.GetIndices());
 
-        Assert.Equal("Unknown tensor type: SimpleTensor", exception.Message);
+        exception.Message.ShouldBe("Unknown tensor type: SimpleTensor");
     }
 
     [Fact]
@@ -71,8 +71,8 @@ public sealed class ParseTokenTests
     {
         var token = new ParseToken(TokenType.Product, new ParseTokenLeaf("a", "a"), new ParseTokenLeaf("b", "b"));
 
-        Assert.Equal("a*b", token.ToString(OutputFormat.Redberry));
-        Assert.Equal("a b", token.ToString(OutputFormat.LaTeX));
+        token.ToString(OutputFormat.Redberry).ShouldBe("a*b");
+        token.ToString(OutputFormat.LaTeX).ShouldBe("a b");
     }
 
     [Fact]
@@ -80,7 +80,7 @@ public sealed class ParseTokenTests
     {
         var token = new ParseToken(TokenType.Sum, new ParseTokenLeaf("a", "a"), new ParseTokenLeaf("-b", "-b"));
 
-        Assert.Equal("(a-b)", token.ToString(OutputFormat.Redberry));
+        token.ToString(OutputFormat.Redberry).ShouldBe("(a-b)");
     }
 
     [Fact]
@@ -88,7 +88,7 @@ public sealed class ParseTokenTests
     {
         var token = new ParseToken(TokenType.Number);
 
-        Assert.Throws<InvalidOperationException>(() => token.ToString(OutputFormat.Redberry));
+        Should.Throw<InvalidOperationException>(() => token.ToString(OutputFormat.Redberry));
     }
 
     [Fact]
@@ -96,7 +96,7 @@ public sealed class ParseTokenTests
     {
         var token = new ParseToken(TokenType.Sum, new ParseTokenLeaf("a", "a"), new ParseTokenLeaf("b", "b"));
 
-        Assert.Equal("Sum[a, b]", token.ToString());
+        token.ToString().ShouldBe("Sum[a, b]");
     }
 
     [Fact]
@@ -104,9 +104,9 @@ public sealed class ParseTokenTests
     {
         var token = new ParseToken(TokenType.Power, new ParseTokenLeaf("a", "a"));
 
-        var exception = Assert.Throws<ParserException>(() => token.ToTensor());
+        var exception = Should.Throw<ParserException>(() => token.ToTensor());
 
-        Assert.Equal("Power token should have exactly 2 arguments.", exception.Message);
+        exception.Message.ShouldBe("Power token should have exactly 2 arguments.");
     }
 
     [Fact]
@@ -114,9 +114,9 @@ public sealed class ParseTokenTests
     {
         var token = new ParseToken(TokenType.Number);
 
-        var exception = Assert.Throws<ParserException>(() => token.ToTensor());
+        var exception = Should.Throw<ParserException>(() => token.ToTensor());
 
-        Assert.Equal("Unknown tensor type: Number", exception.Message);
+        exception.Message.ShouldBe("Unknown tensor type: Number");
     }
 
     [Fact]
@@ -125,10 +125,10 @@ public sealed class ParseTokenTests
         var left = new ParseToken(TokenType.Product, new ParseToken(TokenType.Dummy), new ParseToken(TokenType.Dummy));
         var right = new ParseToken(TokenType.Product, new ParseToken(TokenType.Dummy), new ParseToken(TokenType.Dummy));
 
-        Assert.True(left.Equals(right));
-        Assert.True(left == right);
-        Assert.False(left != right);
-        Assert.Equal(left.GetHashCode(), right.GetHashCode());
+        left.Equals(right).ShouldBeTrue();
+        left == right.ShouldBeTrue();
+        left != right.ShouldBeFalse();
+        right.GetHashCode().ShouldBe(left.GetHashCode());
     }
 
     [Fact]
@@ -137,7 +137,7 @@ public sealed class ParseTokenTests
         var left = new ParseToken(TokenType.Dummy);
         var right = new ParseTokenLeaf("x", "x");
 
-        Assert.False(left.Equals(right));
+        left.Equals(right).ShouldBeFalse();
     }
 }
 

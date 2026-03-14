@@ -1,6 +1,7 @@
 using System.Numerics;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -17,7 +18,7 @@ public sealed class PermutationsTests
     {
         int actual = GroupPermutations.Parity(permutation);
 
-        Assert.Equal(expectedParity, actual);
+        actual.ShouldBe(expectedParity);
     }
 
     [Fact(DisplayName = "Should compute parity for short and sbyte overloads")]
@@ -29,8 +30,8 @@ public sealed class PermutationsTests
         int shortParity = GroupPermutations.Parity(shortPermutation);
         int sbyteParity = GroupPermutations.Parity(sbytePermutation);
 
-        Assert.Equal(1, shortParity);
-        Assert.Equal(0, sbyteParity);
+        shortParity.ShouldBe(1);
+        sbyteParity.ShouldBe(0);
     }
 
     [Fact(DisplayName = "Should compute order as lcm of cycle lengths")]
@@ -40,7 +41,7 @@ public sealed class PermutationsTests
 
         BigInteger order = GroupPermutations.OrderOfPermutation(permutation);
 
-        Assert.Equal(new BigInteger(6), order);
+        order.ShouldBe(new BigInteger(6));
     }
 
     [Fact(DisplayName = "Should evaluate odd order for all overloads")]
@@ -50,9 +51,9 @@ public sealed class PermutationsTests
         short[] evenOrderShort = [1, 0, 2];
         sbyte[] oddOrderSbyte = [2, 0, 1];
 
-        Assert.True(GroupPermutations.OrderOfPermutationIsOdd(oddOrder));
-        Assert.False(GroupPermutations.OrderOfPermutationIsOdd(evenOrderShort));
-        Assert.True(GroupPermutations.OrderOfPermutationIsOdd(oddOrderSbyte));
+        GroupPermutations.OrderOfPermutationIsOdd(oddOrder).ShouldBeTrue();
+        GroupPermutations.OrderOfPermutationIsOdd(evenOrderShort).ShouldBeFalse();
+        GroupPermutations.OrderOfPermutationIsOdd(oddOrderSbyte).ShouldBeTrue();
     }
 
     [Fact(DisplayName = "Should return nontrivial cycle lengths only")]
@@ -63,18 +64,18 @@ public sealed class PermutationsTests
         int[] lengths = GroupPermutations.LengthsOfCycles(permutation);
         Array.Sort(lengths);
 
-        Assert.Equal(new[] { 2, 3 }, lengths);
+        lengths.ShouldBe([2, 3]);
     }
 
     [Fact(DisplayName = "Should validate identity for all overloads")]
     public void ShouldValidateIdentityForAllOverloads()
     {
-        Assert.True(GroupPermutations.IsIdentity([0, 1, 2]));
-        Assert.False(GroupPermutations.IsIdentity([1, 0, 2]));
-        Assert.True(GroupPermutations.IsIdentity(new short[] { 0, 1, 2 }));
-        Assert.False(GroupPermutations.IsIdentity(new short[] { 0, 2, 1 }));
-        Assert.True(GroupPermutations.IsIdentity(new sbyte[] { 0, 1, 2 }));
-        Assert.False(GroupPermutations.IsIdentity(new sbyte[] { 2, 1, 0 }));
+        GroupPermutations.IsIdentity([0, 1, 2]).ShouldBeTrue();
+        GroupPermutations.IsIdentity([1, 0, 2]).ShouldBeFalse();
+        GroupPermutations.IsIdentity(new short[] { 0, 1, 2 }).ShouldBeTrue();
+        GroupPermutations.IsIdentity(new short[] { 0, 2, 1 }).ShouldBeFalse();
+        GroupPermutations.IsIdentity(new sbyte[] { 0, 1, 2 }).ShouldBeTrue();
+        GroupPermutations.IsIdentity(new sbyte[] { 2, 1, 0 }).ShouldBeFalse();
     }
 
     [Fact(DisplayName = "Should build inverse permutation")]
@@ -84,7 +85,7 @@ public sealed class PermutationsTests
 
         int[] inverse = GroupPermutations.Inverse(permutation);
 
-        Assert.Equal(new[] { 1, 2, 0 }, inverse);
+        inverse.ShouldBe([1, 2, 0]);
     }
 
     [Fact(DisplayName = "Should compute internal degree for array overloads")]
@@ -94,9 +95,9 @@ public sealed class PermutationsTests
         short shortDegree = GroupPermutations.InternalDegree(new short[] { 0, 2, 1 });
         sbyte sbyteDegree = GroupPermutations.InternalDegree(new sbyte[] { 1, 0 });
 
-        Assert.Equal(5, intDegree);
-        Assert.Equal((short)3, shortDegree);
-        Assert.Equal((sbyte)2, sbyteDegree);
+        intDegree.ShouldBe(5);
+        shortDegree.ShouldBe((short)3);
+        sbyteDegree.ShouldBe((sbyte)2);
     }
 
     [Fact(DisplayName = "Should compute internal degree for permutation collections")]
@@ -111,19 +112,18 @@ public sealed class PermutationsTests
         int listDegree = GroupPermutations.InternalDegree(list);
         int readOnlyDegree = GroupPermutations.InternalDegree((IReadOnlyCollection<Permutation>)list);
 
-        Assert.Equal(3, listDegree);
-        Assert.Equal(3, readOnlyDegree);
+        listDegree.ShouldBe(3);
+        readOnlyDegree.ShouldBe(3);
     }
 
     [Fact(DisplayName = "Should validate permutation correctness and sign constraints")]
     public void ShouldValidatePermutationCorrectnessAndSignConstraints()
     {
-        Assert.True(GroupPermutations.TestPermutationCorrectness([2, 0, 1]));
-        Assert.False(GroupPermutations.TestPermutationCorrectness([1, 1, 0]));
-        Assert.False(GroupPermutations.TestPermutationCorrectness([0, 3, 1]));
-
-        Assert.False(GroupPermutations.TestPermutationCorrectness([2, 0, 1], true));
-        Assert.True(GroupPermutations.TestPermutationCorrectness([1, 0, 2], true));
+        GroupPermutations.TestPermutationCorrectness([2, 0, 1]).ShouldBeTrue();
+        GroupPermutations.TestPermutationCorrectness([1, 1, 0]).ShouldBeFalse();
+        GroupPermutations.TestPermutationCorrectness([0, 3, 1]).ShouldBeFalse();
+        GroupPermutations.TestPermutationCorrectness([2, 0, 1], true).ShouldBeFalse();
+        GroupPermutations.TestPermutationCorrectness([1, 0, 2], true).ShouldBeTrue();
     }
 
     [Fact(DisplayName = "Should generate deterministic random permutation with seeded random")]
@@ -135,14 +135,14 @@ public sealed class PermutationsTests
         int[] first = GroupPermutations.RandomPermutation(10, firstRandom);
         int[] second = GroupPermutations.RandomPermutation(10, secondRandom);
 
-        Assert.Equal(first, second);
-        Assert.True(GroupPermutations.TestPermutationCorrectness(first));
+        second.ShouldBe(first);
+        GroupPermutations.TestPermutationCorrectness(first).ShouldBeTrue();
     }
 
     [Fact(DisplayName = "Should throw for negative random permutation dimension")]
     public void ShouldThrowForNegativeRandomPermutationDimension()
     {
-        Assert.Throws<ArgumentOutOfRangeException>(() => GroupPermutations.RandomPermutation(-1, new Random(1)));
+        Should.Throw<ArgumentOutOfRangeException>(() => GroupPermutations.RandomPermutation(-1, new Random(1)));
     }
 
     [Fact(DisplayName = "Should shuffle arrays deterministically with seeded random")]
@@ -158,9 +158,9 @@ public sealed class PermutationsTests
         GroupPermutations.Shuffle(leftObject, new Random(11));
         GroupPermutations.Shuffle(rightObject, new Random(11));
 
-        Assert.Equal(rightInt, leftInt);
-        Assert.Equal(rightObject, leftObject);
-        Assert.True(GroupPermutations.TestPermutationCorrectness(leftInt));
+        leftInt.ShouldBe(rightInt);
+        leftObject.ShouldBe(rightObject);
+        GroupPermutations.TestPermutationCorrectness(leftInt).ShouldBeTrue();
     }
 
     [Fact(DisplayName = "Should permute int and generic arrays")]
@@ -173,8 +173,8 @@ public sealed class PermutationsTests
         int[] permutedInts = GroupPermutations.Permute(intArray, permutation);
         string[] permutedStrings = GroupPermutations.Permute(stringArray, permutation);
 
-        Assert.Equal(new[] { 30, 10, 20 }, permutedInts);
-        Assert.Equal(new[] { "c", "a", "b" }, permutedStrings);
+        permutedInts.ShouldBe([30, 10, 20]);
+        permutedStrings.ShouldBe(["c", "a", "b"]);
     }
 
     [Fact(DisplayName = "Should permute list and guard invalid arguments")]
@@ -184,8 +184,8 @@ public sealed class PermutationsTests
 
         List<int> permuted = GroupPermutations.Permute(list, [1, 2, 0]);
 
-        Assert.Equal(new[] { 20, 30, 10 }, permuted);
-        Assert.Throws<ArgumentException>(() => GroupPermutations.Permute(new[] { 1, 2 }, [0]));
-        Assert.Throws<ArgumentException>(() => GroupPermutations.Permute(new[] { 1, 2, 3 }, [0, 1, 1]));
+        permuted.ShouldBe([20, 30, 10]);
+        Should.Throw<ArgumentException>(() => GroupPermutations.Permute(new[] { 1, 2 }, [0]));
+        Should.Throw<ArgumentException>(() => GroupPermutations.Permute(new[] { 1, 2, 3 }, [0, 1, 1]));
     }
 }

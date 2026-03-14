@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Fractions;
+﻿using NRedberry.Transformations.Fractions;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -13,9 +13,7 @@ public sealed class TogetherTransformationTests
 
         NRedberry.Tensors.Tensor actual = TogetherTransformation.Together(tensor);
 
-        Assert.Equal(
-            tensor.ToString(OutputFormat.Redberry),
-            actual.ToString(OutputFormat.Redberry));
+        actual.ToString(OutputFormat.Redberry).ShouldBe(tensor.ToString(OutputFormat.Redberry));
     }
 
     [Fact]
@@ -23,6 +21,6 @@ public sealed class TogetherTransformationTests
     {
         TogetherTransformation transformation = new(new TogetherTransformation.TogetherOptions());
 
-        Assert.Equal("Together", transformation.ToString(OutputFormat.Redberry));
+        transformation.ToString(OutputFormat.Redberry).ShouldBe("Together");
     }
 }

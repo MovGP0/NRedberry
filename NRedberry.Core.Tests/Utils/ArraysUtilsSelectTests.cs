@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -10,12 +10,12 @@ public sealed class ArraysUtilsSelectTests
     {
         string[] actual = ArraysUtils.Select(["a", "b", "c", "d"], [3, 1, 3]);
 
-        Assert.Equal(["b", "d"], actual);
+        actual.ShouldBe(["b", "d"]);
     }
 
     [Fact]
     public void ShouldThrowWhenArrayIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => ArraysUtils.Select<string>(null!, [0]));
+        Should.Throw<ArgumentNullException>(() => ArraysUtils.Select<string>(null!, [0]));
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using TensorFactoryApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -13,11 +13,11 @@ public sealed class TensorFactoryTests
         NRedberry.Tensors.Tensor single = TensorFactoryApi.Parse("a");
         NRedberry.Tensors.Tensor other = TensorFactoryApi.Parse("b");
 
-        Assert.Same(single, factory.Create(single));
+        factory.Create(single).ShouldBeSameAs(single);
 
         string text = factory.Create(single, other).ToString(OutputFormat.Redberry);
-        Assert.Contains("a", text);
-        Assert.Contains("b", text);
+        text.ShouldContain("a");
+        text.ShouldContain("b");
     }
 
     private sealed class RecordingTensorFactory : TensorFactory

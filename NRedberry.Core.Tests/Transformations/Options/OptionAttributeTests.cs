@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using NRedberry.Transformations.Options;
 using Xunit;
 
@@ -9,10 +9,9 @@ public sealed class OptionAttributeTests
     [Fact]
     public void ShouldTargetFieldsAndParameters()
     {
-        AttributeUsageAttribute usage = Assert.IsType<AttributeUsageAttribute>(
-            typeof(OptionAttribute).GetCustomAttribute(typeof(AttributeUsageAttribute)));
+        AttributeUsageAttribute usage = typeof(OptionAttribute).GetCustomAttribute(typeof(AttributeUsageAttribute)).ShouldBeOfType<AttributeUsageAttribute>();
 
-        Assert.Equal(AttributeTargets.Field | AttributeTargets.Parameter, usage.ValidOn);
+        usage.ValidOn.ShouldBe(AttributeTargets.Field | AttributeTargets.Parameter);
     }
 
     [Fact]
@@ -24,7 +23,7 @@ public sealed class OptionAttributeTests
             Index = 2
         };
 
-        Assert.Equal("alpha", attribute.Name);
-        Assert.Equal(2, attribute.Index);
+        attribute.Name.ShouldBe("alpha");
+        attribute.Index.ShouldBe(2);
     }
 }

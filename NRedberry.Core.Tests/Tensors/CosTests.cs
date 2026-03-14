@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using NRedberry.Tensors.Functions;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -15,12 +15,12 @@ public sealed class CosTests
 
         NRedberry.Tensors.Tensor derivative = function.Derivative();
 
-        Assert.Same(argument, function[0]);
-        Assert.Equal(1, function.Size);
-        Assert.Equal("Cos[a]", function.ToString(OutputFormat.Redberry));
-        Assert.IsType<Product>(derivative);
-        Assert.Contains("Sin[a]", derivative.ToString(OutputFormat.Redberry));
-        Assert.Equal("ScalarFunctionBuilder", function.GetBuilder().GetType().Name);
-        Assert.Same(CosFactory.Factory, function.GetFactory());
+        function[0].ShouldBeSameAs(argument);
+        function.Size.ShouldBe(1);
+        function.ToString(OutputFormat.Redberry).ShouldBe("Cos[a]");
+        derivative.ShouldBeOfType<Product>();
+        derivative.ToString(OutputFormat.Redberry).ShouldContain("Sin[a]");
+        function.GetBuilder().GetType().Name.ShouldBe("ScalarFunctionBuilder");
+        function.GetFactory().ShouldBeSameAs(CosFactory.Factory);
     }
 }

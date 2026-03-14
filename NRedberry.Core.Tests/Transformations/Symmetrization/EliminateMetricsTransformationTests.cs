@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Symmetrization;
+﻿using NRedberry.Transformations.Symmetrization;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -13,12 +13,12 @@ public sealed class EliminateMetricsTransformationTests
 
         NRedberry.Tensors.Tensor actual = EliminateMetricsTransformation.Eliminate(tensor);
 
-        Assert.Same(tensor, actual);
+        actual.ShouldBeSameAs(tensor);
     }
 
     [Fact]
     public void ShouldExposeReadableName()
     {
-        Assert.Equal("EliminateMetrics", EliminateMetricsTransformation.Instance.ToString(OutputFormat.Redberry));
+        EliminateMetricsTransformation.Instance.ToString(OutputFormat.Redberry).ShouldBe("EliminateMetrics");
     }
 }

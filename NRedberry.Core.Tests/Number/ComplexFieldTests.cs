@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Number;
@@ -13,10 +13,10 @@ public sealed class ComplexFieldTests
         var fromGetInstance = ComplexField.GetInstance();
 #pragma warning restore CS0618
 
-        Assert.Same(instance, fromGetInstance);
-        Assert.Same(instance, ComplexField.Instance);
+        fromGetInstance.ShouldBeSameAs(instance);
+        ComplexField.Instance.ShouldBeSameAs(instance);
 #pragma warning disable CS0618
-        Assert.Same(fromGetInstance, ComplexField.GetInstance());
+        ComplexField.GetInstance().ShouldBeSameAs(fromGetInstance);
 #pragma warning restore CS0618
     }
 
@@ -25,8 +25,8 @@ public sealed class ComplexFieldTests
     {
         var field = ComplexField.Instance;
 
-        Assert.Same(Complex.One, field.One);
-        Assert.Same(Complex.Zero, field.Zero);
+        field.One.ShouldBeSameAs(Complex.One);
+        field.Zero.ShouldBeSameAs(Complex.Zero);
     }
 
     [Fact]
@@ -34,6 +34,6 @@ public sealed class ComplexFieldTests
     {
         var field = ComplexField.Instance;
 
-        Assert.Equal(typeof(Complex), field.GetRuntimeClass());
+        field.GetRuntimeClass().ShouldBe(typeof(Complex));
     }
 }

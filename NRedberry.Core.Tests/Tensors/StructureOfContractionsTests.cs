@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -13,9 +13,9 @@ public sealed class StructureOfContractionsTests
         long contraction10 = Pack(0, 0, 0);
         StructureOfContractions structure = new([[contraction01], [contraction10], []]);
 
-        Assert.Equal(2, structure.componentCount);
-        Assert.Equal([0, 0, 1], structure.components);
-        Assert.Contains("0_0 -> 1_0", structure.ToString());
+        structure.componentCount.ShouldBe(2);
+        structure.components.ShouldBe([0, 0, 1]);
+        structure.ToString().ShouldContain("0_0 -> 1_0");
     }
 
     [Fact]
@@ -27,23 +27,23 @@ public sealed class StructureOfContractionsTests
 
         StructureOfContractions.Contraction[] contractions = structure.GetContractedWith(0);
 
-        Assert.Single(contractions);
-        Assert.Equal(1, contractions[0].Tensor);
-        Assert.Equal([0], contractions[0].IndicesFrom);
-        Assert.Equal([0], contractions[0].IndicesTo);
+        contractions.ShouldHaveSingleItem();
+        contractions[0].Tensor.ShouldBe(1);
+        contractions[0].IndicesFrom.ShouldBe([0]);
+        contractions[0].IndicesTo.ShouldBe([0]);
     }
 
     [Fact]
     public void ShouldBuildContractionsFromParsedProductContent()
     {
-        Product product = Assert.IsType<Product>(TensorFactory.Parse("f_ab*t^bca*g_cd"));
+        Product product = TensorFactory.Parse("f_ab*t^bca*g_cd").ShouldBeOfType<Product>();
         StructureOfContractions structure = product.Content.StructureOfContractions;
 
-        Assert.NotNull(structure);
-        Assert.NotNull(product.Content.StructureOfContractionsHashed);
-        Assert.True(structure.componentCount >= 0);
-        Assert.NotNull(structure.contractions);
-        Assert.NotNull(structure.components);
+        structure.ShouldNotBeNull();
+        product.Content.StructureOfContractionsHashed.ShouldNotBeNull();
+        structure.componentCount >= 0.ShouldBeTrue();
+        structure.contractions.ShouldNotBeNull();
+        structure.components.ShouldNotBeNull();
     }
 
     [Fact]
@@ -51,12 +51,12 @@ public sealed class StructureOfContractionsTests
     {
         long contraction = Pack(12, 5, 3);
 
-        Assert.Equal(12, StructureOfContractions.GetToTensorIndex(contraction));
-        Assert.Equal(5, StructureOfContractions.GetToIndexId(contraction));
-        Assert.Equal(3, StructureOfContractions.GetFromIndexId(contraction));
-        Assert.Equal(12, StructureOfContractions.ToPosition(contraction));
-        Assert.Equal((short)5, StructureOfContractions.ToIDiffId(contraction));
-        Assert.Equal(3, StructureOfContractions.FromIPosition(contraction));
+        StructureOfContractions.GetToTensorIndex(contraction).ShouldBe(12);
+        StructureOfContractions.GetToIndexId(contraction).ShouldBe(5);
+        StructureOfContractions.GetFromIndexId(contraction).ShouldBe(3);
+        StructureOfContractions.ToPosition(contraction).ShouldBe(12);
+        StructureOfContractions.ToIDiffId(contraction).ShouldBe((short)5);
+        StructureOfContractions.FromIPosition(contraction).ShouldBe(3);
     }
 
     private static long Pack(int toTensorIndex, int toIndexId, int fromIndexId)

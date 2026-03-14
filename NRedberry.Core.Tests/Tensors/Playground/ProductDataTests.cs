@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Tensors.Playground;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -15,7 +15,7 @@ public sealed class ProductDataTests
 
         ProductData productData = new(data, indices);
 
-        Assert.Same(data, productData.Data);
-        Assert.Same(indices, productData.Indices);
+        productData.Data.ShouldBeSameAs(data);
+        productData.Indices.ShouldBeSameAs(indices);
     }
 }

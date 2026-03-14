@@ -1,4 +1,4 @@
-using Xunit;
+﻿using Xunit;
 
 namespace NRedberry.Core.Tests.Tensors;
 
@@ -7,12 +7,12 @@ public sealed class OutputFormatTests
     [Fact]
     public void ShouldExposeExpectedPredefinedFormats()
     {
-        Assert.Equal(0, OutputFormat.LaTeX.Id);
-        Assert.Equal(5, OutputFormat.Maple.Id);
-        Assert.Equal(string.Empty, OutputFormat.Maple.LowerIndexPrefix);
-        Assert.Equal("~", OutputFormat.Maple.UpperIndexPrefix);
-        Assert.False(OutputFormat.SimpleRedberry.PrintMatrixIndices);
-        Assert.True(OutputFormat.Redberry.PrintMatrixIndices);
+        OutputFormat.LaTeX.Id.ShouldBe(0);
+        OutputFormat.Maple.Id.ShouldBe(5);
+        OutputFormat.Maple.LowerIndexPrefix.ShouldBe(string.Empty);
+        OutputFormat.Maple.UpperIndexPrefix.ShouldBe("~");
+        OutputFormat.SimpleRedberry.PrintMatrixIndices.ShouldBeFalse();
+        OutputFormat.Redberry.PrintMatrixIndices.ShouldBeTrue();
     }
 
     [Fact]
@@ -20,10 +20,10 @@ public sealed class OutputFormatTests
     {
         OutputFormat disabled = OutputFormat.Redberry.DoNotPrintMatrixIndices();
 
-        Assert.False(disabled.PrintMatrixIndices);
-        Assert.Same(disabled, disabled.DoNotPrintMatrixIndices());
-        Assert.NotSame(OutputFormat.Redberry, disabled);
-        Assert.Equal(OutputFormat.Redberry.Id, disabled.Id);
+        disabled.PrintMatrixIndices.ShouldBeFalse();
+        disabled.DoNotPrintMatrixIndices().ShouldBeSameAs(disabled);
+        disabled.ShouldNotBeSameAs(OutputFormat.Redberry);
+        disabled.Id.ShouldBe(OutputFormat.Redberry.Id);
     }
 
     [Fact]
@@ -31,33 +31,33 @@ public sealed class OutputFormatTests
     {
         OutputFormat enabled = OutputFormat.SimpleRedberry.PrintMatrixIndicesAlways();
 
-        Assert.True(enabled.PrintMatrixIndices);
-        Assert.Same(enabled, enabled.PrintMatrixIndicesAlways());
-        Assert.NotSame(OutputFormat.SimpleRedberry, enabled);
-        Assert.Equal(OutputFormat.SimpleRedberry.Id, enabled.Id);
+        enabled.PrintMatrixIndices.ShouldBeTrue();
+        enabled.PrintMatrixIndicesAlways().ShouldBeSameAs(enabled);
+        enabled.ShouldNotBeSameAs(OutputFormat.SimpleRedberry);
+        enabled.Id.ShouldBe(OutputFormat.SimpleRedberry.Id);
     }
 
     [Fact]
     public void ShouldCompareFormatsById()
     {
-        Assert.True(OutputFormat.Redberry.Is(OutputFormat.Redberry));
-        Assert.True(OutputFormat.Redberry.DoNotPrintMatrixIndices().Is(OutputFormat.Redberry));
-        Assert.False(OutputFormat.Redberry.Is(OutputFormat.LaTeX));
+        OutputFormat.Redberry.Is(OutputFormat.Redberry).ShouldBeTrue();
+        OutputFormat.Redberry.DoNotPrintMatrixIndices().Is(OutputFormat.Redberry).ShouldBeTrue();
+        OutputFormat.Redberry.Is(OutputFormat.LaTeX).ShouldBeFalse();
     }
 
     [Fact]
     public void ShouldReturnPrefixFromIntState()
     {
-        Assert.Equal("_", OutputFormat.Redberry.GetPrefixFromIntState(0));
-        Assert.Equal("^", OutputFormat.Redberry.GetPrefixFromIntState(1));
-        Assert.Throws<ArgumentException>(() => OutputFormat.Redberry.GetPrefixFromIntState(2));
+        OutputFormat.Redberry.GetPrefixFromIntState(0).ShouldBe("_");
+        OutputFormat.Redberry.GetPrefixFromIntState(1).ShouldBe("^");
+        Should.Throw<ArgumentException>(() => OutputFormat.Redberry.GetPrefixFromIntState(2));
     }
 
     [Fact]
     public void ShouldReturnPrefixFromRawIntState()
     {
-        Assert.Equal("_", OutputFormat.Redberry.GetPrefixFromRawIntState(0));
-        Assert.Equal("^", OutputFormat.Redberry.GetPrefixFromRawIntState(unchecked((int)0x80000000)));
-        Assert.Throws<ArgumentException>(() => OutputFormat.Redberry.GetPrefixFromRawIntState(1));
+        OutputFormat.Redberry.GetPrefixFromRawIntState(0).ShouldBe("_");
+        OutputFormat.Redberry.GetPrefixFromRawIntState(unchecked((int)0x80000000)).ShouldBe("^");
+        Should.Throw<ArgumentException>(() => OutputFormat.Redberry.GetPrefixFromRawIntState(1));
     }
 }

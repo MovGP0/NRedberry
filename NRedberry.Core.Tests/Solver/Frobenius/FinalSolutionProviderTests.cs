@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using NRedberry.Solver.Frobenius;
 using Xunit;
 
@@ -14,7 +14,7 @@ public sealed class FinalSolutionProviderTests
 
         int[]? solution = Take(finalProvider);
 
-        Assert.Null(solution);
+        solution.ShouldBeNull();
     }
 
     [Fact]
@@ -23,13 +23,13 @@ public sealed class FinalSolutionProviderTests
         object dummyProvider = CreateDummySolutionProvider([2, 3, 4], [6, 0, 10]);
         object finalProvider = CreateFinalSolutionProvider(dummyProvider, 1, [3, 0, 5]);
 
-        Assert.True(Tick(finalProvider));
+        Tick(finalProvider).ShouldBeTrue();
 
         int[]? solution = Take(finalProvider);
         int[]? secondTake = Take(finalProvider);
 
-        Assert.Equal(new[] { 2, 5, 4 }, solution);
-        Assert.Null(secondTake);
+        solution.ShouldBe(new[] { 2, 5, 4 });
+        secondTake.ShouldBeNull();
     }
 
     [Fact]
@@ -38,11 +38,11 @@ public sealed class FinalSolutionProviderTests
         object dummyProvider = CreateDummySolutionProvider([7, 8, 9], [0, 10, 6]);
         object finalProvider = CreateFinalSolutionProvider(dummyProvider, 2, [0, 4, 2]);
 
-        Assert.True(Tick(finalProvider));
+        Tick(finalProvider).ShouldBeTrue();
 
         int[]? solution = Take(finalProvider);
 
-        Assert.Null(solution);
+        solution.ShouldBeNull();
     }
 
     [Fact]
@@ -51,11 +51,11 @@ public sealed class FinalSolutionProviderTests
         object dummyProvider = CreateDummySolutionProvider([4, 5, 6], [6, 1, 12]);
         object finalProvider = CreateFinalSolutionProvider(dummyProvider, 0, [2, 0, 4]);
 
-        Assert.True(Tick(finalProvider));
+        Tick(finalProvider).ShouldBeTrue();
 
         int[]? solution = Take(finalProvider);
 
-        Assert.Null(solution);
+        solution.ShouldBeNull();
     }
 
     [Fact]
@@ -64,11 +64,11 @@ public sealed class FinalSolutionProviderTests
         object dummyProvider = CreateDummySolutionProvider([1, 1], [6, 12]);
         object finalProvider = CreateFinalSolutionProvider(dummyProvider, 1, [2, 3]);
 
-        Assert.True(Tick(finalProvider));
+        Tick(finalProvider).ShouldBeTrue();
 
         int[]? solution = Take(finalProvider);
 
-        Assert.Null(solution);
+        solution.ShouldBeNull();
     }
 
     private static object CreateDummySolutionProvider(int[] solution, int[] remainders)

@@ -1,4 +1,4 @@
-using NRedberry.Parsers;
+﻿using NRedberry.Parsers;
 using RedberryParser = NRedberry.Parsers.Parser;
 using Xunit;
 
@@ -11,7 +11,7 @@ public sealed class ParserDerivativeTests
     {
         var token = ParserDerivative.Instance.ParseToken("x][f]", RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
@@ -19,7 +19,7 @@ public sealed class ParserDerivativeTests
     {
         var token = ParserDerivative.Instance.ParseToken("D[x][f][g]", RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public sealed class ParserDerivativeTests
     {
         var token = ParserDerivative.Instance.ParseToken("D[x][f[a]", RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public sealed class ParserDerivativeTests
     {
         var token = ParserDerivative.Instance.ParseToken("D[x,(y][f]", RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
@@ -43,17 +43,17 @@ public sealed class ParserDerivativeTests
     {
         var token = ParserDerivative.Instance.ParseToken("D[(x+y),f[a,b]][q[m]]", RedberryParser.Default);
 
-        var derivative = Assert.IsType<ParseTokenDerivative>(token);
-        Assert.Equal(TokenType.Derivative, derivative.TokenType);
-        Assert.Equal(3, derivative.Content.Length);
-        Assert.Equal(TokenType.TensorField, derivative.Content[0].TokenType);
-        Assert.Equal(TokenType.Sum, derivative.Content[1].TokenType);
-        Assert.Equal(TokenType.SimpleTensor, derivative.Content[2].TokenType);
+        var derivative = token.ShouldBeOfType<ParseTokenDerivative>();
+        derivative.TokenType.ShouldBe(TokenType.Derivative);
+        derivative.Content.Length.ShouldBe(3);
+        derivative.Content[0].TokenType.ShouldBe(TokenType.TensorField);
+        derivative.Content[1].TokenType.ShouldBe(TokenType.Sum);
+        derivative.Content[2].TokenType.ShouldBe(TokenType.SimpleTensor);
     }
 
     [Fact]
     public void ShouldExposeExpectedPriority()
     {
-        Assert.Equal(8000, ParserDerivative.Instance.Priority);
+        ParserDerivative.Instance.Priority.ShouldBe(8000);
     }
 }

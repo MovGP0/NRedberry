@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Immutable;
 using NRedberry;
 using NRedberry.Indices;
@@ -15,7 +15,7 @@ public class EmptyIndicesTests
         var first = EmptyIndices.EmptyIndicesInstance;
         var second = EmptyIndices.EmptyIndicesInstance;
 
-        Assert.Same(first, second);
+        second.ShouldBeSameAs(first);
     }
 
     [Fact]
@@ -23,11 +23,11 @@ public class EmptyIndicesTests
     {
         var indices = EmptyIndices.EmptyIndicesInstance;
 
-        Assert.Equal(0, indices.Size());
+        indices.Size().ShouldBe(0);
 
         foreach (var indexType in Enum.GetValues<IndexType>())
         {
-            Assert.Equal(0, indices.Size(indexType));
+            indices.Size(indexType).ShouldBe(0);
         }
     }
 
@@ -36,10 +36,10 @@ public class EmptyIndicesTests
     {
         var indices = EmptyIndices.EmptyIndicesInstance;
 
-        Assert.Empty(indices.AllIndices);
-        Assert.Empty(indices.UpperIndices);
-        Assert.Empty(indices.LowerIndices);
-        Assert.Empty(indices);
+        indices.AllIndices.ShouldBeEmpty();
+        indices.UpperIndices.ShouldBeEmpty();
+        indices.LowerIndices.ShouldBeEmpty();
+        indices.ShouldBeEmpty();
     }
 
     [Fact]
@@ -47,10 +47,10 @@ public class EmptyIndicesTests
     {
         var indices = EmptyIndices.EmptyIndicesInstance;
 
-        Assert.Same(indices, indices.GetFree());
-        Assert.Same(indices, indices.GetInverted());
-        Assert.Same(indices, indices.GetOfType(IndexType.Matrix1));
-        Assert.Same(indices, indices.ApplyIndexMapping(new IdentityIndexMappingStub()));
+        indices.GetFree().ShouldBeSameAs(indices);
+        indices.GetInverted().ShouldBeSameAs(indices);
+        indices.GetOfType(IndexType.Matrix1).ShouldBeSameAs(indices);
+        indices.ApplyIndexMapping(new IdentityIndexMappingStub()).ShouldBeSameAs(indices);
     }
 
     [Fact]
@@ -59,8 +59,8 @@ public class EmptyIndicesTests
         var indices = EmptyIndices.EmptyIndicesInstance;
         var nonEmptyIndices = new NonEmptyIndicesStub();
 
-        Assert.True(indices.EqualsRegardlessOrder(EmptyIndices.EmptyIndicesInstance));
-        Assert.False(indices.EqualsRegardlessOrder(nonEmptyIndices));
+        indices.EqualsRegardlessOrder(EmptyIndices.EmptyIndicesInstance).ShouldBeTrue();
+        indices.EqualsRegardlessOrder(nonEmptyIndices).ShouldBeFalse();
     }
 
     [Fact]
@@ -68,8 +68,8 @@ public class EmptyIndicesTests
     {
         var indices = EmptyIndices.EmptyIndicesInstance;
 
-        Assert.Throws<ArgumentOutOfRangeException>(() => _ = indices[0]);
-        Assert.Throws<ArgumentOutOfRangeException>(() => _ = indices[IndexType.GreekLower, 0]);
+        Should.Throw<ArgumentOutOfRangeException>(() => _ = indices[0]);
+        Should.Throw<ArgumentOutOfRangeException>(() => _ = indices[IndexType.GreekLower, 0]);
     }
 
     [Fact]
@@ -77,10 +77,10 @@ public class EmptyIndicesTests
     {
         var indices = EmptyIndices.EmptyIndicesInstance;
 
-        Assert.Equal(string.Empty, indices.ToString());
-        Assert.Equal(string.Empty, indices.ToString(OutputFormat.Redberry));
-        Assert.Equal(string.Empty, indices.ToString(OutputFormat.LaTeX));
-        Assert.Equal(string.Empty, indices.ToString(OutputFormat.WolframMathematica));
+        indices.ToString().ShouldBe(string.Empty);
+        indices.ToString(OutputFormat.Redberry).ShouldBe(string.Empty);
+        indices.ToString(OutputFormat.LaTeX).ShouldBe(string.Empty);
+        indices.ToString(OutputFormat.WolframMathematica).ShouldBe(string.Empty);
     }
 
     [Fact]
@@ -88,7 +88,7 @@ public class EmptyIndicesTests
     {
         var indices = EmptyIndices.EmptyIndicesInstance;
 
-        Assert.Empty(indices.GetDiffIds());
+        indices.GetDiffIds().ShouldBeEmpty();
     }
 
     [Fact]
@@ -97,10 +97,10 @@ public class EmptyIndicesTests
         var indices = EmptyIndices.EmptyIndicesInstance;
         var anotherEmpty = new EmptyIndices();
 
-        Assert.True(indices.Equals(indices));
-        Assert.True(indices.Equals(anotherEmpty));
-        Assert.False(indices.Equals(new object()));
-        Assert.Equal(indices.GetHashCode(), anotherEmpty.GetHashCode());
+        indices.Equals(indices).ShouldBeTrue();
+        indices.Equals(anotherEmpty).ShouldBeTrue();
+        indices.Equals(new object()).ShouldBeFalse();
+        anotherEmpty.GetHashCode().ShouldBe(indices.GetHashCode());
     }
 }
 

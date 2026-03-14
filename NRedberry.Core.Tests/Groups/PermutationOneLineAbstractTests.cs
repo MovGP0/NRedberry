@@ -182,7 +182,7 @@ public sealed class PermutationOneLineAbstractTests
         string oneLine = permutation.ToStringOneLine();
         string cycles = permutation.ToStringCycles();
         string text = permutation.ToString();
-        List<int> values = [..permutation];
+        List<int> values = [.. permutation];
 
         oneLine.ShouldBe("+1, 0, 2, 4, 3");
         cycles.ShouldBe("+{0, 1}, {3, 4}");

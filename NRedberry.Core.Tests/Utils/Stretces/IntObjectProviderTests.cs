@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils.Stretces;
+﻿using NRedberry.Core.Utils.Stretces;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils.Stretces;
@@ -10,8 +10,8 @@ public sealed class IntObjectProviderTests
     {
         IIntObjectProvider provider = IIntObjectProvider.HashProvider;
 
-        Assert.Equal(17, provider.Get(new HashCarrier(17)));
-        Assert.Equal(0, provider.Get(null!));
+        provider.Get(new HashCarrier(17)).ShouldBe(17);
+        provider.Get(null!).ShouldBe(0);
     }
 }
 

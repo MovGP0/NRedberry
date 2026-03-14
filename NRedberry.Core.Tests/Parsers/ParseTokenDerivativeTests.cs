@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Parsers;
 using RedberryParser = NRedberry.Parsers.Parser;
 using Xunit;
@@ -19,7 +19,7 @@ public sealed class ParseTokenDerivativeTests
             var indices = derivative.GetIndices();
             var expected = ParserIndices.ParseSimple("_a^b");
 
-            Assert.True(indices.EqualsRegardlessOrder(expected));
+            indices.EqualsRegardlessOrder(expected).ShouldBeTrue();
         }
         catch (TypeInitializationException)
         {
@@ -39,7 +39,7 @@ public sealed class ParseTokenDerivativeTests
             var result = derivative.ToTensor();
             var expected = RedberryParser.Default.Parse("2*x").ToTensor();
 
-            Assert.Equal(expected, result);
+            result.ShouldBe(expected);
         }
         catch (TypeInitializationException)
         {
@@ -63,7 +63,7 @@ public sealed class ParseTokenDerivativeTests
             }
             catch (ArgumentException exception)
             {
-                Assert.Contains("Derivative with respect to non simple argument", exception.Message, StringComparison.Ordinal);
+                exception.Message.ShouldContain("Derivative with respect to non simple argument");
             }
         }
         catch (TypeInitializationException)

@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Parsers;
 using NRedberry.Tensors.Functions;
@@ -11,9 +11,9 @@ public sealed class ParseTokenScalarFunctionTests
     [Fact]
     public void ShouldThrowWhenConstructedWithNullFunction()
     {
-        var exception = Assert.Throws<ArgumentNullException>(() => new ParseTokenScalarFunction(null!, new ParseTokenNumber(Complex.One)));
+        var exception = Should.Throw<ArgumentNullException>(() => new ParseTokenScalarFunction(null!, new ParseTokenNumber(Complex.One)));
 
-        Assert.Equal("function", exception.ParamName);
+        exception.ParamName.ShouldBe("function");
     }
 
     [Theory]
@@ -28,9 +28,9 @@ public sealed class ParseTokenScalarFunctionTests
             _ => throw new InvalidOperationException("Unsupported test input.")
         };
 
-        var exception = Assert.Throws<ArgumentException>(() => new ParseTokenScalarFunction("Sin", content));
+        var exception = Should.Throw<ArgumentException>(() => new ParseTokenScalarFunction("Sin", content));
 
-        Assert.Equal("content", exception.Message);
+        exception.Message.ShouldBe("content");
     }
 
     [Fact]
@@ -38,9 +38,9 @@ public sealed class ParseTokenScalarFunctionTests
     {
         var token = new ParseTokenScalarFunction("Sin", new ParseTokenNumber(Complex.One));
 
-        Assert.Equal(TokenType.ScalarFunction, token.TokenType);
-        Assert.Equal("Sin", token.Function);
-        Assert.Single(token.Content);
+        token.TokenType.ShouldBe(TokenType.ScalarFunction);
+        token.Function.ShouldBe("Sin");
+        token.Content.ShouldHaveSingleItem();
     }
 
     [Fact]
@@ -50,7 +50,7 @@ public sealed class ParseTokenScalarFunctionTests
 
         var indices = token.GetIndices();
 
-        Assert.Same(IndicesFactory.EmptyIndices, indices);
+        indices.ShouldBeSameAs(IndicesFactory.EmptyIndices);
     }
 
     [Fact]
@@ -60,7 +60,7 @@ public sealed class ParseTokenScalarFunctionTests
 
         var text = token.ToString();
 
-        Assert.Equal("Sin[x]", text);
+        text.ShouldBe("Sin[x]");
     }
 
     [Fact]
@@ -71,7 +71,7 @@ public sealed class ParseTokenScalarFunctionTests
         var tensor = token.ToTensor();
         var expected = SinFactory.Factory.Create(Complex.One);
 
-        Assert.Equal(expected, tensor);
+        tensor.ShouldBe(expected);
     }
 
     [Fact]
@@ -79,9 +79,9 @@ public sealed class ParseTokenScalarFunctionTests
     {
         var token = new ParseTokenScalarFunction("Unknown", new ParseTokenNumber(Complex.One));
 
-        var exception = Assert.Throws<InvalidOperationException>(() => token.ToTensor());
+        var exception = Should.Throw<InvalidOperationException>(() => token.ToTensor());
 
-        Assert.Equal("Unknown scalar function \"Unknown\".", exception.Message);
+        exception.Message.ShouldBe("Unknown scalar function \"Unknown\".");
     }
 
     [Fact]
@@ -91,8 +91,8 @@ public sealed class ParseTokenScalarFunctionTests
         var equal = new ParseTokenScalarFunction("Sin", new ParseTokenNumber(Complex.One));
         var different = new ParseTokenScalarFunction("Cos", new ParseTokenNumber(Complex.One));
 
-        Assert.True(left.Equals((object?)equal));
-        Assert.Equal(left.GetHashCode(), equal.GetHashCode());
-        Assert.False(left.Equals((object?)different));
+        left.Equals((object?)equal).ShouldBeTrue();
+        equal.GetHashCode().ShouldBe(left.GetHashCode());
+        left.Equals((object?)different).ShouldBeFalse();
     }
 }

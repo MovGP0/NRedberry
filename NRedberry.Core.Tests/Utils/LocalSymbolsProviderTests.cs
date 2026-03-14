@@ -1,4 +1,4 @@
-using NRedberry.Utils;
+﻿using NRedberry.Utils;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -14,15 +14,15 @@ public sealed class LocalSymbolsProviderTests
         string first = provider.Take().ToString(OutputFormat.Redberry);
         string second = provider.Take().ToString(OutputFormat.Redberry);
 
-        Assert.Equal("x2", first);
-        Assert.Equal("x3", second);
+        first.ShouldBe("x2");
+        second.ShouldBe("x3");
     }
 
     [Fact]
     public void ShouldThrowWhenPrefixIsNull()
     {
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => new LocalSymbolsProvider(TensorApi.Parse("a"), null!));
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() => new LocalSymbolsProvider(TensorApi.Parse("a"), null!));
 
-        Assert.Equal("prefix", exception.ParamName);
+        exception.ParamName.ShouldBe("prefix");
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -10,10 +10,10 @@ public sealed class THashSetTest
     {
         THashSet<string> values = [];
 
-        Assert.True(values.Add("a"));
-        Assert.False(values.Add("a"));
-        Assert.True(values.Add("b"));
-        Assert.Contains("a", values);
-        Assert.Equal(2, values.Count);
+        values.Add("a").ShouldBeTrue();
+        values.Add("a").ShouldBeFalse();
+        values.Add("b").ShouldBeTrue();
+        values.ShouldContain("a");
+        values.Count.ShouldBe(2);
     }
 }

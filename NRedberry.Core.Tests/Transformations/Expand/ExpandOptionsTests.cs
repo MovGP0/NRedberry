@@ -1,4 +1,4 @@
-using NRedberry.Tensors.Iterators;
+﻿using NRedberry.Tensors.Iterators;
 using NRedberry.Transformations;
 using NRedberry.Transformations.Expand;
 using Xunit;
@@ -12,13 +12,11 @@ public sealed class ExpandOptionsTests
     {
         ExpandOptions options = new();
 
-        Assert.Same(Transformation.Identity, options.Simplifications);
-        Assert.NotNull(options.TraverseGuide);
-        Assert.Equal(
-            TraversePermission.DontShow,
-            options.TraverseGuide!.GetPermission(
+        options.Simplifications.ShouldBeSameAs(Transformation.Identity);
+        options.TraverseGuide.ShouldNotBeNull();
+        options.TraverseGuide!.GetPermission(
                 NRedberry.Tensors.Tensors.Parse("Sin[a]"),
                 NRedberry.Tensors.Tensors.Parse("x"),
-                0));
+                0).ShouldBe(TraversePermission.DontShow);
     }
 }

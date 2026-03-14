@@ -1,4 +1,5 @@
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
@@ -10,8 +11,8 @@ public sealed class ExpVectorByteTests
     {
         ExpVectorByte vector = new([1L, 2L, 3L]);
 
-        Assert.Equal([1L, 2L, 3L], vector.GetVal());
-        Assert.Equal([3L, 2L, 1L], vector.Reverse().GetVal());
-        Assert.Equal(3, vector.MaxDeg());
+        vector.GetVal().ShouldBe([1L, 2L, 3L]);
+        vector.Reverse().GetVal().ShouldBe([3L, 2L, 1L]);
+        vector.MaxDeg().ShouldBe(3);
     }
 }

@@ -15,14 +15,14 @@ public sealed class IndicesSymmetriesTests
         Exception? exception = Record.Exception(() =>
         {
             IndicesSymmetries symmetries = IndicesSymmetries.EmptySymmetries;
-            Assert.True(symmetries.IsEmpty);
+            symmetries.IsEmpty.ShouldBeTrue();
         });
         if (exception is TypeInitializationException)
         {
             return;
         }
 
-        Assert.Null(exception);
+        exception.ShouldBeNull();
     }
 
     [Fact]
@@ -38,15 +38,15 @@ public sealed class IndicesSymmetriesTests
             ];
             IndicesSymmetries withIdentity = IndicesSymmetries.Create(structure, generators);
 
-            Assert.True(empty.IsTrivial());
-            Assert.True(withIdentity.IsTrivial());
+            empty.IsTrivial().ShouldBeTrue();
+            withIdentity.IsTrivial().ShouldBeTrue();
         });
         if (exception is TypeInitializationException)
         {
             return;
         }
 
-        Assert.Null(exception);
+        exception.ShouldBeNull();
     }
 
     [Fact]
@@ -57,18 +57,18 @@ public sealed class IndicesSymmetriesTests
             StructureOfIndices structure = StructureOfIndices.Create(IndexType.LatinLower, 2);
             IndicesSymmetries symmetries = IndicesSymmetries.Create(structure);
 
-            Assert.True(symmetries.AvailableForModification());
+            symmetries.AvailableForModification().ShouldBeTrue();
 
             _ = symmetries.PermutationGroup;
 
-            Assert.False(symmetries.AvailableForModification());
+            symmetries.AvailableForModification().ShouldBeFalse();
         });
         if (exception is TypeInitializationException)
         {
             return;
         }
 
-        Assert.Null(exception);
+        exception.ShouldBeNull();
     }
 
     [Fact]
@@ -84,21 +84,21 @@ public sealed class IndicesSymmetriesTests
             IndicesSymmetries original = IndicesSymmetries.Create(structure, generators);
             IndicesSymmetries clone = original.Clone();
 
-            Assert.NotSame(original, clone);
-            Assert.Equal(original.IsTrivial(), clone.IsTrivial());
-            Assert.Equal(original.Generators.Count, clone.Generators.Count);
+            clone.ShouldNotBeSameAs(original);
+            clone.IsTrivial().ShouldBe(original.IsTrivial());
+            clone.Generators.Count.ShouldBe(original.Generators.Count);
 
             clone.AddSymmetry(GroupPermutations.CreatePermutation(false, [1, 0]));
 
-            Assert.Single(original.Generators);
-            Assert.Equal(2, clone.Generators.Count);
+            original.Generators.ShouldHaveSingleItem();
+            clone.Generators.Count.ShouldBe(2);
         });
         if (exception is TypeInitializationException)
         {
             return;
         }
 
-        Assert.Null(exception);
+        exception.ShouldBeNull();
     }
 
     [Fact]
@@ -109,15 +109,15 @@ public sealed class IndicesSymmetriesTests
             StructureOfIndices structure = StructureOfIndices.Create(IndexType.LatinLower, 2);
             IndicesSymmetries symmetries = IndicesSymmetries.Create(structure);
 
-            Assert.NotNull(symmetries.Generators);
-            Assert.NotNull(symmetries.PermutationGroup);
+            symmetries.Generators.ShouldNotBeNull();
+            symmetries.PermutationGroup.ShouldNotBeNull();
         });
         if (exception is TypeInitializationException)
         {
             return;
         }
 
-        Assert.Null(exception);
+        exception.ShouldBeNull();
     }
 
     [Fact]
@@ -130,14 +130,14 @@ public sealed class IndicesSymmetriesTests
 
             short[] positionsInOrbits = symmetries.PositionsInOrbits;
 
-            Assert.NotNull(positionsInOrbits);
-            Assert.Equal(structure.Size, positionsInOrbits.Length);
+            positionsInOrbits.ShouldNotBeNull();
+            positionsInOrbits.Length.ShouldBe(structure.Size);
         });
         if (exception is TypeInitializationException)
         {
             return;
         }
 
-        Assert.Null(exception);
+        exception.ShouldBeNull();
     }
 }

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using NRedberry.Parsers;
 using RedberryParser = NRedberry.Parsers.Parser;
@@ -14,7 +14,7 @@ public sealed class NodeParserComparatorTests
         var first = GetComparator();
         var second = GetComparator();
 
-        Assert.Same(first, second);
+        second.ShouldBeSameAs(first);
     }
 
     [Fact]
@@ -25,7 +25,7 @@ public sealed class NodeParserComparatorTests
 
         var result = comparator.Compare(parser, parser);
 
-        Assert.Equal(0, result);
+        result.ShouldBe(0);
     }
 
     [Fact]
@@ -37,8 +37,8 @@ public sealed class NodeParserComparatorTests
         var nullLeftResult = comparator.Compare(null, parser);
         var nullRightResult = comparator.Compare(parser, null);
 
-        Assert.Equal(1, nullLeftResult);
-        Assert.Equal(-1, nullRightResult);
+        nullLeftResult.ShouldBe(1);
+        nullRightResult.ShouldBe(-1);
     }
 
     [Fact]
@@ -50,7 +50,7 @@ public sealed class NodeParserComparatorTests
 
         var result = comparator.Compare(higherPriority, lowerPriority);
 
-        Assert.True(result < 0);
+        result < 0.ShouldBeTrue();
     }
 
     [Fact]
@@ -62,21 +62,21 @@ public sealed class NodeParserComparatorTests
 
         var result = comparator.Compare(left, right);
 
-        Assert.Equal(0, result);
+        result.ShouldBe(0);
     }
 
     private static IComparer<ITokenParser> GetComparator()
     {
         var comparatorType = typeof(ITokenParser).Assembly.GetType("NRedberry.Parsers.NodeParserComparator");
-        Assert.NotNull(comparatorType);
+        comparatorType.ShouldNotBeNull();
 
         var instanceProperty = comparatorType!.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
-        Assert.NotNull(instanceProperty);
+        instanceProperty.ShouldNotBeNull();
 
         var instance = instanceProperty!.GetValue(null);
-        Assert.NotNull(instance);
+        instance.ShouldNotBeNull();
 
-        return Assert.IsAssignableFrom<IComparer<ITokenParser>>(instance);
+        return instance.ShouldBeAssignableTo<IComparer<ITokenParser>>();
     }
 }
 

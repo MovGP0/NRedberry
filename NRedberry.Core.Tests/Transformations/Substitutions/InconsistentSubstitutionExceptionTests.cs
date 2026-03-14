@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Substitutions;
+﻿using NRedberry.Transformations.Substitutions;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -14,6 +14,6 @@ public sealed class InconsistentSubstitutionExceptionTests
             TensorApi.Parse("b"),
             TensorApi.Parse("c"));
 
-        Assert.Equal("Substitution: a = b.  Detected tensor c", exception.Message);
+        exception.Message.ShouldBe("Substitution: a = b.  Detected tensor c");
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Powerexpand;
+﻿using NRedberry.Transformations.Powerexpand;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -14,16 +14,16 @@ public sealed class PowerUnfoldTransformationTests
 
         NRedberry.Tensors.Tensor actual = transformation.Transform(tensor);
 
-        Assert.Same(tensor, actual);
+        actual.ShouldBeSameAs(tensor);
     }
 
     [Fact]
     public void ShouldExposeReadableNames()
     {
         PowerUnfoldTransformation defaultTransformation = new([]);
-        PowerUnfoldTransformation variableTransformation = new([Assert.IsType<NRedberry.Tensors.SimpleTensor>(TensorApi.Parse("x"))]);
+        PowerUnfoldTransformation variableTransformation = new([TensorApi.Parse("x").ShouldBeOfType<NRedberry.Tensors.SimpleTensor>()]);
 
-        Assert.Equal("PowerUnfold", defaultTransformation.ToString(OutputFormat.Redberry));
-        Assert.Equal("PowerUnfold[x]", variableTransformation.ToString(OutputFormat.Redberry));
+        defaultTransformation.ToString(OutputFormat.Redberry).ShouldBe("PowerUnfold");
+        variableTransformation.ToString(OutputFormat.Redberry).ShouldBe("PowerUnfold[x]");
     }
 }

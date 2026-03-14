@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -8,8 +8,8 @@ public sealed class ArraysUtilsToStringTests
     [Fact]
     public void ShouldFormatNullAndEmptyArrays()
     {
-        Assert.Equal("null", ArraysUtils.ToString<int>(null, ToStringConverters.Default));
-        Assert.Equal("[]", ArraysUtils.ToString([], ToStringConverters.Default));
+        ArraysUtils.ToString<int>(null, ToStringConverters.Default).ShouldBe("null");
+        ArraysUtils.ToString([], ToStringConverters.Default).ShouldBe("[]");
     }
 
     [Fact]
@@ -17,7 +17,7 @@ public sealed class ArraysUtilsToStringTests
     {
         string actual = ArraysUtils.ToString([10, 15], ToStringConverters.Hex);
 
-        Assert.Equal("[a, f]", actual);
+        actual.ShouldBe("[a, f]");
     }
 
     [Fact]
@@ -25,7 +25,7 @@ public sealed class ArraysUtilsToStringTests
     {
         string actual = ArraysUtils.ToString(["a", "b"], new WrapperConverter());
 
-        Assert.Equal("[<a>, <b>]", actual);
+        actual.ShouldBe("[<a>, <b>]");
     }
 
     private sealed class WrapperConverter : IToStringConverter<string>

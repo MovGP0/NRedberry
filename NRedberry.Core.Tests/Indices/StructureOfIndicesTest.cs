@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Parsers;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -13,16 +13,16 @@ public sealed class StructureOfIndicesTest
         SimpleIndices indices = ParserIndices.ParseSimple("_ab'c'^d'");
         StructureOfIndices structure = StructureOfIndices.Create(indices);
 
-        Assert.Equal(indices.StructureOfIndices.ToString(), structure.ToString());
-        Assert.NotEqual(ParserIndices.ParseSimple("_ab'^c'd'").StructureOfIndices.ToString(), structure.ToString());
-        Assert.Equal(ParserIndices.ParseSimple("^a_b'c'^d'").StructureOfIndices.ToString(), structure.ToString());
+        structure.ToString().ShouldBe(indices.StructureOfIndices.ToString());
+        structure.ToString().ShouldNotBe(ParserIndices.ParseSimple("_ab'^c'd'").StructureOfIndices.ToString());
+        structure.ToString().ShouldBe(ParserIndices.ParseSimple("^a_b'c'^d'").StructureOfIndices.ToString());
     }
 
     [Fact]
     public void ShouldCompareDifferentNames()
     {
-        Assert.NotEqual(TensorApi.Parse("v_a'").GetHashCode(), TensorApi.Parse("v^a'").GetHashCode());
-        Assert.NotEqual(TensorApi.Parse("v_a").GetHashCode(), TensorApi.Parse("v^a").GetHashCode());
+        TensorApi.Parse("v^a'").GetHashCode().ShouldNotBe(TensorApi.Parse("v_a'").GetHashCode());
+        TensorApi.Parse("v^a").GetHashCode().ShouldNotBe(TensorApi.Parse("v_a").GetHashCode());
     }
 
     [Fact]
@@ -31,7 +31,7 @@ public sealed class StructureOfIndicesTest
         SimpleIndices indices = ParserIndices.ParseSimple("_ab'c'^d'");
         NRedberry.Indices.Indices inverted = indices.GetInverted();
 
-        Assert.Equal(indices.StructureOfIndices.GetInverted().ToString(), ((SimpleIndices)inverted).StructureOfIndices.ToString());
+        ((SimpleIndices)inverted).StructureOfIndices.ToString().ShouldBe(indices.StructureOfIndices.GetInverted().ToString());
     }
 
     [Fact]
@@ -42,20 +42,12 @@ public sealed class StructureOfIndicesTest
         SimpleIndices leftThenOther = ParserIndices.ParseSimple("_ab'c'^d'_g'_xy_\\beta_y't'^w'_q'");
         SimpleIndices otherThenLeft = ParserIndices.ParseSimple("_xy_\\beta_y't'^w'_q'_ab'c'^d'_g'");
 
-        Assert.Equal(leftThenOther.StructureOfIndices.ToString(), left.StructureOfIndices.Append(other.StructureOfIndices).ToString());
-        Assert.Equal(otherThenLeft.StructureOfIndices.ToString(), other.StructureOfIndices.Append(left.StructureOfIndices).ToString());
-        Assert.Equal(
-            ((SimpleIndices)leftThenOther.GetInverted()).StructureOfIndices.ToString(),
-            ((SimpleIndices)left.GetInverted()).StructureOfIndices.Append(((SimpleIndices)other.GetInverted()).StructureOfIndices).ToString());
-        Assert.Equal(
-            ((SimpleIndices)otherThenLeft.GetInverted()).StructureOfIndices.ToString(),
-            ((SimpleIndices)other.GetInverted()).StructureOfIndices.Append(((SimpleIndices)left.GetInverted()).StructureOfIndices).ToString());
-        Assert.Equal(
-            ((SimpleIndices)leftThenOther.GetInverted()).StructureOfIndices.ToString(),
-            left.StructureOfIndices.GetInverted().Append(other.StructureOfIndices.GetInverted()).ToString());
-        Assert.Equal(
-            ((SimpleIndices)otherThenLeft.GetInverted()).StructureOfIndices.ToString(),
-            other.StructureOfIndices.GetInverted().Append(left.StructureOfIndices.GetInverted()).ToString());
+        left.StructureOfIndices.Append(other.StructureOfIndices).ToString().ShouldBe(leftThenOther.StructureOfIndices.ToString());
+        other.StructureOfIndices.Append(left.StructureOfIndices).ToString().ShouldBe(otherThenLeft.StructureOfIndices.ToString());
+        ((SimpleIndices)left.GetInverted()).StructureOfIndices.Append(((SimpleIndices)other.GetInverted()).StructureOfIndices).ToString().ShouldBe(((SimpleIndices)leftThenOther.GetInverted()).StructureOfIndices.ToString());
+        ((SimpleIndices)other.GetInverted()).StructureOfIndices.Append(((SimpleIndices)left.GetInverted()).StructureOfIndices).ToString().ShouldBe(((SimpleIndices)otherThenLeft.GetInverted()).StructureOfIndices.ToString());
+        left.StructureOfIndices.GetInverted().Append(other.StructureOfIndices.GetInverted()).ToString().ShouldBe(((SimpleIndices)leftThenOther.GetInverted()).StructureOfIndices.ToString());
+        other.StructureOfIndices.GetInverted().Append(left.StructureOfIndices.GetInverted()).ToString().ShouldBe(((SimpleIndices)otherThenLeft.GetInverted()).StructureOfIndices.ToString());
     }
 
     [Fact]
@@ -66,14 +58,10 @@ public sealed class StructureOfIndicesTest
         SimpleIndices leftThenOther = ParserIndices.ParseSimple("_ab'c'^d'_g'_xy_\\beta_y't'^w'_q'");
         SimpleIndices otherThenLeft = ParserIndices.ParseSimple("_xy_\\beta_y't'^w'_q'_ab'c'^d'_g'");
 
-        Assert.Equal(left.StructureOfIndices.ToString(), leftThenOther.StructureOfIndices.Subtract(other.StructureOfIndices).ToString());
-        Assert.Equal(other.StructureOfIndices.ToString(), otherThenLeft.StructureOfIndices.Subtract(left.StructureOfIndices).ToString());
-        Assert.Equal(
-            left.StructureOfIndices.GetInverted().ToString(),
-            leftThenOther.StructureOfIndices.GetInverted().Subtract(other.StructureOfIndices.GetInverted()).ToString());
-        Assert.Equal(
-            other.StructureOfIndices.GetInverted().ToString(),
-            otherThenLeft.StructureOfIndices.GetInverted().Subtract(left.StructureOfIndices.GetInverted()).ToString());
+        leftThenOther.StructureOfIndices.Subtract(other.StructureOfIndices).ToString().ShouldBe(left.StructureOfIndices.ToString());
+        otherThenLeft.StructureOfIndices.Subtract(left.StructureOfIndices).ToString().ShouldBe(other.StructureOfIndices.ToString());
+        leftThenOther.StructureOfIndices.GetInverted().Subtract(other.StructureOfIndices.GetInverted()).ToString().ShouldBe(left.StructureOfIndices.GetInverted().ToString());
+        otherThenLeft.StructureOfIndices.GetInverted().Subtract(left.StructureOfIndices.GetInverted()).ToString().ShouldBe(other.StructureOfIndices.GetInverted().ToString());
     }
 
     [Fact]
@@ -84,7 +72,7 @@ public sealed class StructureOfIndicesTest
 
         Action action = () => invalid.StructureOfIndices.Subtract(other.StructureOfIndices);
 
-        Assert.Throws<ArgumentException>(action);
+        Should.Throw<ArgumentException>(action);
     }
 
     [Fact]
@@ -106,9 +94,7 @@ public sealed class StructureOfIndicesTest
                 rebuilt.Add(combined[index]);
             }
 
-            Assert.Equal(
-                partition[partitionIndex++].ToString(),
-                IndicesFactory.CreateSimple(null, [.. rebuilt]).StructureOfIndices.ToString());
+            IndicesFactory.CreateSimple(null, [.. rebuilt]).StructureOfIndices.ToString().ShouldBe(partition[partitionIndex++].ToString());
         }
     }
 }

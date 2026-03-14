@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -10,11 +10,11 @@ public sealed class IntArrayTests
     {
         IntArray array = new([1, 2, 3]);
 
-        Assert.Equal(3, array.Length());
-        Assert.Equal(2, array.Get(1));
-        Assert.Equal(new[] { 1, 2, 3 }, array.Copy());
-        Assert.Equal(new[] { 2, 3 }, array.Copy(1, 3));
-        Assert.Equal(new[] { 1, 2, 3 }, array.ToArray());
+        array.Length().ShouldBe(3);
+        array.Get(1).ShouldBe(2);
+        array.Copy().ShouldBe(new[] { 1, 2, 3 });
+        array.Copy(1, 3).ShouldBe(new[] { 2, 3 });
+        array.ToArray().ShouldBe(new[] { 1, 2, 3 });
     }
 
     [Fact]
@@ -24,10 +24,10 @@ public sealed class IntArrayTests
         IntArray right = new([4, 5, 6]);
         IntArray different = new([4, 5]);
 
-        Assert.True(left.Equals(right));
-        Assert.True(left == right);
-        Assert.False(left != right);
-        Assert.False(left.Equals(different));
-        Assert.Equal("[4, 5, 6]", left.ToString());
+        left.Equals(right).ShouldBeTrue();
+        left == right.ShouldBeTrue();
+        left != right.ShouldBeFalse();
+        left.Equals(different).ShouldBeFalse();
+        left.ToString().ShouldBe("[4, 5, 6]");
     }
 }

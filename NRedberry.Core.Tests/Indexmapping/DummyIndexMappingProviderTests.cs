@@ -1,6 +1,7 @@
 using System.Reflection;
 using NRedberry.Concurrent;
 using NRedberry.IndexMapping;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Indexmapping;
@@ -12,7 +13,7 @@ public sealed class DummyIndexMappingProviderTests
     {
         Type providerType = GetProviderType();
 
-        TargetInvocationException exception = Assert.Throws<TargetInvocationException>(() =>
+        TargetInvocationException exception = Should.Throw<TargetInvocationException>(() =>
             Activator.CreateInstance(
                 providerType,
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
@@ -20,8 +21,8 @@ public sealed class DummyIndexMappingProviderTests
                 args: [null],
                 culture: null));
 
-        ArgumentNullException innerException = Assert.IsType<ArgumentNullException>(exception.InnerException);
-        Assert.Equal("outputPort", innerException.ParamName);
+        ArgumentNullException innerException = exception.InnerException.ShouldBeOfType<ArgumentNullException>();
+        innerException.ParamName.ShouldBe("outputPort");
     }
 
     [Fact]
@@ -31,7 +32,7 @@ public sealed class DummyIndexMappingProviderTests
 
         bool result = provider.Tick();
 
-        Assert.False(result);
+        result.ShouldBeFalse();
     }
 
     [Fact]
@@ -42,7 +43,7 @@ public sealed class DummyIndexMappingProviderTests
 
         IIndexMappingBuffer? result = provider.Take();
 
-        Assert.Null(result);
+        result.ShouldBeNull();
     }
 
     [Fact]
@@ -54,8 +55,8 @@ public sealed class DummyIndexMappingProviderTests
         IIndexMappingBuffer? firstTake = provider.Take();
         IIndexMappingBuffer? secondTake = provider.Take();
 
-        Assert.Null(firstTake);
-        Assert.Null(secondTake);
+        firstTake.ShouldBeNull();
+        secondTake.ShouldBeNull();
     }
 
     private static IndexMappingProviderAbstract CreateProvider(IOutputPort<IIndexMappingBuffer> outputPort)
@@ -69,7 +70,9 @@ public sealed class DummyIndexMappingProviderTests
             args: [outputPort],
             culture: null);
 
-        return Assert.IsAssignableFrom<IndexMappingProviderAbstract>(instance);
+        instance.ShouldNotBeNull();
+        instance.ShouldBeAssignableTo<IndexMappingProviderAbstract>();
+        return (IndexMappingProviderAbstract)instance;
     }
 
     private static Type GetProviderType()
@@ -77,7 +80,7 @@ public sealed class DummyIndexMappingProviderTests
         Type? providerType = typeof(IndexMappingProviderAbstract).Assembly
             .GetType("NRedberry.IndexMapping.DummyIndexMappingProvider", throwOnError: false);
 
-        Assert.True(providerType is not null);
+        providerType.ShouldNotBeNull();
         return providerType;
     }
 

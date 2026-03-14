@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Numbers.Parser;
 using Xunit;
 
@@ -12,9 +12,9 @@ public sealed class OperatorTokenTests
         var token = new AddSubtractToken();
         var parser = CreateParser(token);
 
-        var exception = Assert.Throws<ArgumentNullException>(() => token.Parse(null!, parser));
+        var exception = Should.Throw<ArgumentNullException>(() => token.Parse(null!, parser));
 
-        Assert.Equal("expression", exception.ParamName);
+        exception.ParamName.ShouldBe("expression");
     }
 
     [Fact]
@@ -22,9 +22,9 @@ public sealed class OperatorTokenTests
     {
         var token = new AddSubtractToken();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => token.Parse("1+2", null!));
+        var exception = Should.Throw<ArgumentNullException>(() => token.Parse("1+2", null!));
 
-        Assert.Equal("parser", exception.ParamName);
+        exception.ParamName.ShouldBe("parser");
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public sealed class OperatorTokenTests
 
         var result = token.Parse("(1+2)", parser);
 
-        Assert.Null(result);
+        result.ShouldBeNull();
     }
 
     [Fact]
@@ -46,7 +46,7 @@ public sealed class OperatorTokenTests
 
         var result = token.Parse("2**3", parser);
 
-        Assert.Null(result);
+        result.ShouldBeNull();
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public sealed class OperatorTokenTests
 
         var result = token.Parse("10-3+2", parser);
 
-        Assert.Equal(new Rational(9), result);
+        result.ShouldBe(new Rational(9));
     }
 
     [Fact]
@@ -68,7 +68,7 @@ public sealed class OperatorTokenTests
 
         var result = token.Parse("10-(3+2)", parser);
 
-        Assert.Equal(new Rational(5), result);
+        result.ShouldBe(new Rational(5));
     }
 
     [Fact]
@@ -77,9 +77,9 @@ public sealed class OperatorTokenTests
         var token = new AddSubtractToken();
         var parser = CreateParser(token);
 
-        var exception = Assert.Throws<BracketsError>(() => token.Parse(")1+2", parser));
+        var exception = Should.Throw<BracketsError>(() => token.Parse(")1+2", parser));
 
-        Assert.Equal("Unbalanced brackets in )1+2", exception.Message);
+        exception.Message.ShouldBe("Unbalanced brackets in )1+2");
     }
 
     [Fact]
@@ -88,9 +88,9 @@ public sealed class OperatorTokenTests
         var token = new AddSubtractToken();
         var parser = CreateParser(token);
 
-        var exception = Assert.Throws<BracketsError>(() => token.Parse("1+2)", parser));
+        var exception = Should.Throw<BracketsError>(() => token.Parse("1+2)", parser));
 
-        Assert.Equal("Unbalanced brackets.", exception.Message);
+        exception.Message.ShouldBe("Unbalanced brackets.");
     }
 
     private static NumberParser<Real> CreateParser(AddSubtractToken token)

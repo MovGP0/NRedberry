@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -12,7 +12,7 @@ public sealed class ArraysUtilsFillTests
 
         ArraysUtils.Fill(values, 1, 3, 9);
 
-        Assert.Equal([1, 9, 9, 4], values);
+        values.ShouldBe([1, 9, 9, 4]);
     }
 
     [Fact]
@@ -22,6 +22,6 @@ public sealed class ArraysUtilsFillTests
 
         ArraysUtils.Fill(values, 7);
 
-        Assert.Equal([7, 7, 7], values);
+        values.ShouldBe([7, 7, 7]);
     }
 }

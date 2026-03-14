@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Symmetrization;
+﻿using NRedberry.Transformations.Symmetrization;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Symmetrization;
@@ -8,6 +8,6 @@ public sealed class EliminateDueSymmetriesTransformationTests
     [Fact]
     public void ShouldExposeSingletonInstance()
     {
-        Assert.NotNull(EliminateDueSymmetriesTransformation.Instance);
+        EliminateDueSymmetriesTransformation.Instance.ShouldNotBeNull();
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Fractions;
+﻿using NRedberry.Transformations.Fractions;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -11,8 +11,8 @@ public sealed class NumeratorDenominatorTests
     {
         NumeratorDenominator actual = NumeratorDenominator.GetNumeratorAndDenominator(TensorApi.Parse("a/b"));
 
-        Assert.Equal("a", actual.Numerator.ToString(OutputFormat.Redberry));
-        Assert.Equal("b", actual.Denominator.ToString(OutputFormat.Redberry));
+        actual.Numerator.ToString(OutputFormat.Redberry).ShouldBe("a");
+        actual.Denominator.ToString(OutputFormat.Redberry).ShouldBe("b");
     }
 
     [Fact]
@@ -22,8 +22,8 @@ public sealed class NumeratorDenominatorTests
             TensorApi.Parse("a*Power[b,-2]"),
             NumeratorDenominator.IntegerDenominatorIndicator);
 
-        Assert.Equal("a", actual.Numerator.ToString(OutputFormat.Redberry));
-        Assert.Equal("b**2", actual.Denominator.ToString(OutputFormat.Redberry));
+        actual.Numerator.ToString(OutputFormat.Redberry).ShouldBe("a");
+        actual.Denominator.ToString(OutputFormat.Redberry).ShouldBe("b**2");
     }
 
     [Fact]
@@ -31,11 +31,9 @@ public sealed class NumeratorDenominatorTests
     {
         IList<NRedberry.Tensors.Tensor> actual = NumeratorDenominator.ExpandPower(TensorApi.Parse("Power[a,x+y]"));
 
-        Assert.Equal(
-            ["a**x", "a**y"],
-            actual
+        actual
                 .Select(tensor => tensor.ToString(OutputFormat.Redberry))
                 .OrderBy(term => term, StringComparer.Ordinal)
-                .ToArray());
+                .ToArray().ShouldBe(["a**x", "a**y"]);
     }
 }

@@ -9,7 +9,7 @@ public sealed class IndexlessBijectionsPortTests
     [Fact]
     public void ShouldThrowWhileIndexlessPortIsUnimplemented()
     {
-        Assert.Throws<NotImplementedException>(() =>
+        Should.Throw<NotImplementedException>(() =>
             new IndexlessBijectionsPort([TensorApi.Parse("a")], [TensorApi.Parse("b")]));
     }
 }

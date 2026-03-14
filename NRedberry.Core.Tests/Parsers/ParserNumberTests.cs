@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Parsers;
 using RedberryParser = NRedberry.Parsers.Parser;
 using Xunit;
@@ -10,13 +10,13 @@ public sealed class ParserNumberTests
     [Fact]
     public void ShouldExposeSingletonInstance()
     {
-        Assert.Same(ParserNumber.Instance, ParserNumber.Instance);
+        ParserNumber.Instance.ShouldBeSameAs(ParserNumber.Instance);
     }
 
     [Fact]
     public void ShouldExposeExpectedPriority()
     {
-        Assert.Equal(9999, ParserNumber.Instance.Priority);
+        ParserNumber.Instance.Priority.ShouldBe(9999);
     }
 
     [Fact]
@@ -24,9 +24,9 @@ public sealed class ParserNumberTests
     {
         var token = ParserNumber.Instance.ParseToken("4/2+I*3/2", RedberryParser.Default);
 
-        var numberToken = Assert.IsType<ParseTokenNumber>(token);
-        Assert.Equal(TokenType.Number, numberToken.TokenType);
-        Assert.Equal(new Complex(new Rational(4, 2), new Rational(3, 2)), numberToken.Value);
+        var numberToken = token.ShouldBeOfType<ParseTokenNumber>();
+        numberToken.TokenType.ShouldBe(TokenType.Number);
+        numberToken.Value.ShouldBe(new Complex(new Rational(4, 2), new Rational(3, 2)));
     }
 
     [Theory]
@@ -36,6 +36,6 @@ public sealed class ParserNumberTests
     {
         var token = ParserNumber.Instance.ParseToken(expression, RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 }

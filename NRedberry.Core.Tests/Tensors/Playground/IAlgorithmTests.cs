@@ -1,4 +1,4 @@
-using NRedberry.Tensors.Playground;
+﻿using NRedberry.Tensors.Playground;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -13,10 +13,10 @@ public sealed class IAlgorithmTests
 
         ProductData result = algorithm.Calc(TensorApi.Parse("a"));
 
-        Assert.Equal("Test algorithm", algorithm.Name);
-        Assert.Single(result.Data);
-        Assert.True(algorithm.Timing >= 0);
-        Assert.True(algorithm.TimingMillis() >= 0);
+        algorithm.Name.ShouldBe("Test algorithm");
+        result.Data.ShouldHaveSingleItem();
+        algorithm.Timing >= 0.ShouldBeTrue();
+        algorithm.TimingMillis() >= 0.ShouldBeTrue();
     }
 
     [Fact]
@@ -24,14 +24,14 @@ public sealed class IAlgorithmTests
     {
         TestAlgorithm algorithm = new();
 
-        Assert.Throws<ArgumentNullException>(() => algorithm.Calc(null!));
+        Should.Throw<ArgumentNullException>(() => algorithm.Calc(null!));
 
         _ = algorithm.Calc(TensorApi.Parse("a"));
-        Assert.True(algorithm.Timing >= 0);
+        algorithm.Timing >= 0.ShouldBeTrue();
 
         algorithm.Restart();
 
-        Assert.Equal(0, algorithm.Timing);
+        algorithm.Timing.ShouldBe(0);
     }
 
     private sealed class TestAlgorithm() : IAlgorithm("Test algorithm")

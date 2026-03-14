@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using NRedberry.Transformations.Options;
 using Xunit;
 
@@ -9,10 +9,9 @@ public sealed class CreatorAttributeTests
     [Fact]
     public void ShouldTargetConstructorsOnly()
     {
-        AttributeUsageAttribute usage = Assert.IsType<AttributeUsageAttribute>(
-            typeof(CreatorAttribute).GetCustomAttribute(typeof(AttributeUsageAttribute)));
+        AttributeUsageAttribute usage = typeof(CreatorAttribute).GetCustomAttribute(typeof(AttributeUsageAttribute)).ShouldBeOfType<AttributeUsageAttribute>();
 
-        Assert.Equal(AttributeTargets.Constructor, usage.ValidOn);
+        usage.ValidOn.ShouldBe(AttributeTargets.Constructor);
     }
 
     [Fact]
@@ -24,7 +23,7 @@ public sealed class CreatorAttributeTests
             HasArgs = true
         };
 
-        Assert.True(attribute.Vararg);
-        Assert.True(attribute.HasArgs);
+        attribute.Vararg.ShouldBeTrue();
+        attribute.HasArgs.ShouldBeTrue();
     }
 }

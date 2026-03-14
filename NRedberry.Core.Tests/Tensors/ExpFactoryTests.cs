@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Tensors;
 using NRedberry.Tensors.Functions;
 using TensorApi = NRedberry.Tensors.Tensors;
@@ -13,8 +13,8 @@ public sealed class ExpFactoryTests
     {
         NRedberry.Tensors.Tensor argument = TensorApi.Parse("a");
 
-        Assert.Same(argument, ExpFactory.Factory.Create(new Log(argument)));
-        Assert.Equal(Complex.One, ExpFactory.Factory.Create(Complex.Zero));
-        Assert.IsType<Exp>(ExpFactory.Factory.Create(argument));
+        ExpFactory.Factory.Create(new Log(argument)).ShouldBeSameAs(argument);
+        ExpFactory.Factory.Create(Complex.Zero).ShouldBe(Complex.One);
+        ExpFactory.Factory.Create(argument).ShouldBeOfType<Exp>();
     }
 }

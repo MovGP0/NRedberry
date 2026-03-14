@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Symmetrization;
+﻿using NRedberry.Transformations.Symmetrization;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -11,7 +11,7 @@ public sealed class ToNumericITransformationTests
     {
         var tensor = TensorApi.Parse("a");
 
-        Assert.Same(ToNumericTransformation.Instance.Transform(tensor), ToNumericITransformation.Instance.Transform(tensor));
-        Assert.Same(ToNumericTransformation.ToNumeric(tensor), ToNumericITransformation.ToNumeric(tensor));
+        ToNumericITransformation.Instance.Transform(tensor).ShouldBeSameAs(ToNumericTransformation.Instance.Transform(tensor));
+        ToNumericITransformation.ToNumeric(tensor).ShouldBeSameAs(ToNumericTransformation.ToNumeric(tensor));
     }
 }

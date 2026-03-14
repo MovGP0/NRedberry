@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Number;
@@ -71,7 +71,7 @@ public sealed class ComplexUtilsAdditionalTests
     [MemberData(nameof(NullGuardCalls))]
     public void MethodsShouldThrowArgumentNullExceptionOnNullInput(Action call)
     {
-        Assert.Throws<ArgumentNullException>(call);
+        Should.Throw<ArgumentNullException>(call);
     }
 
     [Theory]
@@ -84,8 +84,8 @@ public sealed class ComplexUtilsAdditionalTests
         Complex result = operation(new Complex(input));
         double expected = expectedFunction(input);
 
-        Assert.NotNull(result);
-        Assert.True(result.IsReal());
+        result.ShouldNotBeNull();
+        result.IsReal().ShouldBeTrue();
         Assert.Equal(expected, result.Real.ToDouble(), Delta);
     }
 
@@ -97,8 +97,8 @@ public sealed class ComplexUtilsAdditionalTests
 
         Complex result = operation(input);
 
-        Assert.NotNull(result);
-        Assert.False(result.IsNaN());
-        Assert.False(result.IsInfinite());
+        result.ShouldNotBeNull();
+        result.IsNaN().ShouldBeFalse();
+        result.IsInfinite().ShouldBeFalse();
     }
 }

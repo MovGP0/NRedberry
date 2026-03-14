@@ -9,18 +9,18 @@ public sealed class SubstitutionTransformationTests
     [Fact]
     public void ShouldThrowForExpressionConstructors()
     {
-        Assert.Throws<NotImplementedException>(() =>
+        Should.Throw<NotImplementedException>(() =>
             new SubstitutionTransformation(TensorApi.ParseExpression("a=b")));
-        Assert.Throws<NotImplementedException>(() =>
+        Should.Throw<NotImplementedException>(() =>
             new SubstitutionTransformation([TensorApi.ParseExpression("a=b")], true));
     }
 
     [Fact]
     public void ShouldThrowForTensorConstructors()
     {
-        Assert.Throws<NotImplementedException>(() =>
+        Should.Throw<NotImplementedException>(() =>
             new SubstitutionTransformation(TensorApi.Parse("a"), TensorApi.Parse("b")));
-        Assert.Throws<NotImplementedException>(() =>
+        Should.Throw<NotImplementedException>(() =>
             new SubstitutionTransformation([TensorApi.Parse("a")], [TensorApi.Parse("b")], true));
     }
 }

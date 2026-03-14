@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Symmetrization;
+﻿using NRedberry.Transformations.Symmetrization;
 using SumBuilderType = NRedberry.Tensors.SumBuilderSplitingScalars;
 using TensorApi = NRedberry.Tensors.Tensors;
 using TensorUtilsApi = NRedberry.Tensors.TensorUtils;
@@ -19,6 +19,6 @@ public sealed class CollectNonScalarsITransformationTest
         }
 
         var collected = CollectNonScalarsITransformation.CollectNonScalars(tensor);
-        Assert.True(TensorUtilsApi.Equals(builder.Build(), collected));
+        TensorUtilsApi.Equals(builder.Build(), collected).ShouldBeTrue();
     }
 }

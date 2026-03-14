@@ -11,7 +11,7 @@ public sealed class ArraysUtilsRangeCheckTests
         int[] values = [3, 2, 1];
         int[] coSort = [30, 20, 10];
 
-        Assert.Throws<ArgumentException>(() => ArraysUtils.QuickSort(values, 2, 1, coSort));
+        Should.Throw<ArgumentException>(() => ArraysUtils.QuickSort(values, 2, 1, coSort));
     }
 
     [Fact]
@@ -20,6 +20,6 @@ public sealed class ArraysUtilsRangeCheckTests
         int[] values = [3, 2, 1];
         int[] coSort = [30, 20, 10];
 
-        Assert.Throws<ArgumentOutOfRangeException>(() => ArraysUtils.InsertionSort(values, -1, 2, coSort));
+        Should.Throw<ArgumentOutOfRangeException>(() => ArraysUtils.InsertionSort(values, -1, 2, coSort));
     }
 }

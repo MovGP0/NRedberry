@@ -15,7 +15,7 @@ public sealed class IndicesArraysUtilsTests
 
         IndicesArraysUtils.ArrayCopy(source, 0, destination, 0, source.Length);
 
-        Assert.Equal(source.ToArray(), destination);
+        destination.ShouldBe(source.ToArray());
     }
 
     [Fact]
@@ -26,7 +26,7 @@ public sealed class IndicesArraysUtilsTests
 
         IndicesArraysUtils.ArrayCopy(source, 1, destination, 2, 2);
 
-        Assert.Equal([-1, -1, 20, 30, -1], destination);
+        destination.ShouldBe([-1, -1, 20, 30, -1]);
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public sealed class IndicesArraysUtilsTests
 
         IndicesArraysUtils.ArrayCopy(source, 1, destination, 2, 0);
 
-        Assert.Equal([1, 2, 3], destination);
+        destination.ShouldBe([1, 2, 3]);
     }
 
     [Fact]
@@ -46,6 +46,6 @@ public sealed class IndicesArraysUtilsTests
         ImmutableArray<int> source = [1, 2, 3];
         int[] destination = new int[2];
 
-        Assert.Throws<ArgumentException>(() => IndicesArraysUtils.ArrayCopy(source, 1, destination, 0, 3));
+        Should.Throw<ArgumentException>(() => IndicesArraysUtils.ArrayCopy(source, 1, destination, 0, 3));
     }
 }

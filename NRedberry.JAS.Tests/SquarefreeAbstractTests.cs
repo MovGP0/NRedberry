@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
@@ -23,10 +23,10 @@ public sealed class SquarefreeAbstractTests
             [second] = 1L
         };
 
-        Assert.True(squarefree.IsSquarefree(first));
-        Assert.True(squarefree.IsFactorization(product, [first, second]));
-        Assert.True(squarefree.IsFactorization(product, expectedFactors));
-        Assert.Equal(1L, squarefree.SquarefreeFactors(new BigRational(2))[new BigRational(2)]);
+        squarefree.IsSquarefree(first).ShouldBeTrue();
+        squarefree.IsFactorization(product, [first, second]).ShouldBeTrue();
+        squarefree.IsFactorization(product, expectedFactors).ShouldBeTrue();
+        squarefree.SquarefreeFactors(new BigRational(2))[new BigRational(2)].ShouldBe(1L);
     }
 
     private static GenPolynomialRing<BigRational> CreateRing()

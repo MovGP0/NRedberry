@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Tensors;
 using NRedberry.Tensors.Iterators;
 using TensorApi = NRedberry.Tensors.Tensors;
@@ -23,7 +23,7 @@ public sealed class PayloadTests
 
         TensorType result = iterator.Result();
 
-        Assert.Equal("b", result.ToString(OutputFormat.Redberry));
+        result.ToString(OutputFormat.Redberry).ShouldBe("b");
     }
 
     private sealed class ReplacingPayload : Payload<ReplacingPayload>

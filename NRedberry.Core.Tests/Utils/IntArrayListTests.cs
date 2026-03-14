@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -15,14 +15,14 @@ public sealed class IntArrayListTests
         ];
         list.Insert(1, 2);
 
-        Assert.Equal(new[] { 1, 2, 3 }, list.ToArray());
-        Assert.True(list.Remove(2));
-        Assert.Equal(new[] { 1, 3 }, list.ToArray());
+        list.ToArray().ShouldBe(new[] { 1, 2, 3 });
+        list.Remove(2).ShouldBeTrue();
+        list.ToArray().ShouldBe(new[] { 1, 3 });
 
         IntArrayList clone = list.Clone();
 
-        Assert.Equal(list, clone);
-        Assert.Equal("[1, 3]", clone.ToString());
+        clone.ShouldBe(list);
+        clone.ToString().ShouldBe("[1, 3]");
     }
 
     [Fact]
@@ -32,6 +32,6 @@ public sealed class IntArrayListTests
 
         list.RemoveAfter(2);
 
-        Assert.Equal(new[] { 1, 2 }, list.ToArray());
+        list.ToArray().ShouldBe(new[] { 1, 2 });
     }
 }

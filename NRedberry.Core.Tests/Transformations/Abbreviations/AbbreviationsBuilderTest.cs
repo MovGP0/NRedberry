@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using NRedberry.Tensors;
 using NRedberry.Transformations;
 using NRedberry.Transformations.Abbreviations;
@@ -70,10 +70,10 @@ public sealed class AbbreviationsBuilderTest
             AbbreviationsBuilder.WriteToFile(abbrs, filePath);
             AbbreviationsBuilder deserialized = AbbreviationsBuilder.ReadFromFile(filePath);
 
-            Assert.Equal(abbrs.AbbreviateTopLevel, deserialized.AbbreviateTopLevel);
+            deserialized.AbbreviateTopLevel.ShouldBe(abbrs.AbbreviateTopLevel);
             HashSet<Abbreviation> expected = new(abbrs.GetAbbreviations());
             HashSet<Abbreviation> actual = new(deserialized.GetAbbreviations());
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
         finally
         {
@@ -96,6 +96,6 @@ public sealed class AbbreviationsBuilderTest
         TensorType expandedOriginal = ExpandTransformation.Expand(tensor);
         TensorType expandedApplied = ExpandTransformation.Expand(
             Transformation.ApplyUntilUnchanged(transformed, substitutions));
-        Assert.True(TensorUtils.Equals(expandedOriginal, expandedApplied));
+        TensorUtils.Equals(expandedOriginal, expandedApplied).ShouldBeTrue();
     }
 }

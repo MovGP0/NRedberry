@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Symmetrization;
+﻿using NRedberry.Transformations.Symmetrization;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -13,12 +13,12 @@ public sealed class ApplyDiracDeltasTransformationTests
 
         NRedberry.Tensors.Tensor actual = ApplyDiracDeltasTransformation.Instance.Transform(tensor);
 
-        Assert.Same(tensor, actual);
+        actual.ShouldBeSameAs(tensor);
     }
 
     [Fact]
     public void ShouldExposeReadableName()
     {
-        Assert.Equal("ApplyDiracDeltas", ApplyDiracDeltasTransformation.Instance.ToString(OutputFormat.Redberry));
+        ApplyDiracDeltasTransformation.Instance.ToString(OutputFormat.Redberry).ShouldBe("ApplyDiracDeltas");
     }
 }

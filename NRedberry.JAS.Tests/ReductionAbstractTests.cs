@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Gb;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using Xunit;
@@ -16,8 +16,8 @@ public sealed class ReductionAbstractTests
 
         var irreducible = reduction.IrreducibleSet([polynomial]);
 
-        Assert.Single(irreducible);
-        Assert.Equal("1", irreducible[0].LeadingBaseCoefficient().ToString());
-        Assert.Equal([1L], irreducible[0].LeadingExpVector()!.GetVal());
+        irreducible.ShouldHaveSingleItem();
+        irreducible[0].LeadingBaseCoefficient().ToString().ShouldBe("1");
+        irreducible[0].LeadingExpVector()!.GetVal().ShouldBe([1L]);
     }
 }

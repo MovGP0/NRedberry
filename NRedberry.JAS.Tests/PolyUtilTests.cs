@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 using Xunit;
@@ -23,7 +23,7 @@ public sealed class PolyUtilTests
             PolyUtil.AlgebraicFromComplex(algebraicRing, complexPolynomial);
         GenPolynomial<PolyComplex> roundTrip = PolyUtil.ComplexFromAlgebraic(complexRing, algebraicPolynomial);
 
-        Assert.Equal(complexPolynomial.ToString(["x"]), roundTrip.ToString(["x"]));
+        roundTrip.ToString(["x"]).ShouldBe(complexPolynomial.ToString(["x"]));
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public sealed class PolyUtilTests
         GenPolynomial<AlgebraicNumber<BigRational>> converted =
             PolyUtil.ConvertToAlgebraicCoefficients(algebraicRing, polynomial);
 
-        Assert.Equal(polynomial.ToString(["x"]), converted.ToString(["x"]));
+        converted.ToString(["x"]).ShouldBe(polynomial.ToString(["x"]));
     }
 
     [Fact]
@@ -49,11 +49,11 @@ public sealed class PolyUtilTests
         GenPolynomial<BigRational> divisor = x.Sum(new BigRational(1));
         GenPolynomial<BigRational> exactDividend = divisor.Multiply(x.Sum(new BigRational(2)));
 
-        Assert.Equal("4 x", PolyUtil.BaseDeriviative(dividend).ToString(["x"]));
-        Assert.Equal("x + 2", PolyUtil.BasePseudoDivide(exactDividend, divisor).ToString(["x"]));
-        Assert.True(PolyUtil.BaseDensePseudoRemainder(exactDividend, divisor).IsZero());
-        Assert.True(PolyUtil.BaseSparsePseudoRemainder(exactDividend, divisor).IsZero());
-        Assert.Equal("1/2 x^2 + 3/2 x + 1", PolyUtil.CoefficientBasePseudoDivide(exactDividend, new BigRational(2)).ToString(["x"]));
+        PolyUtil.BaseDeriviative(dividend).ToString(["x"]).ShouldBe("4 x");
+        PolyUtil.BasePseudoDivide(exactDividend, divisor).ToString(["x"]).ShouldBe("x + 2");
+        PolyUtil.BaseDensePseudoRemainder(exactDividend, divisor).IsZero().ShouldBeTrue();
+        PolyUtil.BaseSparsePseudoRemainder(exactDividend, divisor).IsZero().ShouldBeTrue();
+        PolyUtil.CoefficientBasePseudoDivide(exactDividend, new BigRational(2)).ToString(["x"]).ShouldBe("1/2 x^2 + 3/2 x + 1");
     }
 
     [Fact]
@@ -71,9 +71,9 @@ public sealed class PolyUtilTests
         GenPolynomial<GenPolynomial<BigRational>> dividedByPolynomial =
             PolyUtil.CoefficientPseudoDivide(recursivePolynomial, coefficientRing.Univariate(0));
 
-        Assert.Equal("1/2 x^2", dividedByCoefficient.Coefficient(ExpVector.Create([1L])).ToString(["x"]));
-        Assert.Equal("x", dividedByPolynomial.Coefficient(ExpVector.Create([1L])).ToString(["x"]));
-        Assert.Equal(2L, PolyUtil.CoeffMaxDegree(recursivePolynomial));
+        dividedByCoefficient.Coefficient(ExpVector.Create([1L])).ToString(["x"]).ShouldBe("1/2 x^2");
+        dividedByPolynomial.Coefficient(ExpVector.Create([1L])).ToString(["x"]).ShouldBe("x");
+        PolyUtil.CoeffMaxDegree(recursivePolynomial).ShouldBe(2L);
     }
 
     [Fact]
@@ -90,7 +90,7 @@ public sealed class PolyUtilTests
 
         GenPolynomial<ModInteger> combined = PolyUtil.ChineseRemainder(ring15, first, new ModInteger(mod5, 2), second);
 
-        Assert.Equal("7 x + 11", combined.ToString(["x"]));
+        combined.ToString(["x"]).ShouldBe("7 x + 11");
     }
 
     [Fact]
@@ -122,10 +122,10 @@ public sealed class PolyUtilTests
             ((GenPolynomialRing<BigRational>)recursiveRing.CoFac).FromInteger(2),
             recursiveRing.Evzero.Subst(0, 1));
 
-        Assert.Equal(polynomial.ToString(["x", "y"]), distributed.ToString(["x", "y"]));
-        Assert.Equal("x + 6", evaluated.ToString(["x", "y"]));
-        Assert.Equal("8", firstEvaluated.ToString(["y"]));
-        Assert.Equal("1", PolyUtil.Monic(monicRecursive)!.LeadingBaseCoefficient().LeadingBaseCoefficient().ToString());
+        distributed.ToString(["x", "y"]).ShouldBe(polynomial.ToString(["x", "y"]));
+        evaluated.ToString(["x", "y"]).ShouldBe("x + 6");
+        firstEvaluated.ToString(["y"]).ShouldBe("8");
+        PolyUtil.Monic(monicRecursive)!.LeadingBaseCoefficient().LeadingBaseCoefficient().ToString().ShouldBe("1");
     }
 
     [Fact]
@@ -138,12 +138,12 @@ public sealed class PolyUtilTests
 
         List<ExpVector?> leading = PolyUtil.LeadingExpVector([mapped]);
 
-        Assert.Equal(integerPolynomial.ToString(["x"]), mapped.ToString(["x"]));
-        Assert.NotNull(leading);
-        Assert.Equal([1L], leading[0]!.GetVal());
-        Assert.Equal("3", PolyUtil.GetTrailingCoefficient(mapped).ToString());
-        Assert.Equal(3, PolyUtil.PopCount(new System.Numerics.BigInteger(-13)));
-        Assert.Equal("16", PolyUtil.FactorBound(ExpVector.Create([3L])).ToString());
+        mapped.ToString(["x"]).ShouldBe(integerPolynomial.ToString(["x"]));
+        leading.ShouldNotBeNull();
+        leading[0]!.GetVal().ShouldBe([1L]);
+        PolyUtil.GetTrailingCoefficient(mapped).ToString().ShouldBe("3");
+        PolyUtil.PopCount(new System.Numerics.BigInteger(-13)).ShouldBe(3);
+        PolyUtil.FactorBound(ExpVector.Create([3L])).ToString().ShouldBe("16");
     }
 
     [Fact]
@@ -166,13 +166,13 @@ public sealed class PolyUtilTests
 
         object[] cleared = PolyUtil.IntegerFromRationalCoefficientsFactor(integerRing, rationalPolynomial);
 
-        Assert.Equal("x + 3", PolyUtil.FromIntegerCoefficients(rationalRing, integerPolynomial).ToString(["x"]));
-        Assert.Equal("x - 1", PolyUtil.IntegerFromModularCoefficients(integerRing, modularPolynomial).ToString(["x"]));
-        Assert.Equal("2 x + 1", PolyUtil.IntegerFromRationalCoefficients(integerRing, rationalPolynomial).ToString(["x"]));
-        Assert.Equal(System.Numerics.BigInteger.One, cleared[0]);
-        Assert.Equal(new System.Numerics.BigInteger(2), cleared[1]);
-        Assert.Equal("2 x + 1", ((GenPolynomial<BigInteger>)cleared[2]).ToString(["x"]));
-        Assert.Equal(algebraicPolynomial.ToString(["x"]), PolyUtil.FromAlgebraicCoefficients(expandedAlgebraicRing, algebraicPolynomial).ToString(["x"]));
+        PolyUtil.FromIntegerCoefficients(rationalRing, integerPolynomial).ToString(["x"]).ShouldBe("x + 3");
+        PolyUtil.IntegerFromModularCoefficients(integerRing, modularPolynomial).ToString(["x"]).ShouldBe("x - 1");
+        PolyUtil.IntegerFromRationalCoefficients(integerRing, rationalPolynomial).ToString(["x"]).ShouldBe("2 x + 1");
+        cleared[0].ShouldBe(System.Numerics.BigInteger.One);
+        cleared[1].ShouldBe(new System.Numerics.BigInteger(2));
+        ((GenPolynomial<BigInteger>)cleared[2]).ToString(["x"]).ShouldBe("2 x + 1");
+        PolyUtil.FromAlgebraicCoefficients(expandedAlgebraicRing, algebraicPolynomial).ToString(["x"]).ShouldBe(algebraicPolynomial.ToString(["x"]));
     }
 
     [Fact]
@@ -190,8 +190,8 @@ public sealed class PolyUtilTests
             new BigRational(10),
             new BigRational(2));
 
-        Assert.Equal("10", PolyUtil.EvaluateMain(ring.CoFac, interpolated, new BigRational(2)).ToString());
-        Assert.True(PolyUtil.BaseSparsePseudoRemainder(interpolated.Subtract(source), modulus).IsZero());
+        PolyUtil.EvaluateMain(ring.CoFac, interpolated, new BigRational(2)).ToString().ShouldBe("10");
+        PolyUtil.BaseSparsePseudoRemainder(interpolated.Subtract(source), modulus).IsZero().ShouldBeTrue();
 
         GenPolynomialRing<BigRational> baseRing = new(new BigRational(), 2, ["x", "y"]);
         GenPolynomialRing<GenPolynomial<BigRational>> recursiveRing = baseRing.Recursive(1);
@@ -224,10 +224,10 @@ public sealed class PolyUtilTests
                 constantCoefficient.Subtract(recursiveSource.Coefficient(ExpVector.Create([0L]))),
                 linearModulus);
 
-        Assert.Equal("5", PolyUtil.EvaluateMain(coefficientRing.CoFac, yCoefficient, new BigRational(2)).ToString());
-        Assert.Equal("3", PolyUtil.EvaluateMain(coefficientRing.CoFac, constantCoefficient, new BigRational(2)).ToString());
-        Assert.True(yDifference.IsZero());
-        Assert.True(constantDifference.IsZero());
+        PolyUtil.EvaluateMain(coefficientRing.CoFac, yCoefficient, new BigRational(2)).ToString().ShouldBe("5");
+        PolyUtil.EvaluateMain(coefficientRing.CoFac, constantCoefficient, new BigRational(2)).ToString().ShouldBe("3");
+        yDifference.IsZero().ShouldBeTrue();
+        constantDifference.IsZero().ShouldBeTrue();
     }
 
     [Fact]
@@ -244,8 +244,8 @@ public sealed class PolyUtilTests
 
         GenPolynomial<GenPolynomial<BigRational>> derivative = PolyUtil.RecursiveDeriviative(recursivePolynomial);
 
-        Assert.Equal("2 x", derivative.Coefficient(ExpVector.Create([1L])).ToString(["x"]));
-        Assert.Equal("3", derivative.Coefficient(ExpVector.Create([0L])).ToString(["x"]));
+        derivative.Coefficient(ExpVector.Create([1L])).ToString(["x"]).ShouldBe("2 x");
+        derivative.Coefficient(ExpVector.Create([0L])).ToString(["x"]).ShouldBe("3");
 
         GenPolynomial<BigRational> coefficientDivisor = coefficientRing.Univariate(0).Sum(new BigRational(1));
         GenPolynomial<GenPolynomial<BigRational>> divisibleRecursive = new(recursiveRing);
@@ -256,8 +256,8 @@ public sealed class PolyUtilTests
 
         GenPolynomial<GenPolynomial<BigRational>> divided = PolyUtil.RecursiveDivide(divisibleRecursive, coefficientDivisor);
 
-        Assert.Equal("x + 2", divided.Coefficient(ExpVector.Create([1L])).ToString(["x"]));
-        Assert.Equal("2", divided.Coefficient(ExpVector.Create([0L])).ToString(["x"]));
+        divided.Coefficient(ExpVector.Create([1L])).ToString(["x"]).ShouldBe("x + 2");
+        divided.Coefficient(ExpVector.Create([0L])).ToString(["x"]).ShouldBe("2");
 
         GenPolynomial<GenPolynomial<BigRational>> recursiveDivisor = new(recursiveRing);
         recursiveDivisor = recursiveDivisor.Sum(coefficientRing.FromInteger(1), ExpVector.Create([1L]));
@@ -271,11 +271,11 @@ public sealed class PolyUtilTests
         GenPolynomial<GenPolynomial<BigRational>> pseudoQuotient =
             PolyUtil.RecursivePseudoDivide(recursiveDividend, recursiveDivisor);
 
-        Assert.Equal("1", pseudoQuotient.Coefficient(ExpVector.Create([1L])).ToString(["x"]));
-        Assert.Equal("2", pseudoQuotient.Coefficient(ExpVector.Create([0L])).ToString(["x"]));
-        Assert.True(PolyUtil.RecursiveDensePseudoRemainder(recursiveDividend, recursiveDivisor).IsZero());
-        Assert.True(PolyUtil.RecursiveSparsePseudoRemainder(recursiveDividend, recursiveDivisor).IsZero());
-        Assert.True(PolyUtil.RecursivePseudoRemainder(recursiveDividend, recursiveDivisor).IsZero());
+        pseudoQuotient.Coefficient(ExpVector.Create([1L])).ToString(["x"]).ShouldBe("1");
+        pseudoQuotient.Coefficient(ExpVector.Create([0L])).ToString(["x"]).ShouldBe("2");
+        PolyUtil.RecursiveDensePseudoRemainder(recursiveDividend, recursiveDivisor).IsZero().ShouldBeTrue();
+        PolyUtil.RecursiveSparsePseudoRemainder(recursiveDividend, recursiveDivisor).IsZero().ShouldBeTrue();
+        PolyUtil.RecursivePseudoRemainder(recursiveDividend, recursiveDivisor).IsZero().ShouldBeTrue();
     }
 
     [Fact]
@@ -287,7 +287,7 @@ public sealed class PolyUtilTests
 
         GenPolynomial<BigRational> substituted = PolyUtil.SubstituteMain(polynomial, substitution);
 
-        Assert.Equal("x^2 + 2 x + 2", substituted.ToString(["x"]));
+        substituted.ToString(["x"]).ShouldBe("x^2 + 2 x + 2");
 
         GenPolynomialRing<BigRational> baseRing = new(new BigRational(), 2, ["x", "y"]);
         GenPolynomial<BigRational> basePolynomial = baseRing.Univariate(1).Sum(new BigRational(2), ExpVector.Create([1L, 0L]));
@@ -297,7 +297,7 @@ public sealed class PolyUtilTests
         GenPolynomial<GenPolynomial<BigRational>> switched = PolyUtil.SwitchVariables(recursive);
         GenPolynomial<GenPolynomial<BigRational>> roundTrip = PolyUtil.SwitchVariables(switched);
 
-        Assert.Equal(basePolynomial.ToString(["x", "y"]), PolyUtil.Distribute(baseRing, roundTrip).ToString(["x", "y"]));
+        PolyUtil.Distribute(baseRing, roundTrip).ToString(["x", "y"]).ShouldBe(basePolynomial.ToString(["x", "y"]));
     }
 }
 

@@ -1,4 +1,4 @@
-using NRedberry.Tensors.Iterators;
+﻿using NRedberry.Tensors.Iterators;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Tensors.Iterators;
@@ -8,11 +8,9 @@ public sealed class TraversePermissionTests
     [Fact]
     public void ShouldExposeExpectedPermissionValues()
     {
-        Assert.Equal(0, (int)TraversePermission.Enter);
-        Assert.Equal(1, (int)TraversePermission.ShowButNotEnter);
-        Assert.Equal(2, (int)TraversePermission.DontShow);
-        Assert.Equal(
-            ["Enter", "ShowButNotEnter", "DontShow"],
-            Enum.GetNames<TraversePermission>());
+        (int)TraversePermission.Enter.ShouldBe(0);
+        (int)TraversePermission.ShowButNotEnter.ShouldBe(1);
+        (int)TraversePermission.DontShow.ShouldBe(2);
+        Enum.GetNames<TraversePermission>().ShouldBe(["Enter", "ShowButNotEnter", "DontShow"]);
     }
 }

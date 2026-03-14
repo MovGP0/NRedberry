@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Numerics;
 using NRedberry;
 using NRedberry.Numbers.Parser;
@@ -11,23 +11,23 @@ public sealed class RealTokenTests
     [Fact]
     public void ShouldExposeSingletonInstance()
     {
-        Assert.Same(RealToken.Instance, RealToken.Instance);
+        RealToken.Instance.ShouldBeSameAs(RealToken.Instance);
     }
 
     [Fact]
     public void ShouldThrowWhenExpressionIsNull()
     {
-        var exception = Assert.Throws<ArgumentNullException>(() => RealToken.Instance.Parse(null!, NumberParser<Real>.RealParser));
+        var exception = Should.Throw<ArgumentNullException>(() => RealToken.Instance.Parse(null!, NumberParser<Real>.RealParser));
 
-        Assert.Equal("expression", exception.ParamName);
+        exception.ParamName.ShouldBe("expression");
     }
 
     [Fact]
     public void ShouldThrowWhenParserIsNull()
     {
-        var exception = Assert.Throws<ArgumentNullException>(() => RealToken.Instance.Parse("1", null!));
+        var exception = Should.Throw<ArgumentNullException>(() => RealToken.Instance.Parse("1", null!));
 
-        Assert.Equal("parser", exception.ParamName);
+        exception.ParamName.ShouldBe("parser");
     }
 
     [Fact]
@@ -37,8 +37,8 @@ public sealed class RealTokenTests
 
         var result = RealToken.Instance.Parse(value.ToString(CultureInfo.InvariantCulture), NumberParser<Real>.RealParser);
 
-        var rational = Assert.IsType<Rational>(result);
-        Assert.Equal(new Rational(value), rational);
+        var rational = result.ShouldBeOfType<Rational>();
+        rational.ShouldBe(new Rational(value));
     }
 
     [Fact]
@@ -46,8 +46,8 @@ public sealed class RealTokenTests
     {
         var result = RealToken.Instance.Parse("12.5", NumberParser<Real>.RealParser);
 
-        var numeric = Assert.IsType<Numeric>(result);
-        Assert.Equal(new Numeric(12.5), numeric);
+        var numeric = result.ShouldBeOfType<Numeric>();
+        numeric.ShouldBe(new Numeric(12.5));
     }
 
     [Fact]
@@ -55,7 +55,7 @@ public sealed class RealTokenTests
     {
         var result = RealToken.Instance.Parse("1/2", NumberParser<Real>.RealParser);
 
-        Assert.Null(result);
+        result.ShouldBeNull();
     }
 
     [Fact]
@@ -63,6 +63,6 @@ public sealed class RealTokenTests
     {
         var result = RealToken.Instance.Parse("12,5", NumberParser<Real>.RealParser);
 
-        Assert.Null(result);
+        result.ShouldBeNull();
     }
 }

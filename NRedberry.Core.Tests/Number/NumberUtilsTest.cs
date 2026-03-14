@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using NRedberry.Numbers;
 using Xunit;
 
@@ -9,6 +9,6 @@ public sealed class NumberUtilsTest
     [Fact]
     public void ShouldComputeSquareRoot()
     {
-        Assert.Equal(new BigInteger(3), NumberUtils.Sqrt(new BigInteger(9)));
+        NumberUtils.Sqrt(new BigInteger(9)).ShouldBe(new BigInteger(3));
     }
 }

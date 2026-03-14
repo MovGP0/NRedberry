@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
@@ -22,13 +22,9 @@ public sealed class SquarefreeInfiniteFieldCharPTests
 
         SortedDictionary<Quotient<ModLong>, long> factors = squarefree.SquarefreeFactors(coefficient);
 
-        Assert.Equal(2, factors.Count);
-        Assert.Equal(
-            2L,
-            factors.Single(entry => entry.Key.Equals(new Quotient<ModLong>(quotientRing, t.Sum(baseRing.FromInteger(1))))).Value);
-        Assert.Equal(
-            1L,
-            factors.Single(entry => entry.Key.Equals(new Quotient<ModLong>(quotientRing, baseRing.FromInteger(1), t))).Value);
+        factors.Count.ShouldBe(2);
+        factors.Single(entry => entry.Key.Equals(new Quotient<ModLong>(quotientRing, t.Sum(baseRing.FromInteger(1))))).Value.ShouldBe(2L);
+        factors.Single(entry => entry.Key.Equals(new Quotient<ModLong>(quotientRing, baseRing.FromInteger(1), t))).Value.ShouldBe(1L);
     }
 
     [Fact]
@@ -39,8 +35,8 @@ public sealed class SquarefreeInfiniteFieldCharPTests
 
         SortedDictionary<Quotient<ModLong>, long> factors = squarefree.SquarefreeFactors(quotientRing.One);
 
-        Assert.Single(factors);
-        Assert.Equal(1L, factors[quotientRing.One]);
+        factors.ShouldHaveSingleItem();
+        factors[quotientRing.One].ShouldBe(1L);
     }
 
     private static QuotientRing<ModLong> CreateInfiniteQuotientRing()

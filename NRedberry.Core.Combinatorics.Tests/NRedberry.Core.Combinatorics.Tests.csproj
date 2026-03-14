@@ -18,5 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NRedberry.Core.Combinatorics\NRedberry.Core.Combinatorics.csproj" />
+    <ProjectReference Include="..\TestInfrastructure\TestInfrastructure.csproj" />
   </ItemGroup>
 </Project>

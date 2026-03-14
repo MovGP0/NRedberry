@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using NRedberry.Transformations.Factor;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -10,7 +10,7 @@ public sealed class SingularFactorizationEngineTests
     [Fact]
     public void ShouldRejectNullExecutablePath()
     {
-        Assert.Throws<ArgumentNullException>(() => new SingularFactorizationEngine(null!));
+        Should.Throw<ArgumentNullException>(() => new SingularFactorizationEngine(null!));
     }
 
     [Fact]
@@ -21,8 +21,8 @@ public sealed class SingularFactorizationEngineTests
             BindingFlags.NonPublic | BindingFlags.Static)!;
         object[] parameters = [new NRedberry.Tensors.Tensor[] { TensorApi.Parse("a"), TensorApi.Parse("b") }];
 
-        string actual = Assert.IsType<string>(method.Invoke(null, parameters));
+        string actual = method.Invoke(null, parameters).ShouldBeOfType<string>();
 
-        Assert.Equal("ring r = 0,(a,b),dp;", actual);
+        actual.ShouldBe("ring r = 0,(a,b),dp;");
     }
 }

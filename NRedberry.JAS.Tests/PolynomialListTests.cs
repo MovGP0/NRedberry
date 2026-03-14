@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using Xunit;
 
@@ -15,10 +15,10 @@ public sealed class PolynomialListTests
         PolynomialList<BigRational> left = new(ring, [x, xSquared]);
         PolynomialList<BigRational> right = left.Copy();
 
-        Assert.Equal(left.Ring, right.Ring);
-        Assert.Equal(left.Polynomials.Count, right.Polynomials.Count);
-        Assert.Equal(left.ToString(), right.ToString());
-        Assert.NotSame(left.Polynomials, right.Polynomials);
+        right.Ring.ShouldBe(left.Ring);
+        right.Polynomials.Count.ShouldBe(left.Polynomials.Count);
+        right.ToString().ShouldBe(left.ToString());
+        right.Polynomials.ShouldNotBeSameAs(left.Polynomials);
     }
 
     [Fact]
@@ -27,6 +27,6 @@ public sealed class PolynomialListTests
         GenPolynomialRing<BigRational> ring = new(new BigRational(), 1, ["x"]);
         PolynomialList<BigRational> list = new(ring, [ring.Univariate(0)]);
 
-        Assert.Contains("x", list.ToString(), System.StringComparison.Ordinal);
+        list.ToString().ShouldContain("x");
     }
 }

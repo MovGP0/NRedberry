@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Util;
 using Xunit;
@@ -14,13 +14,13 @@ public sealed class ListUtilTests
 
         List<BigRational>? mapped = ListUtil.Map(values, new IncrementBigRationalFunctor());
 
-        Assert.Equal([new BigRational(2), new BigRational(3), new BigRational(4)], mapped);
+        mapped.ShouldBe([new BigRational(2), new BigRational(3), new BigRational(4)]);
     }
 
     [Fact]
     public void ShouldReturnNullForNullInputList()
     {
-        Assert.Null(ListUtil.Map<BigRational, BigRational>(null, new IncrementBigRationalFunctor()));
+        ListUtil.Map<BigRational, BigRational>(null, new IncrementBigRationalFunctor()).ShouldBeNull();
     }
 }
 

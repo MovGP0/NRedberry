@@ -1,4 +1,5 @@
 using NRedberry.IndexGeneration;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.IndexGeneration;
@@ -10,9 +11,9 @@ public sealed class IntGeneratorTests
     {
         var generator = new IntGenerator();
 
-        Assert.Equal(0, generator.GetNext());
-        Assert.Equal(1, generator.GetNext());
-        Assert.Equal(2, generator.GetNext());
+        generator.GetNext().ShouldBe(0);
+        generator.GetNext().ShouldBe(1);
+        generator.GetNext().ShouldBe(2);
     }
 
     [Fact]
@@ -20,10 +21,10 @@ public sealed class IntGeneratorTests
     {
         var generator = new IntGenerator([5, 2, 2, 1, 1]);
 
-        Assert.Equal(0, generator.GetNext());
-        Assert.Equal(3, generator.GetNext());
-        Assert.Equal(4, generator.GetNext());
-        Assert.Equal(6, generator.GetNext());
+        generator.GetNext().ShouldBe(0);
+        generator.GetNext().ShouldBe(3);
+        generator.GetNext().ShouldBe(4);
+        generator.GetNext().ShouldBe(6);
     }
 
     [Fact]
@@ -31,12 +32,12 @@ public sealed class IntGeneratorTests
     {
         var generator = new IntGenerator([2, 5, 5]);
 
-        Assert.Equal(0, generator.GetNext());
+        generator.GetNext().ShouldBe(0);
 
-        Assert.True(generator.Contains(0));
-        Assert.True(generator.Contains(2));
-        Assert.True(generator.Contains(5));
-        Assert.False(generator.Contains(6));
+        generator.Contains(0).ShouldBeTrue();
+        generator.Contains(2).ShouldBeTrue();
+        generator.Contains(5).ShouldBeTrue();
+        generator.Contains(6).ShouldBeFalse();
     }
 
     [Fact]
@@ -44,17 +45,17 @@ public sealed class IntGeneratorTests
     {
         var generator = new IntGenerator([1, 3]);
 
-        Assert.Equal(0, generator.GetNext());
+        generator.GetNext().ShouldBe(0);
 
         var clone = generator.Clone();
 
-        Assert.Equal(2, generator.GetNext());
-        Assert.Equal(4, generator.GetNext());
+        generator.GetNext().ShouldBe(2);
+        generator.GetNext().ShouldBe(4);
 
-        Assert.Equal(2, clone.GetNext());
-        Assert.False(clone.Contains(4));
-        Assert.True(generator.Contains(4));
+        clone.GetNext().ShouldBe(2);
+        clone.Contains(4).ShouldBeFalse();
+        generator.Contains(4).ShouldBeTrue();
 
-        Assert.Equal(4, clone.GetNext());
+        clone.GetNext().ShouldBe(4);
     }
 }

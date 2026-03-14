@@ -1,4 +1,4 @@
-using NRedberry;
+﻿using NRedberry;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Reverse;
 using Xunit;
@@ -12,7 +12,7 @@ public sealed class SingleReverseTests
     [Fact]
     public void ShouldRejectMetricIndexTypes()
     {
-        Assert.Throws<ArgumentException>(() => new SingleReverse(IndexType.LatinLower));
+        Should.Throw<ArgumentException>(() => new SingleReverse(IndexType.LatinLower));
     }
 
     [Fact]
@@ -26,7 +26,7 @@ public sealed class SingleReverseTests
             "A^{c'}_{d'}",
             "B^{b'}_{c'}",
             "C^{a'}_{b'}");
-        Assert.Equal(tensor.Indices.ToString(), actual.Indices.ToString());
+        actual.Indices.ToString().ShouldBe(tensor.Indices.ToString());
     }
 
     [Fact]
@@ -41,7 +41,7 @@ public sealed class SingleReverseTests
             "B^{b'}_{c'}",
             "cv_{b'}",
             "v^{d'}");
-        Assert.Equal(tensor.Indices.ToString(), actual.Indices.ToString());
+        actual.Indices.ToString().ShouldBe(tensor.Indices.ToString());
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public sealed class SingleReverseTests
 
         TensorType actual = SingleReverse.InverseOrderOfMatrices(tensor, IndexType.Matrix1);
 
-        Assert.True(TensorUtils.Equals(tensor, actual));
+        TensorUtils.Equals(tensor, actual).ShouldBeTrue();
     }
 
     [Fact]
@@ -61,7 +61,7 @@ public sealed class SingleReverseTests
 
         Action action = () => SingleReverse.InverseOrderOfMatrices(tensor, IndexType.Matrix1);
 
-        Assert.Throws<ArgumentException>(action);
+        Should.Throw<ArgumentException>(action);
     }
 
     private static void AssertIndexedFactors(TensorType tensor, params string[] expected)
@@ -69,7 +69,7 @@ public sealed class SingleReverseTests
         string[] actual = GetIndexedFactorTexts(tensor);
         string[] sortedExpected = expected.OrderBy(text => text, StringComparer.Ordinal).ToArray();
 
-        Assert.Equal(sortedExpected, actual);
+        actual.ShouldBe(sortedExpected);
     }
 
     private static string[] GetIndexedFactorTexts(TensorType tensor)

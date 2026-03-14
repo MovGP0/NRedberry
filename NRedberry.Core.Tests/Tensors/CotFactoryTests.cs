@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Tensors;
 using NRedberry.Tensors.Functions;
 using TensorApi = NRedberry.Tensors.Tensors;
@@ -13,8 +13,8 @@ public sealed class CotFactoryTests
     {
         NRedberry.Tensors.Tensor argument = TensorApi.Parse("a");
 
-        Assert.Same(argument, CotFactory.Factory.Create(new ArcCot(argument)));
-        Assert.Equal(Complex.ComplexPositiveInfinity, CotFactory.Factory.Create(Complex.Zero));
-        Assert.IsType<Cot>(CotFactory.Factory.Create(argument));
+        CotFactory.Factory.Create(new ArcCot(argument)).ShouldBeSameAs(argument);
+        CotFactory.Factory.Create(Complex.Zero).ShouldBe(Complex.ComplexPositiveInfinity);
+        CotFactory.Factory.Create(argument).ShouldBeOfType<Cot>();
     }
 }

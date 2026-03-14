@@ -1,4 +1,4 @@
-using Complex32 = System.Numerics.Complex;
+﻿using Complex32 = System.Numerics.Complex;
 using NumberComplex = NRedberry.Numbers.Complex;
 using Xunit;
 
@@ -9,18 +9,18 @@ public sealed class ComplexAdditionalTests
     [Fact]
     public void ShouldExposeBasicStaticConstants()
     {
-        Assert.True(NumberComplex.Zero.IsZero());
-        Assert.False(NumberComplex.Zero.IsOne());
-        Assert.True(NumberComplex.Zero.IsReal());
+        NumberComplex.Zero.IsZero().ShouldBeTrue();
+        NumberComplex.Zero.IsOne().ShouldBeFalse();
+        NumberComplex.Zero.IsReal().ShouldBeTrue();
 
-        Assert.True(NumberComplex.One.IsOne());
-        Assert.False(NumberComplex.One.IsZero());
-        Assert.True(NumberComplex.One.IsReal());
+        NumberComplex.One.IsOne().ShouldBeTrue();
+        NumberComplex.One.IsZero().ShouldBeFalse();
+        NumberComplex.One.IsReal().ShouldBeTrue();
 
-        Assert.True(NumberComplex.ImaginaryOne.IsImaginary());
-        Assert.False(NumberComplex.ImaginaryOne.IsReal());
-        Assert.False(NumberComplex.ImaginaryOne.IsOne());
-        Assert.False(NumberComplex.ImaginaryOne.IsZero());
+        NumberComplex.ImaginaryOne.IsImaginary().ShouldBeTrue();
+        NumberComplex.ImaginaryOne.IsReal().ShouldBeFalse();
+        NumberComplex.ImaginaryOne.IsOne().ShouldBeFalse();
+        NumberComplex.ImaginaryOne.IsZero().ShouldBeFalse();
     }
 
     [Fact]
@@ -28,10 +28,10 @@ public sealed class ComplexAdditionalTests
     {
         var value = new NumberComplex(7);
 
-        Assert.Equal(new NumberComplex(7, 0), value);
-        Assert.True(value.IsReal());
-        Assert.False(value.IsImaginary());
-        Assert.False(value.IsNumeric());
+        value.ShouldBe(new NumberComplex(7, 0));
+        value.IsReal().ShouldBeTrue();
+        value.IsImaginary().ShouldBeFalse();
+        value.IsNumeric().ShouldBeFalse();
     }
 
     [Fact]
@@ -41,8 +41,8 @@ public sealed class ComplexAdditionalTests
 
         Assert.Equal(2.5, value.Real.ToDouble(), 12);
         Assert.Equal(0.0, value.Imaginary.ToDouble(), 12);
-        Assert.True(value.IsReal());
-        Assert.True(value.IsNumeric());
+        value.IsReal().ShouldBeTrue();
+        value.IsNumeric().ShouldBeTrue();
     }
 
     [Fact]
@@ -53,7 +53,7 @@ public sealed class ComplexAdditionalTests
 
         Assert.Equal(source.Real, value.Real.ToDouble(), 6);
         Assert.Equal(source.Imaginary, value.Imaginary.ToDouble(), 6);
-        Assert.True(value.IsNumeric());
+        value.IsNumeric().ShouldBeTrue();
     }
 
     [Fact]
@@ -64,17 +64,17 @@ public sealed class ComplexAdditionalTests
         var one = new NumberComplex(1, 0);
         var zero = new NumberComplex(0, 0);
 
-        Assert.True(real.IsReal());
-        Assert.False(real.IsImaginary());
+        real.IsReal().ShouldBeTrue();
+        real.IsImaginary().ShouldBeFalse();
 
-        Assert.True(imaginary.IsImaginary());
-        Assert.False(imaginary.IsReal());
+        imaginary.IsImaginary().ShouldBeTrue();
+        imaginary.IsReal().ShouldBeFalse();
 
-        Assert.True(one.IsOne());
-        Assert.False(one.IsZero());
+        one.IsOne().ShouldBeTrue();
+        one.IsZero().ShouldBeFalse();
 
-        Assert.True(zero.IsZero());
-        Assert.False(zero.IsOne());
+        zero.IsZero().ShouldBeTrue();
+        zero.IsOne().ShouldBeFalse();
     }
 
     [Fact]
@@ -83,9 +83,9 @@ public sealed class ComplexAdditionalTests
         var value = new NumberComplex(2, -3);
         var conjugate = value.Conjugate();
 
-        Assert.Equal(new NumberComplex(2, 3), conjugate);
-        Assert.Equal(value.Real, conjugate.Real);
-        Assert.Equal(value.Imaginary.Negate(), conjugate.Imaginary);
+        conjugate.ShouldBe(new NumberComplex(2, 3));
+        conjugate.Real.ShouldBe(value.Real);
+        conjugate.Imaginary.ShouldBe(value.Imaginary.Negate());
     }
 
     [Fact]
@@ -94,7 +94,7 @@ public sealed class ComplexAdditionalTests
         var real = new NumberComplex(42, 0);
         var conjugate = real.Conjugate();
 
-        Assert.Same(real, conjugate);
+        conjugate.ShouldBeSameAs(real);
     }
 
     [Fact]
@@ -103,9 +103,9 @@ public sealed class ComplexAdditionalTests
         var left = new NumberComplex(1, 2);
         var right = new NumberComplex(3, 4);
 
-        Assert.Equal(new NumberComplex(4, 6), left.Add(right));
-        Assert.Equal(new NumberComplex(-2, -2), left.Subtract(right));
-        Assert.Equal(new NumberComplex(-5, 10), left.Multiply(right));
+        left.Add(right).ShouldBe(new NumberComplex(4, 6));
+        left.Subtract(right).ShouldBe(new NumberComplex(-2, -2));
+        left.Multiply(right).ShouldBe(new NumberComplex(-5, 10));
 
         var quotient = left.Divide(right);
         Assert.Equal(11.0 / 25.0, quotient.Real.ToDouble(), 12);
@@ -125,9 +125,9 @@ public sealed class ComplexAdditionalTests
     {
         var value = new NumberComplex(1, 1);
 
-        Assert.Equal(NumberComplex.One, value.Pow(0));
-        Assert.Equal(new NumberComplex(0, 2), value.Pow(2));
-        Assert.Equal(new NumberComplex(-2, 2), value.Pow(3));
+        value.Pow(0).ShouldBe(NumberComplex.One);
+        value.Pow(2).ShouldBe(new NumberComplex(0, 2));
+        value.Pow(3).ShouldBe(new NumberComplex(-2, 2));
 
         var inverse = value.Pow(-1);
         Assert.Equal(0.5, inverse.Real.ToDouble(), 12);
@@ -141,9 +141,9 @@ public sealed class ComplexAdditionalTests
         var second = new NumberComplex(9, -4);
         var different = new NumberComplex(9, 4);
 
-        Assert.Equal(first, second);
-        Assert.True(first.Equals((object)second));
-        Assert.Equal(first.GetHashCode(), second.GetHashCode());
-        Assert.False(first.Equals(different));
+        second.ShouldBe(first);
+        first.Equals((object)second).ShouldBeTrue();
+        second.GetHashCode().ShouldBe(first.GetHashCode());
+        first.Equals(different).ShouldBeFalse();
     }
 }

@@ -1,4 +1,4 @@
-#pragma warning disable CS0618
+﻿#pragma warning disable CS0618
 using NRedberry.Contexts;
 using NRedberry.Core.Utils;
 using Xunit;
@@ -17,12 +17,12 @@ public sealed class ByteBackedBitArrayTests
         array.Set(69);
         array.Clear(31);
 
-        Assert.True(array[0]);
-        Assert.False(array[31]);
-        Assert.True(array[69]);
-        Assert.Equal(2, array.BitCount());
-        Assert.Equal([0, 69], array.GetBits());
-        Assert.Equal("1" + new string('0', 68) + "1", array.ToString());
+        array[0].ShouldBeTrue();
+        array[31].ShouldBeFalse();
+        array[69].ShouldBeTrue();
+        array.BitCount().ShouldBe(2);
+        array.GetBits().ShouldBe([0, 69]);
+        array.ToString().ShouldBe("1" + new string('0', 68) + "1");
     }
 
     [Fact]
@@ -44,10 +44,10 @@ public sealed class ByteBackedBitArrayTests
         ByteBackedBitArray xorResult = (ByteBackedBitArray)left.Clone();
         xorResult.Xor(right);
 
-        Assert.Equal([10], andResult.GetBits());
-        Assert.Equal([0, 10, 11], orResult.GetBits());
-        Assert.Equal([0, 11], xorResult.GetBits());
-        Assert.True(left.Intersects(right));
+        andResult.GetBits().ShouldBe([10]);
+        orResult.GetBits().ShouldBe([0, 10, 11]);
+        xorResult.GetBits().ShouldBe([0, 11]);
+        left.Intersects(right).ShouldBeTrue();
     }
 
     [Fact]
@@ -57,16 +57,16 @@ public sealed class ByteBackedBitArrayTests
         ByteBackedBitArray clone = (ByteBackedBitArray)source.Clone();
         source.Clear(0);
 
-        Assert.True(clone[0]);
-        Assert.False(source[0]);
-        Assert.NotEqual(source, clone);
+        clone[0].ShouldBeTrue();
+        source[0].ShouldBeFalse();
+        clone.ShouldNotBe(source);
 
         ByteBackedBitArray target = new(4);
         target.LoadValueFrom(clone);
 
-        Assert.Equal(clone, target);
-        Assert.Equal(clone.GetHashCode(), target.GetHashCode());
-        Assert.Equal(target, target.Clone());
+        target.ShouldBe(clone);
+        target.GetHashCode().ShouldBe(clone.GetHashCode());
+        target.Clone().ShouldBe(target);
     }
 
     [Fact]
@@ -75,15 +75,15 @@ public sealed class ByteBackedBitArrayTests
         ByteBackedBitArray array = new(35);
 
         array.SetAll();
-        Assert.Equal(35, array.BitCount());
+        array.BitCount().ShouldBe(35);
 
         array.ClearAll();
         array.Set(3);
         array.Set(34);
 
-        Assert.Equal(3, array.NextTrailingBit(0));
-        Assert.Equal(34, array.NextTrailingBit(4));
-        Assert.Equal(-1, array.NextTrailingBit(35));
+        array.NextTrailingBit(0).ShouldBe(3);
+        array.NextTrailingBit(4).ShouldBe(34);
+        array.NextTrailingBit(35).ShouldBe(-1);
     }
 
     [Fact]
@@ -91,12 +91,12 @@ public sealed class ByteBackedBitArrayTests
     {
         ByteBackedBitArray array = new(4);
 
-        Assert.Throws<ArgumentOutOfRangeException>(() => array.Set(-1));
-        Assert.Throws<ArgumentOutOfRangeException>(() => array.Clear(4));
-        Assert.Throws<ArgumentOutOfRangeException>(() => array.NextTrailingBit(-1));
-        Assert.Throws<ArgumentException>(() => new ByteBackedBitArray([true], 2));
-        Assert.Throws<ArgumentException>(() => array.And(new ByteBackedBitArray(5)));
-        Assert.Throws<ArgumentException>(() => array.LoadValueFrom(new LongBackedBitArray(4)));
+        Should.Throw<ArgumentOutOfRangeException>(() => array.Set(-1));
+        Should.Throw<ArgumentOutOfRangeException>(() => array.Clear(4));
+        Should.Throw<ArgumentOutOfRangeException>(() => array.NextTrailingBit(-1));
+        Should.Throw<ArgumentException>(() => new ByteBackedBitArray([true], 2));
+        Should.Throw<ArgumentException>(() => array.And(new ByteBackedBitArray(5)));
+        Should.Throw<ArgumentException>(() => array.LoadValueFrom(new LongBackedBitArray(4)));
     }
 }
 #pragma warning restore CS0618

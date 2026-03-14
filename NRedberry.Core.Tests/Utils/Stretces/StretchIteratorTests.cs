@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils.Stretces;
+﻿using NRedberry.Core.Utils.Stretces;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils.Stretces;
@@ -10,13 +10,13 @@ public sealed class StretchIteratorTests
     {
         StretchIterator iterator = new([1, 1, 2, 3, 3], IIntObjectProvider.HashProvider);
 
-        Assert.True(iterator.HasNext());
-        Assert.Equal(new Stretch(0, 2), iterator.Next());
-        Assert.True(iterator.HasNext());
-        Assert.Equal(new Stretch(2, 1), iterator.Next());
-        Assert.True(iterator.HasNext());
-        Assert.Equal(new Stretch(3, 2), iterator.Next());
-        Assert.False(iterator.HasNext());
+        iterator.HasNext().ShouldBeTrue();
+        iterator.Next().ShouldBe(new Stretch(0, 2));
+        iterator.HasNext().ShouldBeTrue();
+        iterator.Next().ShouldBe(new Stretch(2, 1));
+        iterator.HasNext().ShouldBeTrue();
+        iterator.Next().ShouldBe(new Stretch(3, 2));
+        iterator.HasNext().ShouldBeFalse();
     }
 
     [Fact]
@@ -24,7 +24,7 @@ public sealed class StretchIteratorTests
     {
         Stretch[] actual = StretchIterator.GoHash([1, 1, 2, 2, 3]).ToArray();
 
-        Assert.Equal([new Stretch(0, 2), new Stretch(2, 2), new Stretch(4, 1)], actual);
+        actual.ShouldBe([new Stretch(0, 2), new Stretch(2, 2), new Stretch(4, 1)]);
     }
 
     [Fact]
@@ -32,6 +32,6 @@ public sealed class StretchIteratorTests
     {
         StretchIterator iterator = new(["a"], IIntObjectProvider.HashProvider);
 
-        Assert.Throws<NotSupportedException>(() => iterator.Remove());
+        Should.Throw<NotSupportedException>(() => iterator.Remove());
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
@@ -15,10 +15,10 @@ public sealed class PowerTests
         NRedberry.Tensors.Tensor power = new Complex(3);
         Power tensor = new(argument, power);
 
-        Assert.Equal(2, tensor.Size);
-        Assert.Same(argument, tensor[0]);
-        Assert.Same(power, tensor[1]);
-        Assert.Same(IndicesFactory.EmptyIndices, tensor.Indices);
+        tensor.Size.ShouldBe(2);
+        tensor[0].ShouldBeSameAs(argument);
+        tensor[1].ShouldBeSameAs(power);
+        tensor.Indices.ShouldBeSameAs(IndicesFactory.EmptyIndices);
     }
 
     [Fact]
@@ -26,7 +26,7 @@ public sealed class PowerTests
     {
         Power tensor = new(TensorFactory.Parse("a"), new Complex(2));
 
-        Assert.Throws<ArgumentOutOfRangeException>(() => _ = tensor[2]);
+        Should.Throw<ArgumentOutOfRangeException>(() => _ = tensor[2]);
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public sealed class PowerTests
     {
         Power tensor = new(TensorFactory.Parse("a"), new Complex(-2));
 
-        Assert.Equal("\\frac{1}{a^2}", tensor.ToString(OutputFormat.LaTeX));
+        tensor.ToString(OutputFormat.LaTeX).ShouldBe("\\frac{1}{a^2}");
     }
 
     [Fact]
@@ -42,8 +42,8 @@ public sealed class PowerTests
     {
         Power tensor = new(TensorFactory.Parse("a"), TensorFactory.Parse("b"));
 
-        Assert.Equal("a**b", tensor.ToString(OutputFormat.Redberry));
-        Assert.Equal("a^b", tensor.ToString(OutputFormat.WolframMathematica));
+        tensor.ToString(OutputFormat.Redberry).ShouldBe("a**b");
+        tensor.ToString(OutputFormat.WolframMathematica).ShouldBe("a^b");
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public sealed class PowerTests
     {
         Power tensor = new(TensorFactory.Parse("a"), new Complex(2));
 
-        Assert.IsType<PowerBuilder>(tensor.GetBuilder());
-        Assert.Same(PowerFactory.Factory, tensor.GetFactory());
+        tensor.GetBuilder().ShouldBeOfType<PowerBuilder>();
+        tensor.GetFactory().ShouldBeSameAs(PowerFactory.Factory);
     }
 }

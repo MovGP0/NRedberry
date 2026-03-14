@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -10,12 +10,11 @@ public sealed class ArrayIteratorTests
     {
         Type? type = typeof(IntTimSort).Assembly.GetType("NRedberry.Core.Utils.ArrayIterator`1");
 
-        Assert.NotNull(type);
+        type.ShouldNotBeNull();
 
-        ObsoleteAttribute obsolete = Assert.IsType<ObsoleteAttribute>(
-            Attribute.GetCustomAttribute(type!, typeof(ObsoleteAttribute)));
+        ObsoleteAttribute obsolete = Attribute.GetCustomAttribute(type!, typeof(ObsoleteAttribute)).ShouldBeOfType<ObsoleteAttribute>();
 
-        Assert.True(obsolete.IsError);
-        Assert.Contains("enumerated directly", obsolete.Message);
+        obsolete.IsError.ShouldBeTrue();
+        obsolete.Message.ShouldContain("enumerated directly");
     }
 }

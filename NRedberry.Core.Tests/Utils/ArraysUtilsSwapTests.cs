@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -12,7 +12,7 @@ public sealed class ArraysUtilsSwapTests
 
         ArraysUtils.Swap(values, 0, 2);
 
-        Assert.Equal([3, 2, 1], values);
+        values.ShouldBe([3, 2, 1]);
     }
 
     [Fact]
@@ -22,7 +22,7 @@ public sealed class ArraysUtilsSwapTests
 
         ArraysUtils.Swap(values, 0, 1);
 
-        Assert.Equal([2L, 1L, 3L], values);
+        values.ShouldBe([2L, 1L, 3L]);
     }
 
     [Fact]
@@ -32,6 +32,6 @@ public sealed class ArraysUtilsSwapTests
 
         ArraysUtils.Swap(values, 1, 2);
 
-        Assert.Equal(["a", "c", "b"], values);
+        values.ShouldBe(["a", "c", "b"]);
     }
 }

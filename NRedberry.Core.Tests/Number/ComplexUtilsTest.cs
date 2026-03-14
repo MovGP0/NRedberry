@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Numbers.Parser;
 using NumberComplex = NRedberry.Numbers.Complex;
 using Xunit;
@@ -15,11 +15,11 @@ public sealed class ComplexUtilsTest
         NumberComplex realInput = new(0.3);
         NumberComplex complexInput = NumberParser<NumberComplex>.ComplexParser.Parse("1+2*I");
 
-        Assert.True(realInput.Subtract(ComplexUtils.Sin(ComplexUtils.ArcSin(realInput))).AbsNumeric() <= Delta);
-        Assert.True(realInput.Subtract(ComplexUtils.Cos(ComplexUtils.ArcCos(realInput))).AbsNumeric() <= Delta);
-        Assert.True(realInput.Subtract(ComplexUtils.Tan(ComplexUtils.ArcTan(realInput))).AbsNumeric() <= Delta);
-        Assert.True(realInput.Subtract(ComplexUtils.Cot(ComplexUtils.ArcCot(realInput))).AbsNumeric() <= Delta);
-        Assert.True(realInput.Subtract(ComplexUtils.Log(ComplexUtils.Exp(realInput))).AbsNumeric() <= Delta);
-        Assert.True(complexInput.Subtract(ComplexUtils.Exp(ComplexUtils.Log(complexInput))).AbsNumeric() <= 1E-5);
+        realInput.Subtract(ComplexUtils.Sin(ComplexUtils.ArcSin(realInput))).AbsNumeric() <= Delta.ShouldBeTrue();
+        realInput.Subtract(ComplexUtils.Cos(ComplexUtils.ArcCos(realInput))).AbsNumeric() <= Delta.ShouldBeTrue();
+        realInput.Subtract(ComplexUtils.Tan(ComplexUtils.ArcTan(realInput))).AbsNumeric() <= Delta.ShouldBeTrue();
+        realInput.Subtract(ComplexUtils.Cot(ComplexUtils.ArcCot(realInput))).AbsNumeric() <= Delta.ShouldBeTrue();
+        realInput.Subtract(ComplexUtils.Log(ComplexUtils.Exp(realInput))).AbsNumeric() <= Delta.ShouldBeTrue();
+        complexInput.Subtract(ComplexUtils.Exp(ComplexUtils.Log(complexInput))).AbsNumeric() <= 1E-5.ShouldBeTrue();
     }
 }

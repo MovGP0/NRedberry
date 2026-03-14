@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using NRedberry.Concurrent;
@@ -20,11 +20,11 @@ public sealed class MinusIndexMappingProviderTests
             [typeof(IOutputPort<IIndexMappingBuffer>)],
             modifiers: null)!;
 
-        TargetInvocationException exception = Assert.Throws<TargetInvocationException>(() =>
+        TargetInvocationException exception = Should.Throw<TargetInvocationException>(() =>
             constructor.Invoke([null!]));
 
-        ArgumentNullException argumentNullException = Assert.IsType<ArgumentNullException>(exception.InnerException);
-        Assert.Equal("outputPort", argumentNullException.ParamName);
+        ArgumentNullException argumentNullException = exception.InnerException.ShouldBeOfType<ArgumentNullException>();
+        argumentNullException.ParamName.ShouldBe("outputPort");
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public sealed class MinusIndexMappingProviderTests
 
         IIndexMappingBuffer? buffer = (IIndexMappingBuffer?)InvokeTake(provider);
 
-        Assert.Null(buffer);
+        buffer.ShouldBeNull();
     }
 
     [Fact]
@@ -49,11 +49,11 @@ public sealed class MinusIndexMappingProviderTests
         IIndexMappingBuffer? firstTake = (IIndexMappingBuffer?)InvokeTake(provider);
         IIndexMappingBuffer? secondTake = (IIndexMappingBuffer?)InvokeTake(provider);
 
-        Assert.True(tickResult);
-        Assert.Same(buffer, firstTake);
-        Assert.Equal(1, buffer.AddSignCallCount);
-        Assert.Equal(1, buffer.AddSignTrueCallCount);
-        Assert.Null(secondTake);
+        tickResult.ShouldBeTrue();
+        firstTake.ShouldBeSameAs(buffer);
+        buffer.AddSignCallCount.ShouldBe(1);
+        buffer.AddSignTrueCallCount.ShouldBe(1);
+        secondTake.ShouldBeNull();
     }
 
     private static Type GetProviderType()

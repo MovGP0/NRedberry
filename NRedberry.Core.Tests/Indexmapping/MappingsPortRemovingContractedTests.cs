@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using NRedberry.Concurrent;
 using NRedberry.IndexMapping;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Indexmapping;
@@ -15,11 +16,11 @@ public sealed class MappingsPortRemovingContractedTests
     {
         Type type = GetTargetType();
 
-        TargetInvocationException exception = Assert.Throws<TargetInvocationException>(() =>
+        TargetInvocationException exception = Should.Throw<TargetInvocationException>(() =>
             Activator.CreateInstance(type, args: [null!]));
 
-        ArgumentNullException innerException = Assert.IsType<ArgumentNullException>(exception.InnerException);
-        Assert.Equal("provider", innerException.ParamName);
+        ArgumentNullException innerException = exception.InnerException.ShouldBeOfType<ArgumentNullException>();
+        innerException.ParamName.ShouldBe("provider");
     }
 
     [Fact]
@@ -31,9 +32,9 @@ public sealed class MappingsPortRemovingContractedTests
 
         IIndexMappingBuffer result = sut.Take();
 
-        Assert.Equal(1, provider.TakeCallCount);
-        Assert.Equal(1, buffer.RemoveContractedCallCount);
-        Assert.Same(buffer, result);
+        provider.TakeCallCount.ShouldBe(1);
+        buffer.RemoveContractedCallCount.ShouldBe(1);
+        result.ShouldBeSameAs(buffer);
     }
 
     [Fact]
@@ -44,8 +45,8 @@ public sealed class MappingsPortRemovingContractedTests
 
         IIndexMappingBuffer? result = sut.Take();
 
-        Assert.Equal(1, provider.TakeCallCount);
-        Assert.Null(result);
+        provider.TakeCallCount.ShouldBe(1);
+        result.ShouldBeNull();
     }
 
     private static IOutputPort<IIndexMappingBuffer> CreateSut(IOutputPort<IIndexMappingBuffer> provider)
@@ -53,14 +54,16 @@ public sealed class MappingsPortRemovingContractedTests
         Type type = GetTargetType();
         var instance = Activator.CreateInstance(type, provider);
 
-        return Assert.IsAssignableFrom<IOutputPort<IIndexMappingBuffer>>(instance);
+        instance.ShouldNotBeNull();
+        instance.ShouldBeAssignableTo<IOutputPort<IIndexMappingBuffer>>();
+        return (IOutputPort<IIndexMappingBuffer>)instance;
     }
 
     private static Type GetTargetType()
     {
         var type = typeof(IndexMappingProviderUtil).Assembly.GetType("NRedberry.IndexMapping.MappingsPortRemovingContracted");
 
-        Assert.NotNull(type);
+        type.ShouldNotBeNull();
 
         return type!;
     }

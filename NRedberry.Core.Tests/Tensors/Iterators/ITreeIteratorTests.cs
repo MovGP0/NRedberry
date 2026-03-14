@@ -1,4 +1,4 @@
-using NRedberry.Tensors.Iterators;
+﻿using NRedberry.Tensors.Iterators;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -12,14 +12,14 @@ public sealed class ITreeIteratorTests
         ITreeIterator fromChildToParent = ITreeIterator.Factory.Create(TensorApi.Parse("a+b"), true, TraverseGuide.All);
         ITreeIterator fromParentToChild = ITreeIterator.Factory.Create(TensorApi.Parse("a+b"), false, TraverseGuide.All);
 
-        Assert.IsType<FromChildToParentIterator>(fromChildToParent);
-        Assert.IsType<FromParentToChildIterator>(fromParentToChild);
+        fromChildToParent.ShouldBeOfType<FromChildToParentIterator>();
+        fromParentToChild.ShouldBeOfType<FromParentToChildIterator>();
     }
 
     [Fact]
     public void ShouldValidateFactoryArguments()
     {
-        Assert.Throws<ArgumentNullException>(() => ITreeIterator.Factory.Create(null!, true, TraverseGuide.All));
-        Assert.Throws<ArgumentNullException>(() => ITreeIterator.Factory.Create(TensorApi.Parse("a"), true, null!));
+        Should.Throw<ArgumentNullException>(() => ITreeIterator.Factory.Create(null!, true, TraverseGuide.All));
+        Should.Throw<ArgumentNullException>(() => ITreeIterator.Factory.Create(TensorApi.Parse("a"), true, null!));
     }
 }

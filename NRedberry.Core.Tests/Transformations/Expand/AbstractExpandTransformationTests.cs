@@ -1,4 +1,4 @@
-using NRedberry.Tensors.Iterators;
+﻿using NRedberry.Tensors.Iterators;
 using NRedberry.Transformations;
 using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Symmetrization;
@@ -17,7 +17,7 @@ public sealed class AbstractExpandTransformationTests
 
         NRedberry.Tensors.Tensor actual = transformation.Transform(tensor);
 
-        Assert.Same(tensor, actual);
+        actual.ShouldBeSameAs(tensor);
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public sealed class AbstractExpandTransformationTests
 
         NRedberry.Tensors.Tensor actual = transformation.Transform(TensorApi.Parse("Sin[a*b]"));
 
-        Assert.Equal("Sin[p]", actual.ToString(OutputFormat.Redberry));
+        actual.ToString(OutputFormat.Redberry).ShouldBe("Sin[p]");
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public sealed class AbstractExpandTransformationTests
 
         NRedberry.Tensors.Tensor actual = transformation.Transform(TensorApi.Parse("(a+b)**(-1)"));
 
-        Assert.Equal("(a+b)**(-1)", actual.ToString(OutputFormat.Redberry));
+        actual.ToString(OutputFormat.Redberry).ShouldBe("(a+b)**(-1)");
     }
 
     private sealed class TestExpandTransformation : AbstractExpandTransformation

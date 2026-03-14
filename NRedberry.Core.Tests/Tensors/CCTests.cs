@@ -1,4 +1,4 @@
-using NRedberry.Concurrent;
+﻿using NRedberry.Concurrent;
 using NRedberry.Contexts;
 using NRedberry.Indices;
 using NRedberry.Tensors;
@@ -12,7 +12,7 @@ public sealed class CCTests
     [Fact]
     public void ShouldReturnSharedRandomGenerator()
     {
-        Assert.Same(Random.Shared, TensorCC.GetRandomGenerator());
+        TensorCC.GetRandomGenerator().ShouldBeSameAs(Random.Shared);
     }
 
     [Fact]
@@ -20,7 +20,7 @@ public sealed class CCTests
     {
         IOutputPort<SimpleTensor> generator = TensorCC.GetParametersGenerator();
 
-        Assert.NotNull(generator);
+        generator.ShouldNotBeNull();
     }
 
     [Fact]
@@ -28,9 +28,9 @@ public sealed class CCTests
     {
         try
         {
-            Assert.Same(NRedberry.Contexts.Context.Get(), TensorCC.Current);
-            Assert.Same(TensorCC.Current.NameManager, TensorCC.NameManager);
-            Assert.Same(TensorCC.Current.ConverterManager, TensorCC.IndexConverterManager);
+            TensorCC.Current.ShouldBeSameAs(NRedberry.Contexts.Context.Get());
+            TensorCC.NameManager.ShouldBeSameAs(TensorCC.Current.NameManager);
+            TensorCC.IndexConverterManager.ShouldBeSameAs(TensorCC.Current.ConverterManager);
         }
         catch (TypeInitializationException)
         {
@@ -44,7 +44,7 @@ public sealed class CCTests
         {
             OutputFormat original = TensorCC.GetDefaultOutputFormat();
             TensorCC.SetDefaultOutputFormat(OutputFormat.LaTeX);
-            Assert.Equal(OutputFormat.LaTeX, TensorCC.GetDefaultOutputFormat());
+            TensorCC.GetDefaultOutputFormat().ShouldBe(OutputFormat.LaTeX);
             TensorCC.DefaultOutputFormat = original;
         }
         catch (TypeInitializationException)
@@ -59,7 +59,7 @@ public sealed class CCTests
         {
             bool original = TensorCC.GetParserAllowsSameVariance();
             TensorCC.SetParserAllowsSameVariance(!original);
-            Assert.Equal(!original, TensorCC.GetParserAllowsSameVariance());
+            TensorCC.GetParserAllowsSameVariance().ShouldBe(!original);
             TensorCC.SetParserAllowsSameVariance(original);
         }
         catch (TypeInitializationException)
@@ -74,8 +74,8 @@ public sealed class CCTests
         {
             SimpleTensor symbol = TensorCC.GenerateNewSymbol();
 
-            Assert.NotNull(symbol);
-            Assert.Same(IndicesFactory.EmptySimpleIndices, symbol.SimpleIndices);
+            symbol.ShouldNotBeNull();
+            symbol.SimpleIndices.ShouldBeSameAs(IndicesFactory.EmptySimpleIndices);
         }
         catch (TypeInitializationException)
         {

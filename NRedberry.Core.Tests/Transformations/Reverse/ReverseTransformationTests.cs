@@ -9,6 +9,6 @@ public sealed class ReverseTransformationTests
     [Fact]
     public void ShouldRejectMetricIndexTypes()
     {
-        Assert.Throws<ArgumentException>(() => new ReverseTransformation(IndexType.LatinLower));
+        Should.Throw<ArgumentException>(() => new ReverseTransformation(IndexType.LatinLower));
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
 using Xunit;
@@ -12,7 +12,7 @@ public sealed class AbstractSumBuilderTests
     {
         TestSumBuilder builder = new();
 
-        Assert.Throws<ArgumentNullException>(() => builder.Put(null!));
+        Should.Throw<ArgumentNullException>(() => builder.Put(null!));
     }
 
     [Fact]
@@ -22,7 +22,7 @@ public sealed class AbstractSumBuilderTests
 
         TensorType result = builder.Build();
 
-        Assert.Same(Complex.Zero, result);
+        result.ShouldBeSameAs(Complex.Zero);
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public sealed class AbstractSumBuilderTests
 
         TensorType result = builder.Build();
 
-        Assert.Equal(new Complex(3), result);
+        result.ShouldBe(new Complex(3));
     }
 
     [Fact]
@@ -46,8 +46,8 @@ public sealed class AbstractSumBuilderTests
 
         TensorType result = builder.Build();
 
-        Complex complex = Assert.IsType<Complex>(result);
-        Assert.True(complex.IsNaN());
+        Complex complex = result.ShouldBeOfType<Complex>();
+        complex.IsNaN().ShouldBeTrue();
     }
 
     [Fact]
@@ -59,8 +59,8 @@ public sealed class AbstractSumBuilderTests
 
         TensorType result = builder.Build();
 
-        Complex complex = Assert.IsType<Complex>(result);
-        Assert.True(complex.IsNaN());
+        Complex complex = result.ShouldBeOfType<Complex>();
+        complex.IsNaN().ShouldBeTrue();
     }
 
     private sealed class TestSumBuilder : AbstractSumBuilder

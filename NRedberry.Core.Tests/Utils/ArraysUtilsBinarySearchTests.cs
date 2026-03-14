@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -10,7 +10,7 @@ public sealed class ArraysUtilsBinarySearchTests
     {
         int actual = ArraysUtils.BinarySearch([1, 3, 5, 7], 5);
 
-        Assert.Equal(2, actual);
+        actual.ShouldBe(2);
     }
 
     [Fact]
@@ -18,7 +18,7 @@ public sealed class ArraysUtilsBinarySearchTests
     {
         int actual = ArraysUtils.BinarySearch1([1, 2, 2, 2, 4], 2);
 
-        Assert.Equal(1, actual);
+        actual.ShouldBe(1);
     }
 
     [Fact]
@@ -26,6 +26,6 @@ public sealed class ArraysUtilsBinarySearchTests
     {
         int actual = ArraysUtils.BinarySearch1([1, 2, 4, 4, 7], 3);
 
-        Assert.Equal(2, actual);
+        actual.ShouldBe(2);
     }
 }

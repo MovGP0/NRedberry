@@ -1,4 +1,4 @@
-using NRedberry.Tensors.Playground;
+﻿using NRedberry.Tensors.Playground;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -11,11 +11,11 @@ public sealed class ContentDataTests
     {
         ContentData empty = ContentData.EmptyInstance;
 
-        Assert.Same(GraphStructureHashed.EmptyInstance, empty.StructureOfContractionsHashed);
-        Assert.Same(GraphStructure.EmptyFullContractionsStructure, empty.StructureOfContractions);
-        Assert.Empty(empty.Data);
-        Assert.Empty(empty.StretchIndices);
-        Assert.Empty(empty.HashCodes);
+        empty.StructureOfContractionsHashed.ShouldBeSameAs(GraphStructureHashed.EmptyInstance);
+        empty.StructureOfContractions.ShouldBeSameAs(GraphStructure.EmptyFullContractionsStructure);
+        empty.Data.ShouldBeEmpty();
+        empty.StretchIndices.ShouldBeEmpty();
+        empty.HashCodes.ShouldBeEmpty();
     }
 
     [Fact]
@@ -29,10 +29,10 @@ public sealed class ContentDataTests
 
         ContentData contentData = new(hashed, graphStructure, data, stretchIndices, hashCodes);
 
-        Assert.Same(hashed, contentData.StructureOfContractionsHashed);
-        Assert.Same(graphStructure, contentData.StructureOfContractions);
-        Assert.Same(data, contentData.Data);
-        Assert.Same(stretchIndices, contentData.StretchIndices);
-        Assert.Same(hashCodes, contentData.HashCodes);
+        contentData.StructureOfContractionsHashed.ShouldBeSameAs(hashed);
+        contentData.StructureOfContractions.ShouldBeSameAs(graphStructure);
+        contentData.Data.ShouldBeSameAs(data);
+        contentData.StretchIndices.ShouldBeSameAs(stretchIndices);
+        contentData.HashCodes.ShouldBeSameAs(hashCodes);
     }
 }

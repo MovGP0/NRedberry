@@ -1,4 +1,4 @@
-using NRedberry.Solver;
+﻿using NRedberry.Solver;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Symmetrization;
 using TensorFactory = NRedberry.Tensors.Tensors;
@@ -17,10 +17,10 @@ public sealed class ExternalSolverTests
             var scriptCreator = new TestScriptCreator();
             using var tempDirectory = new TemporaryDirectory();
 
-            Assert.Throws<ArgumentNullException>(() => ExternalSolver.SolveSystemWithExternalProgram(null!, reducedSystem, keepFreeParameters: true, programBinDir: string.Empty, tempDirectory.Path));
-            Assert.Throws<ArgumentNullException>(() => ExternalSolver.SolveSystemWithExternalProgram(scriptCreator, null!, keepFreeParameters: true, programBinDir: string.Empty, tempDirectory.Path));
-            Assert.Throws<ArgumentNullException>(() => ExternalSolver.SolveSystemWithExternalProgram(scriptCreator, reducedSystem, keepFreeParameters: true, programBinDir: null!, tempDirectory.Path));
-            Assert.Throws<ArgumentNullException>(() => ExternalSolver.SolveSystemWithExternalProgram(scriptCreator, reducedSystem, keepFreeParameters: true, programBinDir: string.Empty, path: null!));
+            Should.Throw<ArgumentNullException>(() => ExternalSolver.SolveSystemWithExternalProgram(null!, reducedSystem, keepFreeParameters: true, programBinDir: string.Empty, tempDirectory.Path));
+            Should.Throw<ArgumentNullException>(() => ExternalSolver.SolveSystemWithExternalProgram(scriptCreator, null!, keepFreeParameters: true, programBinDir: string.Empty, tempDirectory.Path));
+            Should.Throw<ArgumentNullException>(() => ExternalSolver.SolveSystemWithExternalProgram(scriptCreator, reducedSystem, keepFreeParameters: true, programBinDir: null!, tempDirectory.Path));
+            Should.Throw<ArgumentNullException>(() => ExternalSolver.SolveSystemWithExternalProgram(scriptCreator, reducedSystem, keepFreeParameters: true, programBinDir: string.Empty, path: null!));
         }
         catch (TypeInitializationException)
         {
@@ -38,7 +38,7 @@ public sealed class ExternalSolverTests
 
             Expression[][] result = ExternalSolver.SolveSystemWithExternalProgram(scriptCreator, reducedSystem, keepFreeParameters: true, programBinDir: string.Empty, tempDirectory.Path);
 
-            Assert.Empty(result);
+            result.ShouldBeEmpty();
         }
         catch (TypeInitializationException)
         {
@@ -56,7 +56,7 @@ public sealed class ExternalSolverTests
 
             Expression[][] result = ExternalSolver.SolveSystemWithExternalProgram(scriptCreator, reducedSystem, keepFreeParameters: true, programBinDir: string.Empty, tempDirectory.Path);
 
-            Assert.Null(result);
+            result.ShouldBeNull();
         }
         catch (TypeInitializationException)
         {
@@ -74,9 +74,9 @@ public sealed class ExternalSolverTests
 
             Expression[][] result = ExternalSolver.SolveSystemWithExternalProgram(scriptCreator, reducedSystem, keepFreeParameters: false, programBinDir: string.Empty, tempDirectory.Path);
 
-            Assert.Single(result);
-            Assert.Single(result[0]);
-            Assert.True(TensorUtils.Equals(result[0][0], TensorFactory.ParseExpression("A=1")));
+            result.ShouldHaveSingleItem();
+            result[0].ShouldHaveSingleItem();
+            TensorUtils.Equals(result[0][0], TensorFactory.ParseExpression("A=1")).ShouldBeTrue();
         }
         catch (TypeInitializationException)
         {

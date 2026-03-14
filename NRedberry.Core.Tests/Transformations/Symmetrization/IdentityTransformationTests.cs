@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Symmetrization;
+﻿using NRedberry.Transformations.Symmetrization;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -12,6 +12,6 @@ public sealed class IdentityTransformationTests
         IdentityTransformation transformation = new();
         NRedberry.Tensors.Tensor tensor = TensorApi.Parse("a+b");
 
-        Assert.Same(tensor, transformation.Transform(tensor));
+        transformation.Transform(tensor).ShouldBeSameAs(tensor);
     }
 }

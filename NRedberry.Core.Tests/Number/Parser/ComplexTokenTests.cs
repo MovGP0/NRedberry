@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Numbers.Parser;
 using Xunit;
 
@@ -9,7 +9,7 @@ public sealed class ComplexTokenTests
     [Fact]
     public void ShouldExposeSingletonInstance()
     {
-        Assert.Same(ComplexToken.Instance, ComplexToken.Instance);
+        ComplexToken.Instance.ShouldBeSameAs(ComplexToken.Instance);
     }
 
     [Fact]
@@ -17,17 +17,17 @@ public sealed class ComplexTokenTests
     {
         var parser = NumberParser<Complex>.ComplexParser;
 
-        var exception = Assert.Throws<ArgumentNullException>(() => ComplexToken.Instance.Parse(null!, parser));
+        var exception = Should.Throw<ArgumentNullException>(() => ComplexToken.Instance.Parse(null!, parser));
 
-        Assert.Equal("expression", exception.ParamName);
+        exception.ParamName.ShouldBe("expression");
     }
 
     [Fact]
     public void ShouldThrowWhenParserIsNull()
     {
-        var exception = Assert.Throws<ArgumentNullException>(() => ComplexToken.Instance.Parse("I", null!));
+        var exception = Should.Throw<ArgumentNullException>(() => ComplexToken.Instance.Parse("I", null!));
 
-        Assert.Equal("parser", exception.ParamName);
+        exception.ParamName.ShouldBe("parser");
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public sealed class ComplexTokenTests
     {
         var result = ComplexToken.Instance.Parse("I", NumberParser<Complex>.ComplexParser);
 
-        Assert.Equal(Complex.ImaginaryOne, result);
+        result.ShouldBe(Complex.ImaginaryOne);
     }
 
     [Fact]
@@ -45,7 +45,7 @@ public sealed class ComplexTokenTests
 
         var result = ComplexToken.Instance.Parse(value.ToString(global::System.Globalization.CultureInfo.InvariantCulture), NumberParser<Complex>.ComplexParser);
 
-        Assert.Equal(new Complex(value), result);
+        result.ShouldBe(new Complex(value));
     }
 
     [Fact]
@@ -53,7 +53,7 @@ public sealed class ComplexTokenTests
     {
         var result = ComplexToken.Instance.Parse("12.5", NumberParser<Complex>.ComplexParser);
 
-        Assert.Equal(new Complex(12.5), result);
+        result.ShouldBe(new Complex(12.5));
     }
 
     [Fact]
@@ -61,6 +61,6 @@ public sealed class ComplexTokenTests
     {
         var result = ComplexToken.Instance.Parse("1/2", NumberParser<Complex>.ComplexParser);
 
-        Assert.Null(result);
+        result.ShouldBeNull();
     }
 }

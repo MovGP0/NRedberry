@@ -1,4 +1,4 @@
-using NRedberry.Transformations;
+﻿using NRedberry.Transformations;
 using NRedberry.Transformations.Expand;
 using Xunit;
 
@@ -11,8 +11,8 @@ public sealed class ExpandTensorsOptionsTests
     {
         ExpandTensorsOptions options = new();
 
-        Assert.False(options.LeaveScalars);
-        Assert.Same(Transformation.Identity, options.Simplifications);
-        Assert.NotNull(options.TraverseGuide);
+        options.LeaveScalars.ShouldBeFalse();
+        options.Simplifications.ShouldBeSameAs(Transformation.Identity);
+        options.TraverseGuide.ShouldNotBeNull();
     }
 }

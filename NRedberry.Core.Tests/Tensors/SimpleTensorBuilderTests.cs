@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -9,27 +9,27 @@ public sealed class SimpleTensorBuilderTests
     [Fact]
     public void ShouldReturnWrappedTensorFromBuild()
     {
-        SimpleTensor tensor = Assert.IsType<SimpleTensor>(TensorFactory.Parse("T_a"));
+        SimpleTensor tensor = TensorFactory.Parse("T_a").ShouldBeOfType<SimpleTensor>();
         SimpleTensorBuilder builder = new(tensor);
 
-        Assert.Same(tensor, builder.Build());
+        builder.Build().ShouldBeSameAs(tensor);
     }
 
     [Fact]
     public void ShouldRejectPutOperations()
     {
-        SimpleTensor tensor = Assert.IsType<SimpleTensor>(TensorFactory.Parse("T_a"));
+        SimpleTensor tensor = TensorFactory.Parse("T_a").ShouldBeOfType<SimpleTensor>();
         SimpleTensorBuilder builder = new(tensor);
 
-        Assert.Throws<NotSupportedException>(() => builder.Put(TensorFactory.Parse("a")));
+        Should.Throw<NotSupportedException>(() => builder.Put(TensorFactory.Parse("a")));
     }
 
     [Fact]
     public void ShouldReturnSameInstanceFromClone()
     {
-        SimpleTensor tensor = Assert.IsType<SimpleTensor>(TensorFactory.Parse("T_a"));
+        SimpleTensor tensor = TensorFactory.Parse("T_a").ShouldBeOfType<SimpleTensor>();
         SimpleTensorBuilder builder = new(tensor);
 
-        Assert.Same(builder, builder.Clone());
+        builder.Clone().ShouldBeSameAs(builder);
     }
 }

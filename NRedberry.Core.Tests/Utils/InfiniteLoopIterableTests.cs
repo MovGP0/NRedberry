@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -13,14 +13,14 @@ public sealed class InfiniteLoopIterableTests
         using IEnumerator<int> first = iterable.GetEnumerator();
         using IEnumerator<int> second = iterable.GetEnumerator();
 
-        Assert.True(first.MoveNext());
-        Assert.True(second.MoveNext());
-        Assert.Equal(1, first.Current);
-        Assert.Equal(1, second.Current);
+        first.MoveNext().ShouldBeTrue();
+        second.MoveNext().ShouldBeTrue();
+        first.Current.ShouldBe(1);
+        second.Current.ShouldBe(1);
 
-        Assert.True(first.MoveNext());
-        Assert.Equal(2, first.Current);
-        Assert.True(first.MoveNext());
-        Assert.Equal(1, first.Current);
+        first.MoveNext().ShouldBeTrue();
+        first.Current.ShouldBe(2);
+        first.MoveNext().ShouldBeTrue();
+        first.Current.ShouldBe(1);
     }
 }

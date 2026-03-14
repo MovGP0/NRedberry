@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -16,16 +16,16 @@ public sealed class ProgressReporterTest
             Console.SetOut(writer);
             ProgressReporter reporter = new("work", 4, 25);
 
-            Assert.True(reporter.Next());
-            Assert.True(reporter.Next());
-            Assert.True(reporter.Next());
-            Assert.True(reporter.Next());
+            reporter.Next().ShouldBeTrue();
+            reporter.Next().ShouldBeTrue();
+            reporter.Next().ShouldBeTrue();
+            reporter.Next().ShouldBeTrue();
 
             string output = writer.ToString();
 
-            Assert.Contains("work", output);
-            Assert.Contains("25.00%", output);
-            Assert.Contains("100.00%", output);
+            output.ShouldContain("work");
+            output.ShouldContain("25.00%");
+            output.ShouldContain("100.00%");
         }
         finally
         {
@@ -44,8 +44,8 @@ public sealed class ProgressReporterTest
             Console.SetOut(writer);
             ProgressReporter reporter = new("done", 1, 100);
 
-            Assert.True(reporter.Next());
-            Assert.False(reporter.Next());
+            reporter.Next().ShouldBeTrue();
+            reporter.Next().ShouldBeFalse();
         }
         finally
         {

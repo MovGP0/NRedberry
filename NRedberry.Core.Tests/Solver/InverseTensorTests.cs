@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Tensors;
 using NRedberry.Solver;
 using TensorType = NRedberry.Tensors.Tensor;
@@ -14,10 +14,10 @@ public sealed class InverseTensorTests
         Expression expression = CreateExpression(CreateSimpleTensor(1), CreateSimpleTensor(2));
         TensorType[] emptySamples = [];
 
-        Assert.Throws<ArgumentNullException>(() => new InverseTensor(null!, expression, emptySamples));
-        Assert.Throws<ArgumentNullException>(() => new InverseTensor(expression, null!, emptySamples));
-        Assert.Throws<ArgumentNullException>(() => new InverseTensor(expression, expression, null!));
-        Assert.Throws<ArgumentNullException>(() => new InverseTensor(expression, expression, emptySamples, false, null!));
+        Should.Throw<ArgumentNullException>(() => new InverseTensor(null!, expression, emptySamples));
+        Should.Throw<ArgumentNullException>(() => new InverseTensor(expression, null!, emptySamples));
+        Should.Throw<ArgumentNullException>(() => new InverseTensor(expression, expression, null!));
+        Should.Throw<ArgumentNullException>(() => new InverseTensor(expression, expression, emptySamples, false, null!));
     }
 
     [Fact]
@@ -27,8 +27,8 @@ public sealed class InverseTensorTests
         Expression equation = CreateExpression(CreateSimpleTensor(3), CreateSimpleTensor(4));
         TensorType[] samples = [];
 
-        var exception = Assert.Throws<ArgumentException>(() => new InverseTensor(toInverse, equation, samples));
-        Assert.Equal("equation", exception.ParamName);
+        var exception = Should.Throw<ArgumentException>(() => new InverseTensor(toInverse, equation, samples));
+        exception.ParamName.ShouldBe("equation");
     }
 
     private static SimpleTensor CreateSimpleTensor(int name)

@@ -9,7 +9,7 @@ public sealed class SumBijectionPortTests
     [Fact]
     public void ShouldThrowWhileSumBijectionPortIsUnimplemented()
     {
-        Assert.Throws<NotImplementedException>(() =>
+        Should.Throw<NotImplementedException>(() =>
             new SumBijectionPort(TensorApi.Parse("a+b"), TensorApi.Parse("a+b")));
     }
 }

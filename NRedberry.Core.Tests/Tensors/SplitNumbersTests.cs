@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -12,10 +12,10 @@ public sealed class SplitNumbersTests
     {
         Split split = Split.SplitScalars(TensorFactory.Parse("2*a"));
 
-        Assert.Equal("SplitNumbers", split.GetType().Name);
-        Assert.Equal("2*a", split.Factor.ToString(OutputFormat.Redberry));
-        Assert.Equal("1", split.Summand.ToString(OutputFormat.Redberry));
-        Assert.Equal("ComplexSumBuilder", split.GetBuilder().GetType().Name);
+        split.GetType().Name.ShouldBe("SplitNumbers");
+        split.Factor.ToString(OutputFormat.Redberry).ShouldBe("2*a");
+        split.Summand.ToString(OutputFormat.Redberry).ShouldBe("1");
+        split.GetBuilder().GetType().Name.ShouldBe("ComplexSumBuilder");
     }
 
     [Fact]
@@ -23,9 +23,9 @@ public sealed class SplitNumbersTests
     {
         Split split = Split.SplitIndexless(TensorFactory.Parse("2*a"));
 
-        Assert.Equal("SplitNumbers", split.GetType().Name);
-        Assert.Equal("a", split.Factor.ToString(OutputFormat.Redberry));
-        Assert.Equal(new Complex(2), split.Summand);
-        Assert.Equal("ComplexSumBuilder", split.GetBuilder().GetType().Name);
+        split.GetType().Name.ShouldBe("SplitNumbers");
+        split.Factor.ToString(OutputFormat.Redberry).ShouldBe("a");
+        split.Summand.ShouldBe(new Complex(2));
+        split.GetBuilder().GetType().Name.ShouldBe("ComplexSumBuilder");
     }
 }

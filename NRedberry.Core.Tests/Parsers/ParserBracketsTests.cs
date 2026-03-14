@@ -1,4 +1,4 @@
-using NRedberry.Parsers;
+﻿using NRedberry.Parsers;
 using RedberryParser = NRedberry.Parsers.Parser;
 using Xunit;
 
@@ -11,7 +11,7 @@ public sealed class ParserBracketsTests
     {
         var parserBrackets = ParserBrackets.Instance;
 
-        Assert.Equal(int.MaxValue, parserBrackets.Priority);
+        parserBrackets.Priority.ShouldBe(int.MaxValue);
     }
 
     [Fact]
@@ -19,7 +19,7 @@ public sealed class ParserBracketsTests
     {
         var token = ParserBrackets.Instance.ParseToken("a+b", RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
@@ -27,9 +27,9 @@ public sealed class ParserBracketsTests
     {
         var token = ParserBrackets.Instance.ParseToken("(a+b)", RedberryParser.Default);
 
-        Assert.NotNull(token);
-        Assert.Equal(TokenType.Sum, token!.TokenType);
-        Assert.Equal(2, token.Content.Length);
+        token.ShouldNotBeNull();
+        token!.TokenType.ShouldBe(TokenType.Sum);
+        token.Content.Length.ShouldBe(2);
     }
 
     [Fact]
@@ -37,22 +37,22 @@ public sealed class ParserBracketsTests
     {
         var token = ParserBrackets.Instance.ParseToken("(a)+b", RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
     public void ShouldThrowBracketsErrorWhenUnbalancedBracketsAndExpressionDoesNotEndWithClosingBracket()
     {
-        var exception = Assert.Throws<BracketsError>(() => ParserBrackets.Instance.ParseToken("(a+b", RedberryParser.Default));
+        var exception = Should.Throw<BracketsError>(() => ParserBrackets.Instance.ParseToken("(a+b", RedberryParser.Default));
 
-        Assert.Equal("Unbalanced brackets in (a+b", exception.Message);
+        exception.Message.ShouldBe("Unbalanced brackets in (a+b");
     }
 
     [Fact]
     public void ShouldThrowBracketsErrorWhenExpressionEndsWithClosingBracketButHasUnmatchedOpeningBracket()
     {
-        var exception = Assert.Throws<BracketsError>(() => ParserBrackets.Instance.ParseToken("((a)", RedberryParser.Default));
+        var exception = Should.Throw<BracketsError>(() => ParserBrackets.Instance.ParseToken("((a)", RedberryParser.Default));
 
-        Assert.Equal("Unbalanced brackets.", exception.Message);
+        exception.Message.ShouldBe("Unbalanced brackets.");
     }
 }

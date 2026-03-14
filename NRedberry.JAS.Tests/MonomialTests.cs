@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using Xunit;
@@ -14,10 +14,10 @@ public sealed class MonomialTests
         BigRational coefficient = new(3);
         Monomial<BigRational> monomial = new(exponent, coefficient);
 
-        Assert.Equal([2L], monomial.Exponent().GetVal());
-        Assert.Equal("3", monomial.Coefficient().ToString());
+        monomial.Exponent().GetVal().ShouldBe([2L]);
+        monomial.Coefficient().ToString().ShouldBe("3");
         string text = monomial.ToString();
-        Assert.Contains("3", text, System.StringComparison.Ordinal);
+        text.ShouldContain("3");
     }
 
     [Fact]
@@ -26,7 +26,7 @@ public sealed class MonomialTests
         KeyValuePair<ExpVector, BigRational> pair = new(ExpVector.Create([1L]), new BigRational(2));
         Monomial<BigRational> monomial = new(pair);
 
-        Assert.Equal([1L], monomial.Exponent().GetVal());
-        Assert.Equal("2", monomial.Coefficient().ToString());
+        monomial.Exponent().GetVal().ShouldBe([1L]);
+        monomial.Coefficient().ToString().ShouldBe("2");
     }
 }

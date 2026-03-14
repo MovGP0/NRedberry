@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 using Xunit;
 
@@ -12,8 +12,8 @@ public sealed class NotInvertibleExceptionTests
         NotInvertibleException exception = new();
         NotInvertibleException custom = new("custom");
 
-        Assert.Equal("NotInvertibleException", exception.Message);
-        Assert.Equal("custom", custom.Message);
+        exception.Message.ShouldBe("NotInvertibleException");
+        custom.Message.ShouldBe("custom");
     }
 
     [Fact]
@@ -23,9 +23,9 @@ public sealed class NotInvertibleExceptionTests
         NotInvertibleException withMessage = new("outer", inner);
         NotInvertibleException withDefaultMessage = new(inner);
 
-        Assert.Same(inner, withMessage.InnerException);
-        Assert.Same(inner, withDefaultMessage.InnerException);
-        Assert.Equal("outer", withMessage.Message);
-        Assert.Equal("NotInvertibleException", withDefaultMessage.Message);
+        withMessage.InnerException.ShouldBeSameAs(inner);
+        withDefaultMessage.InnerException.ShouldBeSameAs(inner);
+        withMessage.Message.ShouldBe("outer");
+        withDefaultMessage.Message.ShouldBe("NotInvertibleException");
     }
 }

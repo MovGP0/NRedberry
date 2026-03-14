@@ -1,3 +1,4 @@
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Tests;
@@ -11,8 +12,8 @@ public sealed class ICloneableTests
 
         Sample clone = original.Clone();
 
-        Assert.NotSame(original, clone);
-        Assert.Equal(42, clone.Value);
+        clone.ShouldNotBeSameAs(original);
+        clone.Value.ShouldBe(42);
     }
 
     [Fact]
@@ -22,8 +23,8 @@ public sealed class ICloneableTests
 
         var clone = (Sample)((ICloneable)original).Clone();
 
-        Assert.NotSame(original, clone);
-        Assert.Equal(7, clone.Value);
+        clone.ShouldNotBeSameAs(original);
+        clone.Value.ShouldBe(7);
     }
 
     private sealed class Sample(int value) : ICloneable<Sample>

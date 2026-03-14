@@ -1,4 +1,4 @@
-using NRedberry.Tensors.Iterators;
+﻿using NRedberry.Tensors.Iterators;
 using NRedberry.Transformations.Symmetrization;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -12,7 +12,7 @@ public sealed class CollectScalarFactorsITransformationTests
     {
         var tensor = TensorApi.Parse("a+b");
 
-        Assert.Same(tensor, CollectScalarFactorsITransformation.Instance.Transform(tensor));
+        CollectScalarFactorsITransformation.Instance.Transform(tensor).ShouldBeSameAs(tensor);
     }
 
     [Fact]
@@ -21,7 +21,7 @@ public sealed class CollectScalarFactorsITransformationTests
         var tensor = TensorApi.Parse("a+b");
         CollectScalarFactorsITransformation transformation = new(TraverseGuide.All);
 
-        Assert.Same(tensor, transformation.Transform(tensor));
-        Assert.Same(tensor, CollectScalarFactorsITransformation.CollectScalarFactors(tensor));
+        transformation.Transform(tensor).ShouldBeSameAs(tensor);
+        CollectScalarFactorsITransformation.CollectScalarFactors(tensor).ShouldBeSameAs(tensor);
     }
 }

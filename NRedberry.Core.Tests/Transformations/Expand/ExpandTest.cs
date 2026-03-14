@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using NRedberry.Tensors.Iterators;
 using NRedberry.Transformations;
 using NRedberry.Transformations.Expand;
@@ -19,7 +19,7 @@ public sealed class ExpandTest
         TensorType tensor = TensorFactory.Parse("a*c");
         TensorType actual = ExpandTransformation.Expand(tensor);
         TensorType expected = TensorFactory.Parse("a*c");
-        Assert.True(TensorUtils.EqualsExactly(actual, expected));
+        TensorUtils.EqualsExactly(actual, expected).ShouldBeTrue();
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public sealed class ExpandTest
         TensorType tensor = TensorFactory.Parse("(a+b)*c+a*c");
         TensorType actual = ExpandTransformation.Expand(tensor);
         TensorType expected = TensorFactory.Parse("2*a*c+b*c");
-        Assert.True(TensorUtils.EqualsExactly(actual, expected));
+        TensorUtils.EqualsExactly(actual, expected).ShouldBeTrue();
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public sealed class ExpandTest
         TensorType tensor = TensorFactory.Parse("(a+b)*c-a*c");
         TensorType actual = ExpandTransformation.Expand(tensor);
         TensorType expected = TensorFactory.Parse("b*c");
-        Assert.True(TensorUtils.EqualsExactly(actual, expected));
+        TensorUtils.EqualsExactly(actual, expected).ShouldBeTrue();
     }
 
     [Fact]
@@ -46,7 +46,7 @@ public sealed class ExpandTest
         TensorType tensor = TensorFactory.Parse("(a*p_i+b*p_i)*c-a*c*p_i");
         TensorType actual = ExpandTransformation.Expand(tensor);
         TensorType expected = TensorFactory.Parse("b*c*p_i");
-        Assert.True(TensorUtils.EqualsExactly(actual, expected));
+        TensorUtils.EqualsExactly(actual, expected).ShouldBeTrue();
     }
 
     [Fact]
@@ -55,7 +55,7 @@ public sealed class ExpandTest
         TensorType tensor = TensorFactory.Parse("(a*p_i+b*p_i)*c-a*c*k_i");
         TensorType actual = ExpandTransformation.Expand(tensor);
         TensorType expected = TensorFactory.Parse("(a*c+c*b)*p_i-a*c*k_i");
-        Assert.True(TensorUtils.EqualsExactly(actual, expected));
+        TensorUtils.EqualsExactly(actual, expected).ShouldBeTrue();
     }
 
     [Fact]
@@ -64,7 +64,7 @@ public sealed class ExpandTest
         TensorType actual = TensorFactory.Parse("c*(a*(c+n)+b)");
         actual = ExpandTransformation.Expand(actual);
         TensorType expected = TensorFactory.Parse("c*a*c+c*a*n+c*b");
-        Assert.True(TensorUtils.EqualsExactly(actual, expected));
+        TensorUtils.EqualsExactly(actual, expected).ShouldBeTrue();
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public sealed class ExpandTest
         TensorType actual = TensorFactory.Parse("a*(c+b)");
         actual = ExpandTransformation.Expand(actual);
         TensorType expected = TensorFactory.Parse("a*c+a*b");
-        Assert.True(TensorUtils.EqualsExactly(actual, expected));
+        TensorUtils.EqualsExactly(actual, expected).ShouldBeTrue();
     }
 
     [Fact]
@@ -82,7 +82,7 @@ public sealed class ExpandTest
         TensorType actual = TensorFactory.Parse("Power[a+b,2]");
         actual = ExpandTransformation.Expand(actual);
         TensorType expected = TensorFactory.Parse("a*a+b*b+2*a*b");
-        Assert.True(TensorUtils.EqualsExactly(actual, expected));
+        TensorUtils.EqualsExactly(actual, expected).ShouldBeTrue();
     }
 
     [Fact]
@@ -100,7 +100,7 @@ public sealed class ExpandTest
         {
             TensorType actual = TensorFactory.Pow(TensorFactory.Parse("a+b"), i);
             actual = ExpandTransformation.Expand(actual);
-            Assert.True(actual.Size == i + 1);
+            actual.Size == i + 1.ShouldBeTrue();
         }
     }
 
@@ -113,7 +113,7 @@ public sealed class ExpandTest
             TensorType actual = TensorFactory.Parse("Power[a_i^i+b_i^i,2]");
             actual = ExpandTransformation.Expand(actual);
             TensorType expected = TensorFactory.Parse("2*b_{i}^{i}*a_{a}^{a}+a_{i}^{i}*a_{a}^{a}+b_{i}^{i}*b_{a}^{a}");
-            Assert.True(TensorUtils.Equals(actual, expected));
+            TensorUtils.Equals(actual, expected).ShouldBeTrue();
         }
     }
 
@@ -131,7 +131,7 @@ public sealed class ExpandTest
         TensorType actual = TensorFactory.Parse("f_mn*(f^mn+r^mn)-r_ab*f^ab");
         actual = ExpandTransformation.Expand(actual);
         TensorType expected = TensorFactory.Parse("f_{mn}*f^{mn}");
-        Assert.True(TensorUtils.EqualsExactly(actual, expected));
+        TensorUtils.EqualsExactly(actual, expected).ShouldBeTrue();
     }
 
     [Fact]
@@ -140,7 +140,7 @@ public sealed class ExpandTest
         TensorType actual = TensorFactory.Parse("((a+b)*(c+a)-b*a)*f_mn*(f^mn+r^mn)");
         actual = ExpandTransformation.Expand(actual);
         TensorType expected = TensorFactory.Parse("(a*a+b*c+a*c)*f_mn*f^mn+(a*a+b*c+a*c)*f_mn*r^mn");
-        Assert.True(TensorUtils.EqualsExactly(actual, expected));
+        TensorUtils.EqualsExactly(actual, expected).ShouldBeTrue();
     }
 
     [Fact]
@@ -160,7 +160,7 @@ public sealed class ExpandTest
             TensorType actual = TensorFactory.Parse("(a+b)*(a*f_m+b*g_m)*(b*f^m+a*g^m)");
             actual = ExpandTransformation.Expand(actual);
             TensorType expected = TensorFactory.Parse("(Power[a, 2]*b+a*Power[b, 2])*g_{m}*g^{m}+(Power[a, 3]+Power[a, 2]*b+a*Power[b, 2]+Power[b, 3])*f^{m}*g_{m}+(Power[a, 2]*b+a*Power[b, 2])*f_{m}*f^{m}");
-            Assert.True(TensorUtils.Equals(actual, expected));
+            TensorUtils.Equals(actual, expected).ShouldBeTrue();
         }
     }
 
@@ -170,7 +170,7 @@ public sealed class ExpandTest
         TensorType actual = TensorFactory.Parse("((a+b)*(c+a)-a)*f_mn*(f^mn+r^mn)-((a-b)*(c-a)+a)*r_ab*(f^ab+r^ab)");
         actual = ExpandTransformation.Expand(actual);
         TensorType expected = TensorFactory.Parse("(Power[a, 2]+c*b+-1*a+c*a+b*a)*f^{mn}*f_{mn}+(-2*a+2*Power[a, 2]+2*c*b)*r^{mn}*f_{mn}+(Power[a, 2]+c*b+-1*a+-1*c*a+-1*b*a)*r^{ab}*r_{ab}");
-        Assert.True(TensorUtils.Equals(actual, expected));
+        TensorUtils.Equals(actual, expected).ShouldBeTrue();
     }
 
     [Fact]
@@ -179,7 +179,7 @@ public sealed class ExpandTest
         TensorType actual = ExpandTransformation.Expand(TensorFactory.Parse("((a+b)*(c+a)-a)*f_mn*(f^mn+r^mn)-((a-b)*(c-a)+a)*r_ab*(f^ab+r^ab)"));
         AssertAllBracketsExpanded(actual);
         TensorType expected = TensorFactory.Parse("(2*c*b+2*Power[a, 2]+-2*a)*r_{ab}*f^{ab}+(-1*b*a+c*b+-1*c*a+Power[a, 2]+-1*a)*r^{ab}*r_{ab}+(b*a+c*b+c*a+Power[a, 2]+-1*a)*f^{mn}*f_{mn}");
-        Assert.True(TensorUtils.Equals(actual, expected));
+        TensorUtils.Equals(actual, expected).ShouldBeTrue();
     }
 
     internal static void AssertAllBracketsExpanded(TensorType tensor)
@@ -196,7 +196,7 @@ public sealed class ExpandTest
             TensorType current = iterator.Current();
             if (current is Power && current[0] is Sum)
             {
-                Assert.True(!TensorUtils.IsNaturalNumber(current[1]));
+                !TensorUtils.IsNaturalNumber(current[1]).ShouldBeTrue();
             }
             else if (current is Product)
             {
@@ -217,7 +217,7 @@ public sealed class ExpandTest
                     }
                 }
 
-                Assert.True(indexedSumCount == 0 && indexlessSumCount < 2);
+                indexedSumCount == 0 && indexlessSumCount < 2.ShouldBeTrue();
             }
         }
     }
@@ -235,7 +235,7 @@ public sealed class ExpandTest
     {
         TensorType tensor = TensorFactory.Parse("T_ij^ij*N_as^sa*K^fd_df");
         TensorType result = ExpandTransformation.Expand(tensor);
-        Assert.True(ReferenceEquals(tensor, result));
+        ReferenceEquals(tensor, result).ShouldBeTrue();
     }
 
     [Fact]
@@ -243,7 +243,7 @@ public sealed class ExpandTest
     {
         TensorType tensor = TensorFactory.Parse("(a+b)*T_ij^ij*N_as^sa*K^fd_df+a*b*F_m^m");
         TensorType result = ExpandTransformation.Expand(tensor);
-        Assert.True(ReferenceEquals(tensor, result));
+        ReferenceEquals(tensor, result).ShouldBeTrue();
     }
 
     [Fact]
@@ -257,7 +257,7 @@ public sealed class ExpandTest
     public void Test21a()
     {
         TensorType tensor = TensorFactory.Parse("2*(a+b)");
-        Assert.True(TensorUtils.Equals(ExpandTransformation.Expand(tensor), TensorFactory.Parse("2*a+2*b")));
+        TensorUtils.Equals(ExpandTransformation.Expand(tensor), TensorFactory.Parse("2*a+2*b")).ShouldBeTrue();
     }
 
     [Fact]
@@ -284,9 +284,9 @@ public sealed class ExpandTest
         {
             TensorCC.ResetTensorNames();
             TensorType tensor = TensorFactory.Parse("(b+a)*(c+a)+(a+b)*(c+b)");
-            Assert.True(TensorUtils.Equals(
+            TensorUtils.Equals(
                 TensorFactory.Parse("2*c*a+2*b*a+a**2+2*c*b+b**2"),
-                ExpandPort.ExpandUsingPort(tensor)));
+                ExpandPort.ExpandUsingPort(tensor)).ShouldBeTrue();
         }
     }
 
@@ -299,7 +299,7 @@ public sealed class ExpandTest
             TensorType tensor = TensorFactory.Parse("((a+b)*(c+a)-a)*f_mn*(f^mn+r^mn)-((a-b)*(c-a)+a)*r_ab*(f^ab+r^ab)");
             TensorType expected = ExpandTransformation.Expand(tensor);
             TensorType actual = ExpandPort.ExpandUsingPort(tensor);
-            Assert.True(TensorUtils.Equals(expected, actual));
+            TensorUtils.Equals(expected, actual).ShouldBeTrue();
         }
     }
 
@@ -314,7 +314,7 @@ public sealed class ExpandTest
             TensorType actual = ExpandPort.ExpandUsingPort(tensor);
             AssertAllBracketsExpanded(expected);
             AssertAllBracketsExpanded(actual);
-            Assert.True(TensorUtils.Equals(expected, actual));
+            TensorUtils.Equals(expected, actual).ShouldBeTrue();
         }
     }
 
@@ -339,7 +339,7 @@ public sealed class ExpandTest
             TensorType tensor = TensorFactory.Parse("(a+b)*(a_b^b+b_a^a)**5");
             TensorType expected = ExpandTransformation.Expand(tensor);
             TensorType actual = ExpandPort.ExpandUsingPort(tensor);
-            Assert.True(TensorUtils.Equals(expected, actual));
+            TensorUtils.Equals(expected, actual).ShouldBeTrue();
         }
     }
 
@@ -383,7 +383,7 @@ public sealed class ExpandTest
     {
         TensorType t1 = ExpandTransformation.Expand(TensorFactory.Parse("a_a^a*F_mn+(b_m^m-a_m^m)*F_mn"));
         TensorType t2 = ExpandPort.ExpandUsingPort(t1);
-        Assert.True(TensorUtils.Equals(t1, t2));
+        TensorUtils.Equals(t1, t2).ShouldBeTrue();
     }
 
     [Fact]
@@ -397,45 +397,45 @@ public sealed class ExpandTest
     public void Test37()
     {
         TensorType tensor = TensorFactory.Parse("Sin[(a+b)*(c+d)]");
-        Assert.True(ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)));
+        ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)).ShouldBeTrue();
     }
 
     [Fact]
     public void Test38()
     {
         TensorType tensor = TensorFactory.Parse("1/(a+b)**2 + Sin[(a+b)*(c+d)]");
-        Assert.True(ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)));
+        ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)).ShouldBeTrue();
     }
 
     [Fact]
     public void Test39()
     {
         TensorType tensor = TensorFactory.Parse("(a+b)*g_mn");
-        Assert.True(ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)));
+        ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)).ShouldBeTrue();
 
         tensor = TensorFactory.Parse("(a+b)*g_mn*f^ab");
-        Assert.True(ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)));
+        ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)).ShouldBeTrue();
 
         tensor = TensorFactory.Parse("(a+b*c)*g_mn*f^ab");
-        Assert.True(ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)));
+        ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)).ShouldBeTrue();
 
         tensor = TensorFactory.Parse("a+b*c");
-        Assert.True(ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)));
+        ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)).ShouldBeTrue();
 
         tensor = TensorFactory.Parse("a_i^i+b*c");
-        Assert.True(ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)));
+        ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)).ShouldBeTrue();
 
         tensor = TensorFactory.Parse("a_ij+b*c_ij");
-        Assert.True(ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)));
+        ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)).ShouldBeTrue();
 
         tensor = TensorFactory.Parse("a_ij+(b+a)*c_ij");
-        Assert.True(ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)));
+        ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)).ShouldBeTrue();
 
         tensor = TensorFactory.Parse("(c+d)*a_ij+(b+a)*c_ij");
-        Assert.True(ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)));
+        ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)).ShouldBeTrue();
 
         tensor = TensorFactory.Parse("(c+d_f^f)*a_ij+(b+a)*c_ij");
-        Assert.True(!ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)));
+        !ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)).ShouldBeTrue();
     }
 
     [Fact]
@@ -443,7 +443,7 @@ public sealed class ExpandTest
     {
         TensorType tensor = TensorFactory.Parse("((a+b)*f_mn+(c+d*(a+b))*l_mn)*(a+b)");
         TensorType expanded = ExpandTransformation.Expand(tensor);
-        Assert.True(TensorUtils.Equals(expanded, TensorFactory.Parse("(a**2+2*a*b+b**2)*f_{mn}+(c*a+2*a*d*b+c*b+a**2*d+b**2*d)*l_{mn}")));
+        TensorUtils.Equals(expanded, TensorFactory.Parse("(a**2+2*a*b+b**2)*f_{mn}+(c*a+2*a*d*b+c*b+a**2*d+b**2*d)*l_{mn}")).ShouldBeTrue();
         AssertAllBracketsExpanded(ExpandTransformation.Expand(tensor));
     }
 
@@ -453,22 +453,22 @@ public sealed class ExpandTest
         TensorType tensor = TensorFactory.Parse("1/(x+y)**2 + a*(c + d)");
         TensorType expected = TensorFactory.Parse("1/(x+y)**2 + a*c + a*d");
         TensorType actual = ExpandPort.ExpandUsingPort(tensor);
-        Assert.True(TensorUtils.Equals(expected, actual));
+        TensorUtils.Equals(expected, actual).ShouldBeTrue();
     }
 
     [Fact]
     public void Test41()
     {
         TensorType tensor = TensorFactory.Parse("a*d + b*c + f");
-        Assert.True(ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)));
+        ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)).ShouldBeTrue();
     }
 
     [Fact]
     public void Test42()
     {
         TensorType tensor = TensorFactory.Parse("(A_m*A^m)**2");
-        Assert.True(ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)));
-        Assert.True(ReferenceEquals(tensor, ExpandPort.ExpandUsingPort(tensor)));
+        ReferenceEquals(tensor, ExpandTransformation.Expand(tensor)).ShouldBeTrue();
+        ReferenceEquals(tensor, ExpandPort.ExpandUsingPort(tensor)).ShouldBeTrue();
     }
 
     [Fact(Skip = "Depends on CollectScalarFactorsTransformation which is not yet ported.")]
@@ -493,13 +493,13 @@ public sealed class ExpandTest
         Expression e2 = TensorFactory.ParseExpression("k_a*k^a = x");
 
         TensorType tensor = TensorFactory.Parse("(p_a*p^a + k_r*k^r)**2");
-        Assert.True(TensorUtils.Equals(ExpandTransformation.Expand(tensor, e1, e2), TensorFactory.Parse("4*x**2")));
+        TensorUtils.Equals(ExpandTransformation.Expand(tensor, e1, e2), TensorFactory.Parse("4*x**2")).ShouldBeTrue();
 
         tensor = TensorFactory.Parse("(p_a*p^a + k_r*k^r)**3");
-        Assert.True(TensorUtils.Equals(ExpandTransformation.Expand(tensor, e1, e2), TensorFactory.Parse("8*x**3")));
+        TensorUtils.Equals(ExpandTransformation.Expand(tensor, e1, e2), TensorFactory.Parse("8*x**3")).ShouldBeTrue();
 
         tensor = TensorFactory.Parse("(p_a*p^a + k_r*k^r)**4");
-        Assert.True(TensorUtils.Equals(ExpandTransformation.Expand(tensor, e1, e2), TensorFactory.Parse("16*x**4")));
+        TensorUtils.Equals(ExpandTransformation.Expand(tensor, e1, e2), TensorFactory.Parse("16*x**4")).ShouldBeTrue();
     }
 
     [Fact]
@@ -507,7 +507,7 @@ public sealed class ExpandTest
     {
         TensorType tensor = TensorFactory.Parse("((a-b)*f_{m}*f^{m}+a+b)*(a+b)*f_{a}*f^{a}");
         TensorType expected = TensorFactory.Parse("(-b**2+a**2)*f_{a}*f^{a}*f_{m}*f^{m}+(a**2+2*a*b+b**2)*f_{a}*f^{a}");
-        Assert.True(TensorUtils.Equals(expected, ExpandTransformation.Expand(tensor)));
+        TensorUtils.Equals(expected, ExpandTransformation.Expand(tensor)).ShouldBeTrue();
     }
 
     [Fact]
@@ -522,14 +522,14 @@ public sealed class ExpandTest
         ];
         TensorType expected = TensorFactory.Parse("-162*a*b+2*c*a+2*c*b-162*a**2");
         TensorType actual = ExpandTransformation.Expand(tensor, subs);
-        Assert.True(TensorUtils.Equals(expected, actual));
+        TensorUtils.Equals(expected, actual).ShouldBeTrue();
     }
 
     [Fact]
     public void Test50()
     {
         TensorType tensor = TensorFactory.Parse("(b+a)*(c+a)+(a+b)*(c+b)");
-        Assert.True(TensorUtils.Equals(tensor, ExpandPort.ExpandUsingPort(tensor, false)));
+        TensorUtils.Equals(tensor, ExpandPort.ExpandUsingPort(tensor, false)).ShouldBeTrue();
     }
 
     [Fact]
@@ -537,7 +537,7 @@ public sealed class ExpandTest
     {
         TensorType tensor = TensorFactory.Parse("((a+b)*(f_a + r_a) + (a + c)*t_a)*(c+r)*k^a");
         TensorType expected = TensorFactory.Parse("(c+r)*(a+b)*f_a*k^a + (c+r)*(a+b)*r_a*k^a + (c+r)*(a+c)*t_a*k^a");
-        Assert.True(TensorUtils.Equals(expected, ExpandPort.ExpandUsingPort(tensor, false)));
+        TensorUtils.Equals(expected, ExpandPort.ExpandUsingPort(tensor, false)).ShouldBeTrue();
     }
 
     [Fact]
@@ -548,7 +548,7 @@ public sealed class ExpandTest
             TensorCC.Reset();
             TensorType tensor = TensorFactory.Parse("((a+b)*(c+d)*(f_a + (k+i)*t_a) + (a + c)*t_a)*(c+r)*((a+b)*f^a + (c+d)*t^a)");
             TensorType expected = TensorFactory.Parse("((c+d)**2*(c+r)*(a+b)+(a+c)*(c+r)*(a+b)+(c+d)*(c+r)*(i+k)*(a+b)**2)*t_{a}*f^{a}+(c+d)*(c+r)*(a+b)**2*f_{a}*f^{a}+((c+d)**2*(c+r)*(i+k)*(a+b)+(a+c)*(c+d)*(c+r))*t_{a}*t^{a}");
-            Assert.True(TensorUtils.Equals(expected, ExpandPort.ExpandUsingPort(tensor, false)));
+            TensorUtils.Equals(expected, ExpandPort.ExpandUsingPort(tensor, false)).ShouldBeTrue();
         }
     }
 }

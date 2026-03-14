@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -18,12 +18,12 @@ public sealed class TimingStatisticsTests
 
         string report = statistics.ToStringNanos();
 
-        Assert.Same(payload, transformed);
-        Assert.Contains("identity", report);
-        Assert.Contains("1 invocations", report);
-        Assert.Contains("Total", report);
-        Assert.Equal(0, timer.Invocations());
-        Assert.Equal(0, timer.ElapsedNanos());
+        transformed.ShouldBeSameAs(payload);
+        report.ShouldContain("identity");
+        report.ShouldContain("1 invocations");
+        report.ShouldContain("Total");
+        timer.Invocations().ShouldBe(0);
+        timer.ElapsedNanos().ShouldBe(0);
     }
 
     [Fact]
@@ -43,9 +43,9 @@ public sealed class TimingStatisticsTests
         first.Merge(second);
         string report = first.ToStringNanos();
 
-        Assert.Contains("shared", report);
-        Assert.Contains("3,000ns", report);
-        Assert.Contains("0 invocations", report);
+        report.ShouldContain("shared");
+        report.ShouldContain("3,000ns");
+        report.ShouldContain("0 invocations");
     }
 
     [Fact]
@@ -53,8 +53,8 @@ public sealed class TimingStatisticsTests
     {
         TransformationWithTimer timer = new(new EchoTransformation("formatted"));
 
-        Assert.Equal("formatted", timer.ToString("ignored-format"));
-        Assert.Equal("formatted", timer.ToString());
+        timer.ToString("ignored-format").ShouldBe("formatted");
+        timer.ToString().ShouldBe("formatted");
     }
 }
 

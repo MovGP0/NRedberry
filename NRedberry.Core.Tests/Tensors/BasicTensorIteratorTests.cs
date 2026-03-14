@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
 using IndicesType = NRedberry.Indices.Indices;
@@ -12,7 +12,7 @@ public sealed class BasicTensorIteratorTests
     [Fact]
     public void ShouldThrowWhenTensorIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => new BasicTensorIterator(null!));
+        Should.Throw<ArgumentNullException>(() => new BasicTensorIterator(null!));
     }
 
     [Fact]
@@ -20,7 +20,7 @@ public sealed class BasicTensorIteratorTests
     {
         BasicTensorIterator iterator = new(new TestTensor(Complex.One));
 
-        Assert.Throws<InvalidOperationException>(() => _ = iterator.Current);
+        Should.Throw<InvalidOperationException>(() => _ = iterator.Current);
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public sealed class BasicTensorIteratorTests
             visited.Add(iterator.Current);
         }
 
-        Assert.Equal(children, visited);
+        visited.ShouldBe(children);
     }
 
     [Fact]
@@ -43,16 +43,16 @@ public sealed class BasicTensorIteratorTests
     {
         BasicTensorIterator iterator = new(new TestTensor(Complex.One, Complex.Two));
 
-        Assert.True(iterator.MoveNext());
-        Assert.Same(Complex.One, iterator.Current);
-        Assert.True(iterator.MoveNext());
-        Assert.Same(Complex.Two, iterator.Current);
+        iterator.MoveNext().ShouldBeTrue();
+        iterator.Current.ShouldBeSameAs(Complex.One);
+        iterator.MoveNext().ShouldBeTrue();
+        iterator.Current.ShouldBeSameAs(Complex.Two);
 
         iterator.Reset();
 
-        Assert.Throws<InvalidOperationException>(() => _ = iterator.Current);
-        Assert.True(iterator.MoveNext());
-        Assert.Same(Complex.One, iterator.Current);
+        Should.Throw<InvalidOperationException>(() => _ = iterator.Current);
+        iterator.MoveNext().ShouldBeTrue();
+        iterator.Current.ShouldBeSameAs(Complex.One);
     }
 
     [Fact]
@@ -60,8 +60,8 @@ public sealed class BasicTensorIteratorTests
     {
         BasicTensorIterator iterator = new(new TestTensor());
 
-        Assert.False(iterator.MoveNext());
-        Assert.Throws<InvalidOperationException>(() => _ = iterator.Current);
+        iterator.MoveNext().ShouldBeFalse();
+        Should.Throw<InvalidOperationException>(() => _ = iterator.Current);
     }
 
     private sealed class TestTensor(params TensorType[] children) : TensorType

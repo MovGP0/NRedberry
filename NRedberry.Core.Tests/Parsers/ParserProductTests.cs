@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Parsers;
 using RedberryParser = NRedberry.Parsers.Parser;
@@ -13,7 +13,7 @@ public sealed class ParserProductTests
     {
         var token = ParserProduct.Instance.ParseToken("a+b", CreateParser());
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
@@ -21,7 +21,7 @@ public sealed class ParserProductTests
     {
         var token = ParserProduct.Instance.ParseToken("a**b", CreateParser());
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
@@ -29,18 +29,18 @@ public sealed class ParserProductTests
     {
         var token = ParserProduct.Instance.ParseToken("a/b", CreateParser());
 
-        var product = Assert.IsType<ParseToken>(token);
-        Assert.Equal(TokenType.Product, product.TokenType);
-        Assert.Equal(2, product.Content.Length);
-        Assert.Equal(TokenType.SimpleTensor, product.Content[0].TokenType);
+        var product = token.ShouldBeOfType<ParseToken>();
+        product.TokenType.ShouldBe(TokenType.Product);
+        product.Content.Length.ShouldBe(2);
+        product.Content[0].TokenType.ShouldBe(TokenType.SimpleTensor);
 
-        var inverse = Assert.IsType<ParseToken>(product.Content[1]);
-        Assert.Equal(TokenType.Power, inverse.TokenType);
-        Assert.Equal(2, inverse.Content.Length);
-        Assert.Equal(TokenType.SimpleTensor, inverse.Content[0].TokenType);
+        var inverse = product.Content[1].ShouldBeOfType<ParseToken>();
+        inverse.TokenType.ShouldBe(TokenType.Power);
+        inverse.Content.Length.ShouldBe(2);
+        inverse.Content[0].TokenType.ShouldBe(TokenType.SimpleTensor);
 
-        var power = Assert.IsType<ParseTokenNumber>(inverse.Content[1]);
-        Assert.Equal(Complex.MinusOne, power.Value);
+        var power = inverse.Content[1].ShouldBeOfType<ParseTokenNumber>();
+        power.Value.ShouldBe(Complex.MinusOne);
     }
 
     [Fact]
@@ -50,11 +50,11 @@ public sealed class ParserProductTests
         {
             var token = ParserProduct.Instance.ParseToken("A_a*B_a", CreateParser(allowSameVariance: false));
 
-            var product = Assert.IsType<ParseToken>(token);
-            var left = Assert.IsType<ParseTokenSimpleTensor>(product.Content[0]);
-            var right = Assert.IsType<ParseTokenSimpleTensor>(product.Content[1]);
+            var product = token.ShouldBeOfType<ParseToken>();
+            var left = product.Content[0].ShouldBeOfType<ParseTokenSimpleTensor>();
+            var right = product.Content[1].ShouldBeOfType<ParseTokenSimpleTensor>();
 
-            Assert.Equal(left.Indices[0], right.Indices[0]);
+            right.Indices[0].ShouldBe(left.Indices[0]);
         }
         catch (TypeInitializationException)
         {
@@ -68,11 +68,11 @@ public sealed class ParserProductTests
         {
             var token = ParserProduct.Instance.ParseToken("A_a*B_a", CreateParser(allowSameVariance: true));
 
-            var product = Assert.IsType<ParseToken>(token);
-            var left = Assert.IsType<ParseTokenSimpleTensor>(product.Content[0]);
-            var right = Assert.IsType<ParseTokenSimpleTensor>(product.Content[1]);
+            var product = token.ShouldBeOfType<ParseToken>();
+            var left = product.Content[0].ShouldBeOfType<ParseTokenSimpleTensor>();
+            var right = product.Content[1].ShouldBeOfType<ParseTokenSimpleTensor>();
 
-            Assert.Equal(IndicesUtils.InverseIndexState(left.Indices[0]), right.Indices[0]);
+            right.Indices[0].ShouldBe(IndicesUtils.InverseIndexState(left.Indices[0]));
         }
         catch (TypeInitializationException)
         {
@@ -82,7 +82,7 @@ public sealed class ParserProductTests
     [Fact]
     public void ShouldExposeExpectedPriority()
     {
-        Assert.Equal(999, ParserProduct.Instance.Priority);
+        ParserProduct.Instance.Priority.ShouldBe(999);
     }
 
     private static RedberryParser CreateParser(bool allowSameVariance = false)

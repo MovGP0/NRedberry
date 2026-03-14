@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Tensors;
 using NRedberry.Tensors.Functions;
 using TensorApi = NRedberry.Tensors.Tensors;
@@ -13,8 +13,8 @@ public sealed class ArcSinFactoryTests
     {
         NRedberry.Tensors.Tensor argument = TensorApi.Parse("a");
 
-        Assert.Same(argument, ArcSinFactory.Factory.Create(new Sin(argument)));
-        Assert.Equal(Complex.Zero, ArcSinFactory.Factory.Create(Complex.Zero));
-        Assert.IsType<ArcSin>(ArcSinFactory.Factory.Create(argument));
+        ArcSinFactory.Factory.Create(new Sin(argument)).ShouldBeSameAs(argument);
+        ArcSinFactory.Factory.Create(Complex.Zero).ShouldBe(Complex.Zero);
+        ArcSinFactory.Factory.Create(argument).ShouldBeOfType<ArcSin>();
     }
 }

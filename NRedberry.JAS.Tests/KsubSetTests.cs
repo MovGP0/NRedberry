@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Util;
 using Xunit;
 
@@ -13,7 +13,7 @@ public sealed class KsubSetTests
 
         List<string> values = subsets.Select(tuple => string.Join(",", tuple)).ToList();
 
-        Assert.Equal(["1,2", "1,3", "2,3"], values);
+        values.ShouldBe(["1,2", "1,3", "2,3"]);
     }
 
     [Fact]
@@ -23,7 +23,7 @@ public sealed class KsubSetTests
 
         List<List<int>> values = subsets.ToList();
 
-        Assert.Single(values);
-        Assert.Empty(values[0]);
+        values.ShouldHaveSingleItem();
+        values[0].ShouldBeEmpty();
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Gb;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using Xunit;
@@ -16,6 +16,6 @@ public sealed class ReductionTests
 
         GenPolynomial<BigRational> normalform = reduction.Normalform([x], x);
 
-        Assert.True(normalform.IsZero());
+        normalform.IsZero().ShouldBeTrue();
     }
 }

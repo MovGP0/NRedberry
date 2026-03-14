@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -34,16 +34,16 @@ public sealed class IntTimSortTest
             {
                 if (i < K - 1)
                 {
-                    Assert.True(main[i] <= main[i + 1]);
+                    main[i] <= main[i + 1].ShouldBeTrue();
                 }
 
                 if (main[i] != pivot)
                 {
-                    Assert.Equal(main[i], perm[i]);
+                    perm[i].ShouldBe(main[i]);
                 }
                 else
                 {
-                    Assert.Equal(counter++, perm[i]);
+                    perm[i].ShouldBe(counter++);
                 }
             }
         }

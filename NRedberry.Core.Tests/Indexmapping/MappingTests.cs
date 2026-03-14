@@ -1,4 +1,4 @@
-using NRedberry.IndexMapping;
+﻿using NRedberry.IndexMapping;
 using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
@@ -17,19 +17,15 @@ public sealed class MappingTests
 
         Mapping mapping = new(from, to);
 
-        Assert.Equal(2, mapping.Size());
-        Assert.Equal(
-            [
+        mapping.Size().ShouldBe(2);
+        mapping.GetFromNames().ToArray().ShouldBe([
                 IndicesUtils.GetNameWithType(IndicesUtils.ParseIndex("_a")),
                 IndicesUtils.GetNameWithType(IndicesUtils.ParseIndex("^b"))
-            ],
-            mapping.GetFromNames().ToArray());
-        Assert.Equal(
-            [
+            ]);
+        mapping.GetToData().ToArray().ShouldBe([
                 IndicesUtils.ParseIndex("^c"),
                 IndicesUtils.ParseIndex("^d")
-            ],
-            mapping.GetToData().ToArray());
+            ]);
     }
 
     [Fact]
@@ -38,9 +34,9 @@ public sealed class MappingTests
         int[] from = [IndicesUtils.ParseIndex("_a")];
         int[] to = [IndicesUtils.ParseIndex("_b"), IndicesUtils.ParseIndex("_c")];
 
-        ArgumentException exception = Assert.Throws<ArgumentException>(() => new Mapping(from, to));
+        ArgumentException exception = Should.Throw<ArgumentException>(() => new Mapping(from, to));
 
-        Assert.Equal("From length != to length.", exception.Message);
+        exception.Message.ShouldBe("From length != to length.");
     }
 
     [Fact]
@@ -48,10 +44,10 @@ public sealed class MappingTests
     {
         Mapping mapping = Mapping.IdentityMapping;
 
-        Assert.True(mapping.IsIdentity());
-        Assert.True(mapping.IsEmpty());
-        Assert.False(mapping.GetSign());
-        Assert.Equal("{}", mapping.ToString());
+        mapping.IsIdentity().ShouldBeTrue();
+        mapping.IsEmpty().ShouldBeTrue();
+        mapping.GetSign().ShouldBeFalse();
+        mapping.ToString().ShouldBe("{}");
     }
 
     [Fact]
@@ -63,9 +59,9 @@ public sealed class MappingTests
 
         Mapping result = mapping.AddSign(true);
 
-        Assert.True(result.GetSign());
-        Assert.Equal(mapping.GetFromNames().ToArray(), result.GetFromNames().ToArray());
-        Assert.Equal(mapping.GetToData().ToArray(), result.GetToData().ToArray());
+        result.GetSign().ShouldBeTrue();
+        result.GetFromNames().ToArray().ShouldBe(mapping.GetFromNames().ToArray());
+        result.GetToData().ToArray().ShouldBe(mapping.GetToData().ToArray());
     }
 
     [Fact]
@@ -78,7 +74,7 @@ public sealed class MappingTests
 
         NRedberry.Tensors.Tensor transformed = mapping.Transform(tensor);
 
-        Assert.Equal("T{}^{b}", transformed.ToString(OutputFormat.LaTeX));
+        transformed.ToString(OutputFormat.LaTeX).ShouldBe("T{}^{b}");
     }
 
     [Fact]
@@ -97,9 +93,9 @@ public sealed class MappingTests
             [IndicesUtils.ParseIndex("^b")],
             sign: false);
 
-        Assert.Equal(first, second);
-        Assert.Equal(first.GetHashCode(), second.GetHashCode());
-        Assert.NotEqual(first, third);
+        second.ShouldBe(first);
+        second.GetHashCode().ShouldBe(first.GetHashCode());
+        third.ShouldNotBe(first);
     }
 
     [Fact]
@@ -110,7 +106,7 @@ public sealed class MappingTests
             [IndicesUtils.ParseIndex("^c"), IndicesUtils.ParseIndex("_d")],
             sign: true);
 
-        Assert.Equal("-{_a->^c, _b->^d}", mapping.ToString());
+        mapping.ToString().ShouldBe("-{_a->^c, _b->^d}");
     }
 
     [Fact]
@@ -118,19 +114,15 @@ public sealed class MappingTests
     {
         Mapping mapping = Mapping.ValueOf("-{_a->^c, ^b->_d}");
 
-        Assert.True(mapping.GetSign());
-        Assert.Equal(
-            [
+        mapping.GetSign().ShouldBeTrue();
+        mapping.GetFromNames().ToArray().ShouldBe([
                 IndicesUtils.GetNameWithType(IndicesUtils.ParseIndex("_a")),
                 IndicesUtils.GetNameWithType(IndicesUtils.ParseIndex("^b"))
-            ],
-            mapping.GetFromNames().ToArray());
-        Assert.Equal(
-            [
+            ]);
+        mapping.GetToData().ToArray().ShouldBe([
                 IndicesUtils.ParseIndex("^c"),
                 IndicesUtils.ParseIndex("^d")
-            ],
-            mapping.GetToData().ToArray());
+            ]);
     }
 
     [Fact]
@@ -138,12 +130,12 @@ public sealed class MappingTests
     {
         Mapping mapping = Mapping.ValueOf("+{}");
 
-        Assert.True(mapping.IsIdentity());
+        mapping.IsIdentity().ShouldBeTrue();
     }
 
     [Fact]
     public void ValueOfShouldThrowOnInvalidSyntax()
     {
-        Assert.Throws<ArgumentException>(() => Mapping.ValueOf("[]"));
+        Should.Throw<ArgumentException>(() => Mapping.ValueOf("[]"));
     }
 }

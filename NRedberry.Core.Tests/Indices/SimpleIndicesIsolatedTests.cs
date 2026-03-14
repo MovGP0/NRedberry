@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using NRedberry.Indices;
 using Xunit;
 using IndicesContract = NRedberry.Indices.Indices;
@@ -18,8 +18,8 @@ public sealed class SimpleIndicesIsolatedTests
 
         SimpleIndicesIsolated sut = new(data, symmetries);
 
-        Assert.Equal(data, sut.AllIndices.ToArray());
-        Assert.Same(symmetries, sut.Symmetries);
+        sut.AllIndices.ToArray().ShouldBe(data);
+        sut.Symmetries.ShouldBeSameAs(symmetries);
     }
 
     [Fact]
@@ -33,8 +33,8 @@ public sealed class SimpleIndicesIsolatedTests
 
         SimpleIndicesIsolated sut = new(true, data, symmetries);
 
-        Assert.Equal(data, sut.AllIndices.ToArray());
-        Assert.Same(symmetries, sut.Symmetries);
+        sut.AllIndices.ToArray().ShouldBe(data);
+        sut.Symmetries.ShouldBeSameAs(symmetries);
     }
 
     [Fact]
@@ -51,11 +51,11 @@ public sealed class SimpleIndicesIsolatedTests
 
         IndicesContract mapped = sut.ApplyIndexMapping(new ReplaceIndexMapping(data[0], mappedValue));
 
-        SimpleIndicesIsolated isolated = Assert.IsType<SimpleIndicesIsolated>(mapped);
-        Assert.NotSame(sut, isolated);
-        Assert.Equal([mappedValue, data[1]], isolated.AllIndices.ToArray());
-        Assert.NotSame(sut.Symmetries, isolated.Symmetries);
-        Assert.Equal(sut.Symmetries.StructureOfIndices, isolated.Symmetries.StructureOfIndices);
+        SimpleIndicesIsolated isolated = mapped.ShouldBeOfType<SimpleIndicesIsolated>();
+        isolated.ShouldNotBeSameAs(sut);
+        isolated.AllIndices.ToArray().ShouldBe([mappedValue, data[1]]);
+        isolated.Symmetries.ShouldNotBeSameAs(sut.Symmetries);
+        isolated.Symmetries.StructureOfIndices.ShouldBe(sut.Symmetries.StructureOfIndices);
     }
 
     [Fact]
@@ -76,9 +76,9 @@ public sealed class SimpleIndicesIsolatedTests
 
         IndicesSymmetries second = sut.Symmetries;
 
-        Assert.NotNull(first);
-        Assert.Same(first, second);
-        Assert.Equal(sut.StructureOfIndices, first.StructureOfIndices);
+        first.ShouldNotBeNull();
+        second.ShouldBeSameAs(first);
+        first.StructureOfIndices.ShouldBe(sut.StructureOfIndices);
     }
 
     [Fact]
@@ -87,7 +87,7 @@ public sealed class SimpleIndicesIsolatedTests
         int[] data = CreateLatinLowerData(1, 0);
         SimpleIndicesIsolated sut = new(true, data, null);
 
-        Assert.Throws<ArgumentNullException>(() => sut.Symmetries = null!);
+        Should.Throw<ArgumentNullException>(() => sut.Symmetries = null!);
     }
 
     [Fact]
@@ -102,9 +102,9 @@ public sealed class SimpleIndicesIsolatedTests
 
         SimpleIndicesIsolated sut = new(true, data, null);
 
-        ArgumentException exception = Assert.Throws<ArgumentException>(() => sut.Symmetries = incompatibleSymmetries!);
+        ArgumentException exception = Should.Throw<ArgumentException>(() => sut.Symmetries = incompatibleSymmetries!);
 
-        Assert.Equal("Illegal symmetries instance.", exception.Message);
+        exception.Message.ShouldBe("Illegal symmetries instance.");
     }
 
     [Fact]
@@ -120,7 +120,7 @@ public sealed class SimpleIndicesIsolatedTests
 
         sut.Symmetries = compatibleSymmetries!;
 
-        Assert.Same(compatibleSymmetries, sut.Symmetries);
+        sut.Symmetries.ShouldBeSameAs(compatibleSymmetries);
     }
 
     private static bool TryCreateSymmetries(int[] data, out IndicesSymmetries? symmetries)

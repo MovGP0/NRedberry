@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -10,8 +10,8 @@ public sealed class IndicatorTests
     {
         TrueIndicator<string> indicator = new();
 
-        Assert.True(indicator.Is("value"));
-        Assert.True(indicator.Is(string.Empty));
+        indicator.Is("value").ShouldBeTrue();
+        indicator.Is(string.Empty).ShouldBeTrue();
     }
 
     [Fact]
@@ -19,7 +19,7 @@ public sealed class IndicatorTests
     {
         FalseIndicator<string> indicator = new();
 
-        Assert.False(indicator.Is("value"));
-        Assert.False(indicator.Is(string.Empty));
+        indicator.Is("value").ShouldBeFalse();
+        indicator.Is(string.Empty).ShouldBeFalse();
     }
 }

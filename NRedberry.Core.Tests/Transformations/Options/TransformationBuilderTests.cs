@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using NRedberry.Transformations.Options;
 using NRedberry.Transformations.Symmetrization;
 using Xunit;
@@ -19,10 +19,10 @@ public sealed class TransformationBuilderTests
                 ["string"] = "mapped"
             });
 
-        Assert.True(options.Created);
-        Assert.Equal(4, options.Integer);
-        Assert.Equal("mapped", options.StringValue);
-        Assert.Equal("default", options.DefaultString);
+        options.Created.ShouldBeTrue();
+        options.Integer.ShouldBe(4);
+        options.StringValue.ShouldBe("mapped");
+        options.DefaultString.ShouldBe("default");
     }
 
     [Fact]
@@ -32,9 +32,9 @@ public sealed class TransformationBuilderTests
             typeof(BuilderTestOptions),
             [7, "listed"]);
 
-        Assert.True(options.Created);
-        Assert.Equal(7, options.Integer);
-        Assert.Equal("listed", options.StringValue);
+        options.Created.ShouldBeTrue();
+        options.Integer.ShouldBe(7);
+        options.StringValue.ShouldBe("listed");
     }
 
     [Fact]
@@ -43,9 +43,9 @@ public sealed class TransformationBuilderTests
         OptionsOnlyTransformation transformation = TransformationBuilder.CreateTransformation<OptionsOnlyTransformation>(
             [3, "value"]);
 
-        Assert.True(transformation.Options.Created);
-        Assert.Equal(3, transformation.Options.Integer);
-        Assert.Equal("value", transformation.Options.StringValue);
+        transformation.Options.Created.ShouldBeTrue();
+        transformation.Options.Integer.ShouldBe(3);
+        transformation.Options.StringValue.ShouldBe("value");
     }
 
     [Fact]
@@ -60,9 +60,9 @@ public sealed class TransformationBuilderTests
                 ["string"] = "configured"
             });
 
-        Assert.Same(variable, transformation.Variable);
-        Assert.Equal(9, transformation.Options.Integer);
-        Assert.Equal("configured", transformation.Options.StringValue);
+        transformation.Variable.ShouldBeSameAs(variable);
+        transformation.Options.Integer.ShouldBe(9);
+        transformation.Options.StringValue.ShouldBe("configured");
     }
 
     [Fact]
@@ -74,20 +74,20 @@ public sealed class TransformationBuilderTests
             [x, y],
             [5, "vararg"]);
 
-        Assert.Equal(2, transformation.Variables.Length);
-        Assert.Same(x, transformation.Variables[0]);
-        Assert.Same(y, transformation.Variables[1]);
-        Assert.Equal(5, transformation.Options.Integer);
-        Assert.Equal("vararg", transformation.Options.StringValue);
+        transformation.Variables.Length.ShouldBe(2);
+        transformation.Variables[0].ShouldBeSameAs(x);
+        transformation.Variables[1].ShouldBeSameAs(y);
+        transformation.Options.Integer.ShouldBe(5);
+        transformation.Options.StringValue.ShouldBe("vararg");
     }
 
     [Fact]
     public void ShouldThrowWhenCreatorIsMissing()
     {
-        InvalidOperationException exception = Assert.Throws<InvalidOperationException>(() =>
+        InvalidOperationException exception = Should.Throw<InvalidOperationException>(() =>
             TransformationBuilder.CreateTransformation<NoCreatorTransformation>([]));
 
-        Assert.Contains("No creator constructor", exception.Message, StringComparison.Ordinal);
+        exception.Message.ShouldContain("No creator constructor");
     }
 }
 

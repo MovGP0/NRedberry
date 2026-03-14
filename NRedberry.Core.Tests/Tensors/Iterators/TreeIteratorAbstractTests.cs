@@ -1,4 +1,4 @@
-using NRedberry.Tensors.Iterators;
+﻿using NRedberry.Tensors.Iterators;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -12,8 +12,8 @@ public sealed class TreeIteratorAbstractTests
         TestTreeIterator enteringIterator = new(TensorApi.Parse("a+b"), TraverseState.Entering);
         TestTreeIterator leavingIterator = new(TensorApi.Parse("a+b"), TraverseState.Leaving);
 
-        Assert.Equal(["a+b", "a", "b"], Drain(enteringIterator));
-        Assert.Equal(["a", "b", "a+b"], Drain(leavingIterator));
+        Drain(enteringIterator).ShouldBe(["a+b", "a", "b"]);
+        Drain(leavingIterator).ShouldBe(["a", "b", "a+b"]);
     }
 
     [Fact]
@@ -21,10 +21,10 @@ public sealed class TreeIteratorAbstractTests
     {
         TestTreeIterator iterator = new(TensorApi.Parse("a+b"), TraverseState.Entering);
 
-        Assert.Equal("a+b", iterator.Next()!.ToString(OutputFormat.Redberry));
-        Assert.Equal(0, iterator.Depth);
-        Assert.Equal("a", iterator.Next()!.ToString(OutputFormat.Redberry));
-        Assert.Equal(1, iterator.Depth);
+        iterator.Next()!.ToString(OutputFormat.Redberry).ShouldBe("a+b");
+        iterator.Depth.ShouldBe(0);
+        iterator.Next()!.ToString(OutputFormat.Redberry).ShouldBe("a");
+        iterator.Depth.ShouldBe(1);
 
         iterator.Set(NRedberry.Numbers.Complex.Zero);
 
@@ -32,7 +32,7 @@ public sealed class TreeIteratorAbstractTests
         {
         }
 
-        Assert.Equal("b", iterator.Result().ToString(OutputFormat.Redberry));
+        iterator.Result().ToString(OutputFormat.Redberry).ShouldBe("b");
     }
 
     private static List<string> Drain(ITreeIterator iterator)

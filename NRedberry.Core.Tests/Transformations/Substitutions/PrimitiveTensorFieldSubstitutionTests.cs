@@ -9,7 +9,7 @@ public sealed class PrimitiveTensorFieldSubstitutionTests
     [Fact]
     public void ShouldThrowWhilePrimitiveTensorFieldSubstitutionIsUnimplemented()
     {
-        Assert.Throws<NotImplementedException>(() =>
+        Should.Throw<NotImplementedException>(() =>
             new PrimitiveTensorFieldSubstitution(TensorApi.Parse("f[x]"), TensorApi.Parse("g[x]")));
     }
 }

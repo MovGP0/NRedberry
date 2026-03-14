@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -15,11 +15,11 @@ public sealed class TensorBuilderTests
         TensorBuilder clone = builder.Clone();
         clone.Put(TensorFactory.Parse("b"));
 
-        Assert.Equal("a", builder.Build().ToString(OutputFormat.Redberry));
+        builder.Build().ToString(OutputFormat.Redberry).ShouldBe("a");
 
         string cloneText = clone.Build().ToString(OutputFormat.Redberry);
-        Assert.Contains("a", cloneText);
-        Assert.Contains("b", cloneText);
+        cloneText.ShouldContain("a");
+        cloneText.ShouldContain("b");
     }
 
     private sealed class RecordingTensorBuilder : TensorBuilder

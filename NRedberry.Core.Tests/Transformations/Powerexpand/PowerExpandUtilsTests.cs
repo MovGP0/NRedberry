@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using NRedberry.Transformations.Powerexpand;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -10,7 +10,7 @@ public sealed class PowerExpandUtilsTests
     [Fact]
     public void ShouldThrowForApplicabilityChecks()
     {
-        Assert.Throws<NotImplementedException>(() =>
+        Should.Throw<NotImplementedException>(() =>
             PowerExpandUtils.PowerExpandApplicable(
                 TensorApi.Parse("Power[a+b,2]"),
                 new TrueIndicator<NRedberry.Tensors.Tensor>()));
@@ -19,15 +19,15 @@ public sealed class PowerExpandUtilsTests
     [Fact]
     public void ShouldThrowForExpansionHelpers()
     {
-        Assert.Throws<NotImplementedException>(() =>
+        Should.Throw<NotImplementedException>(() =>
             PowerExpandUtils.PowerExpandToArray(
                 TensorApi.Parse("Power[a+b,2]"),
                 new TrueIndicator<NRedberry.Tensors.Tensor>()));
-        Assert.Throws<NotImplementedException>(() =>
+        Should.Throw<NotImplementedException>(() =>
             PowerExpandUtils.PowerExpandToArray1(
                 TensorApi.Parse("Power[a+b,2]"),
                 new TrueIndicator<NRedberry.Tensors.Tensor>()));
-        Assert.Throws<NotImplementedException>(() =>
-            PowerExpandUtils.VarsToIndicator([Assert.IsType<NRedberry.Tensors.SimpleTensor>(TensorApi.Parse("x"))]));
+        Should.Throw<NotImplementedException>(() =>
+            PowerExpandUtils.VarsToIndicator([TensorApi.Parse("x").ShouldBeOfType<NRedberry.Tensors.SimpleTensor>()]));
     }
 }

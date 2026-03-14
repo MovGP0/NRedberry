@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reflection;
 using NRedberry.Indices;
 using Xunit;
@@ -19,12 +19,12 @@ public sealed class ShortArrayFactoryTests
         short[] firstLarge = InvokeGetZeroFilledShortArray(129);
         short[] secondLarge = InvokeGetZeroFilledShortArray(129);
 
-        Assert.NotSame(firstBoundary, secondBoundary);
-        Assert.NotSame(firstLarge, secondLarge);
-        Assert.All(firstBoundary, value => Assert.Equal((short)0, value));
-        Assert.All(secondBoundary, value => Assert.Equal((short)0, value));
-        Assert.All(firstLarge, value => Assert.Equal((short)0, value));
-        Assert.All(secondLarge, value => Assert.Equal((short)0, value));
+        secondBoundary.ShouldNotBeSameAs(firstBoundary);
+        secondLarge.ShouldNotBeSameAs(firstLarge);
+        Assert.All(firstBoundary, value => value.ShouldBe((short)0));
+        Assert.All(secondBoundary, value => value.ShouldBe((short)0));
+        Assert.All(firstLarge, value => value.ShouldBe((short)0));
+        Assert.All(secondLarge, value => value.ShouldBe((short)0));
     }
 
     [Fact]
@@ -33,8 +33,8 @@ public sealed class ShortArrayFactoryTests
         short[] first = InvokeGetZeroFilledShortArray(5);
         short[] second = InvokeGetZeroFilledShortArray(5);
 
-        Assert.Same(first, second);
-        Assert.All(first, value => Assert.Equal((short)0, value));
+        second.ShouldBeSameAs(first);
+        Assert.All(first, value => value.ShouldBe((short)0));
     }
 
     [Fact]
@@ -43,19 +43,17 @@ public sealed class ShortArrayFactoryTests
         short[] first = InvokeGetZeroFilledShortArray(0);
         short[] second = InvokeGetZeroFilledShortArray(0);
 
-        Assert.Same(first, second);
-        Assert.Empty(first);
+        second.ShouldBeSameAs(first);
+        first.ShouldBeEmpty();
     }
 
     [Fact]
     public void GetZeroFilledShortArrayShouldThrowRuntimeExceptionForNegativeLength()
     {
-        TargetInvocationException exception = Assert.Throws<TargetInvocationException>(() => InvokeGetZeroFilledShortArray(-1));
+        TargetInvocationException exception = Should.Throw<TargetInvocationException>(() => InvokeGetZeroFilledShortArray(-1));
 
-        Assert.NotNull(exception.InnerException);
-        Assert.True(
-            exception.InnerException is IndexOutOfRangeException or OverflowException,
-            $"Unexpected runtime exception type: {exception.InnerException.GetType().FullName}");
+        exception.InnerException.ShouldNotBeNull();
+        exception.InnerException is IndexOutOfRangeException or OverflowException.ShouldBeTrue($"Unexpected runtime exception type: {exception.InnerException.GetType().FullName}");
     }
 
     private static short[] InvokeGetZeroFilledShortArray(int length)
@@ -73,7 +71,7 @@ public sealed class ShortArrayFactoryTests
             types: [typeof(int)],
             modifiers: null);
 
-        Assert.NotNull(method);
+        method.ShouldNotBeNull();
         return method!;
     }
 }

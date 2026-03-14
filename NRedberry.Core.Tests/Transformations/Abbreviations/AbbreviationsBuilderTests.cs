@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Abbreviations;
+﻿using NRedberry.Transformations.Abbreviations;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -11,13 +11,13 @@ public sealed class AbbreviationsBuilderTests
     {
         AbbreviationsBuilder builder = new();
 
-        Assert.Equal(AbbreviationsBuilder.DefaultAbbrSize, builder.MaxSumSize);
-        Assert.Equal(AbbreviationsBuilder.DefaultAbbrPrefix, builder.AbbrPrefix);
-        Assert.True(builder.AbbreviateScalars);
-        Assert.False(builder.AbbreviateScalarsSeparately);
-        Assert.False(builder.AbbreviateTopLevel);
-        Assert.False(builder.Locked);
-        Assert.Empty(builder.GetAbbreviations());
+        builder.MaxSumSize.ShouldBe(AbbreviationsBuilder.DefaultAbbrSize);
+        builder.AbbrPrefix.ShouldBe(AbbreviationsBuilder.DefaultAbbrPrefix);
+        builder.AbbreviateScalars.ShouldBeTrue();
+        builder.AbbreviateScalarsSeparately.ShouldBeFalse();
+        builder.AbbreviateTopLevel.ShouldBeFalse();
+        builder.Locked.ShouldBeFalse();
+        builder.GetAbbreviations().ShouldBeEmpty();
     }
 
     [Fact]
@@ -32,7 +32,7 @@ public sealed class AbbreviationsBuilderTests
         NRedberry.Tensors.Tensor tensor = TensorApi.Parse("a+b");
         NRedberry.Tensors.Tensor result = builder.Transform(tensor);
 
-        Assert.Same(tensor, result);
-        Assert.Empty(builder.GetAbbreviations());
+        result.ShouldBeSameAs(tensor);
+        builder.GetAbbreviations().ShouldBeEmpty();
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Factor;
+﻿using NRedberry.Transformations.Factor;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -13,9 +13,7 @@ public sealed class JasFactorTests
 
         NRedberry.Tensors.Tensor actual = JasFactor.Engine.Transform(tensor);
 
-        Assert.Equal(
-            tensor.ToString(OutputFormat.Redberry),
-            actual.ToString(OutputFormat.Redberry));
+        actual.ToString(OutputFormat.Redberry).ShouldBe(tensor.ToString(OutputFormat.Redberry));
     }
 
     [Fact]
@@ -25,6 +23,6 @@ public sealed class JasFactorTests
 
         NRedberry.Tensors.Tensor actual = JasFactor.Engine.Transform(tensor);
 
-        Assert.Same(tensor, actual);
+        actual.ShouldBeSameAs(tensor);
     }
 }

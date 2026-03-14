@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using NRedberry.Solver.Frobenius;
 using Xunit;
 
@@ -11,9 +11,9 @@ public sealed class SolutionProviderAbstractTests
     {
         ConstructorInfo? constructor = SingleProviderType.GetConstructor([SolutionProviderType, typeof(int), typeof(int[])]);
 
-        TargetInvocationException exception = Assert.Throws<TargetInvocationException>(() => constructor!.Invoke([null!, 0, new[] { 1 }]));
-        ArgumentNullException innerException = Assert.IsType<ArgumentNullException>(exception.InnerException);
-        Assert.Equal("provider", innerException.ParamName);
+        TargetInvocationException exception = Should.Throw<TargetInvocationException>(() => constructor!.Invoke([null!, 0, new[] { 1 }]));
+        ArgumentNullException innerException = exception.InnerException.ShouldBeOfType<ArgumentNullException>();
+        innerException.ParamName.ShouldBe("provider");
     }
 
     [Fact]
@@ -22,9 +22,9 @@ public sealed class SolutionProviderAbstractTests
         object dummyProvider = CreateDummyProvider([1], [2]);
         ConstructorInfo? constructor = SingleProviderType.GetConstructor([SolutionProviderType, typeof(int), typeof(int[])]);
 
-        TargetInvocationException exception = Assert.Throws<TargetInvocationException>(() => constructor!.Invoke([dummyProvider, 0, null!]));
-        ArgumentNullException innerException = Assert.IsType<ArgumentNullException>(exception.InnerException);
-        Assert.Equal("coefficients", innerException.ParamName);
+        TargetInvocationException exception = Should.Throw<TargetInvocationException>(() => constructor!.Invoke([dummyProvider, 0, null!]));
+        ArgumentNullException innerException = exception.InnerException.ShouldBeOfType<ArgumentNullException>();
+        innerException.ParamName.ShouldBe("coefficients");
     }
 
     [Fact]
@@ -32,9 +32,9 @@ public sealed class SolutionProviderAbstractTests
     {
         object provider = CreateSingleProvider([1], [3], 0, [1]);
 
-        Assert.True(Tick(provider));
-        Assert.Equal([1], Take(provider));
-        Assert.False(Tick(provider));
+        Tick(provider).ShouldBeTrue();
+        Take(provider).ShouldBe([1]);
+        Tick(provider).ShouldBeFalse();
     }
 
     [Fact]
@@ -42,11 +42,11 @@ public sealed class SolutionProviderAbstractTests
     {
         object provider = CreateSingleProvider([3, 4], [5, 8], 1, [2, 3]);
 
-        Assert.True(Tick(provider));
-        Assert.Equal([3, 4], Take(provider));
-        Assert.Equal([5, 8], CurrentRemainders(provider));
-        Assert.Equal([3, 5], Take(provider));
-        Assert.Equal([3, 5], CurrentRemainders(provider));
+        Tick(provider).ShouldBeTrue();
+        Take(provider).ShouldBe([3, 4]);
+        CurrentRemainders(provider).ShouldBe([5, 8]);
+        Take(provider).ShouldBe([3, 5]);
+        CurrentRemainders(provider).ShouldBe([3, 5]);
     }
 
     private static object CreateSingleProvider(int[] baseSolution, int[] remainders, int position, int[] coefficients)

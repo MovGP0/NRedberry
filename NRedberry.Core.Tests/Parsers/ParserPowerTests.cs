@@ -1,4 +1,4 @@
-using NRedberry.Parsers;
+﻿using NRedberry.Parsers;
 using RedberryParser = NRedberry.Parsers.Parser;
 using Xunit;
 
@@ -12,13 +12,13 @@ public sealed class ParserPowerTests
         var first = ParserPower.Instance;
         var second = ParserPower.Instance;
 
-        Assert.Same(first, second);
+        second.ShouldBeSameAs(first);
     }
 
     [Fact]
     public void ShouldExposeExpectedPriority()
     {
-        Assert.Equal(9986, ParserPower.Instance.Priority);
+        ParserPower.Instance.Priority.ShouldBe(9986);
     }
 
     [Fact]
@@ -26,7 +26,7 @@ public sealed class ParserPowerTests
     {
         var token = ParserPower.Instance.ParseToken("Power[]", RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public sealed class ParserPowerTests
     {
         var token = ParserPower.Instance.ParseToken("Pow[a,b]", RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public sealed class ParserPowerTests
     {
         var token = ParserPower.Instance.ParseToken("Power[a,b", RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
@@ -50,23 +50,23 @@ public sealed class ParserPowerTests
     {
         var token = ParserPower.Instance.ParseToken("Power[a],b]", RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
     public void ShouldThrowWhenPowerHasMoreThanTwoArguments()
     {
-        var exception = Assert.Throws<ParserException>(() => ParserPower.Instance.ParseToken("Power[a,b,c]", RedberryParser.Default));
+        var exception = Should.Throw<ParserException>(() => ParserPower.Instance.ParseToken("Power[a,b,c]", RedberryParser.Default));
 
-        Assert.Equal("Power takes only two arguments.", exception.Message);
+        exception.Message.ShouldBe("Power takes only two arguments.");
     }
 
     [Fact]
     public void ShouldThrowWhenPowerHasOnlyOneArgument()
     {
-        var exception = Assert.Throws<ParserException>(() => ParserPower.Instance.ParseToken("Power[a]", RedberryParser.Default));
+        var exception = Should.Throw<ParserException>(() => ParserPower.Instance.ParseToken("Power[a]", RedberryParser.Default));
 
-        Assert.Equal("Power takes exactly two arguments.", exception.Message);
+        exception.Message.ShouldBe("Power takes exactly two arguments.");
     }
 
     [Fact]
@@ -74,11 +74,11 @@ public sealed class ParserPowerTests
     {
         var token = ParserPower.Instance.ParseToken("Power[a,b]", RedberryParser.Default);
 
-        var power = Assert.IsType<ParseToken>(token);
-        Assert.Equal(TokenType.Power, power.TokenType);
-        Assert.Equal(2, power.Content.Length);
-        Assert.Equal(TokenType.SimpleTensor, power.Content[0].TokenType);
-        Assert.Equal(TokenType.SimpleTensor, power.Content[1].TokenType);
+        var power = token.ShouldBeOfType<ParseToken>();
+        power.TokenType.ShouldBe(TokenType.Power);
+        power.Content.Length.ShouldBe(2);
+        power.Content[0].TokenType.ShouldBe(TokenType.SimpleTensor);
+        power.Content[1].TokenType.ShouldBe(TokenType.SimpleTensor);
     }
 
     [Fact]
@@ -86,10 +86,10 @@ public sealed class ParserPowerTests
     {
         var token = ParserPower.Instance.ParseToken("Power[f[a,b],g[c,d]]", RedberryParser.Default);
 
-        var power = Assert.IsType<ParseToken>(token);
-        Assert.Equal(TokenType.Power, power.TokenType);
-        Assert.Equal(2, power.Content.Length);
-        Assert.Equal(TokenType.TensorField, power.Content[0].TokenType);
-        Assert.Equal(TokenType.TensorField, power.Content[1].TokenType);
+        var power = token.ShouldBeOfType<ParseToken>();
+        power.TokenType.ShouldBe(TokenType.Power);
+        power.Content.Length.ShouldBe(2);
+        power.Content[0].TokenType.ShouldBe(TokenType.TensorField);
+        power.Content[1].TokenType.ShouldBe(TokenType.TensorField);
     }
 }

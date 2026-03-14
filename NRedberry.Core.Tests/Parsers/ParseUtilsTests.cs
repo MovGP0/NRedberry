@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Parsers;
@@ -21,13 +21,13 @@ public sealed class ParseUtilsTests
     {
         var actual = ParseUtils.CheckBracketsConsistence(expression);
 
-        Assert.Equal(expected, actual);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
     public void ShouldThrowArgumentNullExceptionWhenBracketExpressionIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => ParseUtils.CheckBracketsConsistence(null!));
+        Should.Throw<ArgumentNullException>(() => ParseUtils.CheckBracketsConsistence(null!));
     }
 
     [Fact]
@@ -35,8 +35,8 @@ public sealed class ParseUtilsTests
     {
         var token = ParseUtils.TensorToAst(Complex.One);
 
-        var numberToken = Assert.IsType<ParseTokenNumber>(token);
-        Assert.Same(Complex.One, numberToken.Value);
+        var numberToken = token.ShouldBeOfType<ParseTokenNumber>();
+        numberToken.Value.ShouldBeSameAs(Complex.One);
     }
 
     [Fact]
@@ -46,12 +46,12 @@ public sealed class ParseUtilsTests
 
         var token = ParseUtils.TensorToAst(expression);
 
-        var expressionToken = Assert.IsType<ParseTokenExpression>(token);
-        Assert.False(expressionToken.Preprocess);
-        var left = Assert.IsType<ParseTokenNumber>(expressionToken.Content[0]);
-        var right = Assert.IsType<ParseTokenNumber>(expressionToken.Content[1]);
-        Assert.Same(Complex.One, left.Value);
-        Assert.Same(Complex.Two, right.Value);
+        var expressionToken = token.ShouldBeOfType<ParseTokenExpression>();
+        expressionToken.Preprocess.ShouldBeFalse();
+        var left = expressionToken.Content[0].ShouldBeOfType<ParseTokenNumber>();
+        var right = expressionToken.Content[1].ShouldBeOfType<ParseTokenNumber>();
+        left.Value.ShouldBeSameAs(Complex.One);
+        right.Value.ShouldBeSameAs(Complex.Two);
     }
 
     [Fact]
@@ -63,9 +63,9 @@ public sealed class ParseUtilsTests
 
             var token = ParseUtils.TensorToAst(simpleTensor);
 
-            var simpleToken = Assert.IsType<ParseTokenSimpleTensor>(token);
-            Assert.Equal(simpleTensor.GetStringName(), simpleToken.Name);
-            Assert.Equal(simpleTensor.SimpleIndices, simpleToken.Indices);
+            var simpleToken = token.ShouldBeOfType<ParseTokenSimpleTensor>();
+            simpleToken.Name.ShouldBe(simpleTensor.GetStringName());
+            simpleToken.Indices.ShouldBe(simpleTensor.SimpleIndices);
         }
         catch (TypeInitializationException)
         {
@@ -77,14 +77,14 @@ public sealed class ParseUtilsTests
     {
         try
         {
-            var tensorField = Assert.IsType<TensorField>(TensorFactory.Parse("F[A]"));
+            var tensorField = TensorFactory.Parse("F[A]").ShouldBeOfType<TensorField>();
 
             var token = ParseUtils.TensorToAst(tensorField);
 
-            var fieldToken = Assert.IsType<ParseTokenTensorField>(token);
-            Assert.Equal(tensorField.GetStringName(), fieldToken.Name);
-            Assert.Single(fieldToken.Content);
-            Assert.Single(fieldToken.ArgumentsIndices);
+            var fieldToken = token.ShouldBeOfType<ParseTokenTensorField>();
+            fieldToken.Name.ShouldBe(tensorField.GetStringName());
+            fieldToken.Content.ShouldHaveSingleItem();
+            fieldToken.ArgumentsIndices.ShouldHaveSingleItem();
         }
         catch (TypeInitializationException)
         {
@@ -96,13 +96,13 @@ public sealed class ParseUtilsTests
     {
         try
         {
-            var scalarFunction = Assert.IsAssignableFrom<ScalarFunction>(TensorFactory.Parse("Sin[A]"));
+            var scalarFunction = TensorFactory.Parse("Sin[A]").ShouldBeAssignableTo<ScalarFunction>();
 
             var token = ParseUtils.TensorToAst(scalarFunction);
 
-            var functionToken = Assert.IsType<ParseTokenScalarFunction>(token);
-            Assert.Equal(scalarFunction.GetType().Name, functionToken.Function);
-            Assert.Single(functionToken.Content);
+            var functionToken = token.ShouldBeOfType<ParseTokenScalarFunction>();
+            functionToken.Function.ShouldBe(scalarFunction.GetType().Name);
+            functionToken.Content.ShouldHaveSingleItem();
         }
         catch (TypeInitializationException)
         {
@@ -123,16 +123,16 @@ public sealed class ParseUtilsTests
         var allIndices = ParseUtils.GetAllIndices(root);
         var allIndicesT = ParseUtils.GetAllIndicesT(root);
 
-        Assert.True(new HashSet<int> { 1, 2, 4 }.SetEquals(allIndices));
-        Assert.True(new HashSet<int> { 1, 2, 4 }.SetEquals(allIndicesT));
-        Assert.DoesNotContain(33, allIndices);
-        Assert.DoesNotContain(33, allIndicesT);
+        new HashSet<int> { 1, 2, 4 }.SetEquals(allIndices).ShouldBeTrue();
+        new HashSet<int> { 1, 2, 4 }.SetEquals(allIndicesT).ShouldBeTrue();
+        allIndices.ShouldNotContain(33);
+        allIndicesT.ShouldNotContain(33);
     }
 
     [Fact]
     public void ShouldThrowArgumentNullExceptionWhenGetAllIndicesNodeIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => ParseUtils.GetAllIndices(null!));
-        Assert.Throws<ArgumentNullException>(() => ParseUtils.GetAllIndicesT(null!));
+        Should.Throw<ArgumentNullException>(() => ParseUtils.GetAllIndices(null!));
+        Should.Throw<ArgumentNullException>(() => ParseUtils.GetAllIndicesT(null!));
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry.Contexts;
+﻿using NRedberry.Contexts;
 using NRedberry.Transformations.Symmetrization;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -14,10 +14,10 @@ public sealed class TransformationToStringAbleTests
         NRedberry.Tensors.Tensor tensor = TensorApi.Parse("a");
         IOutputFormattable outputFormattable = transformation;
 
-        Assert.IsAssignableFrom<ITransformation>(transformation);
-        Assert.IsAssignableFrom<IOutputFormattable>(transformation);
-        Assert.Same(tensor, transformation.Transform(tensor));
-        Assert.Equal("Redberry", outputFormattable.ToString(OutputFormat.Redberry));
+        transformation.ShouldBeAssignableTo<ITransformation>();
+        transformation.ShouldBeAssignableTo<IOutputFormattable>();
+        transformation.Transform(tensor).ShouldBeSameAs(tensor);
+        outputFormattable.ToString(OutputFormat.Redberry).ShouldBe("Redberry");
     }
 
     private sealed class RecordingTransformation : TransformationToStringAble

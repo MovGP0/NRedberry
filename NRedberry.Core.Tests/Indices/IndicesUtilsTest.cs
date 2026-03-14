@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Indices;
@@ -12,9 +12,9 @@ public sealed class IndicesUtilsTest
         int latex = IndicesUtils.ParseIndex("_\\mu");
         int latin = IndicesUtils.ParseIndex("_a");
 
-        Assert.Equal("_\\mu", IndicesUtils.ToString(bracketed, OutputFormat.LaTeX));
-        Assert.Equal("_\\mu", IndicesUtils.ToString(latex, OutputFormat.LaTeX));
-        Assert.Equal("_a", IndicesUtils.ToString(latin, OutputFormat.LaTeX));
+        IndicesUtils.ToString(bracketed, OutputFormat.LaTeX).ShouldBe("_\\mu");
+        IndicesUtils.ToString(latex, OutputFormat.LaTeX).ShouldBe("_\\mu");
+        IndicesUtils.ToString(latin, OutputFormat.LaTeX).ShouldBe("_a");
     }
 
     [Fact]
@@ -23,9 +23,9 @@ public sealed class IndicesUtilsTest
         int lower = IndicesUtils.ParseIndex("_a");
         int upper = IndicesUtils.ParseIndex("^a");
 
-        Assert.Equal("^a", IndicesUtils.ToString(IndicesUtils.SetState(true, lower)));
-        Assert.Equal("^a", IndicesUtils.ToString(IndicesUtils.SetState(true, upper)));
-        Assert.Equal("_a", IndicesUtils.ToString(IndicesUtils.SetRawState(0, upper)));
-        Assert.Equal("_a", IndicesUtils.ToString(IndicesUtils.SetState(false, upper)));
+        IndicesUtils.ToString(IndicesUtils.SetState(true, lower)).ShouldBe("^a");
+        IndicesUtils.ToString(IndicesUtils.SetState(true, upper)).ShouldBe("^a");
+        IndicesUtils.ToString(IndicesUtils.SetRawState(0, upper)).ShouldBe("_a");
+        IndicesUtils.ToString(IndicesUtils.SetState(false, upper)).ShouldBe("_a");
     }
 }

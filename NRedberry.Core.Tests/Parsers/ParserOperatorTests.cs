@@ -1,4 +1,4 @@
-using NRedberry.Parsers;
+﻿using NRedberry.Parsers;
 using RedberryParser = NRedberry.Parsers.Parser;
 using Xunit;
 
@@ -14,8 +14,8 @@ public sealed class ParserOperatorTests
 
         var result = parserOperator.ParseToken("(a+b)", parser);
 
-        Assert.Null(result);
-        Assert.Empty(parserOperator.CompileNodes);
+        result.ShouldBeNull();
+        parserOperator.CompileNodes.ShouldBeEmpty();
     }
 
     [Fact]
@@ -24,7 +24,7 @@ public sealed class ParserOperatorTests
         var parserOperator = new TestParserOperator('+', '-');
         var parser = CreateParser(parserOperator);
 
-        Assert.Throws<BracketsError>(() => parserOperator.ParseToken(")a+b", parser));
+        Should.Throw<BracketsError>(() => parserOperator.ParseToken(")a+b", parser));
     }
 
     [Fact]
@@ -35,13 +35,13 @@ public sealed class ParserOperatorTests
 
         var result = parserOperator.ParseToken("a-b+c", parser);
 
-        Assert.NotNull(result);
-        Assert.Equal(TokenType.Sum, result.TokenType);
-        Assert.Equal(["a", "b", "c"], parserOperator.ParsedExpressions);
-        Assert.Equal(1, parserOperator.InverseCalls);
-        Assert.Equal(TokenType.Number, parserOperator.CompileNodes[0].TokenType);
-        Assert.Equal(TokenType.Product, parserOperator.CompileNodes[1].TokenType);
-        Assert.Equal(TokenType.Number, parserOperator.CompileNodes[2].TokenType);
+        result.ShouldNotBeNull();
+        result.TokenType.ShouldBe(TokenType.Sum);
+        parserOperator.ParsedExpressions.ShouldBe(["a", "b", "c"]);
+        parserOperator.InverseCalls.ShouldBe(1);
+        parserOperator.CompileNodes[0].TokenType.ShouldBe(TokenType.Number);
+        parserOperator.CompileNodes[1].TokenType.ShouldBe(TokenType.Product);
+        parserOperator.CompileNodes[2].TokenType.ShouldBe(TokenType.Number);
     }
 
     [Fact]
@@ -52,8 +52,8 @@ public sealed class ParserOperatorTests
 
         var result = parserOperator.ParseToken(" a_{i j} + b ", parser);
 
-        Assert.NotNull(result);
-        Assert.Equal(["a_{i j}", "b"], parserOperator.ParsedExpressions);
+        result.ShouldNotBeNull();
+        parserOperator.ParsedExpressions.ShouldBe(["a_{i j}", "b"]);
     }
 
     [Fact]
@@ -64,9 +64,9 @@ public sealed class ParserOperatorTests
 
         var result = parserOperator.ParseToken("a--b++c+-d-+e", parser);
 
-        Assert.NotNull(result);
-        Assert.Equal(["a", "b", "c", "d", "e"], parserOperator.ParsedExpressions);
-        Assert.Equal(2, parserOperator.InverseCalls);
+        result.ShouldNotBeNull();
+        parserOperator.ParsedExpressions.ShouldBe(["a", "b", "c", "d", "e"]);
+        parserOperator.InverseCalls.ShouldBe(2);
     }
 
     [Fact]
@@ -83,9 +83,9 @@ public sealed class ParserOperatorTests
 
         var result = parserOperator.ParseToken("a**b*c", parser);
 
-        Assert.NotNull(result);
-        Assert.Equal(["a**b", "c"], parserOperator.ParsedExpressions);
-        Assert.Equal(TokenType.Sum, result.TokenType);
+        result.ShouldNotBeNull();
+        parserOperator.ParsedExpressions.ShouldBe(["a**b", "c"]);
+        result.TokenType.ShouldBe(TokenType.Sum);
     }
 
     [Fact]
@@ -96,7 +96,7 @@ public sealed class ParserOperatorTests
 
         var result = parserOperator.ParseToken("a*b", parser);
 
-        Assert.Null(result);
+        result.ShouldBeNull();
     }
 
     private static RedberryParser CreateParser(TestParserOperator parserOperator)

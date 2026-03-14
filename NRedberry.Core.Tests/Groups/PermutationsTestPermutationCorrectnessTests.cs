@@ -1,3 +1,4 @@
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -12,9 +13,9 @@ public sealed class PermutationsTestPermutationCorrectnessTests
         short[] shortPermutation = [2, 0, 1, 4, 3];
         sbyte[] sbytePermutation = [2, 0, 1, 4, 3];
 
-        Assert.True(GroupPermutations.TestPermutationCorrectness(intPermutation));
-        Assert.True(GroupPermutations.TestPermutationCorrectness(shortPermutation));
-        Assert.True(GroupPermutations.TestPermutationCorrectness(sbytePermutation));
+        GroupPermutations.TestPermutationCorrectness(intPermutation).ShouldBeTrue();
+        GroupPermutations.TestPermutationCorrectness(shortPermutation).ShouldBeTrue();
+        GroupPermutations.TestPermutationCorrectness(sbytePermutation).ShouldBeTrue();
     }
 
     [Fact(DisplayName = "TestPermutationCorrectness without sign should return false for duplicate values across array overloads")]
@@ -24,9 +25,9 @@ public sealed class PermutationsTestPermutationCorrectnessTests
         short[] shortPermutation = [1, 1, 0, 3];
         sbyte[] sbytePermutation = [1, 1, 0, 3];
 
-        Assert.False(GroupPermutations.TestPermutationCorrectness(intPermutation));
-        Assert.False(GroupPermutations.TestPermutationCorrectness(shortPermutation));
-        Assert.False(GroupPermutations.TestPermutationCorrectness(sbytePermutation));
+        GroupPermutations.TestPermutationCorrectness(intPermutation).ShouldBeFalse();
+        GroupPermutations.TestPermutationCorrectness(shortPermutation).ShouldBeFalse();
+        GroupPermutations.TestPermutationCorrectness(sbytePermutation).ShouldBeFalse();
     }
 
     [Fact(DisplayName = "TestPermutationCorrectness without sign should return false for out of range values across array overloads")]
@@ -36,9 +37,9 @@ public sealed class PermutationsTestPermutationCorrectnessTests
         short[] shortPermutation = [0, 4, 1, 2];
         sbyte[] sbytePermutation = [0, 4, 1, 2];
 
-        Assert.False(GroupPermutations.TestPermutationCorrectness(intPermutation));
-        Assert.False(GroupPermutations.TestPermutationCorrectness(shortPermutation));
-        Assert.False(GroupPermutations.TestPermutationCorrectness(sbytePermutation));
+        GroupPermutations.TestPermutationCorrectness(intPermutation).ShouldBeFalse();
+        GroupPermutations.TestPermutationCorrectness(shortPermutation).ShouldBeFalse();
+        GroupPermutations.TestPermutationCorrectness(sbytePermutation).ShouldBeFalse();
     }
 
     [Fact(DisplayName = "TestPermutationCorrectness with sign should require even order across array overloads")]
@@ -52,16 +53,16 @@ public sealed class PermutationsTestPermutationCorrectnessTests
         short[] oddOrderShortPermutation = [1, 2, 0, 3];
         sbyte[] oddOrderSbytePermutation = [1, 2, 0, 3];
 
-        Assert.True(GroupPermutations.TestPermutationCorrectness(evenOrderIntPermutation, true));
-        Assert.True(GroupPermutations.TestPermutationCorrectness(evenOrderShortPermutation, true));
-        Assert.True(GroupPermutations.TestPermutationCorrectness(evenOrderSbytePermutation, true));
+        GroupPermutations.TestPermutationCorrectness(evenOrderIntPermutation, true).ShouldBeTrue();
+        GroupPermutations.TestPermutationCorrectness(evenOrderShortPermutation, true).ShouldBeTrue();
+        GroupPermutations.TestPermutationCorrectness(evenOrderSbytePermutation, true).ShouldBeTrue();
 
-        Assert.False(GroupPermutations.TestPermutationCorrectness(oddOrderIntPermutation, true));
-        Assert.False(GroupPermutations.TestPermutationCorrectness(oddOrderShortPermutation, true));
-        Assert.False(GroupPermutations.TestPermutationCorrectness(oddOrderSbytePermutation, true));
+        GroupPermutations.TestPermutationCorrectness(oddOrderIntPermutation, true).ShouldBeFalse();
+        GroupPermutations.TestPermutationCorrectness(oddOrderShortPermutation, true).ShouldBeFalse();
+        GroupPermutations.TestPermutationCorrectness(oddOrderSbytePermutation, true).ShouldBeFalse();
 
-        Assert.True(GroupPermutations.TestPermutationCorrectness(oddOrderIntPermutation, false));
-        Assert.True(GroupPermutations.TestPermutationCorrectness(oddOrderShortPermutation, false));
-        Assert.True(GroupPermutations.TestPermutationCorrectness(oddOrderSbytePermutation, false));
+        GroupPermutations.TestPermutationCorrectness(oddOrderIntPermutation, false).ShouldBeTrue();
+        GroupPermutations.TestPermutationCorrectness(oddOrderShortPermutation, false).ShouldBeTrue();
+        GroupPermutations.TestPermutationCorrectness(oddOrderSbytePermutation, false).ShouldBeTrue();
     }
 }

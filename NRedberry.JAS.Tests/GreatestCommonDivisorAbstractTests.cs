@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
@@ -21,8 +21,8 @@ public sealed class GreatestCommonDivisorAbstractTests
         JasBigInteger content = gcd.BaseContent(polynomial);
         GenPolynomial<JasBigInteger> primitivePart = gcd.BasePrimitivePart(polynomial);
 
-        Assert.Equal(new JasBigInteger(2), content);
-        Assert.Equal(ring.Univariate(0).Sum(ring.FromInteger(1)), primitivePart);
+        content.ShouldBe(new JasBigInteger(2));
+        primitivePart.ShouldBe(ring.Univariate(0).Sum(ring.FromInteger(1)));
     }
 
     [Fact]
@@ -36,9 +36,9 @@ public sealed class GreatestCommonDivisorAbstractTests
         GenPolynomial<BigRational> listGcd = gcd.Gcd([first, second]);
         GenPolynomial<BigRational> lcm = gcd.Lcm(first, second);
 
-        Assert.Equal(second, listGcd);
-        Assert.Equal(first, lcm);
-        Assert.Contains(nameof(StubGreatestCommonDivisorAbstract), gcd.ToString(), System.StringComparison.Ordinal);
+        listGcd.ShouldBe(second);
+        lcm.ShouldBe(first);
+        gcd.ToString().ShouldContain(nameof(StubGreatestCommonDivisorAbstract));
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public sealed class GreatestCommonDivisorAbstractTests
         StubGreatestCommonDivisorAbstract gcd = new();
         GenPolynomialRing<BigRational> ring = CreateRing();
 
-        Assert.Throws<NotSupportedException>(() => gcd.BaseResultant(ring.Univariate(0), ring.FromInteger(1)));
+        Should.Throw<NotSupportedException>(() => gcd.BaseResultant(ring.Univariate(0), ring.FromInteger(1)));
     }
 
     private static GenPolynomialRing<BigRational> CreateRing()

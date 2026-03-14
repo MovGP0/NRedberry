@@ -1,5 +1,6 @@
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ps;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
@@ -14,10 +15,10 @@ public sealed class CoefficientsTests
         BigRational first = coefficients.Get(3);
         BigRational second = coefficients.Get(3);
 
-        Assert.Equal("4", first.ToString());
-        Assert.Equal(first, second);
-        Assert.Equal(1, coefficients.GenerateCount);
-        Assert.True(coefficients.CoeffCache.ContainsKey(3));
+        first.ToString().ShouldBe("4");
+        second.ShouldBe(first);
+        coefficients.GenerateCount.ShouldBe(1);
+        coefficients.CoeffCache.ContainsKey(3).ShouldBeTrue();
     }
 
     [Fact]
@@ -30,8 +31,8 @@ public sealed class CoefficientsTests
 
         BigRational value = coefficients.Get(2);
 
-        Assert.Equal("7", value.ToString());
-        Assert.Equal(0, coefficients.GenerateCount);
+        value.ToString().ShouldBe("7");
+        coefficients.GenerateCount.ShouldBe(0);
     }
 }
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Numerics;
 using NRedberry.Apache.Commons.Math;
@@ -15,7 +15,7 @@ public sealed class INumberTests
         var genericArgument = iNumberType.GetGenericArguments().Single();
         var expectedBaseInterface = typeof(IFieldElement<>).MakeGenericType(genericArgument);
 
-        Assert.Contains(expectedBaseInterface, iNumberType.GetInterfaces());
+        iNumberType.GetInterfaces().ShouldContain(expectedBaseInterface);
     }
 
     [Fact]
@@ -94,6 +94,6 @@ public sealed class INumberTests
         var method = interfaceType.GetMethod(methodName, parameterTypes);
 
         Assert.True(method is not null, $"Expected method '{methodName}({string.Join(", ", parameterTypes.Select(p => p.Name))})' was not found.");
-        Assert.Equal(expectedReturnType, method!.ReturnType);
+        method!.ReturnType.ShouldBe(expectedReturnType);
     }
 }

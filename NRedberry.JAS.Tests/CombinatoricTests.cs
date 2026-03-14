@@ -1,4 +1,5 @@
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
@@ -13,6 +14,6 @@ public sealed class CombinatoricTests
     {
         BigInteger factorial = Combinatoric.Factorial(value);
 
-        Assert.Equal(expected, factorial.ToString());
+        factorial.ToString().ShouldBe(expected);
     }
 }

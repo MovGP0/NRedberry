@@ -1,4 +1,4 @@
-using NRedberry.Solver;
+﻿using NRedberry.Solver;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Symmetrization;
 using TensorFactory = NRedberry.Tensors.Tensors;
@@ -18,14 +18,14 @@ public sealed class ReduceEngineTests
             ITransformation[] rules = [];
             bool[] symmetricForm = [false];
 
-            Assert.Throws<ArgumentNullException>(() => ReduceEngine.ReduceToSymbolicSystem(null!, vars, rules));
-            Assert.Throws<ArgumentNullException>(() => ReduceEngine.ReduceToSymbolicSystem(equations, null!, rules));
-            Assert.Throws<ArgumentNullException>(() => ReduceEngine.ReduceToSymbolicSystem(equations, vars, null!));
+            Should.Throw<ArgumentNullException>(() => ReduceEngine.ReduceToSymbolicSystem(null!, vars, rules));
+            Should.Throw<ArgumentNullException>(() => ReduceEngine.ReduceToSymbolicSystem(equations, null!, rules));
+            Should.Throw<ArgumentNullException>(() => ReduceEngine.ReduceToSymbolicSystem(equations, vars, null!));
 
-            Assert.Throws<ArgumentNullException>(() => ReduceEngine.ReduceToSymbolicSystem(null!, vars, rules, symmetricForm));
-            Assert.Throws<ArgumentNullException>(() => ReduceEngine.ReduceToSymbolicSystem(equations, null!, rules, symmetricForm));
-            Assert.Throws<ArgumentNullException>(() => ReduceEngine.ReduceToSymbolicSystem(equations, vars, null!, symmetricForm));
-            Assert.Throws<ArgumentNullException>(() => ReduceEngine.ReduceToSymbolicSystem(equations, vars, rules, null!));
+            Should.Throw<ArgumentNullException>(() => ReduceEngine.ReduceToSymbolicSystem(null!, vars, rules, symmetricForm));
+            Should.Throw<ArgumentNullException>(() => ReduceEngine.ReduceToSymbolicSystem(equations, null!, rules, symmetricForm));
+            Should.Throw<ArgumentNullException>(() => ReduceEngine.ReduceToSymbolicSystem(equations, vars, null!, symmetricForm));
+            Should.Throw<ArgumentNullException>(() => ReduceEngine.ReduceToSymbolicSystem(equations, vars, rules, null!));
         }
         catch (TypeInitializationException)
         {
@@ -41,9 +41,9 @@ public sealed class ReduceEngineTests
             var vars = new[] { TensorFactory.ParseSimple("x") };
             ITransformation[] rules = [];
 
-            var exception = Assert.Throws<ArgumentException>(() => ReduceEngine.ReduceToSymbolicSystem(equations, vars, rules, []));
+            var exception = Should.Throw<ArgumentException>(() => ReduceEngine.ReduceToSymbolicSystem(equations, vars, rules, []));
 
-            Assert.Equal("symmetricForm", exception.ParamName);
+            exception.ParamName.ShouldBe("symmetricForm");
         }
         catch (TypeInitializationException)
         {
@@ -61,7 +61,7 @@ public sealed class ReduceEngineTests
 
             ReducedSystem reduced = ReduceEngine.ReduceToSymbolicSystem(equations, vars, rules, [false]);
 
-            Assert.Null(reduced);
+            reduced.ShouldBeNull();
         }
         catch (TypeInitializationException)
         {
@@ -79,21 +79,21 @@ public sealed class ReduceEngineTests
 
             ReducedSystem reduced = ReduceEngine.ReduceToSymbolicSystem(equations, vars, rules);
 
-            Assert.NotNull(reduced);
+            reduced.ShouldNotBeNull();
 
             var reducedEquations = reduced.GetEquations();
             var unknownCoefficients = reduced.GetUnknownCoefficients();
             var generalSolutions = reduced.GetGeneralSolutions();
 
-            Assert.Single(reducedEquations);
-            Assert.Equal(2, unknownCoefficients.Length);
-            Assert.Equal(2, generalSolutions.Length);
+            reducedEquations.ShouldHaveSingleItem();
+            unknownCoefficients.Length.ShouldBe(2);
+            generalSolutions.Length.ShouldBe(2);
 
             HashSet<int> variableNames = [vars[0].Name, vars[1].Name];
             foreach (Expression reducedEquation in reducedEquations)
             {
-                Assert.False(TensorUtils.ContainsSimpleTensors(reducedEquation, variableNames));
-                Assert.True(TensorUtils.Equals(reducedEquation[1], TensorFactory.Parse("0")));
+                TensorUtils.ContainsSimpleTensors(reducedEquation, variableNames).ShouldBeFalse();
+                TensorUtils.Equals(reducedEquation[1], TensorFactory.Parse("0")).ShouldBeTrue();
             }
         }
         catch (TypeInitializationException)

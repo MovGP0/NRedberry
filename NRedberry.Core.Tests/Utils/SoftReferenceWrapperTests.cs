@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -11,12 +11,12 @@ public sealed class SoftReferenceWrapperTests
         object value = new();
         SoftReferenceWrapper<object> wrapper = new(value);
 
-        Assert.Same(value, wrapper.GetReferent());
+        wrapper.GetReferent().ShouldBeSameAs(value);
 
         object replacement = new();
         wrapper.ResetReferent(replacement);
 
-        Assert.Same(replacement, wrapper.GetReferent());
+        wrapper.GetReferent().ShouldBeSameAs(replacement);
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public sealed class SoftReferenceWrapperTests
 
         wrapper.ResetReference(reference);
 
-        Assert.Same(reference, wrapper.GetReference());
-        Assert.Same(value, wrapper.GetReferent());
+        wrapper.GetReference().ShouldBeSameAs(reference);
+        wrapper.GetReferent().ShouldBeSameAs(value);
     }
 }

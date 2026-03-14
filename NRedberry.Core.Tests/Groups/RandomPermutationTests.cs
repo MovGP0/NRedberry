@@ -1,5 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
+using Shouldly;
 using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
@@ -16,7 +17,7 @@ public sealed class RandomPermutationTests
             GroupPermutations.CreatePermutation(2, 0, 1)
         ];
 
-        Assert.Throws<ArgumentException>(() => RandomPermutation.Random(generators, new Random(1)));
+        Should.Throw<ArgumentException>(() => RandomPermutation.Random(generators, new Random(1)));
     }
 
     [Fact(DisplayName = "Randomness should throw when generators count and extend size are both less than 2")]
@@ -27,7 +28,7 @@ public sealed class RandomPermutationTests
             GroupPermutations.CreatePermutation(1, 0, 2)
         ];
 
-        Assert.Throws<ArgumentException>(() => RandomPermutation.Randomness(generators, 1, 0, new Random(7)));
+        Should.Throw<ArgumentException>(() => RandomPermutation.Randomness(generators, 1, 0, new Random(7)));
     }
 
     [Fact(DisplayName = "Randomness should extend list and append identity when needed")]
@@ -41,8 +42,8 @@ public sealed class RandomPermutationTests
 
         RandomPermutation.Randomness(generators, 5, 0, new Random(3));
 
-        Assert.True(generators.Count >= 6);
-        Assert.True(generators[^1].IsIdentity);
+        generators.Count.ShouldBeGreaterThanOrEqualTo(6);
+        generators[^1].IsIdentity.ShouldBeTrue();
     }
 
     [Fact(DisplayName = "Randomness should keep generators count at least requested size and last entry identity")]
@@ -57,8 +58,8 @@ public sealed class RandomPermutationTests
 
         RandomPermutation.Randomness(generators, 3, 0, new Random(11));
 
-        Assert.True(generators.Count >= 3);
-        Assert.True(generators[^1].IsIdentity);
+        generators.Count.ShouldBeGreaterThanOrEqualTo(3);
+        generators[^1].IsIdentity.ShouldBeTrue();
     }
 
     [Fact(DisplayName = "Random should return permutation and mutate deterministically for same seeded setup")]
@@ -77,12 +78,12 @@ public sealed class RandomPermutationTests
         Permutation leftResult = RandomPermutation.Random(left, new Random(123456));
         Permutation rightResult = RandomPermutation.Random(right, new Random(123456));
 
-        Assert.NotNull(leftResult);
-        Assert.NotNull(rightResult);
-        AssertPermutationEqual(leftResult, rightResult);
+        leftResult.ShouldNotBeNull();
+        rightResult.ShouldNotBeNull();
+        ShouldMatchPermutation(leftResult, rightResult);
 
-        AssertPermutationListsEqual(left, right);
-        Assert.False(PermutationListsEqual(left, baseline));
+        ShouldMatchPermutationList(left, right);
+        PermutationListsEqual(left, baseline).ShouldBeFalse();
     }
 
     private static List<Permutation> ClonePermutationList(IList<Permutation> source)
@@ -115,14 +116,14 @@ public sealed class RandomPermutationTests
         return true;
     }
 
-    private static void AssertPermutationListsEqual(IList<Permutation> left, IList<Permutation> right)
+    private static void ShouldMatchPermutationList(IList<Permutation> left, IList<Permutation> right)
     {
-        Assert.True(PermutationListsEqual(left, right));
+        PermutationListsEqual(left, right).ShouldBeTrue();
     }
 
-    private static void AssertPermutationEqual(Permutation left, Permutation right)
+    private static void ShouldMatchPermutation(Permutation left, Permutation right)
     {
-        Assert.Equal(left.IsAntisymmetry, right.IsAntisymmetry);
-        Assert.Equal(left.OneLine(), right.OneLine());
+        left.IsAntisymmetry.ShouldBe(right.IsAntisymmetry);
+        left.OneLine().ShouldBe(right.OneLine());
     }
 }

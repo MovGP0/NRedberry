@@ -3,6 +3,7 @@ using NRedberry.Concurrent;
 using NRedberry.IndexMapping;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
+using Shouldly;
 using TensorType = NRedberry.Tensors.Tensor;
 using Xunit;
 
@@ -16,10 +17,10 @@ public sealed class IndexMappingProviderAbstractFTTests
         IOutputPort<IIndexMappingBuffer> outputPort = new SequenceOutputPort(new TestIndexMappingBuffer());
         TensorType toTensor = Complex.Zero;
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() =>
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() =>
             new TestProvider(outputPort, fromTensor: null!, toTensor));
 
-        Assert.Equal("fromTensor", exception.ParamName);
+        exception.ParamName.ShouldBe("fromTensor");
     }
 
     [Fact]
@@ -28,10 +29,10 @@ public sealed class IndexMappingProviderAbstractFTTests
         IOutputPort<IIndexMappingBuffer> outputPort = new SequenceOutputPort(new TestIndexMappingBuffer());
         TensorType fromTensor = Complex.One;
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() =>
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() =>
             new TestProvider(outputPort, fromTensor, toTensor: null!));
 
-        Assert.Equal("toTensor", exception.ParamName);
+        exception.ParamName.ShouldBe("toTensor");
     }
 
     [Fact]
@@ -43,8 +44,8 @@ public sealed class IndexMappingProviderAbstractFTTests
 
         var provider = new TestProvider(outputPort, fromTensor, toTensor);
 
-        Assert.Same(fromTensor, provider.FromTensor);
-        Assert.Same(toTensor, provider.ToTensor);
+        provider.FromTensor.ShouldBeSameAs(fromTensor);
+        provider.ToTensor.ShouldBeSameAs(toTensor);
     }
 
     [Fact]
@@ -59,10 +60,10 @@ public sealed class IndexMappingProviderAbstractFTTests
         bool secondTick = provider.Tick();
         IIndexMappingBuffer? secondTake = provider.Take();
 
-        Assert.True(firstTick);
-        Assert.Same(buffer, firstTake);
-        Assert.False(secondTick);
-        Assert.Null(secondTake);
+        firstTick.ShouldBeTrue();
+        firstTake.ShouldBeSameAs(buffer);
+        secondTick.ShouldBeFalse();
+        secondTake.ShouldBeNull();
     }
 
     private sealed class TestProvider : IndexMappingProviderAbstractFT<TensorType>

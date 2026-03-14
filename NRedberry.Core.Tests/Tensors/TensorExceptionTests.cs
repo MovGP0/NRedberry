@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -11,9 +11,9 @@ public sealed class TensorExceptionTests
     {
         TensorException exception = new("failure", 1234);
 
-        Assert.Contains("failure", exception.Message);
-        Assert.Contains("nmseed: 1234", exception.Message);
-        Assert.Empty(exception.Tensors);
+        exception.Message.ShouldContain("failure");
+        exception.Message.ShouldContain("nmseed: 1234");
+        exception.Tensors.ShouldBeEmpty();
     }
 
     [Fact]
@@ -22,11 +22,11 @@ public sealed class TensorExceptionTests
         NRedberry.Tensors.Tensor tensor = TensorFactory.Parse("a+b");
         TensorException exception = new("failure", 77, tensor);
 
-        Assert.Contains("\"failure\" in tensors", exception.Message);
-        Assert.Contains("a+b", exception.Message);
-        Assert.Contains("nmseed: 77", exception.Message);
-        Assert.Single(exception.Tensors);
-        Assert.Same(tensor, exception.Tensors[0]);
+        exception.Message.ShouldContain("\"failure\" in tensors");
+        exception.Message.ShouldContain("a+b");
+        exception.Message.ShouldContain("nmseed: 77");
+        exception.Tensors.ShouldHaveSingleItem();
+        exception.Tensors[0].ShouldBeSameAs(tensor);
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public sealed class TensorExceptionTests
         InvalidOperationException inner = new("boom");
         TensorException exception = new("failure", inner);
 
-        Assert.Same(inner, exception.InnerException);
-        Assert.Contains("failure", exception.Message);
+        exception.InnerException.ShouldBeSameAs(inner);
+        exception.Message.ShouldContain("failure");
     }
 }

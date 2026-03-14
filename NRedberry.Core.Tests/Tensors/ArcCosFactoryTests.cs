@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Tensors;
 using NRedberry.Tensors.Functions;
 using TensorApi = NRedberry.Tensors.Tensors;
@@ -13,10 +13,8 @@ public sealed class ArcCosFactoryTests
     {
         NRedberry.Tensors.Tensor argument = TensorApi.Parse("a");
 
-        Assert.Same(argument, ArcCosFactory.Factory.Create(new Cos(argument)));
-        Assert.Equal(
-            TensorApi.Parse("pi/2").ToString(OutputFormat.Redberry),
-            ArcCosFactory.Factory.Create(Complex.Zero).ToString(OutputFormat.Redberry));
-        Assert.IsType<ArcCos>(ArcCosFactory.Factory.Create(argument));
+        ArcCosFactory.Factory.Create(new Cos(argument)).ShouldBeSameAs(argument);
+        ArcCosFactory.Factory.Create(Complex.Zero).ToString(OutputFormat.Redberry).ShouldBe(TensorApi.Parse("pi/2").ToString(OutputFormat.Redberry));
+        ArcCosFactory.Factory.Create(argument).ShouldBeOfType<ArcCos>();
     }
 }

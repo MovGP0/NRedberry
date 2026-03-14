@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Tensors;
 using Xunit;
 
@@ -14,8 +14,8 @@ public sealed class TensorTests
         NRedberry.Tensors.Tensor[] range = tensor.GetRange(1, 3);
         NRedberry.Tensors.Tensor[] array = tensor.ToArray();
 
-        Assert.Equal(["b", "c"], range.Select(t => t.ToString(OutputFormat.Redberry)).ToArray());
-        Assert.Equal(["a", "b", "c"], array.Select(t => t.ToString(OutputFormat.Redberry)).ToArray());
+        range.Select(t => t.ToString(OutputFormat.Redberry)).ToArray().ShouldBe(["b", "c"]);
+        array.Select(t => t.ToString(OutputFormat.Redberry)).ToArray().ShouldBe(["a", "b", "c"]);
     }
 
     [Fact]
@@ -23,9 +23,9 @@ public sealed class TensorTests
     {
         TestTensor tensor = new("root", 10, new TestTensor("a", 1), new TestTensor("b", 2));
 
-        Assert.Throws<IndexOutOfRangeException>(() => tensor.GetRange(1, 3));
-        Assert.Throws<IndexOutOfRangeException>(() => tensor.Set(2, new TestTensor("c", 3)));
-        Assert.Throws<ArgumentNullException>(() => tensor.Set(0, null!));
+        Should.Throw<IndexOutOfRangeException>(() => tensor.GetRange(1, 3));
+        Should.Throw<IndexOutOfRangeException>(() => tensor.Set(2, new TestTensor("c", 3)));
+        Should.Throw<ArgumentNullException>(() => tensor.Set(0, null!));
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public sealed class TensorTests
 
         NRedberry.Tensors.Tensor replaced = tensor.Set(1, new TestTensor("c", 3));
 
-        Assert.Equal("root(a,c)", replaced.ToString(OutputFormat.Redberry));
+        replaced.ToString(OutputFormat.Redberry).ShouldBe("root(a,c)");
     }
 
     [Fact]
@@ -44,17 +44,17 @@ public sealed class TensorTests
         TestTensor left = new("left", 1);
         TestTensor right = new("right", 5);
 
-        Assert.True(left.CompareTo(right) < 0);
-        Assert.True(right.CompareTo(left) > 0);
-        Assert.Equal(1, right.CompareTo(null));
+        left.CompareTo(right) < 0.ShouldBeTrue();
+        right.CompareTo(left) > 0.ShouldBeTrue();
+        right.CompareTo(null).ShouldBe(1);
     }
 
     [Fact]
     public void StaticHelpersShouldGuardNullArguments()
     {
-        Assert.Throws<ArgumentNullException>(() => NRedberry.Tensors.Tensor.Sum(null!));
-        Assert.Throws<ArgumentNullException>(() => NRedberry.Tensors.Tensor.Expression(null!, new TestTensor("a", 1)));
-        Assert.Throws<ArgumentNullException>(() => NRedberry.Tensors.Tensor.Expression(new TestTensor("a", 1), null!));
+        Should.Throw<ArgumentNullException>(() => NRedberry.Tensors.Tensor.Sum(null!));
+        Should.Throw<ArgumentNullException>(() => NRedberry.Tensors.Tensor.Expression(null!, new TestTensor("a", 1)));
+        Should.Throw<ArgumentNullException>(() => NRedberry.Tensors.Tensor.Expression(new TestTensor("a", 1), null!));
     }
 
     private sealed class TestTensor(string text, int hashCode, params NRedberry.Tensors.Tensor[] children) : NRedberry.Tensors.Tensor

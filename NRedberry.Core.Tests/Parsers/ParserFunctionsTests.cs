@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NRedberry.Parsers;
 using RedberryParser = NRedberry.Parsers.Parser;
 using Xunit;
@@ -13,13 +13,13 @@ public sealed class ParserFunctionsTests
         var first = ParserFunctions.Instance;
         var second = ParserFunctions.Instance;
 
-        Assert.Same(first, second);
+        second.ShouldBeSameAs(first);
     }
 
     [Fact]
     public void ShouldExposeExpectedPriority()
     {
-        Assert.Equal(9987, ParserFunctions.Instance.Priority);
+        ParserFunctions.Instance.Priority.ShouldBe(9987);
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public sealed class ParserFunctionsTests
     {
         var token = ParserFunctions.Instance.ParseToken("Sinx", RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public sealed class ParserFunctionsTests
     {
         var token = ParserFunctions.Instance.ParseToken("Sin[x", RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public sealed class ParserFunctionsTests
     {
         var token = ParserFunctions.Instance.ParseToken("Foo[x]", RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public sealed class ParserFunctionsTests
     {
         var token = ParserFunctions.Instance.ParseToken("Sinx]", RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
@@ -59,15 +59,15 @@ public sealed class ParserFunctionsTests
     {
         var token = ParserFunctions.Instance.ParseToken("Sin[]a]", RedberryParser.Default);
 
-        Assert.Null(token);
+        token.ShouldBeNull();
     }
 
     [Fact]
     public void ShouldThrowWhenFunctionHasMultipleTopLevelArguments()
     {
-        var exception = Assert.Throws<ParserException>(() => ParserFunctions.Instance.ParseToken("Sin[x,y]", RedberryParser.Default));
+        var exception = Should.Throw<ParserException>(() => ParserFunctions.Instance.ParseToken("Sin[x,y]", RedberryParser.Default));
 
-        Assert.Equal("Sin, Cos, Tan and others scalar functions take only one argument.", exception.Message);
+        exception.Message.ShouldBe("Sin, Cos, Tan and others scalar functions take only one argument.");
     }
 
     [Fact]
@@ -75,10 +75,10 @@ public sealed class ParserFunctionsTests
     {
         var token = ParserFunctions.Instance.ParseToken("Sin[f[a,b]]", RedberryParser.Default);
 
-        var scalarFunction = Assert.IsType<ParseTokenScalarFunction>(token);
-        Assert.Equal("Sin", scalarFunction.Function);
-        Assert.Single(scalarFunction.Content);
-        Assert.Equal(TokenType.TensorField, scalarFunction.Content[0].TokenType);
+        var scalarFunction = token.ShouldBeOfType<ParseTokenScalarFunction>();
+        scalarFunction.Function.ShouldBe("Sin");
+        scalarFunction.Content.ShouldHaveSingleItem();
+        scalarFunction.Content[0].TokenType.ShouldBe(TokenType.TensorField);
     }
 
     [Theory]
@@ -87,10 +87,10 @@ public sealed class ParserFunctionsTests
     {
         var token = ParserFunctions.Instance.ParseToken($"{functionName}[x]", RedberryParser.Default);
 
-        var scalarFunction = Assert.IsType<ParseTokenScalarFunction>(token);
-        Assert.Equal(TokenType.ScalarFunction, scalarFunction.TokenType);
-        Assert.Equal(functionName, scalarFunction.Function);
-        Assert.Single(scalarFunction.Content);
+        var scalarFunction = token.ShouldBeOfType<ParseTokenScalarFunction>();
+        scalarFunction.TokenType.ShouldBe(TokenType.ScalarFunction);
+        scalarFunction.Function.ShouldBe(functionName);
+        scalarFunction.Content.ShouldHaveSingleItem();
     }
 
     public static IEnumerable<object[]> SupportedFunctions()

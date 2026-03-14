@@ -14,13 +14,13 @@ public sealed class TypesAndNamesTransformerTests
         var transformer = TypesAndNamesTransformer.Utils.SetIndices([30, 10, 20], [300, 100, 200]);
         var descriptor = CreateDescriptor("F");
 
-        Assert.Equal(100, transformer.NewIndex(10, descriptor));
-        Assert.Equal(200, transformer.NewIndex(20, descriptor));
-        Assert.Equal(300, transformer.NewIndex(30, descriptor));
-        Assert.Equal(99, transformer.NewIndex(99, descriptor));
+        transformer.NewIndex(10, descriptor).ShouldBe(100);
+        transformer.NewIndex(20, descriptor).ShouldBe(200);
+        transformer.NewIndex(30, descriptor).ShouldBe(300);
+        transformer.NewIndex(99, descriptor).ShouldBe(99);
 
-        Assert.Equal(IndexType.GreekUpper, transformer.NewType(IndexType.GreekUpper, descriptor));
-        Assert.Equal("Name", transformer.NewName("Name", descriptor));
+        transformer.NewType(IndexType.GreekUpper, descriptor).ShouldBe(IndexType.GreekUpper);
+        transformer.NewName("Name", descriptor).ShouldBe("Name");
     }
 
     [Fact]
@@ -29,11 +29,11 @@ public sealed class TypesAndNamesTransformerTests
         var transformer = TypesAndNamesTransformer.Utils.ChangeType(IndexType.LatinLower, IndexType.LatinUpper);
         var descriptor = CreateDescriptor("F");
 
-        Assert.Equal(IndexType.LatinUpper, transformer.NewType(IndexType.LatinLower, descriptor));
-        Assert.Equal(IndexType.GreekLower, transformer.NewType(IndexType.GreekLower, descriptor));
+        transformer.NewType(IndexType.LatinLower, descriptor).ShouldBe(IndexType.LatinUpper);
+        transformer.NewType(IndexType.GreekLower, descriptor).ShouldBe(IndexType.GreekLower);
 
-        Assert.Equal(17, transformer.NewIndex(17, descriptor));
-        Assert.Equal("f", transformer.NewName("f", descriptor));
+        transformer.NewIndex(17, descriptor).ShouldBe(17);
+        transformer.NewName("f", descriptor).ShouldBe("f");
     }
 
     [Fact]
@@ -44,11 +44,11 @@ public sealed class TypesAndNamesTransformerTests
         var mappedDescriptor = CreateDescriptor("f");
         var unmappedDescriptor = CreateDescriptor("x");
 
-        Assert.Equal("F", transformer.NewName("ignored", mappedDescriptor));
-        Assert.Equal("x", transformer.NewName("ignored", unmappedDescriptor));
+        transformer.NewName("ignored", mappedDescriptor).ShouldBe("F");
+        transformer.NewName("ignored", unmappedDescriptor).ShouldBe("x");
 
-        Assert.Equal(IndexType.Matrix1, transformer.NewType(IndexType.Matrix1, mappedDescriptor));
-        Assert.Equal(7, transformer.NewIndex(7, mappedDescriptor));
+        transformer.NewType(IndexType.Matrix1, mappedDescriptor).ShouldBe(IndexType.Matrix1);
+        transformer.NewIndex(7, mappedDescriptor).ShouldBe(7);
     }
 
     [Fact]
@@ -67,9 +67,9 @@ public sealed class TypesAndNamesTransformerTests
 
         var combined = TypesAndNamesTransformer.Utils.And(first, second);
 
-        Assert.Equal(IndexType.GreekUpper, combined.NewType(IndexType.Matrix4, descriptor));
-        Assert.Equal(8, combined.NewIndex(3, descriptor));
-        Assert.Equal("x12", combined.NewName("x", descriptor));
+        combined.NewType(IndexType.Matrix4, descriptor).ShouldBe(IndexType.GreekUpper);
+        combined.NewIndex(3, descriptor).ShouldBe(8);
+        combined.NewName("x", descriptor).ShouldBe("x12");
     }
 
     [Fact]
@@ -78,37 +78,37 @@ public sealed class TypesAndNamesTransformerTests
         var descriptor = CreateDescriptor("f");
         var combined = TypesAndNamesTransformer.Utils.And();
 
-        Assert.Equal(IndexType.Matrix2, combined.NewType(IndexType.Matrix2, descriptor));
-        Assert.Equal(42, combined.NewIndex(42, descriptor));
-        Assert.Equal("abc", combined.NewName("abc", descriptor));
+        combined.NewType(IndexType.Matrix2, descriptor).ShouldBe(IndexType.Matrix2);
+        combined.NewIndex(42, descriptor).ShouldBe(42);
+        combined.NewName("abc", descriptor).ShouldBe("abc");
     }
 
     [Fact]
     public void ShouldThrowWhenSetIndicesArgumentsAreNull()
     {
-        var fromException = Assert.Throws<ArgumentNullException>(() => TypesAndNamesTransformer.Utils.SetIndices(null!, [1]));
-        var toException = Assert.Throws<ArgumentNullException>(() => TypesAndNamesTransformer.Utils.SetIndices([1], null!));
+        var fromException = Should.Throw<ArgumentNullException>(() => TypesAndNamesTransformer.Utils.SetIndices(null!, [1]));
+        var toException = Should.Throw<ArgumentNullException>(() => TypesAndNamesTransformer.Utils.SetIndices([1], null!));
 
-        Assert.Equal("from", fromException.ParamName);
-        Assert.Equal("to", toException.ParamName);
+        fromException.ParamName.ShouldBe("from");
+        toException.ParamName.ShouldBe("to");
     }
 
     [Fact]
     public void ShouldThrowWhenChangeNameArgumentsAreNull()
     {
-        var fromException = Assert.Throws<ArgumentNullException>(() => TypesAndNamesTransformer.Utils.ChangeName(null!, ["a"]));
-        var toException = Assert.Throws<ArgumentNullException>(() => TypesAndNamesTransformer.Utils.ChangeName(["a"], null!));
+        var fromException = Should.Throw<ArgumentNullException>(() => TypesAndNamesTransformer.Utils.ChangeName(null!, ["a"]));
+        var toException = Should.Throw<ArgumentNullException>(() => TypesAndNamesTransformer.Utils.ChangeName(["a"], null!));
 
-        Assert.Equal("from", fromException.ParamName);
-        Assert.Equal("to", toException.ParamName);
+        fromException.ParamName.ShouldBe("from");
+        toException.ParamName.ShouldBe("to");
     }
 
     [Fact]
     public void ShouldThrowWhenComposedTransformersArrayIsNull()
     {
-        var exception = Assert.Throws<ArgumentNullException>(() => TypesAndNamesTransformer.Utils.And(null!));
+        var exception = Should.Throw<ArgumentNullException>(() => TypesAndNamesTransformer.Utils.And(null!));
 
-        Assert.Equal("transformers", exception.ParamName);
+        exception.ParamName.ShouldBe("transformers");
     }
 
     private static NameAndStructureOfIndices CreateDescriptor(string name)

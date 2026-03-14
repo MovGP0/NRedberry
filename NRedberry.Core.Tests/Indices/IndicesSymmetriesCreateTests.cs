@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
@@ -25,7 +25,7 @@ public sealed class IndicesSymmetriesCreateTests
 
         IndicesSymmetries result = IndicesSymmetries.Create(structureOfIndices!);
 
-        Assert.Same(IndicesSymmetries.EmptySymmetries, result);
+        result.ShouldBeSameAs(IndicesSymmetries.EmptySymmetries);
     }
 
     [Fact]
@@ -38,9 +38,9 @@ public sealed class IndicesSymmetriesCreateTests
 
         PermutationGroup group = PermutationGroup.SymmetricGroup(2);
 
-        ArgumentException exception = Assert.Throws<ArgumentException>(() => IndicesSymmetries.Create(structureOfIndices, group));
+        ArgumentException exception = Should.Throw<ArgumentException>(() => IndicesSymmetries.Create(structureOfIndices, group));
 
-        Assert.Equal("Degree of permutation group not equal to indices size.", exception.Message);
+        exception.Message.ShouldBe("Degree of permutation group not equal to indices size.");
     }
 
     [Fact]
@@ -60,7 +60,7 @@ public sealed class IndicesSymmetriesCreateTests
 
         IndicesSymmetries result = IndicesSymmetries.Create(structureOfIndices!, group);
 
-        Assert.Same(IndicesSymmetries.EmptySymmetries, result);
+        result.ShouldBeSameAs(IndicesSymmetries.EmptySymmetries);
     }
 
     [Fact]
@@ -76,9 +76,9 @@ public sealed class IndicesSymmetriesCreateTests
             GroupPermutations.CreatePermutation(GroupPermutations.CreateTransposition(2, 0, 1))
         ];
 
-        ArgumentException exception = Assert.Throws<ArgumentException>(() => IndicesSymmetries.Create(structureOfIndices, generators));
+        ArgumentException exception = Should.Throw<ArgumentException>(() => IndicesSymmetries.Create(structureOfIndices, generators));
 
-        Assert.Equal("Permutation degree not equal to indices size.", exception.Message);
+        exception.Message.ShouldBe("Permutation degree not equal to indices size.");
     }
 
     [Fact]
@@ -98,7 +98,7 @@ public sealed class IndicesSymmetriesCreateTests
 
         IndicesSymmetries result = IndicesSymmetries.Create(structureOfIndices!, generators);
 
-        Assert.Same(IndicesSymmetries.EmptySymmetries, result);
+        result.ShouldBeSameAs(IndicesSymmetries.EmptySymmetries);
     }
 
     [Fact]
@@ -116,9 +116,9 @@ public sealed class IndicesSymmetriesCreateTests
 
         IndicesSymmetries result = IndicesSymmetries.Create(structureOfIndices, generators);
 
-        Assert.NotSame(IndicesSymmetries.EmptySymmetries, result);
-        Assert.Equal(structureOfIndices, result.StructureOfIndices);
-        Assert.False(result.IsEmpty);
+        result.ShouldNotBeSameAs(IndicesSymmetries.EmptySymmetries);
+        result.StructureOfIndices.ShouldBe(structureOfIndices);
+        result.IsEmpty.ShouldBeFalse();
     }
 
     private static bool TryCreateStructureOfSize(int size, out StructureOfIndices? structureOfIndices)

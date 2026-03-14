@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -10,37 +10,37 @@ public sealed class TensorFieldTests
     [Fact]
     public void ShouldExposeArgumentsAndFactories()
     {
-        TensorField field = Assert.IsType<TensorField>(TensorFactory.Parse("f[x]"));
+        TensorField field = TensorFactory.Parse("f[x]").ShouldBeOfType<TensorField>();
 
-        Assert.Equal(1, field.Size);
-        Assert.Equal("x", field[0].ToString(OutputFormat.Redberry));
-        Assert.False(field.IsDerivative());
-        Assert.False(field.IsDiracDelta());
-        Assert.Same(field, field.GetParentField());
-        Assert.Equal("TensorFieldBuilder", field.GetBuilder().GetType().Name);
-        Assert.Equal("TensorFieldFactory", field.GetFactory()!.GetType().Name);
+        field.Size.ShouldBe(1);
+        field[0].ToString(OutputFormat.Redberry).ShouldBe("x");
+        field.IsDerivative().ShouldBeFalse();
+        field.IsDiracDelta().ShouldBeFalse();
+        field.GetParentField().ShouldBeSameAs(field);
+        field.GetBuilder().GetType().Name.ShouldBe("TensorFieldBuilder");
+        field.GetFactory()!.GetType().Name.ShouldBe("TensorFieldFactory");
     }
 
     [Fact]
     public void ShouldReturnClonedArgumentsAndArgumentIndices()
     {
-        TensorField field = Assert.IsType<TensorField>(TensorFactory.Parse("f[x]"));
+        TensorField field = TensorFactory.Parse("f[x]").ShouldBeOfType<TensorField>();
 
         NRedberry.Tensors.Tensor[] arguments = field.GetArguments();
         SimpleIndices[] argIndices = field.GetArgIndices();
 
-        Assert.Single(arguments);
-        Assert.Single(argIndices);
-        Assert.NotSame(arguments, field.GetArguments());
-        Assert.NotSame(argIndices, field.GetArgIndices());
-        Assert.Equal(0, field.GetArgIndices(0).Size());
+        arguments.ShouldHaveSingleItem();
+        argIndices.ShouldHaveSingleItem();
+        field.GetArguments().ShouldNotBeSameAs(arguments);
+        field.GetArgIndices().ShouldNotBeSameAs(argIndices);
+        field.GetArgIndices(0).Size().ShouldBe(0);
     }
 
     [Fact]
     public void ShouldRenderAsFieldApplication()
     {
-        TensorField field = Assert.IsType<TensorField>(TensorFactory.Parse("f[x]"));
+        TensorField field = TensorFactory.Parse("f[x]").ShouldBeOfType<TensorField>();
 
-        Assert.Equal("f[x]", field.ToString(OutputFormat.Redberry));
+        field.ToString(OutputFormat.Redberry).ShouldBe("f[x]");
     }
 }

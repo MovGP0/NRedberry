@@ -1,4 +1,4 @@
-using NRedberry.Contexts;
+﻿using NRedberry.Contexts;
 using NRedberry.Core.Utils;
 using Shouldly;
 using Xunit;
@@ -30,19 +30,19 @@ public sealed class IBitArrayTests
 
         IBitArray and = left.Clone();
         and.And(right);
-        Assert.Equal(new[] { 3 }, and.GetBits());
+        and.GetBits().ShouldBe(new[] { 3 });
 
         IBitArray or = left.Clone();
         or.Or(right);
-        Assert.Equal(new[] { 1, 3, 5 }, or.GetBits());
+        or.GetBits().ShouldBe(new[] { 1, 3, 5 });
 
         IBitArray xor = left.Clone();
         xor.Xor(right);
-        Assert.Equal(new[] { 1, 5 }, xor.GetBits());
+        xor.GetBits().ShouldBe(new[] { 1, 5 });
 
         xor.ClearAll();
         xor.SetAll();
-        Assert.Equal(xor.Size, xor.BitCount());
-        Assert.Equal(0, xor.NextTrailingBit(0));
+        xor.BitCount().ShouldBe(xor.Size);
+        xor.NextTrailingBit(0).ShouldBe(0);
     }
 }

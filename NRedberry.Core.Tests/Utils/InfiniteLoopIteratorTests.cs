@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -10,14 +10,14 @@ public sealed class InfiniteLoopIteratorTests
     {
         InfiniteLoopIterator<int> iterator = new(1, 2, 3);
 
-        Assert.True(iterator.MoveNext());
-        Assert.Equal(1, iterator.Current);
-        Assert.True(iterator.MoveNext());
-        Assert.Equal(2, iterator.Current);
-        Assert.True(iterator.MoveNext());
-        Assert.Equal(3, iterator.Current);
-        Assert.True(iterator.MoveNext());
-        Assert.Equal(1, iterator.Current);
+        iterator.MoveNext().ShouldBeTrue();
+        iterator.Current.ShouldBe(1);
+        iterator.MoveNext().ShouldBeTrue();
+        iterator.Current.ShouldBe(2);
+        iterator.MoveNext().ShouldBeTrue();
+        iterator.Current.ShouldBe(3);
+        iterator.MoveNext().ShouldBeTrue();
+        iterator.Current.ShouldBe(1);
     }
 
     [Fact]
@@ -25,15 +25,15 @@ public sealed class InfiniteLoopIteratorTests
     {
         InfiniteLoopIterator<string> iterator = new("a", "b");
 
-        Assert.Throws<InvalidOperationException>(() => _ = iterator.Current);
-        Assert.True(iterator.MoveNext());
-        Assert.Equal("a", iterator.Current);
+        Should.Throw<InvalidOperationException>(() => _ = iterator.Current);
+        iterator.MoveNext().ShouldBeTrue();
+        iterator.Current.ShouldBe("a");
 
         iterator.Reset();
 
-        Assert.Throws<InvalidOperationException>(() => _ = iterator.Current);
-        Assert.True(iterator.MoveNext());
-        Assert.Equal("a", iterator.Current);
+        Should.Throw<InvalidOperationException>(() => _ = iterator.Current);
+        iterator.MoveNext().ShouldBeTrue();
+        iterator.Current.ShouldBe("a");
     }
 
     [Fact]
@@ -41,6 +41,6 @@ public sealed class InfiniteLoopIteratorTests
     {
         InfiniteLoopIterator<int> iterator = new();
 
-        Assert.False(iterator.MoveNext());
+        iterator.MoveNext().ShouldBeFalse();
     }
 }

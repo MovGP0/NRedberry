@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NRedberry.Contexts;
 using NRedberry.Indices;
@@ -21,11 +21,11 @@ public sealed class ChangeIndicesTypesAndTensorNamesTest
         ParseToken transformed = transformer.Transform(token);
         IReadOnlyList<ParseTokenSimpleTensor> tensors = CollectSimpleTensors(transformed);
 
-        Assert.Equal(3, tensors.Count);
-        Assert.Equal(2, tensors.Count(tensor => tensor.Name == "f"));
-        Assert.Equal(1, tensors.Count(tensor => tensor.Name == "k"));
-        Assert.All(tensors, tensor => Assert.False(ContainsIndicesOfType(tensor.Indices, IndexType.LatinLower)));
-        Assert.All(tensors, tensor => Assert.True(ContainsIndicesOfType(tensor.Indices, IndexType.LatinUpper)));
+        tensors.Count.ShouldBe(3);
+        tensors.Count(tensor => tensor.Name == "f").ShouldBe(2);
+        tensors.Count(tensor => tensor.Name == "k").ShouldBe(1);
+        Assert.All(tensors, tensor => ContainsIndicesOfType(tensor.Indices, IndexType.LatinLower).ShouldBeFalse());
+        Assert.All(tensors, tensor => ContainsIndicesOfType(tensor.Indices, IndexType.LatinUpper).ShouldBeTrue());
     }
 
     [Fact]
@@ -40,9 +40,9 @@ public sealed class ChangeIndicesTypesAndTensorNamesTest
         ParseToken transformed = transformer.Transform(token);
         IReadOnlyList<ParseTokenSimpleTensor> tensors = CollectSimpleTensors(transformed);
 
-        Assert.Equal(3, tensors.Count);
-        Assert.All(tensors, tensor => Assert.Equal("k", tensor.Name));
-        Assert.All(tensors, tensor => Assert.False(ContainsIndicesOfType(tensor.Indices, IndexType.LatinLower)));
+        tensors.Count.ShouldBe(3);
+        Assert.All(tensors, tensor => tensor.Name.ShouldBe("k"));
+        Assert.All(tensors, tensor => ContainsIndicesOfType(tensor.Indices, IndexType.LatinLower).ShouldBeFalse());
     }
 
     private static IReadOnlyList<ParseTokenSimpleTensor> CollectSimpleTensors(ParseToken node)

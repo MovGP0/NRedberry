@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using NRedberry.Core.Utils;
 using NRedberry.Transformations.Powerexpand;
@@ -38,7 +38,7 @@ public sealed class PowerExpandTransformationTests
     [Fact]
     public void ShouldExpandIntoChainForCustomIndicator()
     {
-        NRedberry.Tensors.Power power = Assert.IsType<NRedberry.Tensors.Power>(Pow("a*b*c", "d"));
+        NRedberry.Tensors.Power power = Pow("a*b*c", "d").ShouldBeOfType<NRedberry.Tensors.Power>();
         IIndicator<NRedberry.Tensors.Tensor> indicator = new NamedSimpleTensorIndicator(TensorApi.ParseSimple("a"));
 
         NRedberry.Tensors.Tensor actual = TensorApi.Multiply(
@@ -52,7 +52,7 @@ public sealed class PowerExpandTransformationTests
     [Fact]
     public void ShouldExpandToArray()
     {
-        NRedberry.Tensors.Power power = Assert.IsType<NRedberry.Tensors.Power>(Pow("a*b*c", "d"));
+        NRedberry.Tensors.Power power = Pow("a*b*c", "d").ShouldBeOfType<NRedberry.Tensors.Power>();
 
         string[] actual = PowerExpandUtils.PowerExpandToArray(power)
             .Select(static tensor => tensor.ToString())
@@ -67,13 +67,13 @@ public sealed class PowerExpandTransformationTests
         ];
         Array.Sort(expected, StringComparer.Ordinal);
 
-        Assert.Equal(expected, actual);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
     public void ShouldExpandToArrayWithVariables()
     {
-        NRedberry.Tensors.Power power = Assert.IsType<NRedberry.Tensors.Power>(Pow("a*b*c", "d"));
+        NRedberry.Tensors.Power power = Pow("a*b*c", "d").ShouldBeOfType<NRedberry.Tensors.Power>();
 
         NRedberry.Tensors.Tensor actual = TensorApi.Multiply(
             PowerExpandUtils.PowerExpandToArray(power, TensorApi.ParseSimple("a")));
@@ -171,7 +171,7 @@ public sealed class PowerExpandTransformationTests
     [Fact]
     public void ShouldUsePowerExpandName()
     {
-        Assert.Equal("PowerExpand", PowerExpandTransformation.Instance.ToString(OutputFormat.Redberry));
+        PowerExpandTransformation.Instance.ToString(OutputFormat.Redberry).ShouldBe("PowerExpand");
     }
 
     [Fact]
@@ -202,9 +202,7 @@ public sealed class PowerExpandTransformationTests
 
     private static void AssertTensorEquals(NRedberry.Tensors.Tensor expected, NRedberry.Tensors.Tensor actual)
     {
-        Assert.True(
-            NRedberry.Tensors.TensorUtils.EqualsExactly(actual, expected),
-            $"Expected: {expected.ToString(OutputFormat.Redberry)}; Actual: {actual.ToString(OutputFormat.Redberry)}");
+        NRedberry.Tensors.TensorUtils.EqualsExactly(actual, expected).ShouldBeTrue($"Expected: {expected.ToString(OutputFormat.Redberry)}; Actual: {actual.ToString(OutputFormat.Redberry)}");
     }
 }
 

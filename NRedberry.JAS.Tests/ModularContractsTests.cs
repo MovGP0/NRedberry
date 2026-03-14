@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
@@ -11,8 +11,8 @@ public sealed class ModularContractsTests
         Modular modInteger = new ModInteger(new ModIntegerRing(new BigInteger(7)), 5);
         Modular modLong = new ModLong(new ModLongRing(7), 5);
 
-        Assert.Equal("-2", modInteger.GetSymmetricInteger().ToString());
-        Assert.Equal("-2", modLong.GetSymmetricInteger().ToString());
+        modInteger.GetSymmetricInteger().ToString().ShouldBe("-2");
+        modLong.GetSymmetricInteger().ToString().ShouldBe("-2");
     }
 
     [Fact]
@@ -21,7 +21,7 @@ public sealed class ModularContractsTests
         ModularRingFactory<ModInteger> integerRing = new ModIntegerRing(new BigInteger(7));
         ModularRingFactory<ModLong> longRing = new ModLongRing(7);
 
-        Assert.Equal("7", integerRing.GetIntegerModul().ToString());
-        Assert.Equal("7", longRing.GetIntegerModul().ToString());
+        integerRing.GetIntegerModul().ToString().ShouldBe("7");
+        longRing.GetIntegerModul().ToString().ShouldBe("7");
     }
 }

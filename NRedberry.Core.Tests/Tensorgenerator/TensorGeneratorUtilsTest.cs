@@ -1,4 +1,4 @@
-using NRedberry.TensorGenerators;
+﻿using NRedberry.TensorGenerators;
 using TensorType = NRedberry.Tensors.Tensor;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -11,13 +11,13 @@ public sealed class TensorGeneratorUtilsTest
     public void ShouldGenerateAllStateCombinationsForMetric()
     {
         TensorType[] combinations = TensorGeneratorUtils.AllStatesCombinations(TensorFactory.ParseSimple("g_ab"));
-        Assert.Equal(3, combinations.Length);
+        combinations.Length.ShouldBe(3);
     }
 
     [Fact]
     public void ShouldGenerateAllStateCombinationsForTensor()
     {
         TensorType[] combinations = TensorGeneratorUtils.AllStatesCombinations(TensorFactory.ParseSimple("F^a_ab"));
-        Assert.Equal(2, combinations.Length);
+        combinations.Length.ShouldBe(2);
     }
 }

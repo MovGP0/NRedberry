@@ -1,4 +1,4 @@
-using NRedberry.Core.Combinatorics;
+﻿using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
 using Xunit;
 
@@ -11,10 +11,10 @@ public sealed class UnsafeCombinatoricsTests
     {
         Permutation permutation = UnsafeCombinatorics.CreateUnsafe([0, 1, 2]);
 
-        var typed = Assert.IsType<PermutationOneLineInt>(permutation);
-        Assert.True(typed.IsIdentity);
-        Assert.Equal(3, typed.Degree);
-        Assert.Equal(new[] { 0, 1, 2 }, typed.OneLine());
+        var typed = permutation.ShouldBeOfType<PermutationOneLineInt>();
+        typed.IsIdentity.ShouldBeTrue();
+        typed.Degree.ShouldBe(3);
+        typed.OneLine().ShouldBe(new[] { 0, 1, 2 });
     }
 
     [Fact]
@@ -22,10 +22,10 @@ public sealed class UnsafeCombinatoricsTests
     {
         Permutation permutation = UnsafeCombinatorics.CreateUnsafe([1, 0]);
 
-        var typed = Assert.IsType<PermutationOneLineInt>(permutation);
-        Assert.False(typed.IsIdentity);
-        Assert.Equal(2, typed.Degree);
-        Assert.Equal(new[] { 1, 0 }, typed.OneLine());
+        var typed = permutation.ShouldBeOfType<PermutationOneLineInt>();
+        typed.IsIdentity.ShouldBeFalse();
+        typed.Degree.ShouldBe(2);
+        typed.OneLine().ShouldBe(new[] { 1, 0 });
     }
 
     [Fact]
@@ -33,8 +33,8 @@ public sealed class UnsafeCombinatoricsTests
     {
         Symmetry symmetry = UnsafeCombinatorics.CreateUnsafe([1, 0], true);
 
-        Assert.True(symmetry.IsAntisymmetry);
-        Assert.Equal(2, symmetry.Degree);
-        Assert.Equal(new[] { 1, 0 }, symmetry.OneLine());
+        symmetry.IsAntisymmetry.ShouldBeTrue();
+        symmetry.Degree.ShouldBe(2);
+        symmetry.OneLine().ShouldBe(new[] { 1, 0 });
     }
 }

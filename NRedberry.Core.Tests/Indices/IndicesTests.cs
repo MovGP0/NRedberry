@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using NRedberry.Indices;
+using Shouldly;
 using Xunit;
 using IndicesContract = NRedberry.Indices.Indices;
 
@@ -17,9 +18,9 @@ public sealed class IndicesTests
         Type indicesType = typeof(IndicesContract);
         Type[] implementedInterfaces = indicesType.GetInterfaces();
 
-        Assert.True(indicesType.IsInterface);
-        Assert.Contains(typeof(IEnumerable<int>), implementedInterfaces);
-        Assert.Contains(typeof(IEquatable<object>), implementedInterfaces);
+        indicesType.IsInterface.ShouldBeTrue();
+        implementedInterfaces.ShouldContain(typeof(IEnumerable<int>));
+        implementedInterfaces.ShouldContain(typeof(IEquatable<object>));
     }
 
     [Fact]
@@ -42,13 +43,9 @@ public sealed class IndicesTests
             .Where(static property => property.GetIndexParameters().Length > 0)
             .ToArray();
 
-        Assert.Contains(
-            indexers,
-            property => HasIndexerSignature(property, typeof(int), typeof(int)));
+        indexers.ShouldContain(property => HasIndexerSignature(property, typeof(int), typeof(int)));
 
-        Assert.Contains(
-            indexers,
-            property => HasIndexerSignature(property, typeof(int), typeof(IndexType), typeof(int)));
+        indexers.ShouldContain(property => HasIndexerSignature(property, typeof(int), typeof(IndexType), typeof(int)));
     }
 
     [Fact]
@@ -70,29 +67,29 @@ public sealed class IndicesTests
     {
         PropertyInfo property = GetRequiredProperty(typeof(IndicesContract), propertyName);
 
-        Assert.Equal(typeof(ImmutableArray<int>), property.PropertyType);
-        Assert.NotNull(property.GetMethod);
-        Assert.Null(property.SetMethod);
+        property.PropertyType.ShouldBe(typeof(ImmutableArray<int>));
+        property.GetMethod.ShouldNotBeNull();
+        property.SetMethod.ShouldBeNull();
     }
 
     private static void AssertMethod(Type declaringType, string name, Type returnType, params Type[] parameterTypes)
     {
         MethodInfo method = GetRequiredMethod(declaringType, name, parameterTypes);
 
-        Assert.Equal(returnType, method.ReturnType);
+        method.ReturnType.ShouldBe(returnType);
     }
 
     private static MethodInfo GetRequiredMethod(Type declaringType, string name, params Type[] parameterTypes)
     {
         MethodInfo? method = declaringType.GetMethod(name, parameterTypes);
-        Assert.NotNull(method);
+        method.ShouldNotBeNull();
         return method!;
     }
 
     private static PropertyInfo GetRequiredProperty(Type declaringType, string name)
     {
         PropertyInfo? property = declaringType.GetProperty(name, BindingFlags.Public | BindingFlags.Instance);
-        Assert.NotNull(property);
+        property.ShouldNotBeNull();
         return property!;
     }
 

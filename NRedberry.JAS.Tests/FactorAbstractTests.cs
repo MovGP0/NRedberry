@@ -3,6 +3,7 @@ using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
+using Shouldly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
@@ -17,8 +18,8 @@ public sealed class FactorAbstractTests
         GenPolynomial<BigRational> linear = ring.Univariate(0).Sum(ring.FromInteger(1));
         GenPolynomial<BigRational> reducible = ring.Univariate(0, 2L).Subtract(ring.FromInteger(1));
 
-        Assert.True(factor.IsIrreducible(linear));
-        Assert.False(factor.IsIrreducible(reducible));
+        factor.IsIrreducible(linear).ShouldBeTrue();
+        factor.IsIrreducible(reducible).ShouldBeFalse();
     }
 
     [Fact]
@@ -37,11 +38,10 @@ public sealed class FactorAbstractTests
         ]);
         List<GenPolynomial<BigRational>> radicalFactors = factor.BaseFactorsRadical(reducible);
 
-        Assert.Collection(
-            normalized,
-            factorPolynomial => Assert.Equal(x.Sum(ring.FromInteger(1)), factorPolynomial),
-            factorPolynomial => Assert.Equal(x.Subtract(ring.FromInteger(1)), factorPolynomial));
-        Assert.Equal(2, radicalFactors.Count);
+        normalized.Count.ShouldBe(2);
+        normalized[0].ShouldBe(x.Sum(ring.FromInteger(1)));
+        normalized[1].ShouldBe(x.Subtract(ring.FromInteger(1)));
+        radicalFactors.Count.ShouldBe(2);
     }
 
     private static GenPolynomialRing<BigRational> CreateRing()

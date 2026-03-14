@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using NRedberry.Indices;
 using Xunit;
 using TensorIndices = NRedberry.Indices.Indices;
@@ -10,8 +10,8 @@ public class AbstractIndicesTests
     [Fact]
     public void Constructor_ShouldThrowWhenDataIsNull()
     {
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => new TestIndices(null!));
-        Assert.Equal("data", exception.ParamName);
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() => new TestIndices(null!));
+        exception.ParamName.ShouldBe("data");
     }
 
     [Fact]
@@ -20,10 +20,10 @@ public class AbstractIndicesTests
         int[] data = [0x01000001, unchecked((int)0x81000002), 0x02000003];
         TestIndices indices = new(data);
 
-        Assert.Same(data, indices.Data);
-        Assert.Equal(data.Length, indices.Size());
-        Assert.Equal(data, indices.AllIndices);
-        Assert.Equal(data[1], indices[1]);
+        indices.Data.ShouldBeSameAs(data);
+        indices.Size().ShouldBe(data.Length);
+        indices.AllIndices.ShouldBe(data);
+        indices[1].ShouldBe(data[1]);
     }
 
     [Fact]
@@ -39,13 +39,13 @@ public class AbstractIndicesTests
         ImmutableArray<int> secondLower = indices.LowerIndices;
         UpperLowerIndices upperLower = indices.GetCachedUpperLowerForTest();
 
-        Assert.Equal(1, indices.CalculateUpperLowerCallCount);
-        Assert.True(firstUpper.SequenceEqual([upper]));
-        Assert.True(secondUpper.SequenceEqual([upper]));
-        Assert.True(firstLower.SequenceEqual([lower]));
-        Assert.True(secondLower.SequenceEqual([lower]));
-        Assert.True(upperLower.Upper.SequenceEqual([upper]));
-        Assert.True(upperLower.Lower.SequenceEqual([lower]));
+        indices.CalculateUpperLowerCallCount.ShouldBe(1);
+        firstUpper.SequenceEqual([upper]).ShouldBeTrue();
+        secondUpper.SequenceEqual([upper]).ShouldBeTrue();
+        firstLower.SequenceEqual([lower]).ShouldBeTrue();
+        secondLower.SequenceEqual([lower]).ShouldBeTrue();
+        upperLower.Upper.SequenceEqual([upper]).ShouldBeTrue();
+        upperLower.Lower.SequenceEqual([lower]).ShouldBeTrue();
     }
 
     [Fact]
@@ -55,9 +55,9 @@ public class AbstractIndicesTests
         TestIndices equal = new([1, 2, 3]);
         TestIndices differentOrder = new([3, 2, 1]);
 
-        Assert.True(left.Equals(equal));
-        Assert.Equal(left.GetHashCode(), equal.GetHashCode());
-        Assert.False(left.Equals(differentOrder));
+        left.Equals(equal).ShouldBeTrue();
+        equal.GetHashCode().ShouldBe(left.GetHashCode());
+        left.Equals(differentOrder).ShouldBeFalse();
     }
 
     [Fact]
@@ -68,9 +68,9 @@ public class AbstractIndicesTests
         TestIndices second = new([2, 3, 1]);
         TestIndices different = new([2, 4, 1]);
 
-        Assert.True(empty.EqualsRegardlessOrder(EmptyIndices.EmptyIndicesInstance));
-        Assert.True(first.EqualsRegardlessOrder(second));
-        Assert.False(first.EqualsRegardlessOrder(different));
+        empty.EqualsRegardlessOrder(EmptyIndices.EmptyIndicesInstance).ShouldBeTrue();
+        first.EqualsRegardlessOrder(second).ShouldBeTrue();
+        first.EqualsRegardlessOrder(different).ShouldBeFalse();
     }
 
     [Fact]
@@ -78,7 +78,7 @@ public class AbstractIndicesTests
     {
         TestIndices indices = new([7, 8, 9]);
 
-        Assert.Equal([7, 8, 9], indices.ToArray());
+        indices.ToArray().ShouldBe([7, 8, 9]);
     }
 
     [Fact]
@@ -91,8 +91,8 @@ public class AbstractIndicesTests
 
         int result = indices[IndexType.GreekLower, 1];
 
-        Assert.Equal(greekLowerC, result);
-        Assert.Equal(1, indices.GetByTypePositionCallCount);
+        result.ShouldBe(greekLowerC);
+        indices.GetByTypePositionCallCount.ShouldBe(1);
     }
 
     [Fact]
@@ -100,8 +100,8 @@ public class AbstractIndicesTests
     {
         TestIndices indices = new([10, 11, 12]);
 
-        Assert.Equal(11, indices.Get(1));
-        Assert.Throws<IndexOutOfRangeException>(() => indices.Get(3));
+        indices.Get(1).ShouldBe(11);
+        Should.Throw<IndexOutOfRangeException>(() => indices.Get(3));
     }
 
     private sealed class TestIndices(int[] data) : AbstractIndices(data)

@@ -1,4 +1,4 @@
-using NRedberry.Tensors.Iterators;
+﻿using NRedberry.Tensors.Iterators;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -15,6 +15,6 @@ public sealed class AllTraverseGuideTests
 
         TraversePermission permission = guide.GetPermission(tensor, parent, 0);
 
-        Assert.Equal(TraversePermission.Enter, permission);
+        permission.ShouldBe(TraversePermission.Enter);
     }
 }

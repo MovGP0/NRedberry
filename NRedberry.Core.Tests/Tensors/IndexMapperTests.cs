@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Tensors;
 using Xunit;
 
@@ -9,13 +9,13 @@ public sealed class IndexMapperTests
     [Fact]
     public void ShouldThrowWhenFromIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => new IndexMapper(null!, []));
+        Should.Throw<ArgumentNullException>(() => new IndexMapper(null!, []));
     }
 
     [Fact]
     public void ShouldThrowWhenToIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => new IndexMapper([], null!));
+        Should.Throw<ArgumentNullException>(() => new IndexMapper([], null!));
     }
 
     [Fact]
@@ -24,7 +24,7 @@ public sealed class IndexMapperTests
         IndexMapper mapper = new([], []);
         int index = Lower(3);
 
-        Assert.Equal(index, mapper.Map(index));
+        mapper.Map(index).ShouldBe(index);
     }
 
     [Fact]
@@ -32,8 +32,8 @@ public sealed class IndexMapperTests
     {
         IndexMapper mapper = new([NameWithType(1)], [NameWithType(7)]);
 
-        Assert.Equal(Lower(7), mapper.Map(Lower(1)));
-        Assert.Equal(Upper(7), mapper.Map(Upper(1)));
+        mapper.Map(Lower(1)).ShouldBe(Lower(7));
+        mapper.Map(Upper(1)).ShouldBe(Upper(7));
     }
 
     [Fact]
@@ -41,7 +41,7 @@ public sealed class IndexMapperTests
     {
         IndexMapper mapper = new([], []);
 
-        Assert.Throws<ArgumentNullException>(() => mapper.Contract(null!));
+        Should.Throw<ArgumentNullException>(() => mapper.Contract(null!));
     }
 
     [Fact]
@@ -49,8 +49,8 @@ public sealed class IndexMapperTests
     {
         IndexMapper mapper = new([], []);
 
-        Assert.False(mapper.Contract([]));
-        Assert.False(mapper.Contract([Lower(1)]));
+        mapper.Contract([]).ShouldBeFalse();
+        mapper.Contract([Lower(1)]).ShouldBeFalse();
     }
 
     [Fact]
@@ -61,8 +61,8 @@ public sealed class IndexMapperTests
 
         bool contract = mapper.Contract(freeIndices);
 
-        Assert.False(contract);
-        Assert.Equal([NameWithType(2), NameWithType(7)], freeIndices);
+        contract.ShouldBeFalse();
+        freeIndices.ShouldBe([NameWithType(2), NameWithType(7)]);
     }
 
     [Fact]
@@ -73,8 +73,8 @@ public sealed class IndexMapperTests
 
         bool contract = mapper.Contract(freeIndices);
 
-        Assert.True(contract);
-        Assert.Equal([NameWithType(7), NameWithType(7)], freeIndices);
+        contract.ShouldBeTrue();
+        freeIndices.ShouldBe([NameWithType(7), NameWithType(7)]);
     }
 
     private static int Lower(int name)

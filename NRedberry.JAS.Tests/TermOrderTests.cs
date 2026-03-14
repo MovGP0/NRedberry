@@ -1,4 +1,4 @@
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;
@@ -15,11 +15,11 @@ public sealed class TermOrderTests
 
         weight[0][0] = 99;
 
-        Assert.Equal("LEX", lex.ToString());
-        Assert.Equal(TermOrder.REVLEX, reversed.GetEvord());
-        Assert.Equal(TermOrder.REVTDEG, TermOrder.Revert(TermOrder.GRLEX));
-        Assert.Contains("W(", weighted.ToString(), System.StringComparison.Ordinal);
-        Assert.Equal(1L, weighted.GetWeight()![0][0]);
+        lex.ToString().ShouldBe("LEX");
+        reversed.GetEvord().ShouldBe(TermOrder.REVLEX);
+        TermOrder.Revert(TermOrder.GRLEX).ShouldBe(TermOrder.REVTDEG);
+        weighted.ToString().ShouldContain("W(");
+        weighted.GetWeight()![0][0].ShouldBe(1L);
     }
 
     [Fact]
@@ -34,12 +34,12 @@ public sealed class TermOrderTests
         int descend = split.GetDescendComparator().Compare(left, right);
         int ascend = split.GetAscendComparator().Compare(left, right);
 
-        Assert.Equal(TermOrder.GRLEX, split.GetEvord2());
-        Assert.Equal(2, split.GetSplit());
-        Assert.Equal(3, extended.GetSplit());
-        Assert.Equal(TermOrder.LEX, contracted.GetEvord());
-        Assert.NotEqual(0, descend);
-        Assert.Equal(-descend, ascend);
+        split.GetEvord2().ShouldBe(TermOrder.GRLEX);
+        split.GetSplit().ShouldBe(2);
+        extended.GetSplit().ShouldBe(3);
+        contracted.GetEvord().ShouldBe(TermOrder.LEX);
+        descend.ShouldNotBe(0);
+        ascend.ShouldBe(-descend);
     }
 
     [Fact]
@@ -49,8 +49,8 @@ public sealed class TermOrderTests
         TermOrder second = new([[1L, 0L], [0L, 1L]]);
         TermOrder third = new(TermOrder.INVLEX);
 
-        Assert.Equal(first, second);
-        Assert.Equal(first.GetHashCode(), second.GetHashCode());
-        Assert.NotEqual(first, third);
+        second.ShouldBe(first);
+        second.GetHashCode().ShouldBe(first.GetHashCode());
+        third.ShouldNotBe(first);
     }
 }

@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -15,6 +15,6 @@ public sealed class DefaultToStringConverterTests
 
         string actual = converter.ToString(value);
 
-        Assert.Equal(expected, actual);
+        actual.ShouldBe(expected);
     }
 }

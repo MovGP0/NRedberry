@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using NRedberry.Concurrent;
@@ -14,7 +14,7 @@ public sealed class PlusMinusIndexMappingProviderTests
     {
         Type providerType = GetProviderType();
 
-        TargetInvocationException exception = Assert.Throws<TargetInvocationException>(() =>
+        TargetInvocationException exception = Should.Throw<TargetInvocationException>(() =>
             Activator.CreateInstance(
                 providerType,
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
@@ -22,8 +22,8 @@ public sealed class PlusMinusIndexMappingProviderTests
                 args: [null],
                 culture: null));
 
-        ArgumentNullException innerException = Assert.IsType<ArgumentNullException>(exception.InnerException);
-        Assert.Equal("outputPort", innerException.ParamName);
+        ArgumentNullException innerException = exception.InnerException.ShouldBeOfType<ArgumentNullException>();
+        innerException.ParamName.ShouldBe("outputPort");
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public sealed class PlusMinusIndexMappingProviderTests
 
         IIndexMappingBuffer? result = provider.Take();
 
-        Assert.Null(result);
+        result.ShouldBeNull();
     }
 
     [Fact]
@@ -46,22 +46,22 @@ public sealed class PlusMinusIndexMappingProviderTests
         bool tickResult = provider.Tick();
         IIndexMappingBuffer? firstTake = provider.Take();
 
-        Assert.True(tickResult);
-        TrackingIndexMappingBuffer firstClone = Assert.IsType<TrackingIndexMappingBuffer>(firstTake);
-        Assert.NotSame(originalBuffer, firstClone);
-        Assert.Equal(1, originalBuffer.CloneCallCount);
-        Assert.Equal(0, originalBuffer.AddSignCallCount);
-        Assert.Equal(0, firstClone.AddSignCallCount);
+        tickResult.ShouldBeTrue();
+        TrackingIndexMappingBuffer firstClone = firstTake.ShouldBeOfType<TrackingIndexMappingBuffer>();
+        firstClone.ShouldNotBeSameAs(originalBuffer);
+        originalBuffer.CloneCallCount.ShouldBe(1);
+        originalBuffer.AddSignCallCount.ShouldBe(0);
+        firstClone.AddSignCallCount.ShouldBe(0);
 
         IIndexMappingBuffer? secondTake = provider.Take();
 
-        Assert.Same(originalBuffer, secondTake);
-        Assert.Equal(1, originalBuffer.AddSignCallCount);
-        Assert.Equal([true], originalBuffer.AddSignArguments);
+        secondTake.ShouldBeSameAs(originalBuffer);
+        originalBuffer.AddSignCallCount.ShouldBe(1);
+        originalBuffer.AddSignArguments.ShouldBe([true]);
 
         IIndexMappingBuffer? thirdTake = provider.Take();
 
-        Assert.Null(thirdTake);
+        thirdTake.ShouldBeNull();
     }
 
     private static IndexMappingProviderAbstract CreateProvider(IOutputPort<IIndexMappingBuffer> outputPort)
@@ -75,7 +75,7 @@ public sealed class PlusMinusIndexMappingProviderTests
             args: [outputPort],
             culture: null);
 
-        return Assert.IsAssignableFrom<IndexMappingProviderAbstract>(instance);
+        return instance.ShouldBeAssignableTo<IndexMappingProviderAbstract>();
     }
 
     private static Type GetProviderType()
@@ -83,7 +83,7 @@ public sealed class PlusMinusIndexMappingProviderTests
         Type? providerType = typeof(IndexMappingProviderAbstract).Assembly
             .GetType("NRedberry.IndexMapping.PlusMinusIndexMappingProvider", throwOnError: false);
 
-        Assert.True(providerType is not null);
+        providerType is not null.ShouldBeTrue();
         return providerType;
     }
 

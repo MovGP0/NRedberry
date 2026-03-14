@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Fractions;
+﻿using NRedberry.Transformations.Fractions;
 using NRedberry.Transformations.Symmetrization;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -16,7 +16,7 @@ public sealed class TransformationCollectionTests
 
         NRedberry.Tensors.Tensor actual = collection.Transform(TensorApi.Parse("a/b"));
 
-        Assert.Equal("1", actual.ToString(OutputFormat.Redberry));
+        actual.ToString(OutputFormat.Redberry).ShouldBe("1");
     }
 
     [Fact]
@@ -26,6 +26,6 @@ public sealed class TransformationCollectionTests
             GetNumeratorTransformation.Instance,
             GetDenominatorTransformation.Instance);
 
-        Assert.Equal("Numerator & Denominator", collection.ToString(OutputFormat.Redberry));
+        collection.ToString(OutputFormat.Redberry).ShouldBe("Numerator & Denominator");
     }
 }

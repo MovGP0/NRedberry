@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Symmetrization;
+﻿using NRedberry.Transformations.Symmetrization;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -13,12 +13,12 @@ public sealed class ExpandAndEliminateTransformationTests
 
         NRedberry.Tensors.Tensor actual = ExpandAndEliminateTransformation.ExpandAndEliminate(tensor);
 
-        Assert.Same(tensor, actual);
+        actual.ShouldBeSameAs(tensor);
     }
 
     [Fact]
     public void ShouldExposeReadableName()
     {
-        Assert.Equal("ExpandAndEliminate", ExpandAndEliminateTransformation.Instance.ToString(OutputFormat.Redberry));
+        ExpandAndEliminateTransformation.Instance.ToString(OutputFormat.Redberry).ShouldBe("ExpandAndEliminate");
     }
 }

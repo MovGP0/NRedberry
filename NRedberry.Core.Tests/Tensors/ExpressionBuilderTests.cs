@@ -1,4 +1,4 @@
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Tensors;
 using IndicesType = NRedberry.Indices.Indices;
 using TensorType = NRedberry.Tensors.Tensor;
@@ -13,7 +13,7 @@ public sealed class ExpressionBuilderTests
     {
         ExpressionBuilder builder = new();
 
-        Assert.Throws<InvalidOperationException>(() => builder.Build());
+        Should.Throw<InvalidOperationException>(() => builder.Build());
     }
 
     [Fact]
@@ -21,7 +21,7 @@ public sealed class ExpressionBuilderTests
     {
         ExpressionBuilder builder = new();
 
-        Assert.Throws<ArgumentNullException>(() => builder.Put(null!));
+        Should.Throw<ArgumentNullException>(() => builder.Put(null!));
     }
 
     [Fact]
@@ -34,10 +34,10 @@ public sealed class ExpressionBuilderTests
         builder.Put(left);
         builder.Put(right);
 
-        Expression expression = Assert.IsType<Expression>(builder.Build());
-        Assert.Same(left, expression[0]);
-        Assert.Same(right, expression[1]);
-        Assert.True(expression.Indices.EqualsRegardlessOrder(left.Indices.GetFree()));
+        Expression expression = builder.Build().ShouldBeOfType<Expression>();
+        expression[0].ShouldBeSameAs(left);
+        expression[1].ShouldBeSameAs(right);
+        expression.Indices.EqualsRegardlessOrder(left.Indices.GetFree()).ShouldBeTrue();
     }
 
     [Fact]
@@ -49,8 +49,8 @@ public sealed class ExpressionBuilderTests
         builder.Put(left);
         builder.Put(NRedberry.Numbers.Complex.Zero);
 
-        Expression expression = Assert.IsType<Expression>(builder.Build());
-        Assert.Same(NRedberry.Numbers.Complex.Zero, expression[1]);
+        Expression expression = builder.Build().ShouldBeOfType<Expression>();
+        expression[1].ShouldBeSameAs(NRedberry.Numbers.Complex.Zero);
     }
 
     [Fact]
@@ -64,8 +64,8 @@ public sealed class ExpressionBuilderTests
 
         Exception? exception = Record.Exception(() => builder.Put(right));
 
-        Assert.NotNull(exception);
-        Assert.True(exception is TensorException or TypeInitializationException);
+        exception.ShouldNotBeNull();
+        exception is TensorException or TypeInitializationException.ShouldBeTrue();
     }
 
     [Fact]
@@ -79,8 +79,8 @@ public sealed class ExpressionBuilderTests
 
         Exception? exception = Record.Exception(() => builder.Put(operand));
 
-        Assert.NotNull(exception);
-        Assert.True(exception is TensorException or TypeInitializationException);
+        exception.ShouldNotBeNull();
+        exception is TensorException or TypeInitializationException.ShouldBeTrue();
     }
 
     [Fact]
@@ -91,13 +91,13 @@ public sealed class ExpressionBuilderTests
         TensorType right = new TestTensor("R", 2, IndicesFactory.EmptyIndices);
         builder.Put(left);
 
-        ExpressionBuilder clone = Assert.IsType<ExpressionBuilder>(builder.Clone());
+        ExpressionBuilder clone = builder.Clone().ShouldBeOfType<ExpressionBuilder>();
         clone.Put(right);
 
-        Expression expression = Assert.IsType<Expression>(clone.Build());
-        Assert.Same(left, expression[0]);
-        Assert.Same(right, expression[1]);
-        Assert.Throws<InvalidOperationException>(() => builder.Build());
+        Expression expression = clone.Build().ShouldBeOfType<Expression>();
+        expression[0].ShouldBeSameAs(left);
+        expression[1].ShouldBeSameAs(right);
+        Should.Throw<InvalidOperationException>(() => builder.Build());
     }
 
     private static int Lower(int name)

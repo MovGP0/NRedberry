@@ -1,4 +1,4 @@
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using NRedberry.Tensors.Functions;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -13,18 +13,18 @@ public sealed class ScalarFunctionTests
         NRedberry.Tensors.Tensor argument = TensorApi.Parse("a");
         TestScalarFunction function = new(argument);
 
-        Assert.Equal(0, function.Indices.Size());
-        Assert.Same(argument, function[0]);
-        Assert.Equal(1, function.Size);
-        Assert.Equal("TestFn[a]", function.ToString(OutputFormat.Redberry));
-        Assert.Equal("\\testfn(a)", function.ToString(OutputFormat.LaTeX));
-        Assert.Equal("TestFn(a)", function.ToString(OutputFormat.UTF8));
+        function.Indices.Size().ShouldBe(0);
+        function[0].ShouldBeSameAs(argument);
+        function.Size.ShouldBe(1);
+        function.ToString(OutputFormat.Redberry).ShouldBe("TestFn[a]");
+        function.ToString(OutputFormat.LaTeX).ShouldBe("\\testfn(a)");
+        function.ToString(OutputFormat.UTF8).ShouldBe("TestFn(a)");
     }
 
     [Fact]
     public void ShouldRejectNonScalarArguments()
     {
-        Assert.Throws<TensorException>(() => new TestScalarFunction(TensorApi.Parse("f_m")));
+        Should.Throw<TensorException>(() => new TestScalarFunction(TensorApi.Parse("f_m")));
     }
 }
 

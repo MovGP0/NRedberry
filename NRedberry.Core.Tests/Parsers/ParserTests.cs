@@ -1,4 +1,4 @@
-using NRedberry.Parsers;
+﻿using NRedberry.Parsers;
 using RedberryParser = NRedberry.Parsers.Parser;
 using Xunit;
 
@@ -9,7 +9,7 @@ public sealed class ParserTests
     [Fact]
     public void ShouldThrowWhenConstructedWithNullTokenParsers()
     {
-        Assert.Throws<ArgumentNullException>(() => new RedberryParser(null!));
+        Should.Throw<ArgumentNullException>(() => new RedberryParser(null!));
     }
 
     [Fact]
@@ -17,7 +17,7 @@ public sealed class ParserTests
     {
         var parser = new RedberryParser(new ParserRecordingTokenParser(0));
 
-        Assert.Throws<ArgumentNullException>(() => parser.Parse(null!));
+        Should.Throw<ArgumentNullException>(() => parser.Parse(null!));
     }
 
     [Fact]
@@ -25,10 +25,10 @@ public sealed class ParserTests
     {
         var parser = new RedberryParser(new ParserRecordingTokenParser(0));
 
-        var exception = Assert.Throws<ArgumentException>(() => parser.Parse("/* only comment */"));
+        var exception = Should.Throw<ArgumentException>(() => parser.Parse("/* only comment */"));
 
-        Assert.Equal("expression", exception.ParamName);
-        Assert.Contains("Empty expression.", exception.Message);
+        exception.ParamName.ShouldBe("expression");
+        exception.Message.ShouldContain("Empty expression.");
     }
 
     [Fact]
@@ -40,9 +40,9 @@ public sealed class ParserTests
 
         var result = parser.Parse("a");
 
-        Assert.Equal(TokenType.Product, result.TokenType);
-        Assert.Equal(1, highPriorityParser.CallCount);
-        Assert.Equal(0, lowPriorityParser.CallCount);
+        result.TokenType.ShouldBe(TokenType.Product);
+        highPriorityParser.CallCount.ShouldBe(1);
+        lowPriorityParser.CallCount.ShouldBe(0);
     }
 
     [Fact]
@@ -53,7 +53,7 @@ public sealed class ParserTests
 
         _ = parser.Parse("   a + b   ");
 
-        Assert.Equal("a + b", tokenParser.LastExpression);
+        tokenParser.LastExpression.ShouldBe("a + b");
     }
 
     [Fact]
@@ -64,7 +64,7 @@ public sealed class ParserTests
 
         _ = parser.Parse("a/* block */ + b // line\n");
 
-        Assert.Equal("a + b", tokenParser.LastExpression);
+        tokenParser.LastExpression.ShouldBe("a + b");
     }
 
     [Fact]
@@ -72,9 +72,9 @@ public sealed class ParserTests
     {
         var parser = new RedberryParser(new ParserRecordingTokenParser(10), new ParserRecordingTokenParser(0));
 
-        var exception = Assert.Throws<ParserException>(() => parser.Parse("a+b"));
+        var exception = Should.Throw<ParserException>(() => parser.Parse("a+b"));
 
-        Assert.Contains("No appropriate parser for expression: \"a+b\"", exception.Message);
+        exception.Message.ShouldContain("No appropriate parser for expression: \"a+b\"");
     }
 }
 

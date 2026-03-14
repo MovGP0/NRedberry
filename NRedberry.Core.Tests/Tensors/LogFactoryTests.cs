@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Tensors;
 using NRedberry.Tensors.Functions;
 using TensorApi = NRedberry.Tensors.Tensors;
@@ -13,8 +13,8 @@ public sealed class LogFactoryTests
     {
         NRedberry.Tensors.Tensor argument = TensorApi.Parse("a");
 
-        Assert.Same(argument, LogFactory.Factory.Create(new Exp(argument)));
-        Assert.Equal(Complex.Zero, LogFactory.Factory.Create(Complex.One));
-        Assert.IsType<Log>(LogFactory.Factory.Create(argument));
+        LogFactory.Factory.Create(new Exp(argument)).ShouldBeSameAs(argument);
+        LogFactory.Factory.Create(Complex.One).ShouldBe(Complex.Zero);
+        LogFactory.Factory.Create(argument).ShouldBeOfType<Log>();
     }
 }

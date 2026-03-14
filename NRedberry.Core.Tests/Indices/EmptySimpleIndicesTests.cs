@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using NRedberry;
 using NRedberry.Indices;
@@ -27,8 +27,8 @@ public class EmptySimpleIndicesTests
     {
         object singleton = Singleton;
 
-        Assert.NotNull(s_singletonField);
-        Assert.Same(singleton, IndicesFactory.EmptySimpleIndices);
+        s_singletonField.ShouldNotBeNull();
+        IndicesFactory.EmptySimpleIndices.ShouldBeSameAs(singleton);
     }
 
     [Fact]
@@ -36,12 +36,12 @@ public class EmptySimpleIndicesTests
     {
         object singleton = Singleton;
 
-        Assert.Same(singleton, GetPropertyValue(singleton, "Inverted"));
-        Assert.Same(singleton, GetPropertyValue(singleton, "Free"));
-        Assert.Same(singleton, GetPropertyValue(singleton, "Upper"));
-        Assert.Same(singleton, GetPropertyValue(singleton, "Lower"));
-        Assert.Same(singleton, InvokeMethod(singleton, "OfType", IndexType.LatinLower));
-        Assert.Same(singleton, InvokeMethod(singleton, "ApplyIndexMapping", [null!]));
+        GetPropertyValue(singleton, "Inverted").ShouldBeSameAs(singleton);
+        GetPropertyValue(singleton, "Free").ShouldBeSameAs(singleton);
+        GetPropertyValue(singleton, "Upper").ShouldBeSameAs(singleton);
+        GetPropertyValue(singleton, "Lower").ShouldBeSameAs(singleton);
+        InvokeMethod(singleton, "OfType", IndexType.LatinLower).ShouldBeSameAs(singleton);
+        InvokeMethod(singleton, "ApplyIndexMapping", [null!]).ShouldBeSameAs(singleton);
     }
 
     [Fact]
@@ -50,7 +50,7 @@ public class EmptySimpleIndicesTests
         MethodInfo getter = s_emptySimpleIndicesType.GetProperty("Symmetries", BindingFlags.Public | BindingFlags.Instance)!.GetMethod!;
         FieldInfo emptySymmetriesField = typeof(IndicesSymmetries).GetField("EmptySymmetries", BindingFlags.Public | BindingFlags.Static)!;
 
-        Assert.True(MethodBodyContainsMetadataTokenWithOpcode(getter, emptySymmetriesField.MetadataToken, 0x7E));
+        MethodBodyContainsMetadataTokenWithOpcode(getter, emptySymmetriesField.MetadataToken, 0x7E).ShouldBeTrue();
     }
 
     [Fact(Skip = "Blocked by existing context initialization failure: IndexConverterManager throws 'Several converters for same type'.")]
@@ -70,10 +70,10 @@ public class EmptySimpleIndicesTests
         PropertyInfo symmetriesProperty = s_emptySimpleIndicesType.GetProperty("Symmetries", BindingFlags.Public | BindingFlags.Instance)!;
         object nonEmptySymmetries = CreateUninitializedSymmetriesWithStructureSize(1);
 
-        Exception exception = Assert.ThrowsAny<Exception>(() => symmetriesProperty.SetValue(singleton, nonEmptySymmetries));
+        Exception exception = Should.Throw<Exception>(() => symmetriesProperty.SetValue(singleton, nonEmptySymmetries));
         Exception unwrapped = UnwrapInvocationException(exception);
 
-        Assert.IsType<InvalidOperationException>(unwrapped);
+        unwrapped.ShouldBeOfType<InvalidOperationException>();
     }
 
     [Fact]
@@ -86,8 +86,8 @@ public class EmptySimpleIndicesTests
         bool matchesSingleton = (bool)InvokeMethod(singleton, "EqualsWithSymmetries", singleton);
         bool matchesNonEmpty = (bool)InvokeMethod(singleton, "EqualsWithSymmetries", nonEmptyIndices);
 
-        Assert.True(matchesSingleton);
-        Assert.False(matchesNonEmpty);
+        matchesSingleton.ShouldBeTrue();
+        matchesNonEmpty.ShouldBeFalse();
     }
 
     [Fact]
@@ -96,7 +96,7 @@ public class EmptySimpleIndicesTests
         MethodInfo getter = s_emptySimpleIndicesType.GetProperty("StructureOfIndices", BindingFlags.Public | BindingFlags.Instance)!.GetMethod!;
         MethodInfo emptyGetter = typeof(StructureOfIndices).GetProperty("Empty", BindingFlags.Public | BindingFlags.Static)!.GetMethod!;
 
-        Assert.True(MethodBodyContainsMetadataTokenWithOpcode(getter, emptyGetter.MetadataToken, 0x28));
+        MethodBodyContainsMetadataTokenWithOpcode(getter, emptyGetter.MetadataToken, 0x28).ShouldBeTrue();
     }
 
     [Fact]
@@ -107,10 +107,10 @@ public class EmptySimpleIndicesTests
         SimpleIndices nonEmptyIndices = IndicesFactory.CreateSimple(null, index);
         object anotherEmpty = EmptyIndices.EmptyIndicesInstance;
 
-        Assert.True(singleton.Equals(singleton));
-        Assert.True(singleton.Equals(anotherEmpty));
-        Assert.False(singleton.Equals(nonEmptyIndices));
-        Assert.Equal(453679, singleton.GetHashCode());
+        singleton.Equals(singleton).ShouldBeTrue();
+        singleton.Equals(anotherEmpty).ShouldBeTrue();
+        singleton.Equals(nonEmptyIndices).ShouldBeFalse();
+        singleton.GetHashCode().ShouldBe(453679);
     }
 
     private static object GetPropertyValue(object instance, string propertyName)

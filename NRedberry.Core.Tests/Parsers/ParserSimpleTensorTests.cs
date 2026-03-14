@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using NRedberry.Parsers;
 using RedberryParser = NRedberry.Parsers.Parser;
 using Xunit;
@@ -10,13 +10,13 @@ public sealed class ParserSimpleTensorTests
     [Fact]
     public void ShouldExposeSingletonInstance()
     {
-        Assert.Same(ParserSimpleTensor.Instance, ParserSimpleTensor.Instance);
+        ParserSimpleTensor.Instance.ShouldBeSameAs(ParserSimpleTensor.Instance);
     }
 
     [Fact]
     public void ShouldExposeExpectedPriority()
     {
-        Assert.Equal(0, ParserSimpleTensor.Instance.Priority);
+        ParserSimpleTensor.Instance.Priority.ShouldBe(0);
     }
 
     [Fact]
@@ -27,10 +27,10 @@ public sealed class ParserSimpleTensorTests
             var parser = new RedberryParser(ParserSimpleTensor.Instance);
             var token = ParserSimpleTensor.Instance.ParseToken("T^a_b", parser);
 
-            var simpleTensorToken = Assert.IsType<ParseTokenSimpleTensor>(token);
-            Assert.Equal(TokenType.SimpleTensor, simpleTensorToken.TokenType);
-            Assert.Equal("T", simpleTensorToken.Name);
-            Assert.Equal(ParserIndices.ParseSimple("^a_b"), simpleTensorToken.Indices);
+            var simpleTensorToken = token.ShouldBeOfType<ParseTokenSimpleTensor>();
+            simpleTensorToken.TokenType.ShouldBe(TokenType.SimpleTensor);
+            simpleTensorToken.Name.ShouldBe("T");
+            simpleTensorToken.Indices.ShouldBe(ParserIndices.ParseSimple("^a_b"));
         }
         catch (TypeInitializationException)
         {
@@ -45,9 +45,9 @@ public sealed class ParserSimpleTensorTests
             var parser = new RedberryParser(ParserSimpleTensor.Instance);
             var token = ParserSimpleTensor.Instance.ParseToken("F_{}^a", parser);
 
-            var simpleTensorToken = Assert.IsType<ParseTokenSimpleTensor>(token);
-            Assert.Equal("F", simpleTensorToken.Name);
-            Assert.Equal(ParserIndices.ParseSimple("^a"), simpleTensorToken.Indices);
+            var simpleTensorToken = token.ShouldBeOfType<ParseTokenSimpleTensor>();
+            simpleTensorToken.Name.ShouldBe("F");
+            simpleTensorToken.Indices.ShouldBe(ParserIndices.ParseSimple("^a"));
         }
         catch (TypeInitializationException)
         {
@@ -66,8 +66,8 @@ public sealed class ParserSimpleTensorTests
 
             var token = ParserSimpleTensor.Instance.ParseToken("A_aa", parser);
 
-            var simpleTensorToken = Assert.IsType<ParseTokenSimpleTensor>(token);
-            Assert.Equal(ParserIndices.ParseSimpleIgnoringVariance("_aa"), simpleTensorToken.Indices);
+            var simpleTensorToken = token.ShouldBeOfType<ParseTokenSimpleTensor>();
+            simpleTensorToken.Indices.ShouldBe(ParserIndices.ParseSimpleIgnoringVariance("_aa"));
         }
         catch (TypeInitializationException)
         {
@@ -79,8 +79,8 @@ public sealed class ParserSimpleTensorTests
     {
         var parser = new RedberryParser(ParserSimpleTensor.Instance);
 
-        var exception = Assert.Throws<ParserException>(() => ParserSimpleTensor.Instance.ParseToken("_a", parser));
+        var exception = Should.Throw<ParserException>(() => ParserSimpleTensor.Instance.ParseToken("_a", parser));
 
-        Assert.Contains("Simple tensor with empty name.", exception.Message, StringComparison.Ordinal);
+        exception.Message.ShouldContain("Simple tensor with empty name.");
     }
 }

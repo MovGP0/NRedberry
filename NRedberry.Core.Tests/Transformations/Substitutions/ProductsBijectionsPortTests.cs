@@ -1,4 +1,4 @@
-using NRedberry.Transformations.Substitutions;
+﻿using NRedberry.Transformations.Substitutions;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -9,9 +9,9 @@ public sealed class ProductsBijectionsPortTests
     [Fact]
     public void ShouldThrowWhileProductsBijectionsPortIsUnimplemented()
     {
-        NRedberry.Tensors.Product from = Assert.IsType<NRedberry.Tensors.Product>(TensorApi.Parse("a*b"));
-        NRedberry.Tensors.Product to = Assert.IsType<NRedberry.Tensors.Product>(TensorApi.Parse("a*b"));
+        NRedberry.Tensors.Product from = TensorApi.Parse("a*b").ShouldBeOfType<NRedberry.Tensors.Product>();
+        NRedberry.Tensors.Product to = TensorApi.Parse("a*b").ShouldBeOfType<NRedberry.Tensors.Product>();
 
-        Assert.Throws<NotImplementedException>(() => new ProductsBijectionsPort(from.Content, to.Content));
+        Should.Throw<NotImplementedException>(() => new ProductsBijectionsPort(from.Content, to.Content));
     }
 }

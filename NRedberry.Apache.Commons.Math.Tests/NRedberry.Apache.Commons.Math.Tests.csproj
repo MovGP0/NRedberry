@@ -18,5 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NRedberry.Apache.Commons.Math\NRedberry.Apache.Commons.Math.csproj" />
+    <ProjectReference Include="..\TestInfrastructure\TestInfrastructure.csproj" />
   </ItemGroup>
 </Project>

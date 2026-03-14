@@ -1,4 +1,4 @@
-using NRedberry.Numbers;
+﻿using NRedberry.Numbers;
 using NRedberry.Tensors;
 using NRedberry.Tensors.Functions;
 using TensorApi = NRedberry.Tensors.Tensors;
@@ -13,8 +13,8 @@ public sealed class ArcTanFactoryTests
     {
         NRedberry.Tensors.Tensor argument = TensorApi.Parse("a");
 
-        Assert.Same(argument, ArcTanFactory.Factory.Create(new Tan(argument)));
-        Assert.Equal(Complex.Zero, ArcTanFactory.Factory.Create(Complex.Zero));
-        Assert.IsType<ArcTan>(ArcTanFactory.Factory.Create(argument));
+        ArcTanFactory.Factory.Create(new Tan(argument)).ShouldBeSameAs(argument);
+        ArcTanFactory.Factory.Create(Complex.Zero).ShouldBe(Complex.Zero);
+        ArcTanFactory.Factory.Create(argument).ShouldBeOfType<ArcTan>();
     }
 }

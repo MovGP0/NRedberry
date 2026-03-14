@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -10,7 +10,7 @@ public sealed class ArraysUtilsBijectionTests
     {
         int[]? actual = ArraysUtils.Bijection([1, 3, 1], [1, 3, 1]);
 
-        Assert.Equal([0, 1, 2], actual);
+        actual.ShouldBe([0, 1, 2]);
     }
 
     [Fact]
@@ -18,7 +18,7 @@ public sealed class ArraysUtilsBijectionTests
     {
         int[]? actual = ArraysUtils.Bijection([1, 3, 1], [3, 1, 1]);
 
-        Assert.Equal([1, 0, 2], actual);
+        actual.ShouldBe([1, 0, 2]);
     }
 
     [Fact]
@@ -26,6 +26,6 @@ public sealed class ArraysUtilsBijectionTests
     {
         int[]? actual = ArraysUtils.Bijection([1, 2], [1, 2, 3]);
 
-        Assert.Null(actual);
+        actual.ShouldBeNull();
     }
 }

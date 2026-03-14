@@ -1,4 +1,4 @@
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
@@ -12,8 +12,8 @@ public sealed class IToStringConverterTests
         IToStringConverter<int> hex = ToStringConverters.Hex;
         IToStringConverter<int> binary = ToStringConverters.Binary;
 
-        Assert.Equal("10", @default.ToString(10));
-        Assert.Equal("ff", hex.ToString(255));
-        Assert.Equal("101", binary.ToString(5));
+        @default.ToString(10).ShouldBe("10");
+        hex.ToString(255).ShouldBe("ff");
+        binary.ToString(5).ShouldBe("101");
     }
 }

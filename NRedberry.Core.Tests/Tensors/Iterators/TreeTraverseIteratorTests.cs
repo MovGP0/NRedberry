@@ -1,4 +1,4 @@
-using NRedberry.Tensors.Iterators;
+﻿using NRedberry.Tensors.Iterators;
 using TensorApi = NRedberry.Tensors.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
 using Xunit;
@@ -19,16 +19,14 @@ public sealed class TreeTraverseIteratorTests
             visited.Add((state.Value, iterator.Current().ToString(OutputFormat.Redberry), iterator.Depth));
         }
 
-        Assert.Equal(
-            [
+        visited.ShouldBe([
                 (TraverseState.Entering, "a+b", 0),
                 (TraverseState.Entering, "a", 1),
                 (TraverseState.Leaving, "a", 1),
                 (TraverseState.Entering, "b", 1),
                 (TraverseState.Leaving, "b", 1),
                 (TraverseState.Leaving, "a+b", 0),
-            ],
-            visited);
+            ]);
     }
 
     [Fact]
@@ -49,6 +47,6 @@ public sealed class TreeTraverseIteratorTests
         {
         }
 
-        Assert.Equal("b", iterator.Result().ToString(OutputFormat.Redberry));
+        iterator.Result().ToString(OutputFormat.Redberry).ShouldBe("b");
     }
 }

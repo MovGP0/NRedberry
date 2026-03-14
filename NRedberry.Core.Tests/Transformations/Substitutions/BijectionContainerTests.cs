@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using NRedberry.IndexMapping;
 using NRedberry.Transformations.Substitutions;
 using Xunit;
@@ -13,8 +13,8 @@ public sealed class BijectionContainerTests
         int[] bijection = [1, 2, 3];
         BijectionContainer container = new(Mapping.IdentityMapping, bijection);
 
-        Assert.Same(Mapping.IdentityMapping, container.Mapping);
-        Assert.Same(bijection, container.Bijection);
-        Assert.Contains("1", container.ToString(), StringComparison.Ordinal);
+        container.Mapping.ShouldBeSameAs(Mapping.IdentityMapping);
+        container.Bijection.ShouldBeSameAs(bijection);
+        container.ToString().ShouldContain("1");
     }
 }

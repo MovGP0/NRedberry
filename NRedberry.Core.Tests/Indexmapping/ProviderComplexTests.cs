@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using NRedberry.IndexMapping;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
@@ -16,7 +16,7 @@ public sealed class ProviderComplexTests
 
         IIndexMappingProvider result = InvokeProviderComplexCreate(provider, Complex.Zero, Complex.Zero);
 
-        Assert.Equal("NRedberry.IndexMapping.PlusMinusIndexMappingProvider", result.GetType().FullName);
+        result.GetType().FullName.ShouldBe("NRedberry.IndexMapping.PlusMinusIndexMappingProvider");
     }
 
     [Fact]
@@ -26,7 +26,7 @@ public sealed class ProviderComplexTests
 
         IIndexMappingProvider result = InvokeProviderComplexCreate(provider, Complex.One, Complex.One);
 
-        Assert.Equal("NRedberry.IndexMapping.DummyIndexMappingProvider", result.GetType().FullName);
+        result.GetType().FullName.ShouldBe("NRedberry.IndexMapping.DummyIndexMappingProvider");
     }
 
     [Fact]
@@ -36,7 +36,7 @@ public sealed class ProviderComplexTests
 
         IIndexMappingProvider result = InvokeProviderComplexCreate(provider, Complex.One, Complex.MinusOne);
 
-        Assert.Equal("NRedberry.IndexMapping.MinusIndexMappingProvider", result.GetType().FullName);
+        result.GetType().FullName.ShouldBe("NRedberry.IndexMapping.MinusIndexMappingProvider");
     }
 
     [Fact]
@@ -46,7 +46,7 @@ public sealed class ProviderComplexTests
 
         IIndexMappingProvider result = InvokeProviderComplexCreate(provider, Complex.One, Complex.Two);
 
-        Assert.Same(IndexMappingProviderUtil.EmptyProvider, result);
+        result.ShouldBeSameAs(IndexMappingProviderUtil.EmptyProvider);
     }
 
     [Fact]
@@ -55,7 +55,7 @@ public sealed class ProviderComplexTests
         IIndexMappingProvider provider = new FakeIndexMappingProvider();
         IIndexMappingProviderFactory factory = GetFactoryFromProviderComplexProperty();
 
-        Assert.True(factory.GetType().FullName == "NRedberry.IndexMapping.ProviderComplexFactory");
+        factory.GetType().FullName == "NRedberry.IndexMapping.ProviderComplexFactory".ShouldBeTrue();
 
         AssertEquivalentCreate(provider, Complex.Zero, Complex.Zero, factory, "NRedberry.IndexMapping.PlusMinusIndexMappingProvider");
         AssertEquivalentCreate(provider, Complex.One, Complex.One, factory, "NRedberry.IndexMapping.DummyIndexMappingProvider");
@@ -63,9 +63,9 @@ public sealed class ProviderComplexTests
 
         IIndexMappingProvider direct = InvokeProviderComplexCreate(provider, Complex.One, Complex.Two);
         IIndexMappingProvider fromFactory = factory.Create(provider, Complex.One, Complex.Two);
-        Assert.Same(IndexMappingProviderUtil.EmptyProvider, direct);
-        Assert.Same(IndexMappingProviderUtil.EmptyProvider, fromFactory);
-        Assert.Same(direct, fromFactory);
+        direct.ShouldBeSameAs(IndexMappingProviderUtil.EmptyProvider);
+        fromFactory.ShouldBeSameAs(IndexMappingProviderUtil.EmptyProvider);
+        fromFactory.ShouldBeSameAs(direct);
     }
 
     private static void AssertEquivalentCreate(
@@ -78,8 +78,8 @@ public sealed class ProviderComplexTests
         IIndexMappingProvider direct = InvokeProviderComplexCreate(provider, from, to);
         IIndexMappingProvider fromFactory = factory.Create(provider, from, to);
 
-        Assert.Equal(expectedProviderTypeName, direct.GetType().FullName);
-        Assert.Equal(expectedProviderTypeName, fromFactory.GetType().FullName);
+        direct.GetType().FullName.ShouldBe(expectedProviderTypeName);
+        fromFactory.GetType().FullName.ShouldBe(expectedProviderTypeName);
     }
 
     private static IIndexMappingProvider InvokeProviderComplexCreate(
@@ -95,9 +95,9 @@ public sealed class ProviderComplexTests
             [typeof(IIndexMappingProvider), typeof(TensorType), typeof(TensorType)],
             modifiers: null)!;
 
-        Assert.NotNull(method);
+        method.ShouldNotBeNull();
         object? result = method.Invoke(obj: null, [provider, from, to]);
-        return Assert.IsAssignableFrom<IIndexMappingProvider>(result);
+        return result.ShouldBeAssignableTo<IIndexMappingProvider>();
     }
 
     private static IIndexMappingProviderFactory GetFactoryFromProviderComplexProperty()
@@ -105,9 +105,9 @@ public sealed class ProviderComplexTests
         Type providerComplexType = GetProviderComplexType();
         PropertyInfo property = providerComplexType.GetProperty("Factory", BindingFlags.Public | BindingFlags.Static)!;
 
-        Assert.NotNull(property);
+        property.ShouldNotBeNull();
         object? instance = property.GetValue(obj: null);
-        return Assert.IsAssignableFrom<IIndexMappingProviderFactory>(instance);
+        return instance.ShouldBeAssignableTo<IIndexMappingProviderFactory>();
     }
 
     private static Type GetProviderComplexType()
@@ -115,7 +115,7 @@ public sealed class ProviderComplexTests
         Type? providerComplexType = typeof(IndexMappingProviderAbstract).Assembly
             .GetType("NRedberry.IndexMapping.ProviderComplex", throwOnError: false);
 
-        Assert.True(providerComplexType is not null);
+        providerComplexType is not null.ShouldBeTrue();
         return providerComplexType;
     }
 }

@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using NRedberry.IndexMapping;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
@@ -14,9 +14,9 @@ public sealed class ProviderPowerTests
         object firstInstance = GetInstance();
         object secondInstance = GetInstance();
 
-        Assert.NotNull(firstInstance);
-        Assert.Same(firstInstance, secondInstance);
-        Assert.IsAssignableFrom<IIndexMappingProviderFactory>(firstInstance);
+        firstInstance.ShouldNotBeNull();
+        secondInstance.ShouldBeSameAs(firstInstance);
+        firstInstance.ShouldBeAssignableTo<IIndexMappingProviderFactory>();
     }
 
     [Fact]
@@ -30,10 +30,10 @@ public sealed class ProviderPowerTests
             Type.EmptyTypes,
             modifiers: null);
 
-        Assert.NotNull(privateConstructor);
-        Assert.True(privateConstructor.IsPrivate);
-        Assert.Empty(providerPowerType.GetConstructors(BindingFlags.Instance | BindingFlags.Public));
-        Assert.Throws<MissingMethodException>(() => Activator.CreateInstance(providerPowerType));
+        privateConstructor.ShouldNotBeNull();
+        privateConstructor.IsPrivate.ShouldBeTrue();
+        providerPowerType.GetConstructors(BindingFlags.Instance | BindingFlags.Public).ShouldBeEmpty();
+        Should.Throw<MissingMethodException>(() => Activator.CreateInstance(providerPowerType));
     }
 
     [Fact]
@@ -43,9 +43,9 @@ public sealed class ProviderPowerTests
         Power from = CreatePowerTensor();
         Power to = CreatePowerTensor();
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => factory.Create(null!, from, to));
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() => factory.Create(null!, from, to));
 
-        Assert.Equal("provider", exception.ParamName);
+        exception.ParamName.ShouldBe("provider");
     }
 
     [Fact]
@@ -55,9 +55,9 @@ public sealed class ProviderPowerTests
         IIndexMappingProvider provider = new FakeIndexMappingProvider();
         Power to = CreatePowerTensor();
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => factory.Create(provider, null!, to));
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() => factory.Create(provider, null!, to));
 
-        Assert.Equal("from", exception.ParamName);
+        exception.ParamName.ShouldBe("from");
     }
 
     [Fact]
@@ -67,9 +67,9 @@ public sealed class ProviderPowerTests
         IIndexMappingProvider provider = new FakeIndexMappingProvider();
         Power from = CreatePowerTensor();
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => factory.Create(provider, from, null!));
+        ArgumentNullException exception = Should.Throw<ArgumentNullException>(() => factory.Create(provider, from, null!));
 
-        Assert.Equal("to", exception.ParamName);
+        exception.ParamName.ShouldBe("to");
     }
 
     [Fact]
@@ -80,7 +80,7 @@ public sealed class ProviderPowerTests
         Power from = CreatePowerTensor();
         Power to = CreatePowerTensor();
 
-        Assert.Throws<NotImplementedException>(() => factory.Create(provider, from, to));
+        Should.Throw<NotImplementedException>(() => factory.Create(provider, from, to));
     }
 
     private static Type GetProviderPowerType()
@@ -88,7 +88,7 @@ public sealed class ProviderPowerTests
         Type? providerPowerType = typeof(IndexMappingProviderAbstract).Assembly
             .GetType("NRedberry.IndexMapping.ProviderPower", throwOnError: false);
 
-        Assert.NotNull(providerPowerType);
+        providerPowerType.ShouldNotBeNull();
         return providerPowerType;
     }
 
@@ -96,16 +96,16 @@ public sealed class ProviderPowerTests
     {
         Type providerPowerType = GetProviderPowerType();
         PropertyInfo? instanceProperty = providerPowerType.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
-        Assert.NotNull(instanceProperty);
+        instanceProperty.ShouldNotBeNull();
 
         object? instance = instanceProperty.GetValue(obj: null);
-        Assert.NotNull(instance);
+        instance.ShouldNotBeNull();
         return instance;
     }
 
     private static IIndexMappingProviderFactory GetFactory()
     {
-        return Assert.IsAssignableFrom<IIndexMappingProviderFactory>(GetInstance());
+        return GetInstance().ShouldBeAssignableTo<IIndexMappingProviderFactory>();
     }
 
     private static Power CreatePowerTensor()
