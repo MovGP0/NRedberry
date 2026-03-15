@@ -23,6 +23,13 @@ public sealed class GraphStructure
 
     public GraphStructure(Tensor[] data, int differentIndicesCount, Indices.Indices freeIndices)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(data);
+        ArgumentNullException.ThrowIfNull(freeIndices);
+
+        StructureOfContractions structure = new(data, differentIndicesCount, freeIndices);
+        FreeContractions = structure.freeContractions;
+        Contractions = structure.contractions;
+        Components = structure.components;
+        ComponentCount = structure.componentCount;
     }
 }

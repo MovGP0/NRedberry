@@ -1,5 +1,4 @@
 using NRedberry.Core.Combinatorics;
-using NRedberry.Contexts;
 using NRedberry.Groups;
 using NRedberry.IndexMapping;
 using NRedberry.Indices;
@@ -41,7 +40,6 @@ public sealed class SymmetrizeUpperLowerIndicesITransformation : ITransformation
 
         SumBuilder sumBuilder = new();
         List<int[]> generatedPermutations = [];
-        HashSet<string> generatedSummands = [];
         if (upperCount != 0 && lowerCount != 0)
         {
             IntPermutationsGenerator lowerIndicesPermutationsGenerator = new(lowerCount);
@@ -62,8 +60,7 @@ public sealed class SymmetrizeUpperLowerIndicesITransformation : ITransformation
                         upperPermutation,
                         lowerPermutation,
                         generatedPermutations,
-                        symmetries,
-                        generatedSummands);
+                        symmetries);
                     if (summand is not null)
                     {
                         sumBuilder.Put(summand);
@@ -82,8 +79,7 @@ public sealed class SymmetrizeUpperLowerIndicesITransformation : ITransformation
                     [],
                     lowerPermutation,
                     generatedPermutations,
-                    symmetries,
-                    generatedSummands);
+                    symmetries);
                 if (summand is not null)
                 {
                     sumBuilder.Put(summand);
@@ -101,8 +97,7 @@ public sealed class SymmetrizeUpperLowerIndicesITransformation : ITransformation
                     upperPermutation,
                     [],
                     generatedPermutations,
-                    symmetries,
-                    generatedSummands);
+                    symmetries);
                 if (summand is not null)
                 {
                     sumBuilder.Put(summand);
@@ -127,8 +122,7 @@ public sealed class SymmetrizeUpperLowerIndicesITransformation : ITransformation
         int[] upperPermutation,
         int[] lowerPermutation,
         IList<int[]> generatedPermutations,
-        IList<Permutation> symmetries,
-        ISet<string> generatedSummands)
+        IList<Permutation> symmetries)
     {
         int[] permutation = new int[upperPermutation.Length + lowerPermutation.Length];
         Array.Copy(upperPermutation, permutation, upperPermutation.Length);
@@ -153,100 +147,11 @@ public sealed class SymmetrizeUpperLowerIndicesITransformation : ITransformation
             newIndices[i] = indicesArray[permutation[i]];
         }
 
-        Tensor summand = ApplyIndexMapping.Apply(tensor, new Mapping(indicesArray, newIndices), []);
-        summand = NormalizeSummand(summand);
-
-        string summandKey = GetSummandKey(summand);
-        if (!generatedSummands.Add(summandKey))
-        {
-            return null;
-        }
-
-        return summand;
+        return ApplyIndexMapping.Apply(tensor, new Mapping(indicesArray, newIndices), []);
     }
 
     internal static Tensor[] GetAllPermutations(Tensor tensor)
     {
         return SymmetrizeUpperLowerIndices(tensor).ToArray();
-    }
-
-    private static Tensor NormalizeSummand(Tensor tensor)
-    {
-        if (tensor is SimpleTensor simpleTensor)
-        {
-            return NormalizeSimpleTensor(simpleTensor);
-        }
-
-        if (tensor is Product)
-        {
-            Tensor[] normalizedFactors = tensor.ToArray();
-            for (int i = 0; i < normalizedFactors.Length; ++i)
-            {
-                if (normalizedFactors[i] is SimpleTensor factor)
-                {
-                    normalizedFactors[i] = NormalizeSimpleTensor(factor);
-                }
-            }
-
-            return Tensors.Tensors.Multiply(normalizedFactors);
-        }
-
-        return tensor;
-    }
-
-    private static SimpleTensor NormalizeSimpleTensor(SimpleTensor tensor)
-    {
-        if (tensor.SimpleIndices.Size() != 2 || !HasSymmetricSwap(tensor))
-        {
-            return tensor;
-        }
-
-        int first = tensor.SimpleIndices[0];
-        int second = tensor.SimpleIndices[1];
-        if (first <= second)
-        {
-            return tensor;
-        }
-
-        return Tensor.SimpleTensor(
-            tensor.Name,
-            IndicesFactory.CreateSimple(null, second, first));
-    }
-
-    private static bool HasSymmetricSwap(SimpleTensor tensor)
-    {
-        foreach (Symmetry basis in tensor.SimpleIndices.Symmetries.Basis)
-        {
-            if (!basis.IsAntisymmetry
-                && basis.NewIndexOf(0) == 1
-                && basis.NewIndexOf(1) == 0)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private static string GetSummandKey(Tensor tensor)
-    {
-        if (tensor is Product product)
-        {
-            string[] factorKeys = new string[product.Size];
-            for (int i = 0; i < product.Size; ++i)
-            {
-                factorKeys[i] = GetSummandKey(product[i]);
-            }
-
-            Array.Sort(factorKeys, StringComparer.Ordinal);
-            return string.Join("*", factorKeys);
-        }
-
-        if (tensor is SimpleTensor simpleTensor)
-        {
-            return NormalizeSimpleTensor(simpleTensor).ToString(OutputFormat.Redberry);
-        }
-
-        return tensor.ToString(OutputFormat.Redberry);
     }
 }

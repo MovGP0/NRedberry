@@ -92,7 +92,7 @@ public sealed class SymmetrizeUpperLowerIndicesTransformationTest
             return string.Join("*", factors);
         }
 
-        if (tensor is SimpleTensor simpleTensor)
+        if (tensor is SimpleTensorType simpleTensor)
         {
             return CanonicalizeSimpleTensor(simpleTensor).ToString(OutputFormat.Redberry);
         }

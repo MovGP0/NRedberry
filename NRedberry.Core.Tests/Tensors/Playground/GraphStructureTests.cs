@@ -33,8 +33,20 @@ public sealed class GraphStructureTests
     }
 
     [Fact]
-    public void ShouldThrowForUnportedTensorConstructor()
+    public void ShouldMatchStructureOfContractionsForTensorConstructor()
     {
-        Should.Throw<NotImplementedException>(() => new GraphStructure([TensorApi.Parse("a")], 1, TensorApi.Parse("a").Indices));
+        NRedberry.Tensors.Tensor scalar = TensorApi.Parse("a");
+        StructureOfContractions expected = new([scalar], 0, scalar.Indices);
+        GraphStructure actual = new([scalar], 0, scalar.Indices);
+
+        actual.FreeContractions.ShouldBe(expected.freeContractions);
+        actual.Contractions.Length.ShouldBe(expected.contractions.Length);
+        for (int i = 0; i < actual.Contractions.Length; ++i)
+        {
+            actual.Contractions[i].ShouldBe(expected.contractions[i]);
+        }
+
+        actual.Components.ShouldBe(expected.components);
+        actual.ComponentCount.ShouldBe(expected.componentCount);
     }
 }

@@ -5,14 +5,44 @@ using Xunit;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
 
-public sealed class DiracSimplify1Test
+public sealed class DiracSimplify1Test : AbstractFeynCalcTest
 {
-    [Fact(Skip = "Blocked by the unported SubstitutionTransformation dependency in NRedberry.Core.")]
+    [Fact(Skip = "Blocked by DiracOptions/SubstitutionTransformation(Expression) port gaps outside DiracSimplify1.")]
     public void ShouldConstructTransformation()
     {
         DiracSimplify1 transformation = new(CreateDiracOptions());
 
         transformation.ShouldNotBeNull();
+    }
+
+    [Fact(Skip = "Blocked by DiracOptions/SubstitutionTransformation(Expression) port gaps outside DiracSimplify1.")]
+    public void ShouldSimplifyRepeatedContractionsToScalar()
+    {
+        SetUp(123L);
+
+        var result = dSimplify1!.Transform(TensorFactory.Parse("G_a*G_a*G_b*G_c*G_b*G_c"));
+
+        ShouldMatchTensor("-32", result);
+    }
+
+    [Fact(Skip = "Blocked by DiracOptions/SubstitutionTransformation(Expression) port gaps outside DiracSimplify1.")]
+    public void ShouldSimplifySingleWrappedContraction()
+    {
+        SetUp(123L);
+
+        var result = dSimplify1!.Transform(TensorFactory.Parse("G_{a}*G_{b}*G^{a}"));
+
+        ShouldMatchTensor("-2*G_{b}", result);
+    }
+
+    [Fact(Skip = "Blocked by DiracOptions/SubstitutionTransformation(Expression) port gaps outside DiracSimplify1.")]
+    public void ShouldSimplifyFourGammaWrappedContraction()
+    {
+        SetUp(123L);
+
+        var result = dSimplify1!.Transform(TensorFactory.Parse("G_{a}*G_{b}*G_c*G_d*G^{a}"));
+
+        ShouldMatchTensor("-2*G_d*G_c*G_b", result);
     }
 
     private static DiracOptions CreateDiracOptions()

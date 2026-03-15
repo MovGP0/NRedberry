@@ -1,4 +1,5 @@
 using NRedberry.Transformations.Substitutions;
+using Shouldly;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
@@ -7,9 +8,11 @@ namespace NRedberry.Core.Tests.Transformations.Substitutions;
 public sealed class PrimitiveSimpleTensorSubstitutionTests
 {
     [Fact]
-    public void ShouldThrowWhilePrimitiveSimpleTensorSubstitutionIsUnimplemented()
+    public void ShouldConstructPrimitiveSimpleTensorSubstitution()
     {
-        Should.Throw<NotImplementedException>(() =>
-            new PrimitiveSimpleTensorSubstitution(TensorApi.Parse("a"), TensorApi.Parse("b")));
+        PrimitiveSimpleTensorSubstitution substitution =
+            new(TensorApi.Parse("a"), TensorApi.Parse("b"));
+
+        substitution.ShouldNotBeNull();
     }
 }
