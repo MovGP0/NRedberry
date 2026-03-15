@@ -25,7 +25,8 @@ public sealed class RedberryExtensionPropertyTests
     [Fact]
     public void ShouldCreatePermutationFromOneLineNotationViaExtensionProperty()
     {
-        Permutation permutation = new[] { 1, 0 }.p;
+        int[] array = [1, 0];
+        Permutation permutation = array.p;
 
         permutation.ShouldBe(Permutations.CreatePermutation(1, 0));
     }
@@ -33,7 +34,8 @@ public sealed class RedberryExtensionPropertyTests
     [Fact]
     public void ShouldCreateAntisymmetricPermutationFromNegativeOneLineNotationViaExtensionProperty()
     {
-        Permutation permutation = new[] { -1, 0 }.p;
+        int[] array = [-1, 0];
+        Permutation permutation = array.p;
 
         permutation.ShouldBe(Permutations.CreatePermutation(true, 1, 0));
     }
@@ -41,11 +43,8 @@ public sealed class RedberryExtensionPropertyTests
     [Fact]
     public void ShouldCreatePermutationFromCycleNotationViaExtensionProperty()
     {
-        Permutation permutation = new[]
-        {
-            new[] { 1, 0 },
-            new[] { 2, 3 },
-        }.p;
+        int[][] array = [[1, 0], [2, 3]];
+        Permutation permutation = array.p;
 
         permutation.ShouldBe(Permutations.CreatePermutation([[1, 0], [2, 3]]));
     }

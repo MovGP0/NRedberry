@@ -114,7 +114,7 @@ public sealed class SymmetrizeUpperLowerIndicesTransformationTest
             return tensor;
         }
 
-        return Tensor.SimpleTensor(
+        return NRedberry.Tensors.Tensor.SimpleTensor(
             tensor.Name,
             IndicesFactory.CreateSimple(null, second, first));
     }

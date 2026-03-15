@@ -13,7 +13,7 @@
 ## Build, Test, and Development Commands
 
 - `dotnet restore NRedberry.slnx` — restore dependencies for the core library and its project references.
-- `dotnet build NRedberry.slnx -c Release` — compile all linked projects (net9.0) with analyzers enabled.
+- `dotnet build NRedberry.slnx -c Release` — compile all linked projects (net10.0) with analyzers enabled.
 - `dotnet test NRedberry.slnx ` — run the xUnit suite; use `--filter Category=...` to scope runs during iteration.
 - IDE users can open `NRedberry.slnx`.
 
@@ -29,6 +29,17 @@
 - use `ArgumentNullException.ThrowIfNull(param);` for null-guarding method parameters/arguments.
 - When updating `IIndexSymbolConverter.GetSymbol`, update all converters plus `IndexConverterManager` to match the signature and prevent CS0535 build errors.
 
+## Modern C# 13/14
+
+- C# 14 extension members are available in this repo (`<LangVersion>14</LangVersion>`). Use extension blocks for small DSL-style adapters such as `.t` and `.p`, but keep them in top-level static classes and prefer ordinary APIs when the extension would hide required type information.
+- C# 13 `params` collections are available. Prefer them over overload ladders when porting Java varargs-style APIs, but verify that collection-expression call sites stay unambiguous against existing array/List overloads.
+- C# 13 partial properties and partial indexers are supported, but only use them when a source generator or other partial-member pattern requires them; avoid them in ordinary handwritten domain code.
+- Collection expressions still have no natural type and must be target-typed before member access. Do not write bare receivers like `[[0, 3, 5]].p`; instead write `int[][] cycles = [[0, 3, 5]];` and then use `cycles.p`.
+- Official references:
+  - C# 14: `https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-14`
+  - C# 13: `https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-13`
+  - Collection expressions: `https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/collection-expressions`
+
 ## Testing Guidelines
 
 - Tests use xUnit (`[Fact]` and `[Theory]`) and live next to the feature they exercise.
@@ -42,7 +53,7 @@
 - Use `SatisfyAllConditions` when multiple assertions are needed to validate a single test case:
 ```csharp
 result.ShouldSatisfyAllConditions(
-    () => result.PropertyA.ShouldBe(expectedA),
+    () => result.PropertyA.ShouldNotBeNull().ShouldBe(expectedA),
     () => result.PropertyB.ShouldBe(expectedB),
     () => result.PropertyC.ShouldBe(expectedC)
 );
@@ -303,7 +314,7 @@ public override int GetHashCode()
 - Build error note: in test files under `NRedberry.Core.Tests.Tensor`, unqualified `Tensor` can bind to the local `Tensor` namespace and cause CS0118; use an alias such as `using TensorType = NRedberry.Tensors.Tensor;`.
 - Build error note: CS0104 can occur when MathUtils is ambiguous between NRedberry.Maths and NRedberry.Core.Utils; use an alias (e.g., MathsUtils) or fully qualify.
 - Build error note: In test files, `Complex` can be ambiguous between `NRedberry.Numbers.Complex` and `System.Numerics.Complex` (CS0104), especially with global/implicit System usings; use an explicit alias such as `using NumberComplex = NRedberry.Numbers.Complex;`.
-- Build error note: running multiple `dotnet test` or build commands concurrently against projects that share `NRedberry.Core` outputs can trigger CS2012 file locks on `obj\Debug\net9.0\NRedberry.Core.dll`; run those validations sequentially.
+- Build error note: running multiple `dotnet test` or build commands concurrently against projects that share `NRedberry.Core` outputs can trigger CS2012 file locks on `obj\Debug\net10.0\NRedberry.Core.dll`; run those validations sequentially.
 - Build error note: in test files under `NRedberry.Core.Tests`, unqualified `Indices.Indices` can bind to the local `NRedberry.Core.Tests.Indices` namespace and cause CS0234; fully qualify it as `NRedberry.Indices.Indices` when the test namespace introduces the ambiguity.
 - Build error note: in test files under `NRedberry.Core.Tests.Tensors`, unqualified `Tensors.Parse`/`Tensors.Sum`/etc. can bind to the local test namespace instead of `NRedberry.Tensors.Tensors`, causing CS0234; use an alias such as `using TensorApi = NRedberry.Tensors.Tensors;`.
 - Build error note: in test files under `NRedberry.Core.Tests`, unqualified `Context` can bind to a namespace instead of `NRedberry.Contexts.Context`, causing CS0118; use an alias such as `using RedberryContext = NRedberry.Contexts.Context;`.
@@ -401,7 +412,7 @@ public override int GetHashCode()
 - Build error note: `NRedberry.Tensors.Tensors.SimpleTensor` does not have a single-string overload; create simple tensor patterns by parsing (`Assert.IsType<SimpleTensor>(TensorFactory.Parse("x"))`) or by supplying explicit indices.
 - Build error note: Collection expressions can trigger CS0121 against overloads like `RenameDummy(Tensor, int[], int[])` vs `RenameDummy(Tensor, int[], HashSet<int>)`; use explicit `new int[] { ... }` arrays when selecting the `int[]` overload.
 - Build error note: Shouldly predicate helpers such as `ShouldContain(...)` can build expression trees; avoid collection expressions like `[0, 1]` inside those predicates because they trigger CS8640/CS9175. Use `Any(...)` with a regular lambda or move the expected value to a normal array variable first.
-- Build error note: Concurrent `dotnet build`/`dotnet test` runs against the same `NRedberry.Core.Tests` output path can hit CS2012/MSB3026 file-lock failures on `obj\Debug\net9.0\NRedberry.Core.Tests.dll`; serialize test/build commands for the same project instead of running them in parallel.
+- Build error note: Concurrent `dotnet build`/`dotnet test` runs against the same `NRedberry.Core.Tests` output path can hit CS2012/MSB3026 file-lock failures on `obj\Debug\net10.0\NRedberry.Core.Tests.dll`; serialize test/build commands for the same project instead of running them in parallel.
 - Build error note: comparer-aware Shouldly string helpers should use `System.StringComparison` directly; this avoids coupling to Shouldly-specific enums and keeps call sites aligned with standard .NET string APIs.
 - Build error note: `ShouldBeTrue` takes only the optional custom-message string; after converting from `Assert.True(condition, message)`, keep the condition as the receiver and pass only the message to avoid CS1501.
 - Build error note: collection expressions can make `Permute(...)` calls ambiguous when both array and `List<T>` overloads exist; use explicit `new T[] { ... }` arrays in tests to force the intended overload and avoid CS0121.
@@ -409,6 +420,7 @@ public override int GetHashCode()
 - Build error note: after changing the shared `TargetFramework` in `Directory.Build.props`, stale `obj\project.assets.json` files can still point at the previous TFM and trigger `NETSDK1005`; run a forced restore (or delete the affected `obj` folders) before using `--no-restore` builds.
 - Build error note: `dotnet format` on SHU001 can rewrite predicate `ShouldContain` calls backwards (for example `item => ... .ShouldContain(collection)`), which yields CS0201; the collection must remain the receiver, i.e. `collection.ShouldContain(item => ...)`.
 - Build error note: `IndexMappings.Compare1(...)` returns `bool?`; use `ShouldBe(false)`/`ShouldBeNull()` instead of `ShouldBeFalse()` to avoid CS1929 on nullable booleans.
+- Build error note: bare collection-expression receivers such as `[[0, 3, 5]].p` have no target type and fail with CS9176 when used with extension properties; assign the collection expression to an explicitly typed local (for example `int[][] cycles = [[0, 3, 5]];`) before accessing the extension member.
 
 ## Roslynator Diagnostics Reference
 
