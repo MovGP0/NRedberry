@@ -4,7 +4,60 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Folder Name="/Documentation/">
+  <Folder Name="/docs/guide/">
+    <File Path="docs/guide/ApplyingAndManipulatingTransformations.ipynb" />
+    <File Path="docs/guide/CalculatingOneLoopCounterterms.ipynb" />
+    <File Path="docs/guide/EinsteinNotation.ipynb" />
+    <File Path="docs/guide/GettingStarted.ipynb" />
+    <File Path="docs/guide/InputtingAndPrintingMathematicalExpressions.ipynb" />
+    <File Path="docs/guide/ListOfTransformations.ipynb" />
+    <File Path="docs/guide/MappingsOfIndices.ipynb" />
+    <File Path="docs/guide/NotesOnInternalArchitecture.ipynb" />
+    <File Path="docs/guide/OverviewOfHepFeatures.ipynb" />
+    <File Path="docs/guide/PermutationsAndPermutationGroups.ipynb" />
+    <File Path="docs/guide/ProgrammingWithRedberry.ipynb" />
+    <File Path="docs/guide/RepresentationOfDerivatives.ipynb" />
+    <File Path="docs/guide/SettingUpMatrixObjects.ipynb" />
+    <File Path="docs/guide/StandardFormOfMathematicalExpressions.ipynb" />
+    <File Path="docs/guide/Substitutions.ipynb" />
+    <File Path="docs/guide/SymmetriesOfTensors.ipynb" />
+    <File Path="docs/guide/TensorsAndIndices.ipynb" />
+    <File Path="docs/guide/TreeTraversal.ipynb" />
+  </Folder>
+  <Folder Name="/docs/ref/">
+    <File Path="docs/ref/Collect.ipynb" />
+    <File Path="docs/ref/Differentiate.ipynb" />
+    <File Path="docs/ref/DiracTrace.ipynb" />
+    <File Path="docs/ref/EliminateDueSymmetries.ipynb" />
+    <File Path="docs/ref/Expand.ipynb" />
+    <File Path="docs/ref/Factor.ipynb" />
+    <File Path="docs/ref/Indices.ipynb" />
+    <File Path="docs/ref/OutputFormat.ipynb" />
+    <File Path="docs/ref/Permutation.ipynb" />
+    <File Path="docs/ref/PermutationGroup.ipynb" />
+    <File Path="docs/ref/Reduce.ipynb" />
+    <File Path="docs/ref/SimpleIndices.ipynb" />
+    <File Path="docs/ref/SimpleTensor.ipynb" />
+    <File Path="docs/ref/Symmetrize.ipynb" />
+    <File Path="docs/ref/Tensor.ipynb" />
+    <File Path="docs/ref/TensorField.ipynb" />
+    <File Path="docs/ref/Transformation.ipynb" />
+    <File Path="docs/ref/UnitaryTrace.ipynb" />
+  </Folder>
+  <Folder Name="/docs/tutorials/">
+    <File Path="docs/tutorials/AnnihilationToMuonsInQed.ipynb" />
+    <File Path="docs/tutorials/BcToUBarDGamma.ipynb" />
+    <File Path="docs/tutorials/ComptonScatteringInQcd.ipynb" />
+    <File Path="docs/tutorials/ComptonScatteringInQed.ipynb" />
+    <File Path="docs/tutorials/ComptonScatteringInScalarQed.ipynb" />
+    <File Path="docs/tutorials/GravitationalField.ipynb" />
+    <File Path="docs/tutorials/MinimalFourthOrderOperator.ipynb" />
+    <File Path="docs/tutorials/MinimalSecondOrderOperator.ipynb" />
+    <File Path="docs/tutorials/Spin3Propagator.ipynb" />
+    <File Path="docs/tutorials/SquaredVectorFieldOperator.ipynb" />
+    <File Path="docs/tutorials/VectorField.ipynb" />
+  </Folder>
+  <Folder Name="/Solution/">
     <File Path=".gitignore" />
     <File Path="AGENTS.md" />
     <File Path="ClassMapping.md" />
@@ -15,7 +68,11 @@
     <File Path=".editorconfig" />
     <File Path="nuget.config" />
   </Folder>
-  <Project Path="NRedberry.Apache.Commons.Math\NRedberry.Apache.Commons.Math.csproj" Type="Classic C#">
+  <Folder Name="/docs/">
+    <File Path="docs/Benchmarks.ipynb" />
+    <File Path="docs/Redberry.Documentation.ipynb" />
+  </Folder>
+  <Project Path="NRedberry.Apache.Commons.Math\NRedberry.Apache.Commons.Math.csproj" Type="C#">
     <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
     <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
     <Configuration Solution="Release|x64" Project="Release|Any CPU" />
@@ -27,7 +84,7 @@
     <Configuration Solution="Release|x64" Project="Release|Any CPU" />
     <Configuration Solution="Release|x86" Project="Release|Any CPU" />
   </Project>
-  <Project Path="NRedberry.Core.Combinatorics\NRedberry.Core.Combinatorics.csproj" Type="Classic C#">
+  <Project Path="NRedberry.Core.Combinatorics\NRedberry.Core.Combinatorics.csproj" Type="C#">
     <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
     <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
     <Configuration Solution="Release|x64" Project="Release|Any CPU" />
@@ -39,7 +96,7 @@
     <Configuration Solution="Release|x64" Project="Release|Any CPU" />
     <Configuration Solution="Release|x86" Project="Release|Any CPU" />
   </Project>
-  <Project Path="NRedberry.Core.Entities\NRedberry.Core.Entities.csproj" Type="Classic C#">
+  <Project Path="NRedberry.Core.Entities\NRedberry.Core.Entities.csproj" Type="C#">
     <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
     <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
     <Configuration Solution="Release|x64" Project="Release|Any CPU" />
@@ -51,7 +108,7 @@
     <Configuration Solution="Release|x64" Project="Release|Any CPU" />
     <Configuration Solution="Release|x86" Project="Release|Any CPU" />
   </Project>
-  <Project Path="NRedberry.Core.Exceptions\NRedberry.Core.Exceptions.csproj" Type="Classic C#">
+  <Project Path="NRedberry.Core.Exceptions\NRedberry.Core.Exceptions.csproj" Type="C#">
     <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
     <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
     <Configuration Solution="Release|x64" Project="Release|Any CPU" />
@@ -69,7 +126,7 @@
     <Configuration Solution="Release|x64" Project="Release|Any CPU" />
     <Configuration Solution="Release|x86" Project="Release|Any CPU" />
   </Project>
-  <Project Path="NRedberry.Core.Utils\NRedberry.Core.Utils.csproj" Type="Classic C#">
+  <Project Path="NRedberry.Core.Utils\NRedberry.Core.Utils.csproj" Type="C#">
     <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
     <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
     <Configuration Solution="Release|x64" Project="Release|Any CPU" />
@@ -93,19 +150,19 @@
     <Configuration Solution="Release|x64" Project="Release|Any CPU" />
     <Configuration Solution="Release|x86" Project="Release|Any CPU" />
   </Project>
-  <Project Path="NRedberry.Groovy.Tests\NRedberry.Groovy.Tests.csproj" Type="Classic C#">
+  <Project Path="NRedberry.Groovy.Tests\NRedberry.Groovy.Tests.csproj" Type="C#">
     <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
     <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
     <Configuration Solution="Release|x64" Project="Release|Any CPU" />
     <Configuration Solution="Release|x86" Project="Release|Any CPU" />
   </Project>
-  <Project Path="NRedberry.Groovy\NRedberry.Groovy.csproj" Type="Classic C#">
+  <Project Path="NRedberry.Groovy\NRedberry.Groovy.csproj" Type="C#">
     <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
     <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
     <Configuration Solution="Release|x64" Project="Release|Any CPU" />
     <Configuration Solution="Release|x86" Project="Release|Any CPU" />
   </Project>
-  <Project Path="NRedberry.JAS\NRedberry.JAS.csproj" Type="Classic C#">
+  <Project Path="NRedberry.JAS\NRedberry.JAS.csproj" Type="C#">
     <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
     <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
     <Configuration Solution="Release|x64" Project="Release|Any CPU" />
@@ -117,19 +174,19 @@
     <Configuration Solution="Release|x64" Project="Release|Any CPU" />
     <Configuration Solution="Release|x86" Project="Release|Any CPU" />
   </Project>
-  <Project Path="NRedberry.Physics.Tests\NRedberry.Physics.Tests.csproj" Type="Classic C#">
+  <Project Path="NRedberry.Physics.Tests\NRedberry.Physics.Tests.csproj" Type="C#">
     <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
     <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
     <Configuration Solution="Release|x64" Project="Release|Any CPU" />
     <Configuration Solution="Release|x86" Project="Release|Any CPU" />
   </Project>
-  <Project Path="NRedberry.Physics\NRedberry.Physics.csproj" Type="Classic C#">
+  <Project Path="NRedberry.Physics\NRedberry.Physics.csproj" Type="C#">
     <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
     <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
     <Configuration Solution="Release|x64" Project="Release|Any CPU" />
     <Configuration Solution="Release|x86" Project="Release|Any CPU" />
   </Project>
-    <Project Path="TestInfrastructure\TestInfrastructure.csproj" Type="Classic C#">
+    <Project Path="TestInfrastructure\TestInfrastructure.csproj" Type="C#">
         <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
         <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
         <Configuration Solution="Release|x64" Project="Release|Any CPU" />

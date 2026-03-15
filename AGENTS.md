@@ -340,6 +340,7 @@ public override int GetHashCode()
 - Build error note: ExternalSolver.cs used `Tensors.Expression`/`Tensors.ParseExpression` and `Tensors` resolved to the namespace, causing CS1955/CS0234; use `NRedberry.Tensors.Tensors` (or a using alias) when calling static tensor helpers.
 - Build error note: adding the `NRedberry.Tensors.Random` namespace can make unqualified `Random` resolve to the namespace instead of `System.Random` (CS0118); use `System.Random` explicitly in files under `NRedberry.Tensors` when that namespace is in play.
 - Build error note: CS0246 when using `TransformationCollection` without the correct namespace; add `using NRedberry.Transformations.Symmetrization;` (the class lives there).
+- Build error note: in `NRedberry.Groovy`, `Permutation` lives in `NRedberry.Core.Combinatorics` while `Permutations` factory helpers live in `NRedberry.Groups`, and `Complex` is ambiguous with `System.Numerics.Complex`; use explicit aliases/imports to avoid CS0246 and CS0104 in DSL files.
 - Build error note: RCS0055/RCS0027 can flag long string concatenation chains; prefer `StringBuilder` (or keep each `+` on its own line with consistent indentation).
 - Build error note: RCS0055 can also flag long string concatenations in expressions; prefer `string.Concat(...)` to avoid binary chain formatting errors.
 - Build error note: RCS0055 can still fire for `const string` concatenations; if the value must remain `const`, collapse into a single literal string to avoid binary chains.
