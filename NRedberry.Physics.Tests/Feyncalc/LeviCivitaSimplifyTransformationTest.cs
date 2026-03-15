@@ -163,7 +163,7 @@ public sealed class LeviCivitaSimplifyTransformationTest(ITestOutputHelper testO
         ShouldMatchTensor("12*g_sx", t);
     }
 
-    [Fact(Skip = "LeviCivitaSimplifyTransformation is not yet ported.")]
+    [Fact]
     public void Test9()
     {
         Reset();
@@ -195,8 +195,10 @@ public sealed class LeviCivitaSimplifyTransformationTest(ITestOutputHelper testO
             TensorFactory.ParseExpression("A_ab*A^ba = xx"),
             TensorFactory.ParseExpression("D_ab*D^ba = yy"));
 
-        _ = new ExpandTransformation(transformation)
+        Tensor result = new ExpandTransformation(transformation)
             .Transform(Tensor.MultiplyAndRenameConflictingDummies([t1, t2]));
+
+        result.ShouldNotBeNull();
     }
 
     private static Tensor SimplifyLeviCivita(Tensor tensor, SimpleTensor eps)

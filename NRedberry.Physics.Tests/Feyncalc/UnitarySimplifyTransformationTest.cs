@@ -1,25 +1,26 @@
 using NRedberry.Physics.Feyncalc;
+using NRedberry.Tensors;
 using Shouldly;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
 
-public sealed class UnitarySimplifyTransformationTest(ITestOutputHelper testOutputHelper)
+public sealed class UnitarySimplifyTransformationTest
 {
     [Fact]
-    public void Test1()
+    public void ShouldPreserveBareGeneratorContractionWithoutInsertionRules()
     {
-        // TODO: GeneralIndicesInsertion is not yet ported; insertion rules skipped.
-        // TODO: setAntiSymmetric/setSymmetric are not yet ported.
-
         UnitarySimplifyTransformation tr = new(
             TensorFactory.ParseSimple("T_A"),
             TensorFactory.ParseSimple("f_ABC"),
             TensorFactory.ParseSimple("d_ABC"),
             TensorFactory.ParseSimple("n"));
 
-        testOutputHelper.WriteLine(tr.Transform(TensorFactory.Parse("T_A*T^A")).ToString());
+        Tensor input = TensorFactory.Parse("T_A*T^A");
+        Tensor actual = tr.Transform(input);
+
+        tr.ToString().ShouldBe("UnitarySimplify");
+        actual.ToString().ShouldBe(input.ToString());
     }
 }

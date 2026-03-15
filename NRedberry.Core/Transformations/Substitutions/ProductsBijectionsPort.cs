@@ -3,6 +3,7 @@ using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
 using NRedberry.Core.Utils.Stretces;
 using NRedberry.Graphs;
+using NRedberry.Indices;
 using NRedberry.Tensors;
 
 namespace NRedberry.Transformations.Substitutions;
@@ -27,8 +28,8 @@ public sealed class ProductsBijectionsPort : IOutputPort<int[]>
         ArgumentNullException.ThrowIfNull(fromContent);
         ArgumentNullException.ThrowIfNull(targetContent);
 
-        _targetContractionsStructure = targetContent.StructureOfContractions;
-        _fromContractionsStructure = fromContent.StructureOfContractions;
+        _targetContractionsStructure = GetStructureOfContractions(targetContent);
+        _fromContractionsStructure = GetStructureOfContractions(fromContent);
 
         _fromContractions = _fromContractionsStructure.contractions;
         _targetContractions = _targetContractionsStructure.contractions;
@@ -115,6 +116,25 @@ public sealed class ProductsBijectionsPort : IOutputPort<int[]>
         }
 
         return false;
+    }
+
+    private static StructureOfContractions GetStructureOfContractions(ProductContent productContent)
+    {
+        ArgumentNullException.ThrowIfNull(productContent);
+
+        StructureOfContractions structure = productContent.StructureOfContractions;
+        if (structure.contractions.Length == productContent.Size)
+        {
+            return structure;
+        }
+
+        Tensor[] data = productContent.GetDataCopy();
+        IndicesBuilder indicesBuilder = new();
+        indicesBuilder.Append(data);
+        Indices.Indices indices = indicesBuilder.Indices;
+        Indices.Indices freeIndices = indices.GetFree();
+        int differentIndicesCount = (indices.Size() + freeIndices.Size()) / 2;
+        return new StructureOfContractions(data, differentIndicesCount, freeIndices);
     }
 
     private sealed class InnerPort : IOutputPort<int[]>

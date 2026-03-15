@@ -19,7 +19,9 @@ public sealed class DiracOrderTransformationTest
         ConfigureContext();
 
         DiracOptions options = CreateOptions();
-        Tensor[] orderedGammas = DiracOrderTransformation.CreateArrayForTesting(options, [0, 1]);
+        Tensor[] orderedGammas = ParseGammaArray(
+            "G_{a}^{a'}_{b'}",
+            "G_{b}^{b'}_{c'}");
         Tensor? ordered = DiracOrderTransformation.OrderArrayForTesting(
             options,
             orderedGammas);
@@ -33,7 +35,9 @@ public sealed class DiracOrderTransformationTest
         ConfigureContext();
 
         DiracOptions options = CreateOptions();
-        Tensor[] gammas = DiracOrderTransformation.CreateArrayForTesting(options, [1, 0]);
+        Tensor[] gammas = ParseGammaArray(
+            "G_{b}^{a'}_{b'}",
+            "G_{a}^{b'}_{c'}");
         Tensor ordered = DiracOrderTransformation.OrderArrayForTesting(options, gammas)!;
 
         ShouldMatchTensor("2*g_{ba}*d^{a'}_{c'}-G_{a}^{a'}_{b'}*G_{b}^{b'}_{c'}", ordered);
@@ -45,7 +49,10 @@ public sealed class DiracOrderTransformationTest
         ConfigureContext();
 
         DiracOptions options = CreateOptions();
-        Tensor[] gammas = DiracOrderTransformation.CreateArrayForTesting(options, [2, 1, 0]);
+        Tensor[] gammas = ParseGammaArray(
+            "G_{c}^{a'}_{b'}",
+            "G_{b}^{b'}_{c'}",
+            "G_{a}^{c'}_{d'}");
         Tensor ordered = DiracOrderTransformation.OrderArrayForTesting(options, gammas)!;
 
         ShouldMatchTensor(
@@ -54,15 +61,93 @@ public sealed class DiracOrderTransformationTest
     }
 
     [Fact]
-    public void ShouldCreatePermutedCanonicalGammaArray()
+    public void ShouldOrderPartiallyPermutedThreeGammas()
     {
         ConfigureContext();
 
         DiracOptions options = CreateOptions();
-        Tensor[] created = DiracOrderTransformation.CreateArrayForTesting(options, [1, 0]);
-        Tensor product = TensorApi.Multiply(created);
+        Tensor[] gammas = ParseGammaArray(
+            "G_{c}^{a'}_{b'}",
+            "G_{a}^{b'}_{c'}",
+            "G_{b}^{c'}_{d'}");
+        Tensor ordered = DiracOrderTransformation.OrderArrayForTesting(options, gammas)!;
 
-        ShouldMatchTensor("G_{b}^{a'}_{b'}*G_{a}^{b'}_{c'}", product);
+        ShouldMatchTensor(
+            "G_{a}^{a'}_{b'}*G_{b}^{b'}_{c'}*G_{c}^{c'}_{d'}-2*g_{bc}*G_{a}^{a'}_{d'}+2*g_{ac}*G_{b}^{a'}_{d'}",
+            ordered);
+    }
+
+    [Fact]
+    public void ShouldOrderFourGammas()
+    {
+        ConfigureContext();
+
+        DiracOptions options = CreateOptions();
+        Tensor[] gammas = ParseGammaArray(
+            "G_{d}^{a'}_{b'}",
+            "G_{c}^{b'}_{c'}",
+            "G_{b}^{c'}_{d'}",
+            "G_{a}^{d'}_{e'}");
+        Tensor ordered = DiracOrderTransformation.OrderArrayForTesting(options, gammas)!;
+
+        ShouldMatchTensor(
+            string.Concat(
+                "G_{a}^{a'}_{b'}*G_{b}^{b'}_{c'}*G_{c}^{c'}_{d'}*G_{d}^{d'}_{e'}",
+                "-2*g_{ab}*G_{c}^{a'}_{d'}*G_{d}^{d'}_{e'}",
+                "+2*g_{ac}*G_{b}^{a'}_{d'}*G_{d}^{d'}_{e'}",
+                "-2*g_{ad}*G_{b}^{a'}_{c'}*G_{c}^{c'}_{e'}",
+                "-2*g_{bc}*G_{a}^{a'}_{d'}*G_{d}^{d'}_{e'}",
+                "+4*g_{ad}*g_{bc}*d^{a'}_{e'}",
+                "+2*g_{bd}*G_{a}^{a'}_{c'}*G_{c}^{c'}_{e'}",
+                "-4*g_{ac}*g_{bd}*d^{a'}_{e'}",
+                "-2*g_{cd}*G_{a}^{a'}_{b'}*G_{b}^{b'}_{e'}",
+                "+4*g_{ab}*g_{cd}*d^{a'}_{e'}"),
+            ordered);
+    }
+
+    [Fact]
+    public void ShouldOrderFiveGammas()
+    {
+        ConfigureContext();
+
+        DiracOptions options = CreateOptions();
+        Tensor[] gammas = ParseGammaArray(
+            "G_{e}^{a'}_{b'}",
+            "G_{d}^{b'}_{c'}",
+            "G_{c}^{c'}_{d'}",
+            "G_{b}^{d'}_{e'}",
+            "G_{a}^{e'}_{f'}");
+        Tensor ordered = DiracOrderTransformation.OrderArrayForTesting(options, gammas)!;
+
+        ShouldMatchTensor(
+            string.Concat(
+                "G_{a}^{a'}_{b'}*G_{b}^{b'}_{c'}*G_{c}^{c'}_{d'}*G_{d}^{d'}_{e'}*G_{e}^{e'}_{f'}",
+                "-2*g_{ab}*G_{c}^{a'}_{d'}*G_{d}^{d'}_{e'}*G_{e}^{e'}_{f'}",
+                "+2*g_{ac}*G_{b}^{a'}_{d'}*G_{d}^{d'}_{e'}*G_{e}^{e'}_{f'}",
+                "-2*g_{ad}*G_{b}^{a'}_{c'}*G_{c}^{c'}_{e'}*G_{e}^{e'}_{f'}",
+                "+2*g_{ae}*G_{b}^{a'}_{c'}*G_{c}^{c'}_{d'}*G_{d}^{d'}_{f'}",
+                "-2*g_{bc}*G_{a}^{a'}_{d'}*G_{d}^{d'}_{e'}*G_{e}^{e'}_{f'}",
+                "+2*g_{bd}*G_{a}^{a'}_{c'}*G_{c}^{c'}_{e'}*G_{e}^{e'}_{f'}",
+                "-2*g_{be}*G_{a}^{a'}_{c'}*G_{c}^{c'}_{d'}*G_{d}^{d'}_{f'}",
+                "-2*g_{cd}*G_{a}^{a'}_{b'}*G_{b}^{b'}_{e'}*G_{e}^{e'}_{f'}",
+                "+2*g_{ce}*G_{a}^{a'}_{b'}*G_{b}^{b'}_{d'}*G_{d}^{d'}_{f'}",
+                "-2*g_{de}*G_{a}^{a'}_{b'}*G_{b}^{b'}_{c'}*G_{c}^{c'}_{f'}",
+                "+4*g_{be}*g_{cd}*G_{a}^{a'}_{f'}",
+                "-4*g_{bd}*g_{ce}*G_{a}^{a'}_{f'}",
+                "+4*g_{bc}*g_{de}*G_{a}^{a'}_{f'}",
+                "-4*g_{ae}*g_{cd}*G_{b}^{a'}_{f'}",
+                "+4*g_{ad}*g_{ce}*G_{b}^{a'}_{f'}",
+                "-4*g_{ac}*g_{de}*G_{b}^{a'}_{f'}",
+                "+4*g_{ae}*g_{bd}*G_{c}^{a'}_{f'}",
+                "-4*g_{ad}*g_{be}*G_{c}^{a'}_{f'}",
+                "+4*g_{ab}*g_{de}*G_{c}^{a'}_{f'}",
+                "-4*g_{ae}*g_{bc}*G_{d}^{a'}_{f'}",
+                "+4*g_{ac}*g_{be}*G_{d}^{a'}_{f'}",
+                "-4*g_{ab}*g_{ce}*G_{d}^{a'}_{f'}",
+                "+4*g_{ad}*g_{bc}*G_{e}^{a'}_{f'}",
+                "-4*g_{ac}*g_{bd}*G_{e}^{a'}_{f'}",
+                "+4*g_{ab}*g_{cd}*G_{e}^{a'}_{f'}"),
+            ordered);
     }
 
     [Fact]
@@ -97,6 +182,19 @@ public sealed class DiracOrderTransformationTest
         TensorCC.Reset();
         TensorCC.SetDefaultOutputFormat(OutputFormat.SimpleRedberry);
         TensorCC.SetParserAllowsSameVariance(true);
+    }
+
+    private static Tensor[] ParseGammaArray(params string[] gammaStrings)
+    {
+        ArgumentNullException.ThrowIfNull(gammaStrings);
+
+        Tensor[] gammas = new Tensor[gammaStrings.Length];
+        for (int i = 0; i < gammaStrings.Length; ++i)
+        {
+            gammas[i] = TensorApi.ParseSimple(gammaStrings[i]);
+        }
+
+        return gammas;
     }
 
     private static void ShouldMatchTensor(string expected, Tensor actual)

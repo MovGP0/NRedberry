@@ -3,24 +3,15 @@ using NRedberry.Tensors;
 using Shouldly;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace NRedberry.Physics.Tests.Feyncalc;
 
 public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
 {
-    private readonly ITestOutputHelper testOutputHelper;
-
-    public SpinorsSimplifyTransformationTest(ITestOutputHelper testOutputHelper)
-    {
-        this.testOutputHelper = testOutputHelper;
-    }
-
     [Fact]
     public void Test1()
     {
         SetUp();
-        // TODO: GeneralIndicesInsertion is not yet ported; insertion rules skipped.
 
         SpinorsSimplifyTransformation sp = new(
             new SpinorsSimplifyOptions("u", "v", "cu", "cv", "p_a", "m"));
@@ -63,7 +54,6 @@ public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
     public void Test1A()
     {
         SetUp();
-        // TODO: GeneralIndicesInsertion is not yet ported; insertion rules skipped.
 
         SpinorsSimplifyTransformation sp = new(
             new SpinorsSimplifyOptions(null, "v", null, null, "p_a", "m"));
@@ -76,7 +66,6 @@ public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
     public void Test2()
     {
         SetUp();
-        // TODO: GeneralIndicesInsertion is not yet ported; insertion rules skipped.
 
         SpinorsSimplifyOptions options = new("u[p_a]", "v[p_a]", "cu[p_a]", "cv[p_a]", "p_a", "m")
         {
@@ -107,20 +96,18 @@ public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
     public void Test3()
     {
         SetUp();
-        // TODO: GeneralIndicesInsertion is not yet ported; insertion rules skipped.
 
         SpinorsSimplifyTransformation sp2 = new(
             new SpinorsSimplifyOptions(null, null, "cu[p1_a[charm]]", null, "p1_a[charm]", "mc"));
 
         Tensor t = TensorFactory.Parse("p1^{a}[charm]*p1^{e}[charm]*v^{b'A'}[p2_{m}[charm]]*G_{a}^{e'}_{b'}*G_{b}^{a'}_{e'}*cu_{a'A'}[p1_{m}[charm]]*k2^{g}*e^{b}_{kge}*k1^{k}");
-        sp2.Transform(t);
+        sp2.Transform(t).ShouldNotBeNull();
     }
 
     [Fact]
     public void Test4()
     {
         SetUp();
-        // TODO: GeneralIndicesInsertion is not yet ported; insertion rules skipped.
 
         SpinorsSimplifyTransformation sp = new(
             new SpinorsSimplifyOptions("u", "v", "cu", "cv", "p_a", "m"));
@@ -139,7 +126,6 @@ public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
     public void Test5()
     {
         SetUp();
-        // TODO: GeneralIndicesInsertion is not yet ported; insertion rules skipped.
 
         SpinorsSimplifyTransformation sp = new(
             new SpinorsSimplifyOptions("u", "v", "cu", "cv", "p_a", "m"));
@@ -157,21 +143,19 @@ public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
         ShouldMatchTensor("-m*cu", sp.Transform(t));
 
         t = TensorFactory.Parse("G_{c}^{a'}_{d'}*G_{k}^{d'}_{g'}*G_{l}^{g'}_{e'}*v^{f'}*G5^{e'}_{f'}*cu_{a'}*eps^{c}_{a}[h[bottom]]*k2^{k}*k2^{a}*k1^{l}");
-        testOutputHelper.WriteLine(t.ToString());
-        testOutputHelper.WriteLine(TensorFactory.Parse("G_{a}^{f'}_{b'}*G^{me'}_{f'}*G^{da'}_{e'}*cu_{a'}*v^{b'}*k2^{a}*k2^{k}*p1^{e}*e^{b}_{nke}*k1_{m}*k1^{n}*eps_{bd}").ToString());
+        sp.Transform(t).ShouldNotBeNull();
     }
 
     [Fact]
     public void Test6()
     {
         SetUp();
-        // TODO: GeneralIndicesInsertion is not yet ported; insertion rules skipped.
 
         SpinorsSimplifyTransformation sp = new(
             new SpinorsSimplifyOptions(null, null, null, "cv[x_a]", "p_a", "0"));
 
         Tensor t = TensorFactory.Parse("cv[x_a]*G_{a}*u*p^{a}");
-        testOutputHelper.WriteLine(sp.Transform(t).ToString());
+        sp.Transform(t).ShouldNotBeNull();
     }
 
     private static void ShouldKeepSameReference(Tensor expected, Tensor actual)

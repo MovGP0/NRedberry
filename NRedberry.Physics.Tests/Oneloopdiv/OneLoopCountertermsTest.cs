@@ -480,7 +480,7 @@ public sealed class OneLoopCountertermsTest
         ShouldEqualTensor(actual, expected);
     }
 
-    [Fact(Skip = "Blocked by NRedberry-9y2mn: SubstitutionTransformation is not ported yet.")]
+    [Fact]
     public void TestLambdaGaugeGravity()
     {
         if (!NeedToTest(nameof(TestLambdaGaugeGravity)))
@@ -652,7 +652,7 @@ public sealed class OneLoopCountertermsTest
         Expression f = TensorFactory.ParseExpression("F_lm^kd_pr = "
             + "R^k_plm*d^d_r+R^d_rlm*d^k_p");
 
-        //todo together symbolic
+        // Blocked at ticket scope: this extremal symbolic case still exceeds practical test runtime.
         OneLoopInput input = new OneLoopInput(2, iK, k, s, w, null, null, f);
 
         OneLoopCounterterms action = OneLoopCounterterms.CalculateOneLoopCounterterms(input);
