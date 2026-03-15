@@ -1,4 +1,5 @@
-﻿using NRedberry.Tensors.Playground;
+﻿using NRedberry.Tensors;
+using NRedberry.Tensors.Playground;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
 
