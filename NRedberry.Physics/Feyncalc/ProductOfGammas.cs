@@ -1,4 +1,6 @@
+using NRedberry.Concurrent;
 using NRedberry;
+using NRedberry.Contexts;
 using NRedberry.Core.Utils;
 using NRedberry.Graphs;
 using NRedberry.Indices;
@@ -82,7 +84,9 @@ public sealed class ProductOfGammas
         return indices.Indices;
     }
 
-    public sealed class It
+#pragma warning disable CS0618
+    public sealed class It : IOutputPort<ProductOfGammas>
+#pragma warning restore CS0618
     {
         private static IIndicator<GraphType> DefaultFilter { get; } = new ExcludeGraphIndicator();
 
@@ -90,13 +94,11 @@ public sealed class ProductOfGammas
 
         private ProductContent Content { get; }
 
-        private IndexType MatrixType { get; }
+        private NameAndStructureOfIndices GammaKey { get; }
+
+        private NameAndStructureOfIndices Gamma5Key { get; }
 
         private PrimitiveSubgraph[] Partition { get; }
-
-        private int GammaName { get; }
-
-        private int Gamma5Name { get; }
 
         private IIndicator<GraphType> Filter { get; }
 
@@ -108,11 +110,10 @@ public sealed class ProductOfGammas
         {
             ArgumentNullException.ThrowIfNull(product);
 
-            GammaName = gammaName;
-            Gamma5Name = gamma5Name;
             Product = product;
             Content = product.Content;
-            MatrixType = matrixType;
+            GammaKey = NameDescriptor.ExtractKey(CC.GetNameDescriptor(gammaName));
+            Gamma5Key = NameDescriptor.ExtractKey(CC.GetNameDescriptor(gamma5Name));
             Partition = PrimitiveSubgraphPartition.CalculatePartition(Content, matrixType);
             Filter = filter ?? DefaultFilter;
         }
@@ -214,19 +215,36 @@ public sealed class ProductOfGammas
                 graphType);
         }
 
+        ProductOfGammas IOutputPort<ProductOfGammas>.Take()
+        {
+            return Take()!;
+        }
+
         private bool IsGamma(Tensor tensor)
         {
-            return tensor.GetHashCode() == GammaName && tensor.GetType() == typeof(SimpleTensor);
+            return Matches(tensor, GammaKey);
         }
 
         private bool IsGamma5(Tensor tensor)
         {
-            return tensor.GetHashCode() == Gamma5Name && tensor.GetType() == typeof(SimpleTensor);
+            return Matches(tensor, Gamma5Key);
         }
 
         private static int GetIndexlessOffset(Product product)
         {
             return product.IndexlessData.Length + (product.Factor == Complex.One ? 0 : 1);
+        }
+
+        private static bool Matches(Tensor tensor, NameAndStructureOfIndices key)
+        {
+            if (tensor is not SimpleTensor simpleTensor)
+            {
+                return false;
+            }
+
+            return NameDescriptor
+                .ExtractKey(CC.GetNameDescriptor(simpleTensor.Name))
+                .Equals(key);
         }
     }
 }

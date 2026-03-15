@@ -17,12 +17,6 @@ public sealed class SpinorsSimplifyTransformationTest : AbstractFeynCalcTest
     }
 
     [Fact]
-    public void ShouldThrowUntilSpinorsSimplifyTransformationIsPorted()
-    {
-        Should.Throw<NotImplementedException>(() => new SpinorsSimplifyTransformation(null!));
-    }
-
-    [Fact]
     public void Test1()
     {
         SetUp();

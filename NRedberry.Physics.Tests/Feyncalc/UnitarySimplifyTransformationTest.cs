@@ -9,16 +9,6 @@ namespace NRedberry.Physics.Tests.Feyncalc;
 public sealed class UnitarySimplifyTransformationTest(ITestOutputHelper testOutputHelper)
 {
     [Fact]
-    public void ShouldThrowUntilUnitarySimplifyTransformationIsPorted()
-    {
-        Should.Throw<NotImplementedException>(() => new UnitarySimplifyTransformation(
-            TensorFactory.ParseSimple("T_A"),
-            TensorFactory.ParseSimple("f_ABC"),
-            TensorFactory.ParseSimple("d_ABC"),
-            TensorFactory.Parse("N")));
-    }
-
-    [Fact]
     public void Test1()
     {
         // TODO: GeneralIndicesInsertion is not yet ported; insertion rules skipped.

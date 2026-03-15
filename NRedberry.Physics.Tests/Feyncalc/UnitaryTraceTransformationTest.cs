@@ -13,16 +13,6 @@ namespace NRedberry.Physics.Tests.Feyncalc;
 public sealed class UnitaryTraceTransformationTest(ITestOutputHelper testOutputHelper)
 {
     [Fact]
-    public void ShouldThrowUntilUnitaryTraceTransformationIsPorted()
-    {
-        Should.Throw<NotImplementedException>(() => new UnitaryTraceTransformation(
-            TensorFactory.ParseSimple("T_a"),
-            TensorFactory.ParseSimple("f_abc"),
-            TensorFactory.ParseSimple("d_abc"),
-            TensorFactory.Parse("N")));
-    }
-
-    [Fact]
     public void Test1()
     {
         Reset();

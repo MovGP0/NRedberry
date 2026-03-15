@@ -10,12 +10,6 @@ namespace NRedberry.Physics.Tests.Feyncalc;
 public sealed class SimplifyGamma5TransformationTest : AbstractFeynCalcTest
 {
     [Fact]
-    public void ShouldThrowUntilSimplifyGamma5TransformationIsPorted()
-    {
-        Should.Throw<NotImplementedException>(() => new SimplifyGamma5Transformation(null!));
-    }
-
-    [Fact]
     public void Test1()
     {
         SetUp();

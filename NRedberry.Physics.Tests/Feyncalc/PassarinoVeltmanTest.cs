@@ -12,15 +12,6 @@ namespace NRedberry.Physics.Tests.Feyncalc;
 public sealed class PassarinoVeltmanTest(ITestOutputHelper testOutputHelper)
 {
     [Fact]
-    public void ShouldThrowUntilPassarinoVeltmanIsPorted()
-    {
-        Should.Throw<NotImplementedException>(() => PassarinoVeltman.GenerateSubstitution(
-            1,
-            TensorFactory.ParseSimple("q_a"),
-            [TensorFactory.ParseSimple("k1_a")]));
-    }
-
-    [Fact]
     public void Test1()
     {
         Expression subs = PassarinoVeltman.GenerateSubstitution(
