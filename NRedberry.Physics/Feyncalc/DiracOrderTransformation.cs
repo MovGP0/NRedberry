@@ -162,16 +162,14 @@ public sealed class DiracOrderTransformation : AbstractFeynCalcTransformation
 
         metricIndices = Permutations.Permute(metricIndices, Permutations.Inverse(permutation));
         Tensor[] gammas = new Tensor[permutation.Length];
-        int matrixIndex = IndicesUtils.SetType(matrixType, 0);
-        int upper = matrixIndex;
         for (int i = 0; i < permutation.Length; ++i)
         {
             gammas[i] = TensorApi.SimpleTensor(
                 gammaName,
                 IndicesFactory.CreateSimple(
                     null,
-                    IndicesUtils.SetState(true, upper),
-                    upper = ++matrixIndex,
+                    IndicesUtils.CreateIndex(i, matrixType, true),
+                    IndicesUtils.CreateIndex(i + 1, matrixType, false),
                     metricIndices[i]));
         }
 

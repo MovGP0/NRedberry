@@ -5,6 +5,7 @@ using NRedberry.IndexMapping;
 using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
+using NRedberry.Transformations.Options;
 
 namespace NRedberry.Transformations.Symmetrization;
 
@@ -33,7 +34,8 @@ public sealed class SymmetrizeITransformation : ITransformation
         this.multiplyBySymmetryFactor = multiplyBySymmetryFactor;
     }
 
-    public SymmetrizeITransformation(SimpleIndices indices, SymmetrizeOptions options)
+    [Creator(HasArgs = true)]
+    public SymmetrizeITransformation(SimpleIndices indices, [Options] SymmetrizeOptions options)
         : this(indices, options?.MultiplyBySymmetryFactor ?? throw new ArgumentNullException(nameof(options)))
     {
     }
@@ -144,11 +146,7 @@ public sealed class SymmetrizeITransformation : ITransformation
 
     public sealed class SymmetrizeOptions
     {
-        public bool MultiplyBySymmetryFactor { get; set; }
-
-        public SymmetrizeOptions()
-        {
-            MultiplyBySymmetryFactor = true;
-        }
+        [Option(Name = "SymmetryFactor", Index = 0)]
+        public bool MultiplyBySymmetryFactor = true;
     }
 }

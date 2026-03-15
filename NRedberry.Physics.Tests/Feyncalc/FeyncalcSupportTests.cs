@@ -183,7 +183,10 @@ public sealed class ProductOfGammasTests
         line.GraphType.ShouldBe(GraphType.Line);
         line.G5Positions.ShouldHaveSingleItem();
         line.G5Positions[0].ShouldBe(1);
-        factors[line.G5Positions[0]].ShouldBeOfType<SimpleTensor>().Name.ShouldBe(GetGamma5Name());
+        factors[line.G5Positions[0]]
+            .ShouldBeOfType<SimpleTensor>()
+            .GetStringName(OutputFormat.Redberry)
+            .ShouldBe("G5");
         line.ToList().Count.ShouldBe(line.Length);
         line.GetIndices().EqualsRegardlessOrder(line.ToProduct().Indices).ShouldBeTrue();
         iterator.Take().ShouldBeNull();
@@ -207,7 +210,10 @@ public sealed class ProductOfGammasTests
         cycle.GraphType.ShouldBe(GraphType.Cycle);
         cycle.G5Positions.ShouldHaveSingleItem();
         cycle.G5Positions[0].ShouldBe(cycle.Length - 1);
-        factors[^1].ShouldBeOfType<SimpleTensor>().Name.ShouldBe(GetGamma5Name());
+        factors[^1]
+            .ShouldBeOfType<SimpleTensor>()
+            .GetStringName(OutputFormat.Redberry)
+            .ShouldBe("G5");
         iterator.Take().ShouldBeNull();
     }
 

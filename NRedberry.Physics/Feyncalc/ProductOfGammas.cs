@@ -6,6 +6,7 @@ using NRedberry.Graphs;
 using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
+using ContextCC = NRedberry.Contexts.CC;
 
 namespace NRedberry.Physics.Feyncalc;
 
@@ -94,9 +95,9 @@ public sealed class ProductOfGammas
 
         private ProductContent Content { get; }
 
-        private NameAndStructureOfIndices GammaKey { get; }
+        private string GammaStringName { get; }
 
-        private NameAndStructureOfIndices Gamma5Key { get; }
+        private string Gamma5StringName { get; }
 
         private PrimitiveSubgraph[] Partition { get; }
 
@@ -112,8 +113,8 @@ public sealed class ProductOfGammas
 
             Product = product;
             Content = product.Content;
-            GammaKey = NameDescriptor.ExtractKey(CC.GetNameDescriptor(gammaName));
-            Gamma5Key = NameDescriptor.ExtractKey(CC.GetNameDescriptor(gamma5Name));
+            GammaStringName = ContextCC.GetNameDescriptor(gammaName).GetName(null, OutputFormat.Redberry);
+            Gamma5StringName = ContextCC.GetNameDescriptor(gamma5Name).GetName(null, OutputFormat.Redberry);
             Partition = PrimitiveSubgraphPartition.CalculatePartition(Content, matrixType);
             Filter = filter ?? DefaultFilter;
         }
@@ -222,12 +223,12 @@ public sealed class ProductOfGammas
 
         private bool IsGamma(Tensor tensor)
         {
-            return Matches(tensor, GammaKey);
+            return Matches(tensor, GammaStringName);
         }
 
         private bool IsGamma5(Tensor tensor)
         {
-            return Matches(tensor, Gamma5Key);
+            return Matches(tensor, Gamma5StringName);
         }
 
         private static int GetIndexlessOffset(Product product)
@@ -235,16 +236,17 @@ public sealed class ProductOfGammas
             return product.IndexlessData.Length + (product.Factor == Complex.One ? 0 : 1);
         }
 
-        private static bool Matches(Tensor tensor, NameAndStructureOfIndices key)
+        private static bool Matches(Tensor tensor, string expectedName)
         {
             if (tensor is not SimpleTensor simpleTensor)
             {
                 return false;
             }
 
-            return NameDescriptor
-                .ExtractKey(CC.GetNameDescriptor(simpleTensor.Name))
-                .Equals(key);
+            return string.Equals(
+                ContextCC.GetNameDescriptor(simpleTensor.Name).GetName(null, OutputFormat.Redberry),
+                expectedName,
+                StringComparison.Ordinal);
         }
     }
 }

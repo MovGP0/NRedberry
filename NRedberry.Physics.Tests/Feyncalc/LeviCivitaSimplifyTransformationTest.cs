@@ -16,14 +16,6 @@ namespace NRedberry.Physics.Tests.Feyncalc;
 public sealed class LeviCivitaSimplifyTransformationTest(ITestOutputHelper testOutputHelper)
 {
     [Fact]
-    public void ShouldThrowUntilLeviCivitaSimplifyTransformationIsPorted()
-    {
-        Should.Throw<NotImplementedException>(() => new LeviCivitaSimplifyTransformation(
-            TensorFactory.ParseSimple("e_abcd"),
-            true));
-    }
-
-    [Fact]
     public void Test1()
     {
         Reset();

@@ -186,7 +186,7 @@ main:
         }
 
         Complex factor = product.Factor;
-        Mapping? mapping = IndexMappings.GetFirst(GetDataSubProduct(epsilon), GetDataSubProduct(product));
+        Mapping? mapping = IndexMappings.GetFirst(epsilon, GetDataSubProduct(product));
         if (mapping is null)
         {
             return null;
@@ -207,32 +207,16 @@ main:
         }
 
         Complex factor = product.Factor;
-        Tensor epsilonData = GetDataSubProduct(epsilon);
         Tensor dataSubProduct = GetDataSubProduct(product);
 
-        if (IndexMappings.TestMapping(mapping.IndexMapping, epsilonData, dataSubProduct))
+        if (IndexMappings.TestMapping(mapping.IndexMapping, epsilon, dataSubProduct))
         {
             return factor.Equals(mapping.Factor);
         }
 
-        if (IndexMappings.TestMapping(mapping.IndexMapping.AddSign(true), epsilonData, dataSubProduct))
+        if (IndexMappings.TestMapping(mapping.IndexMapping.AddSign(true), epsilon, dataSubProduct))
         {
             return factor.Equals(mapping.Factor.Negate());
-        }
-
-        return false;
-    }
-
-    private static bool Contains(int[] array, int value)
-    {
-        ArgumentNullException.ThrowIfNull(array);
-
-        foreach (int current in array)
-        {
-            if (current == value)
-            {
-                return true;
-            }
         }
 
         return false;
@@ -246,16 +230,6 @@ main:
             1 => product.Data[0],
             _ => TensorFactory.Multiply(product.Data)
         };
-    }
-
-    private static Tensor GetDataSubProduct(Tensor tensor)
-    {
-        if (tensor is Product product)
-        {
-            return GetDataSubProduct(product);
-        }
-
-        return tensor;
     }
 
     private sealed record Mapping0(Complex Factor, Mapping IndexMapping);
