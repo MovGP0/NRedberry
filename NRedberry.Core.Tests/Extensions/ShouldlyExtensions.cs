@@ -1,4 +1,6 @@
-﻿using NRedberry.Tensors;
+﻿using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
+using NRedberry.Tensors;
 using NRedberry.Transformations.Symmetrization;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
@@ -36,6 +38,12 @@ public static class ShouldlyExtensions
         public static void CompleteIn(Action action, string? customMessage = null)
         {
             Should.CompleteIn(action, TimeSpan.FromSeconds(1), customMessage);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void SatisfyAllConditions([InstantHandle] params Action[] conditions)
+        {
+            "Should".ShouldSatisfyAllConditions(conditions);
         }
     }
 }

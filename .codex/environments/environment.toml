@@ -11,6 +11,16 @@ icon = "build"
 command = "dotnet build .\\NRedberry.slnx"
 
 [[actions]]
+name = "Build Benchmarks"
+icon = "build"
+command = "dotnet build .\\NRedberry.Benchmarks\\NRedberry.Benchmarks.csproj -c Release --nologo"
+
+[[actions]]
+name = "Run Benchmarks"
+icon = "play"
+command = "dotnet run --project .\\NRedberry.Benchmarks\\NRedberry.Benchmarks.csproj -c Release --no-build"
+
+[[actions]]
 name = "Apache.Commons.Math Tests"
 icon = "test"
 command = "dotnet test .\\NRedberry.Apache.Commons.Math.Tests\\NRedberry.Apache.Commons.Math.Tests.csproj --no-build --nologo"

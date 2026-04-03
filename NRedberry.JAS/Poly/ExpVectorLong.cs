@@ -10,6 +10,7 @@
 public sealed class ExpVectorLong : ExpVector
 {
     internal readonly long[] _values;
+    private readonly long[] _prefixSums;
 
     /// <summary>
     /// Creates a long-backed exponent vector of the requested length.
@@ -45,6 +46,7 @@ public sealed class ExpVectorLong : ExpVector
     {
         ArgumentNullException.ThrowIfNull(values);
         _values = values;
+        _prefixSums = CreatePrefixSums(values);
     }
 
     /// <summary>
@@ -256,13 +258,7 @@ public sealed class ExpVectorLong : ExpVector
 
     public override long TotalDeg()
     {
-        long total = 0;
-        for (int i = 0; i < _values.Length; i++)
-        {
-            total += _values[i];
-        }
-
-        return total;
+        return _prefixSums[^1];
     }
 
     public override long MaxDeg()
@@ -343,8 +339,11 @@ public sealed class ExpVectorLong : ExpVector
     public override int InvLexCompareTo(ExpVector vector)
     {
         ArgumentNullException.ThrowIfNull(vector);
-        long[] other = ExtractValues(vector);
-        EnsureSameLength(other, nameof(vector));
+        long[] other = vector is ExpVectorLong longVector ? longVector._values : ExtractValues(vector);
+        if (other.Length != _values.Length)
+        {
+            throw new ArgumentException("Exponent vectors must have the same length.", nameof(vector));
+        }
 
         for (int i = 0; i < _values.Length; i++)
         {
@@ -365,10 +364,16 @@ public sealed class ExpVectorLong : ExpVector
     public override int InvLexCompareTo(ExpVector vector, int begin, int end)
     {
         ArgumentNullException.ThrowIfNull(vector);
-        ValidateRange(begin, end);
+        long[] other = vector is ExpVectorLong longVector ? longVector._values : ExtractValues(vector);
+        if (other.Length != _values.Length)
+        {
+            throw new ArgumentException("Exponent vectors must have the same length.", nameof(vector));
+        }
 
-        long[] other = ExtractValues(vector);
-        EnsureSameLength(other, nameof(vector));
+        if ((uint)begin > (uint)end || end > _values.Length)
+        {
+            throw new ArgumentOutOfRangeException(nameof(begin), "Invalid begin/end range specified.");
+        }
 
         for (int i = begin; i < end; i++)
         {
@@ -389,8 +394,23 @@ public sealed class ExpVectorLong : ExpVector
     public override int InvGradCompareTo(ExpVector vector)
     {
         ArgumentNullException.ThrowIfNull(vector);
-        long[] other = ExtractValues(vector);
-        EnsureSameLength(other, nameof(vector));
+        long[] other;
+        long[] otherPrefixSums;
+        if (vector is ExpVectorLong longVector)
+        {
+            other = longVector._values;
+            otherPrefixSums = longVector._prefixSums;
+        }
+        else
+        {
+            other = ExtractValues(vector);
+            otherPrefixSums = CreatePrefixSums(other);
+        }
+
+        if (other.Length != _values.Length)
+        {
+            throw new ArgumentException("Exponent vectors must have the same length.", nameof(vector));
+        }
 
         int comparison = 0;
         int index = 0;
@@ -414,14 +434,8 @@ public sealed class ExpVectorLong : ExpVector
             return 0;
         }
 
-        long selfSum = 0;
-        long otherSum = 0;
-        for (int j = index; j < _values.Length; j++)
-        {
-            selfSum += _values[j];
-            otherSum += other[j];
-        }
-
+        long selfSum = _prefixSums[^1] - _prefixSums[index];
+        long otherSum = otherPrefixSums[^1] - otherPrefixSums[index];
         if (selfSum > otherSum)
         {
             return 1;
@@ -438,10 +452,17 @@ public sealed class ExpVectorLong : ExpVector
     public override int InvGradCompareTo(ExpVector vector, int begin, int end)
     {
         ArgumentNullException.ThrowIfNull(vector);
-        ValidateRange(begin, end);
+        long[] other = vector is ExpVectorLong longVector ? longVector._values : ExtractValues(vector);
+        long[] otherPrefixSums = vector is ExpVectorLong longVector1 ? longVector1._prefixSums : CreatePrefixSums(other);
+        if (other.Length != _values.Length)
+        {
+            throw new ArgumentException("Exponent vectors must have the same length.", nameof(vector));
+        }
 
-        long[] other = ExtractValues(vector);
-        EnsureSameLength(other, nameof(vector));
+        if ((uint)begin > (uint)end || end > _values.Length)
+        {
+            throw new ArgumentOutOfRangeException(nameof(begin), "Invalid begin/end range specified.");
+        }
 
         int comparison = 0;
         int index = begin;
@@ -465,14 +486,8 @@ public sealed class ExpVectorLong : ExpVector
             return 0;
         }
 
-        long selfSum = 0;
-        long otherSum = 0;
-        for (int j = index; j < end; j++)
-        {
-            selfSum += _values[j];
-            otherSum += other[j];
-        }
-
+        long selfSum = _prefixSums[end] - _prefixSums[index];
+        long otherSum = otherPrefixSums[end] - otherPrefixSums[index];
         if (selfSum > otherSum)
         {
             return 1;
@@ -489,8 +504,11 @@ public sealed class ExpVectorLong : ExpVector
     public override int RevInvLexCompareTo(ExpVector vector)
     {
         ArgumentNullException.ThrowIfNull(vector);
-        long[] other = ExtractValues(vector);
-        EnsureSameLength(other, nameof(vector));
+        long[] other = vector is ExpVectorLong longVector ? longVector._values : ExtractValues(vector);
+        if (other.Length != _values.Length)
+        {
+            throw new ArgumentException("Exponent vectors must have the same length.", nameof(vector));
+        }
 
         for (int i = _values.Length - 1; i >= 0; i--)
         {
@@ -511,10 +529,16 @@ public sealed class ExpVectorLong : ExpVector
     public override int RevInvLexCompareTo(ExpVector vector, int begin, int end)
     {
         ArgumentNullException.ThrowIfNull(vector);
-        ValidateRange(begin, end);
+        long[] other = vector is ExpVectorLong longVector ? longVector._values : ExtractValues(vector);
+        if (other.Length != _values.Length)
+        {
+            throw new ArgumentException("Exponent vectors must have the same length.", nameof(vector));
+        }
 
-        long[] other = ExtractValues(vector);
-        EnsureSameLength(other, nameof(vector));
+        if ((uint)begin > (uint)end || end > _values.Length)
+        {
+            throw new ArgumentOutOfRangeException(nameof(begin), "Invalid begin/end range specified.");
+        }
 
         for (int i = end - 1; i >= begin; i--)
         {
@@ -535,8 +559,23 @@ public sealed class ExpVectorLong : ExpVector
     public override int RevInvGradCompareTo(ExpVector vector)
     {
         ArgumentNullException.ThrowIfNull(vector);
-        long[] other = ExtractValues(vector);
-        EnsureSameLength(other, nameof(vector));
+        long[] other;
+        long[] otherPrefixSums;
+        if (vector is ExpVectorLong longVector)
+        {
+            other = longVector._values;
+            otherPrefixSums = longVector._prefixSums;
+        }
+        else
+        {
+            other = ExtractValues(vector);
+            otherPrefixSums = CreatePrefixSums(other);
+        }
+
+        if (other.Length != _values.Length)
+        {
+            throw new ArgumentException("Exponent vectors must have the same length.", nameof(vector));
+        }
 
         int comparison = 0;
         int index = _values.Length - 1;
@@ -560,14 +599,8 @@ public sealed class ExpVectorLong : ExpVector
             return 0;
         }
 
-        long selfSum = 0;
-        long otherSum = 0;
-        for (int j = index; j >= 0; j--)
-        {
-            selfSum += _values[j];
-            otherSum += other[j];
-        }
-
+        long selfSum = _prefixSums[index + 1];
+        long otherSum = otherPrefixSums[index + 1];
         if (selfSum > otherSum)
         {
             return 1;
@@ -584,10 +617,17 @@ public sealed class ExpVectorLong : ExpVector
     public override int RevInvGradCompareTo(ExpVector vector, int begin, int end)
     {
         ArgumentNullException.ThrowIfNull(vector);
-        ValidateRange(begin, end);
+        long[] other = vector is ExpVectorLong longVector ? longVector._values : ExtractValues(vector);
+        long[] otherPrefixSums = vector is ExpVectorLong longVector1 ? longVector1._prefixSums : CreatePrefixSums(other);
+        if (other.Length != _values.Length)
+        {
+            throw new ArgumentException("Exponent vectors must have the same length.", nameof(vector));
+        }
 
-        long[] other = ExtractValues(vector);
-        EnsureSameLength(other, nameof(vector));
+        if ((uint)begin > (uint)end || end > _values.Length)
+        {
+            throw new ArgumentOutOfRangeException(nameof(begin), "Invalid begin/end range specified.");
+        }
 
         int comparison = 0;
         int index = end - 1;
@@ -611,14 +651,8 @@ public sealed class ExpVectorLong : ExpVector
             return 0;
         }
 
-        long selfSum = 0;
-        long otherSum = 0;
-        for (int j = index; j >= begin; j--)
-        {
-            selfSum += _values[j];
-            otherSum += other[j];
-        }
-
+        long selfSum = _prefixSums[index + 1] - _prefixSums[begin];
+        long otherSum = otherPrefixSums[index + 1] - otherPrefixSums[begin];
         if (selfSum > otherSum)
         {
             return 1;
@@ -637,8 +671,12 @@ public sealed class ExpVectorLong : ExpVector
         ArgumentNullException.ThrowIfNull(weights);
         ArgumentNullException.ThrowIfNull(vector);
 
-        long[] other = ExtractValues(vector);
-        EnsureSameLength(other, nameof(vector));
+        long[] other = vector is ExpVectorLong longVector ? longVector._values : ExtractValues(vector);
+        if (other.Length != _values.Length)
+        {
+            throw new ArgumentException("Exponent vectors must have the same length.", nameof(vector));
+        }
+
         ValidateWeights(weights);
 
         int comparison = 0;
@@ -728,5 +766,16 @@ public sealed class ExpVectorLong : ExpVector
                 throw new ArgumentException("Weight matrix must match the exponent vector length.", nameof(weights));
             }
         }
+    }
+
+    private static long[] CreatePrefixSums(long[] values)
+    {
+        long[] prefixSums = new long[values.Length + 1];
+        for (int i = 0; i < values.Length; i++)
+        {
+            prefixSums[i + 1] = prefixSums[i] + values[i];
+        }
+
+        return prefixSums;
     }
 }

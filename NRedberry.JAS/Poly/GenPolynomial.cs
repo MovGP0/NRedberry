@@ -582,7 +582,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         foreach (KeyValuePair<ExpVector, C> term in Terms)
         {
             ExpVector newExponent = term.Key.Sum(exponent);
-            result.Add(newExponent, term.Value.Multiply(coefficient));
+            AddTerm(result, newExponent, term.Value.Multiply(coefficient));
         }
 
         return new GenPolynomial<C>(Ring, result, false);
@@ -604,7 +604,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         foreach (KeyValuePair<ExpVector, C> term in Terms)
         {
             ExpVector newExponent = term.Key.Sum(exponent);
-            result.Add(newExponent, term.Value);
+            AddTerm(result, newExponent, term.Value);
         }
 
         return new GenPolynomial<C>(Ring, result, false);
@@ -1009,12 +1009,7 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
     /// </summary>
     public C TrailingBaseCoefficient()
     {
-        if (Terms.Count == 0)
-        {
-            return Ring.CoFac.FromInteger(0);
-        }
-
-        return Terms.Last().Value;
+        return Terms.TryGetValue(Ring.Evzero, out C? value) ? value : Ring.CoFac.FromInteger(0);
     }
 
     /// <summary>

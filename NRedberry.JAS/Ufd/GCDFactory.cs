@@ -31,7 +31,7 @@ public static class GCDFactory
     public static GreatestCommonDivisorAbstract<BigInteger> GetImplementation(BigInteger fac)
     {
         ArgumentNullException.ThrowIfNull(fac);
-        return new GreatestCommonDivisorModular<ModInteger>();
+        return new GreatestCommonDivisorModular<ModLong>();
     }
 
     public static GreatestCommonDivisorAbstract<BigRational> GetImplementation(BigRational fac)

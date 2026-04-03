@@ -295,7 +295,7 @@ public sealed class JasFactor : ITransformation
         throw new ArgumentException();
     }
 
-    internal static GenPolynomial<JasBigInteger> TensorToPoly(Tensor t)
+    public static GenPolynomial<JasBigInteger> TensorToPoly(Tensor t)
     {
         Dictionary<int, JasVar> vars = GetVars(t);
         JasVar[] varsArray = vars.Values.ToArray();

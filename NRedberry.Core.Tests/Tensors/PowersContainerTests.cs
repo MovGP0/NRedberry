@@ -1,4 +1,5 @@
-﻿using NRedberry.Tensors;
+﻿using NRedberry.Core.Tests.Extensions;
+using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
 
 namespace NRedberry.Core.Tests.Tensors;
@@ -26,7 +27,7 @@ public sealed class PowersContainerTests
 
         NRedberry.Tensors.Tensor[] tensors = container.ToArray();
 
-        "result".ShouldSatisfyAllConditions(
+        Should.SatisfyAllConditions(
             () => tensors.Length.ShouldBe(1),
             () => tensors[0].ToString(OutputFormat.Redberry).ShouldBe("a**3"),
             () => container.Sign.ShouldBeFalse());
@@ -45,7 +46,7 @@ public sealed class PowersContainerTests
         NRedberry.Tensors.Tensor[] tensors = container.ToArray();
         string[] texts = tensors.Select(t => t.ToString(OutputFormat.Redberry)).ToArray();
 
-        "result".ShouldSatisfyAllConditions(
+        Should.SatisfyAllConditions(
             () => tensors.Length.ShouldBe(2),
             () => texts.ShouldContain(firstExpected),
             () => texts.ShouldContain(secondExpected),
@@ -66,7 +67,7 @@ public sealed class PowersContainerTests
 
         NRedberry.Tensors.Tensor[] tensors = left.ToArray();
 
-        "result".ShouldSatisfyAllConditions(
+        Should.SatisfyAllConditions(
             () => left.IsEmpty().ShouldBeFalse(),
             () => tensors.Length.ShouldBe(2),
             () => tensors.ShouldContain(t => t.ToString(OutputFormat.Redberry) == "a**3"),

@@ -440,7 +440,7 @@ public sealed class TermOrder
 
     private static IComparer<ExpVector> CreateSingleOrderComparer(int order)
     {
-        return new ExpVectorComparer((left, right) => CompareBlock(left, right, order, 0, int.MaxValue));
+        return new SingleOrderComparer(order);
     }
 
     private static IComparer<ExpVector> CreateSplitOrderComparer(int firstOrder, int secondOrder, int begin1, int end1, int begin2, int end2)
@@ -543,6 +543,58 @@ public sealed class TermOrder
             }
 
             return comparer(x, y);
+        }
+    }
+
+    private sealed class SingleOrderComparer(int order) : IComparer<ExpVector>
+    {
+        private readonly int _order = order;
+
+        public int Compare(ExpVector? x, ExpVector? y)
+        {
+            if (ReferenceEquals(x, y))
+            {
+                return 0;
+            }
+
+            if (x is null)
+            {
+                return -1;
+            }
+
+            if (y is null)
+            {
+                return 1;
+            }
+
+            if (x is ExpVectorLong leftLong && y is ExpVectorLong rightLong)
+            {
+                return _order switch
+                {
+                    LEX => leftLong.InvLexCompareTo(rightLong),
+                    INVLEX => -leftLong.InvLexCompareTo(rightLong),
+                    GRLEX => leftLong.InvGradCompareTo(rightLong),
+                    IGRLEX => -leftLong.InvGradCompareTo(rightLong),
+                    REVLEX => leftLong.RevInvLexCompareTo(rightLong),
+                    REVILEX => -leftLong.RevInvLexCompareTo(rightLong),
+                    REVTDEG => leftLong.RevInvGradCompareTo(rightLong),
+                    REVITDG => -leftLong.RevInvGradCompareTo(rightLong),
+                    _ => throw new ArgumentOutOfRangeException(nameof(order), $"Unsupported term order: {_order}")
+                };
+            }
+
+            return _order switch
+            {
+                LEX => ExpVector.EvIlcp(x, y),
+                INVLEX => -ExpVector.EvIlcp(x, y),
+                GRLEX => ExpVector.EvIglc(x, y),
+                IGRLEX => -ExpVector.EvIglc(x, y),
+                REVLEX => ExpVector.EvRilcp(x, y),
+                REVILEX => -ExpVector.EvRilcp(x, y),
+                REVTDEG => ExpVector.EvRiglc(x, y),
+                REVITDG => -ExpVector.EvRiglc(x, y),
+                _ => throw new ArgumentOutOfRangeException(nameof(order), $"Unsupported term order: {_order}")
+            };
         }
     }
 }

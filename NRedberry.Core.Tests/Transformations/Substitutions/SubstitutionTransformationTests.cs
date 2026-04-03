@@ -1,3 +1,4 @@
+using NRedberry.Core.Tests.Extensions;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Substitutions;
 using TensorApi = NRedberry.Tensors.Tensors;
@@ -17,7 +18,7 @@ public sealed class SubstitutionTransformationTests
         TensorType resultFromArray = new SubstitutionTransformation(new[] { expression }, true)
             .Transform(TensorApi.Parse("a+c"));
 
-        result.ShouldSatisfyAllConditions(
+        Should.SatisfyAllConditions(
             () => TensorUtils.Equals(result, TensorApi.Parse("b+c")).ShouldBeTrue(),
             () => TensorUtils.Equals(resultFromArray, TensorApi.Parse("b+c")).ShouldBeTrue());
     }
@@ -33,7 +34,7 @@ public sealed class SubstitutionTransformationTests
         TensorType result = new SubstitutionTransformation(from, to).Transform(target);
         TensorType arrayResult = new SubstitutionTransformation(new[] { from }, new[] { to }, true).Transform(target);
 
-        result.ShouldSatisfyAllConditions(
+        Should.SatisfyAllConditions(
             () => TensorUtils.Equals(result, expected).ShouldBeTrue(),
             () => TensorUtils.Equals(arrayResult, expected).ShouldBeTrue());
     }
@@ -56,7 +57,7 @@ public sealed class SubstitutionTransformationTests
         SubstitutionTransformation simpleSubstitution = substitution.AsSimpleSubstitution();
         TensorType result = simpleSubstitution.Transform(TensorApi.Parse("a+c"));
 
-        result.ShouldSatisfyAllConditions(
+        Should.SatisfyAllConditions(
             () => TensorUtils.Equals(result, TensorApi.Parse("b+c")).ShouldBeTrue(),
             () => simpleSubstitution.ToString().ShouldBe("{a=b}"));
     }

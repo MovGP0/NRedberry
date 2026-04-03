@@ -1,4 +1,5 @@
-﻿using NRedberry.Tensors.Iterators;
+﻿using NRedberry.Core.Tests.Extensions;
+using NRedberry.Tensors.Iterators;
 using TensorApi = NRedberry.Tensors.Tensors;
 
 namespace NRedberry.Core.Tests.Tensors.Iterators;
@@ -17,7 +18,7 @@ public sealed class FromParentToChildIteratorTests
             visited.Add(current.ToString(OutputFormat.Redberry));
         }
 
-        "result".ShouldSatisfyAllConditions(
+        Should.SatisfyAllConditions(
             () => visited.ShouldBe([sum.ToString(OutputFormat.Redberry), sum[0].ToString(OutputFormat.Redberry), sum[1].ToString(OutputFormat.Redberry)]),
             () => iterator.Result().ToString(OutputFormat.Redberry).ShouldBe(sum.ToString(OutputFormat.Redberry)));
     }
