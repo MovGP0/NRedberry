@@ -43,9 +43,7 @@ public static partial class HenselUtil
         if (factorCount == 1)
         {
             GenPolynomial<MOD> factor = F[0];
-            ModularRingFactory<MOD> liftedFactory = ModLongRing.MaxLong.CompareTo(modulus.Val) > 0
-                ? (ModularRingFactory<MOD>)(object)new ModLongRing(modulus.Val)
-                : (ModularRingFactory<MOD>)(object)new ModIntegerRing(modulus.Val);
+            ModularRingFactory<MOD> liftedFactory = CreateModularRingFactory<MOD>(modulus);
             GenPolynomialRing<MOD> liftedRing = CreatePolynomialRingFromTemplate(liftedFactory, integerRing);
             GenPolynomial<MOD> liftedFactor = PolyUtil.FromIntegerCoefficients(
                 liftedRing,
@@ -118,9 +116,7 @@ public static partial class HenselUtil
         }
 
         BigInteger finalModulus = Power<BigInteger>.PositivePower(baseModulus, k);
-        currentFactory = ModLongRing.MaxLong.CompareTo(finalModulus.Val) > 0
-            ? (ModularRingFactory<MOD>)(object)new ModLongRing(finalModulus.Val)
-            : (ModularRingFactory<MOD>)(object)new ModIntegerRing(finalModulus.Val);
+        currentFactory = CreateModularRingFactory<MOD>(finalModulus);
         GenPolynomialRing<MOD> finalRing = CreatePolynomialRingFromTemplate(currentFactory, integerRing);
         result = PolyUtil.FromIntegerCoefficients(finalRing, Fi)
             ?? throw new InvalidOperationException("Failed to map lifted factors.");

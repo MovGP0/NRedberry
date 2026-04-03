@@ -35,7 +35,7 @@ public sealed class AbstractExpandTransformationTests
 
         NRedberry.Tensors.Tensor actual = transformation.Transform(TensorApi.Parse("(a+b)**(-1)"));
 
-        actual.ToString(OutputFormat.Redberry).ShouldBe("(a+b)**(-1)");
+        actual.ToString(OutputFormat.Redberry).ShouldBeOneOf("(a+b)**(-1)", "(b+a)**(-1)");
     }
 
     private sealed class TestExpandTransformation : AbstractExpandTransformation

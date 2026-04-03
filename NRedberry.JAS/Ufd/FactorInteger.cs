@@ -29,12 +29,9 @@ public class FactorInteger<MOD> : FactorAbstract<BigInteger> where MOD : GcdRing
     {
         ArgumentNullException.ThrowIfNull(cfac);
 
-        ModLongRing modularRing = new(13, true);
-        FactorAbstract<ModLong> modularFactor = FactorFactory.GetImplementation(modularRing);
-        GreatestCommonDivisorAbstract<ModLong> modularGcd = GCDFactory.GetImplementation(modularRing);
-
-        mfactor = (FactorAbstract<MOD>)(object)modularFactor;
-        mengine = (GreatestCommonDivisorAbstract<MOD>)(object)modularGcd;
+        ModularRingFactory<MOD> modularRing = CreatePrimeFactory(new BigInteger(13), true);
+        mfactor = FactorFactory.GetImplementation(modularRing);
+        mengine = GCDFactory.GetImplementation(modularRing);
     }
 
     public override List<GenPolynomial<BigInteger>> BaseFactorsSquarefree(GenPolynomial<BigInteger> P)
@@ -105,10 +102,7 @@ public class FactorInteger<MOD> : FactorAbstract<BigInteger> where MOD : GcdRing
                     throw new ArithmeticException("prime list exhausted");
                 }
 
-                ModularRingFactory<MOD> modularCoefficientFactory =
-                    ModLongRing.MaxLong.CompareTo(prime.Val) > 0
-                        ? (ModularRingFactory<MOD>)(object)new ModLongRing(prime.Val, true)
-                        : (ModularRingFactory<MOD>)(object)new ModIntegerRing(prime.Val, true);
+                ModularRingFactory<MOD> modularCoefficientFactory = CreatePrimeFactory(prime, true);
 
                 MOD modularLeading = modularCoefficientFactory.FromInteger(leadingCoefficient.Val);
                 if (modularLeading.IsZero())
@@ -479,5 +473,11 @@ public class FactorInteger<MOD> : FactorAbstract<BigInteger> where MOD : GcdRing
         }
 
         return result;
+    }
+
+    private static ModularRingFactory<MOD> CreatePrimeFactory(BigInteger prime, bool isField)
+    {
+        ArgumentNullException.ThrowIfNull(prime);
+        return HenselUtil.CreateModularRingFactory<MOD>(prime, isField);
     }
 }

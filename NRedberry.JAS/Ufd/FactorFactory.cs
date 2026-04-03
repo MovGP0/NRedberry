@@ -26,7 +26,7 @@ public static class FactorFactory
 
         if (fac is BigInteger)
         {
-            return (FactorAbstract<C>)(object)new FactorInteger<ModLong>();
+            return (FactorAbstract<C>)(object)new FactorInteger<ModInteger>();
         }
 
         if (fac is BigRational)
@@ -91,7 +91,7 @@ public static class FactorFactory
     public static FactorAbstract<Arith.BigInteger> GetImplementation(Arith.BigInteger fac)
     {
         ArgumentNullException.ThrowIfNull(fac);
-        return new FactorInteger<ModLong>();
+        return new FactorInteger<ModInteger>();
     }
 
     public static FactorAbstract<BigRational> GetImplementation(BigRational fac)

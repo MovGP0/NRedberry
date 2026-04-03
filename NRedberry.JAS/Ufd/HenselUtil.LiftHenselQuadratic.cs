@@ -158,9 +158,7 @@ public static partial class HenselUtil
 
             accumulatedModulus = currentModulus;
             currentModulus = qFactory.GetIntegerModul().Multiply(qFactory.GetIntegerModul());
-            qFactory = ModLongRing.MaxLong.CompareTo(currentModulus.Val) > 0
-                ? (ModularRingFactory<MOD>)(object)new ModLongRing(currentModulus.Val)
-                : (ModularRingFactory<MOD>)(object)new ModIntegerRing(currentModulus);
+            qFactory = CreateModularRingFactory<MOD>(currentModulus);
             qPolynomialRing = new GenPolynomialRing<MOD>(qFactory, polynomialRing);
             Aq = PolyUtil.FromIntegerCoefficients(qPolynomialRing, Ai)
                 ?? throw new InvalidOperationException("Failed to map Ai to new modulus.");

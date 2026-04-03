@@ -10,6 +10,10 @@ using TensorType = NRedberry.Tensors.Tensor;
 
 namespace NRedberry.Core.Tests.Transformations.Factor;
 
+/// <summary>
+/// These tests require <a href="https://www.singular.uni-kl.de/index.php.html">Singular</a> to be installed,
+/// which is a computer algebra system (CAS) for polynomial computations.
+/// </summary>
 public sealed class SingularFactorizationEngineTest
 {
     [SkippableFact]

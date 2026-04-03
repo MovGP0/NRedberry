@@ -212,18 +212,18 @@ public sealed class ProductFactory : TensorFactory
             }
         }
 
-        if (factor.IsMinusOne())
+        if (factor.IsReal() && factor.GetReal().SigNum() < 0)
         {
             Sum? sum = null;
+            bool sumIsIndexless = false;
             if (indexless.Length == 1 && data.Length == 0 && indexless[0] is Sum indexlessSum)
             {
-                //case (-1)*(a+b) -> -a-b
                 sum = indexlessSum;
+                sumIsIndexless = true;
             }
 
             if (indexless.Length == 0 && data.Length == 1 && data[0] is Sum dataSum)
             {
-                //case (-1)*(a_i+b_i) -> -a_i-b_i
                 sum = dataSum;
             }
 
@@ -235,7 +235,20 @@ public sealed class ProductFactory : TensorFactory
                     sumData[i] = Tensors.Negate(sumData[i]);
                 }
 
-                return new Sum(sumData, sum.Indices);
+                Tensor negatedSum = new Sum(sumData, sum.Indices);
+                factor = factor.Abs();
+
+                if (factor.IsOne())
+                {
+                    return negatedSum;
+                }
+
+                if (sumIsIndexless)
+                {
+                    return new Product(factor, [negatedSum], [], null, sum.Indices);
+                }
+
+                return new Product(factor, [], [negatedSum], null, sum.Indices);
             }
         }
 

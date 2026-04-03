@@ -135,7 +135,7 @@ public sealed class FactorTransformation : ITransformation, TransformationToStri
             {
                 if (current is Sum)
                 {
-                    iterator.Set(FactorOut(current));
+                    iterator.Set(FactorOutInternal(current));
                 }
             }
 
@@ -247,6 +247,16 @@ public sealed class FactorTransformation : ITransformation, TransformationToStri
         return Factor(tensor, true, JasFactor.Engine);
     }
 
+    /// <summary>
+    /// Factors common symbolic multipliers out of sums without invoking the polynomial factorization engine.
+    /// </summary>
+    public Tensor FactorOut(Tensor tensor)
+    {
+        ArgumentNullException.ThrowIfNull(tensor);
+
+        return FactorOutInternal(tensor);
+    }
+
     private static Tensor[] ReIm(Tensor sum)
     {
         var im = new List<int>(sum.Size);
@@ -348,7 +358,7 @@ public sealed class FactorTransformation : ITransformation, TransformationToStri
         return true;
     }
 
-    private Tensor FactorOut(Tensor tensor)
+    private Tensor FactorOutInternal(Tensor tensor)
     {
         var iterator = new FromChildToParentIterator(tensor);
         Tensor? current;
@@ -356,7 +366,7 @@ public sealed class FactorTransformation : ITransformation, TransformationToStri
         {
             if (current is Sum)
             {
-                iterator.Set(FactorOut1(current));
+                iterator.Set(FactorOut1Internal(current));
             }
         }
 
@@ -394,7 +404,7 @@ public sealed class FactorTransformation : ITransformation, TransformationToStri
         return tensor is Power && tensor[0] is Sum && TensorUtils.IsInteger(tensor[1]);
     }
 
-    private Tensor FactorOut1(Tensor tensor)
+    private Tensor FactorOut1Internal(Tensor tensor)
     {
         // S0: factor out imaginary numbers: I*a + I*b
         bool? factorOutImaginaryOne = null;
@@ -436,7 +446,7 @@ public sealed class FactorTransformation : ITransformation, TransformationToStri
                 tensor = Tensors.Tensors.Multiply(Complex.ImaginaryOne, tensor);
             }
 
-            return FactorOut(tensor);
+            return FactorOutInternal(tensor);
         }
 
         // S1: (a+b)*c + a*d + b*d -> (a+b)*c + (a+b)*d
@@ -522,8 +532,6 @@ public sealed class FactorTransformation : ITransformation, TransformationToStri
         // S4: merge all terms
         BigInteger baseExponent;
         BigInteger tempExponent;
-        List<FactorTermNode>? tempList;
-        bool? sign = null;
         for (int i = terms.Length - 1; i >= 0; --i)
         {
             if (baseFactors.Count == 0)
@@ -534,51 +542,35 @@ public sealed class FactorTransformation : ITransformation, TransformationToStri
             for (int j = baseFactors.Count - 1; j >= 0; --j)
             {
                 FactorTermNode baseNode = baseFactors[j];
-                if (!terms[i].Map.TryGetValue(baseNode.Tensor.GetHashCode(), out tempList))
+                if (!TryFindMatchingFactor(terms[i], baseNode, out FactorTermNode? matchedNode, out bool diffSigns))
                 {
                     baseFactors.RemoveAt(j);
                     continue;
                 }
 
-                foreach (FactorTermNode nn in tempList)
-                {
-                    sign = TensorUtils.Compare1(baseNode.Tensor, nn.Tensor);
-                    if (sign is null)
-                    {
-                        continue;
-                    }
+                baseExponent = baseNode.Exponent;
+                tempExponent = matchedNode.Exponent;
 
-                    baseExponent = baseNode.Exponent;
-                    tempExponent = nn.Exponent;
-
-                    if (baseExponent.Sign != tempExponent.Sign)
-                    {
-                        baseFactors.RemoveAt(j);
-                        continue;
-                    }
-
-                    if (sign == true)
-                    {
-                        nn.DiffSigns = true;
-                    }
-
-                    nn.MinExponent = baseNode.MinExponent;
-
-                    if (baseExponent.Sign > 0 && baseExponent.CompareTo(tempExponent) > 0)
-                    {
-                        baseNode.Exponent = tempExponent;
-                    }
-                    else if (baseExponent.Sign < 0 && baseExponent.CompareTo(tempExponent) < 0)
-                    {
-                        baseNode.Exponent = tempExponent;
-                    }
-
-                    break;
-                }
-
-                if (sign is null)
+                if (baseExponent.Sign != tempExponent.Sign)
                 {
                     baseFactors.RemoveAt(j);
+                    continue;
+                }
+
+                if (diffSigns)
+                {
+                    matchedNode.DiffSigns = true;
+                }
+
+                matchedNode.MinExponent = baseNode.MinExponent;
+
+                if (baseExponent.Sign > 0 && baseExponent.CompareTo(tempExponent) > 0)
+                {
+                    baseNode.Exponent = tempExponent;
+                }
+                else if (baseExponent.Sign < 0 && baseExponent.CompareTo(tempExponent) < 0)
+                {
+                    baseNode.Exponent = tempExponent;
                 }
             }
         }
@@ -602,6 +594,61 @@ public sealed class FactorTransformation : ITransformation, TransformationToStri
         }
 
         return Tensors.Tensors.Multiply(pb.Build(), sb.Build());
+    }
+
+    private static bool TryFindMatchingFactor(FactorTerm term, FactorTermNode baseNode, out FactorTermNode? matchedNode, out bool diffSigns)
+    {
+        if (term.Map.TryGetValue(baseNode.Tensor.GetHashCode(), out List<FactorTermNode>? factors)
+            && TryFindMatchingFactor(factors, baseNode, out matchedNode, out diffSigns))
+        {
+            return true;
+        }
+
+        foreach (List<FactorTermNode> candidateGroup in term.Map.Values)
+        {
+            if (ReferenceEquals(candidateGroup, factors))
+            {
+                continue;
+            }
+
+            if (TryFindMatchingFactor(candidateGroup, baseNode, out matchedNode, out diffSigns))
+            {
+                return true;
+            }
+        }
+
+        matchedNode = null;
+        diffSigns = false;
+        return false;
+    }
+
+    private static bool TryFindMatchingFactor(
+        List<FactorTermNode> factors,
+        FactorTermNode baseNode,
+        out FactorTermNode? matchedNode,
+        out bool diffSigns)
+    {
+        foreach (FactorTermNode candidate in factors)
+        {
+            bool? sign = TensorUtils.Compare1(baseNode.Tensor, candidate.Tensor);
+            if (sign is not null)
+            {
+                matchedNode = candidate;
+                diffSigns = sign.Value;
+                return true;
+            }
+
+            if (TensorUtils.Equals(baseNode.Tensor, Tensors.Tensors.Negate(candidate.Tensor)))
+            {
+                matchedNode = candidate;
+                diffSigns = true;
+                return true;
+            }
+        }
+
+        matchedNode = null;
+        diffSigns = false;
+        return false;
     }
 
     private static FactorTerm[] SumToSplitArray(Sum sum, FactorInt pivotPosition)

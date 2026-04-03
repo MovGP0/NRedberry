@@ -81,54 +81,41 @@ public sealed class FactorTransformationTest
         TensorUtils.Equals(result, expected).ShouldBeTrue();
     }
 
-    [Fact(Skip = "FactorOut API is not exposed in the C# port yet.")]
-    public void TestFactorOut8()
+    [Fact]
+    public void ShouldFactorOutCommonProduct()
     {
+        VerifyFactorOut("a*b*c + a*b*d", "a*b*(c+d)");
     }
 
-    [Fact(Skip = "FactorOut API is not exposed in the C# port yet.")]
-    public void TestFactorOut9()
+    [Fact]
+    public void ShouldFactorOutCommonProductRepeatedCase()
     {
+        VerifyFactorOut("a*b*c + a*b*d", "a*b*(c+d)");
     }
 
-    [Fact(Skip = "FactorOut API is not exposed in the C# port yet.")]
-    public void TestFactorOut10()
+    [Theory]
+    [InlineData("a**2*b*c + a*b**2*d*e + a*b", "a*b*(a*c + d*b*e + 1)")]
+    [InlineData("a**(-2)*b**(-1)*c + a**(-1)*b**(-2)*d*e + 1/(a*b)", "1/(a*b)*(1/a*c + d/b*e + 1)")]
+    [InlineData("a**(-2)*b**(-1)*c + a**(-1)*b**(-2)*d*e + a*b", "a**(-2)*b**(-1)*c + a**(-1)*b**(-2)*d*e + a*b")]
+    [InlineData("(a-b)**2*c + a-b", "(a-b)*(c*(a-b) + 1)")]
+    public void ShouldFactorOutCommonMultiplier(string formula, string expectedFormula)
     {
+        VerifyFactorOut(formula, expectedFormula);
     }
 
-    [Fact(Skip = "FactorOut API is not exposed in the C# port yet.")]
-    public void TestFactorOut11()
+    [Theory]
+    [InlineData("(a-b)**2*c + (b-a)**3*d", "(a-b)**2*(c - d*(a-b))")]
+    [InlineData("(a-b)**2*c + (b-a)**3*d + (b-a)*d", "(a-b)*(c*(a-b) - d*(a-b)**2 - d)")]
+    [InlineData("(a-b)**3*c + a**2 - 2*a*b + b**2", "(a-b)**2*(c*(a-b) + 1)")]
+    public void ShouldFactorOutCommonMultiplierWhenSignsNeedNormalization(string formula, string expectedFormula)
     {
+        VerifyFactorOut(formula, expectedFormula, compareExpanded: true);
     }
 
-    [Fact(Skip = "FactorOut API is not exposed in the C# port yet.")]
-    public void TestFactorOut12()
+    [Fact]
+    public void ShouldFactorOutExpandedNegativePowerBase()
     {
-    }
-
-    [Fact(Skip = "FactorOut API is not exposed in the C# port yet.")]
-    public void TestFactorOut13()
-    {
-    }
-
-    [Fact(Skip = "FactorOut API is not exposed in the C# port yet.")]
-    public void TestFactorOut14()
-    {
-    }
-
-    [Fact(Skip = "FactorOut API is not exposed in the C# port yet.")]
-    public void TestFactorOut15()
-    {
-    }
-
-    [Fact(Skip = "FactorOut API is not exposed in the C# port yet.")]
-    public void TestFactorOut16()
-    {
-    }
-
-    [Fact(Skip = "FactorOut API is not exposed in the C# port yet.")]
-    public void TestFactorOut17()
-    {
+        VerifyFactorOut("(a+a*b)**(-2) + a", "(1+b)**(-2)*a**(-2) + a");
     }
 
     [Fact]
@@ -231,5 +218,25 @@ public sealed class FactorTransformationTest
     {
         TensorType tensor = TensorFactory.Parse("I*a + f");
         TensorUtils.Equals(FactorTransformation.Factor(tensor), TensorFactory.Parse("I*a + f")).ShouldBeTrue();
+    }
+
+    private static void VerifyFactorOut(string formula, string expectedFormula, bool compareExpanded = false)
+    {
+        TensorCC.ResetTensorNames();
+
+        TensorType actual = FactorTransformation.Instance.FactorOut(TensorFactory.Parse(formula));
+        TensorType expected = TensorFactory.Parse(expectedFormula);
+
+        if (compareExpanded)
+        {
+            TensorUtils.Equals(
+                ExpandTransformation.Expand(actual),
+                ExpandTransformation.Expand(expected))
+                .ShouldBeTrue();
+
+            return;
+        }
+
+        TensorUtils.Equals(actual, expected).ShouldBeTrue();
     }
 }

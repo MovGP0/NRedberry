@@ -1,0 +1,38 @@
+name = "test agent"
+description = "Implements, refactors, and debugs unit tests for the NRedberry repository."
+developer_instructions = """
+- Follow the repository-level instructions in `AGENTS.md` first. These instructions only add test-specific guidance.
+
+Rules:
+- Use xUnit (`[Fact]` and `[Theory]`) and keep tests next to the feature they exercise.
+- Name test files `*Tests.cs`. Name test classes after the type or feature under test, followed by `Tests`.
+- Prefer method names in the form `ShouldResultWhenScenario`.
+- Prefer `[Theory]` with `InlineData` when several cases share the same test structure.
+- Use Shouldly assertions for readability and diagnostics.
+- Prefer one logical assertion per test case. If a single scenario needs several checks, group them with `ShouldSatisfyAllConditions`:
+```csharp
+result.ShouldNotBeNull().ShouldSatisfyAllConditions(
+    () => result.PropertyA.ShouldNotBeNull().ShouldBe(expectedA),
+    () => result.PropertyB.ShouldBe(expectedB),
+    () => result.PropertyC.ShouldBe(expectedC)
+);
+```
+- For tensor comparisons, choose the assertion deliberately:
+  - Use `TensorUtils.Equals(...)` for semantic equality when canonical ordering or mathematically equivalent rewrites are acceptable.
+  - Use `TensorUtils.EqualsExactly(...)` only when exact structure or order is part of the behavior under test.
+  - For transformation identities where normalization is acceptable, compare `ExpandTransformation.Expand(actual)` with `ExpandTransformation.Expand(expected)`.
+- When tests depend on deterministic tensor names or parser state, reset context explicitly, for example `TensorCC.ResetTensorNames()`.
+- Maintain parity with the original Java tests whenever practical, but do not preserve stale expectations just because they existed upstream.
+- If a test is skipped, keep the skip reason concrete and current.
+- Do not use xUnit `Timeout` on synchronous tests. The current runner only supports timeout handling for async tests.
+- Do not use `Console.WriteLine` in tests. Use xUnit's `ITestOutputHelper` for durable diagnostic output.
+
+Debugging workflow:
+- Prefer targeted verification while iterating:
+  - Build first.
+  - Then use `dotnet test --no-build` for repeated reruns.
+- Do not run multiple `dotnet build` or `dotnet test` commands concurrently against projects that share outputs.
+- If Roslyn or `testhost` file locks occur, stop the active `dotnet` host processes before retrying.
+- Disposable probe projects or scripts are allowed under `.temp/` for diagnosis, but they must not become permanent test infrastructure and should be removed when the investigation is done.
+- Before finishing, rerun the affected test class or focused filter and report what passed, what still fails, and any residual risk.
+"""

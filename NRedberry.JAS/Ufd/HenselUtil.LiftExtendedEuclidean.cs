@@ -89,9 +89,7 @@ public static partial class HenselUtil
             modulus = modulus.Multiply(baseModulus);
         }
 
-        ModularRingFactory<MOD> liftedRing = ModLongRing.MaxLong.CompareTo(modulus.Val) > 0
-            ? (ModularRingFactory<MOD>)(object)new ModLongRing(modulus.Val)
-            : (ModularRingFactory<MOD>)(object)new ModIntegerRing(modulus.Val);
+        ModularRingFactory<MOD> liftedRing = CreateModularRingFactory<MOD>(modulus);
         GenPolynomialRing<MOD> liftedPolynomialRing = new(liftedRing, polynomialRing);
         S = PolyUtil.FromIntegerCoefficients(liftedPolynomialRing, Si)
             ?? throw new InvalidOperationException("Failed to map lifted S.");
