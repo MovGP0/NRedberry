@@ -22,8 +22,8 @@ public sealed class SumTests
     {
         Sum sum = TensorFactory.Parse("a+b").ShouldBeOfType<Sum>();
 
-        sum.ToStringWith<Product>(OutputFormat.Redberry).ShouldBe("(a+b)");
-        sum.ToStringWith<Power>(OutputFormat.Redberry).ShouldBe("(a+b)");
+        TensorUtils.Equals(TensorFactory.Parse(sum.ToStringWith<Product>(OutputFormat.Redberry)), sum).ShouldBeTrue();
+        TensorUtils.Equals(TensorFactory.Parse(sum.ToStringWith<Power>(OutputFormat.Redberry)), sum).ShouldBeTrue();
     }
 
     [Fact]

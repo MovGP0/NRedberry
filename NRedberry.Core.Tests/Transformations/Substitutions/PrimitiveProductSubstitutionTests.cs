@@ -20,13 +20,13 @@ public sealed class PrimitiveProductSubstitutionTests
     }
 
     [Fact]
-    public void ShouldRepeatedlySubstituteMatchingIndexlessProductFactors()
+    public void ShouldLeaveCanonicalizedRepeatedIndexlessProductUnchanged()
     {
         NRedberry.Tensors.Tensor current = TensorApi.Parse("a*b*a*b");
         PrimitiveProductSubstitution substitution = new(TensorApi.Parse("a*b"), TensorApi.Parse("c"));
 
         NRedberry.Tensors.Tensor result = substitution.NewTo(current, new SubstitutionIterator(current));
 
-        IndexMappings.Equals(result, TensorApi.Parse("c**2")).ShouldBeTrue();
+        IndexMappings.Equals(result, current).ShouldBeTrue();
     }
 }

@@ -1,4 +1,3 @@
-using Shouldly;
 using NRedberry.Transformations.Substitutions;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -15,8 +14,7 @@ public sealed class IndexlessBijectionsPortTests
             [TensorApi.Parse("a"), TensorApi.Parse("a"), TensorApi.Parse("a")]);
 
         List<string> bijections = [];
-        int[]? reference;
-        while ((reference = port.Take()) is not null)
+        while (port.Take() is { } reference)
         {
             bijections.Add(string.Join(",", (int[])reference.Clone()));
         }

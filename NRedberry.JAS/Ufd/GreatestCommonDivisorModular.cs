@@ -19,7 +19,9 @@ public class GreatestCommonDivisorModular<MOD>(bool simple) : GreatestCommonDivi
     private const int GcdPrimeLimit = 10;
 
     protected readonly GreatestCommonDivisorAbstract<MOD> modularEngine = simple ? new GreatestCommonDivisorSimple<MOD>() : new GreatestCommonDivisorModEval<MOD>();
-    protected readonly GreatestCommonDivisorAbstract<BigInteger> integerFallback = new GreatestCommonDivisorSubres<BigInteger>();
+    // Subresultant PRS causes severe coefficient blow-up for some univariate integer squarefree checks.
+    // Keep the modular algorithm for multivariate cases, but use primitive PRS for the fallback path.
+    protected readonly GreatestCommonDivisorAbstract<BigInteger> integerFallback = new GreatestCommonDivisorPrimitive<BigInteger>();
 
     public GreatestCommonDivisorModular()
         : this(false)

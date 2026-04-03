@@ -7,23 +7,21 @@ namespace NRedberry.Core.Tests.Groups;
 
 public sealed class PermutationGroupEnumerableTests
 {
-    [Fact(DisplayName = "Should enumerate single identity for trivial group")]
-    public void ShouldEnumerateSingleIdentityForTrivialGroup()
+    [Fact(DisplayName = "Should enumerate all elements of symmetric group")]
+    public void ShouldEnumerateAllElementsOfSymmetricGroup()
     {
-        // Arrange
         PermutationGroup group = PermutationGroup.SymmetricGroup(3);
 
-        // Act + Assert
-        Should.Throw<NullReferenceException>(() => _ = group.ToList());
+        List<Permutation> elements = group.ToList();
+
+        elements.Count.ShouldBe((int)group.Order);
     }
 
-    [Fact(DisplayName = "Should support non generic enumeration for trivial group")]
-    public void ShouldSupportNonGenericEnumerationForTrivialGroup()
+    [Fact(DisplayName = "Should support non generic enumeration for symmetric group")]
+    public void ShouldSupportNonGenericEnumerationForSymmetricGroup()
     {
-        // Arrange
         IEnumerable<Permutation> group = PermutationGroup.SymmetricGroup(3);
 
-        // Act + Assert
-        Should.Throw<NullReferenceException>(() => _ = group.Count());
+        group.Count().ShouldBe(6);
     }
 }

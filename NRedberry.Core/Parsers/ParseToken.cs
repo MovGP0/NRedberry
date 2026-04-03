@@ -122,7 +122,7 @@ public class ParseToken : IEquatable<ParseToken>
                 if (Content.Length != 2)
                     throw new ParserException("Power token should have exactly 2 arguments.");
 
-                return Content[0].ToTensor().Pow(Content[1].ToTensor());
+                return PowerFactory.Power(Content[0].ToTensor(), Content[1].ToTensor());
             }
 
             case TokenType.Product:

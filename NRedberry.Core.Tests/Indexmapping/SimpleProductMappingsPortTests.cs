@@ -84,16 +84,15 @@ public sealed class SimpleProductMappingsPortTests
     }
 
     [Fact]
-    public void SecondConstructorShouldThrowNotImplementedExceptionWithMinimalTensorArrays()
+    public void SecondConstructorShouldReturnNullWithMinimalTensorArrays()
     {
         IIndexMappingProvider provider = new SequenceIndexMappingProvider([], []);
         TensorType[] from = [Complex.One];
         TensorType[] to = [Complex.Zero];
 
-        NotImplementedException exception = AssertInnerException<NotImplementedException>(() =>
-            CreateWithProviderAndTensors(provider, from, to));
+        object port = CreateWithProviderAndTensors(provider, from, to);
 
-        exception.ShouldNotBeNull();
+        InvokeTake(port).ShouldBeNull();
     }
 
     private static object CreateWithProviders(IIndexMappingProvider[] providers)

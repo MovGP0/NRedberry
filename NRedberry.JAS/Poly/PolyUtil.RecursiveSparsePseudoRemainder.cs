@@ -45,20 +45,9 @@ public static partial class PolyUtil
 
             GenPolynomial<C> leadingRemainderCoefficient = remainder.LeadingBaseCoefficient();
             ExpVector exponentDifference = leadingRemainderExponent.Subtract(leadingDivisorExponent);
-            GenPolynomial<C> remainderModulo = BaseSparsePseudoRemainder(leadingRemainderCoefficient, leadingDivisorCoefficient);
-
-            if (remainderModulo.IsZero())
-            {
-                GenPolynomial<C> quotientCoefficient = BasePseudoDivide(leadingRemainderCoefficient, leadingDivisorCoefficient);
-                GenPolynomial<GenPolynomial<C>> product = divisor.Multiply(quotientCoefficient, exponentDifference);
-                remainder = remainder.Subtract(product);
-            }
-            else
-            {
-                remainder = remainder.Multiply(leadingDivisorCoefficient);
-                GenPolynomial<GenPolynomial<C>> product = divisor.Multiply(leadingRemainderCoefficient, exponentDifference);
-                remainder = remainder.Subtract(product);
-            }
+            remainder = remainder.Multiply(leadingDivisorCoefficient);
+            GenPolynomial<GenPolynomial<C>> product = divisor.Multiply(leadingRemainderCoefficient, exponentDifference);
+            remainder = remainder.Subtract(product);
         }
 
         return remainder;

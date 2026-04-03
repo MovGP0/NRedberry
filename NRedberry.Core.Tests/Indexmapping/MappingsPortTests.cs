@@ -29,11 +29,13 @@ public sealed class MappingsPortTests
     }
 
     [Fact]
-    public void TakeShouldThrowNotImplementedExceptionWhenInnerPortReturnsBuffer()
+    public void TakeShouldWrapBufferIntoMappingWhenInnerPortReturnsBuffer()
     {
         var mappingsPort = new MappingsPort(new MappingsPortTestsSingleBufferOutputPortDouble(new MappingsPortTestsBufferDouble()));
 
-        Should.Throw<NotImplementedException>(() => mappingsPort.Take());
+        Mapping? mapping = mappingsPort.Take();
+
+        mapping.ShouldNotBeNull();
     }
 
     private sealed class MappingsPortTestsNullOutputPortDouble : IOutputPort<IIndexMappingBuffer>

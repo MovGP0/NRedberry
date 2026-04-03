@@ -14,10 +14,16 @@ public class InducedOrdering : IComparer<int>
         ArgumentNullException.ThrowIfNull(baseArray);
         if (baseArray.Length == 0)
         {
-            throw new ArgumentException("Base array must not be empty.", nameof(baseArray));
+            degree = 0;
+            positions =
+            [
+                int.MinValue,
+                int.MaxValue
+            ];
+            return;
         }
 
-        degree = Max(baseArray) + 1;
+        degree = GetMaxValue(baseArray) + 1;
         positions = new int[degree + 2];
 
         Array.Fill(positions, -1);
@@ -37,6 +43,25 @@ public class InducedOrdering : IComparer<int>
 
         positions[0] = int.MinValue;
         positions[degree + 1] = int.MaxValue;
+    }
+
+    private static int GetMaxValue(int[] array)
+    {
+        if (array.Length == 0)
+        {
+            throw new ArgumentException("Array must not be empty.", nameof(array));
+        }
+
+        int max = array[0];
+        for (int i = 1; i < array.Length; i++)
+        {
+            if (array[i] > max)
+            {
+                max = array[i];
+            }
+        }
+
+        return max;
     }
 
     /// <summary>

@@ -106,26 +106,29 @@ public sealed class ProviderFunctionsTests
     [InlineData("CreateOdd")]
     [InlineData("CreateEven")]
     [InlineData("Create")]
-    public void CreateMethodsShouldThrowNotImplementedForNonNullInputs(string methodName)
+    public void CreateMethodsShouldReturnProviderForNonNullInputs(string methodName)
     {
         MethodInfo method = GetCreateMethod(methodName);
         TensorType tensor = CreateCompositeTensor();
 
-        TargetInvocationException exception = Should.Throw<TargetInvocationException>(() => method.Invoke(null, [IndexMappingProviderUtil.EmptyProvider, tensor, tensor]));
+        object? provider = method.Invoke(null, [IndexMappingProviderUtil.EmptyProvider, tensor, tensor]);
 
-        exception.InnerException.ShouldBeOfType<NotImplementedException>();
+        provider.ShouldNotBeNull();
+        provider.ShouldBeAssignableTo<IIndexMappingProvider>();
     }
 
     [Theory]
     [InlineData("OddFactory")]
     [InlineData("EvenFactory")]
     [InlineData("Factory")]
-    public void FactoryCreateShouldThrowNotImplementedForNonNullInputs(string propertyName)
+    public void FactoryCreateShouldReturnProviderForNonNullInputs(string propertyName)
     {
         IIndexMappingProviderFactory factory = GetFactoryFromProperty(propertyName);
         TensorType tensor = CreateCompositeTensor();
 
-        Should.Throw<NotImplementedException>(() => factory.Create(IndexMappingProviderUtil.EmptyProvider, tensor, tensor));
+        IIndexMappingProvider provider = factory.Create(IndexMappingProviderUtil.EmptyProvider, tensor, tensor);
+
+        provider.ShouldNotBeNull();
     }
 
     private static MethodInfo GetCreateMethod(string methodName)

@@ -7,39 +7,45 @@ namespace NRedberry.Core.Tests.Groups;
 
 public sealed class PermutationGroupProductsTests
 {
-    [Fact(DisplayName = "Should throw for direct product of identity generated groups")]
-    public void ShouldThrowForDirectProductOfIdentityGeneratedGroups()
+    [Fact(DisplayName = "Should create direct product of identity generated groups")]
+    public void ShouldCreateDirectProductOfIdentityGeneratedGroups()
     {
-        // Arrange
         PermutationGroup left = PermutationGroup.CreatePermutationGroup(
             GroupPermutations.CreateIdentityPermutation(2));
         PermutationGroup right = PermutationGroup.CreatePermutationGroup(
             GroupPermutations.CreateIdentityPermutation(3));
 
-        // Act + Assert
-        Should.Throw<NullReferenceException>(() => _ = left.DirectProduct(right));
+        PermutationGroup product = left.DirectProduct(right);
+
+        product.ShouldNotBeNull();
+        product.Degree.ShouldBe(5);
+        product.Order.ShouldBe(1);
     }
 
-    [Fact(DisplayName = "Should throw for direct product of symmetric groups")]
-    public void ShouldThrowForDirectProductOfSymmetricGroups()
+    [Fact(DisplayName = "Should create direct product of symmetric groups")]
+    public void ShouldCreateDirectProductOfSymmetricGroups()
     {
-        // Arrange
         PermutationGroup left = PermutationGroup.SymmetricGroup(2);
         PermutationGroup right = PermutationGroup.SymmetricGroup(3);
 
-        // Act + Assert
-        Should.Throw<NullReferenceException>(() => _ = left.DirectProduct(right));
+        PermutationGroup product = left.DirectProduct(right);
+
+        product.ShouldNotBeNull();
+        product.Degree.ShouldBe(5);
+        product.Order.ShouldBe(left.Order * right.Order);
     }
 
-    [Fact(DisplayName = "Should throw for direct product of identity generated and symmetric groups")]
-    public void ShouldThrowForDirectProductOfIdentityGeneratedAndSymmetricGroups()
+    [Fact(DisplayName = "Should create direct product of identity generated and symmetric groups")]
+    public void ShouldCreateDirectProductOfIdentityGeneratedAndSymmetricGroups()
     {
-        // Arrange
         PermutationGroup identityGenerated = PermutationGroup.CreatePermutationGroup(
             GroupPermutations.CreateIdentityPermutation(2));
         PermutationGroup symmetric = PermutationGroup.SymmetricGroup(3);
 
-        // Act + Assert
-        Should.Throw<NullReferenceException>(() => _ = identityGenerated.DirectProduct(symmetric));
+        PermutationGroup product = identityGenerated.DirectProduct(symmetric);
+
+        product.ShouldNotBeNull();
+        product.Degree.ShouldBe(5);
+        product.Order.ShouldBe(symmetric.Order);
     }
 }

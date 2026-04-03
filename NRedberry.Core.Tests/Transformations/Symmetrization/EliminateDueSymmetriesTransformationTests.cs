@@ -32,10 +32,10 @@ public sealed class EliminateDueSymmetriesTransformationTests
     [Fact]
     public void ShouldRemoveZeroSummandCreatedBySymmetry()
     {
-        SetSymmetric("A_ab");
-        SetAntiSymmetric("B_ab");
+        SetSymmetric("C_ab");
+        SetAntiSymmetric("D_ab");
 
-        TensorType tensor = TensorApi.Parse("x + A_ab*B^ab");
+        TensorType tensor = TensorApi.Parse("x + C_ab*D^ab");
 
         TensorType actual = EliminateDueSymmetriesTransformation.Instance.Transform(tensor);
 
@@ -45,9 +45,9 @@ public sealed class EliminateDueSymmetriesTransformationTests
     [Fact]
     public void ShouldLeaveNonZeroExpressionUnchanged()
     {
-        SetSymmetric("A_ab");
+        SetSymmetric("E_ab");
 
-        TensorType tensor = TensorApi.Parse("A_ab*A^ab");
+        TensorType tensor = TensorApi.Parse("E_ab*E^ab");
 
         TensorType actual = EliminateDueSymmetriesTransformation.Instance.Transform(tensor);
 

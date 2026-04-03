@@ -231,7 +231,7 @@ public sealed class SumBijectionPort : IOutputPort<BijectionContainer>
 
         protected bool Test(Mapping buffer)
         {
-            for (int i = 1; i < From.Length; ++i)
+            for (int i = 0; i < From.Length; ++i)
             {
                 if (!IndexMappings.TestMapping(buffer, From[i], To[CurrentPermutation![i]]))
                 {

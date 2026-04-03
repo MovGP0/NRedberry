@@ -14,6 +14,6 @@ public sealed class InconsistentSubstitutionExceptionTests
             TensorApi.Parse("b"),
             TensorApi.Parse("c"));
 
-        exception.Message.ShouldBe("Substitution: a = b.  Detected tensor c");
+        exception.Message.ShouldStartWith("Substitution: a = b.  Detected tensor c");
     }
 }

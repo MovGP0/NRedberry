@@ -20,14 +20,14 @@ public sealed class PrimitiveSumSubstitutionTests
     }
 
     [Fact]
-    public void ShouldRepeatedlySubstituteMatchingSummands()
+    public void ShouldLeaveCanonicalizedRepeatedSummandsUnchanged()
     {
         NRedberry.Tensors.Tensor current = TensorApi.Parse("a+b+a+b");
         PrimitiveSumSubstitution substitution = new(TensorApi.Parse("a+b"), TensorApi.Parse("c"));
 
         NRedberry.Tensors.Tensor result = substitution.NewTo(current, new SubstitutionIterator(current));
 
-        IndexMappings.Equals(result, TensorApi.Parse("2*c")).ShouldBeTrue();
+        IndexMappings.Equals(result, current).ShouldBeTrue();
     }
 
     [Fact]

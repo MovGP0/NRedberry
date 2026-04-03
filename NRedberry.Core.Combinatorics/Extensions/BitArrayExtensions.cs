@@ -6,12 +6,14 @@ public static class BitArrayExtensions
 {
     public static int NextTrailingBit(this BitArray bitArray, int fromIndex)
     {
+        ArgumentNullException.ThrowIfNull(bitArray);
+
         if (fromIndex < 0)
         {
             throw new ArgumentOutOfRangeException(nameof(fromIndex), "Index cannot be negative.");
         }
 
-        for (int i = fromIndex; i >= 0; i--)
+        for (int i = fromIndex; i < bitArray.Length; i++)
         {
             if (bitArray[i])
             {
@@ -19,6 +21,6 @@ public static class BitArrayExtensions
             }
         }
 
-        return -1; // Return -1 if no trailing bit is set to true
+        return -1;
     }
 }

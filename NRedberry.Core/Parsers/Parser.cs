@@ -21,7 +21,8 @@ public sealed class Parser
         ParserPower.Instance,
         ParserNumber.Instance,
         ParserFunctions.Instance,
-        ParserExpression.Instance
+        ParserExpression.Instance,
+        ParserPowerAst.Instance
     ];
 
     public static readonly Parser Default = new((ITokenParser[])DefaultTokenParsers.Clone());

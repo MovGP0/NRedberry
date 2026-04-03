@@ -21,6 +21,10 @@ public static class ReduceEngine
 
     public static ReducedSystem ReduceToSymbolicSystem(Expression[] equations, SimpleTensor[] vars, ITransformation[] rules)
     {
+        ArgumentNullException.ThrowIfNull(equations);
+        ArgumentNullException.ThrowIfNull(vars);
+        ArgumentNullException.ThrowIfNull(rules);
+
         return ReduceToSymbolicSystem(equations, vars, rules, new bool[vars.Length]);
     }
 

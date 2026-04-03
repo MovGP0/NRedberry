@@ -33,6 +33,6 @@ public sealed class PermutationGroupCoreTests
 
         // Assert
         group.Degree.ShouldBe(3);
-        Should.Throw<NullReferenceException>(() => _ = group.Order);
+        group.Order.ShouldBe(6);
     }
 }

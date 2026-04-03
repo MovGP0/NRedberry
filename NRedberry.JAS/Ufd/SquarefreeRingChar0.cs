@@ -138,22 +138,28 @@ public class SquarefreeRingChar0<C> : SquarefreeAbstract<C> where C : GcdRingEle
             throw new ArgumentException($"{GetType().Name} only applies to univariate polynomials.", nameof(polynomial));
         }
 
-        GenPolynomial<GenPolynomial<C>> primitive = engine.RecursivePrimitivePart(polynomial);
-        if (primitive.IsConstant())
+        GenPolynomial<GenPolynomial<C>> primitive = polynomial;
+        GenPolynomial<C> content = engine.RecursiveContent(polynomial);
+        content = engine.BasePrimitivePart(content);
+        if (!content.IsOne())
         {
-            return primitive;
+            primitive = PolyUtil.CoefficientPseudoDivide(primitive, content);
+        }
+
+        ExpVector? leadingExponent = primitive.LeadingExpVector();
+        if (leadingExponent?.GetVal(0) < 1)
+        {
+            return primitive.Multiply(content);
         }
 
         GenPolynomial<GenPolynomial<C>> derivative = PolyUtil.RecursiveDeriviative(primitive);
-        derivative = engine.RecursivePrimitivePart(derivative);
-
         GenPolynomial<GenPolynomial<C>> gcd = engine.RecursiveUnivariateGcd(primitive, derivative);
-        gcd = engine.RecursivePrimitivePart(gcd);
+        gcd = engine.BaseRecursivePrimitivePart(gcd);
 
         GenPolynomial<GenPolynomial<C>> quotient = PolyUtil.RecursivePseudoDivide(primitive, gcd);
-        quotient = engine.RecursivePrimitivePart(quotient);
+        quotient = engine.BaseRecursivePrimitivePart(quotient);
 
-        return quotient;
+        return quotient.Multiply(content);
     }
 
     public override SortedDictionary<GenPolynomial<GenPolynomial<C>>, long> RecursiveUnivariateSquarefreeFactors(GenPolynomial<GenPolynomial<C>> polynomial)
@@ -178,30 +184,73 @@ public class SquarefreeRingChar0<C> : SquarefreeAbstract<C> where C : GcdRingEle
             throw new ArgumentException($"{GetType().Name} only applies to univariate polynomials.", nameof(polynomial));
         }
 
-        GenPolynomial<GenPolynomial<C>> primitive = engine.RecursivePrimitivePart(polynomial);
-        GenPolynomial<GenPolynomial<C>> derivative = PolyUtil.RecursiveDeriviative(primitive);
-        derivative = engine.RecursivePrimitivePart(derivative);
-
-        GenPolynomial<GenPolynomial<C>> gcd = engine.RecursiveUnivariateGcd(primitive, derivative);
-        gcd = engine.RecursivePrimitivePart(gcd);
-
-        GenPolynomial<GenPolynomial<C>> v = PolyUtil.RecursivePseudoDivide(primitive, gcd);
-        v = engine.RecursivePrimitivePart(v);
-
-        long multiplicity = 0L;
-        while (!v.IsConstant())
+        GenPolynomialRing<C> coefficientRing = (GenPolynomialRing<C>)ring.CoFac;
+        C baseContent = engine.BaseRecursiveContent(polynomial);
+        if (!baseContent.IsOne())
         {
-            multiplicity++;
-            GenPolynomial<GenPolynomial<C>> w = engine.RecursiveUnivariateGcd(gcd, v);
-            w = engine.RecursivePrimitivePart(w);
+            GenPolynomial<C> baseFactor = coefficientRing.One.Multiply(baseContent);
+            GenPolynomial<GenPolynomial<C>> recursiveBaseFactor = ring.One.Multiply(baseFactor);
+            factors[recursiveBaseFactor] = 1L;
+            polynomial = PolyUtil.BaseRecursiveDivide(polynomial, baseContent);
+        }
 
-            GenPolynomial<GenPolynomial<C>> factor = PolyUtil.RecursivePseudoDivide(v, w);
-            v = w;
-            gcd = PolyUtil.RecursivePseudoDivide(gcd, v);
+        GenPolynomial<C> content = engine.RecursiveContent(polynomial);
+        content = engine.BasePrimitivePart(content);
+        if (!content.IsOne())
+        {
+            polynomial = PolyUtil.CoefficientPseudoDivide(polynomial, content);
+        }
+
+        foreach (KeyValuePair<GenPolynomial<C>, long> entry in SquarefreeFactors(content))
+        {
+            if (entry.Key.IsOne())
+            {
+                continue;
+            }
+
+            GenPolynomial<GenPolynomial<C>> recursiveFactor = ring.One.Multiply(entry.Key);
+            factors[recursiveFactor] = entry.Value;
+        }
+
+        GenPolynomial<GenPolynomial<C>> current = polynomial;
+        GenPolynomial<GenPolynomial<C>>? gcd = null;
+        GenPolynomial<GenPolynomial<C>>? quotient = null;
+        long multiplicity = 0L;
+        bool initialize = true;
+
+        while (true)
+        {
+            if (initialize)
+            {
+                if (current.IsConstant() || current.IsZero())
+                {
+                    break;
+                }
+
+                GenPolynomial<GenPolynomial<C>> derivative = PolyUtil.RecursiveDeriviative(current);
+                gcd = engine.RecursiveUnivariateGcd(current, derivative);
+                gcd = engine.BaseRecursivePrimitivePart(gcd);
+                quotient = PolyUtil.RecursivePseudoDivide(current, gcd);
+                multiplicity = 0L;
+                initialize = false;
+            }
+
+            if (quotient!.IsConstant())
+            {
+                break;
+            }
+
+            multiplicity++;
+            GenPolynomial<GenPolynomial<C>> nextGcd = engine.RecursiveUnivariateGcd(gcd!, quotient);
+            nextGcd = engine.BaseRecursivePrimitivePart(nextGcd);
+
+            GenPolynomial<GenPolynomial<C>> factor = PolyUtil.RecursivePseudoDivide(quotient, nextGcd);
+            quotient = nextGcd;
+            gcd = PolyUtil.RecursivePseudoDivide(gcd!, quotient);
 
             if (!factor.IsOne() && !factor.IsZero())
             {
-                factor = engine.RecursivePrimitivePart(factor);
+                factor = engine.BaseRecursivePrimitivePart(factor);
                 factors[factor] = multiplicity;
             }
         }

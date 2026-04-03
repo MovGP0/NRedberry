@@ -44,10 +44,11 @@ public sealed class PowersContainerTests
         container.Put(TensorFactory.Parse("(b-a)**3"));
 
         NRedberry.Tensors.Tensor[] tensors = container.ToArray();
+        string[] texts = tensors.Select(t => t.ToString(OutputFormat.Redberry)).ToArray();
 
         tensors.Length.ShouldBe(2);
-        tensors.ShouldContain(t => t.ToString(OutputFormat.Redberry) == "a-b");
-        tensors.ShouldContain(t => t.ToString(OutputFormat.Redberry) == "(b-a)**3");
+        texts.ShouldContain("a-b");
+        texts.ShouldContain("(-a+b)**3");
         container.Sign.ShouldBeFalse();
     }
 

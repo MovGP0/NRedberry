@@ -37,7 +37,7 @@ public sealed class ScalarsBackedProductBuilderTests
         clone.Put(TensorFactory.Parse("b"));
 
         builder.Build().ToString(OutputFormat.Redberry).ShouldBe("a");
-        clone.Build().ToString(OutputFormat.Redberry).ShouldBe("a*b");
+        TensorUtils.Equals(clone.Build(), TensorFactory.Parse("a*b")).ShouldBeTrue();
     }
 
     [Fact]

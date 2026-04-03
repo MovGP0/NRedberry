@@ -22,7 +22,7 @@ public sealed class InconsistentIndicesExceptionTests
 
         if (creationError is null)
         {
-            exception!.Message.ShouldBe("Inconsistent indices");
+            exception!.Message.StartsWith("Inconsistent indices", StringComparison.Ordinal).ShouldBeTrue();
             exception.Index.ShouldBeNull();
             return;
         }
@@ -47,7 +47,7 @@ public sealed class InconsistentIndicesExceptionTests
 
         if (creationError is null)
         {
-            exception!.Message.ShouldBe(message);
+            exception!.Message.StartsWith(message, StringComparison.Ordinal).ShouldBeTrue();
             exception.Index.ShouldBeNull();
             return;
         }

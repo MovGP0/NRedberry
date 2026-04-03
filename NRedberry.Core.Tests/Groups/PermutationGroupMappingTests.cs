@@ -11,11 +11,12 @@ public sealed class PermutationGroupMappingTests
     [Fact(DisplayName = "Should find mapping for points in same orbit")]
     public void ShouldFindMappingForPointsInSameOrbit()
     {
-        // Arrange
         PermutationGroup group = PermutationGroup.SymmetricGroup(3);
 
-        // Act + Assert
-        Should.Throw<NullReferenceException>(() => _ = group.Mapping(0, 1));
+        Permutation? mapping = group.Mapping(0, 1);
+
+        mapping.ShouldNotBeNull();
+        mapping.NewIndexOf(0).ShouldBe(1);
     }
 
     [Fact(DisplayName = "Should throw for mismatched mapping arrays")]
@@ -31,10 +32,10 @@ public sealed class PermutationGroupMappingTests
     [Fact(DisplayName = "Should return mapping search for arrays")]
     public void ShouldReturnMappingSearchForArrays()
     {
-        // Arrange
         PermutationGroup group = PermutationGroup.SymmetricGroup(3);
 
-        // Act + Assert
-        Should.Throw<NullReferenceException>(() => _ = group.Mapping([0], [1]));
+        BacktrackSearch mappingSearch = group.Mapping([0], [1]);
+
+        mappingSearch.ShouldNotBeNull();
     }
 }

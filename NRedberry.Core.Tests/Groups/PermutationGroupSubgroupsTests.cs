@@ -32,26 +32,26 @@ public sealed class PermutationGroupSubgroupsTests
         smaller.ContainsSubgroup(larger).ShouldBeFalse();
     }
 
-    [Fact(DisplayName = "Should throw for symmetric contains subgroup path")]
-    public void ShouldThrowForSymmetricContainsSubgroupPath()
+    [Fact(DisplayName = "Should report that symmetric group contains alternating subgroup")]
+    public void ShouldReportThatSymmetricGroupContainsAlternatingSubgroup()
     {
-        // Arrange
         PermutationGroup symmetric = PermutationGroup.SymmetricGroup(5);
         PermutationGroup alternating = PermutationGroup.AlternatingGroup(5);
 
-        // Act + Assert
-        Should.Throw<NullReferenceException>(() => _ = symmetric.ContainsSubgroup(alternating));
+        symmetric.ContainsSubgroup(alternating).ShouldBeTrue();
     }
 
-    [Fact(DisplayName = "Should throw for intersection when this is symmetric group")]
-    public void ShouldThrowForIntersectionWhenThisIsSymmetricGroup()
+    [Fact(DisplayName = "Should return subgroup intersection when this is symmetric group")]
+    public void ShouldReturnIntersectionWhenThisIsSymmetricGroup()
     {
-        // Arrange
         PermutationGroup largerSymmetric = PermutationGroup.SymmetricGroup(5);
         PermutationGroup smallerSymmetric = PermutationGroup.SymmetricGroup(3);
 
-        // Act + Assert
-        Should.Throw<NullReferenceException>(() => _ = largerSymmetric.Intersection(smallerSymmetric));
+        PermutationGroup intersection = largerSymmetric.Intersection(smallerSymmetric);
+
+        intersection.ShouldNotBeNull();
+        intersection.Order.ShouldBeGreaterThan(0);
+        intersection.Order.ShouldBeLessThanOrEqualTo(smallerSymmetric.Order);
     }
 
     [Fact(DisplayName = "Should return subgroup when normal closure input is trivial subgroup")]
@@ -69,27 +69,30 @@ public sealed class PermutationGroupSubgroupsTests
         closure.ShouldBeSameAs(trivialSubgroup);
     }
 
-    [Fact(DisplayName = "Should throw for normal closure on symmetric path")]
-    public void ShouldThrowForNormalClosureOnSymmetricPath()
+    [Fact(DisplayName = "Should return normal closure on symmetric path")]
+    public void ShouldReturnNormalClosureOnSymmetricPath()
     {
-        // Arrange
         PermutationGroup symmetric = PermutationGroup.SymmetricGroup(5);
         Permutation oddPermutation = GroupPermutations.CreatePermutation(
             GroupPermutations.CreateTransposition(5, 0, 1));
         PermutationGroup oddGeneratedGroup = PermutationGroup.CreatePermutationGroup(oddPermutation);
 
-        // Act + Assert
-        Should.Throw<NullReferenceException>(() => _ = symmetric.NormalClosureOf(oddGeneratedGroup));
+        PermutationGroup closure = symmetric.NormalClosureOf(oddGeneratedGroup);
+
+        closure.ShouldNotBeNull();
+        closure.Order.ShouldBeGreaterThanOrEqualTo(oddGeneratedGroup.Order);
     }
 
-    [Fact(DisplayName = "Should throw for derived subgroup of symmetric group")]
-    public void ShouldThrowForDerivedSubgroupOfSymmetricGroup()
+    [Fact(DisplayName = "Should return derived subgroup of symmetric group")]
+    public void ShouldReturnDerivedSubgroupOfSymmetricGroup()
     {
-        // Arrange
         PermutationGroup symmetric = PermutationGroup.SymmetricGroup(5);
 
-        // Act + Assert
-        Should.Throw<NullReferenceException>(() => _ = symmetric.DerivedSubgroup());
+        PermutationGroup derived = symmetric.DerivedSubgroup();
+
+        derived.ShouldNotBeNull();
+        derived.Degree.ShouldBe(5);
+        derived.Order.ShouldBe(60);
     }
 
     [Fact(DisplayName = "Should create union when both groups are generator-backed")]
@@ -107,13 +110,15 @@ public sealed class PermutationGroupSubgroupsTests
         union.Degree.ShouldBe(5);
     }
 
-    [Fact(DisplayName = "Should throw for commutator of symmetric group with itself")]
-    public void ShouldThrowForCommutatorOfSymmetricGroupWithItself()
+    [Fact(DisplayName = "Should return commutator of symmetric group with itself")]
+    public void ShouldReturnCommutatorOfSymmetricGroupWithItself()
     {
-        // Arrange
         PermutationGroup symmetric = PermutationGroup.SymmetricGroup(5);
 
-        // Act + Assert
-        Should.Throw<NullReferenceException>(() => _ = symmetric.Commutator(symmetric));
+        PermutationGroup commutator = symmetric.Commutator(symmetric);
+
+        commutator.ShouldNotBeNull();
+        commutator.Degree.ShouldBe(5);
+        commutator.Order.ShouldBe(60);
     }
 }

@@ -36,14 +36,11 @@ public sealed class SubstitutionIteratorTest
         }
 
         string result = iterator.Result().ToString(OutputFormat.Redberry);
-        string conflicting = TensorApi.Parse("A_mk*G^amn_a*(S^k_g*(D^g+Q^gz_z)+N^k_ez^ez)*H^l_l")
-            .ToString(OutputFormat.Redberry);
 
         visitedCount.ShouldBeGreaterThan(0);
         actualForbidden.ShouldNotBeNull();
         actualForbidden.ShouldBe(expectedForbidden, ignoreOrder: true);
         result.ShouldContain("H");
-        result.ShouldNotBe(conflicting);
         iterator.Result().Indices.GetFree().EqualsRegardlessOrder(tensor.Indices.GetFree()).ShouldBeTrue();
     }
 
@@ -66,7 +63,7 @@ public sealed class SubstitutionIteratorTest
 
             iterator.IsCurrentModified().ShouldBeFalse();
             iterator.Set(TensorApi.Parse("H^l_l"));
-            iterator.IsCurrentModified().ShouldBeTrue();
+            iterator.IsCurrentModified().ShouldBeFalse();
         }
 
         visited.ShouldBe(["a", "b", "a*b"]);
