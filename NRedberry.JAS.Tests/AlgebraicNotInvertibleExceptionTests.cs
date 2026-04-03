@@ -1,6 +1,4 @@
-using System;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
-using Shouldly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;

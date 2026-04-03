@@ -1,5 +1,4 @@
 ﻿using NRedberry.Tensors.Iterators;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Tensors.Iterators;
 

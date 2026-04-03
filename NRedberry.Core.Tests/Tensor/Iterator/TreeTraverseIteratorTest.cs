@@ -2,7 +2,6 @@
 using NRedberry.Tensors.Iterators;
 using TensorApi = NRedberry.Tensors.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Tensor.Iterator;
 

@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using NRedberry.Transformations.Options;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Options;
 

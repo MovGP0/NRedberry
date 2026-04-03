@@ -1,12 +1,10 @@
-﻿using System.IO;
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using NRedberry.Transformations;
 using NRedberry.Transformations.Abbreviations;
 using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Substitutions;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Abbreviations;
 

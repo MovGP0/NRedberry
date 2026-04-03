@@ -1,9 +1,7 @@
 ﻿using NRedberry.Tensors.Iterators;
-using NRedberry.Transformations;
 using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Symmetrization;
 using TensorApi = NRedberry.Tensors.Tensors;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Expand;
 

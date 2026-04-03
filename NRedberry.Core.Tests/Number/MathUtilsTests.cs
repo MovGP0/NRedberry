@@ -1,5 +1,4 @@
 ﻿using NRedberry.Maths;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Number;
 

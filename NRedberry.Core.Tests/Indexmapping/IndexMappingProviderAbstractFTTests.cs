@@ -1,11 +1,7 @@
-using System.Collections.Generic;
 using NRedberry.Concurrent;
 using NRedberry.IndexMapping;
 using NRedberry.Numbers;
-using NRedberry.Tensors;
-using Shouldly;
 using TensorType = NRedberry.Tensors.Tensor;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Indexmapping;
 

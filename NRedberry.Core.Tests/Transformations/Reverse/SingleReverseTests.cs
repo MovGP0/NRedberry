@@ -1,7 +1,5 @@
-﻿using NRedberry;
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using NRedberry.Transformations.Reverse;
-using Xunit;
 using TensorApi = NRedberry.Tensors.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
 

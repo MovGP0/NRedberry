@@ -1,4 +1,3 @@
-using NRedberry.Indices;
 using NRedberry.Transformations.Substitutions;
 using NRedberry.Transformations.Symmetrization;
 

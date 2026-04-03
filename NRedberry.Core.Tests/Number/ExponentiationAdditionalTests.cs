@@ -1,5 +1,4 @@
 ﻿using NRedberry.Numbers;
-using Xunit;
 using BigInteger = System.Numerics.BigInteger;
 using TensorComplex = NRedberry.Numbers.Complex;
 

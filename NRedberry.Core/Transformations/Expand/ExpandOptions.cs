@@ -1,5 +1,4 @@
 ﻿using NRedberry.Tensors.Iterators;
-using NRedberry.Transformations;
 using NRedberry.Transformations.Symmetrization;
 
 namespace NRedberry.Transformations.Expand;

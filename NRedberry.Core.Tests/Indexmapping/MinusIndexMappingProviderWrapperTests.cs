@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using NRedberry.IndexMapping;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Indexmapping;
 

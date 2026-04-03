@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 using Xunit;
 using JasBigInteger = NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith.BigInteger;

@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Tensors;
 

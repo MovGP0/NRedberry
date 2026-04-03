@@ -13,78 +13,66 @@ namespace NRedberry.Core.Tests.Transformations;
 public sealed class EliminateMetricsTransformationTest
 {
     [Theory]
-    [InlineData("g_mn*A^mn", "A^n_n")]
-    [InlineData("d^n_m*A^m_n", "A^n_n")]
-    [InlineData("d_m^n*A^m_n", "A^n_n")]
-    [InlineData("d_m^n*d^m_n", "d^n_n")]
-    [InlineData("g_mn*g^mn", "d^n_n")]
-    [InlineData("g_\\mu\\nu*g^\\mu\\nu", "d^\\mu_\\mu")]
-    [InlineData("2*a*g_mn*g^mn", "2*a*d^n_n")]
-    [InlineData("B^ma*g_mn*A^nb", "B^ma*A_m^b")]
-    [InlineData("B^ma*d_m^n*A_n^b", "B^ma*A_m^b")]
-    [InlineData("g^mx*g_xa", "d^m_a")]
-    [InlineData("d^m_x*g^xa", "g^ma")]
-    [InlineData("d^m_x*d^x_a", "d^m_a")]
-    [InlineData("g_mn*g^mn*g_ab*g^ab", "d_b^b**2")]
-    [InlineData("g_mn*g^ma*g_ab*g^bn", "d_m^m")]
-    [InlineData("F^n*F^m*F^ab", "F^n*F^m*F^ab")]
-    [InlineData("g^mc*g_am", "d_a^c")]
-    [InlineData("g_ab*F^ab", "F^a_a")]
-    [InlineData("g_ab*g^bc*(d_c^f*F_f+g_cd*g^de*X_e+g_cj*d^j_k*(X^k+X_l*g^lk))", "F_{a}+X_{a}+X_{a}+X_{a}")]
-    [InlineData("g^ab*g^gd*(p_g*g_ba+p_a*g_bg)", "p^{d}*d^{b}_{b}+p^{d}")]
-    [InlineData("g_mn*g_ab*(F^n*F^m*F^ab+F^n*F^m*F^ab)", "F^n*F_n*F^a_a+F^r*F_r*F_x^x")]
-    [InlineData("(F^n*F^m*F^ab+F^n*F^m*F^ab)*X_b", "(F^n*F^m*F^ab+F^n*F^m*F^ab)*X_b")]
-    [InlineData("g_mn*(F^m_b+g_ab*(F^am+g_xy*F^xyam))", "F_{nb}+F_{bn}+F_{y}^{y}_{bn}")]
-    [InlineData("g^nb*A_nb+g^nb*g_mn*(F^m_b+g_ab*(F^am+g_xy*F^xyam))", "A_n^n+F_n^n+F_n^n+F^{x}_{x}_n^n")]
-    [InlineData("A_mn+g_mn*h", "A_mn+g_mn*h")]
-    [InlineData("g^mc*(A_mn+g_mn*h)", "A^c_n+d^c_n*h")]
-    [InlineData("g^ab*(g_mn*F_zxab^m+g^cd*g_mn*F_zxab^m*K_cd+g_zx*g_ab*X_n)", "F_zx^b_bn+F_zx^b_bn*K^d_d+X_n*g_zx*d^b_b")]
-    [InlineData("X_a+g_ab*(X^b+g^bc*(X_c+d_c^f*F_f+g_cd*g^de*X_e+g_cj*d^j_k*(X^k+X_l*g^lk)))", "X_{a}+X_{a}+X_{a}+F_{a}+X_{a}+X_{a}+X_{a}")]
-    [InlineData("g^mn*g_mn", "d^n_n")]
-    [InlineData("g^ma*g_mn*g_ab*g^bc*d_c^n", "d^n_n")]
-    [InlineData("d^c_a*d^a_b*d_o^b*g^ox", "g^cx")]
-    [InlineData("d^c_o*g^ox", "g^cx")]
-    [InlineData("p^n*d^a_d*g^db", "p^n*g^ab")]
-    [InlineData("g^ab*(g_am*F_b+d_m^x*Y_xab+X_abm*g_pq*g^pq)", "F_m+Y_m^b_b+X^b_bm*d_q^q")]
-    [InlineData("d^m_n*d^a_b*(F^nb+d^A_B*(M^B_A*X^n*X^b+M^Bnb_A))", "F^{ma}+M^{A}_{A}*X^{m}*X^{a}+M^{Ama}_{A}")]
-    [InlineData("g_{\\alpha \\beta}*(F^{\\alpha}+g^{\\gamma \\alpha}*U_{\\gamma})", "F_{\\beta}+U_{\\beta}")]
-    [InlineData("g^{\\alpha \\beta}*(F_{\\alpha}+g_{\\gamma \\alpha}*U^{\\gamma})", "F^{\\beta}+U^{\\beta}")]
-    [InlineData("g^{\\alpha \\beta}*g_{\\beta \\alpha}", "d^{\\alpha}_{\\alpha}")]
-    [InlineData("g^{mn}*F_m[x]", "F^n[x]")]
-    [InlineData("F[g_mn*A^m]", "F[A_n]")]
-    [InlineData("d_{f}^{c}*g~3_{bn}^{f}_{m}[x_{f}]", "g~3_{bn}^{c}_{m}[x_{f}]")]
-    public void ShouldContractExpression(string input, string expected)
+    [InlineData("g_mn*A^mn", "A^n_n", false)]
+    [InlineData("d^n_m*A^m_n", "A^n_n", false)]
+    [InlineData("d_m^n*A^m_n", "A^n_n", false)]
+    [InlineData("d_m^n*d^m_n", "d^n_n", false)]
+    [InlineData("g_mn*g^mn", "d^n_n", false)]
+    [InlineData("g_\\mu\\nu*g^\\mu\\nu", "d^\\mu_\\mu", false)]
+    [InlineData("2*a*g_mn*g^mn", "2*a*d^n_n", false)]
+    [InlineData("B^ma*g_mn*A^nb", "B^ma*A_m^b", false)]
+    [InlineData("B^ma*d_m^n*A_n^b", "B^ma*A_m^b", false)]
+    [InlineData("g^mx*g_xa", "d^m_a", false)]
+    [InlineData("d^m_x*g^xa", "g^ma", false)]
+    [InlineData("d^m_x*d^x_a", "d^m_a", false)]
+    [InlineData("g_mn*g^mn*g_ab*g^ab", "d_b^b**2", false)]
+    [InlineData("g_mn*g^ma*g_ab*g^bn", "d_m^m", false)]
+    [InlineData("F^n*F^m*F^ab", "F^n*F^m*F^ab", false)]
+    [InlineData("g^mc*g_am", "d_a^c", false)]
+    [InlineData("g_ab*F^ab", "F^a_a", false)]
+    [InlineData("g_ab*g^bc*(d_c^f*F_f+g_cd*g^de*X_e+g_cj*d^j_k*(X^k+X_l*g^lk))", "F_{a}+X_{a}+X_{a}+X_{a}", false)]
+    [InlineData("g^ab*g^gd*(p_g*g_ba+p_a*g_bg)", "p^{d}*d^{b}_{b}+p^{d}", false)]
+    [InlineData("g_mn*g_ab*(F^n*F^m*F^ab+F^n*F^m*F^ab)", "F^n*F_n*F^a_a+F^r*F_r*F_x^x", false)]
+    [InlineData("(F^n*F^m*F^ab+F^n*F^m*F^ab)*X_b", "(F^n*F^m*F^ab+F^n*F^m*F^ab)*X_b", false)]
+    [InlineData("g_mn*(F^m_b+g_ab*(F^am+g_xy*F^xyam))", "F_{nb}+F_{bn}+F_{y}^{y}_{bn}", false)]
+    [InlineData("g^nb*A_nb+g^nb*g_mn*(F^m_b+g_ab*(F^am+g_xy*F^xyam))", "A_n^n+F_n^n+F_n^n+F^{x}_{x}_n^n", false)]
+    [InlineData("A_mn+g_mn*h", "A_mn+g_mn*h", false)]
+    [InlineData("g^mc*(A_mn+g_mn*h)", "A^c_n+d^c_n*h", false)]
+    [InlineData("g^ab*(g_mn*F_zxab^m+g^cd*g_mn*F_zxab^m*K_cd+g_zx*g_ab*X_n)", "F_zx^b_bn+F_zx^b_bn*K^d_d+X_n*g_zx*d^b_b", false)]
+    [InlineData("X_a+g_ab*(X^b+g^bc*(X_c+d_c^f*F_f+g_cd*g^de*X_e+g_cj*d^j_k*(X^k+X_l*g^lk)))", "X_{a}+X_{a}+X_{a}+F_{a}+X_{a}+X_{a}+X_{a}", false)]
+    [InlineData("g^mn*g_mn", "d^n_n", false)]
+    [InlineData("g^ma*g_mn*g_ab*g^bc*d_c^n", "d^n_n", false)]
+    [InlineData("d^c_a*d^a_b*d_o^b*g^ox", "g^cx", false)]
+    [InlineData("d^c_o*g^ox", "g^cx", false)]
+    [InlineData("p^n*d^a_d*g^db", "p^n*g^ab", false)]
+    [InlineData("g^ab*(g_am*F_b+d_m^x*Y_xab+X_abm*g_pq*g^pq)", "F_m+Y_m^b_b+X^b_bm*d_q^q", false)]
+    [InlineData("d^m_n*d^a_b*(F^nb+d^A_B*(M^B_A*X^n*X^b+M^Bnb_A))", "F^{ma}+M^{A}_{A}*X^{m}*X^{a}+M^{Ama}_{A}", false)]
+    [InlineData("g_{\\alpha \\beta}*(F^{\\alpha}+g^{\\gamma \\alpha}*U_{\\gamma})", "F_{\\beta}+U_{\\beta}", false)]
+    [InlineData("g^{\\alpha \\beta}*(F_{\\alpha}+g_{\\gamma \\alpha}*U^{\\gamma})", "F^{\\beta}+U^{\\beta}", false)]
+    [InlineData("g^{\\alpha \\beta}*g_{\\beta \\alpha}", "d^{\\alpha}_{\\alpha}", false)]
+    [InlineData("g^{mn}*F_m[x]", "F^n[x]", false)]
+    [InlineData("F[g_mn*A^m]", "F[A_n]", false)]
+    [InlineData("d_{f}^{c}*g~3_{bn}^{f}_{m}[x_{f}]", "g~3_{bn}^{c}_{m}[x_{f}]", false)]
+    [InlineData("g_mn*F^n*k", "F_m*k", true)]
+    [InlineData("g_mn*F^n", "F_m", true)]
+    [InlineData("g^mn*g^ab*g^gd*(p_g*g_ba+p_a*g_bg)*(p_m*g_dn+p_n*g_dm)", "2*(p_{g}+d_{b}^{b}*p_{g})*p^{g}", true)]
+    [InlineData("A_mn+g_ma*B^a_n", "A_mn+B_mn", true)]
+    [InlineData("g^ad*(g_ab*X^b+X_a)", "X^{d}+X^{d}", true)]
+    [InlineData("g_mn*g^na*g_ab", "g_mb", false)]
+    [InlineData("g^na*g_mn*g_ab", "g_mb", false)]
+    [InlineData("g^na*g_ab*g_mn", "g_mb", false)]
+    [InlineData("g_ab*g^na*g_mn", "g_mb", false)]
+    [InlineData("Sin[g^am*(X_a+g_ab*(X^b+g^bc*(X_c+d_c^f*F_f+g_cd*g^de*X_e+g_cj*d^j_k*(X^k+X_l*g^lk))))*J_m]", "Sin[(6*X^{m}+F^{m})*J_{m}]", true)]
+    [InlineData("Sin[g^ac*(X_a+g_ab*(X^b+g^bc*(X_c+d_c^f*F_f+g_cd*g^de*X_e+g_cj*d^j_k*(X^k+X_l*g^lk))))*J_c]", "Sin[(6*X^{c}+F^{c})*J_{c}]", true)]
+    public void ShouldContractExpression(string input, string expected, bool exact)
     {
+        if (exact)
+        {
+            input.ShouldContractEqualsExactly(expected);
+            return;
+        }
+
         input.ShouldContractEquals(expected);
-    }
-
-    [Theory]
-    [InlineData("g_mn*F^n*k", "F_m*k")]
-    [InlineData("g_mn*F^n", "F_m")]
-    [InlineData("g^mn*g^ab*g^gd*(p_g*g_ba+p_a*g_bg)*(p_m*g_dn+p_n*g_dm)", "2*(p_{g}+d_{b}^{b}*p_{g})*p^{g}")]
-    [InlineData("A_mn+g_ma*B^a_n", "A_mn+B_mn")]
-    [InlineData("g^ad*(g_ab*X^b+X_a)", "X^{d}+X^{d}")]
-    public void ShouldContractExpressionExactly(string input, string expected)
-    {
-        input.ShouldContractEqualsExactly(expected);
-    }
-
-    [Theory]
-    [InlineData("g_mn*g^na*g_ab", "g_mb")]
-    [InlineData("g^na*g_mn*g_ab", "g_mb")]
-    [InlineData("g^na*g_ab*g_mn", "g_mb")]
-    [InlineData("g_ab*g^na*g_mn", "g_mb")]
-    public void ShouldContractMetricChain(string input, string expected)
-    {
-        input.ShouldContractEquals(expected);
-    }
-
-    [Theory]
-    [InlineData("Sin[g^am*(X_a+g_ab*(X^b+g^bc*(X_c+d_c^f*F_f+g_cd*g^de*X_e+g_cj*d^j_k*(X^k+X_l*g^lk))))*J_m]", "Sin[(6*X^{m}+F^{m})*J_{m}]")]
-    [InlineData("Sin[g^ac*(X_a+g_ab*(X^b+g^bc*(X_c+d_c^f*F_f+g_cd*g^de*X_e+g_cj*d^j_k*(X^k+X_l*g^lk))))*J_c]", "Sin[(6*X^{c}+F^{c})*J_{c}]")]
-    public void ShouldContractAbstractScalarFunctionExactly(string input, string expected)
-    {
-        input.ShouldContractEqualsExactly(expected);
     }
 
     [Fact]

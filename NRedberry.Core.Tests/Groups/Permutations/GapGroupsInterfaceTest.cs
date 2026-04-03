@@ -1,7 +1,4 @@
-using System.IO;
 using System.Text;
-using Shouldly;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Groups.Permutations;
 

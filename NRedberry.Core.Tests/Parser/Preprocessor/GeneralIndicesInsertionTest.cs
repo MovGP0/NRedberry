@@ -2,10 +2,8 @@
 using NRedberry.Indices;
 using NRedberry.Parsers;
 using NRedberry.Parsers.Preprocessor;
-using NRedberry.Tensors;
 using TensorApi = NRedberry.Tensors.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Parser.Preprocessor;
 

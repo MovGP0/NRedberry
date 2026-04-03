@@ -1,7 +1,4 @@
-﻿using System.Reflection;
-using Xunit;
-
-namespace NRedberry.Core.Tests.Test;
+﻿namespace NRedberry.Core.Tests.Test;
 
 [AttributeUsage(AttributeTargets.Method, Inherited = false)]
 public sealed class PerformanceTestAttribute : Attribute;

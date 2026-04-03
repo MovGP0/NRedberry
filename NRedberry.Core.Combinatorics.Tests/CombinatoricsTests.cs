@@ -1,4 +1,3 @@
-using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Combinatorics.Tests;

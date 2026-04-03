@@ -1,7 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using NRedberry.Solver;
 using NRedberry.Tensors;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Solver;
 

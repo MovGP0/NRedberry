@@ -5,7 +5,6 @@ using NRedberry.TensorGenerators;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Symmetrization;
-using IndexType = NRedberry.IndexType;
 using TensorCC = NRedberry.Tensors.CC;
 using TensorOps = NRedberry.Tensors.Tensors;
 

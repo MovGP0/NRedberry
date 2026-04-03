@@ -2,7 +2,6 @@ using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Symmetrization;
-using Shouldly;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 

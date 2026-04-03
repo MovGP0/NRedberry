@@ -1,8 +1,6 @@
 ﻿using System.Globalization;
 using System.Numerics;
-using NRedberry;
 using NRedberry.Numbers.Parser;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Number.Parser;
 

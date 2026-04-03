@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using NRedberry.Concurrent;
 using NRedberry.Core.Combinatorics;
-using NRedberry.Groups;
 using NRedberry.Indices;
 using NRedberry.Tensors;
 using static NRedberry.Indices.IndicesUtils;

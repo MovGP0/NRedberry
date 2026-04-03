@@ -1,6 +1,5 @@
 using NRedberry.Transformations.Symmetrization;
 using NRedberry.Tensors;
-using Shouldly;
 using Xunit;
 
 namespace NRedberry.Groovy.Tests;

@@ -1,5 +1,4 @@
 using NRedberry.IndexMapping;
-using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
 using TensorApi = NRedberry.Tensors.Tensors;

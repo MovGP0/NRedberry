@@ -1,8 +1,6 @@
-using NRedberry;
 using NRedberry.Core.Utils;
 using NRedberry.Graphs;
 using NRedberry.Physics.Feyncalc;
-using Shouldly;
 using NRedberry.Tensors;
 using NRedberry.Transformations;
 using NRedberry.Transformations.Symmetrization;

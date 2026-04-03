@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using NRedberry.IndexMapping;
 using NRedberry.Numbers;
-using Xunit;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
 

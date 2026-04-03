@@ -1,5 +1,4 @@
 using NRedberry.Physics.Feyncalc;
-using Shouldly;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 

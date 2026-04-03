@@ -1,14 +1,10 @@
 using System.Text.RegularExpressions;
-using NRedberry;
 using NRedberry.Contexts;
 using NRedberry.Graphs;
-using NRedberry.Indices;
-using NRedberry.Numbers;
 using NRedberry.Parsers;
 using NRedberry.Parsers.Preprocessor;
 using NRedberry.Tensors;
 using NRedberry.Tensors.Iterators;
-using NRedberry.Transformations;
 using NRedberry.Transformations.Symmetrization;
 using Complex = NRedberry.Numbers.Complex;
 using TensorApi = NRedberry.Tensors.Tensors;

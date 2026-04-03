@@ -1,8 +1,6 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Number;
 

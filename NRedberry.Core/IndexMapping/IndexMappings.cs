@@ -1,10 +1,8 @@
-using System.Collections.Generic;
 using NRedberry.Concurrent;
 using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
 using NRedberry.Tensors.Functions;
-using TensorCC = NRedberry.Tensors.CC;
 
 namespace NRedberry.IndexMapping;
 

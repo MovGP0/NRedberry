@@ -1,7 +1,6 @@
 ﻿using NRedberry.Tensors;
 using NRedberry.Transformations.Options;
 using NRedberry.Transformations.Symmetrization;
-using Xunit;
 using TensorType = NRedberry.Tensors.Tensor;
 using TensorApi = NRedberry.Tensors.Tensors;
 

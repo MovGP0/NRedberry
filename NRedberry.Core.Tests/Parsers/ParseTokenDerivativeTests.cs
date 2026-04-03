@@ -1,7 +1,5 @@
-﻿using NRedberry.Indices;
-using NRedberry.Parsers;
+﻿using NRedberry.Parsers;
 using RedberryParser = NRedberry.Parsers.Parser;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Parsers;
 

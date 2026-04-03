@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using NRedberry.Core.Combinatorics;
 using NRedberry.IndexMapping;
 using NRedberry.Indices;

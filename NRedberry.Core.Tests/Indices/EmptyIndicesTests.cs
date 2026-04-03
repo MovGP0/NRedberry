@@ -1,9 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Immutable;
-using NRedberry;
 using NRedberry.Indices;
 using IndicesInterface = NRedberry.Indices.Indices;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Indices;
 

@@ -1,8 +1,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Core.Utils;
 using NRedberry.Groups;
-using Shouldly;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Groups;
 

@@ -1,6 +1,4 @@
 using NRedberry.Concurrent;
-using Shouldly;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Concurrent;
 

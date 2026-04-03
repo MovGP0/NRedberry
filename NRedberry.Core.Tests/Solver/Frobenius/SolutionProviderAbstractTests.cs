@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using NRedberry.Solver.Frobenius;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Solver.Frobenius;
 

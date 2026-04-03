@@ -2,7 +2,6 @@
 using NRedberry.IndexMapping;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Indexmapping;
 

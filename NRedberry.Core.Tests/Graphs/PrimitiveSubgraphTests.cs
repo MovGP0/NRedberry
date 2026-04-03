@@ -1,6 +1,4 @@
 using NRedberry.Graphs;
-using Shouldly;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Graphs;
 

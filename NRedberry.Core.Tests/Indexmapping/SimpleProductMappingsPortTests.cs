@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using NRedberry.IndexMapping;
 using NRedberry.Numbers;
-using Xunit;
 using TensorType = NRedberry.Tensors.Tensor;
 
 namespace NRedberry.Core.Tests.Indexmapping;

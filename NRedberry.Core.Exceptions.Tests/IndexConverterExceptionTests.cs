@@ -1,5 +1,3 @@
-using System;
-using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Exceptions.Tests;

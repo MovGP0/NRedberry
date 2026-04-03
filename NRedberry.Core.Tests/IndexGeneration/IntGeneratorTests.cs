@@ -1,6 +1,4 @@
 using NRedberry.IndexGeneration;
-using Shouldly;
-using Xunit;
 
 namespace NRedberry.Core.Tests.IndexGeneration;
 

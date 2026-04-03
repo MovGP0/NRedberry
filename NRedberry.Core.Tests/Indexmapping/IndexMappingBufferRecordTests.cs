@@ -1,7 +1,5 @@
 using NRedberry.IndexMapping;
 using NRedberry.Indices;
-using Shouldly;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Indexmapping;
 

@@ -1,7 +1,5 @@
 using System.Reflection;
 using NRedberry.IndexMapping;
-using Shouldly;
-using Xunit;
 using TensorType = NRedberry.Tensors.Tensor;
 
 namespace NRedberry.Core.Tests.Indexmapping;

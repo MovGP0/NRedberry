@@ -1,8 +1,7 @@
 using NRedberry.Core.Combinatorics.Symmetries;
-using Shouldly;
 using Xunit;
 
-namespace NRedberry.Core.Combinatorics.Tests;
+namespace NRedberry.Core.Combinatorics.Tests.Symmetries;
 
 public sealed class IntPriorityPermutationsGeneratorTests
 {

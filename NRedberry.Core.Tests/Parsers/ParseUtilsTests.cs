@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Parsers;
 using NRedberry.Tensors;
 using NRedberry.Tensors.Functions;
 using TensorFactory = NRedberry.Tensors.Tensors;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Parsers;
 

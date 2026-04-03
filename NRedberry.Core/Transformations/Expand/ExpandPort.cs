@@ -1,7 +1,9 @@
 ﻿using NRedberry.Concurrent;
 using NRedberry.Core.Combinatorics;
+using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
+using NRedberry.Transformations.Symmetrization;
 
 namespace NRedberry.Transformations.Expand;
 
@@ -160,7 +162,7 @@ public static class ExpandPort
             }
 
             HashSet<int> added = new(initialForbidden);
-            TensorBuilder builder = new ScalarsBackedProductBuilder();
+            SimpleProductBuilder builder = new();
             builder.Put(baseTensor[tuple[0]]);
             for (int i = 1; i < tuple.Length; ++i)
             {
@@ -200,8 +202,8 @@ public static class ExpandPort
 
     private sealed class ProductPort : IOutputPort<Tensor>
     {
-        private readonly TensorBuilder baseBuilder;
-        private TensorBuilder? currentBuilder;
+        private readonly SimpleProductBuilder baseBuilder;
+        private SimpleProductBuilder? currentBuilder;
         private readonly IResettablePort[] sumsAndPowers;
         private readonly Tensor[] currentMultipliers;
         private readonly Tensor tensor;
@@ -211,7 +213,7 @@ public static class ExpandPort
         {
             this.tensor = tensor;
             this.expandSymbolic = expandSymbolic;
-            baseBuilder = new ScalarsBackedProductBuilder();
+            baseBuilder = new SimpleProductBuilder();
             List<IResettablePort> sumOrPowerPorts = [];
             int theLargestSumPosition = 0;
             int theLargestSumSize = 0;
@@ -282,7 +284,7 @@ public static class ExpandPort
             return expandSymbolic || !TensorUtils.IsSymbolic(tensor);
         }
 
-        private TensorBuilder? NextCombination()
+        private SimpleProductBuilder? NextCombination()
         {
             if (sumsAndPowers.Length == 1)
             {
@@ -290,7 +292,7 @@ public static class ExpandPort
             }
 
             int pointer = sumsAndPowers.Length - 2;
-            TensorBuilder temp = baseBuilder.Clone();
+            SimpleProductBuilder temp = baseBuilder.Clone();
             bool next = false;
             Tensor? current = sumsAndPowers[pointer].Take();
             if (current is null)
@@ -349,7 +351,7 @@ public static class ExpandPort
                 return Take();
             }
 
-            TensorBuilder temp = currentBuilder.Clone();
+            SimpleProductBuilder temp = currentBuilder.Clone();
             temp.Put(current);
             return temp.Build();
         }
@@ -396,6 +398,253 @@ public static class ExpandPort
             }
 
             return current!;
+        }
+    }
+
+    private sealed class SimpleProductBuilder
+    {
+        private Complex _factor = Complex.One;
+        private readonly List<Tensor> _elements;
+        private readonly List<Tensor> _indexless;
+        private readonly PowersContainer _symbolicPowers;
+
+        public SimpleProductBuilder(int initialCapacityIndexless = 4, int initialCapacityData = 3)
+        {
+            _elements = new List<Tensor>(initialCapacityData);
+            _indexless = new List<Tensor>();
+            _symbolicPowers = new PowersContainer(initialCapacityIndexless);
+        }
+
+        private SimpleProductBuilder(
+            Complex factor,
+            List<Tensor> elements,
+            List<Tensor> indexless,
+            PowersContainer symbolicPowers)
+        {
+            _factor = factor;
+            _elements = elements;
+            _indexless = indexless;
+            _symbolicPowers = symbolicPowers;
+        }
+
+        public void Put(Tensor tensor)
+        {
+            if (_factor.IsNumeric())
+            {
+                tensor = ToNumericITransformation.ToNumeric(tensor);
+            }
+
+            if (tensor is Complex complex)
+            {
+                _factor = _factor.Multiply(complex);
+                return;
+            }
+
+            if (tensor is Product product)
+            {
+                if (IsEmpty())
+                {
+                    InitializeData(product.Factor, product.IndexlessData, product.Data);
+                }
+                else
+                {
+                    _factor = _factor.Multiply(product.Factor);
+                    if (NumberUtils.IsZeroOrIndeterminate(_factor))
+                    {
+                        return;
+                    }
+
+                    foreach (Tensor current in product.IndexlessData)
+                    {
+                        Put(current);
+                    }
+
+                    _elements.AddRange(product.Data);
+                }
+
+                return;
+            }
+
+            if (NumberUtils.IsZeroOrIndeterminate(_factor))
+            {
+                return;
+            }
+
+            if (TensorUtils.IsSymbolic(tensor))
+            {
+                _symbolicPowers.Put(tensor);
+            }
+            else if (tensor.Indices.Size() == 0)
+            {
+                _indexless.Add(tensor);
+            }
+            else
+            {
+                _elements.Add(tensor);
+            }
+        }
+
+        public Tensor Build()
+        {
+            if (NumberUtils.IsZeroOrIndeterminate(_factor))
+            {
+                return _factor;
+            }
+
+            bool isNumeric = _factor.IsNumeric();
+            foreach (Tensor power in _symbolicPowers)
+            {
+                Tensor current = isNumeric ? ToNumericITransformation.ToNumeric(power) : power;
+                if (current is Product product)
+                {
+                    _factor = _factor.Multiply(product.Factor);
+                    if (NumberUtils.IsZeroOrIndeterminate(_factor))
+                    {
+                        return _factor;
+                    }
+
+                    _indexless.EnsureCapacity(_indexless.Count + product.Size);
+                    foreach (Tensor multiplier in product.IndexlessData)
+                    {
+                        _indexless.Add(multiplier);
+                    }
+                }
+                else if (current is Complex complex)
+                {
+                    _factor = _factor.Multiply(complex);
+                    if (NumberUtils.IsZeroOrIndeterminate(_factor))
+                    {
+                        return _factor;
+                    }
+                }
+                else
+                {
+                    _indexless.Add(current);
+                }
+            }
+
+            if (_symbolicPowers.Sign)
+            {
+                _factor = _factor.Negate();
+            }
+
+            if (_indexless.Count == 0 && _elements.Count == 0)
+            {
+                return _factor;
+            }
+
+            if (isNumeric)
+            {
+                List<Tensor> nonNumbers = new();
+                foreach (Tensor element in _elements)
+                {
+                    Tensor current = ToNumericITransformation.ToNumeric(element);
+                    if (current is Complex complex)
+                    {
+                        _factor = _factor.Multiply(complex);
+                    }
+                    else
+                    {
+                        nonNumbers.Add(current);
+                    }
+                }
+
+                if (_indexless.Count == 0 && nonNumbers.Count == 0)
+                {
+                    return _factor;
+                }
+
+                _elements.Clear();
+                _elements.AddRange(nonNumbers);
+            }
+
+            if (_factor.IsOne())
+            {
+                if (_indexless.Count == 1 && _elements.Count == 0)
+                {
+                    return _indexless[0];
+                }
+
+                if (_indexless.Count == 0 && _elements.Count == 1)
+                {
+                    return _elements[0];
+                }
+            }
+
+            if (_factor.IsMinusOne())
+            {
+                Sum? sum = null;
+                if (_indexless.Count == 1 && _elements.Count == 0 && _indexless[0] is Sum indexlessSum)
+                {
+                    sum = indexlessSum;
+                }
+
+                if (_indexless.Count == 0 && _elements.Count == 1 && _elements[0] is Sum dataSum)
+                {
+                    sum = dataSum;
+                }
+
+                if (sum is not null)
+                {
+                    Tensor[] sumData = (Tensor[])sum.Data.Clone();
+                    for (int i = sumData.Length - 1; i >= 0; --i)
+                    {
+                        sumData[i] = Tensors.Tensors.Negate(sumData[i]);
+                    }
+
+                    return new Sum(sumData, sum.Indices);
+                }
+            }
+
+            IndicesBuilder builder = new();
+            foreach (Tensor element in _elements)
+            {
+                builder.Append(element);
+            }
+
+            return new Product(
+                builder.Indices,
+                _factor,
+                _indexless.ToArray(),
+                _elements.ToArray());
+        }
+
+        public SimpleProductBuilder Clone()
+        {
+            PowersContainer symbolicPowers = new(_symbolicPowers.Count);
+            symbolicPowers.Merge(_symbolicPowers);
+            return new SimpleProductBuilder(
+                _factor,
+                new List<Tensor>(_elements),
+                new List<Tensor>(_indexless),
+                symbolicPowers);
+        }
+
+        private void InitializeData(Complex factor, Tensor[] indexlessData, Tensor[] data)
+        {
+            _factor = factor.Multiply(_factor);
+            if (NumberUtils.IsZeroOrIndeterminate(_factor))
+            {
+                return;
+            }
+
+            _elements.AddRange(data);
+            foreach (Tensor tensor in indexlessData)
+            {
+                if (TensorUtils.IsSymbolic(tensor))
+                {
+                    _symbolicPowers.Put(tensor);
+                }
+                else
+                {
+                    _indexless.Add(tensor);
+                }
+            }
+        }
+
+        private bool IsEmpty()
+        {
+            return _symbolicPowers.Count == 0 && _elements.Count == 0;
         }
     }
 

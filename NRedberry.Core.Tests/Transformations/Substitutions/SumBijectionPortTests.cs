@@ -1,12 +1,7 @@
-using NRedberry;
-using NRedberry.Indices;
-using NRedberry.Tensors;
 using NRedberry.Transformations.Substitutions;
-using Shouldly;
 using TensorCC = NRedberry.Tensors.CC;
 using TensorApi = NRedberry.Tensors.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Substitutions;
 

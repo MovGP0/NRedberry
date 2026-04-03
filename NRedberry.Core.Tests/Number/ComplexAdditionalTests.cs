@@ -1,6 +1,5 @@
 ﻿using Complex32 = System.Numerics.Complex;
 using NumberComplex = NRedberry.Numbers.Complex;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Number;
 

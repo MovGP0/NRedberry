@@ -4,7 +4,6 @@ using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Symmetrization;
-using Shouldly;
 using TensorCC = NRedberry.Tensors.CC;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using RandomTensorGenerator = NRedberry.Tensors.Random.RandomTensor;

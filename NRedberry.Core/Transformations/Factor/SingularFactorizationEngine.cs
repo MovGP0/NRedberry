@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using System.Text;
-using NRedberry;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Symmetrization;
 

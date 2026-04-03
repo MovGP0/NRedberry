@@ -2,7 +2,6 @@
 using NRedberry.Contexts;
 using NRedberry.Parsers;
 using RedberryParser = NRedberry.Parsers.Parser;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Parsers;
 

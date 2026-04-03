@@ -1,6 +1,4 @@
-﻿using Xunit;
-
-namespace NRedberry.Core.Tests.Tensors;
+﻿namespace NRedberry.Core.Tests.Tensors;
 
 public sealed class OutputFormatTests
 {

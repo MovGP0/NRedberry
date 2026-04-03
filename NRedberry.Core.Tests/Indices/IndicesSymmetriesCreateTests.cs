@@ -3,7 +3,6 @@ using System.Runtime.CompilerServices;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
 using NRedberry.Indices;
-using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
 namespace NRedberry.Core.Tests.Indices;

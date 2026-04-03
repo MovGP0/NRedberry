@@ -1,9 +1,7 @@
 ﻿using NRedberry.Concurrent;
-using NRedberry.Contexts;
 using NRedberry.Indices;
 using NRedberry.Tensors;
 using TensorCC = NRedberry.Tensors.CC;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Tensors;
 

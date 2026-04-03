@@ -1,5 +1,4 @@
 using BigInteger = System.Numerics.BigInteger;
-using NRedberry;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
 using NRedberry.Tensors.Iterators;

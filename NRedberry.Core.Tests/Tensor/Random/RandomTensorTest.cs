@@ -2,7 +2,6 @@
 using NRedberry.Parsers;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Symmetrization;
-using Xunit;
 using RandomTensorGenerator = NRedberry.Tensors.Random.RandomTensor;
 using RedberryContext = NRedberry.Contexts.Context;
 using ContextCC = NRedberry.Contexts.CC;

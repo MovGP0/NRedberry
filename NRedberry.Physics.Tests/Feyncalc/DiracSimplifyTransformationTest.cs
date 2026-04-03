@@ -1,7 +1,5 @@
-using NRedberry.Contexts;
 using NRedberry.Numbers;
 using NRedberry.Physics.Feyncalc;
-using Shouldly;
 using Xunit;
 
 namespace NRedberry.Physics.Tests.Feyncalc;

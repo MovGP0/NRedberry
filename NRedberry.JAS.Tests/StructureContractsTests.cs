@@ -1,5 +1,4 @@
-﻿using System;
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 using Xunit;
 using SystemBigInteger = System.Numerics.BigInteger;

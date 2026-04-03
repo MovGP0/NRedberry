@@ -1,10 +1,7 @@
 ﻿using NRedberry.Contexts;
 using NRedberry.Numbers;
 using NRedberry.Parsers;
-using NRedberry.Tensors;
-using NRedberry.Transformations.Symmetrization;
 using RedberryParser = NRedberry.Parsers.Parser;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Parsers;
 

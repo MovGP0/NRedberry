@@ -1,6 +1,4 @@
-﻿using Xunit;
-
-namespace NRedberry.Core.Tests.Number;
+﻿namespace NRedberry.Core.Tests.Number;
 
 public sealed class NumericTest
 {

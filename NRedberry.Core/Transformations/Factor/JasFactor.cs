@@ -1,7 +1,6 @@
 ﻿using SystemBigInteger = System.Numerics.BigInteger;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Symmetrization;
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;

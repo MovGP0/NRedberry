@@ -6,7 +6,6 @@ using NRedberry.Numbers;
 using NRedberry.Parsers;
 using NRedberry.Tensors;
 using NRedberry.Tensors.Iterators;
-using NRedberry.Transformations;
 using NRedberry.Transformations.Substitutions;
 using NRedberry.Transformations.Symmetrization;
 using TensorApi = NRedberry.Tensors.Tensors;

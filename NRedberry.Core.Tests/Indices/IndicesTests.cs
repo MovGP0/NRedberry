@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
+﻿using System.Collections.Immutable;
 using System.Reflection;
 using NRedberry.Indices;
-using Shouldly;
-using Xunit;
 using IndicesContract = NRedberry.Indices.Indices;
 
 namespace NRedberry.Core.Tests.Indices;

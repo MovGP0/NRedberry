@@ -1,8 +1,6 @@
 using System.Reflection;
 using NRedberry.Concurrent;
 using NRedberry.IndexMapping;
-using Shouldly;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Indexmapping;
 

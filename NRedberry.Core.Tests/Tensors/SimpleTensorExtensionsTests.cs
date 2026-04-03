@@ -1,7 +1,5 @@
-﻿using NRedberry.Contexts;
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Tensors;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Tensors;
 

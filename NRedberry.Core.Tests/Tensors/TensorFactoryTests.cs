@@ -1,6 +1,5 @@
 ﻿using NRedberry.Tensors;
 using TensorFactoryApi = NRedberry.Tensors.Tensors;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Tensors;
 

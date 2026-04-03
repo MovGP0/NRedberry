@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using NRedberry.Indices;
-using Xunit;
 using TensorIndices = NRedberry.Indices.Indices;
 
 namespace NRedberry.Core.Tests.Indices;

@@ -1,11 +1,9 @@
-﻿using NRedberry.Contexts;
-using NRedberry.Tensors;
+﻿using NRedberry.Tensors;
 using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Fractions;
 using TensorCC = NRedberry.Tensors.CC;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Fractions;
 

@@ -1,6 +1,5 @@
 using NRedberry.Contexts.Defaults;
 using NRedberry.Indices;
-using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Contexts.Tests.Defaults;

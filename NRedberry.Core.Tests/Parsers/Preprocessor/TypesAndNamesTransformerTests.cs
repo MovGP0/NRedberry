@@ -1,8 +1,5 @@
-﻿using NRedberry;
-using NRedberry.Contexts;
-using NRedberry.Indices;
+﻿using NRedberry.Contexts;
 using NRedberry.Parsers.Preprocessor;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Parsers.Preprocessor;
 

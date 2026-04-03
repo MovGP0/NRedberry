@@ -1,5 +1,4 @@
 using NRedberry.Numbers;
-using Shouldly;
 using Xunit;
 using TensorApi = NRedberry.Tensors.Tensors;
 

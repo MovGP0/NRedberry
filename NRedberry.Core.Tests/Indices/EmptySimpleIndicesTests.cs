@@ -1,8 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
-using NRedberry;
 using NRedberry.Indices;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Indices;
 

@@ -1,6 +1,4 @@
-﻿using Xunit;
-
-namespace NRedberry.Core.Tests.Test;
+﻿namespace NRedberry.Core.Tests.Test;
 
 public static class TestUtils
 {

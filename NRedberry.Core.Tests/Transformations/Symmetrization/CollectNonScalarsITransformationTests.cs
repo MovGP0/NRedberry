@@ -3,7 +3,6 @@ using SumBuilderType = NRedberry.Tensors.SumBuilderSplitingScalars;
 using TensorType = NRedberry.Tensors.Tensor;
 using TensorApi = NRedberry.Tensors.Tensors;
 using TensorUtilsApi = NRedberry.Tensors.TensorUtils;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Symmetrization;
 

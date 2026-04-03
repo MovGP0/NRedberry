@@ -1,8 +1,6 @@
 ﻿using NRedberry.Solver;
 using NRedberry.Tensors;
-using NRedberry.Transformations.Symmetrization;
 using TensorFactory = NRedberry.Tensors.Tensors;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Solver;
 

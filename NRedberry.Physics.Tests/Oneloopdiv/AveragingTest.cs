@@ -7,7 +7,6 @@ using TensorCC = NRedberry.Tensors.CC;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 using Xunit.Abstractions;
-using Shouldly;
 
 namespace NRedberry.Physics.Tests.Oneloopdiv;
 

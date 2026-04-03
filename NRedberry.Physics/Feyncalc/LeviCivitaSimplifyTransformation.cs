@@ -1,10 +1,8 @@
-using System.Collections.Generic;
 using NRedberry.Core.Combinatorics;
 using NRedberry.Contexts;
 using NRedberry.Groups;
 using NRedberry.IndexMapping;
 using NRedberry.Indices;
-using NRedberry.Numbers;
 using NRedberry.Parsers;
 using NRedberry.Parsers.Preprocessor;
 using NRedberry.Tensors;

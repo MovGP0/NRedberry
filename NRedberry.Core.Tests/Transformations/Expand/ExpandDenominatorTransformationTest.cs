@@ -2,7 +2,6 @@
 using NRedberry.Transformations.Expand;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Expand;
 

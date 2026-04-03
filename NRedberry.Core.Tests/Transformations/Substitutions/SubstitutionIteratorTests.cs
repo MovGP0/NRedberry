@@ -1,7 +1,6 @@
 using NRedberry.Tensors.Iterators;
 using NRedberry.Transformations.Substitutions;
 using TensorApi = NRedberry.Tensors.Tensors;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Substitutions;
 

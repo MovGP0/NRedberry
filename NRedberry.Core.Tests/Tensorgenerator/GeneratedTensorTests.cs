@@ -3,7 +3,6 @@ using NRedberry.Tensors;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using TensorType = NRedberry.Tensors.Tensor;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Tensorgenerator;
 

@@ -1,6 +1,5 @@
 ﻿using NRedberry.Indices;
 using NRedberry.Numbers;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Indices;
 

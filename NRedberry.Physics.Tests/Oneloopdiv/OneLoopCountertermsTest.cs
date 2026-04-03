@@ -6,7 +6,6 @@ using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Factor;
 using NRedberry.Transformations.Fractions;
 using NRedberry.Transformations.Symmetrization;
-using Shouldly;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 

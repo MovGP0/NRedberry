@@ -1,9 +1,7 @@
-using System.Collections.Generic;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Structure;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
-using Shouldly;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;

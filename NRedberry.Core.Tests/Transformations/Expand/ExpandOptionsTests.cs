@@ -1,7 +1,6 @@
 ﻿using NRedberry.Tensors.Iterators;
 using NRedberry.Transformations;
 using NRedberry.Transformations.Expand;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Expand;
 

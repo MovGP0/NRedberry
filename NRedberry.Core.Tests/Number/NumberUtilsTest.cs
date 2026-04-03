@@ -1,6 +1,5 @@
 ﻿using System.Numerics;
 using NRedberry.Numbers;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Number;
 

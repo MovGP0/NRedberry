@@ -2,7 +2,6 @@
 using NRedberry.Numbers;
 using NRedberry.Parsers;
 using NRedberry.Tensors.Functions;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Parsers;
 

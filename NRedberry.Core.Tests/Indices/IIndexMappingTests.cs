@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using NRedberry.Indices;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Indices;
 

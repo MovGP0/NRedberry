@@ -1,6 +1,4 @@
-using Shouldly;
 using GroupPermutations = NRedberry.Groups.Permutations;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Groups;
 

@@ -1,4 +1,3 @@
-using NRedberry;
 using NRedberry.Contexts;
 using NRedberry.IndexMapping;
 using NRedberry.Indices;

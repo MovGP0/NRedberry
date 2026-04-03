@@ -1,7 +1,6 @@
 ﻿using NRedberry.Indices;
 using NRedberry.Parsers;
 using TensorApi = NRedberry.Tensors.Tensors;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Indices;
 

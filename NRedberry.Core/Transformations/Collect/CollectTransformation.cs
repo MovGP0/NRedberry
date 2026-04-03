@@ -6,7 +6,6 @@ using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Concurrent;
 using NRedberry.Tensors;
-using NRedberry.Transformations;
 using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Powerexpand;
 using NRedberry.Transformations.Symmetrization;

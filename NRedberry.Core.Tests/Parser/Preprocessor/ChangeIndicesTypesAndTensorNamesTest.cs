@@ -1,11 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using NRedberry.Contexts;
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Parsers;
 using NRedberry.Parsers.Preprocessor;
 using RedberryParser = NRedberry.Parsers.Parser;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Parser.Preprocessor;
 

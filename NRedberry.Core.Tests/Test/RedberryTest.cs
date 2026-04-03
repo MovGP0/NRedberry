@@ -1,7 +1,5 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Xunit;
-using Xunit.Sdk;
 using SkipException = Xunit.Sdk.SkipException;
 
 namespace NRedberry.Core.Tests.Test;

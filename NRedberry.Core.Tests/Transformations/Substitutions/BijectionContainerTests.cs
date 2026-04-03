@@ -1,7 +1,5 @@
-﻿using System;
-using NRedberry.IndexMapping;
+﻿using NRedberry.IndexMapping;
 using NRedberry.Transformations.Substitutions;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Substitutions;
 

@@ -1,5 +1,4 @@
 using NRedberry.Core.Combinatorics;
-using NRedberry.Groups;
 using NRedberry.IndexMapping;
 using NRedberry.Indices;
 using NRedberry.Numbers;

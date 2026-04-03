@@ -1,7 +1,6 @@
 ﻿#pragma warning disable CS0618
 using NRedberry.Contexts;
 using NRedberry.Core.Utils;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Utils;
 

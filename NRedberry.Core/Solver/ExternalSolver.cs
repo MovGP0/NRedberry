@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using NRedberry.Contexts;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
 using NRedberry.Tensors.Iterators;

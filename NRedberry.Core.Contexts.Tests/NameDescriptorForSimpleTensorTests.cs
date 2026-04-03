@@ -1,9 +1,7 @@
 using System.Reflection;
-using NRedberry;
 using NRedberry.Contexts;
 using NRedberry.Indices;
 using NRedberry.Tensors;
-using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Contexts.Tests;

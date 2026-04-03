@@ -1,6 +1,4 @@
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
-using Shouldly;
 using Xunit;
 using PolyComplex = NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly.Complex<NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith.BigRational>;
 using PolyComplexRing = NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly.ComplexRing<NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith.BigRational>;

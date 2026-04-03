@@ -1,7 +1,6 @@
 ﻿using NRedberry.Contexts;
 using NRedberry.Tensors.Functions;
 using RedberryContext = NRedberry.Contexts.Context;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Tensors;
 

@@ -1,8 +1,6 @@
-﻿using NRedberry;
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Parsers;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Parsers;
 

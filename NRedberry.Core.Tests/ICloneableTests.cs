@@ -1,6 +1,3 @@
-using Shouldly;
-using Xunit;
-
 namespace NRedberry.Core.Tests;
 
 public sealed class ICloneableTests

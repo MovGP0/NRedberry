@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using NRedberry.Solver.Frobenius;
-using Xunit;
+﻿using NRedberry.Solver.Frobenius;
 
 namespace NRedberry.Core.Tests.Solver.Frobenius;
 

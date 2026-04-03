@@ -1,8 +1,6 @@
 ﻿using NRedberry.Numbers;
 using NRedberry.Tensors;
-using Shouldly;
 using TensorFactory = NRedberry.Tensors.Tensors;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Tensor;
 

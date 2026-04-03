@@ -1,6 +1,4 @@
-using NRedberry;
 using NRedberry.Transformations.Reverse;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Reverse;
 

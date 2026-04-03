@@ -2,7 +2,6 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
 using NRedberry.Indices;
-using Xunit;
 using TensorIndices = NRedberry.Indices.Indices;
 
 namespace NRedberry.Core.Tests.Indices;

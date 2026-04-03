@@ -1,9 +1,5 @@
-﻿using System;
-using System.Linq;
-using NRedberry;
-using NRedberry.Indices;
+﻿using NRedberry.Indices;
 using NRedberry.Tensors;
-using Xunit;
 using IndicesContract = NRedberry.Indices.Indices;
 
 namespace NRedberry.Core.Tests.Indices;

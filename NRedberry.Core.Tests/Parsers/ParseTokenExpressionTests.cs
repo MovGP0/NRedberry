@@ -1,10 +1,8 @@
-﻿using NRedberry;
-using NRedberry.Parsers;
+﻿using NRedberry.Parsers;
 using NRedberry.Numbers;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Symmetrization;
 using RedberryTensor = NRedberry.Tensors.Tensor;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Parsers;
 

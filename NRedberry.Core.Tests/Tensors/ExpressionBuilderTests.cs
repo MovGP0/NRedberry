@@ -2,7 +2,6 @@
 using NRedberry.Tensors;
 using IndicesType = NRedberry.Indices.Indices;
 using TensorType = NRedberry.Tensors.Tensor;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Tensors;
 

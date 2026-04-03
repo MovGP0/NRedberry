@@ -1,6 +1,5 @@
 ﻿using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
-using Xunit;
 
 namespace NRedberry.Core.Tests;
 

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Linq;
-using NRedberry.Core.Utils;
+﻿using NRedberry.Core.Utils;
 using NRedberry.Transformations.Powerexpand;
 using NRedberry.Transformations.Symmetrization;
 using TensorApi = NRedberry.Tensors.Tensors;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Powerexpand;
 

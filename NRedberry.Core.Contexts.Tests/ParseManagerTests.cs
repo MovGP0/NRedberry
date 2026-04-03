@@ -2,7 +2,6 @@ using NRedberry.Contexts;
 using NRedberry.Parsers;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Symmetrization;
-using Shouldly;
 using Xunit;
 
 namespace NRedberry.Core.Contexts.Tests;

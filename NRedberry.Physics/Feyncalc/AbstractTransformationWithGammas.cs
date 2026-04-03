@@ -1,9 +1,7 @@
-using NRedberry;
 using NRedberry.Contexts;
 using NRedberry.Indices;
 using NRedberry.Parsers.Preprocessor;
 using NRedberry.Tensors;
-using NRedberry.Transformations;
 using NRedberry.Transformations.Substitutions;
 using NRedberry.Transformations.Symmetrization;
 using TensorApi = NRedberry.Tensors.Tensors;

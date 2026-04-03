@@ -4,7 +4,6 @@ using NRedberry.Groups;
 using NRedberry.IndexGeneration;
 using NRedberry.IndexMapping;
 using NRedberry.Indices;
-using NRedberry.Numbers;
 using IndicesType = NRedberry.Indices.Indices;
 
 namespace NRedberry.Tensors.Random;

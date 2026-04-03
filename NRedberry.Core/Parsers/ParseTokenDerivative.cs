@@ -1,6 +1,5 @@
 using NRedberry.Indices;
 using NRedberry.Tensors;
-using NRedberry.Transformations;
 using NRedberry.Transformations.Symmetrization;
 
 namespace NRedberry.Parsers;

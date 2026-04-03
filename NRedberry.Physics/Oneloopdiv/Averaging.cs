@@ -1,4 +1,3 @@
-using System.Linq;
 using NRedberry.Contexts;
 using NRedberry.Indices;
 using NRedberry.Numbers;

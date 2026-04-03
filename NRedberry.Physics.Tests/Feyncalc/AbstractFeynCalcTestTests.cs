@@ -1,6 +1,5 @@
 using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
-using Shouldly;
 using Xunit;
 
 namespace NRedberry.Physics.Tests.Feyncalc;

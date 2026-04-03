@@ -2,7 +2,6 @@
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
 using Xunit;
-using System.Linq;
 
 namespace NRedberry.JAS.Tests;
 

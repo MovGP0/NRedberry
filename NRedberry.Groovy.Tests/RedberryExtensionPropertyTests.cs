@@ -1,6 +1,5 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
-using Shouldly;
 using Xunit;
 using NumberComplex = NRedberry.Numbers.Complex;
 using TensorApi = NRedberry.Tensors.Tensors;

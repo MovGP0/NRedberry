@@ -1,5 +1,4 @@
 ﻿using NRedberry.Tensors.Playground;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Tensors.Playground;
 

@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using NRedberry.Numbers;
 using NRedberry.Numbers.Parser;
-using Xunit;
 using NumberComplex = NRedberry.Numbers.Complex;
 
 namespace NRedberry.Core.Tests.Number;

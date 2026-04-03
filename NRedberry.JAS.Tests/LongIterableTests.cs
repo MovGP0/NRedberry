@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Util;
+﻿using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Util;
 using Xunit;
 
 namespace NRedberry.JAS.Tests;

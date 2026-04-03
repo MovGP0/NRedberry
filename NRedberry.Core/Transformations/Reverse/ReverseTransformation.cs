@@ -1,6 +1,5 @@
 using System.Text;
 using NRedberry.Tensors;
-using NRedberry.Transformations;
 using NRedberry.Transformations.Symmetrization;
 
 namespace NRedberry.Transformations.Reverse;

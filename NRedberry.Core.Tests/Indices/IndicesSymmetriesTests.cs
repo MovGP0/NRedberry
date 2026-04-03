@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using NRedberry.Core.Combinatorics;
-using NRedberry.Groups;
+﻿using NRedberry.Core.Combinatorics;
 using NRedberry.Indices;
-using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
 namespace NRedberry.Core.Tests.Indices;

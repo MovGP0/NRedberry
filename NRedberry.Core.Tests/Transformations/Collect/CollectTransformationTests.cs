@@ -1,7 +1,6 @@
 ﻿using NRedberry.Transformations;
 using NRedberry.Transformations.Collect;
 using TensorApi = NRedberry.Tensors.Tensors;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Collect;
 

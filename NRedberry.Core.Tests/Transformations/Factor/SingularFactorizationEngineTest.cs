@@ -1,12 +1,9 @@
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using NRedberry.Indices;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Factor;
-using Shouldly;
-using Xunit;
 using RandomTensorGenerator = NRedberry.Tensors.Random.RandomTensor;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;

@@ -3,7 +3,6 @@ using NRedberry.Numbers;
 using BigInteger = System.Numerics.BigInteger;
 using NumberComplex = NRedberry.Numbers.Complex;
 using TensorFactory = NRedberry.Tensors.Tensors;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Number;
 

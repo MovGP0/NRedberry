@@ -1,8 +1,5 @@
-using NRedberry;
 using NRedberry.Transformations.Symmetrization;
-using Shouldly;
 using TensorApi = NRedberry.Tensors.Tensors;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Symmetrization;
 

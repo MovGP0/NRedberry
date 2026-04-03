@@ -1,8 +1,5 @@
-using System;
 using System.Collections;
 using System.Reflection;
-using Shouldly;
-using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
 namespace NRedberry.Core.Tests.Groups;

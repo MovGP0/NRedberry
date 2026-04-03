@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using NRedberry.Indices;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Indices;
 

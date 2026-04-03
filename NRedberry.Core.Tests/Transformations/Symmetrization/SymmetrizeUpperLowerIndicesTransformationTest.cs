@@ -1,13 +1,10 @@
 using NRedberry.Core.Combinatorics;
-using NRedberry.Contexts;
 using NRedberry.Indices;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Symmetrization;
-using Shouldly;
 using TensorApi = NRedberry.Tensors.Tensors;
 using SimpleTensorType = NRedberry.Tensors.SimpleTensor;
 using TensorType = NRedberry.Tensors.Tensor;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Symmetrization;
 

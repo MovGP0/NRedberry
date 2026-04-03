@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Numerics;
+﻿using System.Numerics;
 using NRedberry.Apache.Commons.Math;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Number;
 

@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.IO;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Factor;

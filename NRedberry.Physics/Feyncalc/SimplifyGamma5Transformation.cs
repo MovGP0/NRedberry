@@ -1,5 +1,4 @@
 using NRedberry.Contexts;
-using NRedberry.Core.Utils;
 using NRedberry.Graphs;
 using NRedberry.Indices;
 using NRedberry.Tensors;

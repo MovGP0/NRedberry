@@ -1,7 +1,5 @@
 using NRedberry.Transformations.Powerexpand;
-using Shouldly;
 using TensorApi = NRedberry.Tensors.Tensors;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Transformations.Powerexpand;
 

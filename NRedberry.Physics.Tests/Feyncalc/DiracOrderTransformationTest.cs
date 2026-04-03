@@ -1,10 +1,6 @@
-using NRedberry;
-using NRedberry.Contexts;
-using NRedberry.Indices;
 using NRedberry.Physics.Feyncalc;
 using NRedberry.Tensors;
 using NRedberry.Transformations.Symmetrization;
-using Shouldly;
 using Xunit;
 using TensorCC = NRedberry.Tensors.CC;
 using TensorApi = NRedberry.Tensors.Tensors;

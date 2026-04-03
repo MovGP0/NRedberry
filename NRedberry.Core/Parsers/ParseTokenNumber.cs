@@ -1,4 +1,3 @@
-using NRedberry;
 using NRedberry.Indices;
 using NRedberry.Numbers;
 using NRedberry.Tensors;

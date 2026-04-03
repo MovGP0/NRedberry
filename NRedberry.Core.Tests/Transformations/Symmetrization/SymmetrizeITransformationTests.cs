@@ -1,5 +1,3 @@
-using Xunit;
-
 namespace NRedberry.Core.Tests.Transformations.Symmetrization;
 
 public sealed class SymmetrizeITransformationTests

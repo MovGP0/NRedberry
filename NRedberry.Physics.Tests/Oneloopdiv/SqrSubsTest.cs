@@ -1,7 +1,6 @@
 using NRedberry.Tensors;
 using NRedberry.Physics.Oneloopdiv;
 using NRedberry.Transformations.Symmetrization;
-using Shouldly;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using Xunit;
 
