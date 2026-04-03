@@ -1,4 +1,5 @@
-﻿using NRedberry.Tensors.Iterators;
+using NRedberry.Tensors;
+using NRedberry.Tensors.Iterators;
 using TensorApi = NRedberry.Tensors.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
 
@@ -17,9 +18,10 @@ public sealed class PayloadFactoryTests
             new TrackingPayloadFactory(allowLazyInitialization: true));
         lazyIterator.Next().ShouldBe(TraverseState.Entering);
         StackPosition<TrackingPayload> lazyStackPosition = lazyIterator.CurrentStackPosition();
-        lazyStackPosition.IsPayloadInitialized().ShouldBeFalse();
-        lazyStackPosition.GetPayload().CapturedTensor.ShouldBe("a+b");
-        lazyStackPosition.IsPayloadInitialized().ShouldBeTrue();
+        lazyStackPosition.ShouldSatisfyAllConditions(
+            () => lazyStackPosition.IsPayloadInitialized().ShouldBeFalse(),
+            () => TensorUtils.Equals(lazyStackPosition.GetPayload().CapturedTensor, tensor).ShouldBeTrue(),
+            () => lazyStackPosition.IsPayloadInitialized().ShouldBeTrue());
 
         TreeTraverseIterator<TrackingPayload> eagerIterator = new(
             tensor,
@@ -27,13 +29,14 @@ public sealed class PayloadFactoryTests
             new TrackingPayloadFactory(allowLazyInitialization: false));
         eagerIterator.Next().ShouldBe(TraverseState.Entering);
         StackPosition<TrackingPayload> eagerStackPosition = eagerIterator.CurrentStackPosition();
-        eagerStackPosition.IsPayloadInitialized().ShouldBeTrue();
-        eagerStackPosition.GetPayload().CapturedTensor.ShouldBe("a+b");
+        eagerStackPosition.ShouldSatisfyAllConditions(
+            () => eagerStackPosition.IsPayloadInitialized().ShouldBeTrue(),
+            () => TensorUtils.Equals(eagerStackPosition.GetPayload().CapturedTensor, tensor).ShouldBeTrue());
     }
 
-    private sealed class TrackingPayload(string capturedTensor) : Payload<TrackingPayload>
+    private sealed class TrackingPayload(TensorType capturedTensor) : Payload<TrackingPayload>
     {
-        public string CapturedTensor { get; } = capturedTensor;
+        public TensorType CapturedTensor { get; } = capturedTensor;
 
         public NRedberry.Tensors.Tensor OnLeaving(StackPosition<TrackingPayload> stackPosition)
         {
@@ -50,7 +53,7 @@ public sealed class PayloadFactoryTests
 
         public TrackingPayload Create(StackPosition<TrackingPayload> stackPosition)
         {
-            return new TrackingPayload(stackPosition.GetTensor().ToString(OutputFormat.Redberry));
+            return new TrackingPayload(stackPosition.GetTensor());
         }
     }
 }

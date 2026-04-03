@@ -30,4 +30,12 @@ public static class ShouldlyExtensions
     {
         return EliminateMetricsTransformation.Eliminate(tensor);
     }
+
+    extension(Should)
+    {
+        public static void CompleteIn(Action action, string? customMessage = null)
+        {
+            Should.CompleteIn(action, TimeSpan.FromSeconds(1), customMessage);
+        }
+    }
 }
