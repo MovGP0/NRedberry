@@ -136,11 +136,6 @@ public abstract class FactorAbstract<C> : Factorization<C> where C : GcdRingElem
                 GenPolynomial<C> trial = PolyUfdUtil.BackSubstituteKronecker(polynomialRing, candidate, substitutionDegree);
                 trialCounter++;
 
-                if (trial.IsConstant() || trial.Degree() > maximumDegree)
-                {
-                    continue;
-                }
-
                 ExpVector? trialLeadingExponent = trial.LeadingExpVector();
                 ExpVector? trialTrailingExponent = trial.TrailingExpVector();
                 if (leadingExponent is not null && trialLeadingExponent is not null && !leadingExponent.MultipleOf(trialLeadingExponent))
@@ -152,6 +147,13 @@ public abstract class FactorAbstract<C> : Factorization<C> where C : GcdRingElem
                 {
                     continue;
                 }
+
+                if (trial.IsConstant() || trial.Degree() > maximumDegree)
+                {
+                    continue;
+                }
+
+                trial = trial.Monic();
 
                 GenPolynomial<C> remainder = PolyUtil.BaseSparsePseudoRemainder(remaining, trial);
                 if (!remainder.IsZero())

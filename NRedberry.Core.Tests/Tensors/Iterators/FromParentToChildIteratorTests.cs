@@ -1,6 +1,5 @@
 ﻿using NRedberry.Tensors.Iterators;
 using TensorApi = NRedberry.Tensors.Tensors;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Tensors.Iterators;
 
@@ -9,7 +8,8 @@ public sealed class FromParentToChildIteratorTests
     [Fact]
     public void ShouldYieldOnlyEnteringStates()
     {
-        FromParentToChildIterator iterator = new(TensorApi.Parse("a+b"));
+        var sum = TensorApi.Parse("a+b");
+        FromParentToChildIterator iterator = new(sum);
 
         List<string> visited = [];
         while (iterator.Next() is { } current)
@@ -17,7 +17,8 @@ public sealed class FromParentToChildIteratorTests
             visited.Add(current.ToString(OutputFormat.Redberry));
         }
 
-        visited.ShouldBe(["a+b", "a", "b"]);
-        iterator.Result().ToString(OutputFormat.Redberry).ShouldBe("a+b");
+        "result".ShouldSatisfyAllConditions(
+            () => visited.ShouldBe([sum.ToString(OutputFormat.Redberry), sum[0].ToString(OutputFormat.Redberry), sum[1].ToString(OutputFormat.Redberry)]),
+            () => iterator.Result().ToString(OutputFormat.Redberry).ShouldBe(sum.ToString(OutputFormat.Redberry)));
     }
 }

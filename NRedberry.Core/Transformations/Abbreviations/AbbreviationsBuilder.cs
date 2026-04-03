@@ -295,7 +295,16 @@ public sealed class AbbreviationsBuilder : ITransformation
                 abbreviation.AbbreviationTensor.ToString()));
         }
 
-        string json = JsonSerializer.Serialize(records);
+        AbbreviationsBuilderRecord serialized = new(
+            abbreviations.MaxSumSize,
+            abbreviations.AbbrPrefix,
+            abbreviations.AbbreviateScalars,
+            abbreviations.AbbreviateScalarsSeparately,
+            abbreviations.AbbreviateTopLevel,
+            abbreviations.Locked,
+            records);
+
+        string json = JsonSerializer.Serialize(serialized);
         System.IO.File.WriteAllText(file.FullName, json);
     }
 
@@ -310,16 +319,24 @@ public sealed class AbbreviationsBuilder : ITransformation
         ArgumentNullException.ThrowIfNull(file);
 
         string json = System.IO.File.ReadAllText(file.FullName);
-        List<AbbreviationRecord>? records = JsonSerializer.Deserialize<List<AbbreviationRecord>>(json);
         AbbreviationsBuilder builder = new();
-        if (records is null)
+        AbbreviationsBuilderRecord? serialized =
+            JsonSerializer.Deserialize<AbbreviationsBuilderRecord>(json);
+        if (serialized is null)
         {
             return builder;
         }
 
+        builder.MaxSumSize = serialized.MaxSumSize;
+        builder.AbbrPrefix = serialized.AbbrPrefix;
+        builder.AbbreviateScalars = serialized.AbbreviateScalars;
+        builder.AbbreviateScalarsSeparately = serialized.AbbreviateScalarsSeparately;
+        builder.AbbreviateTopLevel = serialized.AbbreviateTopLevel;
+        builder.Locked = serialized.Locked;
+
         builder._abbreviations.Clear();
         int maxIndex = -1;
-        foreach (AbbreviationRecord record in records)
+        foreach (AbbreviationRecord record in serialized.Abbreviations)
         {
             Tensor definition = TensorFunctions.Parse(record.Definition);
             Tensor abbreviation = TensorFunctions.Parse(record.Abbreviation);
@@ -388,6 +405,15 @@ public sealed class AbbreviationsBuilder : ITransformation
             ProductContent.EmptyInstance,
             IndicesFactory.EmptyIndices);
     }
+
+    private sealed record class AbbreviationsBuilderRecord(
+        int MaxSumSize,
+        string AbbrPrefix,
+        bool AbbreviateScalars,
+        bool AbbreviateScalarsSeparately,
+        bool AbbreviateTopLevel,
+        bool Locked,
+        List<AbbreviationRecord> Abbreviations);
 
     private sealed record class AbbreviationRecord(int Index, long Count, string Definition, string Abbreviation);
 }

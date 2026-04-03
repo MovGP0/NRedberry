@@ -195,7 +195,7 @@ public sealed class ScalarsBackedProductBuilder : TensorBuilder
                     sumData[i] = Tensors.Negate(sumData[i]);
                 }
 
-                return new Sum(sum.Indices, sumData, sum.GetHashCode());
+                return new Sum(sumData, sum.Indices);
             }
         }
 

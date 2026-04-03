@@ -203,6 +203,16 @@ public sealed class Product : MultiTensor
         return PrintMatrices(sb, outputFormat, operatorChar);
     }
 
+    protected override string ToString<T>(OutputFormat outputFormat)
+    {
+        if (typeof(T) == typeof(Power))
+        {
+            return "(" + ToString(outputFormat) + ")";
+        }
+
+        return ToString(outputFormat);
+    }
+
     public override TensorBuilder GetBuilder()
     {
         return new ScalarsBackedProductBuilder();

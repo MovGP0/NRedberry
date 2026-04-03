@@ -1,7 +1,5 @@
 using NRedberry.Core.Combinatorics;
 using NRedberry.Groups;
-using Shouldly;
-using Xunit;
 using GroupPermutations = NRedberry.Groups.Permutations;
 
 namespace NRedberry.Core.Tests.Groups;
@@ -14,8 +12,13 @@ public sealed class PermutationGroupCentralizersTests
         // Arrange
         PermutationGroup group = PermutationGroup.SymmetricGroup(3);
 
-        // Act + Assert
-        Should.Throw<NullReferenceException>(() => _ = group.Center());
+        // Act
+        PermutationGroup center = group.Center();
+
+        // Assert
+        center.ShouldNotBeNull().ShouldSatisfyAllConditions(
+            c => c.Order.ShouldBe(1),
+            c => c.IsTrivial().ShouldBeTrue());
     }
 
     [Fact(DisplayName = "Should conjugate trivial group to itself")]
@@ -40,7 +43,14 @@ public sealed class PermutationGroupCentralizersTests
         PermutationGroup group = PermutationGroup.SymmetricGroup(3);
         Permutation identity = GroupPermutations.CreateIdentityPermutation(3);
 
-        // Act + Assert
-        Should.Throw<NullReferenceException>(() => _ = group.CentralizerOf(identity));
+        // Act
+        PermutationGroup centralizer = group.CentralizerOf(identity);
+
+        // Assert
+        centralizer
+            .ShouldNotBeNull()
+            .ShouldSatisfyAllConditions(
+                c => c.Order.ShouldBe(group.Order),
+                c => c.Degree.ShouldBe(group.Degree));
     }
 }

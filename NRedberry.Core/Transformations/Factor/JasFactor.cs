@@ -338,6 +338,6 @@ internal sealed class JasVar(SimpleTensor simpleTensor) : IComparable<JasVar>
             return 1;
         }
 
-        return other.MaxPower.CompareTo(MaxPower);
+        return MaxPower.CompareTo(other.MaxPower);
     }
 }

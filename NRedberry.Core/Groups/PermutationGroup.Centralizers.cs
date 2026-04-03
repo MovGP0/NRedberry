@@ -12,6 +12,11 @@ public sealed partial class PermutationGroup
 
     public PermutationGroup CentralizerOf(PermutationGroup subgroup)
     {
+        if (subgroup.IsTrivial())
+        {
+            return this;
+        }
+
         if (subgroup.IsAbelian() && subgroup.IsTransitive(0, _internalDegree))
         {
             return subgroup;

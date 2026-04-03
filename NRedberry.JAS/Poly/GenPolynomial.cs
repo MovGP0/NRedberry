@@ -630,6 +630,11 @@ public class GenPolynomial<C> : RingElem<GenPolynomial<C>>, IEnumerable<Monomial
         SortedDictionary<ExpVector, C> result = CreateDictionary();
         foreach (KeyValuePair<ExpVector, C> term in Terms)
         {
+            if (term.Value.IsZero())
+            {
+                continue;
+            }
+
             C quotient = term.Value.Divide(divisor);
             if (quotient.IsZero())
             {

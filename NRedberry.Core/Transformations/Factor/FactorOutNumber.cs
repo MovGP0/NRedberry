@@ -80,9 +80,14 @@ public sealed class FactorOutNumber : TransformationToStringAble
                 commonFactor = commonFactor.Multiply(Complex.ImaginaryOne);
             }
 
-            iterator.Set(Tensors.Tensors.Multiply(
-                commonFactor,
-                FastTensors.MultiplySumElementsOnFactor(sum, commonFactor.Reciprocal())));
+            Tensor scaled = FastTensors.MultiplySumElementsOnFactor(sum, commonFactor.Reciprocal());
+            if (scaled is Sum scaledSum && HasCommonNegativeRealFactor(scaledSum))
+            {
+                commonFactor = commonFactor.Negate();
+                scaled = Tensors.Tensors.Negate(scaledSum);
+            }
+
+            iterator.Set(Tensors.Tensors.Multiply(commonFactor, scaled));
         }
 
         return iterator.Result();
@@ -115,6 +120,20 @@ public sealed class FactorOutNumber : TransformationToStringAble
         }
 
         return tensor as Complex;
+    }
+
+    private static bool HasCommonNegativeRealFactor(Sum sum)
+    {
+        for (int i = 0; i < sum.Size; ++i)
+        {
+            Complex? factor = GetFactor(sum[i]);
+            if (factor?.IsReal() != true || factor.Real.SigNum() >= 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public string ToString(OutputFormat outputFormat)

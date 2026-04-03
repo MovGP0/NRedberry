@@ -10,7 +10,11 @@ public sealed class TreeTraverseIteratorTests
     [Fact]
     public void ShouldTraverseTreeInEnteringAndLeavingOrder()
     {
-        TreeTraverseIterator iterator = new(TensorApi.Parse("a+b"));
+        TensorType sum = TensorApi.Parse("a+b");
+        string sumText = sum.ToString(OutputFormat.Redberry);
+        string firstChild = sum[0].ToString(OutputFormat.Redberry);
+        string secondChild = sum[1].ToString(OutputFormat.Redberry);
+        TreeTraverseIterator iterator = new(sum);
 
         List<(TraverseState State, string Tensor, int Depth)> visited = [];
         TraverseState? state;
@@ -20,12 +24,12 @@ public sealed class TreeTraverseIteratorTests
         }
 
         visited.ShouldBe([
-            (TraverseState.Entering, "a+b", 0),
-            (TraverseState.Entering, "a", 1),
-            (TraverseState.Leaving, "a", 1),
-            (TraverseState.Entering, "b", 1),
-            (TraverseState.Leaving, "b", 1),
-            (TraverseState.Leaving, "a+b", 0),
+            (TraverseState.Entering, sumText, 0),
+            (TraverseState.Entering, firstChild, 1),
+            (TraverseState.Leaving, firstChild, 1),
+            (TraverseState.Entering, secondChild, 1),
+            (TraverseState.Leaving, secondChild, 1),
+            (TraverseState.Leaving, sumText, 0),
         ]);
     }
 

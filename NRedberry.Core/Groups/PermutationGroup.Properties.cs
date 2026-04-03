@@ -124,7 +124,8 @@ public sealed partial class PermutationGroup
             {
                 if (permutation.Parity == 1)
                 {
-                    return _isAlternating == false;
+                    _isAlternating = false;
+                    return false;
                 }
             }
         }
@@ -141,12 +142,14 @@ public sealed partial class PermutationGroup
     {
         if (IsTrivial() || !IsTransitive())
         {
-            return _isSymmetric == false;
+            _isSymmetric = false;
+            return false;
         }
 
         if (_internalDegree > 2 && _generators.Count == 1)
         {
-            return _isSymmetric == false;
+            _isSymmetric = false;
+            return false;
         }
 
         bool isSym = IsSymOrAlt(DefaultConfidenceLevel);
@@ -165,14 +168,16 @@ public sealed partial class PermutationGroup
             }
         }
 
-        return _isSymmetric == containsOdd;
+        _isSymmetric = containsOdd;
+        return containsOdd;
     }
 
     private bool IsAlt0()
     {
         if (IsTrivial() || !IsTransitive())
         {
-            return _isAlternating == false;
+            _isAlternating = false;
+            return false;
         }
 
         bool isAlt = IsSymOrAlt(DefaultConfidenceLevel);
@@ -185,11 +190,13 @@ public sealed partial class PermutationGroup
         {
             if (permutation.Parity == 1)
             {
-                return _isAlternating == false;
+                _isAlternating = false;
+                return false;
             }
         }
 
-        return _isAlternating == true;
+        _isAlternating = true;
+        return true;
     }
 
     private const double DefaultConfidenceLevel = 1 - 1E-6;

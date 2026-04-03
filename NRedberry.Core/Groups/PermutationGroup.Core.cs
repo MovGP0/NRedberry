@@ -115,9 +115,7 @@ public sealed partial class PermutationGroup
             return TrivialGroupInstance;
         }
 
-        return CreatePermutationGroup(
-            Permutations.CreatePermutation(Permutations.CreateTransposition(degree, 0, Math.Min(1, degree - 1))),
-            Permutations.CreatePermutation(Permutations.CreateCycle(degree)));
+        return CreatePermutationGroupFromBSGS(AlgorithmsBase.CreateSymmetricGroupBSGS(degree));
     }
 
     public static PermutationGroup AntisymmetricGroup(int degree)
@@ -132,9 +130,7 @@ public sealed partial class PermutationGroup
             return TrivialGroupInstance;
         }
 
-        return CreatePermutationGroup(
-            Permutations.CreatePermutation(true, Permutations.CreateTransposition(degree, 0, Math.Min(1, degree - 1))),
-            Permutations.CreatePermutation(Permutations.CreateCycle(degree)));
+        return CreatePermutationGroupFromBSGS(AlgorithmsBase.CreateAntisymmetricGroupBSGS(degree));
     }
 
     public static PermutationGroup AlternatingGroup(int degree)
@@ -149,30 +145,7 @@ public sealed partial class PermutationGroup
             return TrivialGroupInstance;
         }
 
-        var threeCycle = new int[degree];
-        for (int i = 0; i < degree; ++i)
-        {
-            threeCycle[i] = i;
-        }
-
-        if (degree > 0)
-        {
-            threeCycle[0] = Math.Min(1, degree - 1);
-        }
-
-        if (degree > 1)
-        {
-            threeCycle[1] = Math.Min(2, degree - 1);
-        }
-
-        if (degree > 2)
-        {
-            threeCycle[2] = 0;
-        }
-
-        return CreatePermutationGroup(
-            Permutations.CreatePermutation(threeCycle),
-            Permutations.CreatePermutation(Permutations.CreateCycle(degree)));
+        return CreatePermutationGroupFromBSGS(AlgorithmsBase.CreateAlternatingGroupBSGS(degree));
     }
 
     public BigInteger Order
@@ -322,9 +295,26 @@ public sealed partial class PermutationGroup
             return;
         }
 
-        List<BSGSElement> bsgs = _base is not null
-            ? AlgorithmsBase.CreateBSGSList(_base, _generators)
-            : AlgorithmsBase.CreateBSGSList(_generators);
+        List<BSGSElement> bsgs;
+        if (IsSym0())
+        {
+            bsgs = AlgorithmsBase.CreateSymmetricGroupBSGS(_internalDegree);
+        }
+        else if (IsAlt0())
+        {
+            bsgs = AlgorithmsBase.CreateAlternatingGroupBSGS(_internalDegree);
+        }
+        else
+        {
+            bsgs = _base is not null
+                ? AlgorithmsBase.CreateBSGSList(_base, _generators, _internalDegree)
+                : AlgorithmsBase.CreateBSGSList(_generators, _internalDegree);
+        }
+
+        if (bsgs.Count == 0)
+        {
+            bsgs = AlgorithmsBase.TrivialBsgs;
+        }
 
         _bsgs = bsgs;
         _base = AlgorithmsBase.GetBaseAsArray(bsgs);

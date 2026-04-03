@@ -7,7 +7,6 @@ using NRedberry.Transformations.Expand;
 using NRedberry.Transformations.Factor;
 using Shouldly;
 using Xunit;
-using Xunit.Sdk;
 using RandomTensorGenerator = NRedberry.Tensors.Random.RandomTensor;
 using TensorFactory = NRedberry.Tensors.Tensors;
 using TensorType = NRedberry.Tensors.Tensor;
@@ -16,10 +15,11 @@ namespace NRedberry.Core.Tests.Transformations.Factor;
 
 public sealed class SingularFactorizationEngineTest
 {
-    [Fact]
+    [SkippableFact]
     public void ShouldFactorSimplePolynomial()
     {
-        using SingularFactorizationEngine engine = new(GetSingularExecutablePath());
+        string singularExecutablePath = GetSingularExecutablePath();
+        using SingularFactorizationEngine engine = new(singularExecutablePath);
         TensorType tensor = TensorFactory.Parse("12387623*x**134-12387623*y**6");
 
         TensorType factored = engine.Transform(tensor);
@@ -30,7 +30,7 @@ public sealed class SingularFactorizationEngineTest
         equalAfterExpansion.ShouldBeTrue();
     }
 
-    [Fact]
+    [SkippableFact]
     public void ShouldFactorRandomTensor()
     {
         RandomTensorGenerator random = new();
@@ -41,7 +41,8 @@ public sealed class SingularFactorizationEngineTest
             TensorFactory.Parse("b"),
             TensorFactory.Parse("t"));
 
-        using SingularFactorizationEngine engine = new(GetSingularExecutablePath());
+        string singularExecutablePath = GetSingularExecutablePath();
+        using SingularFactorizationEngine engine = new(singularExecutablePath);
         TensorType tensor = random.NextProductTree(3, 6, 8, IndicesFactory.EmptyIndices);
 
         tensor = ExpandTransformation.Expand(tensor);
@@ -68,7 +69,8 @@ public sealed class SingularFactorizationEngineTest
             }
         }
 
-        throw SkipException.ForSkip("Singular executable is not available on PATH.");
+        Skip.If(true, "Singular executable is not available on PATH.");
+        return string.Empty;
     }
 
     private static bool IsExecutableAvailable(string executableName)

@@ -179,7 +179,7 @@ public sealed class TogetherTransformation : ITransformation, TransformationToSt
     {
         tensor = factor.Transform(tensor);
 
-        var map = new Dictionary<Tensor, Complex>();
+        var map = new Dictionary<Tensor, Complex>(TensorDenominatorComparer.Instance);
         if (CheckPower(tensor))
         {
             map[tensor[0]] = ((Complex)tensor[1]).Negate();
@@ -230,4 +230,34 @@ internal sealed class TogetherSplitStruct(Dictionary<Tensor, Complex> denominato
 {
     public Dictionary<Tensor, Complex> Denominators { get; } = denominators;
     public Tensor Numerator { get; } = numerator;
+}
+
+internal sealed class TensorDenominatorComparer : IEqualityComparer<Tensor>
+{
+    public static TensorDenominatorComparer Instance { get; } = new();
+
+    private TensorDenominatorComparer()
+    {
+    }
+
+    public bool Equals(Tensor? x, Tensor? y)
+    {
+        if (ReferenceEquals(x, y))
+        {
+            return true;
+        }
+
+        if (x is null || y is null)
+        {
+            return false;
+        }
+
+        return TensorUtils.Equals(x, y);
+    }
+
+    public int GetHashCode(Tensor obj)
+    {
+        ArgumentNullException.ThrowIfNull(obj);
+        return obj.GetHashCode();
+    }
 }

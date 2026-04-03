@@ -235,7 +235,7 @@ public sealed class ProductFactory : TensorFactory
                     sumData[i] = Tensors.Negate(sumData[i]);
                 }
 
-                return new Sum(sum.Indices, sumData, sum.GetHashCode());
+                return new Sum(sumData, sum.Indices);
             }
         }
 

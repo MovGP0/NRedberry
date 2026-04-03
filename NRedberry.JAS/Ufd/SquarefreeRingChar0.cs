@@ -92,30 +92,57 @@ public class SquarefreeRingChar0<C> : SquarefreeAbstract<C> where C : GcdRingEle
             throw new ArgumentException($"{GetType().Name} only applies to univariate polynomials.", nameof(P));
         }
 
-        GenPolynomial<C> primitive = engine.BasePrimitivePart(P);
-        GenPolynomial<C> derivative = PolyUtil.BaseDeriviative(primitive);
-        derivative = engine.BasePrimitivePart(derivative);
-
-        GenPolynomial<C> gcd = engine.BaseGcd(primitive, derivative);
-        gcd = engine.BasePrimitivePart(gcd);
-
-        GenPolynomial<C> v = PolyUtil.BasePseudoDivide(primitive, gcd);
-        v = engine.BasePrimitivePart(v);
-
-        long multiplicity = 0L;
-        while (!v.IsConstant())
+        C leadingCoefficient = P.LeadingBaseCoefficient();
+        if (!leadingCoefficient.IsOne())
         {
-            multiplicity++;
-            GenPolynomial<C> w = engine.BaseGcd(gcd, v);
-            w = engine.BasePrimitivePart(w);
+            C content = engine.BaseContent(P);
+            P = P.Divide(content);
+            GenPolynomial<C> coefficientFactor = ring.One.Multiply(content);
+            factors[coefficientFactor] = 1L;
+        }
 
-            GenPolynomial<C> factor = PolyUtil.BasePseudoDivide(v, w);
-            v = w;
-            gcd = PolyUtil.BasePseudoDivide(gcd, v);
+        GenPolynomial<C> current = P;
+        GenPolynomial<C>? gcd = null;
+        GenPolynomial<C>? quotient = null;
+        long multiplicity = 0L;
+        bool initialize = true;
 
-            if (!factor.IsOne() && !factor.IsZero())
+        while (true)
+        {
+            if (initialize)
             {
-                factor = engine.BasePrimitivePart(factor);
+                if (current.IsConstant() || current.IsZero())
+                {
+                    break;
+                }
+
+                GenPolynomial<C> derivative = PolyUtil.BaseDeriviative(current);
+                gcd = engine.BaseGcd(current, derivative);
+                gcd = engine.BasePrimitivePart(gcd);
+                quotient = PolyUtil.BasePseudoDivide(current, gcd);
+                multiplicity = 0L;
+                initialize = false;
+            }
+
+            if (quotient!.IsConstant())
+            {
+                break;
+            }
+
+            multiplicity++;
+            GenPolynomial<C> nextGcd = engine.BaseGcd(gcd!, quotient);
+            nextGcd = engine.BasePrimitivePart(nextGcd);
+            GenPolynomial<C> factor = PolyUtil.BasePseudoDivide(quotient, nextGcd);
+            quotient = nextGcd;
+            gcd = PolyUtil.BasePseudoDivide(gcd!, quotient);
+
+            if (factor.Degree(0) > 0)
+            {
+                if (leadingCoefficient.IsOne() && !factor.LeadingBaseCoefficient().IsOne())
+                {
+                    factor = engine.BasePrimitivePart(factor);
+                }
+
                 factors[factor] = multiplicity;
             }
         }
@@ -169,12 +196,6 @@ public class SquarefreeRingChar0<C> : SquarefreeAbstract<C> where C : GcdRingEle
         SortedDictionary<GenPolynomial<GenPolynomial<C>>, long> factors = new();
         if (polynomial.IsZero())
         {
-            return factors;
-        }
-
-        if (polynomial.IsConstant())
-        {
-            factors[polynomial] = 1L;
             return factors;
         }
 
@@ -278,12 +299,7 @@ public class SquarefreeRingChar0<C> : SquarefreeAbstract<C> where C : GcdRingEle
 
         GenPolynomial<GenPolynomial<C>> recursivePolynomial = PolyUtil.Recursive(recursiveRing, polynomial);
         GenPolynomial<C> coefficientContent = engine.RecursiveContent(recursivePolynomial);
-
-        if (!coefficientContent.IsOne())
-        {
-            recursivePolynomial = PolyUtil.CoefficientPseudoDivide(recursivePolynomial, coefficientContent);
-        }
-
+        recursivePolynomial = PolyUtil.CoefficientPseudoDivide(recursivePolynomial, coefficientContent);
         GenPolynomial<C> contentSquarefree = SquarefreePart(coefficientContent);
         GenPolynomial<GenPolynomial<C>> recursiveSquarefree = RecursiveUnivariateSquarefreePart(recursivePolynomial);
         GenPolynomial<GenPolynomial<C>> combined = recursiveSquarefree.Multiply(contentSquarefree);

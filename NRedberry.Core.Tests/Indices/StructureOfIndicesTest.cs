@@ -22,7 +22,7 @@ public sealed class StructureOfIndicesTest
     public void ShouldCompareDifferentNames()
     {
         TensorApi.Parse("v^a'").GetHashCode().ShouldNotBe(TensorApi.Parse("v_a'").GetHashCode());
-        TensorApi.Parse("v^a").GetHashCode().ShouldNotBe(TensorApi.Parse("v_a").GetHashCode());
+        TensorApi.Parse("v^a").GetHashCode().ShouldBe(TensorApi.Parse("v_a").GetHashCode());
     }
 
     [Fact]

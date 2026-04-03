@@ -1,5 +1,4 @@
-﻿using NRedberry.Core.Utils;
-using NRedberry.Tensors;
+using NRedberry.Core.Utils;
 using NRedberry.Tensors.Iterators;
 using TensorApi = NRedberry.Tensors.Tensors;
 using Xunit;
@@ -11,8 +10,12 @@ public sealed class StackPositionTests
     [Fact]
     public void ShouldExposeCurrentTraversalContext()
     {
+        var sum = TensorApi.Parse("a+b");
+        string parentText = sum.ToString(OutputFormat.Redberry);
+        string currentChild = sum[0].ToString(OutputFormat.Redberry);
+        string siblingChild = sum[1].ToString(OutputFormat.Redberry);
         TreeTraverseIterator<TrackingPayload> iterator = new(
-            TensorApi.Parse("a+b"),
+            sum,
             TraverseGuide.All,
             new TrackingPayloadFactory());
 
@@ -21,19 +24,20 @@ public sealed class StackPositionTests
 
         StackPosition<TrackingPayload> stackPosition = iterator.CurrentStackPosition();
 
-        stackPosition.GetInitialTensor().ToString(OutputFormat.Redberry).ShouldBe("a");
-        stackPosition.GetTensor().ToString(OutputFormat.Redberry).ShouldBe("a");
-        stackPosition.IsModified().ShouldBeFalse();
-        stackPosition.Previous().GetTensor().ToString(OutputFormat.Redberry).ShouldBe("a+b");
-        stackPosition.Previous(0).ShouldBeSameAs(stackPosition);
-        stackPosition.Previous(1).GetTensor().ToString(OutputFormat.Redberry).ShouldBe("a+b");
-        stackPosition.IsPayloadInitialized().ShouldBeFalse();
-        stackPosition.GetPayload().CapturedTensor.ShouldBe("a");
-        stackPosition.IsPayloadInitialized().ShouldBeTrue();
-        stackPosition.GetDepth().ShouldBe(1);
-        stackPosition.IsUnder(new TensorTextIndicator("a+b"), 1).ShouldBeTrue();
-        stackPosition.IsUnder(new TensorTextIndicator("b"), 0).ShouldBeFalse();
-        stackPosition.CurrentIndex().ShouldBe(-1);
+        stackPosition.ShouldSatisfyAllConditions(
+            () => stackPosition.GetInitialTensor().ToString(OutputFormat.Redberry).ShouldBe(currentChild),
+            () => stackPosition.GetTensor().ToString(OutputFormat.Redberry).ShouldBe(currentChild),
+            () => stackPosition.IsModified().ShouldBeFalse(),
+            () => stackPosition.Previous().GetTensor().ToString(OutputFormat.Redberry).ShouldBe(parentText),
+            () => stackPosition.Previous(0).ShouldBeSameAs(stackPosition),
+            () => stackPosition.Previous(1).GetTensor().ToString(OutputFormat.Redberry).ShouldBe(parentText),
+            () => stackPosition.IsPayloadInitialized().ShouldBeFalse(),
+            () => stackPosition.GetPayload().CapturedTensor.ShouldBe(currentChild),
+            () => stackPosition.IsPayloadInitialized().ShouldBeTrue(),
+            () => stackPosition.GetDepth().ShouldBe(1),
+            () => stackPosition.IsUnder(new TensorTextIndicator(parentText), 1).ShouldBeTrue(),
+            () => stackPosition.IsUnder(new TensorTextIndicator(siblingChild), 0).ShouldBeFalse(),
+            () => stackPosition.CurrentIndex().ShouldBe(-1));
     }
 
     private sealed class TrackingPayload(string capturedTensor) : Payload<TrackingPayload>

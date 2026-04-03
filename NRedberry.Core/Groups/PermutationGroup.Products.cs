@@ -1,9 +1,19 @@
-﻿namespace NRedberry.Groups;
+using NRedberry.Core.Combinatorics;
+
+namespace NRedberry.Groups;
 
 public sealed partial class PermutationGroup
 {
     public PermutationGroup DirectProduct(PermutationGroup group)
     {
-        return CreatePermutationGroupFromBSGS(AlgorithmsBase.DirectProduct(GetBSGS(), group.GetBSGS()));
+        List<Permutation> generators = new(Generators.Count + group.Generators.Count);
+        generators.AddRange(Generators);
+
+        foreach (Permutation permutation in group.Generators)
+        {
+            generators.Add(permutation.MoveRight(Degree));
+        }
+
+        return CreatePermutationGroup(generators);
     }
 }

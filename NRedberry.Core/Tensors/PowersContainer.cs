@@ -65,23 +65,8 @@ public sealed class PowersContainer : IEnumerable<Tensor>
 
             if (compare == false)
             {
-                if ((node.Exponent is null) != TensorUtils.IsOne(exponent))
-                {
-                    continue;
-                }
-
                 node.PutExponent(exponent);
                 return;
-            }
-
-            if (TensorUtils.IsOne(exponent))
-            {
-                continue;
-            }
-
-            if (node.Exponent is null)
-            {
-                continue;
             }
 
             if (TensorUtils.IsInteger(exponent))

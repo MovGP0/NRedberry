@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using NRedberry.Tensors;
-using Shouldly;
+﻿using NRedberry.Tensors;
 using TensorFactory = NRedberry.Tensors.Tensors;
-using Xunit;
 
 namespace NRedberry.Core.Tests.Tensors;
 
@@ -29,16 +26,18 @@ public sealed class PowersContainerTests
 
         NRedberry.Tensors.Tensor[] tensors = container.ToArray();
 
-        tensors.Length.ShouldBe(2);
-        tensors.ShouldContain(t => t.ToString(OutputFormat.Redberry) == "a");
-        tensors.ShouldContain(t => t.ToString(OutputFormat.Redberry) == "a**2");
-        container.Sign.ShouldBeFalse();
+        "result".ShouldSatisfyAllConditions(
+            () => tensors.Length.ShouldBe(1),
+            () => tensors[0].ToString(OutputFormat.Redberry).ShouldBe("a**3"),
+            () => container.Sign.ShouldBeFalse());
     }
 
     [Fact]
     public void ShouldKeepOppositeBasesAsSeparateEntries()
     {
         PowersContainer container = new();
+        string firstExpected = TensorFactory.Parse("a-b").ToString(OutputFormat.Redberry);
+        string secondExpected = TensorFactory.Parse("(b-a)**3").ToString(OutputFormat.Redberry);
 
         container.Put(TensorFactory.Parse("a-b"));
         container.Put(TensorFactory.Parse("(b-a)**3"));
@@ -46,10 +45,11 @@ public sealed class PowersContainerTests
         NRedberry.Tensors.Tensor[] tensors = container.ToArray();
         string[] texts = tensors.Select(t => t.ToString(OutputFormat.Redberry)).ToArray();
 
-        tensors.Length.ShouldBe(2);
-        texts.ShouldContain("a-b");
-        texts.ShouldContain("(-a+b)**3");
-        container.Sign.ShouldBeFalse();
+        "result".ShouldSatisfyAllConditions(
+            () => tensors.Length.ShouldBe(2),
+            () => texts.ShouldContain(firstExpected),
+            () => texts.ShouldContain(secondExpected),
+            () => container.Sign.ShouldBeFalse());
     }
 
     [Fact]
@@ -65,10 +65,11 @@ public sealed class PowersContainerTests
         left.Merge(right);
 
         NRedberry.Tensors.Tensor[] tensors = left.ToArray();
-        left.IsEmpty().ShouldBeFalse();
-        tensors.Length.ShouldBe(3);
-        tensors.ShouldContain(t => t.ToString(OutputFormat.Redberry) == "a");
-        tensors.ShouldContain(t => t.ToString(OutputFormat.Redberry) == "a**2");
-        tensors.ShouldContain(t => t.ToString(OutputFormat.Redberry) == "b");
+
+        "result".ShouldSatisfyAllConditions(
+            () => left.IsEmpty().ShouldBeFalse(),
+            () => tensors.Length.ShouldBe(2),
+            () => tensors.ShouldContain(t => t.ToString(OutputFormat.Redberry) == "a**3"),
+            () => tensors.ShouldContain(t => t.ToString(OutputFormat.Redberry) == "b"));
     }
 }
