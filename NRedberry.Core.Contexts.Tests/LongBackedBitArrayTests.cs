@@ -204,14 +204,16 @@ public sealed class LongBackedBitArrayTests
         Should.Throw<ArgumentException>(() => left.LoadValueFrom(other));
     }
 
-    [Fact(DisplayName = "Should throw NotImplementedException for Get")]
-    public void ShouldThrowNotImplementedForGet()
+    [Fact(DisplayName = "Should return indexed bit for Get")]
+    public void ShouldReturnIndexedBitForGet()
     {
         // Arrange
         var array = new LongBackedBitArray(10);
+        array.Set(1);
 
         // Act + Assert
-        Should.Throw<NotImplementedException>(() => array.Get(1));
+        array.Get(1).ShouldBeTrue();
+        array.Get(2).ShouldBeFalse();
     }
 
 #pragma warning disable CS0618

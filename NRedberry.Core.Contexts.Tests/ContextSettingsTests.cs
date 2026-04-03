@@ -13,7 +13,7 @@ public sealed class ContextSettingsTests
         ContextSettings settings = new();
 
         settings.DefaultOutputFormat.ShouldBe(OutputFormat.Redberry);
-        settings.Kronecker.ShouldBe("g");
+        settings.Kronecker.ShouldBe("d");
         settings.MetricName.ShouldBe("g");
         settings.ConverterManager.ShouldNotBeNull();
         settings.Parser.ShouldNotBeNull();

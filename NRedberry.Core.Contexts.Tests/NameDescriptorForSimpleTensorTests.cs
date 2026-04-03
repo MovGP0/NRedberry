@@ -45,7 +45,8 @@ public sealed class NameDescriptorForSimpleTensorTests
 
         // Act + Assert
         cachedSymbol!.GetValue(descriptor).ShouldBeNull();
-        Should.Throw<ArgumentNullException>(() => cachedSymbol.SetValue(descriptor, null));
+        var nullException = Should.Throw<TargetInvocationException>(() => cachedSymbol.SetValue(descriptor, null));
+        nullException.InnerException.ShouldBeOfType<ArgumentNullException>();
 
         var tensor = new SimpleTensor(1, IndicesFactory.EmptySimpleIndices);
         cachedSymbol.SetValue(descriptor, tensor);

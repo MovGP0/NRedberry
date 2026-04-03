@@ -289,6 +289,7 @@ public sealed class StructureOfIndices
         unchecked
         {
             int hash = 469;
+            BitArrayEqualityComparer comparer = new();
             foreach (var item in TypesCounts)
             {
                 hash = (hash * 23) + item.GetHashCode();
@@ -296,7 +297,7 @@ public sealed class StructureOfIndices
 
             foreach (var item in states)
             {
-                hash = (hash * 23) + (item == null ? 0 : item.GetHashCode());
+                hash = (hash * 23) + (item == null ? 0 : comparer.GetHashCode(item));
             }
 
             return hash;

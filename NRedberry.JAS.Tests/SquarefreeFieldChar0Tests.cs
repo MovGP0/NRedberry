@@ -21,7 +21,7 @@ public sealed class SquarefreeFieldChar0Tests
 
         part.ShouldBe(ring.Univariate(0).Subtract(ring.FromInteger(1)));
         factors.ShouldHaveSingleItem();
-        factors.Keys.ShouldContain(part);
+        factors.Keys.Any(factor => factor.Equals(part)).ShouldBeTrue();
     }
 
     private static GenPolynomialRing<BigRational> CreateRing()

@@ -51,6 +51,11 @@ internal sealed class NameDescriptorForMetricAndKronecker(string[] names, byte t
         ArgumentNullException.ThrowIfNull(indices);
 
         bool metric = IndicesUtils.HaveEqualStates(indices[0], indices[1]);
+        if (outputFormat.Is(OutputFormat.Maple))
+        {
+            return metric ? "g_" : "KroneckerDelta";
+        }
+
         return metric ? _names[1] : _names[0];
     }
 

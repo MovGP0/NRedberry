@@ -10,7 +10,7 @@ namespace NRedberry.Parsers;
  * Original: ./core/src/main/java/cc/redberry/core/parser/ParseTokenSimpleTensor.java
  */
 
-public class ParseTokenSimpleTensor : ParseToken
+public class ParseTokenSimpleTensor : ParseToken, IEquatable<ParseTokenSimpleTensor>
 {
     public SimpleIndices Indices { get; internal set; }
 
@@ -56,20 +56,34 @@ public class ParseTokenSimpleTensor : ParseToken
         return NRedberry.Tensors.Tensors.SimpleTensor(Name, Indices);
     }
 
-    public override bool Equals(object? obj)
+    public bool Equals(ParseTokenSimpleTensor? other)
     {
-        if (!base.Equals(obj))
+        if (other is null)
         {
             return false;
         }
 
-        var other = (ParseTokenSimpleTensor)obj!;
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        if (!base.Equals((ParseToken)other))
+        {
+            return false;
+        }
+
         if (!Equals(Indices, other.Indices))
         {
             return false;
         }
 
         return Name == other.Name;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as ParseTokenSimpleTensor);
     }
 
     public bool IsKroneckerOrMetric()

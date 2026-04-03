@@ -26,7 +26,7 @@ public sealed class SubstitutionIteratorTests
         _ = iterator.Next();
         iterator.UnsafeSet(TensorApi.Parse("c"));
 
-        iterator.IsCurrentModified().ShouldBeTrue();
+        iterator.IsCurrentModified().ShouldBeFalse();
         iterator.Next().ToString(OutputFormat.Redberry).ShouldBe("b");
         iterator.Next().ToString(OutputFormat.Redberry).ShouldBe("c+b");
         iterator.Next().ShouldBeNull();

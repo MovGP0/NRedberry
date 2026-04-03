@@ -73,14 +73,16 @@ public sealed class ProviderPowerTests
     }
 
     [Fact]
-    public void CreateShouldThrowNotImplementedForCurrentNonNullPath()
+    public void CreateShouldReturnDummyProviderForEqualPositivePowers()
     {
         IIndexMappingProviderFactory factory = GetFactory();
         IIndexMappingProvider provider = new FakeIndexMappingProvider();
         Power from = CreatePowerTensor();
         Power to = CreatePowerTensor();
 
-        Should.Throw<NotImplementedException>(() => factory.Create(provider, from, to));
+        IIndexMappingProvider result = factory.Create(provider, from, to);
+
+        result.GetType().Name.ShouldBe("DummyIndexMappingProvider");
     }
 
     private static Type GetProviderPowerType()

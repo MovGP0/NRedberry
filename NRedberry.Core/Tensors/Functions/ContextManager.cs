@@ -11,18 +11,23 @@ namespace NRedberry.Tensors.Functions;
 /// </remarks>
 public static class ContextManager
 {
-    private static volatile Context _context = DefaultContextFactory.Instance.CreateContext();
+    private sealed class ContextContainer
+    {
+        public Context Context { get; set; } = DefaultContextFactory.Instance.CreateContext();
+    }
+
+    private static readonly ThreadLocal<ContextContainer> s_threadLocalContainer = new(() => new ContextContainer());
 
     /// <summary>
     /// Gets or sets the current context of the Redberry session.
     /// </summary>
     public static Context CurrentContext
     {
-        get => _context;
+        get => GetCurrentContainer().Context;
         set
         {
             ArgumentNullException.ThrowIfNull(value);
-            _context = value;
+            GetCurrentContainer().Context = value;
         }
     }
 
@@ -31,7 +36,7 @@ public static class ContextManager
     /// </summary>
     public static Context GetCurrentContext()
     {
-        return _context;
+        return GetCurrentContainer().Context;
     }
 
     /// <summary>
@@ -41,7 +46,7 @@ public static class ContextManager
     public static Context InitializeNew()
     {
         var context = DefaultContextFactory.Instance.CreateContext();
-        _context = context;
+        GetCurrentContainer().Context = context;
         return context;
     }
 
@@ -54,7 +59,7 @@ public static class ContextManager
     {
         ArgumentNullException.ThrowIfNull(contextSettings);
         var context = new Context(contextSettings);
-        _context = context;
+        GetCurrentContainer().Context = context;
         return context;
     }
 
@@ -65,5 +70,11 @@ public static class ContextManager
     public static void SetCurrentContext(Context context)
     {
         CurrentContext = context;
+    }
+
+    private static ContextContainer GetCurrentContainer()
+    {
+        return s_threadLocalContainer.Value
+            ?? throw new InvalidOperationException("Current thread context container is not initialized.");
     }
 }

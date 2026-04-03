@@ -33,10 +33,12 @@ public sealed class ArrayExtensionsTests
     }
 
     [Fact]
-    public void ShouldThrowWhenRangeTouchesArrayEnd()
+    public void ShouldFillRangeWhenItTouchesArrayEnd()
     {
         int[] values = [1, 2, 3, 4];
 
-        Should.Throw<ArgumentOutOfRangeException>(() => values.Fill(2, 2, 0));
+        values.Fill(2, 2, 0);
+
+        values.ShouldBe([1, 2, 0, 0]);
     }
 }

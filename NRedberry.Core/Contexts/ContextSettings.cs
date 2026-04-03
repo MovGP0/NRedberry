@@ -7,7 +7,7 @@ public sealed class ContextSettings
     public ContextSettings()
     {
         DefaultOutputFormat = OutputFormat.Redberry;
-        Kronecker = "g";
+        Kronecker = "d";
         MetricName = "g";
     }
 

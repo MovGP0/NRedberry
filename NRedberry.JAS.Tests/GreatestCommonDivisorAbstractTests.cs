@@ -2,6 +2,7 @@
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Poly;
 using NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Ufd;
+using Shouldly;
 using Xunit;
 using JasBigInteger = NRedberry.Core.Transformations.Factor.Jasfactor.Edu.Jas.Arith.BigInteger;
 
@@ -21,7 +22,7 @@ public sealed class GreatestCommonDivisorAbstractTests
         JasBigInteger content = gcd.BaseContent(polynomial);
         GenPolynomial<JasBigInteger> primitivePart = gcd.BasePrimitivePart(polynomial);
 
-        content.ShouldBe(new JasBigInteger(2));
+        content.Equals(new JasBigInteger(2)).ShouldBeTrue();
         primitivePart.ShouldBe(ring.Univariate(0).Sum(ring.FromInteger(1)));
     }
 

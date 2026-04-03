@@ -18,8 +18,9 @@ public sealed class FactorAbstractTests
         GenPolynomial<BigRational> linear = ring.Univariate(0).Sum(ring.FromInteger(1));
         GenPolynomial<BigRational> reducible = ring.Univariate(0, 2L).Subtract(ring.FromInteger(1));
 
-        factor.IsIrreducible(linear).ShouldBeTrue();
-        factor.IsIrreducible(reducible).ShouldBeFalse();
+        factor.ShouldSatisfyAllConditions(
+            () => factor.IsIrreducible(linear).ShouldBeTrue(),
+            () => factor.IsIrreducible(reducible).ShouldBeFalse());
     }
 
     [Fact]
@@ -38,10 +39,11 @@ public sealed class FactorAbstractTests
         ]);
         List<GenPolynomial<BigRational>> radicalFactors = factor.BaseFactorsRadical(reducible);
 
-        normalized.Count.ShouldBe(2);
-        normalized[0].ShouldBe(x.Sum(ring.FromInteger(1)));
-        normalized[1].ShouldBe(x.Subtract(ring.FromInteger(1)));
-        radicalFactors.Count.ShouldBe(2);
+        normalized.ShouldSatisfyAllConditions(
+            () => normalized.Count.ShouldBe(2),
+            () => normalized[0].ShouldBe(x.Sum(ring.FromInteger(1))),
+            () => normalized[1].ShouldBe(x.Subtract(ring.FromInteger(1))),
+            () => radicalFactors.Count.ShouldBe(2));
     }
 
     private static GenPolynomialRing<BigRational> CreateRing()
